@@ -1,0 +1,181 @@
+\documentclass[11pt,a4paper,english]{article}
+%\usepackage[finnish]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage{hyperref}
+
+ % Normal latex T1-fonts
+\usepackage[T1]{fontenc}
+ % For the pdf-conversion. Remember -Ppdf for latex!
+%\usepackage[T1,mtbold,lucidacal,mtplusscr,subscriptcorrection]{mathtime}
+%\usepackage{times}
+
+ % Figures
+\usepackage{graphicx,fancybox,subfigure}
+
+ % AMS-stuff
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{amsbsy}
+
+ % Misc
+\usepackage{verbatim}
+\usepackage{url}
+
+% Page size
+\addtolength{\hoffset}{-1cm}
+\addtolength{\textwidth}{2cm}
+\addtolength{\voffset}{-1cm}
+\addtolength{\textheight}{2cm}
+
+% Paragraph
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
+
+% Horizontal line
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+% No page numbers
+\pagestyle{empty}
+
+% New commands:
+\DeclareMathOperator{\var}{var}
+\DeclareMathOperator{\cov}{cov}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Prob}{\mathbb{P}}
+
+
+\begin{document}
+
+\section*{Bayesian Data Analysis - Assignment 1}
+
+%The deadline for this assignment is on Sunday \textbf{18.9.2016} at 23.59. After this, peergrading opens and closes on Tuesday \textbf{20.9.2016} at 23:59.
+
+The exercises of this assignment are not related to any book chapter, but rather work to test whether or not you have sufficient knowledge to participate the course.
+
+There are three pen and paper exercises and one computer task. The maximum amount of points from this assignment is 2. In addition to the correctness of the answers, the overall quality and clearness of the report is evaluated.
+
+Report all results to a single, {\bf anonymous} *.pdf -file and return it to \href{peergrade.io}{peergrade.io}. Include also source code to the report (either as an attachment or as a part of the answer). By anonymity it is meant that the report should not contain your name or student number.
+
+%Do the computer task first, it should take no more than 10--15 minutes. Answer then to the pen and paper questions.
+
+%{\it Before you leave, ask the assistant to check your plots and results for the computer task (no need to return anything). Leave your pen and paper solutions to the assistant. Make sure the papers have your name and student number.}
+
+\HRule
+
+\begin{enumerate}
+
+% computer exercise, plotting pdf, sampling from distribution and computing percentiles
+\item {\bf (Basic probability theory notation and terms)}. This can be trivial or you may need to refresh your memory on these concepts. Note that some terms may be different names for the same concept.
+  \begin{itemize}
+  \item[a)] Explain the following terms with one sentence:
+    \begin{itemize}
+    \item probability
+    \item probability mass
+    \item probability density
+    \item probability mass function (pmf)
+    \item probability density function (pdf)
+    \item probability distribution
+    \item discrete probability distribution
+    \item continuous probability distribution
+    \item cumulative distribution function (cdf)
+    \end{itemize}
+  \item[b)] Explain the following terms with one sentence:
+    \begin{itemize}
+    \item sampling distribution
+    \item observation model
+    \item statistical model
+    \item likelihood
+    \end{itemize}
+  \end{itemize}
+
+\item {\bf (Basic computer skills)} This task deals with elementary plotting and computing skills needed during the rest of the course. You can use either R, Python or Matlab. The use of Matlab is however discouraged.
+For more about Python, see the docs (\href{https://docs.python.org/3/}{https://docs.python.org/3/}), for R, you can just type ?\{function name here\}
+%% For Matlab, you can type {\tt help stats} or {\tt doc stats} to browse the functions in the Statistics Toolbox.
+\begin{itemize}
+	\item[a)] Plot the density function of Beta-distribution, with mean $\mu = 0.2$ and variance $\sigma^2=0.01$. The parameters $\alpha$ and $\beta$ of the Beta-distribution are related to the mean and variance according to the following equations
+	\begin{align*}
+	\alpha = \mu \left( \frac{\mu(1-\mu)}{\sigma^2} - 1 \right), \quad
+	\beta = \frac{\alpha (1-\mu) }{\mu} \,.
+\end{align*}
+
+(Useful Python functions: {\tt numpy.arange} and {\tt scipy.stats.beta.pdf}
+ \\Useful R functions: {\tt seq} and {\tt dbeta})
+
+%%Useful Matlab functions: {\tt linspace}, {\tt betapdf} )
+	\item[b)] Take a sample of 1000 random numbers from the above distribution and plot a histogram of the results. Compare visually to the density function.
+	\\( Useful Python functions: {\tt scipy.stats.beta.rvs} and {\tt matplotlib.pyplot.hist}\\
+	Useful R functions: {\tt rbeta} and {\tt hist} )
+%%Useful Matlab functions: {\tt betarnd}, {\tt hist}/{\tt histogram}\\
+	\item[c)] Compute the sample mean and variance from the drawn sample. Verify that they match (roughly) to the true mean and variance of the distribution.\\
+(Useful Python functions: {\tt numpy.mean} and {\tt numpy.var}\\
+Useful R functions: {\tt mean} and {\tt var})
+%%Useful Matlab functions: {\tt mean}, {\tt var}\\
+	\item[d)] Estimate the central 95\%-interval of the distribution from the drawn samples.\\
+(Useful Python functions: {\tt numpy.percentile}\\ Useful R functions: {\tt quantile})
+%%
+\end{itemize}
+
+
+% Rules of probability, Bayes' theorem
+
+\item {\bf (Bayes' theorem)} A group of researchers have designed a new inexpensive and
+  painless test for detecting lung cancer. The test is
+  intended to be an initial screening test for the population in
+  general. A positive result (presence of a lung cancer) from the test
+  would be followed up immediately with medication, surgery or more
+  extensive and expensive test. The researchers know from their
+  studies the following facts:
+  \begin{itemize}
+  \item Test gives a positive result in 98$\%$  of the time when the
+    test subject has lung cancer.
+  \item Test gives a negative result in 96 $\%$ of the time when the
+    test subject does not have lung cancer.
+  \item In general population approximately one person in 1000 has
+    lung cancer.
+  \end{itemize}
+
+  The researchers are happy with these preliminary results (about 97$\%$
+  success rate), and wish to get the test to market as soon as
+  possible. How would you advice them? Base your answer on elementary
+  probability calculus.
+
+
+\item {\bf (Bayes' theorem)} We have three boxes, A, B and C. There are
+  \begin{itemize}
+    \item 2 red balls and 5 white balls in the box A,
+    \item 4 red balls and 1 white ball in the box B, and
+    \item 1 red ball and 3 white balls in the box C.
+  \end{itemize}
+Consider a random expreriment in which one of the boxes is randomly
+selected and from that box one ball is randomly picked up. After
+observing the color of the ball it is replaced in the box it came
+from. Suppose also that on average box A is selected 40\% of the time
+and box B 10\% of the time.
+
+What is the probability of picking a red ball? If a red ball was
+picked, from which box it most probably came from? (For latter question, it is enough to infer the answer from unnormalized posterior probabilities)
+
+
+
+% Bayes' theorem
+\item {\bf (Bayes' theorem)} On average fraternal twins (two fertilized eggs) occur once in 125
+births and identical twins (single egg divides into two separate
+embryos) once in 300 births.
+American male singer actor Elvis Presley (1935 -- 1977) had a twin brother who died in birth.
+What is the probability that Elvis was an identical twin?
+Assume that equal number of boys and girls are born on average.
+
+
+
+
+
+
+\end{enumerate}
+
+
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
