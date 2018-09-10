@@ -23,10 +23,11 @@ This repository has course material for Bayesian Data Analysis course at Aalto (
 - Multiparameter models (Ch 3)
 - Computational methods (Ch 10)
 - Markov chain Monte Carlo (Ch 11--12)
-- + extra material for Stan and probabilistic programming
+- Extra material for Stan and probabilistic programming
 - Hierarchical models (Ch 5)
 - Model checking (Ch 6)
-- Evaluating and comparing models (Ch 7) + extra material
+- Evaluating and comparing models (Ch 7)
+  + [extra material](https://avehtari.github.io/modelselection/)
 - Decision analysis (Ch 9)
 - Large sample properties and Laplace approximation (Ch 4)
 - In addition you learn workflow for Bayesian data analysis
@@ -39,3 +40,9 @@ must be obtained from both the exam and the exercises.
 ## R and Python
 
 We recommend using R in the course as there are more packages for Stan in R. If you are already fluent in Python, but not in R, then using Python is probably easier. Unless you are already experienced and have figured out your preferred way to work with R, we recommend installing [RStudio Desktop](https://www.rstudio.com/products/rstudio/download/).
+
+## Demos
+
+- [BDA_R_demos](https://github.com/avehtari/BDA_R_demos)
+- [BDA_py_demos](https://github.com/avehtari/BDA_py_demos)
+
