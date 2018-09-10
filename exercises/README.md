@@ -1,0 +1,1 @@
+**NOTE**: The assignments descriptions on github are still being updated and individual exercises are not guaranteed to be up to date until Monday (4am) of the hand-in period of the corresponding exercise week (See the deadlines on mycourses ([link](https://mycourses.aalto.fi/course/view.php?id=20640&section=2))).
