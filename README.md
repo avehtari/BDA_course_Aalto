@@ -2,6 +2,8 @@
 
 This repository has course material for Bayesian Data Analysis course at Aalto (CS-E5710)
 
+The material will be updated during the course. Exercises instructions and slides will be updated at latest on Monday of the corresponding week.
+
 ## Prerequisites
 
 - Basic terms of probability theory
