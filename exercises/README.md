@@ -1,0 +1,1 @@
+**NOTE**: The assignment descriptions are still being updated and individual exercises are not guaranteed to be up to date until Monday (4am) of the hand-in period of the corresponding exercise week (see the deadlines on [mycourses](https://mycourses.aalto.fi/course/view.php?id=20640&section=2)).
