@@ -1,0 +1,104 @@
+\documentclass[a4paper,11pt]{article}
+
+\usepackage[pdftex]{graphicx}
+%\usepackage{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+%\usepackage[T1,mtbold,lucidacal,mtplusscr,subscriptcorrection]{mathtime}
+\usepackage{times}
+\usepackage{amsmath}
+\usepackage{url}
+\usepackage{enumerate}
+\usepackage{parskip}
+\usepackage[colorlinks,urlcolor=black]{hyperref}
+\usepackage{microtype}
+
+%\usepackage[dvips,bookmarks=false]{hyperref}
+% \hypersetup{%
+%   bookmarksopen=true,
+%   bookmarksnumbered=true,
+%   pdftitle={S-114.2601 Bayesilaisen mallintamisen perusteet},
+%   pdfsubject={Kommentteja},
+%   pdfauthor={Aki Vehtari},
+%   pdfkeywords={bayesilainen todennäköisyysteoria, bayesilainen
+%     päättely, bayesilaiset mallit, mallien analysointi,
+%     laskennalliset menetelmät, Markov-ketju Monte Carlo},
+%   pdfstartview={FitH -32768}
+% }
+
+
+% if not draft, smaller printable area makes the paper more readable
+\topmargin -4mm
+\oddsidemargin 0mm
+\textheight 225mm
+\textwidth 150mm
+
+%\parskip=\baselineskip
+
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\var}{var}
+\DeclareMathOperator{\Sd}{Sd}
+\DeclareMathOperator{\sd}{sd}
+\DeclareMathOperator{\Bin}{Bin}
+\DeclareMathOperator{\Beta}{Beta}
+\DeclareMathOperator{\Poisson}{Poisson}
+\DeclareMathOperator{\betacdf}{betacdf}
+\DeclareMathOperator{\Invchi2}{Inv-\chi^2}
+\DeclareMathOperator{\logit}{logit}
+\DeclareMathOperator{\N}{N}
+\DeclareMathOperator{\U}{U}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\trace}{trace}
+
+\pagestyle{empty}
+
+\begin{document}
+\thispagestyle{empty}
+
+\section*{Bayesian data analysis -- exercise 5}
+
+This assignment is related to Chapters 10 and 11.
+
+The maximum amount of points from this assignment is 6. In addition to the correctness of the answers, the overall quality and clearness of the report is evaluated.
+
+Report all results to a single, {\bf anonymous} *.pdf -file and return it to \href{peergrade.io}{peergrade.io}. Include also source code to the report (either as an attachment or as a part of the answer). By anonymity it is meant that the report should not contain your name or student number.
+
+\vspace{1cm}
+
+
+
+
+
+\subsection*{1. Generalized linear model: Bioassay with Metropolis (6 points)}
+
+Metropolis algorithm: Replicate the computations for the bioassay
+example of section 3.7 (BDA3) using the Metropolis algorithm. Be sure
+to define your starting points and your jumping rule (proposal distribution). Run the
+simulations long enough for approximate convergence.
+
+
+\subsubsection*{Information and hints}
+
+\begin{itemize}
+\item Use uniform prior as in the book $p(\alpha,\beta)\propto 1$.
+\item Use a simple proposal distribution, there is no need to try to find optimal proposal (but remember to report the one you used). Efficient proposals are dicussed in BDA3 p. 295--297 (not part of the course). In real-life a pre-run could be made with an automatic adaptive control to adapt the proposal distribution.
+\item Metropolis is a simple algorithm, you do not need many lines of
+  code for it (less than ten lines). %Insert your code into Matlab template ex11\_2.m.
+\item Compute with log-densities. Reasons are explained on page 261 (BDA3). Remember that $\log(a/b)=\log(a)-\log(b)$. For your convenience we have provided functions for each language that will evaluate the log-posterior for given $\alpha$ and $\beta$ (see {\tt bioassaylp.R} and {\tt bioassaylp.py}).
+\item Use $\hat{R}$ (see {\tt psrf.m}) for convergence analysis. Remember to remove the warm-up samples. Include in the report the number of chains used, the starting points, the number of samples generated from each chain, and the warm-up length. Report also the $\hat R$ values for $\alpha$ and $\beta$ and draw conclusions about the convergence of the chains.
+\textbf{This means that you should briefly explain how to interpret the obtained} $\hat R$ \textbf{values}.
+\item Plot the samples for $\alpha$ and $\beta$ (scatter plot) and compare to the Figure~3.3b in BDA3 to verify that your code works. You can also compute and visualize the density in a grid (as in Fig.~3.3a) but this is not mandatory.
+\end{itemize}
+
+
+
+
+
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

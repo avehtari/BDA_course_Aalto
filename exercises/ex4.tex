@@ -1,0 +1,119 @@
+\documentclass[a4paper,11pt]{article}
+
+\usepackage[pdftex]{graphicx}
+%\usepackage{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+%\usepackage[T1,mtbold,lucidacal,mtplusscr,subscriptcorrection]{mathtime}
+\usepackage{times}
+\usepackage{amsmath}
+\usepackage{url}
+\usepackage{enumerate}
+\usepackage{parskip}
+\usepackage{hyperref}
+\usepackage{microtype}
+
+
+%\usepackage[dvips,bookmarks=false]{hyperref}
+% \hypersetup{%
+%   bookmarksopen=true,
+%   bookmarksnumbered=true,
+%   pdftitle={S-114.2601 Bayesilaisen mallintamisen perusteet},
+%   pdfsubject={Kommentteja},
+%   pdfauthor={Aki Vehtari},
+%   pdfkeywords={bayesilainen todennäköisyysteoria, bayesilainen
+%     päättely, bayesilaiset mallit, mallien analysointi,
+%     laskennalliset menetelmät, Markov-ketju Monte Carlo},
+%   pdfstartview={FitH -32768}
+% }
+
+
+% if not draft, smaller printable area makes the paper more readable
+\topmargin -4mm
+\oddsidemargin 0mm
+\textheight 225mm
+\textwidth 150mm
+
+%\parskip=\baselineskip
+
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\var}{var}
+\DeclareMathOperator{\Sd}{Sd}
+\DeclareMathOperator{\sd}{sd}
+\DeclareMathOperator{\Bin}{Bin}
+\DeclareMathOperator{\Beta}{Beta}
+\DeclareMathOperator{\Poisson}{Poisson}
+\DeclareMathOperator{\betacdf}{betacdf}
+\DeclareMathOperator{\Invchi2}{Inv-\chi^2}
+\DeclareMathOperator{\logit}{logit}
+\DeclareMathOperator{\N}{N}
+\DeclareMathOperator{\U}{U}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\trace}{trace}
+
+\pagestyle{empty}
+
+\begin{document}
+\thispagestyle{empty}
+
+\section*{Bayesian data analysis -- exercise 4}
+
+This exercise is related to Chapter 3 (additional information on
+number of required samples will be covered in Chapter 10).
+
+The maximum amount of points from this assignment is 6. In addition to the correctness of the answers, the overall quality and clearness of the report is evaluated.
+
+Report all results to a single, {\bf anonymous} *.pdf -file and return it to \href{peergrade.io}{peergrade.io}. Include also source code to the report (either as an attachment or as a part of the answer). By anonymity it is meant that the report should not contain your name or student number.
+
+\vspace{1cm}
+
+
+\subsection*{Generalized linear model: Bioassay + grid sampling}
+
+
+In the bioassay example (Chapter 3 in the book), replace the uniform prior density by a joint normal prior distribution on $(\alpha, \beta)$, with $\alpha \sim N(0,2^2), \beta \sim N(10,10^2)$, and $\mathrm{corr}(\alpha, \beta)=0.5$.
+\begin{enumerate}[a)]
+\item Repeat all the computations and plots of Section 3.7 with this
+  new prior distribution.
+  \begin{itemize}
+  	\item Compute the posterior density at a grid of points $(\alpha,\beta)$
+  	\item Use the grid to sample 1000 draws from the posterior
+  	\item Draw a posterior contour plot for the parameters $\alpha$ and $\beta$ (see Figure 3.3a)
+  	\item Draw a scatterplot of the 1000 draws from the posterior (see Figure 3.3b)
+  	\item Draw a histogram of the draws from the posterior distribution of the LD50 conditional on $\beta > 0$ (see Figure 3.4)
+  \end{itemize}
+\item Check visually that your contour plot and scatter plot look like a
+  compromise between the prior distribution and the likelihood
+\item Report an estimate for $p(\beta>0|x, n, y)$, that is, the probability that the drug is harmful
+% Removed because I did not completely understand what is meant here. The new prior doesn't really effectively differ from the uniform prior so
+% that conclusions would be that much different.
+%\item Discuss the effect of this hypothetical prior information on the
+%  conclusions in the applied context.
+\end{enumerate}
+Hints
+\begin{itemize}
+\item See {\tt demo3\_6.R}, {\tt demo3\_6.py}, or {\tt demo3\_6.m}
+\item Check that the range and spacing of grid for $\alpha$ and
+  $\beta$ are sensible for the alternative prior
+\item Compute the log-posterior in a grid
+\item Scale the log-posterior by subtracting its maximum value before
+  exponentiating
+\item Exponentiate
+\item Normalize the posterior
+\item Use 2D grid sampling or the method in the book to sample from the posterior
+%\item Multivariate normal log-pdf \texttt{mnorm\_lpdf.m}
+%\item Check that shape of the vector x is correct (1xN)
+%\item Possibly useful Matlab functions: \texttt{mnorm\_lpdf.m, catrand.m, binsgeq.m, contour}
+\end{itemize}
+
+
+
+
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
