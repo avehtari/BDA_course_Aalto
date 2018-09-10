@@ -20,6 +20,10 @@ The material will be updated during the course. Exercises instructions and slide
 
 ## Course contents following BDA3
 
+Bayesian Data Analysis, 3rd ed, by by Andrew Gelman, John Carlin, Hal
+Stern, David Dunson, Aki Vehtari, and Donald Rubin. [Home page for the
+book](http://www.stat.columbia.edu/~gelman/book/).
+
 - Background (Ch 1)
 - Single-parameter models (Ch 2)
 - Multiparameter models (Ch 3)
