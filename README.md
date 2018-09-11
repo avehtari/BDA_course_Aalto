@@ -52,3 +52,27 @@ We recommend using R in the course as there are more packages for Stan in R. If 
 - [BDA_R_demos](https://github.com/avehtari/BDA_R_demos)
 - [BDA_py_demos](https://github.com/avehtari/BDA_py_demos)
 
+## Stan
+
+- [Stan home page](http://mc-stan.org/)
+- [Introductory article in Journal of Statistical Software](http://www.stat.columbia.edu/~gelman/research/published/Stan-paper-aug-2015.pdf)
+- [Documentation](http://mc-stan.org/documentation/)
+- [RStan installation](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started)
+- [PyStan installation](https://pystan.readthedocs.io/en/latest/getting_started.html)
+- Basics of Bayesian inference and Stan, Jonah Gabry & Lauren Kennedy [Part 1](https://www.youtube.com/watch?v=ZRpo41l02KQ&t=8s&list=PLuwyh42iHquU4hUBQs20hkBsKSMrp6H0J&index=6) and [Part 2](https://www.youtube.com/watch?v=6cc4N1vT8pk&t=0s&list=PLuwyh42iHquU4hUBQs20hkBsKSMrp6H0J&index=7)
+
+## Extra reading
+
+- [Dicing with the unknown](https://doi.org/10.1111/j.1740-9713.2004.00050.x)
+- [Logic, Probability, and Bayesian Inference](https://github.com/betanalpha/stan_intro/blob/master/stan_intro.pdf) by Michael Betancourt
+- [Origin of word Bayesian](http://jeff560.tripod.com/b.html)
+
+
+## Finnish terms
+
+Sanasta "bayesilainen" esiintyy Suomessa muutamaa erilaista
+kirjoitustapaa. Muoto "bayesilainen" on muodostettu yleisen
+vieraskielisten nimien taivutussääntöjen mukaan 
+> "Jos nimi on kirjoitettuna takavokaalinen mutta äännettynä etuvokaalinen, kirjoitetaan päätteseen tavallisesti takavokaali etuvokaalin sijasta, esim. Birminghamissa, Thamesilla." Terho Itkonen, Kieliopas, 6. painos, Kirjayhtymä, 1997.
+
+- [Lyhyt englanti-suomi sanasto kurssin termeistä](extra_reading/sanasto.pdf)
