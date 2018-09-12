@@ -2,7 +2,7 @@
 
 This repository has course material for Bayesian Data Analysis course at Aalto (CS-E5710)
 
-The material will be updated during the course. Exercises instructions and slides will be updated at latest on Monday of the corresponding week.
+The material will be updated during the course. Exercise instructions and slides will be updated at latest on Monday of the corresponding week.
 
 ## Prerequisites
 
@@ -41,7 +41,7 @@ book](http://www.stat.columbia.edu/~gelman/book/).
 ## Assessment
 
 Exercises (67\%) and a project work (33\%). Minimum of 50\% of points
-must be obtained from both the exam and the exercises.
+must be obtained from both the exercises and project work.
 
 ## R and Python
 
