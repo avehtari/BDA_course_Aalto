@@ -136,6 +136,11 @@
     \end{align*}
   \end{itemize}
 
+  \begin{center}
+  \only<1>{\includegraphics[width=9cm]{dbinom1.pdf}}
+  \only<2>{\includegraphics[width=9cm]{dbinom10.pdf}}
+  \only<3>{\includegraphics[width=9cm]{dbinom10b.pdf}}
+\end{center}
 \end{frame}
 
 
@@ -253,6 +258,58 @@
 \end{frame}
 
 \begin{frame}
+  \frametitle{Predictive distribution -- Effect of integration}
+
+  \begin{itemize}
+  \item Predictive distribution for new $\tilde{y}$ (discrete)
+    \begin{align*}
+      p(\tilde{y}=1|y,n,M) &= \int_0^1 p(\tilde{y}=1|\theta,y,n,M)p(\theta|y,n,M)d\theta\\
+      &\uncover<2->{= \int_0^1 \theta p(\theta|y,n,M)d\theta}\\
+      &\uncover<3->{= \E[\theta|y]}
+    \end{align*}
+    \vskip -4mm
+  \item<4-> With uniform prior
+    \begin{align*}
+      \uncover<4->{\E[\theta|y] = \frac{y+1}{n+2}}
+    \end{align*}
+  \item<5-> Extreme cases
+    \begin{align*}
+      p(\tilde{y}=1|y=0,n,M) &= \frac{1}{n+2} \\
+      p(\tilde{y}=1|y=n,n,M) &= \frac{n+1}{n+2}
+    \end{align*}
+    \vskip -2mm
+
+  \item<6-> cf. maximum likelihood
+
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Benefits of integration}
+
+  Example: $n=10, y=10$
+  \begin{center}
+  \includegraphics[width=10cm]{dbbeta10.pdf}
+  \end{center}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Predictive distribution}
+
+  \begin{itemize}
+  \item Prior predictive distribution for new $\tilde{y}$ (discrete)
+    \begin{align*}
+      p(\tilde{y}=1|M) &= \int_0^1 p(\tilde{y}=1|\theta,y,n,M)p(\theta|M)d\theta
+    \end{align*}
+  \item Posterior predictive distribution for new $\tilde{y}$ (discrete)
+    \begin{align*}
+      p(\tilde{y}=1|y,n,M) &= \int_0^1 p(\tilde{y}=1|\theta,y,n,M)p(\theta|y,n,M)d\theta
+    \end{align*}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
   \frametitle{Justification for uniform prior}
 
   \begin{itemize}
@@ -269,40 +326,6 @@
       %   Laplace "principle of insufficient reason"
     \end{itemize} 
   \end{itemize}
-
-\end{frame}
-
-\begin{frame}
-  \frametitle{Prediction -- Effect of integration}
-
-  \begin{itemize}
-  \item Predictive distribution for new $\tilde{y}$ (discrete)
-  \item With uniform prior
-    \begin{align*}
-      p(\tilde{y}=1|y,n,M) &= \int_0^1 p(\tilde{y}=1|\theta,y,n,M)p(\theta|y,n,M)d\theta\\
-      &\uncover<2->{= \int_0^1 \theta p(\theta|y,n,M)d\theta}\\
-      &\uncover<3->{= \E[\theta|y] = \frac{y+1}{n+2}}
-    \end{align*}
-    \vskip -4mm
-  \item<4-> Extreme cases
-    \begin{align*}
-      p(\tilde{y}=1|y=0,n,M) &= \frac{1}{n+2} \\
-      p(\tilde{y}=1|y=n,n,M) &= \frac{n+1}{n+2}
-    \end{align*}
-    \vskip -2mm
-
-  \item<5-> cf. maximum likelihood
-
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Benefits of integration}
-
-  Example: $n=10, y=10$
-  \begin{center}
-  \includegraphics[width=8cm]{binom_10_10_hist.pdf}
-  \end{center}
 
 \end{frame}
 
@@ -382,8 +405,8 @@
   \vspace{-0.5\baselineskip}
   Example: $n=10, y=10$ - uniform vs Beta(2,2) prior
   \begin{center}
-  \includegraphics[width=7.8cm]{binom_10_10_hist.pdf}\\
-  \includegraphics[width=7.8cm]{binom_12_11_hist.pdf}
+  \includegraphics[width=7.8cm]{dbbeta10a.pdf}\\
+  \includegraphics[width=7.8cm]{dbbeta10b.pdf}
   \end{center}
 
 \end{frame}
@@ -442,26 +465,26 @@
   
 \end{frame}
 
-\begin{frame}
+% \begin{frame}
 
-  \frametitle{Jeffrey's prior}
+%   \frametitle{Jeffrey's prior}
 
-  \begin{itemize}
-  \item Prior which is invariant to transformation of variables
-  \item Fisher's information matrix (more in Chapter 4) is $I(\theta)$, where
-    $\displaystyle I(\theta)_{ij}=E\left(-\frac{\partial^2 l}{\partial
-        \theta_i\partial\theta_j} \right)$ 
-  \item Jeffrey's prior is
-    \begin{align*}
-      p(\theta) \propto \text{det}(I(\theta))^{1/2}
-    \end{align*}
-  \item<2-> E.g.\\
-    $y \sim \Bin(n,\theta): \quad p(\theta)\propto \theta^{-1/2}(1-\theta)^{-1/2}$\\
-    $y \sim N(\mu,\sigma^2): \quad p(\mu,\sigma^2)\propto 1/\sigma^2$
-  \item<3-> May produce improper priors or too vague priors
-  \end{itemize}
+%   \begin{itemize}
+%   \item Prior which is invariant to transformation of variables
+%   \item Fisher's information matrix (more in Chapter 4) is $I(\theta)$, where
+%     $\displaystyle I(\theta)_{ij}=E\left(-\frac{\partial^2 l}{\partial
+%         \theta_i\partial\theta_j} \right)$ 
+%   \item Jeffrey's prior is
+%     \begin{align*}
+%       p(\theta) \propto \text{det}(I(\theta))^{1/2}
+%     \end{align*}
+%   \item<2-> E.g.\\
+%     $y \sim \Bin(n,\theta): \quad p(\theta)\propto \theta^{-1/2}(1-\theta)^{-1/2}$\\
+%     $y \sim N(\mu,\sigma^2): \quad p(\mu,\sigma^2)\propto 1/\sigma^2$
+%   \item<3-> May produce improper priors or too vague priors
+%   \end{itemize}
 
-\end{frame}
+% \end{frame}
 
 % \begin{frame}
 
@@ -522,6 +545,39 @@
   \only<3>{\includegraphics[width=9cm]{sexratio_bayes_1.pdf}}
   \only<4>{\includegraphics[width=9cm]{sexratio_bayes_2.pdf}}
   \end{center}
+\end{frame}
+
+\begin{frame}
+
+  \frametitle{Example of weakly informative prior}
+  
+  \begin{itemize}
+  \item Gabry et al (2017). Visualization in Bayesian workflow.
+    \only<1>{
+    \begin{itemize}
+    \item Estimation of human exposure to air pollution from
+      particulate matter measuring less than 2.5 microns in diameter
+      (PM$_{2.5}$)
+  \item A recent report estimated that PM$_{2.5}$ is responsible for three
+    million deaths worldwide each year (Shaddick et al, 2017)
+  \end{itemize}
+  }
+  \end{itemize}
+  \begin{center}
+  \only<2>{\includegraphics[width=10cm]{map-data.png}\\Satellite estimates and ground monitor locations}
+  \only<3>{\includegraphics[width=6.5cm]{plot2_bigger.png}}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+
+  \frametitle{Example of weakly informative prior}
+
+  \begin{center}
+    \only<1>{\includegraphics[width=11cm]{pm25_pp1a.pdf}}
+    \only<2>{\includegraphics[width=11cm]{pm25_pp1b.pdf}}
+    \only<3>{\includegraphics[width=11cm]{pm25_pp2.pdf}}
+\end{center}
 \end{frame}
 
 \begin{frame}
@@ -648,18 +704,18 @@ blue-green algae levels.
 
 \end{frame}
 
-\begin{frame}
- \frametitle{Normal distribution - conjugate prior for $\theta$}
+% \begin{frame}
+%  \frametitle{Normal distribution - conjugate prior for $\theta$}
 
- \begin{itemize}
- \item Assume $\sigma^2$ known
-   \begin{align*}
-     &\text{Likelihood} & p(y|\theta) & \propto
-     \exp\left(-\frac{1}{2\sigma^2}(y-\theta)^2\right)\\ \\
-     &\text{Prior} & p(\theta) & \propto \exp\left(-\frac{1}{2\tau_0^2}(\theta-\mu_0)^2\right)
-   \end{align*}
-\end{itemize}
-\end{frame}
+%  \begin{itemize}
+%  \item Assume $\sigma^2$ known
+%    \begin{align*}
+%      &\text{Likelihood} & p(y|\theta) & \propto
+%      \exp\left(-\frac{1}{2\sigma^2}(y-\theta)^2\right)\\ \\
+%      &\text{Prior} & p(\theta) & \propto \exp\left(-\frac{1}{2\tau_0^2}(\theta-\mu_0)^2\right)
+%    \end{align*}
+% \end{itemize}
+% \end{frame}
 
 \begin{frame}
   \frametitle{Normal distribution - conjugate prior for $\theta$}
@@ -671,8 +727,9 @@ blue-green algae levels.
       \exp\left(-\frac{1}{2\sigma^2}(y-\theta)^2\right)\\ \\
       &\text{Prior} & p(\theta) & \propto
       \exp\left(-\frac{1}{2\tau_0^2}(\theta-\mu_0)^2\right)\\ \\
-      & \pause \text{Posterior}&
-      p(\theta|y)& \propto \exp\left(-\frac{1}{2}\left[ \frac{(y-\theta)^2}{\sigma^2}+\frac{(\theta-\mu_0)^2}{\tau_0^2} \right]\right)
+      & & \uncover<2->{\exp(a)\exp(b)} & \uncover<2->{= \exp(a+b)} \\ \\
+      &\uncover<3->{ \text{Posterior}}&
+      \uncover<3->{p(\theta|y)& \propto \exp\left(-\frac{1}{2}\left[ \frac{(y-\theta)^2}{\sigma^2}+\frac{(\theta-\mu_0)^2}{\tau_0^2} \right]\right)}
     \end{align*}
   \end{itemize}
 
@@ -708,23 +765,23 @@ blue-green algae levels.
 
 \end{frame}
 
+% \begin{frame}
+%   \frametitle{Normal distribution - example}
+
+%   \begin{itemize}
+%   \item Let's collect some data\\
+%   \url{https://goo.gl/forms/c9asEqJMDQ061hj03}
+% \end{itemize}
+
+% \end{frame}
+
 \begin{frame}
-  \frametitle{Normal distribution - conjugate prior for $\theta$}
+  \frametitle{Normal distribution - example}
 
-  \begin{itemize}
-  \item Posterior predictive distribution
-    \begin{align*}
-      p(\tilde{y}|y)&=\int p(\tilde{y}|\theta)p(\theta|y) d\theta \\
-      p(\tilde{y}|y)& \propto\int
-      \exp\left(-\frac{1}{2\sigma^2}(\tilde{y}-\theta)^2\right)\exp\left(-\frac{1}{2\tau_1^2}(\theta-\mu_1)^2\right) d\theta \\
-      ~&~\\ 
-      \tilde{y}|y &\sim \N(\mu_1,\sigma^2+\tau_1^2)
-    \end{align*}
-  \item Predictive variance = observation model variance $\sigma^2$ + \\
-     posterior variance $\tau_1^2$
-
-  \end{itemize}
-
+  \only<1>{\includegraphics[width=11cm]{pguess.pdf}}
+  \only<2>{\includegraphics[width=11cm]{pguessprior.pdf}}
+  \only<3>{\includegraphics[width=11cm]{ppost.pdf}}
+  
 \end{frame}
 
 \begin{frame}
@@ -762,16 +819,35 @@ blue-green algae levels.
 
 \end{frame}
 
- \begin{frame}
-   \frametitle{Some other one parameter models}
+% \begin{frame}
+%   \frametitle{Normal distribution - conjugate prior for $\theta$}
 
-   \begin{itemize}
-   \item Poisson
-   \item Exponential
-   \item Cauchy
-   \end{itemize}
+%   \begin{itemize}
+%   \item Posterior predictive distribution
+%     \begin{align*}
+%       p(\tilde{y}|y)&=\int p(\tilde{y}|\theta)p(\theta|y) d\theta \\
+%       p(\tilde{y}|y)& \propto\int
+%       \exp\left(-\frac{1}{2\sigma^2}(\tilde{y}-\theta)^2\right)\exp\left(-\frac{1}{2\tau_1^2}(\theta-\mu_1)^2\right) d\theta \\
+%       ~&~\\ 
+%       \tilde{y}|y &\sim \N(\mu_1,\sigma^2+\tau_1^2)
+%     \end{align*}
+%   \item Predictive variance = observation model variance $\sigma^2$ + \\
+%      posterior variance $\tau_1^2$
+
+%   \end{itemize}
+
+% \end{frame}
+
+ % \begin{frame}
+ %   \frametitle{Some other one parameter models}
+
+ %   \begin{itemize}
+ %   \item Poisson
+ %   \item Exponential
+ %   \item Cauchy
+ %   \end{itemize}
    
- \end{frame}
+ % \end{frame}
 
 
 \end{document}
