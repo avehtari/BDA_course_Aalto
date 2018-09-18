@@ -51,13 +51,23 @@
 \DeclareMathOperator{\tr}{tr}
 \DeclareMathOperator{\trace}{trace}
 
+% Parenthesis \left  \right -fix
+\renewcommand*{\l}{\mathopen{}\mathclose\bgroup\left}
+\renewcommand*{\r}{\aftergroup\egroup\right}
+
+
 % Horizontal line
 \newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
 
-\pagestyle{empty}
+% \pagestyle{empty}
+
+
+% Stan source code block
+\usepackage{listings}
+
 
 \begin{document}
-\thispagestyle{empty}
+% \thispagestyle{empty}
 
 \section*{Bayesian data analysis -- exercise 7}
 
@@ -67,27 +77,72 @@ The maximum amount of points from this assignment is 6. In addition to the corre
 
 Report all results to a single, {\bf anonymous} *.pdf -file and return it to \href{peergrade.io}{peergrade.io}. Include also source code to the report (either as an attachment or as a part of the answer). By anonymity it is meant that the report should not contain your name or student number.
 
-%\HRule
+\HRule
 
 \vspace{1cm}
 
 
 \subsection*{1. Linear model: drowning data with Stan (3p)}
 
-The provided {\tt drowning.txt} file contains the number of people drown per year in Finland 1980--2013.
+The provided {\tt drowning.txt} file contains the number of people drown per year in Finland 1980--2016.
 %We build a linear model using time as the predictor to explain the changes in the number of people drown. with Gaussian noise
-Using Stan, fit a linear model with Gaussian noise to these data (using time as the predictor and number of drownings as the target variable), and answer the following questions:
+We are going to fit a linear model with Gaussian noise to these data using time as the predictor and number of drownings as the target variable (see related linear model example for the Kilpisjärvi-temperature data in the example Stan codes).
+We have two objective questions:
 \begin{itemize}
-	\item [i)] What can you say about the trend in the number of people drown per year? Plot the histogram of the slope of the linear model.
-	\item [ii)] What does the model predict for year 2019? Plot the histogram of the posterior predictive distribution for number of people drown at $\tilde x=2019$.
+	\item [i)] What can you say about the trend in the number of people drown per year? We would plot the histogram of the slope of the linear model.
+	\item [ii)] What does the model predict for year 2019? We would plot the histogram of the posterior predictive distribution for number of people drown at $\tilde x=2019$.
 \end{itemize}
-Use uniform prior for the intercept, slope and noise variance.
 
-Hints and further advice:
+The provided Stan code in Listing~\ref{listing1} is almost correct for the given problem. However, there are two crucial mistakes. Find these two mistakes and fix them. Report the original mistakes and your fixes clearly in your report.
+
+The provided broken code does not define any prior for the parameters. In Stan, this corresponds to using a uniform prior. We would like to apply a weakly-informative prior $\operatorname{N}(0, \tau^2)$ for the slope parameter {\tt beta}. It is very unlikely that the mean number of drownings changes more than 50 \% in one year. The approximate historical mean yearly number of drownings is 138. Hence, set $\tau$ so that the prior probability for {\tt beta} being less than $-69$ or greater than $69$ is $0.01$. Report suitable approximate numerical value for $\tau$ and clearly indicate how one would implement this in the Stan code.
+
+Example resulting plots for the problem, with the fixes and the desired prior applied, are shown in Figure~\ref{fig1}. If you want, you can use these plots as a reference for testing if your modified Stan code produces similar results. However, running the inference and comparing the plots is not required. In the report, in addition to the full resulting Stan model code, the following things needs to be clearly presented and discussed in separate sections:
 \begin{itemize}
-\item See the linear model example for the Kilpisjärvi-temperature data in the example Stan codes. What you need to do is essentially just change the dataset.
-\item You need to implement the prediction for year 2019. This can be done using the {\tt generated quantities} block in the Stan code, as in the demo example. Alternatively, you can perform the sampling from the predictive distribution outside Stan, given the posterior samples provided by Stan.
+\item the fixes in the code,
+\item suitable approximate numerical value for $\tau$,
+\item details how to implement the desired prior in the code.
 \end{itemize}
+
+\begin{lstlisting}[
+	float,
+	caption=Broken Stan code for question 1,
+	label=listing1,
+	basicstyle=\footnotesize\ttfamily,
+	numbers=left,
+	xleftmargin=2.7em,
+	frame=single,
+	framexleftmargin=2.2em
+]
+data {
+    int<lower=0> N; // number of data points
+    vector[N] x; //
+    vector[N] y; //
+    real xpred; // input location for prediction
+}
+parameters {
+    real alpha;
+    real beta;
+    real sigma;
+}
+transformed parameters {
+    vector[N] mu;
+    mu = alpha + beta*x;
+}
+model {
+    y ~ normal(mu, sigma);
+}
+generated quantities {
+    real ypred;
+    ypred = normal_rng(mu, sigma);
+}
+\end{lstlisting}
+
+\begin{figure}
+\centering
+   \includegraphics[width=0.66\textwidth]{ex7_fig1.pdf}
+\caption{Example plots for the results obtained for problem in the question 1.}\label{fig1}
+\end{figure}
 
 
 
