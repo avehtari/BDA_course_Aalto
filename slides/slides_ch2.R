@@ -17,19 +17,19 @@ theme_set(bayesplot::theme_default(base_family = "sans"))
 ggplot(data.frame(x=0:1, y=dbinom(0:1, 1, 0.5)), aes(x=x, y=y)) +
     geom_col() +
     scale_x_discrete(breaks=0:1, limits=0:1) +
-    labs(x="y", y="", title="Binomial distribution with theta=0.5, n=1")
+    labs(x="y", y="probability", title=bquote("Binomial distribution with " ~ theta ~ "=0.5, n=1"))
 
 #' Binomial distribution with theta=0.5, n=10
 ggplot(data.frame(x=0:10, y=dbinom(0:10, 10, 0.5)), aes(x=x, y=y)) +
     geom_col() +
     scale_x_discrete(breaks=0:10, limits=0:10) +
-    labs(x="y", y="", title="Binomial distribution with theta=0.5, n=10")
+    labs(x="y", y="probability", title=bquote("Binomial distribution with " ~ theta~ "=0.5, n=10"))
 
 #' Binomial distribution with theta=0.9, n=10
 ggplot(data.frame(x=0:10, y=dbinom(0:10, 10, 0.9)), aes(x=x, y=y)) +
     geom_col() +
     scale_x_discrete(breaks=0:10, limits=0:10) +
-    labs(x="y", y="", title="Binomial distribution with theta=0.9, n=10")
+    labs(x="y", y="probability", title=bquote("Binomial distribution with " ~ theta ~ "=0.9, n=10"))
 
 #' Posterior of theta of Binomial model with y=10, n=10
 ggplot(data = data.frame(x = c(0, 1)), aes(x)) +
@@ -37,8 +37,8 @@ ggplot(data = data.frame(x = c(0, 1)), aes(x)) +
                   color = "blue") +
     geom_segment(x=11/12, xend=11/12, y=0, yend=11, color="red") +
     annotate(geom ="text", x=11/12, y=-0.5, label="Mean")  +
-    labs(x="theta", y="",
-         title="Posterior of theta of Binomial model with y=10, n=10")
+    labs(x=bquote(theta), y="",
+         title=bquote("Posterior of " ~ theta ~ " of Binomial model with y=10, n=10"))
 
 #' Posterior of theta of Binomial model with y=10, n=10
 ggplot(data = data.frame(x = c(0, 1)), aes(x)) +
@@ -46,7 +46,7 @@ ggplot(data = data.frame(x = c(0, 1)), aes(x)) +
                   color = "blue") +
     geom_segment(x=11/12, xend=11/12, y=0, yend=11, color="red") +
     annotate(geom ="text", x=11/12, y=-0.5, label="Mean")  +
-    labs(x="theta", y="", title="p(theta|y=10,n=10, M=binom) + unif. prior")
+    labs(x=bquote(theta), y="", title=bquote("p(" ~ theta ~ "| y=10, n=10, M=binom) + unif. prior"))
 
 #' Posterior of theta of Binomial model with y=10, n=10 + Beta(2,2) prior
 ggplot(data = data.frame(x = c(0, 1)), aes(x)) +
@@ -54,13 +54,13 @@ ggplot(data = data.frame(x = c(0, 1)), aes(x)) +
                   color = "blue") +
     geom_segment(x=12/14, xend=12/14, y=0, yend=11, color="red") +
     annotate(geom ="text", x=12/14, y=-0.5, label="Mean")  +
-    labs(x="theta", y="", title="p(theta|y=10,n=10, M=binom) + Beta(2,2) prior")
+    labs(x=bquote(theta), y="", title=bquote("p(" ~ theta ~ "| y=10, n=10, M=binom) + Beta(2,2) prior"))
 
 #' Posterior of theta of Binomial model with y=6, n=10 + unif prior
 ggplot(data = data.frame(x = c(0, 1)), aes(x)) +
     stat_function(fun = dbeta, n = 601, args = list(shape1 = 7, shape2 = 5),
                   color = "blue") +
-    labs(x="theta", y="", title="p(theta|y=6,n=10, M=binom) + unif. prior")
+    labs(x=bquote(theta), y="", title=bquote("p(" ~ theta ~ "| y=6, n=10, M=binom) + unif. prior)"))
 
 
 #' # Gaussian model with known variance, Gaussian posterior
