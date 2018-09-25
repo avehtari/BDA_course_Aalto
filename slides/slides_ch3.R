@@ -829,18 +829,21 @@ pos <- ggplot(data = data.frame(cA ,cB, p), aes(cA, cB)) +
   scale_fill_gradient(low = 'white', high = 'red') 
 pos
 ggsave('figs/bioassay_grid3.pdf', width=6, height=4)
+ggsave('figs/bioassay_grid3.png', width=6, height=4)
 
 #' Plot posterior density evaluated in a grid and a posterior draw
 pos + 
     geom_point(data = samps[1,], aes(alpha, beta), color = 'blue', size=1) +
     labs(title = 'Posterior density and draws in a grid', x = TeX('$\\alpha$'), y = TeX('$\\beta$')) 
 ggsave('figs/bioassay_grid4.pdf', width=6, height=4)
+ggsave('figs/bioassay_grid4.png', width=6, height=4)
 
 #' Plot posterior density evaluated in a grid and 100 posterior draws
 pos + 
     geom_point(data = samps[1:100,], aes(alpha, beta), color = 'blue', size=1) +
     labs(title = 'Posterior density and draws in a grid', x = TeX('$\\alpha$'), y = TeX('$\\beta$'))
 ggsave('figs/bioassay_grid5.pdf', width=6, height=4)
+ggsave('figs/bioassay_grid5.png', width=6, height=4)
 ## +
 ##     transition_reveal(id=id, along=ind) + 
 ##     shadow_trail(0.01)
@@ -850,11 +853,13 @@ pos +
     geom_point(data = samps, aes(alpha, beta), color = 'blue', size=1) +
     labs(title = 'Posterior density and draws in a grid', x = TeX('$\\alpha$'), y = TeX('$\\beta$')) 
 ggsave('figs/bioassay_grid6.pdf', width=6, height=4)
+ggsave('figs/bioassay_grid6.png', width=6, height=4)
 
 pos + 
     geom_point(data = sampsj, aes(alpha, beta), color = 'blue', size=1) +
   labs(title = 'Posterior density in a grid and jittered draws', x = TeX('$\\alpha$'), y = TeX('$\\beta$'))
 ggsave('figs/bioassay_grid7.pdf', width=6, height=4)
+ggsave('figs/bioassay_grid7.png', width=6, height=4)
 
 #' For illustration use coarser a grid
 A = seq(-4, 8, length.out = 25)
@@ -872,7 +877,7 @@ logl <- function(df, a, b)
 
 #' Calculate likelihoods: apply logl function for each observation
 #' ie. each row of data frame of x, n and y
-p <- apply(df1, 1, logl, cA, cB) %>%
+pc <- apply(df1, 1, logl, cA, cB) %>%
   # sum the log likelihoods of observations
   # and exponentiate to get the joint likelihood
     rowSums() %>% exp()
@@ -880,24 +885,27 @@ p <- apply(df1, 1, logl, cA, cB) %>%
 #' Plot posterior density evaluated in a coarser grid
 xl <- c(-1, 5)
 yl <- c(-2, 30)
-pos <- ggplot(data = data.frame(cA ,cB, p), aes(cA, cB)) +
-  geom_raster(aes(fill = p), interpolate = F) +
+posc <- ggplot(data = data.frame(cA ,cB, pc), aes(cA, cB)) +
+  geom_raster(aes(fill = pc), interpolate = F) +
   coord_cartesian(xlim = xl, ylim = yl) +
   labs(title = 'Posterior density evaluated in a grid', x = TeX('$\\alpha$'), y = TeX('$\\beta$')) +
     scale_fill_gradient(low = 'white', high = 'red')
-pos
+posc
 ggsave('figs/bioassay_grid3_1.pdf', width=6, height=4)
+ggsave('figs/bioassay_grid3_1.png', width=6, height=4)
 
 #' Plot posterior density evaluated in a coarser grid and cell mid points
-pos + geom_point(size=0.5)
+posc + geom_point(size=0.5)
 ggsave('figs/bioassay_grid3_2.pdf', width=6, height=4)
+ggsave('figs/bioassay_grid3_2.png', width=6, height=4)
 
 #' Plot posterior density evaluated in a coarser grid and annotate three cells
-pos + 
+posc + 
     annotate('text', x=cA[which(p==max(p))], y=cB[which(p==max(p))], label='1', size=5) +
     annotate('text', x=cA[which(p==max(p))+50], y=cB[which(p==max(p))+50], label='2', size=5) +
     annotate('text', x=cA[which(p==max(p))+100], y=cB[which(p==max(p))+100], label='3', size=5)
 ggsave('figs/bioassay_grid3_3.pdf', width=6, height=4)
+ggsave('figs/bioassay_grid3_3.png', width=6, height=4)
 
 #' Densities and probabilities in three annotated cells
 round(c(p[which(p==max(p))],p[which(p==max(p))+50],p[which(p==max(p))+100]),4)
