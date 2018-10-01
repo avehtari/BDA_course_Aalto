@@ -42,6 +42,10 @@ fit_lin <- stan_glm(temp ~ year, data = d_lin, family = gaussian())
 #' Check the diagnostics
 summary(fit_lin)
 
+#' The effective sample size for slope is almost 4000, so we proceed
+#' as if the draws would be independent, introducing a negligible
+#' error in Monte Carlo error estimates
+
 #' Plot data and the fit
 samples_lin <- rstan::extract(fit_lin$stanfit, permuted = T)
 mean(samples_lin$beta>0) # probability that beta > 0
