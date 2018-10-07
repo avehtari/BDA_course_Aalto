@@ -85,8 +85,8 @@ Is the interpretation of Rhat values correct (correct interpretation will be giv
 Does the report contain a scatter plot about the draws? Do the results look reasonable, that is, roughly like in the Figure below (figure attached in peergrade)?
 
 - No plot included
-- Plot in included, but it does not look like Fig. 3.3b in BDA3
-- Plot included, and the results look roughly like in Fig. 3.3b in BDA3
+- Plot included, but the results do not look like in the figure above
+- Plot included, and the results look roughly like in the figure above
 
 ## S3 - 7.5 points
 
