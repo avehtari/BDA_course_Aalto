@@ -82,7 +82,7 @@ Is the interpretation of Rhat values correct (correct interpretation will be giv
 - Interpretation correct
 
 ### Q11 - 1 point
-Does the report contain a scatter plot about the draws? Do the results look reasonable, that is, roughly like in the Figure below (figure attached)?
+Does the report contain a scatter plot about the draws? Do the results look reasonable, that is, roughly like in the Figure below (figure attached in peergrade)?
 
 - No plot included
 - Plot in included, but it does not look like Fig. 3.3b in BDA3
