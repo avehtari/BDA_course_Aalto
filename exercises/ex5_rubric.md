@@ -75,7 +75,7 @@ Are the Rhat-values reported (potential scale reduction factor, Eq. (11.4) in th
 
 ### Q10 - 1 point
 
-Is the interpretation of Rhat values correct (Rhat values are --- => chains probably converged and estimates reliable)?
+Is the interpretation of Rhat values correct (correct interpretation will be given in peergrade)?
 
 - No interpretation or discussion about the Rhat-values, or conclusions clearly wrong
 - Somewhat correct
