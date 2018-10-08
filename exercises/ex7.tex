@@ -131,77 +131,21 @@ generated quantities {
 \end{figure}
 
 
-
 \subsection*{2. Hierarchical model: factory data with Stan (3p)}
-The provided {\tt factory.txt} file contains quality control measurements from 6 machines in a factory (units of the measurements are irrelevant here). Quality control measurements are expensive and time-consuming, so only 5 measurements were done for each machine. In addition to the existing machines, we are interested in the quality of another machine (the seventh machine).
-Implement a separate, pooled and hierarchical Gaussian model described in Section 11.6 using Stan.
-Similarly as in the model description in the book, use the same measurement standard deviation $\sigma$ for all the groups in the hierarchical model. In the separate model however, use separate measurement standard deviation $\sigma_j$ for each group $j$.
-Using each of the three models -- separate, pooled, and hierarchical -- report (plot histogram and comment on the results):
+
+The provided {\tt factory.txt} file contains quality control measurements from 6 machines in a factory (units of the measurements are irrelevant here). In the data file, each column contains the measurements for a single machine. Quality control measurements are expensive and time-consuming, so only 5 measurements were done for each machine. In addition to the existing machines, we are interested in the quality of another machine (the seventh machine).
+
+Implement a separate, pooled and hierarchical Gaussian model described in Section 11.6 using Stan. In the pooled model, all the measurements are combined together and no distinction is made between the machines. In the separate model, each machine has its own model. Similarly as in the model description in the book, use the same measurement standard deviation $\sigma$ for all the groups in the hierarchical model. In the separate model however, use separate measurement standard deviation $\sigma_j$ for each group $j$. Use Stan's default uniform prior for all the parameters.
+
+Using each of the three models -- separate, pooled, and hierarchical -- report (comment and, if applicable, plot histogram):
 \begin{itemize}
 	\item [i)] the posterior distribution of the mean of the quality measurements of the sixth machine
 	\item [ii)] the predictive distribution for another quality measurement of the sixth machine
 	\item [iii)] the posterior distribution of the mean of the quality measurements of the seventh machine.
 \end{itemize}
-Use Stan's default uniform prior for all the parameters.
 
-\noindent Hints and further advice:
-\begin{itemize}
-
-\item In the data file, each column contains measurements for a single machine. In the pooled model all measurements are combined together and in the separate model each machine has its own model.
-\item See the example Stan-codes for the comparison of $k$ groups with and without the hierarchical structure. What you need to do is change the dataset, implement the prediction for the future measurement of the sixth machine, and figure out the distribution for the mean of the quality measurements for the seventh machine in the hierarchical model.
-
-%\item The units of the measurements are irrelevant here.
-
-% \item In the book (Section 11.6), the hierarchical model has the same measurement standard deviation $\sigma$ for all the groups. The example Stan codes have an implementation both for the shared $\sigma$ and for the case where each group $j$ has its own measurement deviation $\sigma_j$. You can use either of these, but remember to report which one you used.
-% \item You can use any reasonable prior, for example uniform prior for all the parameters. See the example codes for other reasonable weakly informative priors.  Remember to report which prior you used.
-%\item Use Matlab template ex11\_3.m
-%\item %The pooled and separate models can be implemented without Gibbs sampling and you can directly use the results from Chapter 3.
-% In the pooled model all measurements are combined together and in the
-%  separate model each machine has its own model.
-%\item Use Gibbs sampling to sample from the posterior of the
-%  hierarchical model. The hierarchical model and its conditional
-%  distributions can be found in Section 11.6 (BDA3). Make a
-%  hierarchical model for the means and a common model for the
-%  variances of the machine qualities by following the instructions in
-%  the book.
-%\item Perform convergence diagnostics and remember to remove the
-%  burn-in samples:
-%\item Monitor the convergence visually and using \texttt{psrf.m}.
-%\item Use the \texttt{acorr.m} to compute the autocorrelation
-%  functions. Plot autocorrelation functions. What would be a good
-%  value in thinning to make the samples approximately independent?
-%\item Functions: \texttt{sinvchi2rand.m sinvchi2pdf.m psrf.m acorr.m}
-
-%\item Your solution should contain
-
-%\begin{itemize}
-%\item m-files for the three models
-
-%\item the posterior distribution of the mean of the quality measurements of
-%the sixth machine with the different models
-
-%\item the predictive distribution for another quality measurement of the
-%sixth machine with the different models
-
-%\item the posterior distribution of the mean of the quality measurements of
-%the seventh machine with the the hierarchical and pooled models
-
-%\item results of the convergence analysis
-
-%\item comments on the results
-%\end{itemize}
-%\item Comment the obtained results.
-
-\end{itemize}
-
-
-
-
-
-
-
-
-
+Hint:
+See the example Stan-codes for the comparison of $k$ groups with and without the hierarchical structure. What you need to do is change the dataset, implement the prediction for the future measurement of the sixth machine, and figure out the distribution for the mean of the quality measurements for the seventh machine in the hierarchical model.
 
 \end{document}
 
