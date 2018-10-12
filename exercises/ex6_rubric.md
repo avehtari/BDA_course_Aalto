@@ -1,3 +1,5 @@
+# Assignment 6
+
 ## S1
 
 Basic requirements
@@ -46,8 +48,7 @@ Are the R_hat-values reported (potential scale reduction factor, Eq. (11.4) in t
 
 ### Q6 
 
-Is the interpretation of R_hat values correct (R_hat values close to one => chains probably converged
-and estimates reliable)?
+Is the interpretation of Rhat values correct (correct interpretation will be given in peergrade)?
 
 - No interpretation or discussion about the R_hat-values, or conclusions clearly wrong
 - Somewhat correct
@@ -55,12 +56,12 @@ and estimates reliable)?
 
 ### Q7
 
-Does the report contain a scatter plot about the samples (like Fig. 3.3b in BDA3)? Do the results look
-reasonable?
+Does the report contain a scatter plot about the draws? Do the results look reasonable, that is, roughly like in the Figure below (figure attached in peergrade)?
 
 - No plot included
-- Plot in included, but it does not look like Fig. 3.3b in BDA3
-- Plot included, and the results look roughly like in Fig. 3.3b in BDA3
+- Plot included, but the results do not look like in the figure above
+- Plot included, and the results look roughly like in the figure above
+
 
 ## S3
 
@@ -88,14 +89,4 @@ What is the overall quality of the report?
 
 Justify your answers for overall quality of the report if needed
 
-## S4
 
-Assignment
-
-### Q11 
-
-Mention something that your classmate did well ?
-
-### Q12 
-
-Mention something that your classmate could improve at ?
