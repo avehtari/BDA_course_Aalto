@@ -1084,6 +1084,83 @@ functions {
 }
 \end{frame} 
 
+
+\begin{frame}[fragile]
+
+  {\Large\color{navyblue} RStanARM}
+
+  \begin{itemize}
+  \item RStanARM provides simplified model description with
+    pre-compiled models
+    \begin{itemize}
+    \item no need to wait for compilation
+    \item a restricted set of models
+    \end{itemize}
+  \end{itemize}
+
+  {\scriptsize
+\begin{lstlisting}
+d_bin2 <- data.frame(N = c(674, 680), y = c(39,22), grp2 = c(0,1))
+fit_bin2 <- stan_glm(y/N ~ grp2, family = binomial(), data = d_bin2,
+                    weights = N)
+
+draws_bin2 <- as.data.frame(fit_bin2) %>%
+  mutate(theta1 = plogis(`(Intercept)`),
+         theta2 = plogis(`(Intercept)` + grp2),
+         oddsratio = (theta2/(1-theta2))/(theta1/(1-theta1)))
+
+mcmc_hist(draws_bin2, pars='oddsratio')
+\end{lstlisting}
+    }
+    
+\end{frame} 
+
+
+\begin{frame}[fragile]
+
+  {\Large\color{navyblue} BRMS}
+
+  \begin{itemize}
+  \item BRMS provides simplified model description
+    \begin{itemize}
+    \item a larger set of models than RStanARM, but still restricted
+    \item need to wait for the compilation
+    \end{itemize}
+  \end{itemize}
+
+  {\scriptsize
+\begin{lstlisting}
+fit_bin2 <- brm(y/N ~ grp2, family = binomial(), data = d_bin2,
+                    weights = N)
+
+
+fit_lin_t <- brm(temp ~ year, data = d_lin, family = student())
+\end{lstlisting}
+    }
+    
+\end{frame} 
+
+\begin{frame}[fragile]
+
+  {\Large\color{navyblue} Other packages}
+
+  \begin{itemize}
+  \item R
+    \begin{itemize}
+    \item shinystan --- interactive diagnostics
+    \item bayesplot --- visualization and model checking (se model checking in Ch 6)
+    \item loo --- cross-validation model assessment, comparison and averaging (see Ch 7)
+    \item projpred --- projection predictive variable selection
+    \end{itemize}
+    \vspace{\baselineskip}
+  \item Python
+    \begin{itemize}
+    \item ArviZ --- visualization, and model checking and assessment (see Ch 6 and 7)
+    \end{itemize}
+  \end{itemize}
+
+\end{frame} 
+
 \end{document}
 
 %%% Local Variables: 
