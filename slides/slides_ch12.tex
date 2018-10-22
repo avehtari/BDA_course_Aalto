@@ -29,6 +29,7 @@
 \usepackage{eucal}
 \usepackage{rotating}
 \usepackage{listings}
+\usepackage{lstbayes}
 
 \usepackage{natbib}
 \bibliographystyle{apalike}
@@ -236,12 +237,12 @@
     \item adaptively selects number of steps to improve robustness and
       efficiency
     \item dynamic HMC refers to dynamic trajectory length
-    \item to keep reversibility of Markov chain, need to simulate on two direction
+    \item to keep reversibility of Markov chain, need to simulate in two directions
     \item \url{http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/}
     \end{itemize}
   \item<4-> Dynamic simulation is discretized
     \begin{itemize}
-    \item small step size gives accurate simulation, but requires more log density evalutions
+    \item small step size gives accurate simulation, but requires more log density evaluations
     \item large step size reduces computation, but increases
       simulation error which needs to be taken into account in the
       Markov chain
@@ -261,7 +262,7 @@
     \begin{itemize}
     \item max treedepth to keep computation in control
     \item pick a draw along the trajectory with probabilities adjusted
-      to take into account the error in the discreteized dynamic
+      to take into account the error in the discretized dynamic
       simulation
     \end{itemize}
   \item<2-> Mass matrix and step size adaptation in Stan
@@ -361,6 +362,9 @@
    \begin{itemize}
    \item Language, inference engine, user interfaces, documentation,
      case studies, diagnostics, packages, ...
+     \begin{itemize}
+     \item autodiff to compute gradients of the log density
+     \end{itemize}
    \item<2-> More than ten thousand users in social, biological, and
      physical sciences, medicine, engineering, and business
    \item<2-> Several full time developers, 35 in dev team, more than 100 contributors
@@ -393,20 +397,20 @@
   {\Large\color{navyblue} Binomial model - Stan code}
   {\small\color{gray}
 {\only<1>{\color{black}}
-  \begin{lstlisting}
+  \begin{lstlisting}[language=Stan]
 data {
   int<lower=0> N;     // number of experiments
   int<lower=0,upper=N> y; // number of successes
 }
 \end{lstlisting}}
   {\only<2>{\color{black}}
-\begin{lstlisting}
+\begin{lstlisting}[language=Stan]
 parameters {
   real<lower=0,upper=1> theta; // parameter of the binomial
 }
 \end{lstlisting}}
 {\only<3>{\color{black}}
-\begin{lstlisting}
+\begin{lstlisting}[language=Stan]
 model {
   theta ~ beta(1,1);     //prior
   y ~ binomial(N,theta); // observation model
@@ -420,7 +424,7 @@ model {
   {\Large\color{navyblue} Binomial model - Stan code}
   
   {\small
-  \begin{lstlisting}
+  \begin{lstlisting}[language=Stan]
 data {
   int<lower=0> N;     // number of experiments
   int<lower=0,upper=N> y; // number of successes
@@ -438,7 +442,7 @@ data {
   {\Large\color{navyblue} Binomial model - Stan code}
 
   {\small
-\begin{lstlisting}
+\begin{lstlisting}[language=Stan]
 parameters {
   real<lower=0,upper=1> theta;
 }
@@ -461,10 +465,10 @@ parameters {
   {\Large\color{navyblue} Binomial model - Stan code}
   
   {\small
-\begin{lstlisting}
+\begin{lstlisting}[language=Stan]
 model {
-  theta ~ beta(1,1);     //prior
-  y ~ binomial(N,theta); // observation model
+  theta ~ beta(1,1);     // prior
+  y ~ binomial(N,theta); // likelihood
 }
 \end{lstlisting}}
 
@@ -475,10 +479,10 @@ model {
   {\Large\color{navyblue} Binomial model - Stan code}
   
   {\small
-\begin{lstlisting}
+\begin{lstlisting}[language=Stan]
 model {
-  theta ~ beta(1,1);     //prior
-  y ~ binomial(N,theta); // observation model
+  theta ~ beta(1,1);     // prior
+  y ~ binomial(N,theta); // likelihood
 }
 \end{lstlisting}}
 
@@ -487,45 +491,48 @@ model {
     \end{itemize}
 
   {\small
-\begin{lstlisting}
+\begin{lstlisting}[language=Stan]
 model {
-  target +=  beta_lpdf(theta | 1, 1);
-  target +=  binomial_lpmf(y | N, theta);
+  target += beta_lpdf(theta | 1, 1);     // prior
+  target += binomial_lpmf(y | N, theta); // likelihood
 }
 \end{lstlisting}}
+
+    \begin{itemize}
+    \item<2-> {\tt target} is the log posterior density (usually)
+    \item<3-> {\tt \_lpdf} for continuous, {\tt \_lpmf} for discrete distributions
+    \end{itemize}
 
 \end{frame} 
 
-\begin{frame}[fragile]
+% \begin{frame}[fragile]
 
-  {\Large\color{navyblue} Binomial model - Stan code}
+%   {\Large\color{navyblue} Binomial model - Stan code}
   
-  {\small
-\begin{lstlisting}
-model {
-  theta ~ beta(1,1);     //prior
-  y ~ binomial(N,theta); // observation model
-}
-\end{lstlisting}}
+%   {\small
+% \begin{lstlisting}[language=Stan]
+% model {
+%   theta ~ beta(1,1);     //prior
+%   y ~ binomial(N,theta); // observation model
+% }
+% \end{lstlisting}}
 
-    \begin{itemize}
-    \item $\sim$ is syntactic sugar and this could be also written as
-    \end{itemize}
+%     \begin{itemize}
+%     \item $\sim$ is syntactic sugar and this could be also written as
+%     \end{itemize}
 
-  {\small
-\begin{lstlisting}
-model {
-  target +=  beta_lpdf(theta | 1, 1);
-  target +=  binomial_lpmf(y | N, theta);
-}
-\end{lstlisting}}
+%   {\small
+% \begin{lstlisting}[language=Stan]
+% model {
+%   target +=  beta_lpdf(theta | 1, 1);
+%   target +=  binomial_lpmf(y | N, theta);
+% }
+% \end{lstlisting}}
 
-    \begin{itemize}
-    \item Stan model code constructs log density!
-    \item<2-> lpdf for continuous, lpmf for discrete distributions
-    \end{itemize}
+%     \begin{itemize}
+%     \end{itemize}
     
-\end{frame}
+% \end{frame}
 
 \begin{frame}
   
@@ -549,7 +556,7 @@ model {
   {\small\color{gray}
     {\only<1>{\color{black}}
       RStan
-\begin{lstlisting}
+\begin{lstlisting}[language=R]
 library(rstan) 
 rstan_options(auto_write = TRUE)
 options(mc.cores = parallel::detectCores())
@@ -557,25 +564,26 @@ source('stan_utility.R')
 \end{lstlisting}
     }
 {\only<2>{\color{black}}
-\begin{lstlisting}
+\begin{lstlisting}[language=R]
 d_bin <- list(N = 10, y = 7)
 fit_bin <- stan(file = 'binom.stan', data = d_bin)
 \end{lstlisting}
-} \hrulefill\\
-{\only<3>{\color{black}}
-      PyStan
-\begin{lstlisting}
-import pystan
-import stan_utility
-\end{lstlisting}
-    }
-    {\only<4>{\color{black}}
-\begin{lstlisting}
-data = dict(N=10, y=8)
-model = stan_utility.compile_model('binom.stan')
-fit = model.sampling(data=data)
-\end{lstlisting}
-    }
+}
+% \hrulefill\\
+% {\only<3>{\color{black}}
+%       PyStan
+% \begin{lstlisting}
+% import pystan
+% import stan_utility
+% \end{lstlisting}
+%     }
+%     {\only<4>{\color{black}}
+% \begin{lstlisting}
+% data = dict(N=10, y=8)
+% model = stan_utility.compile_model('binom.stan')
+% fit = model.sampling(data=data)
+% \end{lstlisting}
+%     }
   }
 \end{frame}
 
@@ -634,7 +642,7 @@ fit = model.sampling(data=data)
   
   {\small\color{gray}
     {\only<1>{\color{black}}
-\begin{lstlisting}
+\begin{lstlisting}[language=Stan]
 data {
   int<lower=0> N1;
   int<lower=0> y1;
@@ -654,7 +662,7 @@ model {
 \end{lstlisting}
     }
     {\only<2>{\color{black}}
-\begin{lstlisting}
+\begin{lstlisting}[language=Stan]
 generated quantities {
   real oddsratio;
   oddsratio = (theta2/(1-theta2))/(theta1/(1-theta1));
@@ -671,7 +679,7 @@ generated quantities {
 %  Beta-blockers $N_1 = 674, y_1 = 39, N_2 = 680, y_2 = 22$
   
   {\small
-\begin{lstlisting}
+\begin{lstlisting}[language=Stan]
 generated quantities {
   real oddsratio;
   oddsratio = (theta2/(1-theta2))/(theta1/(1-theta1));
@@ -690,7 +698,7 @@ generated quantities {
   {\Large\color{navyblue} Difference between proportions}
   
   {\small
-\begin{lstlisting}
+\begin{lstlisting}[language=R]
 d_bin2 <- list(N1 = 674, y1 = 39, N2 = 680, y2 = 22)
 fit_bin2 <- stan(file = 'binom2.stan', data = d_bin2)
 \end{lstlisting}
@@ -735,7 +743,7 @@ SAMPLING FOR MODEL 'binom2' NOW (CHAIN 2).
   {\Large\color{navyblue} Difference between proportions}
   
   {\small
-\begin{lstlisting}
+\begin{lstlisting}[language=R]
 monitor(fit_bin2, probs = c(0.1, 0.5, 0.9))
 \end{lstlisting}
   }
@@ -768,7 +776,7 @@ convergence, Rhat=1).
   {\Large\color{navyblue} Difference between proportions}
   
   {\small
-\begin{lstlisting}
+\begin{lstlisting}[language=R]
 draws <- as.data.frame(fit_bin2)
 mcmc_hist(draws, pars = 'oddsratio') +
   geom_vline(xintercept = 1) +
@@ -827,7 +835,7 @@ check_div(fit_bin2)
 
   {\Large\color{navyblue} Gaussian linear model}
   {\small
-  \begin{lstlisting}
+  \begin{lstlisting}[language=Stan]
 data {
     int<lower=0> N; // number of data points 
     vector[N] x; // 
@@ -853,7 +861,7 @@ model {
 
   {\Large\color{navyblue} Gaussian linear model}
   {\small
-  \begin{lstlisting}
+  \begin{lstlisting}[language=Stan]
 data {
     int<lower=0> N; // number of data points 
     vector[N] x; // 
@@ -871,7 +879,7 @@ data {
 
   {\Large\color{navyblue} Gaussian linear model}
   {\small
-  \begin{lstlisting}
+  \begin{lstlisting}[language=Stan]
     parameters {
     real alpha; 
     real beta; 
@@ -892,7 +900,7 @@ transformed parameters {
 
   {\Large\color{navyblue} Priors for Gaussian linear model}
   {\small
-  \begin{lstlisting}
+  \begin{lstlisting}[language=Stan]
 data {
     int<lower=0> N; // number of data points 
     vector[N] x; // 
@@ -920,7 +928,7 @@ model {
 
   {\Large\color{navyblue} Student-t linear model}
   {\small
-  \begin{lstlisting}
+  \begin{lstlisting}[language=Stan]
 ...
 parameters {
   real alpha; 
@@ -994,7 +1002,7 @@ Examine the pairs() plot to diagnose sampling problems
   {\Large\color{navyblue} Linear regression model in Stan}
   
   {\scriptsize
-\begin{lstlisting}
+\begin{lstlisting}[language=Stan]
 data {
   int<lower=0> N; // number of data points
   vector[N] x; //
@@ -1027,7 +1035,7 @@ Geomagnetic storms
 
   {\Large\color{navyblue} Extreme value analysis}
   {\small
-  \begin{lstlisting}
+  \begin{lstlisting}[language=Stan]
 data {
   int<lower=0> N;
   vector<lower=0>[N] y;
@@ -1057,9 +1065,9 @@ generated quantities {
 
   {\Large\color{navyblue} Functions}
   {\footnotesize
-  \begin{lstlisting}
+  \begin{lstlisting}[language=Stan]
 functions {
-  real gpareto_log(vector y, real k, real sigma) {
+  real gpareto_lpdf(vector y, real k, real sigma) {
     // generalised Pareto log pdf with mu=0
     // should check and give error if k<0 
     // and max(y)/sigma > -1/k
@@ -1099,7 +1107,7 @@ functions {
   \end{itemize}
 
   {\scriptsize
-\begin{lstlisting}
+\begin{lstlisting}[language=R]
 d_bin2 <- data.frame(N = c(674, 680), y = c(39,22), grp2 = c(0,1))
 fit_bin2 <- stan_glm(y/N ~ grp2, family = binomial(), data = d_bin2,
                     weights = N)
@@ -1129,7 +1137,7 @@ mcmc_hist(draws_bin2, pars='oddsratio')
   \end{itemize}
 
   {\scriptsize
-\begin{lstlisting}
+\begin{lstlisting}[language=R]
 fit_bin2 <- brm(y/N ~ grp2, family = binomial(), data = d_bin2,
                     weights = N)
 
@@ -1148,7 +1156,7 @@ fit_lin_t <- brm(temp ~ year, data = d_lin, family = student())
   \item R
     \begin{itemize}
     \item shinystan --- interactive diagnostics
-    \item bayesplot --- visualization and model checking (se model checking in Ch 6)
+    \item bayesplot --- visualization and model checking (see model checking in Ch 6)
     \item loo --- cross-validation model assessment, comparison and averaging (see Ch 7)
     \item projpred --- projection predictive variable selection
     \end{itemize}
