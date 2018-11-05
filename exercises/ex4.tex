@@ -8,9 +8,17 @@
 \usepackage{times}
 \usepackage{amsmath}
 \usepackage{url}
+\urlstyle{same}
 \usepackage{enumerate}
 \usepackage{parskip}
-\usepackage{hyperref}
+\usepackage[bookmarks=false]{hyperref}
+\hypersetup{%
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=black,
+  filecolor=black,
+  urlcolor=black
+}
 \usepackage{microtype}
 
 
@@ -65,21 +73,34 @@ Repeat parts of the computations and plots of Section 3.7 with this new prior di
   \item Calculate the posterior density in a grid of points around the prior ($\alpha$: $0 \pm 4$, $\beta$: $10 \pm 20$) and plot a heatmap of the density.
 \item Sample draws of $\alpha$ and $\beta$ from the prior distribution.
 \item Compute the importance ratios for each draw (target distribution is the posterior).
-\item Compute and report the effective sample size $S_{\text{eff}}$. If $S_{\text{eff}}$ is less than 1000, repeat the importance sampling with more draws.
+\item Using the importance ratios, compute the effective sample size $S_{\text{eff}}$ and report it. If $S_{\text{eff}}$ is less than 1000, repeat the importance sampling with more draws.
+\item {\it BDA3 1st (2013) and 2nd (2014) printing have an error
+   for $\tilde{w}(\theta^s)$ used in the effective sample size
+   equation 10.4. The normalized weights equation should not have the
+   multiplier S (the normalized weights should sum to one). Errata for
+   the book
+   \url{http://www.stat.columbia.edu/~gelman/book/errata_bda3.txt}.
+   The later printings and slides have the correct equation.}
 \item Compute the posterior mean using importance sampling and report it.
 \item Use importance resampling to obtain a posterior sample of size 1000 of $\alpha$ and $\beta$.
+\item Using the posterior sample obtained via importance resampling:
+\begin{itemize}
 \item Plot a scatterplot of the obtained posterior sample and compare that to the heatmap plotted earlier.
 \item Report an estimate for $p(\beta > 0|x, n, y)$, that is, the probability that the drug is harmful.
 \item Draw a histogram of the draws from the posterior distribution of the LD50 conditional on $\beta$ > 0 (see Figure 3.4).
+\end{itemize}
   \end{itemize}
 Hints
 \begin{itemize}
 \item See {\tt demo3\_6.R} / {\tt demo3\_6.ipynb} and {\tt demo10\_3.R} / {\tt demo10\_3.ipynb}
-\item Compute the posterior density and importance ratios as logarithms
+\item Compute the posterior density and importance ratios as logarithms, and exponentiate at the end
 \item Scale the log-posterior by subtracting its maximum value before
   exponentiating
   \item Normalize the posterior and importance ratios to sum to 1
-  \item When computing the importance ratios, you will have to take logarithms of very small numbers, which may round to zero. If this happens, replace the small numbers with {\tt 1e-12} to prevent {\tt log(0) = NaN} (not a number).
+  \item Possibly useful R functions: {\tt dmvnorm} and {\tt rmvnorm} from the {\tt mvtnorm} package
+  \item Possibly useful Python functions: {\tt scipy.stats.multivariate\_normal, numpy.meshgrid, numpy.ravel}
+  \item You may use the {\tt bioassaylp.R} and {\tt bioassaylp.py} from the {\tt additional\_files} folder to compute the log-density of the likelihood at any point $(\alpha, \beta)$
+    \item When computing the importance ratios, you will have to take logarithms of very small numbers, which may round to zero. If this happens, replace the small numbers with {\tt 1e-12} to prevent {\tt log(0) = NaN} (not a number).
 \end{itemize}
 
 
