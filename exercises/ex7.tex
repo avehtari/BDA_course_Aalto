@@ -81,11 +81,11 @@ We have two objective questions:
 
 The provided Stan code in Listing~\ref{listing1} is almost correct for the given problem. However, there are two crucial mistakes. Find these two mistakes and fix them. Report the original mistakes and your fixes clearly in your report.
 
-The provided broken code does not define any prior for the parameters. In Stan, this corresponds to using a uniform prior. We would like to apply a weakly-informative prior $\operatorname{N}(0, \tau^2)$ for the slope parameter {\tt beta}. It is very unlikely that the mean number of drownings changes more than 50 \% in one year. The approximate historical mean yearly number of drownings is 138. Hence, set $\tau$ so that the prior probability for {\tt beta} being less than $-69$ or greater than $69$ is $0.01$. Report suitable approximate numerical value for $\tau$ and clearly indicate how one would implement this in the Stan code.
+The provided broken code does not define any prior for the parameters. In Stan, this corresponds to using a uniform prior. In addition to the two fixes discussed above, we would like to apply a weakly-informative prior $\operatorname{N}(0, \tau^2)$ for the slope parameter {\tt beta} into the code. It is very unlikely that the mean number of drownings changes more than 50 \% in one year. The approximate historical mean yearly number of drownings is 138. Hence, set $\tau$ so that the following holds for the prior probability for {\tt beta}: $\operatorname{Pr}(-69 < \text{{\tt beta}} < 69) = 0.99$. Determine suitable value for $\tau$ and report the approximate numerical value for it in the report. Using the obtained $\tau$, implement the desired prior in the Stan code. In the report, in a separate section, indicate clearly how you carried out your prior implementation, e.g.\ ``Added line \dots in block \dots''..
 
 Example resulting plots for the problem, with the fixes and the desired prior applied, are shown in Figure~\ref{fig1}. If you want, you can use these plots as a reference for testing if your modified Stan code produces similar results. However, running the inference and comparing the plots is not required. In the report, in addition to the full resulting Stan model code, the following things needs to be clearly presented and discussed in separate sections:
 \begin{itemize}
-\item the fixes in the code,
+\item the two fixes in the code,
 \item suitable approximate numerical value for $\tau$,
 \item details how to implement the desired prior in the code.
 \end{itemize}
@@ -124,10 +124,10 @@ generated quantities {
 }
 \end{lstlisting}
 
-\begin{figure}
+\begin{figure}[htb!]
 \centering
-   \includegraphics[width=0.66\textwidth]{ex7_fig1.pdf}
-\caption{Example plots for the results obtained for problem in the question 1.}\label{fig1}
+   \includegraphics[width=0.56\textwidth]{ex7_fig1.pdf}
+\caption{Example plots for the results obtained for problem in the question 1. In the first subplot, the red lines indicate the resulting 5 \%, 50 \%, and 95 \% posterior quantiles for the transformed parameter {\tt mu} at each year.}\label{fig1}
 \end{figure}
 
 
