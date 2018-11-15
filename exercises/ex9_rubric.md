@@ -22,7 +22,7 @@ Is there a stan code provided that seems reasonable for the problem? The code do
 Is there a reasonable code provided for computing the expected utilities for the six machines? (either as a part of Stan code or as separate R/Python code) The code doesn't have to be correct, as far as it is somewhat reasonable.
 
 ### Q6 · Scale · 1 point
-Are the expected utilities computed and reported? (The utility should be of the form XXX or equivalently XXX. The utilities should be roughly XXX, XXX, XXX, XXX, XXX, XXX for the machines 1,2,...,6, respectively. If default settings for stan are used, roughly +/-3 variation due to random error can occur.)
+Are the expected utilities computed and reported? (The utility should be of the form XXX or equivalently XXX. The utilities should be roughly XXX, XXX, XXX, XXX, XXX, XXX for the machines 1,2,...,6, respectively. If default settings for stan are used, roughly +/-4 variation due to random error can occur.)
 
 - No
 - Yes, but results are not correct (e.g. utility computed with wrong formula or samples from wrong distribution used) or some utilities are missing
@@ -46,7 +46,7 @@ Is some discussion on the computed values for the expected utilities for the six
 Is there a reasonable code provided for computing the expected utility for the new (7th) machine? The code doesn't have to be correct, as far as it is somewhat reasonable.
 
 ### Q10 · Scale · 1 point
-Is the expected utility for the new (7th) machine computed and reported? (If the utility is formulated as previously, the result should be roughly XXX, roughly +/-3 variation due to random error can occur.)
+Is the expected utility for the new (7th) machine computed and reported? (If the utility is formulated as previously, the result should be roughly XXX, roughly +/-4 variation due to random error can occur.)
 
 - No
 - Yes, but it is wrong (e.g. wrong utility function or samples from wrong distribution)
