@@ -18,6 +18,11 @@ The material will be updated during the course. Exercise instructions and slides
   + see e.g. [BDA_R_demos](https://github.com/avehtari/BDA_R_demos)
   + see e.g. [BDA_py_demos](https://github.com/avehtari/BDA_py_demos)
 
+If you find BDA3 too difficult to start with, I recommend
+ - For background prerequisties, see, e.g., chapters 2, 4 and 5 in [Kruschke, "Doing Bayesian Data Analysis"](https://sites.google.com/site/doingbayesiandataanalysis/). Some of my students have found this useful.
+ - Richard McElreath's [Statistical Rethinking](https://xcelab.net/rm/statistical-rethinking/) book is easier and the latest videos of [Statistical Rethinking: A Bayesian Course Using R and Stan](https://github.com/rmcelreath/statrethinking_winter2019) are highly recommended even if you are following BDA3.
+ - Michael Betancourt has a different point of view in his [introduction material](https://betanalpha.github.io/writing/), and many have found these also enlightening. Furthermore, his [Hamiltonian Monte Carlo videos](https://betanalpha.github.io/speaking/) are highly recommended if you are taking this course.
+
 ## Course contents following BDA3
 
 Bayesian Data Analysis, 3rd ed, by by Andrew Gelman, John Carlin, Hal
@@ -37,6 +42,10 @@ book](http://www.stat.columbia.edu/~gelman/book/).
 - Decision analysis (Ch 9)
 - Large sample properties and Laplace approximation (Ch 4)
 - In addition you learn workflow for Bayesian data analysis
+
+## Videos
+
+Video clips on selected topics are available in [a Panopto folder](https://aalto.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx#folderID=%22f0ec3a25-9e23-4935-873b-a9f401646812%22). I've started recording these in February 2019, and more will appear in spring and fall 2019.
 
 ## Assessment
 
