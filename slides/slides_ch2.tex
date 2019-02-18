@@ -126,13 +126,39 @@
 
 \end{frame}
 
+%%%%
+
+%only in video
+\begin{frame}
+  \frametitle{Binomial: known $\theta$}
+
+  \begin{itemize}
+  \item Probability of event 1 in trial is $\theta$
+  \item<2-> Probability of event 2 in trial is $1-\theta$
+  \item<3-> Probability of seveal events in independent trials is e.g.\\
+    $\theta\theta(1-\theta)\theta(1-\theta)(1-\theta)\ldots$
+  \item<4-> If there are $n$ trials and we don't care about the order
+    of the events, then the probability that event 1 happens $y$ times
+    is
+    \begin{align*}
+      p(y|\theta,n) = \binom{n}{y} \theta^y(1-\theta)^{n-y}
+    \end{align*}
+  \end{itemize}
+
+%   \begin{center}
+%   \only<2>{\includegraphics[width=9cm]{dbinom1.pdf}}
+%   \only<3>{\includegraphics[width=9cm]{dbinom10.pdf}}
+%   \only<4>{\includegraphics[width=9cm]{dbinom10b.pdf}}
+% \end{center}
+\end{frame}
+
 \begin{frame}
   \frametitle{Binomial: known $\theta$}
 
   \begin{itemize}
   \item Observation model (function of $y$, discrete)
     \begin{align*}
-      p(y|\theta,n,M) = \binom{n}{y} \theta^y(1-\theta)^{n-y}
+      p(y|\theta,n) = \binom{n}{y} \theta^y(1-\theta)^{n-y}
     \end{align*}
   \end{itemize}
 
@@ -210,21 +236,6 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Binomial: computation*}
-
-  \begin{itemize}
-  \item Beta CDF not trivial to compute
-  \item For example, {\tt pbeta} in R uses a continued fraction with
-    weighting factors and asymptotic expansion
-  \item Laplace developed normal approximation (Laplace
-    approximation), because he didn't know how to compute Beta CDF
-  \end{itemize}
-  % Lagandre, Gamma function
-
-\end{frame}
-% Beta distribution named by C. Gini 1911
-
-\begin{frame}
   \frametitle{Binomial: computation}
 
   \begin{itemize}
@@ -248,6 +259,21 @@
 \end{frame}
 
 \begin{frame}
+  \frametitle{Binomial: computation*}
+
+  \begin{itemize}
+  \item Beta CDF not trivial to compute
+  \item For example, {\tt pbeta} in R uses a continued fraction with
+    weighting factors and asymptotic expansion
+  \item Laplace developed normal approximation (Laplace
+    approximation), because he didn't know how to compute Beta CDF
+  \end{itemize}
+  % Lagandre, Gamma function
+
+\end{frame}
+% Beta distribution named by C. Gini 1911
+
+\begin{frame}
   \frametitle{Placenta previa}
 
   \begin{itemize}
@@ -261,22 +287,24 @@
   \includegraphics[width=9cm]{figs/demo2_1.pdf}
 \end{frame}
 
+%%%% predictive distribution
+
 \begin{frame}
   \frametitle{Predictive distribution -- Effect of integration}
 
   \begin{itemize}
   \item Predictive distribution for new $\tilde{y}$ (discrete)
     \begin{align*}
-      p(\tilde{y}=1|y,n,M) &= \int_0^1 p(\tilde{y}=1|\theta,y,n,M)p(\theta|y,n,M)d\theta\\
-      &\uncover<2->{= \int_0^1 \theta p(\theta|y,n,M)d\theta}\\
-      &\uncover<3->{= \E[\theta|y]}
+      \uncover<2->{p(\tilde{y}=1|y,n,M)} & \uncover<2->{= \int_0^1} p(\tilde{y}=1|\theta,y,n,M) \uncover<2->{p(\theta|y,n,M)d\theta}\\
+      &\uncover<3->{= \int_0^1 \theta p(\theta|y,n,M)d\theta}\\
+      &\uncover<4->{= \E[\theta|y]}
     \end{align*}
     \vskip -4mm
-  \item<4-> With uniform prior
+  \item<5-> With uniform prior
     \begin{align*}
       \uncover<4->{\E[\theta|y] = \frac{y+1}{n+2}}
     \end{align*}
-  \item<5-> Extreme cases
+  \item<6-> Extreme cases
     \begin{align*}
       p(\tilde{y}=1|y=0,n,M) &= \frac{1}{n+2} \\
       p(\tilde{y}=1|y=n,n,M) &= \frac{n+1}{n+2}
@@ -302,13 +330,13 @@
   \frametitle{Predictive distribution}
 
   \begin{itemize}
-  \item Prior predictive distribution for new $\tilde{y}$ (discrete)
+  \item {\color{blue} Prior predictive} distribution for new $\tilde{y}$ (discrete)
     \begin{align*}
-      p(\tilde{y}=1|M) &= \int_0^1 p(\tilde{y}=1|\theta,y,n,M)p(\theta|M)d\theta
+      p(\tilde{y}=1|M) &= \int_0^1 p(\tilde{y}=1|\theta,y,n,M){\color{blue}p(\theta|M)}d\theta
     \end{align*}
-  \item Posterior predictive distribution for new $\tilde{y}$ (discrete)
+  \item {\color{red} Posterior predictive} distribution for new $\tilde{y}$ (discrete)
     \begin{align*}
-      p(\tilde{y}=1|y,n,M) &= \int_0^1 p(\tilde{y}=1|\theta,y,n,M)p(\theta|y,n,M)d\theta
+      p(\tilde{y}=1|y,n,M) &= \int_0^1 p(\tilde{y}=1|\theta,y,n,M){\color{red}p(\theta|y,n,M)}d\theta
     \end{align*}
   \end{itemize}
 \end{frame}
@@ -326,12 +354,14 @@
       \begin{itemize}
       \item nice justification as it is based on observables $y$ and $n$
       \end{itemize}
-    \item[2)] we think all values of $\theta$ are equally likely
+     \item<2->[2)] we think all values of $\theta$ are equally likely
       %   Laplace "principle of insufficient reason"
     \end{itemize} 
   \end{itemize}
 
 \end{frame}
+
+%%%priors
 
 \begin{frame}
   \frametitle{Priors}
@@ -598,6 +628,8 @@
   
 \end{frame}
 
+%skip rest in video
+
 \begin{frame}
   \frametitle{Sufficient statistics*}
 
@@ -608,6 +640,8 @@
   \end{itemize}
 
 \end{frame}
+
+%%% demos
 
 \begin{frame}
   \frametitle{Posterior visualisation and inference demos}
@@ -659,6 +693,8 @@ blue-green algae levels.
 
 \end{frame}
 
+%%%normal
+
 \begin{frame}
   \frametitle{Normal / Gaussian}
 
@@ -688,6 +724,8 @@ blue-green algae levels.
   \end{itemize}
 
 \end{frame}
+
+%%skip in video
 
 \begin{frame}
 
