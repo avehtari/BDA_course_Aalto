@@ -45,7 +45,7 @@ book](http://www.stat.columbia.edu/~gelman/book/).
 
 ## Videos
 
-Video clips on selected topics are available in [a Panopto folder](https://aalto.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx#folderID=%22f0ec3a25-9e23-4935-873b-a9f401646812%22). I've started recording these in February 2019, and more will appear in spring and fall 2019.
+Video clips on selected topics are available in [a Panopto folder](https://aalto.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx#folderID=%22f0ec3a25-9e23-4935-873b-a9f401646812%22). I've started recording these in February 2019, and more will appear in fall 2019.
 
 ## Assessment
 
