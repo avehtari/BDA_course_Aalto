@@ -38,21 +38,21 @@ Is the number of chains reported?
 
 ### Q5 - 1 point
 
-Are the starting points for the chains reported?
+Are the starting points or the mechanism how they are generated reported?
 
 - No
 - Yes
 
 ### Q6 - 1 point
 
-Is the warm-up/burn-in length reported?
+Is the warm-up length reported?
 
 - No
 - Yes
 
 ### Q7 - 1 point
 
-Is the number of samples per chain reported?
+Is the number of draws per chain reported?
 
 - No
 - Yes
