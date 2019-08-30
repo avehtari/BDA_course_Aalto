@@ -8,6 +8,11 @@ from __future__ import division
 # or later); please refer to the file LICENSE.txt, included with the software, 
 # for details.
 
+try:
+    xrange
+except NameError:
+    xrange = range
+
 import numpy as np
 
 def psrf(X, return_extra=False):
