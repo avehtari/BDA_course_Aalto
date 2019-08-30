@@ -39,11 +39,13 @@ book](http://www.stat.columbia.edu/~gelman/book/).
 - Multiparameter models (Ch 3)
 - Computational methods (Ch 10)
 - Markov chain Monte Carlo (Ch 11--12)
-- Extra material for Stan and probabilistic programming
+- Extra material for Stan and probabilistic programming (see below)
 - Hierarchical models (Ch 5)
 - Model checking (Ch 6)
+  + [Visualization in Bayesian workflow](https://doi.org/10.1111/rssa.12378)
 - Evaluating and comparing models (Ch 7)
-  + [extra material](https://avehtari.github.io/modelselection/)
+  + [Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC](http://link.springer.com/article/10.1007/s11222-016-9696-4)
+  + [Videos and case studies](https://avehtari.github.io/modelselection/)
 - Decision analysis (Ch 9)
 - Large sample properties and Laplace approximation (Ch 4)
 - In addition you learn workflow for Bayesian data analysis
@@ -60,12 +62,12 @@ Video clips on selected topics are available in [a Panopto folder](https://aalto
 
 ## R and Python
 
-We strongly recommend using R in the course as there are more packages for Stan in R. If you are already fluent in Python, but not in R, then using Python may be easier, but it can still be more useful to learn also R. Unless you are already experienced and have figured out your preferred way to work with R, we recommend installing [RStudio Desktop](https://www.rstudio.com/products/rstudio/download/).
+We strongly recommend using R in the course as there are more packages for Stan and statistical analysis in R. If you are already fluent in Python, but not in R, then using Python may be easier, but it can still be more useful to learn also R. Unless you are already experienced and have figured out your preferred way to work with R, we recommend installing [RStudio Desktop](https://www.rstudio.com/products/rstudio/download/). TAs will provide brief introduction to use of RStudio during the first week TA sessions.
 
 ## Demos
 
-- [BDA_R_demos](https://github.com/avehtari/BDA_R_demos)
-- [BDA_py_demos](https://github.com/avehtari/BDA_py_demos)
+- [R demos](https://github.com/avehtari/BDA_R_demos)
+- [Python demos](https://github.com/avehtari/BDA_py_demos)
 
 ## Self study exercises
 
