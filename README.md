@@ -23,6 +23,11 @@ If you find BDA3 too difficult to start with, I recommend
  - Richard McElreath's [Statistical Rethinking](https://xcelab.net/rm/statistical-rethinking/) book is easier and the latest videos of [Statistical Rethinking: A Bayesian Course Using R and Stan](https://github.com/rmcelreath/statrethinking_winter2019) are highly recommended even if you are following BDA3.
  - Michael Betancourt has a different point of view in his [introduction material](https://betanalpha.github.io/writing/), and many have found these also enlightening. Furthermore, his [Hamiltonian Monte Carlo videos](https://betanalpha.github.io/speaking/) are highly recommended if you are taking this course.
 
+## Assessment
+
+Exercises (67\%) and a project work (33\%). Minimum of 50\% of points
+must be obtained from both the exercises and project work.
+
 ## Course contents following BDA3
 
 Bayesian Data Analysis, 3rd ed, by by Andrew Gelman, John Carlin, Hal
@@ -47,19 +52,34 @@ book](http://www.stat.columbia.edu/~gelman/book/).
 
 Video clips on selected topics are available in [a Panopto folder](https://aalto.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx#folderID=%22f0ec3a25-9e23-4935-873b-a9f401646812%22). I've started recording these in February 2019, and more will appear in fall 2019.
 
-## Assessment
-
-Exercises (67\%) and a project work (33\%). Minimum of 50\% of points
-must be obtained from both the exercises and project work.
+- [1.1 Introduction to uncertainty and modelling](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d841f429-9c3d-4d24-8228-a9f400efda7b)
+- [1.2 Introduction to the course contents](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=13fc7889-cfd1-4d99-996c-a9f400f6e5a2)
+- [2.1 Observation model, likelihood, posterior and binomial model](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=7a297f7d-bb7b-4dd0-9913-a9f500ec822d)
+- [2.2 Predictive distribution and benefit of integration](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=75b9f18f-e379-4557-a5fa-a9f500f11b40)
+- [2.3 Priors and prior information](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=099659a5-f707-473d-8b03-a9f500f39eb5)
 
 ## R and Python
 
-We recommend using R in the course as there are more packages for Stan in R. If you are already fluent in Python, but not in R, then using Python is probably easier. Unless you are already experienced and have figured out your preferred way to work with R, we recommend installing [RStudio Desktop](https://www.rstudio.com/products/rstudio/download/).
+We strongly recommend using R in the course as there are more packages for Stan in R. If you are already fluent in Python, but not in R, then using Python may be easier, but it can still be more useful to learn also R. Unless you are already experienced and have figured out your preferred way to work with R, we recommend installing [RStudio Desktop](https://www.rstudio.com/products/rstudio/download/).
 
 ## Demos
 
 - [BDA_R_demos](https://github.com/avehtari/BDA_R_demos)
 - [BDA_py_demos](https://github.com/avehtari/BDA_py_demos)
+
+## Self study exercises
+
+Good self study exercises for this course are listed below. Most of these have also [model solutions vailable](http://www.stat.columbia.edu/~gelman/book/solutions3.pdf).
+
+- 1.1-1.4, 1.6-1.8 (model solutions for 1.1-1.6)
+- 2.1-2.5, 2.8, 2.9, 2.14, 2.17, 2.22 (model solutions for 2.1-2.5, 2.7-2.13, 2.16, 2.17, 2.20, and 2.14 is in slides)
+- 3.2, 3.3, 3.9 (model solutions for 3.1-3.3, 3.5, 3.9, 3.10)
+- 4.2, 4.4, 4.6 (model solutions for 3.2-3.4, 3.6, 3.7, 3.9, 3.10)
+- 5.1, 5.2 (model solutions for 5.3-5.5, 5.7-5.12)
+- 6.1 (model solutions for 6.1, 6.5-6.7)
+- 9.1
+- 10.1, 10.2 (model solution for 10.4)
+- 11.1 (model solution for 11.1)
 
 ## Stan
 
