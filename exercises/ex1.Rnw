@@ -52,9 +52,8 @@
 \newcommand{\Prob}{\mathbb{P}}
 
 
-\usepackage{Sweave}
 \begin{document}
-\input{ex1-concordance}
+\SweaveOpts{concordance=TRUE}
 
 \section*{Bayesian Data Analysis - Assignment 1}
 
@@ -75,14 +74,12 @@ The exercises of this assignment are not necessarily related to chapter 1, but r
 \textbf{Grading instructions:} The grading will be done in peergrade. All grading questions and evaluations for exercise 1 can be found \href{https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex1_rubric.md}{\textbf{here}}
 
 To use markmyassignment for this assignment, run the following code in R:
-\begin{Schunk}
-\begin{Sinput}
-> library(markmyassignment)
-> exercise_path <- 
-+   "https://github.com/MansMeg/BDA_course_Aalto/blob/master/exercises/tests/ex1.yml"
-> set_assignment(exercise_path)
-\end{Sinput}
-\end{Schunk}
+<<echo=TRUE,eval=FALSE>>=
+library(markmyassignment)
+exercise_path <- 
+  "https://github.com/MansMeg/BDA_course_Aalto/blob/master/exercises/tests/ex1.yml"
+set_assignment(exercise_path)
+@
 
 %Do the computer task first, it should take no more than 10--15 minutes. Answer than to the pen and paper questions.
 
@@ -180,36 +177,22 @@ and box B 10\% of the time (i.e. $P(A) = 0.4$).
 Implement two functions in R that computes the probabilities. Below is an example of how the functions should be named and work if you want to check them with \texttt{markmyassignment}. 
 Note that this is a test case, you need to change the number in the matrix.
 
-\begin{Schunk}
-\begin{Sinput}
-> boxes <- matrix(c(2,2,1,5,5,1), ncol = 2, 
-+    dimnames = list(c("A", "B", "C"), c("red", "white")))
-> boxes
-\end{Sinput}
-\begin{Soutput}
-  red white
-A   2     5
-B   2     5
-C   1     1
-\end{Soutput}
-\end{Schunk}
+<<echo=TRUE>>=
+boxes <- matrix(c(2,2,1,5,5,1), ncol = 2, 
+   dimnames = list(c("A", "B", "C"), c("red", "white")))
+boxes
+@
 
 % See exercises/solution folder in teacher repo
+<<echo=FALSE>>=
+p_red <- function(boxes) 0.3928571
+p_box <- function(boxes) c(0.29090909,0.07272727,0.63636364)
+@
 
-\begin{Schunk}
-\begin{Sinput}
-> p_red(boxes)
-\end{Sinput}
-\begin{Soutput}
-[1] 0.3928571
-\end{Soutput}
-\begin{Sinput}
-> p_box(boxes)
-\end{Sinput}
-\begin{Soutput}
-[1] 0.29090909 0.07272727 0.63636364
-\end{Soutput}
-\end{Schunk}
+<<echo=TRUE>>=
+p_red(boxes)
+p_box(boxes)
+@
 
 
 % Bayes' theorem
@@ -221,25 +204,21 @@ Assume that an equal number of boys and girls are born on average.
 
 Implement this as a function in R that computes the probability. Below is an example of how the functions should be named and work if you want to check your result with \texttt{markmyassignment}. 
 
+<<echo=FALSE>>=
+p_identical_twin <- function(fraternal_prob, identical_prob) 0.4545455
+@
 
-\begin{Schunk}
-\begin{Sinput}
-> p_identical_twin(fraternal_prob = 1/125, identical_prob = 1/300)
-\end{Sinput}
-\begin{Soutput}
-[1] 0.4545455
-\end{Soutput}
-\end{Schunk}
+<<echo=TRUE>>=
+p_identical_twin(fraternal_prob = 1/125, identical_prob = 1/300)
+@
 
+<<echo=FALSE>>=
+p_identical_twin <- function(fraternal_prob, identical_prob) 0.2857143
+@
 
-\begin{Schunk}
-\begin{Sinput}
-> p_identical_twin(1/100, 1/500)
-\end{Sinput}
-\begin{Soutput}
-[1] 0.2857143
-\end{Soutput}
-\end{Schunk}
+<<echo=TRUE>>=
+p_identical_twin(1/100, 1/500)
+@
 
 \end{enumerate}
 
