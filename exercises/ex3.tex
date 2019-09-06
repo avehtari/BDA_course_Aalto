@@ -165,12 +165,19 @@ or weakly informative prior distribution on $(p_0,p_1)$.
 \item Summarize the posterior distribution for the odds ratio, $(p_1/(1-p_1))/(p_0/(1-p_0))$. Compute the point and interval estimates (95\%) and plot the histogram. Below is a test case on how the odd ratio should be computed.
 \begin{Schunk}
 \begin{Sinput}
-> p0 <- c(0.06480697, 0.05696637, 0.05931916, 0.03985734, 0.05275953)
-> p1 <- c(0.03793276, 0.02587435, 0.03616679, 0.03532958, 0.02129371)
-> posterior_odds_ratio(p0, p1)
+> set.seed(4711)
+> p0 <- rbeta(100000, 5, 95)
+> p1 <- rbeta(100000, 10, 90)
+> posterior_odds_ratio_mean(p0, p1)
 \end{Sinput}
 \begin{Soutput}
-[1] 0.569 0.440 0.595 0.882 0.391
+[1] 2.676
+\end{Soutput}
+\begin{Sinput}
+> posterior_odds_ratio_interval(p0, p1, prob = 0.9)
+\end{Sinput}
+\begin{Soutput}
+[1] 0.875 6.059
 \end{Soutput}
 \end{Schunk}
 \item Discuss the sensitivity of your inference
