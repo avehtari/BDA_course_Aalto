@@ -63,21 +63,13 @@ Is some discussion provided whether the company should buy a new (7th) machine? 
 ## S3 · 7.5 points
 Overall quality of the report
 
-### Q12 · Scale · Requires additional comment · 1 point
-How easy was it to ﬁnd answers?
+### Q12 · Scale · 1 point
+Does the report follow the formatting instructions?
 
-- Difﬁcult
-- Relatively difﬁcult
-- Relatively easy
-- Easy
+- Not at all
+- Little
+- Mostly
+- Yes
 
-### Q13 · Scale · Requires additional comment · 1 point
-What is the overall quality of the report?
-
-- Bad
-- Fair
-- Good
-- Excellent
-
-### Q14 · Text · Optional question
+### Q13 · Text · Optional question
 Justify your answers for overall quality of the report if needed

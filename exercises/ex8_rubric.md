@@ -62,22 +62,15 @@ Is the interpretation of the k-values correct? Correct interpretation (roughly):
 Overall quality of the report
 
 
-### Q9 · Scale · Requires additional comment · 1 point
-How easy was it to find answers?
-- Difficult
-- Relatively difficult
-- Relatively easy
-- Easy
+### Q9 · Scale · 1 point
+Does the report follow the formatting instructions?
 
-### Q10 · Scale · Requires additional comment · 1 point
-What is the overall quality of the report?
+- Not at all
+- Little
+- Mostly
+- Yes
 
-- Bad
-- Fair
-- Good
-- Excellent
-
-### Q11 · Text · Optional question
+### Q10 · Text · Optional question
 Justify your answers for overall quality of the report if needed
 
 

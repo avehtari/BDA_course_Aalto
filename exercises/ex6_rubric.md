@@ -69,23 +69,15 @@ Overall quality of the report
 
 ### Q8 
 
-How easy was it to ﬁnd answers?
+Does the report follow the formatting instructions?
 
-- Difﬁcult
-- Relatively difﬁcult
-- Relatively easy
-- Easy
+- Not at all
+- Little
+- Mostly
+- Yes
 
-### Q9 
 
-What is the overall quality of the report?
-
-- Bad
-- Fair
-- Good
-- Excellent
-
-### Q10 
+### Q9
 
 Justify your answers for overall quality of the report if needed
 
