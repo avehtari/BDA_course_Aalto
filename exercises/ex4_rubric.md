@@ -89,24 +89,14 @@ Is the histogram of the LD50 plotted?
 
 Overall quality of the report
 
-### Q11 - 1 point
+### Q11 · Scale · 1 point
+Does the report follow the formatting instructions?
 
-How easy was it to ﬁnd answers?
+- Not at all
+- Little
+- Mostly
+- Yes
 
-- Difﬁcult
-- Relatively difﬁcult
-- Relatively easy
-- Easy
+### Q12 · Text · Optional question
 
-### Q12 - 1 point
-
-What is the overall quality of the report?
-
-- Bad
-- Fair
-- Good
-- Excellent
-
-### Q13 -
-
-Justify your answers for the two questions above.
+Justify your answers for overall quality of the report if needed
