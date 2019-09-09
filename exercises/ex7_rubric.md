@@ -4,7 +4,7 @@
 
 Basic requirements
 
-### Q1 · Yes / No · 3.75 points
+### Q1 · Yes / No · 1 points
 
 Can you open the pdf?
 
@@ -13,7 +13,7 @@ Response:
 - No
 - Yes
 
-### Q2 · Yes / No · 3.75 points
+### Q2 · Yes / No · 1 points
 
 Is the report anonymous?
 
@@ -228,29 +228,14 @@ Response:
 
 Overall quality of the report
 
-### Q22 · Scale · 3.75 points
+### Q22 · Scale · 1 point
+Does the report follow the formatting instructions?
 
-How easy was it to ﬁnd answers?
+- Not at all
+- Little
+- Mostly
+- Yes
 
-Response:
-
-- Difﬁcult
-- Relatively difﬁcult
-- Relatively easy
-- Easy
-
-### Q23 · Scale · 3.75 points
-
-What is the overall quality of the report?
-
-Response:
-
-- Bad
-- Fair
-- Good
-- Excellent
-
-### Q24 · Text
-
-Justify your answers for the two questions above.
+### Q23 · Text · Optional question
+Justify your answers for overall quality of the report if needed
 
