@@ -52,9 +52,8 @@
 
 \pagestyle{empty}
 
-\usepackage{Sweave}
 \begin{document}
-\input{ex2-concordance}
+\SweaveOpts{concordance=TRUE, prompt=FALSE}
 \thispagestyle{empty}
 
 \section*{Bayesian data analysis -- Assignment 2}
@@ -72,17 +71,18 @@ This exercise is related to Chapters 1 and 2. The maximum amount of points from 
 \textbf{Grading instructions:} The grading will be done in peergrade. All grading questions and evaluations for assignment 2 can be found \href{https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex2_rubric.md}{\textbf{here}}
 
 To use markmyassignment for this assignment, run the following code in R:
+<<echo=FALSE,eval=TRUE>>=
+options(continue="  ", prompt="> ")
+@
 
 
 
-\begin{Schunk}
-\begin{Sinput}
-> library(markmyassignment)
-> exercise_path <- 
-    "https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/tests/ex2.yml"
-> set_assignment(exercise_path)
-\end{Sinput}
-\end{Schunk}
+<<echo=TRUE,eval=FALSE>>=
+library(markmyassignment)
+exercise_path <- 
+  "https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/tests/ex2.yml"
+set_assignment(exercise_path)
+@
 
 
 \HRule
@@ -96,16 +96,11 @@ The observations for the 2008 algae status at each site are presented
 in file {\tt algae.txt} ('0': no algae, '1': algae present). The data
 can also be accessed from the {\tt aaltobda} R package as follows:
 
-\begin{Schunk}
-\begin{Sinput}
-> library(aaltobda)
-> data("algae")
-> head(algae)
-\end{Sinput}
-\begin{Soutput}
-[1] 0 1 1 0 0 0
-\end{Soutput}
-\end{Schunk}
+<<echo=TRUE,eval=TRUE>>=
+library(aaltobda)
+data("algae")
+head(algae)
+@
 
 % In the year 2008 blue-green algae was observed at 44 sites.
 Let $\pi$ be the probability of a monitoring site having detectable
@@ -119,42 +114,30 @@ Also, it is not necessary to write out the distributions; it is sufficient to us
 
 As a test case, we provide some results for the following data. It is also possible to check the functions below with \texttt{markmyassignment}.
 
-\begin{Schunk}
-\begin{Sinput}
-> algea_test <- c(0, 1, 1, 0, 0, 0)
-\end{Sinput}
-\end{Schunk}
+<<echo=TRUE>>=
+algea_test <- c(0, 1, 1, 0, 0, 0)
+@
 
 % See exercises/solution folder in teacher repo
+<<echo=FALSE>>=
+beta_point_est <- function(prior_alpha, prior_beta, data) 0.2222222
+beta_interval <- function(prior_alpha, prior_beta, data, prob) c(0.06810774, 0.43431787)
+beta_low <- function(prior_alpha, prior_beta, data, pi_0) 0.1382122
+@
 
 Use your model to answer the following questions:
 \begin{enumerate}[a)]
 \item What can you say about the value of the unknown $\pi$ according
   to the observations and your prior knowledge? Summarize your results
   with a point estimate (i.e. $E(\pi|y)$) and a 90\% interval estimate.
-\begin{Schunk}
-\begin{Sinput}
-> beta_point_est(prior_alpha = 2, prior_beta = 10, data = algea_test)
-\end{Sinput}
-\begin{Soutput}
-[1] 0.2222222
-\end{Soutput}
-\begin{Sinput}
-> beta_interval(prior_alpha = 2, prior_beta = 10, data = algea_test, prob = 0.9)
-\end{Sinput}
-\begin{Soutput}
-[1] 0.06810774 0.43431787
-\end{Soutput}
-\end{Schunk}
+<<eval=TRUE, echo=TRUE>>=
+beta_point_est(prior_alpha = 2, prior_beta = 10, data = algea_test)
+beta_interval(prior_alpha = 2, prior_beta = 10, data = algea_test, prob = 0.9)
+@
 \item What is the probability that the proportion of monitoring sites with detectable algae levels $\pi$ is smaller than $\pi_0=0.2$ that is known from historical records?
-\begin{Schunk}
-\begin{Sinput}
-> beta_low(prior_alpha = 2, prior_beta = 10, data = algea_test, pi_0 = 0.2)
-\end{Sinput}
-\begin{Soutput}
-[1] 0.1382122
-\end{Soutput}
-\end{Schunk}
+<<eval=TRUE, echo=TRUE>>=
+beta_low(prior_alpha = 2, prior_beta = 10, data = algea_test, pi_0 = 0.2)
+@
 \item What assumptions are required in order to use this kind of a
   model with this type of data?
 \item Make prior sensitivity analysis by testing a couple of different reasonable priors. Summarize the results by one or two sentences.
