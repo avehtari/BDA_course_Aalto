@@ -27,7 +27,7 @@ test_that("beta_interval()", {
   beta <- 5
   expect_equal(beta_interval(prior_alpha = alpha, prior_beta = beta, data = test, prob = 0.9), 
                c(0.3640088, 0.7398856), tol= 0.001, 
-               info = "Error: Incorrect result for prior_alpha = 2, prior_beta = 4 and data = c(0, 1, 1, 0, 1, 1, 0, 1, 1, 1) and 90% interval.")
+               info = "Error: Incorrect result for prior_alpha = 3, prior_beta = 5 and data = c(0, 1, 1, 0, 1, 1, 0, 1, 1, 1) and 90% interval.")
     
 })
 

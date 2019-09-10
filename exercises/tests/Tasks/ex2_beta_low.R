@@ -26,8 +26,8 @@ test_that("beta_low()", {
   alpha <- 3
   beta <- 5
   expect_equal(beta_low(prior_alpha = alpha, prior_beta = beta, data = test, pi_0 = 0.2), 
-               0.4572175, tol= 0.001, 
-               info = "Error: Incorrect result for prior_alpha = 2, prior_beta = 4 and data = c(0, 1, 1, 0, 1, 1, 0, 1, 1, 1)")
+               0.0004932497, tol= 0.001, 
+               info = "Error: Incorrect result for prior_alpha = 3, prior_beta = 5 and data = c(0, 1, 1, 0, 1, 1, 0, 1, 1, 1)")
   
 })
 
