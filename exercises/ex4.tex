@@ -135,11 +135,43 @@ we will use a different prior distribution on the parameters $\alpha$ and $\beta
 \textbf{Hint!} Logarithm of the product of two densities is the sum of the log-densities, i.e. $\log ab = \log a + \log b$.
 
 \item[d)] Plot the posterior density in a grid of points ($\alpha \in [-4,4]$, $\beta \in [-10,30]$) using the {\tt bioassay\_posterior\_density\_plot} function from the {\tt aaltobda} package. Internally, it uses the {\tt p\_log\_posterior} function you implemented in c).
-\item[e)] Sample draws of $\alpha$ and $\beta$ from the prior distribution from a). Compute the importance ratios (importance weights) for each draw when the target distribution is
-the posterior distribution. Normalize the weights so that they sum to $1$.\\
+\item[e)] Sample draws of $\alpha$ and $\beta$ from the prior distribution from a).  Compute the importance ratios (importance weights) for each draw when the target distribution is
+the posterior distribution. Normalize the weights so that they sum to $1$. Below is a test example, the functions can also be tested with \texttt{markmyassignment}.\\
+\begin{Schunk}
+\begin{Sinput}
+> alpha <- c(1.896, -3.6,  0.374, 0.964, -3.123, -1.581)
+> beta <- c(24.76, 20.04, 6.15, 18.65, 8.16, 17.4)
+> log_importance_weights(alpha, beta)
+\end{Sinput}
+\begin{Soutput}
+[1]  -8.95 -23.47  -6.02  -8.13 -16.61 -14.57
+\end{Soutput}
+\begin{Sinput}
+> normalized_importance_weights(alpha, beta)
+\end{Sinput}
+\begin{Soutput}
+[1] 0.045 0.000 0.852 0.103 0.000 0.000
+\end{Soutput}
+\end{Schunk}
 \textbf{Hint!} Use R function {\tt rmvnorm} from the {\tt mvtnorm} package. Equation (10.3) in the course book.
 \item[f)] Compute the posterior mean using importance sampling and draws from e), and report it.
+\begin{Schunk}
+\begin{Sinput}
+> posterior_mean(alpha, beta)
+\end{Sinput}
+\begin{Soutput}
+[1] 0.503 8.275
+\end{Soutput}
+\end{Schunk}
 \item[g)] Using the importance ratios, compute the effective sample size $S_{\text{eff}}$ and report it. If $S_{\text{eff}}$ is less than 1000, repeat e) and f) with more draws.\\
+\begin{Schunk}
+\begin{Sinput}
+> S_eff(alpha, beta)
+\end{Sinput}
+\begin{Soutput}
+[1] 1.354
+\end{Soutput}
+\end{Schunk}
 \textbf{Hint!} Equation (10.4) in the course book.
 \begin{itemize}
 \item \textbf{Note!} {\it BDA3 1st (2013) and 2nd (2014) printing have an error
