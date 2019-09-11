@@ -11,3 +11,23 @@ Error: Failed to install 'aaltobda' from GitHub:
 
 ### Solution
 See the following StackOverflow solution. ([link](https://stackoverflow.com/a/3909546))
+
+## Installing `knitr`
+If you just installed RStudio and R, chances are you don't have `knitr` installed, the package responsible of rendering your pdf.
+
+### Solution
+```{r}
+install.packages("knitr")
+```
+
+## If `knitr` is installed but the pdf won't compile
+In this case it is possible that you don't have LaTeX installed, which is the package that runs the engine to process the text and render the pdf itself.
+
+### Solution
+TinyLatex is the bare minimum Latex core that you need to install in order to run the pdf compiler. If you want to go further and download a full distribution of Latex, look at texlive for linux and mactex for macOS.
+
+```{r}
+install.packages(tinylatex)
+tinylatex::install_tinylatex()
+```
+
