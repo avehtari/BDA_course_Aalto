@@ -1,0 +1,181 @@
+\documentclass[11pt,a4paper,english]{article}
+%\usepackage[finnish]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage{hyperref}
+\usepackage{listings}
+
+\usepackage{xcolor}
+\hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
+
+ % Normal latex T1-fonts
+\usepackage[T1]{fontenc}
+ % For the pdf-conversion. Remember -Ppdf for latex!
+%\usepackage[T1,mtbold,lucidacal,mtplusscr,subscriptcorrection]{mathtime}
+%\usepackage{times}
+
+ % Figures
+\usepackage{graphicx,fancybox,subfigure}
+
+ % AMS-stuff
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{amsbsy}
+
+ % Misc
+\usepackage{verbatim}
+\usepackage{url}
+
+% Page size
+\addtolength{\hoffset}{-1cm}
+\addtolength{\textwidth}{2cm}
+\addtolength{\voffset}{-1cm}
+\addtolength{\textheight}{2cm}
+
+% Paragraph
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
+
+% Horizontal line
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+% No page numbers
+\pagestyle{empty}
+
+% New commands:
+\DeclareMathOperator{\var}{var}
+\DeclareMathOperator{\cov}{cov}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Prob}{\mathbb{P}}
+
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+
+\section*{Bayesian Data Analysis - Assignment 4}
+
+
+
+\HRule
+
+\input{general_info.tex}
+
+
+
+\subsubsection*{Information on this assignment}
+
+This exercise is related to Chapters 3 and 10. The maximum amount of points from this assignment is 6.
+
+
+\textbf{Reading instructions:} Chapters 3 and 10 in BDA3, see reading instructions \href{https://github.com/avehtari/BDA_course_Aalto/blob/master/chapter_notes/BDA_notes_ch3.pdf}{\textbf{here}} and \href{https://github.com/avehtari/BDA_course_Aalto/blob/master/chapter_notes/BDA_notes_ch10.pdf}{\textbf{here}}
+
+\textbf{Grading instructions:} The grading will be done in peergrade. All grading questions and evaluations for exercise 4 can be found \href{https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex4_rubric.md}{\textbf{here}}
+
+To use markmyassignment for this assignment, run the following code in R:
+<<echo=TRUE,eval=FALSE>>=
+library(markmyassignment)
+exercise_path <- 
+  "https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/tests/ex4.yml"
+set_assignment(exercise_path)
+@
+
+
+
+\HRule
+
+\newpage
+
+\begin{enumerate}
+
+\item {\bf (Bioassay model and importance sampling)}. In this exercise, you will use a dose-response relation model that is used in Section 3.7 of the course book. The used likelihood is the same, but
+we will use a different prior distribution on the parameters $\alpha$ and $\beta$.
+
+
+\begin{itemize}
+    \item[a)] Construct a bivariate normal distribution as prior distribution for $(\alpha,\beta)$.
+    The marginal distributions are $\alpha \sim N(0,2^2), \beta \sim N(10,10^2)$ with correlation $\mathrm{corr}(\alpha, \beta)=0.5$. Report the mean and covariance
+    of the bivariate normal distribution.\\
+\textbf{Hint!} The mean and covariance of the bivariate normal distribution are a length-$2$ vector and a $2 \times 2$ matrix. The elements of the covariance matrix can be computed using the relation of correlation and covariance.
+  \item[b)] Implement a function in R for computing the \textbf{logarithm} of the density of the
+  prior distribution in a) for arbitrary values of $\alpha$ and $\beta$. Below is an example of how the function should be named and work if you want to check them with \texttt{markmyassignment}. 
+<<echo=FALSE>>=
+p_log_prior <- function(alpha,beta) -6.296435
+@
+  
+<<echo=TRUE>>=
+alpha <- 3
+beta <- 9
+p_log_prior(alpha,beta)
+@  
+ 
+\textbf{Hint!} Use R function {\tt dmvnorm} from the {\tt mvtnorm} package. We use logarithms for better numerical accuracy in later questions.
+
+\item[c)] Implement a function in R for computing the \textbf{logarithm} of the density of the posterior for arbitrary values of $\alpha$ and $\beta$. Below is an example of how the function should be named and work if you want to check them with \texttt{markmyassignment}. 
+ 
+<<echo=FALSE>>=
+p_log_posterior <- function(alpha,beta) -15.78798
+@
+  
+<<echo=TRUE>>=
+alpha <- 3
+beta <- 9
+p_log_posterior(alpha,beta)
+@  
+\textbf{Hint!} Equation (3.16) in the course book. The \textbf{logarithm} of the prior density was already implemented in b). For computing the \textbf{logarithm} of the likelihood, use the {\tt bioassaylp} function from the {\tt aaltobda} package. The data can be loaded with the R command {\tt data("bioassay")}.\\
+\textbf{Hint!} Logarithm of the product of two densities is the sum of the log-densities, i.e. $\log ab = \log a + \log b$.
+
+\item[d)] Plot the posterior density in a grid of points ($\alpha \in [-4,4]$, $\beta \in [-10,30]$) using the {\tt bioassay\_posterior\_density\_plot} function from the {\tt aaltobda} package. Internally, it uses the {\tt p\_log\_posterior} function you implemented in c).
+\item[e)] Sample draws of $\alpha$ and $\beta$ from the prior distribution from a).  Compute the importance ratios (importance weights) for each draw when the target distribution is
+the posterior distribution. Normalize the weights so that they sum to $1$. Below is a test example, the functions can also be tested with \texttt{markmyassignment}.\\
+<<echo=FALSE>>=
+log_importance_weights <- function(alpha, beta) c(-8.95, -23.47, -6.02, -8.13, -16.61, -14.57)
+normalized_importance_weights <- function(alpha, beta) c(0.045, 0.000, 0.852, 0.103, 0.000, 0.000)
+posterior_mean <- function(alpha, beta) c(0.503, 8.275)
+S_eff <- function(alpha, beta) 1.354
+@
+<<echo=TRUE>>=
+alpha <- c(1.896, -3.6,  0.374, 0.964, -3.123, -1.581)
+beta <- c(24.76, 20.04, 6.15, 18.65, 8.16, 17.4)
+log_importance_weights(alpha, beta)
+normalized_importance_weights(alpha, beta)
+@
+\textbf{Hint!} Use R function {\tt rmvnorm} from the {\tt mvtnorm} package. Equation (10.3) in the course book.
+\item[f)] Compute the posterior mean using importance sampling and draws from e), and report it.
+<<echo=TRUE>>=
+posterior_mean(alpha, beta)
+@
+\item[g)] Using the importance ratios, compute the effective sample size $S_{\text{eff}}$ and report it. If $S_{\text{eff}}$ is less than 1000, repeat e) and f) with more draws.\\
+<<echo=TRUE>>=
+S_eff(alpha, beta)
+@
+\textbf{Hint!} Equation (10.4) in the course book.
+\begin{itemize}
+\item \textbf{Note!} {\it BDA3 1st (2013) and 2nd (2014) printing have an error
+   for $\tilde{w}(\theta^s)$ used in the effective sample size
+   equation (10.4). The normalized weights equation should not have the
+   multiplier S (the normalized weights should sum to one). Errata for
+   the book
+   \url{http://www.stat.columbia.edu/~gelman/book/errata_bda3.txt}.
+   The later printings and slides have the correct equation.}
+ \end{itemize}
+\item[h)] Use importance resampling without replacement to obtain a posterior sample of size 1000 of $\alpha$ and $\beta$ and plot a scatterplot of the obtained posterior sample.
+\item[i)] Using the posterior sample obtained via importance resampling, report an estimate for $p(\beta > 0|x, n, y)$, that is, the probability that the drug is harmful.
+\item[j)] Using the posterior sample obtained via importance resampling, draw a histogram of the draws from the posterior distribution of the LD50 conditional on $\beta$ > 0.\\
+\textbf{Hint!} See Figure 3.4 and corresponding section in the course book.
+\end{itemize}
+
+
+
+\end{enumerate}
+
+
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

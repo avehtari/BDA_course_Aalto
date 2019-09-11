@@ -38,21 +38,21 @@ Is the number of chains reported?
 
 ### Q5 - 1 point
 
-Are the starting points for the chains reported?
+Are the starting points or the mechanism how they are generated reported?
 
 - No
 - Yes
 
 ### Q6 - 1 point
 
-Is the warm-up/burn-in length reported?
+Is the warm-up length reported?
 
 - No
 - Yes
 
 ### Q7 - 1 point
 
-Is the number of samples per chain reported?
+Is the number of draws per chain reported?
 
 - No
 - Yes
@@ -92,24 +92,14 @@ Does the report contain a scatter plot about the draws? Do the results look reas
 
 Overall quality of the report
 
-### Q12 - 1 point
+### Q12 · Scale · 1 point
+Does the report follow the formatting instructions?
 
-How easy was it to ﬁnd answers?
+- Not at all
+- Little
+- Mostly
+- Yes
 
-- Difﬁcult
-- Relatively difﬁcult
-- Relatively easy
-- Easy
-
-### Q13 - 1 point
-
-What is the overall quality of the report?
-
-- Bad
-- Fair
-- Good
-- Excellent
-
-### Q14 - Optional question
+### Q13 - Optional question
 
 Justify your answers for overall quality of the report if needed

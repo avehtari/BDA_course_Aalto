@@ -65,9 +65,10 @@
 
 Outline of the chapter 11
 \begin{list}{$\bullet$}{\parsep=0pt\itemsep=2pt}
-\item 11.1 Gibbs sampler
-\item 11.2 Metropolis and Metropolis-Hastings
-\item 11.3 Using Gibbs and Metropolis as building blocks
+\item Markov chain simulation: before section 11.1, pages 275-276
+\item 11.1 Gibbs sampler (an example of simple MCMC method)
+\item 11.2 Metropolis and Metropolis-Hastings (an example of simple MCMC method)
+\item 11.3 Using Gibbs and Metropolis as building blocks (can be skipped)
 \item 11.4 Inference and assessing convergence (important)
 \item 11.5 Effective number of simulation draws (important)
 \item 11.6 Example: hierarchical normal model (skip this)
@@ -116,7 +117,7 @@ think might be unclear for others.
 
 \subsection*{Basics of Markov chains}
 
-Slides by J. Virtamo for the course S-38.143 Queueing Theory has nice
+Slides by J. Virtamo for the course S-38.143 Queueing Theory have a nice
 review of the fundamental terms and Finnish translations for them (in
 English
 \url{http://www.netlab.tkk.fi/opetus/s38143/luennot/english.shtml} and
@@ -134,10 +135,6 @@ Nice animations with discussion
 ~\\
 And just the animations with more options to experiment
 \url{https://chi-feng.github.io/mcmc-demo/}
-
-\subsection*{Draw and sample}
-
-A collection of draws is a sample.
 
 \subsection*{Metropolis algorithm}
 
@@ -192,15 +189,32 @@ beginning of the chain are not presentative of the true distribution
 unless the starting point was somehow samples directly from the target
 distribution. 
 
-\subsection*{Split-$\hat{R}$ ja $n_\eff$}
+\subsection*{$\hat{R}$ ja $n_\eff$}
 
-Note that the method to split-$\hat{R}$ and effective number of
-samples $n_\eff$ has been updated in BDA3, and even more updated
-$n_\eff$ is described in Stan 2.18+ user guide. New compared to BDA2
-is splitting of chains and use of autocorrelation in estimation of
-$n_\eff$.
+There are many versions of $\hat{R}$ ja $n_\eff$. Beware that some
+software packages compute $\hat{R}$ using old inferior approaches.
 
+The $\hat{R}$ and the approach to estimate effective number of samples
+$n_\eff$ were updated in BDA3, and slightly updated version of this is
+described in Stan 2.18+ user guide. Since then we have developed even
+better $\hat{R}$, $ESS$ (effective sample size or $s_\eff$, with
+change from $n$ to $S$ is due to improved consistency in the notation)
+in
+ \begin{itemize}
+ \item Aki Vehtari, Andrew Gelman, Daniel Simpson, Bob Carpenter, and
+   Paul-Christian Bürkner (2019). Rank-normalization, folding, and
+   localization: An improved R-hat for assessing convergence of
+   MCMC. arXiv preprint
+   arXiv:1903.08008 \url{<http://arxiv.org/abs/1903.08008>}.
+ \end{itemize}
+ New $\hat{R}$, $ESS$, and Monte Carlo error estimates are available
+ in RStan {\tt monitor} function in R, and in ArviZ package in Python.
+ 
 Due to randomness in chains, $\hat{R}$ may get values slightly below 1.
+
+Brief Guide to Stan's Warnings
+\url{https://mc-stan.org/misc/warnings.html} provides summary of
+available convergence diagnostics in Stan and how to interpret them.
 
 \end{document}
 

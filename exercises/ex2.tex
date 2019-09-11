@@ -14,8 +14,16 @@
 \usepackage{hyperref}
 \usepackage{microtype}
 
+\usepackage{xcolor}
+\hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
 
-% if not draft, smaller printable area makes the paper more readable
+
+% if not draft, the smaller printable area makes the paper more readable
 \topmargin -4mm
 \oddsidemargin 0mm
 \textheight 225mm
@@ -44,30 +52,62 @@
 
 \pagestyle{empty}
 
+\usepackage{Sweave}
 \begin{document}
+\input{ex2-concordance}
 \thispagestyle{empty}
 
-\section*{Bayesian data analysis -- assignment 2}
+\section*{Bayesian data analysis -- Assignment 2}
 
-This exercise is related to Chapters 1 and 2.
+% \HRule
 
-The maximum amount of points from this assignment is 3. In addition to the correctness of the answers, the overall quality and clearness of the report is evaluated.
+\input{general_info.tex}
 
-Report all results to a single, {\bf anonymous} *.pdf -file and return it to \href{peergrade.io}{peergrade.io}. Include also source code to the report (either as an attachment or as a part of the answer). By anonymity it is meant that the report should not contain your name or student number.
+\subsubsection*{Information on this assignment}
 
-You may find an additional discussion about choosing priors by Andrew Gelman useful
-\url{http://andrewgelman.com/2017/10/04/worry-rigged-priors/}.
+This exercise is related to Chapters 1 and 2. The maximum amount of points from this assignment is 3. You may find an additional discussion about choosing priors by Andrew Gelman useful, they can be found \href{http://andrewgelman.com/2017/10/04/worry-rigged-priors/}{\textbf{here}}.
+
+\textbf{Reading instructions:} Chapter 1 and 2 in BDA3, see \href{https://github.com/avehtari/BDA_course_Aalto/blob/master/chapter_notes/BDA_notes_ch1.pdf}{\textbf{here}} and \href{https://github.com/avehtari/BDA_course_Aalto/blob/master/chapter_notes/BDA_notes_ch2.pdf}{\textbf{here}}.
+
+\textbf{Grading instructions:} The grading will be done in peergrade. All grading questions and evaluations for assignment 2 can be found \href{https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex2_rubric.md}{\textbf{here}}
+
+To use markmyassignment for this assignment, run the following code in R:
+
+
+
+\begin{Schunk}
+\begin{Sinput}
+> library(markmyassignment)
+> exercise_path <- 
+    "https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/tests/ex2.yml"
+> set_assignment(exercise_path)
+\end{Sinput}
+\end{Schunk}
+
 
 \HRule
 
-\vspace{1cm}
+\newpage
 
 \subsection*{Inference for binomial proportion (Computer)}
 
 Algae status is monitored in 274 sites at Finnish lakes and rivers.
 The observations for the 2008 algae status at each site are presented
-in file {\tt algae.txt} ('0': no algae, '1': algae present).
-% In year 2008 blue-green algae was observed at 44 sites.
+in file {\tt algae.txt} ('0': no algae, '1': algae present). The data
+can also be accessed from the {\tt aaltobda} R package as follows:
+
+\begin{Schunk}
+\begin{Sinput}
+> library(aaltobda)
+> data("algae")
+> head(algae)
+\end{Sinput}
+\begin{Soutput}
+[1] 0 1 1 0 0 0 
+\end{Soutput}
+\end{Schunk}
+
+% In the year 2008 blue-green algae was observed at 44 sites.
 Let $\pi$ be the probability of a monitoring site having detectable
 blue-green algae levels.
 
@@ -75,20 +115,52 @@ Use a binomial model for observations and a $\Beta(2,10)$ prior
 for $\pi$ in Bayesian inference. Formulate Bayesian model likelihood
 $p(y|\pi)$, prior $p(\pi)$, and the resulting posterior $p(\pi|y)$.
 Here it is not necessary to derive the posterior distribution as it has already been done in the book.
-Also it is not necessary to write out the distributions; it is sufficient to use label-parameter format, e.g.\ $\Beta(\cdot,\cdot)$. Although recommended, plotting is not required in this exercise.
+Also, it is not necessary to write out the distributions; it is sufficient to use label-parameter format, e.g.\ $\Beta(\cdot,\cdot)$. Although recommended, any plotting is not required in this exercise.
+
+As a test case, we provide some results for the following data. It is also possible to check the functions below with \texttt{markmyassignment}.
+
+\begin{Schunk}
+\begin{Sinput}
+> algea_test <- c(0, 1, 1, 0, 0, 0)
+\end{Sinput}
+\end{Schunk}
+
+% See exercises/solution folder in teacher repo
+
 Use your model to answer the following questions:
 \begin{enumerate}[a)]
 \item What can you say about the value of the unknown $\pi$ according
   to the observations and your prior knowledge? Summarize your results
-  with a point estimate and an interval estimate.
+  with a point estimate (i.e. $E(\pi|y)$) and a 90\% interval estimate.
+\begin{Schunk}
+\begin{Sinput}
+> beta_point_est(prior_alpha = 2, prior_beta = 10, data = algea_test)
+\end{Sinput}
+\begin{Soutput}
+[1] 0.2222222
+\end{Soutput}
+\begin{Sinput}
+> beta_interval(prior_alpha = 2, prior_beta = 10, data = algea_test, prob = 0.9)
+\end{Sinput}
+\begin{Soutput}
+[1] 0.0846451 0.3956414
+\end{Soutput}
+\end{Schunk}
 \item What is the probability that the proportion of monitoring sites with detectable algae levels $\pi$ is smaller than $\pi_0=0.2$ that is known from historical records?
+\begin{Schunk}
+\begin{Sinput}
+> beta_low(prior_alpha = 2, prior_beta = 10, data = algea_test, pi_0 = 0.2)
+\end{Sinput}
+\begin{Soutput}
+[1] 0.4511238
+\end{Soutput}
+\end{Schunk}
 \item What assumptions are required in order to use this kind of a
   model with this type of data?
 \item Make prior sensitivity analysis by testing a couple of different reasonable priors. Summarize the results by one or two sentences.
 \end{enumerate}
-Hint: With a conjugate prior, a closed form posterior is Beta form (see
-equations in the book). Useful functions: {\tt dbeta}, {\tt pbeta}, {\tt qbeta} in R and {\tt pdf}, {\tt cdf} and {\tt ppf} from {\tt scipy.stats.beta} in Python.
-
+\textbf{Hint!} With a conjugate prior, a closed-form posterior is Beta form (see
+equations in the book). Useful functions: {\tt dbeta}, {\tt pbeta}, {\tt qbeta} in R.
 
 
 \end{document}
