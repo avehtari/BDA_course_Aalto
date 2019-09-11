@@ -1,4 +1,6 @@
 #' Plot the posterior density in a grid using the implemented function p_log_posterior
+#' @param alpha_limits length-2 vector representing the min and max values of the intercept parameter in the dose-response model
+#' @param beta_limits length-2 vector representing the min and max values of the slope parameter in the dose-response model
 #' @export
 bioassay_posterior_density_plot <- function(alpha_limits = c(0,1), beta_limits = c(0,10)) {
   # grid
