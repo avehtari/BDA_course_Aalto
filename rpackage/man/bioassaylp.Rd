@@ -4,7 +4,18 @@
 \alias{bioassaylp}
 \title{Unnormalized log-posterior for bioassay, assuming uniform prior}
 \usage{
-bioassaylp(a, b, x, y, n)
+bioassaylp(alpha, beta, x, y, n)
+}
+\arguments{
+\item{alpha}{intercept parameter in the dose-response model}
+
+\item{beta}{slope parameter in the dose-response model}
+
+\item{x}{vector of doses for each observation}
+
+\item{y}{vector of number of deaths for each observation}
+
+\item{n}{vector of number of animals for each observation}
 }
 \description{
 Unnormalized log-posterior for bioassay, assuming uniform prior
