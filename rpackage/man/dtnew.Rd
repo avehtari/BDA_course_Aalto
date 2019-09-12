@@ -14,6 +14,8 @@ dtnew(x, df, mean = 0, scale = 1, ...)
 \item{mean}{Vector of means}
 
 \item{scale}{Vector of scale/standard deviations}
+
+\item{...}{Further arguments passed to dt function}
 }
 \description{
 The density of a transformed t-distribution

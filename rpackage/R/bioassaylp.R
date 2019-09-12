@@ -1,8 +1,13 @@
 #' Unnormalized log-posterior for bioassay, assuming uniform prior
+#' @param alpha intercept parameter in the dose-response model
+#' @param beta slope parameter in the dose-response model
+#' @param x vector of doses for each observation
+#' @param y vector of number of deaths for each observation
+#' @param n vector of number of animals for each observation
 #' @export
-bioassaylp <- function(a, b, x, y, n) {
+bioassaylp <- function(alpha, beta, x, y, n) {
   
-  t <- a + b*x
+  t <- alpha + beta*x
   et <- exp(t)
   z <- et/(1+et)
   
