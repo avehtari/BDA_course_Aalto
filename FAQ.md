@@ -31,3 +31,14 @@ install.packages(tinylatex)
 tinylatex::install_tinylatex()
 ```
 
+## Windows user and have a lot of problems getting packages to install ?
+
+One workaround might be to use Linux via the `remote desktop solution` provided by Aalto-IT. A couple of students (BDA-2019) have been using this already and it has been a pretty good experience.
+* Goto `vdi.aalto.fi`
+* Download VMWare Horizon application (you could also use the web portal, so no need to install anything)
+* Click on `New Server`.
+* Enter `vdi.aalto.fi`
+* Enter your aalto username (aalto email works too) and password in the respective fields.
+* Select `Ubuntu 16.04`
+* Click `Applications` (top left) -> `Programming` -> `RStudio`
+
