@@ -33,6 +33,10 @@ tinytex::install_tinytex()
 
 ## Windows user and have a lot of problems getting packages to install ?
 
+> ⚠️i Note that Windows is not supported officially in the course but we will try our best to help you get your setup (in Windows) working. This is because of two main reasons:
+> 1. `Stan`, the probabilistic programming language which we will later on use in the course, doesn't have good support for Windows. 
+> 2. The `dev-tools` which the `aalto-bda` package depends on, at the moment, has a lot of dependencies some of which need to be compiled from source. Getting the compiler tool-chain setup on windows is quite time consuming. 
+
 One workaround might be to use Linux via the `remote desktop solution` provided by Aalto-IT. A couple of students (BDA-2019) have been using this already and it has been a pretty good experience.
 * Goto `vdi.aalto.fi`
 * Download VMWare Horizon application (you could also use the web portal, so no need to install anything)
