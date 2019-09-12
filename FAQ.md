@@ -24,10 +24,10 @@ install.packages("knitr")
 In this case it is possible that you don't have LaTeX installed, which is the package that runs the engine to process the text and render the pdf itself.
 
 ### Solution
-TinyLatex is the bare minimum Latex core that you need to install in order to run the pdf compiler. If you want to go further and download a full distribution of Latex, look at texlive for linux and mactex for macOS.
+Tinytex is the bare minimum Latex core that you need to install in order to run the pdf compiler. If you want to go further and download a full distribution of Latex, look at texlive for linux and mactex for macOS.
 
 ```{r}
-install.packages(tinylatex)
-tinylatex::install_tinylatex()
+install.packages("tinytex")
+tinytex::install_tinytex()
 ```
 
