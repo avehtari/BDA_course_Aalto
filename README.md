@@ -108,3 +108,7 @@ vieraskielisten nimien taivutussääntöjen mukaan
 > "Jos nimi on kirjoitettuna takavokaalinen mutta äännettynä etuvokaalinen, kirjoitetaan päätteseen tavallisesti takavokaali etuvokaalin sijasta, esim. Birminghamissa, Thamesilla." Terho Itkonen, Kieliopas, 6. painos, Kirjayhtymä, 1997.
 
 - [Lyhyt englanti-suomi sanasto kurssin termeistä](extra_reading/sanasto.pdf)
+
+## Frequently Asked Questions (FAQ)
+
+We now have an FAQ for the exercises [here](FAQ.md). Has solutions to commonly asked questions related RStudio setup, errors during package installations, etc.
