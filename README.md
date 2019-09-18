@@ -53,13 +53,17 @@ book](http://www.stat.columbia.edu/~gelman/book/errata_bda3.txt).
 
 ## Videos
 
-Video clips on selected topics are available in [a Panopto folder](https://aalto.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx#folderID=%22f0ec3a25-9e23-4935-873b-a9f401646812%22). I've started recording these in February 2019, and more will appear in fall 2019.
+Shorter video clips on selected topics are available in [a Panopto folder](https://aalto.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx#folderID=%22f0ec3a25-9e23-4935-873b-a9f401646812%22).
 
 - [1.1 Introduction to uncertainty and modelling](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d841f429-9c3d-4d24-8228-a9f400efda7b)
 - [1.2 Introduction to the course contents](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=13fc7889-cfd1-4d99-996c-a9f400f6e5a2)
 - [2.1 Observation model, likelihood, posterior and binomial model](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=7a297f7d-bb7b-4dd0-9913-a9f500ec822d)
 - [2.2 Predictive distribution and benefit of integration](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=75b9f18f-e379-4557-a5fa-a9f500f11b40)
 - [2.3 Priors and prior information](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=099659a5-f707-473d-8b03-a9f500f39eb5)
+
+2019 fall lecture videos will appear weekly to [a Panopto folder](https://aalto.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx#folderID=%22f0ec3a25-9e23-4935-873b-a9f401646812%22).
+
+ - [Lecture 2.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=9c271082-5a8c-4b66-b6c2-aacc00fc683f) and [Lecture 2.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=70655a8a-0eb4-4ddd-9f52-aacc00fc67a2) on basics of Bayesian inference, observation model, likelihood, posterior and binomial model, predictive distribution and benefit of integration, priors and prior information, and one parameter normal model.
 
 ## R and Python
 
