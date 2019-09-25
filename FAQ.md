@@ -19,6 +19,7 @@ If you just installed RStudio and R, chances are you don't have `knitr` installe
 ```{r}
 install.packages("knitr")
 ```
+You can also install packages from RStudio menu `Tools->Install Packages`.
 
 ## If `knitr` is installed but the pdf won't compile
 In this case it is possible that you don't have LaTeX installed, which is the package that runs the engine to process the text and render the pdf itself.
