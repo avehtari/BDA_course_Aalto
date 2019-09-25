@@ -33,9 +33,11 @@ tinytex::install_tinytex()
 
 ## Windows user and have a lot of problems getting packages to install ?
 
-> ⚠️ Note that **Windows is not officially supported in the course** but we will try our best to help you get your setup (in Windows) working. This is because of two main reasons:
-> 1. `Stan`, the probabilistic programming language which we will later on use in the course, doesn't have good support for Windows. 
-> 2. `devtools` package which the `aaltobda` package depends on at the moment, has a lot of dependencies, some of which need to be compiled from source. Getting the compiler tool-chain setup on windows is quite time consuming. 
+> ⚠️ Note that getting the setup needed for the course working on Windows might involve a bit more effort than on Linux and Mac. Consequently, **we recommmend using either Linux or MacOS**.
+> Moreover, `Stan` the probabilistic programming language which we will use later on during the course requires a C++ compiler toolchain which is not available by default in Windows (blame Microsoft).
+> However, if you insist on using Windows and have a problem getting the setup working, following are some possible workarounds / solutions :
+
+# Workaround: Use Linux via remote-desktop. (Quickest to get started with)
 
 One workaround might be to use Linux via the `remote desktop solution` provided by Aalto-IT. A couple of students (BDA-2019) have been using this already and it has been a pretty good experience.
 * Goto `vdi.aalto.fi`
@@ -45,4 +47,8 @@ One workaround might be to use Linux via the `remote desktop solution` provided 
 * Enter your aalto username (aalto email works too) and password in the respective fields.
 * Select `Ubuntu 16.04`
 * Click `Applications` (top left) -> `Programming` -> `RStudio`
+
+# Install the latest version of `R` and then install `RStan`
+* Remove existing R installations and install the latest version of [R](https://www.r-project.org/)
+* Install `RStan` along with the necessary C++ compiler toolchain as described [here](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started)
 
