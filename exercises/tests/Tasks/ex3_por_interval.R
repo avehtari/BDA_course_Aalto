@@ -6,8 +6,8 @@ test_that("posterior_odds_ratio_interval()", {
   #-----------------------------------------------------------------------------------
   # test for posterior_odds_ratio_interval()
   #-----------------------------------------------------------------------------------
-  expect_true(exists("mu_pred_point_est"),
-              info = "Error: mu_pred_point_est() is missing")
+  expect_true(exists("posterior_odds_ratio_interval"),
+              info = "Error: posterior_odds_ratio_interval() is missing")
   set.seed(4711)
   p0 <- rbeta(100000, 5, 95)
   p1 <- rbeta(100000, 10, 90)
@@ -18,9 +18,9 @@ test_that("posterior_odds_ratio_interval()", {
   set.seed(4711)
   p0 <- rbeta(100000, 5, 5)
   p1 <- rbeta(100000, 6, 5)
-  expect_equal(unname(posterior_odds_ratio_interval(p0, p1), 0.9), c(0.2714472, 5.5970131), tol= 0.01, info = "Error: Incorrect result for p0 = rbeta(100000, 5, 5), p1 = rbeta(100000, 5, 6) and 90%.")
-  expect_equal(unname(posterior_odds_ratio_interval(p1, p0), 0.9), c(0.1786667, 3.6839583), tol= 0.01, info = "Error: Incorrect result for p0 = rbeta(100000, 5, 6), p1 = rbeta(100000, 5, 5) and 90%.")
-  expect_equal(unname(posterior_odds_ratio_interval(p1, p0), 0.8), c(0.1786667, 3.6839583), tol= 0.01, info = "Error: Incorrect result for p0 = rbeta(100000, 5, 6), p1 = rbeta(100000, 5, 5) and 80%.")  
+  expect_equal(unname(posterior_odds_ratio_interval(p0, p1, 0.9)), c(0.2714472, 5.5970131), tol= 0.01, info = "Error: Incorrect result for p0 = rbeta(100000, 5, 5), p1 = rbeta(100000, 5, 6) and 90%.")
+  expect_equal(unname(posterior_odds_ratio_interval(p1, p0, 0.9)), c(0.1786667, 3.6839583), tol= 0.01, info = "Error: Incorrect result for p0 = rbeta(100000, 5, 6), p1 = rbeta(100000, 5, 5) and 90%.")
+  expect_equal(unname(posterior_odds_ratio_interval(p1, p0, 0.8)), c(0.1786667, 3.6839583), tol= 0.01, info = "Error: Incorrect result for p0 = rbeta(100000, 5, 6), p1 = rbeta(100000, 5, 5) and 80%.")  
 })
 
 
