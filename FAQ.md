@@ -1,4 +1,19 @@
 # Frequently Asked Questions
+
+## Using R and RStudio via Jupyterhub
+
+Instead of installing RStudio in your computer, you can use it in your web browser:
+- go to jupyter.cs.aalto.fi
+- choose R: General use (JupyterLab) 1.8.*
+- in Launcher click RStudio
+- in RStudio Files pane you can create folders and upload files from your computer to the server
+  - **notebooks** folder is currently the only persistent folder (stays there if you sign out) so upload files (and folders) to that folder!
+- I got an error if I tried to upload whole BDA_R_demos repository as a zip file, but uploading smaller zip files work - after uploading files use Files pane to open, e.g., RMarkdown notebook
+  - the maximum filesize will increase in near future
+- knitting of R and Rmd files work, too
+- when running RStan, there is currently extra dialog popping up which required clicking Yes, but this will be fixed in near future
+  - there is a limited memory available (3Gib) and bigger models and datasets can run out of memory with cryptic error message
+
 ## Error related to LC_CTYPE while installing `aaltobda` r-package.
 One of the reported errors was as follows:
 ```
