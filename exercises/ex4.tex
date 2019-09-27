@@ -64,7 +64,7 @@
 
 \input{general_info.tex}
 
-
+\newpage
 
 \subsubsection*{Information on this assignment}
 
@@ -82,9 +82,10 @@ To use markmyassignment for this assignment, run the following code in R:
 > exercise_path <- 
 +   "https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/tests/ex4.yml"
 > set_assignment(exercise_path)
+> # To check your code/functions, just run
+> mark_my_assignment()
 \end{Sinput}
 \end{Schunk}
-
 
 
 \HRule
@@ -135,8 +136,7 @@ we will use a different prior distribution on the parameters $\alpha$ and $\beta
 \textbf{Hint!} Logarithm of the product of two densities is the sum of the log-densities, i.e. $\log ab = \log a + \log b$.
 
 \item[d)] Plot the posterior density in a grid of points ($\alpha \in [-4,4]$, $\beta \in [-10,30]$) using the {\tt bioassay\_posterior\_density\_plot} function from the {\tt aaltobda} package. Internally, it uses the {\tt p\_log\_posterior} function you implemented in c).
-\item[e)] Sample draws of $\alpha$ and $\beta$ from the prior distribution from a).  Compute the importance ratios (importance weights) for each draw when the target distribution is
-the posterior distribution. Normalize the weights so that they sum to $1$. Below is a test example, the functions can also be tested with \texttt{markmyassignment}.\\
+\item[e)] Implement two functions in: 1) A function for computing the log importance ratios (log importance weights) for draws from the prior distribution in 1a) when the target distribution is the posterior distribution. 2) A function for exponentiating the log importance ratios and normalizing them to sum to one. Below is a test example, the functions can also be tested with \texttt{markmyassignment}.\\
 \begin{Schunk}
 \begin{Sinput}
 > alpha <- c(1.896, -3.6,  0.374, 0.964, -3.123, -1.581)
@@ -153,8 +153,9 @@ the posterior distribution. Normalize the weights so that they sum to $1$. Below
 [1] 0.045 0.000 0.852 0.103 0.000 0.000
 \end{Soutput}
 \end{Schunk}
-\textbf{Hint!} Use R function {\tt rmvnorm} from the {\tt mvtnorm} package. Equation (10.3) in the course book.
-\item[f)] Compute the posterior mean using importance sampling and draws from e), and report it.
+\textbf{Hint!} Equation (10.3) in the course book.
+\item[f)] Sample draws of $\alpha$ and $\beta$ from the prior distribution from 1a). Implement a function for computing the posterior mean using importance sampling, and report the obtained mean.\\
+\textbf{Hint!} Use R function {\tt rmvnorm} from the {\tt mvtnorm} package.
 \begin{Schunk}
 \begin{Sinput}
 > posterior_mean(alpha, beta)
@@ -163,7 +164,7 @@ the posterior distribution. Normalize the weights so that they sum to $1$. Below
 [1] 0.503 8.275
 \end{Soutput}
 \end{Schunk}
-\item[g)] Using the importance ratios, compute the effective sample size $S_{\text{eff}}$ and report it. If $S_{\text{eff}}$ is less than 1000, repeat e) and f) with more draws.\\
+\item[g)] Using the importance ratios, compute the effective sample size $S_{\text{eff}}$ and report it. If $S_{\text{eff}}$ is less than 1000, repeat f) with more draws.\\
 \begin{Schunk}
 \begin{Sinput}
 > S_eff(alpha, beta)
@@ -185,7 +186,7 @@ the posterior distribution. Normalize the weights so that they sum to $1$. Below
 \item[h)] Use importance resampling without replacement to obtain a posterior sample of size 1000 of $\alpha$ and $\beta$ and plot a scatterplot of the obtained posterior sample.
 \item[i)] Using the posterior sample obtained via importance resampling, report an estimate for $p(\beta > 0|x, n, y)$, that is, the probability that the drug is harmful.
 \item[j)] Using the posterior sample obtained via importance resampling, draw a histogram of the draws from the posterior distribution of the LD50 conditional on $\beta$ > 0.\\
-\textbf{Hint!} See Figure 3.4 and corresponding section in the course book.
+\textbf{Hint!} See Figure 3.4 and corresponding section in the course book. You can plot a basic histogram with R using the library {\tt ggplot2} and the command {\tt ggplot() + geom\_histogram(aes(ld50))}
 \end{itemize}
 
 
