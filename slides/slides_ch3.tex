@@ -8,10 +8,13 @@
 {
   \usetheme{Warsaw}
 }
+\setbeamertemplate{itemize items}[circle]
+\setbeamercolor{frametitle}{bg=white,fg=navyblue}
 
 \usepackage[T1]{fontenc}
 \usepackage[latin1]{inputenc}
 \usepackage{times}
+\usepackage{microtype}
 \usepackage{amsmath,amsfonts,amssymb}
 \usepackage{graphicx}
 \graphicspath{{./figs/}{../../../presentations/Stancon2018Helsinki/figs/}}
@@ -96,7 +99,7 @@
   {\Large\color{navyblue} Chapter 3}
 
   \begin{itemize}
-\item 3.1 Marginalisation
+\item 3.1 Marginalization
 \item 3.2 Normal distribution with a noninformative prior (important)
 \item 3.3 Normal distribution with a conjugate prior (important)
 \item 3.4 Multinomial model (can be skipped)
@@ -136,6 +139,23 @@
 \end{frame}
 
 \begin{frame}
+
+  {\large\color{navyblue} Monte Carlo and posterior draws}
+  
+  \begin{itemize}
+  \item $\theta^{(s)}$ draws from $p(\theta \mid y)$ can be used
+    \begin{itemize}
+    \item<1-> for visualization
+    \item<2-> to approximate expectations (integrals)
+      \begin{align*}
+        E_{p(\theta \mid y)}[\theta] = \int \theta p(\theta \mid y) \approx \frac{1}{S}\sum_{s=1}^{S} \theta^{(s)}
+      \end{align*}
+    \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
   
   {\large\color{navyblue} Marginalization}
 
@@ -149,12 +169,17 @@
         p(\theta_1 \mid y) = \int p(\theta_1,\theta_2 \mid y) d\theta_2
       \end{align*}
       $p(\theta_1 \mid y)$ is a marginal distribution
-  %     \vspace{0.5\baselineskip}
+       \vspace{0.5\baselineskip}
   % \item Goal is to find marginal posterior of an interesting quantity
   %   \begin{itemize}
   %   \item a parameter of the model
   %   \item future event
   %   \end{itemize}
+    \item<2-> Monte Carlo approximation
+          \begin{align*}
+      p(\theta_1 \mid y) \approx  \frac{1}{S}\sum_{s=1}^{S} p(\theta_1,\theta_2^{(s)}\mid y),
+    \end{align*}
+    where $\theta_2^{(s)}$ are draws from $p(\theta_2 \mid y)$
   \end{itemize}
 
 \end{frame}
@@ -242,11 +267,12 @@
   \begin{align*}
     {\color{blue} \mu^{(s)}, \sigma^{(s)}} & \sim p(\mu, \sigma  \mid  y) \\
     \uncover<2->{\text{with } p(\mu,\sigma^2) & \propto \sigma^{-2}} \\
-    \uncover<3->{p(\mu,\sigma^2 \mid y) & \propto  \sigma^{-n-2}\exp\left(-\frac{1}{2\sigma^2}\sum_{i=1}^n(y_i-\mu)^2\right)}\\
-    \uncover<4->{&  = \sigma^{-n-2}\exp\left(-\frac{1}{2\sigma^2}\left[\sum_{i=1}^n(y_i-\bar{y})^2+n(\bar{y}-\mu)^2\right]\right)}\\
-    \uncover<4->{\color{gray} \text{where } \bar{y} & \color{gray} = \frac{1}{n}\sum_{i=1}^n y_i }\\
-    \uncover<5->{&  = \sigma^{-n-2}\exp\left(-\frac{1}{2\sigma^2}\left[(n-1)s^2+n(\bar{y}-\mu)^2\right]\right)}\\
-    \uncover<5->{\color{gray} \text{where }  s^2 & \color{gray} =\frac{1}{n-1}\sum_{i=1}^n(y_i-\bar{y})^2}
+    \only<3>{p(\mu,\sigma^2 \mid y) & \propto  \sigma^{-2}\prod_{i=1}^n\frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}(y_i-\mu)^2\right)\\}
+    \uncover<4->{p(\mu,\sigma^2 \mid y) & \propto  \sigma^{-n-2}\exp\left(-\frac{1}{2\sigma^2}\sum_{i=1}^n(y_i-\mu)^2\right)}\\
+    \uncover<5->{&  = \sigma^{-n-2}\exp\left(-\frac{1}{2\sigma^2}\left[\sum_{i=1}^n(y_i-\bar{y})^2+n(\bar{y}-\mu)^2\right]\right)}\\
+    \uncover<5->{\color{gray} \text{where } \bar{y} & \color{gray} = \frac{1}{n}\sum_{i=1}^n y_i }\\
+    \uncover<6->{&  = \sigma^{-n-2}\exp\left(-\frac{1}{2\sigma^2}\left[(n-1)s^2+n(\bar{y}-\mu)^2\right]\right)}\\
+    \uncover<6->{\color{gray} \text{where }  s^2 & \color{gray} =\frac{1}{n-1}\sum_{i=1}^n(y_i-\bar{y})^2}
   \end{align*}
 
 \end{frame}
@@ -306,7 +332,7 @@
     \sigma^{-n-2}\exp\left(-\frac{1}{2\sigma^2}(n-1)s^2\right)} \\
     & \uncover<3->{&\int
     \exp\left(-\frac{n}{2\sigma^2}(\bar{y}-\mu)^2\right) d\mu}\\
-    \uncover<4->{& &\hspace{2cm} \color{gray} \int \frac{1}{\sqrt{2\pi}\sigma} \exp\left(-\frac{1}{2\sigma^2}(y-\theta)^2\right) dy = 1}\\
+    \uncover<4->{& &\hspace{2cm} \color{gray} \int \frac{1}{\sqrt{2\pi}\sigma} \exp\left(-\frac{1}{2\sigma^2}(y-\theta)^2\right) d\theta = 1}\\
     & \uncover<5->{\propto &
     \sigma^{-n-2}\exp\left(-\frac{1}{2\sigma^2}(n-1)s^2\right)\sqrt{2\pi\sigma^2/n}}\\
     & \uncover<6->{\propto &
@@ -353,7 +379,7 @@
        p(\mu,\sigma^2 \mid y) & = {\color{darkgreen} p(\mu \mid \sigma^2,y)}{\color{blue} p(\sigma^2 \mid y)} \\
        \uncover<2->{{\color{blue} p(\sigma^2 \mid y)} & = \Invchi2(\sigma^2 \mid  n-1,s^2)\\
        (\sigma^2)^{(s)} & \sim {\color{blue} p(\sigma^2 \mid y)} \\}
-       \uncover<3->{{\color{darkgreen} p(\mu \mid \sigma^2,y)} & = \N(\mu \mid \bar{y},\sigma^2/n)\,} \uncover<4>{ \color{gray} {\textstyle \propto \sigma^{-n-2}\exp\left(-\frac{1}{2\sigma^2}\left[(n-1)s^2+n(\bar{y}-\mu)^2\right]\right)}\\}
+       \uncover<3->{{\color{darkgreen} p(\mu \mid \sigma^2,y)} & = \N(\mu \mid \bar{y},\sigma^2/n)\,} \uncover<4>{ \color{gray} {\textstyle \propto \exp\left(-\frac{n}{2\sigma^2}(\bar{y}-\mu)^2\right)}\\}
         \only<5->{\mu^{(s)} & \sim {\color{darkgreen} p(\mu \mid \sigma^2,y)}\\}
         \only<6->{{\color{red} \mu^{(s)}, \sigma^{(s)}} & \sim p(\mu, \sigma  \mid  y)}
      \end{align*}
@@ -387,23 +413,23 @@
 }
 \end{frame}
 
-\begin{frame}
+\begin{frame}[fragile]
   
   {\color{navyblue} Marginal posterior $p(\mu \mid y)$}
     \begin{align*}
       p(\mu \mid y)&=\int_0^\infty p(\mu,\sigma^2 \mid y)d\sigma^2\\
-      \uncover<2->{& \propto \int_0^\infty \sigma^{-n-2}\exp\left(-\frac{1}{2\sigma^2}\left[(n-1)s^2+n(\bar{y}-\mu)^2\right]\right) d\sigma^2}
+      \uncover<2->{& \propto \int_0^\infty \sigma^{-n-2}\exp\left(-{\only<4-5>{\color{blue}}\frac{1}{2\sigma^2}\left[{\only<3>{\color{blue}}(n-1)s^2+n(\bar{y}-\mu)^2}\right]}\right) d\sigma^2}
     \end{align*}
    \uncover<3->{Transformation\\}
     \vspace{-1\baselineskip}
     \begin{align*}
-      \uncover<3->{A=(n-1)s^2+n(\mu-\bar{y})^2}\uncover<4->{\quad \text{and} \quad z=\frac{A}{2\sigma^2}}
+      \uncover<3->{A=\only<3>{\color{blue}}(n-1)s^2+n(\mu-\bar{y})^2}\uncover<4->{\quad \text{and} \quad {\only<4-5>{\color{blue}}z=\frac{A}{2\sigma^2}}}
     \end{align*}
 %  \vspace{-\baselineskip}
     \begin{align*}
-     \uncover<5->{p(\mu \mid y)&\propto A^{-n/2}\int_0^\infty z^{(n-2)/2}\exp(-z)dz}
+     \uncover<5->{p(\mu \mid y)&\propto {\only<7>{\color{blue}}A^{-n/2}}\int_0^\infty {\only<5>{\color{blue}}z}^{(n-2)/2}\exp(-{\only<5>{\color{blue}}z})d{\only<5>{\color{blue}}z}}
    \uncover<6->{\intertext{\color{gray} Recognize gamma integral\, $\Gamma(u) = \int_0^\infty x^{u-1}\exp(-x)dx$}}
-    \uncover<7->{&\propto [(n-1)s^2+n(\mu-\bar{y})^2]^{-n/2}\\}
+    \uncover<7->{&\propto {\only<7>{\color{blue}}[(n-1)s^2+n(\mu-\bar{y})^2]^{-n/2}}\\}
     \uncover<8->{&\propto \left[1+\frac{n(\mu-\bar{y})^2}{(n-1)s^2}\right]^{-n/2}\\}
     \uncover<9->{p(\mu \mid y) & = t_{n-1}(\mu \mid \bar{y},s^2/n) \color{gray} \quad \text{Student's $t$}}
     \end{align*}
@@ -700,9 +726,9 @@
       y_i \mid \color{blue} \theta_i & \sim \Bin({\color{blue} \theta}_i, n_i)\\
       \logit({\color{blue} \theta}_i) & = \log\left(\frac{{\color{blue} \theta}_i}{1-{\color{blue} \theta}_i}\right)\\
                                      & = {\color{darkgreen} \alpha+\beta x_i} \\
-      \uncover<2->{\\ {\color{blue} \theta} & = \frac{1}{1+\exp(-({\color{darkgreen}\alpha+\beta x}))}}
+      \uncover<2->{\\ {\color{blue} \theta_i} & = \frac{1}{1+\exp(-({\color{darkgreen}\alpha+\beta x_i}))}}
     \end{align*}
-  \end{minipage}~~~
+  \end{minipage}~
      \begin{minipage}[b][5cm][t]{6.5cm}
     {\includegraphics[width=6.5cm]{bioassay_fitbinom.pdf}}
     {\includegraphics[width=6.5cm]{bioassay_fitlogitspace.pdf}}
@@ -715,14 +741,15 @@
 
   \only<1>{\includegraphics[width=10cm]{bioassay_fitbinom.pdf}}
   \only<2>{\includegraphics[width=10cm]{bioassay_post.pdf}}
-  \only<3-4>{\includegraphics[width=10cm]{bioassay_postld50.pdf}\\}
-  \only<5>{\includegraphics[width=10cm]{bioassay_histld50.pdf}\\}
+  \only<3-5>{\includegraphics[width=10cm]{bioassay_postld50.pdf}\\}
+  \only<6>{\includegraphics[width=10cm]{bioassay_histld50.pdf}\\}
   \only<3->{
-    \vspace{-\baselineskip}
+    \vspace{-1.5\baselineskip}
         \begin{align*}
       \mbox{LD50:}\;\;\;
           \E\left(\frac{y}{n}\right)=\logit^{-1}(\alpha+\beta x) = 0.5
-          \uncover<4->{\quad \Rightarrow \quad x_{\mathrm{LD50}}=-\alpha/\beta}
+          \uncover<4->{\quad \Rightarrow \quad & x_{\mathrm{LD50}}=-\alpha/\beta}\\
+          \uncover<5->{& x_{\mathrm{LD50}}^{(s)}=-\alpha^{(s)}/\beta^{(s)}}
     \end{align*}
   }
 \end{frame}
