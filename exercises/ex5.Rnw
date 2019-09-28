@@ -49,9 +49,8 @@
 
 \pagestyle{empty}
 
-\usepackage{Sweave}
 \begin{document}
-\input{ex5-concordance}
+\SweaveOpts{concordance=TRUE}
 \thispagestyle{empty}
 
 \section*{Bayesian data analysis -- Assignment 5}
@@ -72,18 +71,19 @@ This exercise is related to Chapters 10 and 11. The maximum amount of points fro
 \textbf{Reporting accuracy:} As many significant digits as justified by the Monte Carlo error and posterior accuracy.
 
 To use markmyassignment for this assignment, run the following code in R:
+<<echo=FALSE,eval=TRUE>>=
+options(continue="  ", prompt="> ")
+@
 
 
-\begin{Schunk}
-\begin{Sinput}
-> library(markmyassignment)
-> exercise_path <- 
-    "https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/tests/ex5.yml"
-> set_assignment(exercise_path)
-> # To check your code/functions, just run
-> mark_my_assignment()
-\end{Sinput}
-\end{Schunk}
+<<echo=TRUE,eval=FALSE>>=
+library(markmyassignment)
+exercise_path <- 
+  "https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/tests/ex5.yml"
+set_assignment(exercise_path)
+# To check your code/functions, just run
+mark_my_assignment()
+@
 
 \newpage
 
@@ -107,36 +107,30 @@ example of section 3.7 (BDA3) using the Metropolis algorithm. The Metropolis alg
 
 \begin{itemize}
 \item[a)] Start by implementing the density ratio function to compute $r$ in Eq. (11.1) in BDA3. Below is an example on how the function should work. You can test  the function using {\tt markmyassignment}.
+<<echo=FALSE>>=
+density_ratio <- function(alpha_propose, alpha_previous, beta_propose, beta_previous, x, y, n) 1.187524
+@
 
-\begin{Schunk}
-\begin{Sinput}
-> library(aaltobda)
-> data("bioassay")
-\end{Sinput}
-\end{Schunk}
+<<echo=TRUE, eval=FALSE>>=
+library(aaltobda)
+data("bioassay")
+@  
 
-\begin{Schunk}
-\begin{Sinput}
-> density_ratio(alpha_propose = 1.89, alpha_previous = 0.374,
-                beta_propose = 24.76, beta_previous = 20.04,
-                x = bioassay$x, y = bioassay$y, n = bioassay$n)
-\end{Sinput}
-\begin{Soutput}
-[1] 1.187524
-\end{Soutput}
-\end{Schunk}
+<<echo=TRUE>>=
+density_ratio(alpha_propose = 1.89, alpha_previous = 0.374,
+              beta_propose = 24.76, beta_previous = 20.04,
+              x = bioassay$x, y = bioassay$y, n = bioassay$n)
+@  
 
+<<echo=FALSE>>=
+density_ratio <- function(alpha_propose, alpha_previous, beta_propose, beta_previous, x, y, n) 0.8420882
+@
 
-\begin{Schunk}
-\begin{Sinput}
-> density_ratio(alpha_propose = 0.374, alpha_previous = 1.89,
-                beta_propose = 20.04, beta_previous = 24.76,
-                x = bioassay$x, y = bioassay$y, n = bioassay$n)
-\end{Sinput}
-\begin{Soutput}
-[1] 0.8420882
-\end{Soutput}
-\end{Schunk}
+<<echo=TRUE>>=
+density_ratio(alpha_propose = 0.374, alpha_previous = 1.89,
+              beta_propose = 20.04, beta_previous = 24.76,
+              x = bioassay$x, y = bioassay$y, n = bioassay$n)
+@  
 
 \textbf{Hint!} Compute with log-densities. Reasons are explained on page 261 (BDA3). Remember that $p_1/p_0=\exp(\log(p_1)-\log(p_0))$. For your convenience we have provided functions will evaluate the log-likelihood for given $\alpha$ and $\beta$ (see {\tt bioassaylp()} in the {\tt aaltobda} package). Notice that you still need to add the prior yourself and remember the unnormalized log posterior is simply the log-likelihood plus log-prior. For evaluating the log of the Gaussian prior you can use function {\tt dmvnorm} from package {\tt mvtnorm}. It can be worthwhile to look up your implementation of {\tt p\_log\_posterior()} that you implemented in Assignment 4.
 \item[b)] Now implement the metropolis algorithm using {\tt density\_ratio()} as a function called {\tt metropolis\_bioassay()}. Be sure to define your starting points and your jumping rule (proposal distribution). Run the simulations long enough for approximate convergence. 
