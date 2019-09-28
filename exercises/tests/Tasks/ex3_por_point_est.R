@@ -1,12 +1,12 @@
-context("mu_pred_point_est()")
+context("posterior_odds_ratio_point_est()")
 
-test_that("mu_pred_point_est()", {  
+test_that("posterior_odds_ratio_point_est()", {  
   
   #-----------------------------------------------------------------------------------
-  # test for mu_pred_point_est()
+  # test for posterior_odds_ratio_point_est()
   #-----------------------------------------------------------------------------------
-  expect_true(exists("mu_pred_point_est"),
-              info = "Error: mu_pred_point_est() is missing")
+  expect_true(exists("posterior_odds_ratio_point_est"),
+              info = "Error: posterior_odds_ratio_point_est() is missing")
   set.seed(4711)
   p0 <- rbeta(100000, 5, 95)
   p1 <- rbeta(100000, 10, 90)
