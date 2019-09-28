@@ -74,6 +74,8 @@ This exercise is related to Chapters 3 and 10. The maximum amount of points from
 
 \textbf{Grading instructions:} The grading will be done in peergrade. All grading questions and evaluations for exercise 4 can be found \href{https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex4_rubric.md}{\textbf{here}}
 
+\textbf{Reporting accuracy:} As many significant digits as justified by the Monte Carlo error and posterior accuracy.
+
 To use markmyassignment for this assignment, run the following code in R:
 <<echo=TRUE,eval=FALSE>>=
 library(markmyassignment)
@@ -114,16 +116,18 @@ p_log_prior(alpha,beta)
  
 \textbf{Hint!} Use R function {\tt dmvnorm} from the {\tt mvtnorm} package. We use logarithms for better numerical accuracy in later questions.
 
-\item[c)] Implement a function in R for computing the \textbf{logarithm} of the density of the posterior for arbitrary values of $\alpha$ and $\beta$. Below is an example of how the function should be named and work if you want to check them with \texttt{markmyassignment}. 
+\item[c)] Implement a function in R for computing the \textbf{logarithm} of the density of the posterior for arbitrary values of $\alpha$ and $\beta$ and data $x$, $y$ and $n$. Below is an example of how the function should be named and work if you want to check them with \texttt{markmyassignment}. 
  
 <<echo=FALSE>>=
-p_log_posterior <- function(alpha,beta) -15.78798
+p_log_posterior <- function(alpha,beta,x,y,n) -15.78798
 @
   
 <<echo=TRUE>>=
+library(aaltobda)
+data("bioassay")
 alpha <- 3
 beta <- 9
-p_log_posterior(alpha,beta)
+p_log_posterior(alpha, beta, x = bioassay$x, y = bioassay$y, n = bioassay$n)
 @  
 \textbf{Hint!} Equation (3.16) in the course book. The \textbf{logarithm} of the prior density was already implemented in b). For computing the \textbf{logarithm} of the likelihood, use the {\tt bioassaylp} function from the {\tt aaltobda} package. The data can be loaded with the R command {\tt data("bioassay")}.\\
 \textbf{Hint!} Logarithm of the product of two densities is the sum of the log-densities, i.e. $\log ab = \log a + \log b$.
