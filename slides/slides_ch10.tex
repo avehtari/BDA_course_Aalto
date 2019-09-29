@@ -6,18 +6,17 @@
 
 \mode<presentation>
 {
-  \usetheme{Copenhagen}
-  % oder ...
-
-  %\setbeamercovered{transparent}
-  % oder auch nicht
+  \usetheme{Warsaw}
 }
+\setbeamertemplate{itemize items}[circle]
+\setbeamercolor{frametitle}{bg=white,fg=navyblue}
 
 
 % \usepackage[pdftex]{graphicx}
-\usepackage[T1]{fontenc}
-\usepackage[latin1]{inputenc}
+%\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
 \usepackage{times}
+\usepackage{microtype}
 \usepackage{epic,epsfig}
 \usepackage{subfigure,float}
 \usepackage{amsmath,amsfonts,amssymb}
@@ -31,7 +30,6 @@
 \usepackage{eucal}
 \usepackage{rotating}
 \usepackage[all,poly,ps,color]{xy}
-\usepackage{microtype}
 
 \usepackage{natbib}
 \bibliographystyle{apalike}
@@ -117,6 +115,9 @@
 \item 10.3 Direct simulation and rejection sampling (overview)
 \item 10.4 Importance sampling (used in PSIS-LOO discussed later)
 \item 10.5 How many simulation draws are needed? (Ex 10.1 and 10.2)
+  \begin{itemize}
+  \item see extra slides for how many significant digits to report
+  \end{itemize}
 \item 10.6 Software (can be skipped)
 \item 10.7 Debugging (can be skipped)
    \end{itemize}
@@ -130,6 +131,10 @@
   \item In this chapter, generic $p(\theta)$ is used instead of
     $p(\theta|y)$
   \item unnormalized distribution is denoted by $q(\cdot)$
+    \begin{itemize}
+    \item $\int q(\theta) d\theta \neq 1$, but finite
+    \item $q(\cdot) \propto p(\cdot)$
+    \end{itemize}
   \item proposal distribution is denoted by $g(\cdot)$
   \end{itemize}
 
@@ -162,9 +167,11 @@
     \end{itemize}
     \item<6-> compute exp as late as possible
       \begin{itemize}
-      \item e.g. for $a>b$, compute $\log(\exp(a)+\exp(b)) = a + \log(1+\exp(b-a))$\\
-        e.g. $\log(exp(800)+exp(800)) \rightarrow$ Inf, but $800 + \log(1 + exp(800-800)) \approx 800.69$
-      \item<7-> e.g. in Metropolis-algorithm compute the log of ratio of densities using the identity\\
+      \item<7-> e.g. for $a>b$, compute $\log(\exp(a)+\exp(b)) = a + \log(1+\exp(b-a))$\\
+        \uncover<8->{
+          e.g. $\log(\exp(800)+\exp(800)) \rightarrow$ Inf}\\
+        \uncover<9->{but $800 + \log(1 + \exp(800-800)) \approx 800.69$}
+      \item<10-> e.g. in Metropolis-algorithm compute the log of ratio of densities using the identity\\
         $\log(a/b)=\log(a)-\log(b)$
     \end{itemize}
     \end{itemize}
@@ -213,11 +220,11 @@
    \end{align*}
 
   \begin{itemize}
-  \item Conjugate priors and analytic solutions
-  \item Grid integration and other quadrature rules
-  \item Independent Monte Carlo, rejection and importance sampling
-  \item Markov Chain Monte Carlo
-  \item Distributional approximations (Laplace, VB, EP)
+  \item Conjugate priors and analytic solutions (Ch 1-5)
+  \item Grid integration and other quadrature rules (Ch 3, 10)
+  \item Independent Monte Carlo, rejection and importance sampling (Ch 10)
+  \item Markov Chain Monte Carlo (Ch 11-12)
+  \item Distributional approximations (Laplace, VB, EP) (Ch 4, 13)
   \end{itemize}
    
 
@@ -231,20 +238,20 @@
   \begin{itemize}
   \item The simplest quadrature integration is grid integration
     \begin{itemize}
-    \item Evaluate function in a grid and compute
-    \begin{minipage}{4cm}
+    \item Evaluate function in a grid and compute\\
+    \hspace{-1cm}\begin{minipage}{4cm}
     \begin{align*}
       \E[-\alpha/\beta] \approx \sum_{t=1}^{T} w_{\mathrm{cell}}^{(t)} \frac{\alpha^{(t)}}{\beta^{(t)}},
     \end{align*}
   \end{minipage}
-  \begin{minipage}{5cm}
-  \includegraphics[width=5cm]{Integration_rectangle.png}
-\end{minipage}
+  \begin{minipage}{6cm}
+  \includegraphics[width=6cm]{Integration_rectangle.png}
+\end{minipage}\\
 where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(t)}$ and $\beta^{(t)}$ are center locations of grid cells
 \end{itemize}
-\item<2-> In 1D further variations, e.g. trapezoid
+\item<2-> In 1D further variations with smaller error, e.g. trapezoid
   \begin{center}
-    \includegraphics[width=5cm]{Integration_trapezoid.png}
+    \includegraphics[width=6cm]{Integration_trapezoid.png}
   \end{center}
 \item<3-> In 2D and higher
   \begin{itemize}
@@ -284,8 +291,8 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
      \item Stan initial release 2012
      \end{itemize}
      % \begin{itemize}
-     %   \item t‰t‰ ennen k‰yttˆ v‰h‰ist‰, vaikka bayesilaisiakin
-     %     osallistui teorian ja menetelmien kehitt‰miseen
+     %   \item t√§t√§ ennen k√§ytt√∂ v√§h√§ist√§, vaikka bayesilaisiakin
+     %     osallistui teorian ja menetelmien kehitt√§miseen
      % \end{itemize}
   \end{itemize}
 
@@ -294,12 +301,12 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 % \note{Buffon tiputteli neuloja lautalattialle
 % % http://noppa5.pc.helsinki.fi/koe/flash/prob/buf-en.html
 
-% Pearson laski kuinka monta ruletinpyˆrityst‰ tarvitaan,
-% t‰t‰ tietoa joku muu hyˆdynsikin
+% Pearson laski kuinka monta ruletinpy√∂rityst√§ tarvitaan,
+% t√§t√§ tietoa joku muu hy√∂dynsikin
 
-% Gosset k‰ytti paperilappuja
+% Gosset k√§ytti paperilappuja
 
-% atomipommin kehitt‰jill‰ oli laskentatehoa
+% atomipommin kehitt√§jill√§ oli laskentatehoa
 
 % }
 
@@ -398,9 +405,9 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 
 \begin{frame}
   
-  {\Large\color{navyblue} Example: Kilpisj‰rvi summer temperature}
+  {\Large\color{navyblue} Example: Kilpisj√§rvi summer temperature}
 
-  Average temperature in June, July, and August at Kilpisj‰rvi, Finland
+  Average temperature in June, July, and August at Kilpisj√§rvi, Finland
 
   \begin{center}
     \only<1>{\includegraphics[width=8cm]{kilpis_data.pdf}}
@@ -411,7 +418,7 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 
 \begin{frame}
   
-  {\Large\color{navyblue} Example: Kilpisj‰rvi summer temperature}
+  {\Large\color{navyblue} Example: Kilpisj√§rvi summer temperature}
 
   \begin{center}
     \only<1>{\includegraphics[width=8cm]{kilpis_phist.pdf}}
@@ -426,7 +433,7 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 
 \begin{frame}
   
-  {\Large\color{navyblue} Example: Kilpisj‰rvi summer temperature}
+  {\Large\color{navyblue} Example: Kilpisj√§rvi summer temperature}
 
   \vspace{\baselineskip}
   \makebox[12cm][t]{
@@ -481,7 +488,7 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 
 \begin{frame}
   
-  {\Large\color{navyblue} Example: Kilpisj‰rvi summer temperature}
+  {\Large\color{navyblue} Example: Kilpisj√§rvi summer temperature}
 
   \begin{center}
     \only<1>{\includegraphics[width=10cm]{kilpis_ppneg_mcse1a.pdf}}
@@ -492,6 +499,32 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
   \end{center}
 
 \end{frame}
+
+\begin{frame}
+  
+  {\Large\color{navyblue} How many digits to show in reports?}
+
+  \begin{itemize}
+  \item Don't show digits which are just random noise from simulation
+    or which are not meaningful given the posterior uncertainty
+    \begin{itemize}
+    \item extra digits make reading of the results slower and give
+      false impression of the accuracy
+    \end{itemize}
+  \item<2-> Example: The mean and 90\% central posterior interval for temperature
+     increase C$^\circ$/century based on posterior draws
+     \begin{itemize}
+     \item<3-> {\color{red} 2.050774 and $[$0.7472868 3.3017524$]$} (NO!)
+     \item<4-> {\color{darkgreen} 2.1 and $[$0.7 3.3$]$}
+    \item<5-> {\color{navyblue} 2 and $[$1 3$]$} (depends on the context)
+     \end{itemize}
+   \item<6-> For your reports: Don't be lazy and settle for the
+     default number of digits. Think for each reported value how
+     many digits is sensible.
+  \end{itemize}
+
+\end{frame}
+
 
 \begin{frame}
   
@@ -723,8 +756,8 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
     \end{itemize}
   \item Central limit theorem holds only if variance of the weight
     distribution is finite
-  \item See Vehtari, Gelman and Gabry (2017). Pareto smoothed
-    importance sampling. arXiv preprint arXiv:1507.02646,
+  \item See Vehtari, Simpson, Gelman, Yuling and Gabry (2019). Pareto
+    smoothed importance sampling. arXiv preprint arXiv:1507.02646,
     \url{https://arxiv.org/abs/1507.02646} for improved diagnostics
     and stability.
   \end{itemize}
@@ -752,11 +785,11 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
     \only<2-3>{Normal approximation is discussed more in BDA3 Ch 4\\}
     \only<3>{But the normal approximation is not that good here:\\ Grid sd(LD50) $\approx$ 0.1, Normal sd(LD50) $\approx$ .75!}
       \only<4->{
-        \makebox[0cm][t]{\hspace{-0.5cm}\rotatebox{90}{\hspace{1cm}SIR}}
+        \makebox[0cm][t]{\hspace{-0.5cm}\rotatebox{90}{\hspace{1cm}IR}}
       \includegraphics[width=3.4cm]{bioassayis3d.pdf}
       \includegraphics[width=3.4cm]{bioassayis3s.pdf}
       \includegraphics[width=3.4cm]{bioassayis3h.pdf}\\}
-    \only<5->{Grid sd(LD50) $\approx$ 0.1, SIR sd(LD50) $\approx$ 0.1}
+    \only<5->{Grid sd(LD50) $\approx$ 0.1, IR sd(LD50) $\approx$ 0.1}
     \end{center}
      \end{minipage}  
    }
@@ -778,7 +811,7 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
      \end{minipage}
      \begin{minipage}[t][6cm][t]{6cm}
        \begin{center}
-       SIR\\
+       IR\\
        \includegraphics[width=6cm]{bioassayis3s.pdf}
   \end{center}
   \end{minipage}
@@ -791,7 +824,7 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
   {\Large\color{navyblue} Example: Importance sampling in Bioassay}
 
        \begin{center}
-       SIR\\
+       IR\\
        \includegraphics[width=10cm]{bioassayis3s.pdf}
   \end{center}
 
@@ -839,7 +872,7 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
          \vspace{-2\baselineskip}
          \begin{align*}
            S_{\rm eff} & = \frac{1}{\sum_{s=1}^S (\tilde{w}(\theta^s))^2}, \quad \text{is based on variance of } \tilde{w}(\theta^s) \\
-           S_{\rm eff} & \approx 270 \\ \uncover<2->{&\text{Pareto-$k$ diagnostic preferably < 0.7: }}\uncover<3->{ \hat{k} \approx 0.76}
+           S_{\rm eff} & \approx 270 \\ \uncover<2->{&\text{Pareto-$k$ diagnostic preferably $<$ 0.7: }}\uncover<3->{ \hat{k} \approx 0.76}
          \end{align*}
   \end{center}
 
@@ -852,10 +885,10 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
 
   \begin{itemize}
   \item Pareto-$k$ diagnostic estimate the number of existing moments ($\lfloor 1/k \rfloor$)
-  \item Finite variance and central limit theorem for $k<1/2$
-  \item Finite mean and generalized central limit theorem for $k<1$,
+  \item<2-> Finite variance and central limit theorem for $k<1/2$
+  \item<3-> Finite mean and generalized central limit theorem for $k<1$,
     but pre-asymptotic constant grows impractically large for $k>0.7$
-  \item See Vehtari, Gelman and Gabry (2017). Pareto smoothed
+  \item<4-> See Vehtari, Simpson, Gelman, Yuling and Gabry (2019). Pareto smoothed
     importance sampling. arXiv preprint arXiv:1507.02646,
     \url{https://arxiv.org/abs/1507.02646} for improved diagnostics
     and stability.
