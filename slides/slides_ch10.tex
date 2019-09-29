@@ -56,7 +56,7 @@
 \parindent=0pt
 \parskip=8pt
 \tolerance=9000
-\abovedisplayshortskip=0pt
+\abovedisplayshortskip=2pt
 
 \setbeamertemplate{navigation symbols}{}
 \setbeamertemplate{headline}[default]{}
@@ -142,36 +142,50 @@
 
 \begin{frame}
   
-  {\Large\color{navyblue} Numerical accuracy}
+  {\Large\color{navyblue} Numerical accuracy -- floating point}
 
   \begin{itemize}
   \item Floating point presentation of numbers. e.g. with 64bits
     \begin{itemize}
     \item closest value to zero is $\approx 2.2\cdot 10^{-308}$
       \begin{itemize}
-      \item qr=rnorm(600);prod(dnorm(qr)) $\rightarrow$ 0
-      \item<3-> pbeta(0.5,241945,251527, lower.tail=FALSE) $\approx -1.15\cdot 10^{-42}$
+      \item generate sample of 600 from normal distribution:\\
+        {\color{navyblue} qr=rnorm(600)}
+      \item calculate joint density given normal:\\
+        {\color{navyblue} prod(dnorm(qr)) $\rightarrow$} {\color{red} 0 (underflow)}
+      \item<2-> see log densities in the next slide
       \end{itemize}
-    \item<2-> closest value to 1 is $\approx 1 \pm  2.2\cdot 10^{-16}$
+    \item<3-> closest value to 1 is $\approx 1 \pm  2.2\cdot 10^{-16}$
       \begin{itemize}
-      \item pbeta(0.5,241945,251527) $\rightarrow$ 1
+      \item<3-> {\color{navyblue}  pbeta(0.5, 241945, 251527) $\rightarrow$} {\color{red}  1 (rounding)}
+      \item<4-> {\color{navyblue} pbeta(0.5, 241945, 251527, lower.tail=FALSE) $\approx -1.2\cdot 10^{-42}$}\\
+        there is more accuracy near 0
       \end{itemize}
     \end{itemize}
-  \item<4-> Log densities
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  
+  {\Large\color{navyblue} Numerical accuracy -- log scale}
+
+  \begin{itemize}
+  \item Log densities
     \begin{itemize}
     \item use log densities to avoid over- and underflows in floating
       point presentation
       \begin{itemize}
-      \item sum(dnorm(qr,log=TRUE)) $\rightarrow$ -847.3
-      \item<5-> how many observations we can now handle? % $\sim 10^308$
+      \item {\color{navyblue} sum(dnorm(qr,log=TRUE)) $\rightarrow$} {\color{darkgreen} -847.3}
+      \item<2-> how many observations we can now handle? % $\sim 10^308$
     \end{itemize}
-    \item<6-> compute exp as late as possible
+    \item<3-> compute exp as late as possible
       \begin{itemize}
-      \item<7-> e.g. for $a>b$, compute $\log(\exp(a)+\exp(b)) = a + \log(1+\exp(b-a))$\\
-        \uncover<8->{
-          e.g. $\log(\exp(800)+\exp(800)) \rightarrow$ Inf}\\
-        \uncover<9->{but $800 + \log(1 + \exp(800-800)) \approx 800.69$}
-      \item<10-> e.g. in Metropolis-algorithm compute the log of ratio of densities using the identity\\
+      \item<4-> e.g. for $a>b$, compute $\log(\exp(a)+\exp(b)) = a + \log(1+\exp(b-a))$\\
+        \uncover<5->{
+          e.g. {\color{navyblue} $\log(\exp(800)+\exp(800)) \rightarrow$} {\color{red} Inf}}\\
+        \uncover<6->{but {\color{navyblue} $800 + \log(1 + \exp(800-800)) \approx$} {\color{darkgreen} $800.69$}}
+      \item<7-> e.g. in Metropolis-algorithm (ex5) compute the log of ratio of densities using the identity\\
         $\log(a/b)=\log(a)-\log(b)$
     \end{itemize}
     \end{itemize}
@@ -344,6 +358,7 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
   \item Deterministic methods (e.g. grid)
     \begin{itemize}
     \item evaluation points are selected by some deterministic rule
+    \item good deterministic methods converge faster (need less function evaluations)
     \end{itemize}
   \end{itemize}
 
@@ -425,8 +440,9 @@ where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$
     \only<2>{\includegraphics[width=8cm]{kilpis_phist100.pdf}}
     \only<3>{\includegraphics[width=8cm]{kilpis_phist100_mcse1a.pdf}}
     \only<4>{\includegraphics[width=8cm]{kilpis_phist100_mcse1b.pdf}}
-    \only<3>{$\sigma_\theta\approx 0.827,\, \text{MCSE} \approx 0.0827,\, \text{total deviation} \approx 0.831$}
-    \only<4>{$\sigma_\theta\approx 0.827,\, \text{MCSE} \approx 0.0261,\, \text{total deviation} \approx 0.827$}
+    \only<3>{$\sigma_\theta\approx 0.827,\, \text{MCSE} \approx 0.0827,\, \text{total deviation} \approx 0.831$\\}
+    \only<4>{$\sigma_\theta\approx 0.827,\, \text{MCSE} \approx 0.0261,\, \text{total deviation} \approx 0.827$\\}
+     \uncover<3-4>{\vspace{0.5\baselineskip}\color{gray} $\text{total deviation}^2 = \sigma_\theta^2 + \text{MCSE}^2$}
   \end{center}
 
 \end{frame}
