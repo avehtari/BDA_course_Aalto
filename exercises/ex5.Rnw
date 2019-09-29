@@ -134,13 +134,16 @@ density_ratio(alpha_propose = 0.374, alpha_previous = 1.89,
 
 \textbf{Hint!} Compute with log-densities. Reasons are explained on page 261 (BDA3). Remember that $p_1/p_0=\exp(\log(p_1)-\log(p_0))$. For your convenience we have provided functions will evaluate the log-likelihood for given $\alpha$ and $\beta$ (see {\tt bioassaylp()} in the {\tt aaltobda} package). Notice that you still need to add the prior yourself and remember the unnormalized log posterior is simply the log-likelihood plus log-prior. For evaluating the log of the Gaussian prior you can use function {\tt dmvnorm} from package {\tt mvtnorm}. It can be worthwhile to look up your implementation of {\tt p\_log\_posterior()} that you implemented in Assignment 4.
 \item[b)] Now implement the metropolis algorithm using {\tt density\_ratio()} as a function called {\tt metropolis\_bioassay()}. Be sure to define your starting points and your jumping rule (proposal distribution). Run the simulations long enough for approximate convergence. 
+
 \textbf{Hint!} Use a simple (normal) proposal distribution. Example proposals are $\alpha^* \sim N(\alpha_{t-1}, \sigma = 1)$ and $\beta^* \sim N(\beta_{t-1}, \sigma = 5)$. There is no need to try to find optimal proposal but test some different values for the jump scale ($\sigma$). Remember to report the one you used. Efficient proposals are dicussed in BDA3 p. 295--297 (not part of the course). In real-life a pre-run could be made with an automatic adaptive control to adapt the proposal distribution.
 \end{itemize}
 
-\item Include in the report the proposal distribution, number of chains used, the starting points (or the mechanism for generating them), the number of draws generated from each chain, and the warm-up length. Use $\hat{R}$ for convergence analysis (Eq. (11.4) in BDA3). In R the best choice is to use function {\tt Rhat} from package {\tt rstan}. Remember to remove the warm-up samples before computing $\hat R$. Report also the $\hat R$ values for $\alpha$ and $\beta$ and draw conclusions about the convergence of the chains.
+\item Include in the report the proposal distribution, number of chains used, the starting points (or the mechanism for generating them), the number of draws generated from each chain, and the warm-up length. 
+
+\item Use $\hat{R}$ for convergence analysis. You can either use Eq. (11.4) in BDA3 or the later version that can be found \href{https://arxiv.org/abs/1903.08008}{\textbf{here}}. You should specify which $\hat{R}$ you used. In R the best choice is to use function {\tt Rhat} from package {\tt rstan}. Remember to remove the warm-up samples before computing $\hat R$. Report also the $\hat R$ values for $\alpha$ and $\beta$ and draw conclusions about the convergence of the chains.
 \textbf{This means that you should briefly explain how to interpret the obtained} $\hat R$ \textbf{values}.
 
-\item Plot also the draws for $\alpha$ and $\beta$ (scatter plot) and include this plot in you report. You can compare the results to Figure~3.3b in BDA3 to verify that your code gives sensible results. Notice though that the results in Figure~3.3b are generated from posterior with uniform prior, so even when your algorithm works perfectly, the results will look slightly different (although fairly similar).
+\item Plot the draws for $\alpha$ and $\beta$ (scatter plot) and include this plot in you report. You can compare the results to Figure~3.3b in BDA3 to verify that your code gives sensible results. Notice though that the results in Figure~3.3b are generated from posterior with uniform prior, so even when your algorithm works perfectly, the results will look slightly different (although fairly similar).
 
 \end{enumerate}
 
