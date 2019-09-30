@@ -74,6 +74,7 @@ Shorter video clips on selected topics are available in [a Panopto folder](https
 
  - [Lecture 2.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=9c271082-5a8c-4b66-b6c2-aacc00fc683f) and [Lecture 2.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=70655a8a-0eb4-4ddd-9f52-aacc00fc67a2) on basics of Bayesian inference, observation model, likelihood, posterior and binomial model, predictive distribution and benefit of integration, priors and prior information, and one parameter normal model.
  - [Lecture 3](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=ab958b4b-e2c4-4534-8305-aad100ba191f) on multiparameter models, joint, marginal and conditional distribution, normal model, bioassay example, grid sampling and grid evaluation.
+ - [Lecture 4.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=8a3c7bbc-e2b8-4c16-97b2-aad800ba7927) on numerical issues, Monte Carlo, how many simulation draws are needed, how many digits to report, and [Lecture 4.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=44446861-eaa2-41b5-bf33-aad800caf18a) on direct simulation, curse of dimensionality, rejection sampling, importance sampling.
 
 ## R and Python
 
