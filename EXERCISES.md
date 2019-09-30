@@ -1,7 +1,7 @@
-# Bayesian Data Aanalysis course exercises
+# Bayesian Data Analysis course exercises
 
-Exercises and evaluation criteria are in folder
-[exercises](exercises). Exercises are submitted in
+Exercises and evaluation criteria are in [exercises
+folder](exercises). Exercises are submitted in
 [peergrade](https://www.peergrade.io).
 
 ## Exercise sessions
