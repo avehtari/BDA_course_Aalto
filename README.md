@@ -25,7 +25,7 @@ If you find BDA3 too difficult to start with, I recommend
 
 ## Assessment
 
-[Exercises](exercises) (67\%) and a [project work](project_work)
+[Exercises](EXERCISES.md) (67\%) and a [project work](project_work)
 (33\%). Minimum of 50\% of points must be obtained from both the
 exercises and project work.
 
