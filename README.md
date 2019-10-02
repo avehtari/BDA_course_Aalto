@@ -1,4 +1,4 @@
-# Bayesian Data Aanalysis course material
+# Bayesian Data Analysis course material
 
 This repository has course material for Bayesian Data Analysis course at Aalto (CS-E5710). Aalto students should check also [MyCourses announcements](https://mycourses.aalto.fi/mod/forum/view.php?id=448327).
 
@@ -19,7 +19,7 @@ The material will be updated during the course. Exercise instructions and slides
   + see e.g. [BDA_py_demos](https://github.com/avehtari/BDA_py_demos)
 
 If you find BDA3 too difficult to start with, I recommend
- - For background prerequisties, see, e.g., chapters 2, 4 and 5 in [Kruschke, "Doing Bayesian Data Analysis"](https://sites.google.com/site/doingbayesiandataanalysis/). Some of my students have found this useful.
+ - For background prerequisites, see, e.g., chapters 2, 4 and 5 in [Kruschke, "Doing Bayesian Data Analysis"](https://sites.google.com/site/doingbayesiandataanalysis/). Some of my students have found this useful.
  - Richard McElreath's [Statistical Rethinking](https://xcelab.net/rm/statistical-rethinking/) book is easier and the latest videos of [Statistical Rethinking: A Bayesian Course Using R and Stan](https://github.com/rmcelreath/statrethinking_winter2019) are highly recommended even if you are following BDA3.
  - Michael Betancourt has a different point of view in his [introduction material](https://betanalpha.github.io/writing/), and many have found these also enlightening. Furthermore, his [Hamiltonian Monte Carlo videos](https://betanalpha.github.io/speaking/) are highly recommended if you are taking this course.
 
@@ -52,11 +52,25 @@ book](http://www.stat.columbia.edu/~gelman/book/errata_bda3.txt).
 - Large sample properties and Laplace approximation (Ch 4)
 - In addition you learn workflow for Bayesian data analysis
 
+## How to study
+
+Recommended way to go through the material is
+- Read the reading instructions for a chapter in [chapter_notes](chapter_notes).
+- Read the chapter in BDA3 and check that you find the terms listed in the reading instructions.
+- Watch the corresponding [lecture video](https://aalto.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx#folderID=%22f0ec3a25-9e23-4935-873b-a9f401646812%22) to get explanations for most important parts.
+- Read corresponding additional information in the [chapter notes](chapter_notes).
+- Run the corresponding demos in [R demos](https://github.com/avehtari/BDA_R_demos) or 
+  [Python demos](https://github.com/avehtari/BDA_py_demos).
+- Read the exercise instructions and make the corresponding [exercises](exercises). Demo codes in [R demos](https://github.com/avehtari/BDA_R_demos) and 
+  [Python demos](https://github.com/avehtari/BDA_py_demos) have a lot of useful examples for handling data and plotting figures. If you have problems, visit TA sessions or ask in course slack channel.
+- If you want to learn more, make also self study exercises listed below
+
 ## Slides and chapter notes
 
 - [Slides](slides)
   - including code for reproducing some of the figures
 - [Chapter notes](chapter_notes)
+  - including reading instructions highlighting most important parts and terms
 
 Text licensed under CC-BY-NC 4.0. Code licensed under BSD-3.
 
