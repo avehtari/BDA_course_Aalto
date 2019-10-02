@@ -8,6 +8,7 @@
 \usepackage{microtype}
 \usepackage{url}
 \urlstyle{same}
+\usepackage{color}
 
 \usepackage[bookmarks=false]{hyperref}
 \hypersetup{%
@@ -49,6 +50,10 @@
 \DeclareMathOperator{\tr}{tr}
 %\DeclareMathOperator{\Pr}{Pr}
 \DeclareMathOperator{\trace}{trace}
+
+ \definecolor{navyblue}{rgb}{0,0,0.5}
+\renewcommand{\emph}[1]{\textcolor{navyblue}{#1}}
+\definecolor{darkgreen}{rgb}{0,0.3922,0}
 
 \pagestyle{empty}
 
@@ -115,6 +120,46 @@ think might be unclear for others.
  group. For clarity, we prefer separate words for single item (draw)
  and for the group (sample).
  
+  \subsection*{How many digits should be displayed}
+
+  \begin{itemize}
+  \item Too many digits make reading of the results slower and give
+    false impression of the accuracy. 
+  \item Don't show digits which are just random noise. You can use
+    Monte Carlo standard error estimates to check how many digits are
+    likely to stay the same if the sampling would be continued.
+  \item Show meaningful digits given the posterior uncertainty. You can compare posterior standard error or posterior intervals to the mean value. Posterior interval length can be used to determine also how many digits to show for the interval endpoints.
+  \item Example: The mean and 90\% central posterior interval for
+    temperature increase C$^\circ$/century (see the slides for the
+    example) based on posterior draws:
+     \begin{itemize}
+     \item {\color{red} 2.050774 and $[$0.7472868 3.3017524$]$} (too many digits)
+     \item {\color{darkgreen} 2.1 and $[$0.7 3.3$]$} (good
+       compared to the interval length)
+    \item {\color{navyblue} 2 and $[$1 3$]$} (depends on the context)
+     \end{itemize}
+   \item Example: The probability that temp increase is positive
+     \begin{itemize}
+     \item {\color{red} 0.9960000} (too many digits)
+     \item {\color{navyblue} 1.00} (depends on the context. 1.00 hints
+       it's not exactly 1, but larger than 0.99)
+     \item With 4000 draws MCSE $\approx$ 0.002. We could report that
+       probability is {\color{darkgreen} very likely larger than
+         0.99}, or sample more to justify reporting three digits
+     \item For probabilities close to 0 or 1, consider also when the
+       model assumption justify certain accuracy
+     \end{itemize}
+   \item When reporting many numbers in table, for aesthetics reasons,
+     it may be sometimes better for some numbers to show one extra or
+     one too few digits compared to the ideal.
+   \item Often it's better to plot the whole posterior density in
+     addition of any summaries, as summaries always loose some
+     information content.
+   \item For your reports: Don't be lazy and settle for the default
+     number of digits in R or Python. Think for each reported value
+     how many digits is sensible.
+   \end{itemize}
+
  \subsection*{Quadrature}
 
  Sometimes `quadrature' is used to refer generically to any numerical

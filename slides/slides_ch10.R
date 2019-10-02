@@ -37,7 +37,7 @@ ggsave('figs/kilpis_data.pdf', width=6, height=4)
 #' unexplained variation. rstanarm uses by default scaled priors.
 
 #' y ~ x means y depends on the intercept and x
-fit_lin <- stan_glm(temp ~ year, data = d_lin, family = gaussian())
+fit_lin <- stan_glm(temp ~ year, data = d_lin, family = gaussian(), iter = 8000)
 
 #' Check the diagnostics
 summary(fit_lin)
@@ -447,100 +447,3 @@ his_norm <- ggplot() +
   labs(x = TeX('$LD50 = - \\alpha / \\beta, \\beta > 0$'))
 his_norm
 
-#' ### Importance sampling for Bioassay model.
- 
-#' Multivariate normal log probability density function
-ldmvnorm <- function(x, mu, sig)
-(-0.5*(length(x)*log(2*pi) + log(det(sig)) + (x-mu)%*%solve(sig, x-mu)))
-#' Log importance ratios (working in log scale is numerically more stable)
-lg <- apply(samp_norm, 1, ldmvnorm, w, S)
-lp <- apply(df1, 1, logl, samp_norm[,1], samp_norm[,2]) %>% rowSums()
-lw <- lp-lg
-#' Pareto smoothed importance sampling
-#' [(Vehtari et al, 2017)](https://arxiv.org/abs/1507.02646)
-psislw <- psis(lw, r_eff = 1)
-#' Pareto diagnostics. k<0.7 is ok.
-#' [(Vehtari et al, 2017)](https://arxiv.org/abs/1507.02646)
-print(psislw$diagnostics$pareto_k, digits=2)
-#' Effective sample size estimate
-#' [(Vehtari et al, 2017)](https://arxiv.org/abs/1507.02646)
-print(psislw$diagnostics$n_eff, digits=2)
-#' Pareto smoothed weights
-psisw <- exp(psislw$log_weights)
-
-#' Importance sampling weights could be used to weight different
-#' expectations directly, but for visualisation and easy computation
-#' of LD50 histogram, we use resampling importance sampling.
-samp_indices <- sample(length(psisw), size = nsamp,
-                       replace = T, prob = psisw)
-rissamp_A <- samp_norm[samp_indices,1]
-rissamp_B <- samp_norm[samp_indices,2]
-# add random jitter, see BDA3 p. 76
-rissamp_A <- rissamp_A + runif(nsamp, (A[1] - A[2])/2, (A[2] - A[1])/2)
-rissamp_B <- rissamp_B + runif(nsamp, (B[1] - B[2])/2, (B[2] - B[1])/2)
-# samples of LD50 
-rissamp_ld50 <- -rissamp_A/rissamp_B
-
-#' Plot of the samples
-sam_ris <- ggplot(data = data.frame(rissamp_A, rissamp_B)) +
-  geom_point(aes(rissamp_A, rissamp_B), color = 'blue', size = 0.3, alpha=0.5) +
-  coord_cartesian(xlim = xl, ylim = yl) +
-  labs(x = TeX('$\\alpha$'), y = TeX('$\\beta$'))
-sam_ris
-
-#' Plot of the histogram of LD50
-his_ris <- ggplot() +
-  geom_histogram(aes(rissamp_ld50), binwidth = 0.05,
-                 fill = 'steelblue', color = 'black') +
-  coord_cartesian(xlim = c(-0.8, 0.8)) +
-  labs(x = TeX('$LD50 = - \\alpha / \\beta$'))
-his_ris
-
-#' Combine the plots. Top: grid sampling, middle: normal
-#' approximation, bottom: importance sampling.
-#+ blank, fig.show='hide'
-blank <- grid.rect(gp=gpar(col="white"))
-#+ combined
-grid.arrange(pos, sam, his, pos_norm, sam_norm, his_norm, blank, sam_ris, his_ris, ncol=3)
-
-ggsave('figs/bioassayis1d.pdf', pos, width=4, height=3)
-ggsave('figs/bioassayis1s.pdf', sam, width=4, height=3)
-ggsave('figs/bioassayis1h.pdf', his, width=4, height=3)
-ggsave('figs/bioassayis2d.pdf', pos_norm, width=4, height=3)
-ggsave('figs/bioassayis2s.pdf', sam_norm, width=4, height=3)
-ggsave('figs/bioassayis2h.pdf', his_norm, width=4, height=3)
-ggsave('figs/bioassayis3d.pdf', blank, width=4, height=3)
-ggsave('figs/bioassayis3s.pdf', sam_ris, width=4, height=3)
-ggsave('figs/bioassayis3h.pdf', his_ris, width=4, height=3)
-
-sd(samp_ld50)
-sd(samp_norm_ld50)
-sd(rissamp_ld50)
-
-psiswn<-psisw/sum(psisw)
-
-isw <- ggplot() +
-  geom_histogram(aes(psiswn), bins = 100,
-                 fill = 'steelblue', color = 'steelblue', alpha=0.5) +
-    labs(x = 'IS weights', y='') +
-    scale_y_continuous(breaks = NULL)
-isw
-ggsave('figs/bioassayisw1.pdf', width=4, height=3)
-
-isw + geom_vline(xintercept=1/length(psiswn), linetype=2) +
-    annotate('text', x=1/1000+3/10000, y=430, label='1/S', hjust='left')
-ggsave('figs/bioassayisw2.pdf', width=4, height=3)
-
-iscw <- ggplot() +
-    geom_step(aes(x=1:length(psiswn),y=cumsum(sort(psiswn, decreasing=TRUE))),
-              color = 'steelblue') +
-    labs(x = 'Rank of IS weight', y = 'Cumulative IS weight')
-iscw
-ggsave('figs/bioassayisw3.pdf', width=4, height=3)
-
-#' Pareto diagnostics. k<0.7 is ok.
-#' [(Vehtari et al, 2017)](https://arxiv.org/abs/1507.02646)
-print(psislw$diagnostics$pareto_k, digits=2)
-#' Effective sample size estimate
-#' [(Vehtari et al, 2017)](https://arxiv.org/abs/1507.02646)
-print(psislw$diagnostics$n_eff, digits=2)
