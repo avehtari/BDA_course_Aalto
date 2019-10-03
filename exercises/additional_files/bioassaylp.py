@@ -28,6 +28,9 @@ def bioassaylp(a, b, x, y, n):
 	t = a + b*x
 	et = np.exp(t)
 	z = et/(1.+et)
+	eps = 1e-12
+	z = np.minimum(z, 1 - eps)
+	z = np.maximum(z, eps)
 	# negative log posterior (error function to be minimized)
 	lp = np.sum(y*np.log(z)+ (n-y)*np.log(1.0-z), axis=-1)
 	return lp
