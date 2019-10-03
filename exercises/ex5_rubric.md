@@ -77,7 +77,7 @@ Is it mentioned which implementation of Rhat is used ? (Possible answers mention
 
 ### Q11 - 1 point
 
-Are the Rhat-values reported (potential scale reduction factor, Eq. (11.4) in the BDA3)?
+Are the Rhat-values reported ?
 
 - No
 - Yes, but incorrectly computed.
