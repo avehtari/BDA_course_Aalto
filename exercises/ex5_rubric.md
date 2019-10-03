@@ -70,20 +70,12 @@ Is the proposal/jumping distribution reported ?
 
 ### Q10 - 1 point
 
-Is the scale of the jumping distribution mentioned ? 
-
-- No
-- Yes, but only in the code.
-- Yes, used correctly in the code and also discussed in the report.
-
-### Q11 - 1 point
-
 Is it mentioned which implementation of Rhat is used ? (Possible answers mentioned in peergrade)
 
 - No
 - Yes
 
-### Q12 - 1 point
+### Q11 - 1 point
 
 Are the Rhat-values reported (potential scale reduction factor, Eq. (11.4) in the BDA3)?
 
@@ -93,7 +85,7 @@ Are the Rhat-values reported (potential scale reduction factor, Eq. (11.4) in th
 - Yes, but only for alpha or beta
 - Yes, single values both for alpha and beta
 
-### Q13 - 1 point
+### Q12 - 1 point
 
 Is there a discussion on the convergence of the chains ?
 
@@ -103,7 +95,7 @@ Is there a discussion on the convergence of the chains ?
 - Yes, plots included for alpha and beta, but no discussion
 - Yes, plots included for alpha and beta and discussed in the report.
 
-### Q14 - 1 point
+### Q13 - 1 point
 
 Is the interpretation of Rhat values correct (correct interpretation will be given in peergrade)?
 
@@ -111,7 +103,7 @@ Is the interpretation of Rhat values correct (correct interpretation will be giv
 - Somewhat correct
 - Interpretation correct
 
-### Q15 - 1 point
+### Q14 - 1 point
 Does the report contain a scatter plot about the draws? Do the results look reasonable, that is, roughly like in the Figure below (figure attached in peergrade)?
 
 - No plot included
@@ -122,7 +114,7 @@ Does the report contain a scatter plot about the draws? Do the results look reas
 
 Overall quality of the report
 
-### Q16 · Scale · 1 point
+### Q15 · Scale · 1 point
 Does the report follow the formatting instructions?
 
 - Not at all
@@ -130,6 +122,6 @@ Does the report follow the formatting instructions?
 - Mostly
 - Yes
 
-### Q17 - Optional question
+### Q16 - Optional question
 
 Justify your answers for overall quality of the report if needed
