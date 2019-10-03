@@ -5,12 +5,18 @@
 \title{Plot the posterior density in a grid using the implemented function p_log_posterior}
 \usage{
 bioassay_posterior_density_plot(alpha_limits = c(0, 1),
-  beta_limits = c(0, 10))
+  beta_limits = c(0, 10), x, y, n)
 }
 \arguments{
 \item{alpha_limits}{length-2 vector representing the min and max values of the intercept parameter in the dose-response model}
 
 \item{beta_limits}{length-2 vector representing the min and max values of the slope parameter in the dose-response model}
+
+\item{x}{vector of doses for each observation}
+
+\item{y}{vector of number of deaths for each observation}
+
+\item{n}{vector of number of animals for each observation}
 }
 \description{
 Plot the posterior density in a grid using the implemented function p_log_posterior
