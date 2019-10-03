@@ -9,6 +9,6 @@ dmvnorm <- function(x, mean, sigma) {
   cholesky <- chol(sigma)
   tmp <- backsolve(cholesky, t(x) - mean, transpose = TRUE)
   xMx <- colSums(tmp ^ 2)
-  return <- exp(- 0.5 * (ncol(x) * log(2 * pi) + 2* sum(log(diag(cholesky))) + xMx))
-  return
+  ret <- exp(- 0.5 * (ncol(x) * log(2 * pi) + 2* sum(log(diag(cholesky))) + xMx))
+  ret
 }
