@@ -7,7 +7,7 @@
 #' @export
 bioassaylp <- function(alpha, beta, x, y, n) {
   
-  t <- alpha + beta*x
+  t <- alpha+ outer(beta,x)
   et <- exp(t)
   z <- et/(1+et)
   
@@ -15,7 +15,7 @@ bioassaylp <- function(alpha, beta, x, y, n) {
   eps <- 1e-12
   z <- pmin(z, 1-eps)
   z <- pmax(z, eps)
-  lp <- sum(y*log(z) + (n-y)*log(1-z))
+  lp <- rowSums(t(t(log(z)) * y) + t(t(log(1-z)) * (n-y)))
   return(lp)
 }
 
