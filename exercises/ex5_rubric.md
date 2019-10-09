@@ -87,9 +87,9 @@ Are the Rhat-values reported ?
 
 ### Q12 - 1 point
 
-Is there a discussion on the convergence of the chains ?
+Is there a discussion on the convergence of the chains ? Are the plots of the chains included ?
 
-- No
+- No discussion on convergence and no plots included.
 - Yes, but plots not included.
 - Yes, plots included but only for alpha or beta
 - Yes, plots included for alpha and beta, but no discussion
