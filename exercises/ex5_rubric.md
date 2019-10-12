@@ -70,12 +70,22 @@ Is the proposal/jumping distribution reported ?
 
 ### Q10 - 1 point
 
+Is there a discussion on the convergence of the chains ? Are the plots of the chains included ?
+
+- No discussion on convergence and no plots included.
+- Yes, but plots not included.
+- Yes, plots included but only for alpha or beta
+- Yes, plots included for alpha and beta, but no discussion
+- Yes, plots included for alpha and beta and discussed in the report.
+
+### Q11 - 1 point
+
 Is it mentioned which implementation of Rhat is used ? (Possible answers mentioned in peergrade)
 
 - No
 - Yes
 
-### Q11 - 1 point
+### Q12 - 1 point
 
 Are the Rhat-values reported ?
 
@@ -84,16 +94,6 @@ Are the Rhat-values reported ?
 - Yes, but computed separately for each chain
 - Yes, but only for alpha or beta
 - Yes, single values both for alpha and beta
-
-### Q12 - 1 point
-
-Is there a discussion on the convergence of the chains ? Are the plots of the chains included ?
-
-- No discussion on convergence and no plots included.
-- Yes, but plots not included.
-- Yes, plots included but only for alpha or beta
-- Yes, plots included for alpha and beta, but no discussion
-- Yes, plots included for alpha and beta and discussed in the report.
 
 ### Q13 - 1 point
 
