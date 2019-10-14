@@ -6,17 +6,17 @@
 
 \mode<presentation>
 {
-  \usetheme{Copenhagen}
-  % oder ...
-
-  %\setbeamercovered{transparent}
-  % oder auch nicht
+  \usetheme{Warsaw}
 }
+\setbeamertemplate{itemize items}[circle]
+\setbeamercolor{frametitle}{bg=white,fg=navyblue}
 
 
+% \usepackage[pdftex]{graphicx}
 \usepackage[T1]{fontenc}
-\usepackage[latin1]{inputenc}
+\usepackage[utf8]{inputenc}
 \usepackage{times}
+\usepackage{microtype}
 \usepackage{epic,epsfig}
 \usepackage{subfigure,float}
 \usepackage{amsmath,amsfonts,amssymb}
@@ -42,11 +42,12 @@
 % \definecolor{list1}{rgb}{0,0.2549,0.6784}
  \definecolor{navyblue}{rgb}{0,0,0.5}
 \renewcommand{\emph}[1]{\textcolor{navyblue}{#1}}
+\definecolor{darkgreen}{rgb}{0,0.3922,0}
 
 \graphicspath{{./figs/}}
 
 \pdfinfo{
-  /Title      (Bayesian data analysis 12)
+  /Title      (Bayesian data analysis, ch 12)
   /Author     (Aki Vehtari) %
   /Keywords   (Bayesian probability theory, Bayesian inference, Bayesian data analysis)
 }
@@ -55,7 +56,7 @@
 \parindent=0pt
 \parskip=8pt
 \tolerance=9000
-\abovedisplayshortskip=0pt
+\abovedisplayshortskip=2pt
 
 \setbeamertemplate{navigation symbols}{}
 \setbeamertemplate{headline}[default]{}
@@ -71,6 +72,7 @@
 \def\z{{\mathbf z}}
 
 \def\eff{\mathrm{eff}}
+\def\ESS{\mathrm{ESS}}
 
 \DeclareMathOperator{\E}{E}
 \DeclareMathOperator{\Var}{Var}
@@ -147,14 +149,14 @@
   \item Carpenter et al (2017). Stan: A probabilistic programming
     language. Journal of Statistical Software
     76(1). \url{https://dox.doi.org/10.18637/jss.v076.i01}
-  \item Stan development team (2018). Modeling Language User's Guide
-    and Reference Manual
-    \url{https://github.com/stan-dev/stan/releases/download/v2.17.0/stan-reference-2.17.0.pdf}
+  \item Stan User's Guide, Language Reference Manual, and Language
+    Function Reference (in html and pdf)
+    \url{https://mc-stan.org/users/documentation/}
     \begin{itemize}
-    \item[-] easiest to start from Part III Example Models
+    \item[-] easiest to start from Example Models in User's guide
     \end{itemize}
   \item Basics of Bayesian inference and Stan, part 1 Jonah Gabry \&
-    Lauren Kennedy
+    Lauren Kennedy (StanCon 2019 Helsinki tutorial)
     \begin{itemize}
     \item[-]
       \url{https://www.youtube.com/watch?v=ZRpo41l02KQ&index=6&list=PLuwyh42iHquU4hUBQs20hkBsKSMrp6H0J}
@@ -229,8 +231,7 @@
 
   \begin{itemize}
   \item Uses gradient information for more efficient sampling
-  \item Alternating dynamic simulation and sampling of the energy
-    level
+  \item Alternating dynamic simulation and sampling energy level 
   \item<2-> Parameters: step size, number of steps in each chain
   \item<3-> No U-Turn Sampling (NUTS) and dynamic HMC
     \begin{itemize}
@@ -238,7 +239,7 @@
       efficiency
     \item dynamic HMC refers to dynamic trajectory length
     \item to keep reversibility of Markov chain, need to simulate in two directions
-    \item \url{http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/}
+    \item {\footnotesize \url{http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/}}
     \end{itemize}
   \item<4-> Dynamic simulation is discretized
     \begin{itemize}
@@ -261,23 +262,24 @@
     trajectory until no-U-turn criterion stopping
     \begin{itemize}
     \item max treedepth to keep computation in control
-    \item pick a draw along the trajectory with probabilities adjusted
+    \item<2-> pick a draw along the trajectory with probabilities adjusted
       to take into account the error in the discretized dynamic
       simulation
+    \item<3-> give bigger weight for treeparts further away to increase
+      probability of jumping further away
     \end{itemize}
-  \item<2-> Mass matrix and step size adaptation in Stan
+  \item<4-> Mass matrix and step size adaptation in Stan
     \begin{itemize}
-    \item mass matrix refers to having different scaling for different
+    \item<4-> mass matrix refers to having different scaling for different
       parameters and optionally also rotation to reduce correlations
-    \item mass matrix and step size adjustment and are estimated
+    \item<5-> mass matrix and step size adjustment and are estimated
       during initial adaptation phase
-    \item step size is adjusted to be as big as possible while keeping
-      discretization error in control
+    \item<6-> step size is adjusted to be as big as possible while keeping
+      discretization error in control (adapt\_delta)
     \end{itemize}
-  \item<3-> After adaptation the algorithm parameters are fixed and
-    some further iterations included in the warmup
-  \item<4-> After warmup store iterations for inference
-  \item<5-> See more details in Stan reference manual
+  \item<7-> After adaptation the algorithm parameters are fixed
+  \item<8-> After warmup store iterations for inference
+  \item<9-> See more details in Stan reference manual
 \end{itemize}
 
 \end{frame}
@@ -289,7 +291,7 @@
   \begin{itemize}
   \item Dynamic HMC specific diagnostic
   \item Indicates inefficiency in sampling leading to higher
-    autocorrelations and lower $n_{\rm eff}$
+    autocorrelations and lower ESS ($n_{\rm eff}$)
   \item Different parameterizations matter
   \end{itemize}
 \end{frame}
@@ -300,8 +302,8 @@
   {\Large\color{navyblue} Divergences}
 
   \begin{itemize}
-  \item HMC specific: Indicates that Hamiltonian dynamic simulation has problems
-    going to narrow places
+  \item HMC specific: indicates that Hamiltonian dynamic simulation
+    has problems with unexpected fast changes in log-density
     \begin{itemize}
     \item indicates possibility of biased estimates
     \end{itemize}
@@ -317,6 +319,32 @@
      \only<8>{\includegraphics[width=8cm]{unnamed-chunk-21-1.png}}
      \only<9>{\includegraphics[width=8cm]{unnamed-chunk-31-1.png}}
   \end{itemize}
+\end{frame}
+
+\begin{frame}
+
+  {\Large\color{navyblue} Problematic distributions}
+
+  \begin{itemize}
+  \item<1-> Nonlinear dependencies
+    \begin{itemize}
+    \item simple mass matrix scaling doesn't help
+    \end{itemize}
+  \item<2-> Funnels
+    \begin{itemize}
+    \item optimal step size depends on location
+    \end{itemize}
+  \item<3-> Multimodal
+    \begin{itemize}
+    \item difficult to move from one mode to another
+    \end{itemize}
+  \item<4-> Long-tailed with non-finite variance and mean
+    \begin{itemize}
+    \item effciency of exploration is reduced
+    \item central limit theorem doesn't hold for mean and variance
+    \end{itemize}
+  \end{itemize}
+
 \end{frame}
 
 \begin{frame}
@@ -367,9 +395,10 @@
      \end{itemize}
    \item<2-> More than ten thousand users in social, biological, and
      physical sciences, medicine, engineering, and business
-   \item<2-> Several full time developers, 35 in dev team, more than 100 contributors
-   \item<3-> R, Python, Julia, Scala, Stata, Matlab, command line interfaces
-    \item<3-> More than 100 R packages using Stan
+     
+   \item<3-> Several full time developers, 38 in dev team, more than 100 contributors
+   \item<4-> R, Python, Julia, Scala, Stata, Matlab, command line interfaces
+    \item<4-> More than 100 R packages using Stan
    \end{itemize}
   \vfill
   \begin{center}
@@ -434,8 +463,14 @@ data {
   \begin{itemize}
   \item Data type and size are declared
   \item Stan checks that given data matches type and constraints
+    \begin{itemize}
+    \item<2-> If you are not used to strong typing, this may
+      feel annoying, but it will reduce the probability of coding
+      errors, which will reduce probability of data analysis errors
+    \end{itemize}
   \end{itemize}
-\end{frame}  
+\end{frame}
+
 
 \begin{frame}[fragile]
 
@@ -455,7 +490,7 @@ parameters {
     \item e.g. log transformation for <lower=a> 
     \item e.g. logit transformation for <lower=a,upper=b> 
     \end{itemize}
-  \item For these declared transformation Stan automatically takes
+  \item<2-> For these declared transformation Stan automatically takes
     into account the Jacobian of the transformation (see BDA3 p. 21)
   \end{itemize}
 \end{frame}
@@ -486,21 +521,26 @@ model {
 }
 \end{lstlisting}}
 
+    \vspace{-0.5\baselineskip}
     \begin{itemize}
-    \item $\sim$ is syntactic sugar and this could be also written as
+    \item $\sim$ is syntactic sugar and this is equivalent to
     \end{itemize}
 
   {\small
 \begin{lstlisting}[language=Stan]
 model {
-  target += beta_lpdf(theta | 1, 1);     // prior
-  target += binomial_lpmf(y | N, theta); // likelihood
+  target += beta_lpdf(theta | 1, 1);
+  target += binomial_lpmf(y | N, theta);
 }
 \end{lstlisting}}
 
+    \vspace{-0.5\baselineskip}
     \begin{itemize}
-    \item<2-> {\tt target} is the log posterior density (usually)
-    \item<3-> {\tt \_lpdf} for continuous, {\tt \_lpmf} for discrete distributions
+    \item<2-> {\tt target} is the log posterior density
+    \item<3-> {\tt \_lpdf} for continuous, {\tt \_lpmf} for discrete distributions (discrete for the left hand side of {\tt |})
+    \item<4-> for Stan sampler there is no difference between prior and likelihood, all that matters is the final {\tt target}
+    \item<5-> you can write in Stan language any program to compute the
+      log density (Stan language is Turing complete)
     \end{itemize}
 
 \end{frame} 
@@ -551,7 +591,7 @@ model {
 
 \begin{frame}[fragile]
 
-  {\Large\color{navyblue} RStan and PyStan}
+  {\Large\color{navyblue} RStan}
 
   {\small\color{gray}
     {\only<1>{\color{black}}
@@ -569,21 +609,28 @@ d_bin <- list(N = 10, y = 7)
 fit_bin <- stan(file = 'binom.stan', data = d_bin)
 \end{lstlisting}
 }
-% \hrulefill\\
-% {\only<3>{\color{black}}
-%       PyStan
-% \begin{lstlisting}
-% import pystan
-% import stan_utility
-% \end{lstlisting}
-%     }
-%     {\only<4>{\color{black}}
-% \begin{lstlisting}
-% data = dict(N=10, y=8)
-% model = stan_utility.compile_model('binom.stan')
-% fit = model.sampling(data=data)
-% \end{lstlisting}
-%     }
+}
+\end{frame}
+
+\begin{frame}[fragile]
+
+  {\Large\color{navyblue} PyStan}
+
+  {\small\color{gray}
+{\only<1>{\color{black}}
+      PyStan
+\begin{lstlisting}
+import pystan
+import stan_utility
+\end{lstlisting}
+    }
+    {\only<2>{\color{black}}
+\begin{lstlisting}
+data = dict(N=10, y=8)
+model = stan_utility.compile_model('binom.stan')
+fit = model.sampling(data=data)
+\end{lstlisting}
+    }
   }
 \end{frame}
 
@@ -592,28 +639,12 @@ fit_bin <- stan(file = 'binom.stan', data = d_bin)
   {\Large\color{navyblue} Stan}
   
   \begin{itemize}
-  \item Stan compiles the model written in Stan language to C++
-    \begin{itemize}
-    \item this makes the sampling for complex models and bigger data faster
-    \item also makes Stan models easily portable, you can use your own
-      favorite interface
-    \end{itemize}
-  \end{itemize}
-
-\end{frame}
-
-\begin{frame}
-
-  {\Large\color{navyblue} Stan}
-  
-  \begin{itemize}
   \item Compilation (unless previously compiled model available)
-  \item Adaptation
-  \item Warm-up
+  \item Warm-up including adaptation
   \item Sampling
   \item Generated quantities
   \item Save posterior draws
-  \item Report divergences, $n_\eff$, $\hat{R}$
+  \item Report divergences, $n_\eff$, $\widehat{R}$
   \end{itemize}
 
 \end{frame}
@@ -766,7 +797,7 @@ convergence, Rhat=1).
   }
 
   \begin{itemize}
-  \item<2-> lp\_\_ is the log density, ie, same as ``target''
+  \item<2-> {\tt lp\_\_} is the log density, ie, same as {\tt target}
   \end{itemize}
   
 \end{frame}
@@ -776,7 +807,7 @@ convergence, Rhat=1).
   {\Large\color{navyblue} Difference between proportions}
   
   {\small
-\begin{lstlisting}[language=R]
+\begin{lstlisting}
 draws <- as.data.frame(fit_bin2)
 mcmc_hist(draws, pars = 'oddsratio') +
   geom_vline(xintercept = 1) +
@@ -819,10 +850,10 @@ check_div(fit_bin2)
 
 \begin{frame}
 
-  {\Large\color{navyblue} Kilpisjärvi summer temperature}
+  {\Large\color{navyblue} KilpisjÃ¤rvi summer temperature}
   
   \begin{itemize}
-  \item Temperature at Kilpisjärvi in June, July and August from 1952 to 2013
+  \item Temperature at KilpisjÃ¤rvi in June, July and August from 1952 to 2013
   \item Is there change in the temperature?
   \end{itemize}
   \begin{center}
@@ -871,7 +902,7 @@ data {
   }
 
   \begin{itemize}
-  \item difference between ``vector[N] x'' and ``real x[N]''
+  \item difference between {\tt vector[N] x}\, and\, {\tt real x[N]}
   \end{itemize}
 \end{frame}
 
@@ -960,7 +991,9 @@ model {
 
 \begin{frame}
 
-  {\Large\color{navyblue} Kilpisjärvi summer temperature}
+  {\Large\color{navyblue} KilpisjÃ¤rvi summer temperature}
+
+  Posterior fit
   
   \begin{center}
     \includegraphics[width=10cm]{kilpis_lin_pfit.pdf}
@@ -970,7 +1003,9 @@ model {
 
 \begin{frame}[fragile]
 
-  {\Large\color{navyblue} Kilpisjärvi summer temperature}
+  {\Large\color{navyblue} KilpisjÃ¤rvi summer temperature}
+
+  Posterior draws of alpha and beta
   
   \begin{center}
     \includegraphics[width=10cm]{kilpis_lin_mcmc_scatter.pdf}
@@ -980,7 +1015,9 @@ model {
 
 \begin{frame}[fragile]
 
-  {\Large\color{navyblue} Kilpisjärvi summer temperature}
+  {\Large\color{navyblue} KilpisjÃ¤rvi summer temperature}
+  
+  Posterior draws of alpha and beta
   
   \begin{center}
     \includegraphics[width=10cm]{kilpis_lin_mcmc_scatter.pdf}
@@ -1020,7 +1057,106 @@ transformed data {
 \end{lstlisting}
   }
 \end{frame}
+
+%XXXX add better posterior draws
+
+\begin{frame}[fragile]
+
+  {\Large\color{navyblue} RStanARM}
+
+  \begin{itemize}
+  \item RStanARM provides simplified model description with
+    pre-compiled models
+    \begin{itemize}
+    \item no need to wait for compilation
+    \item a restricted set of models
+    \end{itemize}
+  \end{itemize}
+
+Two group Binomial model:
+  {\scriptsize
+\begin{lstlisting}
+d_bin2 <- data.frame(N = c(674, 680), y = c(39,22), grp2 = c(0,1))
+fit_bin2 <- stan_glm(y/N ~ grp2, family = binomial(), data = d_bin2,
+                    weights = N)
+\end{lstlisting}
+  }
+% \begin{lstlisting}[language=R]
+% draws_bin2 <- as.data.frame(fit_bin2) %>%
+%   mutate(theta1 = plogis(`(Intercept)`),
+%          theta2 = plogis(`(Intercept)` + grp2),
+%          oddsratio = (theta2/(1-theta2))/(theta1/(1-theta1)))
+
+% mcmc_hist(draws_bin2, pars='oddsratio')
+% \end{lstlisting}
+%     }
     
+\end{frame} 
+
+\begin{frame}[fragile]
+
+  {\Large\color{navyblue} RStanARM}
+
+  \begin{itemize}
+  \item RStanARM provides simplified model description with
+    pre-compiled models
+    \begin{itemize}
+    \item no need to wait for compilation
+    \item a restricted set of models
+    \end{itemize}
+  \end{itemize}
+
+Two group Binomial model:
+  {\scriptsize
+\begin{lstlisting}
+d_bin2 <- data.frame(N = c(674, 680), y = c(39,22), grp2 = c(0,1))
+fit_bin2 <- stan_glm(y/N ~ grp2, family = binomial(), data = d_bin2,
+                    weights = N)
+\end{lstlisting}
+  }
+    Gaussian linear model
+  {\scriptsize
+\begin{lstlisting}
+    fit_lin <- stan_glm(temp ~ year, data = d_lin)
+\end{lstlisting}
+  }
+% \begin{lstlisting}[language=R]
+% draws_bin2 <- as.data.frame(fit_bin2) %>%
+%   mutate(theta1 = plogis(`(Intercept)`),
+%          theta2 = plogis(`(Intercept)` + grp2),
+%          oddsratio = (theta2/(1-theta2))/(theta1/(1-theta1)))
+
+% mcmc_hist(draws_bin2, pars='oddsratio')
+% \end{lstlisting}
+%     }
+    
+\end{frame} 
+
+
+\begin{frame}[fragile]
+
+  {\Large\color{navyblue} BRMS}
+
+  \begin{itemize}
+  \item BRMS provides simplified model description
+    \begin{itemize}
+    \item a larger set of models than RStanARM, but still restricted
+    \item need to wait for the compilation
+    \end{itemize}
+  \end{itemize}
+
+  {\scriptsize
+\begin{lstlisting}[language=R]
+fit_bin2 <- brm(y/N ~ grp2, family = binomial(), data = d_bin2,
+                    weights = N)
+
+
+fit_lin_t <- brm(temp ~ year, data = d_lin, family = student())
+\end{lstlisting}
+    }
+    
+\end{frame} 
+
 \begin{frame}
 
   {\Large\color{navyblue} Extreme value analysis}
@@ -1093,60 +1229,6 @@ functions {
 \end{frame} 
 
 
-\begin{frame}[fragile]
-
-  {\Large\color{navyblue} RStanARM}
-
-  \begin{itemize}
-  \item RStanARM provides simplified model description with
-    pre-compiled models
-    \begin{itemize}
-    \item no need to wait for compilation
-    \item a restricted set of models
-    \end{itemize}
-  \end{itemize}
-
-  {\scriptsize
-\begin{lstlisting}[language=R]
-d_bin2 <- data.frame(N = c(674, 680), y = c(39,22), grp2 = c(0,1))
-fit_bin2 <- stan_glm(y/N ~ grp2, family = binomial(), data = d_bin2,
-                    weights = N)
-
-draws_bin2 <- as.data.frame(fit_bin2) %>%
-  mutate(theta1 = plogis(`(Intercept)`),
-         theta2 = plogis(`(Intercept)` + grp2),
-         oddsratio = (theta2/(1-theta2))/(theta1/(1-theta1)))
-
-mcmc_hist(draws_bin2, pars='oddsratio')
-\end{lstlisting}
-    }
-    
-\end{frame} 
-
-
-\begin{frame}[fragile]
-
-  {\Large\color{navyblue} BRMS}
-
-  \begin{itemize}
-  \item BRMS provides simplified model description
-    \begin{itemize}
-    \item a larger set of models than RStanARM, but still restricted
-    \item need to wait for the compilation
-    \end{itemize}
-  \end{itemize}
-
-  {\scriptsize
-\begin{lstlisting}[language=R]
-fit_bin2 <- brm(y/N ~ grp2, family = binomial(), data = d_bin2,
-                    weights = N)
-
-
-fit_lin_t <- brm(temp ~ year, data = d_lin, family = student())
-\end{lstlisting}
-    }
-    
-\end{frame} 
 
 \begin{frame}[fragile]
 

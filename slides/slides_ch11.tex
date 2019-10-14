@@ -1,23 +1,22 @@
 \documentclass[finnish,english,t]{beamer}
-%\documentclass[finnish,english,handout]{beamer}
+% \documentclass[finnish,english,handout]{beamer}
 
 % Uncomment if want to show notes
 % \setbeameroption{show notes}
 
 \mode<presentation>
 {
-  \usetheme{Copenhagen}
-  % oder ...
-
-  %\setbeamercovered{transparent}
-  % oder auch nicht
+  \usetheme{Warsaw}
 }
+\setbeamertemplate{itemize items}[circle]
+\setbeamercolor{frametitle}{bg=white,fg=navyblue}
 
 
 % \usepackage[pdftex]{graphicx}
-\usepackage[T1]{fontenc}
-\usepackage[latin1]{inputenc}
+%\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
 \usepackage{times}
+\usepackage{microtype}
 \usepackage{epic,epsfig}
 \usepackage{subfigure,float}
 \usepackage{amsmath,amsfonts,amssymb}
@@ -26,7 +25,6 @@
 \usepackage{afterpage}
 \usepackage{url}
 \urlstyle{same}
-\usepackage{microtype}
 
 \usepackage{natbib}
 \bibliographystyle{apalike}
@@ -53,7 +51,7 @@
 \parindent=0pt
 \parskip=8pt
 \tolerance=9000
-\abovedisplayshortskip=0pt
+\abovedisplayshortskip=2pt
 
 \setbeamertemplate{navigation symbols}{}
 \setbeamertemplate{headline}[default]{}
@@ -69,6 +67,7 @@
 \def\z{{\mathbf z}}
 
 \def\eff{\mathrm{eff}}
+\def\ESS{\mathrm{ESS}}
 
 \DeclareMathOperator{\E}{E}
 \DeclareMathOperator{\Var}{Var}
@@ -119,7 +118,7 @@
     \end{itemize}
   \item 11.5 Effective number of simulation draws (important)
     \begin{itemize}
-    \item effective sample size $N_{\mathrm{eff}}$
+    \item effective sample size $S_{\mathrm{eff}}$
     \end{itemize}
   \item 11.6 Example: hierarchical normal model (quick glance)
   \end{itemize}
@@ -133,7 +132,7 @@
 \item demo11\_1: Gibbs sampling
 \item demo11\_2: Metropolis sampling
 \item demo11\_3: Convergence of Markov chain
-\item demo11\_4: split-$\widehat{R}$ and effective sample size $N_{\mathrm{eff}}$
+\item demo11\_4: split-$\widehat{R}$ and effective sample size $S_{\mathrm{eff}}$
 \end{itemize}
 
 \end{frame}
@@ -148,7 +147,7 @@
      \text{where} \quad
      {\color{blue} p(\theta|y)} & = \frac{\color{darkgreen}p(y|\theta)p(\theta)}{\color{red} \int p(y|\theta)p(\theta) d\theta}
    \end{align*}
-     \uncover<2->{We can easily evalute ${\color{darkgreen} p(y|\theta)p(\theta)}$ for any $\theta$, but the integral ${\color{red} \int p(y|\theta)p(\theta) d\theta}$ is usually difficult.}
+     \uncover<2->{We can easily evaluate ${\color{darkgreen} p(y|\theta)p(\theta)}$ for any $\theta$, but the integral ${\color{red} \int p(y|\theta)p(\theta) d\theta}$ is usually difficult.}
 
    \uncover<3->{We can use the unnormalized posterior ${\color{darkgreen} q(\theta|y)
      = p(y|\theta)p(\theta)}$, for example, in}
@@ -189,7 +188,7 @@
   \item What to do in high dimensions?
     \begin{itemize}
     \item Markov chain Monte Carlo (Ch 11-12)
-    \item Laplace, Variational*, EP* (Ch 4,13)
+    \item Laplace, Variational*, EP* (Ch 4,13*)
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -266,7 +265,7 @@
 
 % \note{S-38.143 Jonoteorian luentokalvoissa
 % %<http://www.netlab.hut.fi/opetus/s38143/luennot/index.shtml> ja
-% erityisesti luento 4 on hyv‰ tiivistelm‰ perustermeist‰ ja niiden
+% erityisesti luento 4 on hyv√§ tiivistelm√§ perustermeist√§ ja niiden
 % suomennokset}
 
 \begin{frame}
@@ -373,9 +372,10 @@
       ie, the new state is the same as previous
       \item<6-> step c is executed by generating a random number from 
         $\U(0,1)$
-      \item<7-> instead of $p(\theta|y)$, unnormalized $q(\theta|y)$ can be used,
-        as the normalization terms cancel out!
-      \vspace{-0mm}
+      \item<7-> $p(\theta^*|y)$ and $p(\theta^{t-1}|y)$ have the same
+        normalization terms, and thus instead of $p(\cdot|y)$,
+        unnormalized $q(\cdot|y)$ can be used, as the normalization
+        terms cancel out!
     \end{itemize}
   \end{itemize}
 
@@ -452,12 +452,12 @@
     \item[b)] aperiodic
       \begin{itemize}
       \item<3->[=] aperiodic (return times are not periodic)
-      \item<3->[-] holds for a random walk on any proper distrbution (except for trivial exceptions)
+      \item<3->[-] holds for a random walk on any proper distribution (except for trivial exceptions)
       \end{itemize}
     \item[c)] recurrent / not transient
       \begin{itemize}
       \item<4->[=] probability to return to a state $i$ is 1
-      \item<4->[-] holds for a random walk on any proper distrbution (except for trivial exceptions)
+      \item<4->[-] holds for a random walk on any proper distribution (except for trivial exceptions)
       \end{itemize}
     \end{itemize}
   \end{itemize}
@@ -473,7 +473,7 @@
     \begin{itemize}
     \item[-] consider starting algorithm at time $t-1$ with a draw
       $\theta^{t-1} \sim p(\theta|y)$ 
-    \item<2->[-] consider any two such points $\theta_a$ ja $\theta_b$ drawn
+    \item<2->[-] consider any two such points $\theta_a$ and $\theta_b$ drawn
       from $p(\theta|y)$ and labeled so that
       $p(\theta_b|y)\geq p(\theta_a|y)$
     \item<3->[-] the unconditional probability density of a transition from $\theta_a$ to $\theta_b$ is
@@ -606,7 +606,7 @@
   {\Large\color{navyblue} Metropolis}
 
   \begin{itemize}
-  \item Ususally doesn't scale well to high dimensions
+  \item Usually doesn't scale well to high dimensions
     \begin{itemize}
     \item if the shape doesn't match the whole distribution, the efficiency drops
     \item demo11\_2\\
@@ -634,6 +634,15 @@
       \end{itemize}
     \end{itemize}
   \end{itemize}  
+
+\end{frame}
+
+
+\begin{frame}
+
+  {\large\color{navyblue} Example of uncertainty in modeling}
+
+  \includegraphics[width=10cm]{fakel_postdraws.pdf}
 
 \end{frame}
 
@@ -795,40 +804,41 @@
   {\Large\color{navyblue} $\widehat{R}$}
 
   \begin{itemize}
-  \item<1-> Within chains variance $W$
+  \item $M$ chains, each having $N$ draws (with new R-hat notation)
+  \item<2-> Within chains variance $W$
     \begin{equation*}
-      W=\frac{1}{m}\sum_{j=1}^m s^2_j ,\text{ where } 
-      s^2_j=\frac{1}{n-1}\sum_{i=1}^n (\psi_{ij}-\bar{\psi}_{.j})^2
+      W=\frac{1}{M}\sum_{m=1}^M s^2_m ,\text{ where } 
+      s^2_m=\frac{1}{N-1}\sum_{n=1}^N (\theta_{nm}-\bar{\theta}_{.m})^2
     \end{equation*}
-  \item<2-> Between chains variance $B$
-    \begin{equation*}
-      B=\frac{n}{m-1}\sum_{j=1}^m
-      (\bar{\psi}_{.j}-\bar{\psi}_{..})^2,
-      \text{ where } \bar{\psi}_{.j}=\frac{1}{n}\sum_{i=1}^n \psi_{ij},
-      \bar{\psi}_{..}=\frac{1}{m}\sum_{j=1}^m\bar{\psi}_{.j}
-    \end{equation*}
-    \vspace{-6mm}
+  \item<3-> Between chains variance $B$
+    \begin{align*}
+      B&=\frac{N}{M-1}\sum_{m=1}^M
+      (\bar{\theta}_{.m}-\bar{\theta}_{..})^2,\\
+      &\text{ where } \bar{\theta}_{.m}=\frac{1}{N}\sum_{n=1}^N \theta_{nm}, \,
+      \bar{\theta}_{..}=\frac{1}{M}\sum_{m=1}^M\bar{\theta}_{.m}
+    \end{align*}
+    %\vspace{-6mm}
     \begin{itemize}
-      \item $B/n$ is variance of the means of the chains
+      \item<4-> $B/N$ is variance of the means of the chains
     \end{itemize}
     \vspace{2mm}
-  \item<3-> Estimate total variance
-    $\var(\psi|y)$ as a weighted mean of $W$ and $B$
+  \item<5-> Estimate total variance
+    $\var(\theta|y)$ as a weighted mean of $W$ and $B$
     \begin{equation*}
-      \widehat{\var}^{+}(\psi|y) = \frac{n-1}{n}W+\frac{1}{n}B
+      \widehat{\var}^{+}(\theta|y) = \frac{N-1}{N}W+\frac{1}{N}B
     \end{equation*}
   \end{itemize}  
 
 \end{frame}
 
 % \note{1) $B/n$ on varsinainen ketjujen keskiarvojen varianssi, jossa $n$
-% johtuu siit‰ ett‰ ne keskiarvot joiden varianssia lasketaan on
-% muodostettu $n$ n‰ytteest‰ ja siten varianssi pienempi, mutta
-% Gelman et kump. ovat halunneet merkit‰ kuitenkin $B$:ll‰ $n$ kertaa
-% t‰t‰ varianssia, koska silloin lopullisessa
-% marginaaliposteriorivarianssin kaavassa n‰kyy $n$:n vaikutus
+% johtuu siit√§ ett√§ ne keskiarvot joiden varianssia lasketaan on
+% muodostettu $n$ n√§ytteest√§ ja siten varianssi pienempi, mutta
+% Gelman et kump. ovat halunneet merkit√§ kuitenkin $B$:ll√§ $n$ kertaa
+% t√§t√§ varianssia, koska silloin lopullisessa
+% marginaaliposteriorivarianssin kaavassa n√§kyy $n$:n vaikutus
 
-% 2) termi $\frac{n-1}{n}$ tulee siit‰, ett‰ silloin painojen summa on 1
+% 2) termi $\frac{n-1}{n}$ tulee siit√§, ett√§ silloin painojen summa on 1
 % }
 
 \begin{frame}
@@ -837,9 +847,9 @@
 
   \begin{itemize}
   \item Estimate total variance
-    $\var(\psi|y)$ as a weighted mean of $W$ and $B$
+    $\var(\theta|y)$ as a weighted mean of $W$ and $B$
     \begin{equation*}
-      \widehat{\var}^{+}(\psi|y) = \frac{n-1}{n}W+\frac{1}{n}B
+      \widehat{\var}^{+}(\theta|y) = \frac{N-1}{N}W+\frac{1}{N}B
     \end{equation*}
     \vspace{-0.5\baselineskip}
     \begin{itemize}
@@ -847,13 +857,13 @@
       starting points are overdispersed
     \end{itemize}
     \vspace{0.5\baselineskip}
-  \item<2-> Given finite $n$, $W$ \emph{underestimates} marginal posterior variance
+  \item<2-> Given finite $N$, $W$ \emph{underestimates} marginal posterior variance
     \begin{itemize}
     \item single chains have not yet visited all points in the distribution
-    \item when $n\rightarrow\infty, \quad \E(W)\rightarrow \var(\psi|y)$
+    \item when $N\rightarrow\infty, \quad \E(W)\rightarrow \var(\theta|y)$
     \end{itemize}
     \vspace{0.5\baselineskip}
-  \item<3-> As $\widehat{\var}^{+}(\psi|y)$ overestimates and $W$ underestimates,
+  \item<3-> As $\widehat{\var}^{+}(\theta|y)$ overestimates and $W$ underestimates,
     compute
     \begin{equation*}
       \widehat{R}=\sqrt{\frac{\widehat{\var}^{+}}{W}}
@@ -887,10 +897,10 @@
       \widehat{R}=\sqrt{\frac{\widehat{\var}^{+}}{W}}
     \end{equation*}
     \begin{itemize}
-    \item<1-> Estimates how much the scale of $\psi$ could reduce if $n\rightarrow\infty$
-    \item<1-> $R\rightarrow 1$, when $n\rightarrow\infty$
-    \item<1-> if $R$ is big (e.g., $R>1.01$), keep sampling
-    \item<2-> If $R$ close to 1, it is still possible that chains have not converged
+    \item<1-> Estimates how much the scale of $\psi$ could reduce if $N\rightarrow\infty$
+    \item<1-> $\widehat{R}\rightarrow 1$, when $N\rightarrow\infty$
+    \item<1-> if $\widehat{R}$ is big (e.g., $R>1.01$), keep sampling
+    \item<2-> If $\widehat{R}$ close to 1, it is still possible that chains have not converged
       \begin{itemize}
       \item if starting points were not overdispersed
       \item distribution far from normal (especially if infinite variance)
@@ -907,16 +917,37 @@
   \begin{itemize}
   \item BDA3: split-$\widehat{R}$
   \item Examines {\it mixing} and {\it stationarity} of chains
-  \item To examine stationarity chains are splitted to two parts
+  \item To examine stationarity chains are split to two parts
     \begin{itemize}
-    \item after splitting, we have $m$ chains, each having $n$ draws
-    \item scalar draws $\psi_{ij} \quad (i=1,\ldots,n;j=1,\ldots,m)$
+    \item after splitting, we have $M$ chains, each having $N$ draws
+    \item scalar draws $\theta_{nm} \quad (n=1,\ldots,N;m=1,\ldots,M)$
     \item compare means and variances of the split chains
     \end{itemize}
   \end{itemize}  
 
 \end{frame}
 
+\begin{frame}[fragile]
+
+  {\Large\color{navyblue} Rank normalized $\widehat{R}$}
+
+  \begin{itemize}
+  \item<+-> Original $\widehat{R}$ requires that the target distribution
+    has finite mean and variance
+  \item<+-> Rank normalization fixes this and is also more robust given
+    finite but high variance
+  \item<+-> Folding improves detecting scale differences between chains
+  \item<+-> Paper proposes also local convergence diagnostics and
+    practical MCSE estimates for quantiles
+  \item<+-> Notation updated compared to BDA3 
+  \end{itemize}  
+
+    Vehtari, Gelman, Simpson, Carpenter, B√ºrkner
+  (2019). Rank-normalization, folding, and localization: An improved
+  R-hat for assessing convergence of MCMC. arXiv preprint
+  arXiv:1903.08008.
+
+\end{frame}
 
 % \begin{frame}
   
@@ -1017,14 +1048,14 @@
     error in case of MCMC
   \item For expectation $\bar{\theta}$
     \begin{equation*}
-      \Var[\bar{\theta}] = \frac{\sigma^2_\theta}{N/\tau}
+      \Var[\bar{\theta}] = \frac{\sigma^2_\theta}{S_\eff}
     \end{equation*}
-    where $\tau$ is sum of autocorrelations
+    where $S_\eff=S/\tau$, and $\tau$ is sum of autocorrelations
     \begin{itemize}
-      \item $\tau$ describes how many dependent draws correspond to one independent sample
-      \item in BDA3 $N=nm$
-      \item $n_\eff=nm/\tau$
-      \item BDA3 focuses on $n_\eff$ and not the Monte Carlo error directly
+      \item<2-> $\tau$ describes how many dependent draws correspond to one independent sample
+      \item<3-> new R-hat paper $S=NM$ (in BDA3 $N=nm$ and $n_\eff=N/\tau$)
+      \item<4-> BDA3 focuses on $S_\eff$ and not the Monte Carlo error directly\\
+        new R-hat paper discusses more about MCSEs for different quantities
     \end{itemize}
   \end{itemize}  
 \end{frame}
@@ -1036,13 +1067,17 @@
   \begin{itemize}
   \item Estimation of the autocorrelation using several chains
     \begin{equation*}
-      \hat{\rho}_t=1-\frac{W - \frac{1}{M}\sum_{j=1}^m \hat{\rho}_{t,j}}{2\widehat{\var}^{+}}
+      \hat{\rho}_n=1-\frac{W - \frac{1}{M}\sum_{m=1}^M \hat{\rho}_{n,m}}{2\widehat{\var}^{+}}
     \end{equation*}
-    where $\hat{\rho}_{t,j}$ is autocorrelation at lag $t$ for chain $j$
-  \item<2-> BDA3 has slightly different less accurate equation. The
+    where $\hat{\rho}_{n,m}$ is autocorrelation at lag $n$ for chain $m$
+  \item<2-> This combines $\widehat{R}$ and autocorrelation estimates
+    \begin{itemize}
+    \item takes into account if the chains are not mixing (the chains have not converged)
+    \end{itemize}
+  \item<3-> BDA3 has slightly different and less accurate equation. The
     above equation is used in Stan 2.18+
-  \item<3-> Compared to usual method which computes the autocorrelation
-    from a single chain, this estimate has smaller variance
+  \item<4-> Compared to a method which computes the autocorrelation
+    from a single chain, the multi-chain estimate has smaller variance
  \end{itemize}
 \end{frame}
 
@@ -1057,20 +1092,21 @@
     \end{align*}
     where $\hat{\rho}_t$ is empirical autocorrelation 
     \begin{itemize}
-    \item empirical autocorrelation function is noisy and thus
+    \item<2-> empirical autocorrelation function is noisy and thus
       estimate of $\tau$ is noisy
-    \item noise is larger for longer lags (less observations)
-    \item less noisy estimate is obtained by truncating
+    \item<2-> noise is larger for longer lags (less observations)
+    \item<3-> less noisy estimate is obtained by truncating
     \begin{align*}
-      \tau \approx 1 + 2 \sum_{t=1}^T \hat{\rho}_t
+      \hat{\tau} = 1 + 2 \sum_{t=1}^T \hat{\rho}_t
     \end{align*}
     \end{itemize}
-    \item<2-> As $\tau$ is estimated from a finite number of draws,
+    \item<4-> As $\tau$ is estimated from a finite number of draws,
       it's expectation is overoptimistic
       \begin{itemize}
-      \item if $\tau>mn/20$ then the estimate is unreliable
+      \item if $\hat{\tau}>MN/20$ then the estimate is unreliable
 
-      \end{itemize} \end{itemize}
+      \end{itemize}
+    \end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -1106,7 +1142,7 @@
   
    {\Large\color{navyblue} Effective sample size}
 
-   Effective number of draws $n_\eff \approx N/\tau$\\
+   Effective sample size $\ESS = S_\eff \approx S/\hat{\tau}$\\
    \uncover<2->{
   \makebox[12cm][t]{
     \hspace{-.7cm}
@@ -1118,7 +1154,7 @@
      \begin{minipage}[t][4cm][t]{6cm}
        \vspace{-3.5cm}
        \begin{align*}
-         \tau & \approx 1 + 2 \sum_{t=1}^T \hat{\rho}_t\\
+         \hat{\tau} & = 1 + 2 \sum_{t=1}^T \hat{\rho}_t\\
                  & \approx 24
        \end{align*}
      \end{minipage}
@@ -1132,7 +1168,7 @@
   
    {\Large\color{navyblue} Effective sample size}
 
-   Effective number of draws $n_\eff \approx N/\tau$\\
+   Effective sample size $\ESS = S_\eff \approx S/\hat{\tau}$\\
   \makebox[12cm][t]{
     \hspace{-.7cm}
      \begin{minipage}{12cm}
@@ -1143,7 +1179,7 @@
      \begin{minipage}[t][4cm][t]{6cm}
        \vspace{-3.5cm}
        \begin{align*}
-         \tau & \approx 1 + 2 \sum_{t=1}^T \hat{\rho}_t\\
+         \hat{\tau} & = 1 + 2 \sum_{t=1}^T \hat{\rho}_t\\
                  & \approx 104
        \end{align*}
      \end{minipage}
@@ -1156,7 +1192,7 @@
   
    {\Large\color{navyblue} Effective sample size}
 
-   Effective number of draws $n_\eff \approx N/\tau$\\
+   Effective sample size $\ESS = S_\eff \approx S/\hat{\tau}$\\
   \makebox[12cm][t]{
     \hspace{-.7cm}
      \begin{minipage}{12cm}
@@ -1167,7 +1203,7 @@
      \begin{minipage}[t][4cm][t]{6cm}
        \vspace{-3.5cm}
        \begin{align*}
-         \tau & \approx 1 + 2 \sum_{t=1}^T \hat{\rho}_t\\
+         \hat{\tau} & = 1 + 2 \sum_{t=1}^T \hat{\rho}_t\\
                  & \approx 63
        \end{align*}
      \end{minipage}
@@ -1205,7 +1241,7 @@
   
    {\Large\color{navyblue} Next week: HMC, NUTS, and dynamic HMC}
 
-   Effective number of draws $n_\eff \approx N/\tau$\\
+   Effective sample size $\ESS = S_\eff \approx S/\hat{\tau}$\\
   \makebox[12cm][t]{
     \hspace{-.7cm}
      \begin{minipage}{12cm}
@@ -1216,7 +1252,7 @@
      \begin{minipage}[t][4cm][t]{6cm}
        \vspace{-3.5cm}
        \begin{align*}
-         \tau & \approx 1 + 2 \sum_{t=1}^T \hat{\rho}_t\\
+         \hat{\tau} & = 1 + 2 \sum_{t=1}^T \hat{\rho}_t\\
                  & \approx 1.6
        \end{align*}
      \end{minipage}
