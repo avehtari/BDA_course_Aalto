@@ -39,9 +39,8 @@
 
 \pagestyle{empty}
 
-\usepackage{Sweave}
 \begin{document}
-\input{ex9-concordance}
+\SweaveOpts{concordance=TRUE}
 \thispagestyle{empty}
 
 \section*{Bayesian Data Analysis -- Assignment 9}
@@ -66,16 +65,14 @@ In R, install package {\tt rstan}. Installation instructions on Linux, Mac and W
 Stan manual can be found at \url{http://mc-stan.org/documentation/}. From this website, you can also find a lot of other useful material about Stan. 
 
 To use markmyassignment for this assignment, run the following code in R:
-\begin{Schunk}
-\begin{Sinput}
-> library(markmyassignment)
-> exercise_path <- 
-+   "https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/tests/ex9.yml"
-> set_assignment(exercise_path)
-> # To check your code/functions, just run
-> mark_my_assignment()
-\end{Sinput}
-\end{Schunk}
+<<echo=TRUE,eval=FALSE>>=
+library(markmyassignment)
+exercise_path <- 
+  "https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/tests/ex9.yml"
+set_assignment(exercise_path)
+# To check your code/functions, just run
+mark_my_assignment()
+@
 
 
 \newpage
@@ -85,12 +82,10 @@ To use markmyassignment for this assignment, run the following code in R:
 This exercise is an example of a decision analysis (DA). In a broad context, this means optimizing over different decisions that lead to different outcomes that all have different utilities. In a Bayesian context, this means using posterior distributions to make decisions.  
 
 In this exercise, you work as a data analyst in the company that owns the six machines that have produced the data in the \texttt{factory} dataset. To access the data, just use:
-\begin{Schunk}
-\begin{Sinput}
-> library(aaltobda)
-> data("factory")
-\end{Sinput}
-\end{Schunk}
+<<echo=TRUE, eval=FALSE>>=
+library(aaltobda)
+data("factory")
+@  
 
 Your task is to decide whether or not to buy a new (7th) machine for the company. The decision should be based on our best knowledge about the machines.
 
@@ -116,15 +111,13 @@ Your task is the following:
 \item For each of the six machines, compute and report the expected utility of one product of that machine. Below is a test case on how the utility function should work (and that you can test with {\tt markmyassignment}. 
 \textbf{Note!} This is just a test case to test that your utility function works. In the report, you should report the expected utility using your posterior draws from Stan.
 
-\begin{Schunk}
-\begin{Sinput}
-> y_pred <- c(123.80, 85.23, 70.16, 80.57, 84.91)
-> utility(draws = y_pred)
-\end{Sinput}
-\begin{Soutput}
-[1] -26
-\end{Soutput}
-\end{Schunk}
+<<echo=FALSE>>=
+utility <- function(draws) -26
+@
+<<echo=TRUE>>=
+y_pred <- c(123.80, 85.23, 70.16, 80.57, 84.91)
+utility(draws = y_pred)
+@
 
 \item Rank the machines based on the expected utilities (in other words order the machines from worst to best) and explain briefly what the utility values tell about the quality of these machines. E.g. Tell which machines are profitable and which are not (if any).
 \item Compute and report the expected utility of the products of a new (7th) machine.
