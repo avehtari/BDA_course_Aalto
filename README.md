@@ -90,6 +90,7 @@ Shorter video clips on selected topics are available in [a Panopto folder](https
  - [Lecture 3](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=ab958b4b-e2c4-4534-8305-aad100ba191f) on multiparameter models, joint, marginal and conditional distribution, normal model, bioassay example, grid sampling and grid evaluation.
  - [Lecture 4.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=8a3c7bbc-e2b8-4c16-97b2-aad800ba7927) on numerical issues, Monte Carlo, how many simulation draws are needed, how many digits to report, and [Lecture 4.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=44446861-eaa2-41b5-bf33-aad800caf18a) on direct simulation, curse of dimensionality, rejection sampling, importance sampling.
  - [Lecture 5.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=098dfdb4-f3b8-46aa-b988-aadf00bd3177) on Markov chain Monte Carlo, Gibbs sampling Metropolis algorithm, and [Lecture 5.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=9f657178-d8cf-4cb8-af62-aadf00cd9423) on warm-up, convergence diagnostics, R-hat, and effective sample size.
+ - [Lecture 6.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=1744f6a0-84d3-4218-8a86-aae600ba7e84) on HMC, NUTS, dynamic HMC and HMC specific convergence diagnostics, and [Lecture 6.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=e60ba1a9-f752-4b0a-88c6-aae600caa61a) on probabilistic programming and Stan.
 
 ## R and Python
 
