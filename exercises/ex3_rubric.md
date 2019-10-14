@@ -39,7 +39,7 @@ Are the likelihood, prior and the posterior for computing the average hardness v
 
 ### Q5 - 1 point
 
-For a)-part, were the point and interval estimates provided? (The posterior mean should be close to ... and 95% interval should be around [...,...])
+For a)-part, were the point estimates and posterior interval provided? (The posterior mean should be close to ... and 95% posterior interval should be around [...,...])
 
 
 - No
@@ -64,7 +64,7 @@ For b)-part, was a formula or a simulation method presented for computing the po
 
 ### Q8 - 1 point
 
-For b)-part, were the point and interval estimates provided? (95% predictive interval should be around [...,...] and the mean the same as in a)-part).
+For b)-part, were the point estimate and predictive interval provided? (95% predictive interval should be around [...,...] and the mean the same as in a)-part).
 
 - No
 - Yes, but seems incorrect
@@ -107,7 +107,7 @@ Was the simulation algorithm in a)-part for computing the posterior for the odds
 
 ### Q13 - 1 point
 
-In a)-part, was the odds ratio summarized with point and interval estimates? (The mean should be something like ... and 95% interval [..., ...])
+In a)-part, was the odds ratio summarized with point estimate and posterior interval? (The mean should be something like ... and 95% posterior interval [..., ...])
 
 - No
 - Yes, but results seem incorrect
@@ -150,7 +150,7 @@ Was the simulation algorithm in a)-part for computing the difference in the mean
 
 ### Q18 - 1 point
 
-In a)-part, was the posterior for the difference between the means in a)-part summarized with point and interval estimates? (The mean should be close to ... and 95% interval [..., ...] or something close to it)
+In a)-part, was the posterior for the difference between the means in a)-part summarized with point and interval estimates? (The mean should be close to ... and 95% posterior interval [..., ...] or something close to it)
 
 - No answer
 - Yes, but results seem incorrect or only one estimate was given
