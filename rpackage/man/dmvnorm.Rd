@@ -4,7 +4,7 @@
 \alias{dmvnorm}
 \title{Computes the density of a multivariate normal distribution}
 \usage{
-dmvnorm(x, mean, sigma)
+dmvnorm(x, mean, sigma, log = FALSE)
 }
 \arguments{
 \item{x}{vector or matrix of values for which the density is computed. If \code{x} is a matrix, each row is taken to be a single draw.}
@@ -12,6 +12,8 @@ dmvnorm(x, mean, sigma)
 \item{mean}{mean vector}
 
 \item{sigma}{covariance matrix}
+
+\item{log}{logical indicating whether to return on the log scale or not. False by default.}
 }
 \description{
 Computes the density of a multivariate normal distribution
