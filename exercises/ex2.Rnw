@@ -67,7 +67,7 @@
 \subsubsection*{Information on this assignment}
 This exercise is related to Chapters 1 and 2. The maximum amount of points from this assignment is 3. You may find an additional discussion about choosing priors by Andrew Gelman useful, they can be found \href{http://andrewgelman.com/2017/10/04/worry-rigged-priors/}{\textbf{here}}.
 
-\textbf{Reading instructions:} Chapter 1 and 2 in BDA3, see \href{https://github.com/avehtari/BDA_course_Aalto/blob/master/chapter_notes/BDA_notes_ch1.pdf}{\textbf{here}} and \href{https://github.com/avehtari/BDA_course_Aalto/blob/master/chapter_notes/BDA_notes_ch2.pdf}{\textbf{here}}.
+\textbf{Reading instructions:} Chapter 1 and 2 in BDA3, see reading instructions \href{https://github.com/avehtari/BDA_course_Aalto/blob/master/chapter_notes/BDA_notes_ch1.pdf}{\textbf{here}} and \href{https://github.com/avehtari/BDA_course_Aalto/blob/master/chapter_notes/BDA_notes_ch2.pdf}{\textbf{here}}.
 
 \textbf{Grading instructions:} The grading will be done in peergrade. All grading questions and evaluations for assignment 2 can be found \href{https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex2_rubric.md}{\textbf{here}}
 
@@ -110,15 +110,14 @@ Let $\pi$ be the probability of a monitoring site having detectable
 blue-green algae levels.
 
 Use a binomial model for observations and a $\Beta(2,10)$ prior
-for $\pi$ in Bayesian inference. Formulate Bayesian model likelihood
-$p(y|\pi)$, prior $p(\pi)$, and the resulting posterior $p(\pi|y)$.
+for $\pi$ in Bayesian inference. 
 Here it is not necessary to derive the posterior distribution as it has already been done in the book.
 Also, it is not necessary to write out the distributions; it is sufficient to use label-parameter format, e.g.\ $\Beta(\cdot,\cdot)$. Although recommended, any plotting is not required in this exercise.
 
-As a test case, we provide some results for the following data. It is also possible to check the functions below with \texttt{markmyassignment}.
+As a test case, we provide some results for the following data. It is also possible to check the functions below with \texttt{markmyassignment}. \textbf{Note!} This is \emph{only} a test case, you need to change to the full data {\tt algae} when reporting your results.
 
 <<echo=TRUE>>=
-algea_test <- c(0, 1, 1, 0, 0, 0)
+algae_test <- c(0, 1, 1, 0, 0, 0)
 @
 
 % See exercises/solution folder in teacher repo
@@ -128,22 +127,25 @@ beta_interval <- function(prior_alpha, prior_beta, data, prob) c(0.0846451, 0.39
 beta_low <- function(prior_alpha, prior_beta, data, pi_0) 0.4511238
 @
 
+In the report, formulate (1) model likelihood
+$p(y|\pi)$, (2) the prior $p(\pi)$, and (3) the resulting posterior $p(\pi|y)$.
+
 Use your model to answer the following questions:
 \begin{enumerate}[a)]
 \item What can you say about the value of the unknown $\pi$ according
   to the observations and your prior knowledge? Summarize your results
   with a point estimate (i.e. $E(\pi|y)$) and a 90\% posterior interval. \textbf{Note!} Posterior intervals are also called credible intervals and are different from confidence intervals.
 <<eval=TRUE, echo=TRUE>>=
-beta_point_est(prior_alpha = 2, prior_beta = 10, data = algea_test)
-beta_interval(prior_alpha = 2, prior_beta = 10, data = algea_test, prob = 0.9)
+beta_point_est(prior_alpha = 2, prior_beta = 10, data = algae_test)
+beta_interval(prior_alpha = 2, prior_beta = 10, data = algae_test, prob = 0.9)
 @
 \item What is the probability that the proportion of monitoring sites with detectable algae levels $\pi$ is smaller than $\pi_0=0.2$ that is known from historical records?
 <<eval=TRUE, echo=TRUE>>=
-beta_low(prior_alpha = 2, prior_beta = 10, data = algea_test, pi_0 = 0.2)
+beta_low(prior_alpha = 2, prior_beta = 10, data = algae_test, pi_0 = 0.2)
 @
 \item What assumptions are required in order to use this kind of a
   model with this type of data?
-\item Make prior sensitivity analysis by testing a couple of different reasonable priors. Summarize the results by one or two sentences.
+\item Make prior sensitivity analysis by testing a couple of different reasonable priors and plot the different posteriors. Summarize the results by one or two sentences.
 \end{enumerate}
 \textbf{Hint!} With a conjugate prior, a closed-form posterior is Beta form (see
 equations in the book). Useful functions: {\tt dbeta}, {\tt pbeta}, {\tt qbeta} in R.
