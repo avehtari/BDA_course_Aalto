@@ -104,7 +104,7 @@ Response:
 ### Explanation
 
 Separate model:
-The following model solution plot is used as a reference in the grading for the separate model:
+The following histograms are used as a reference in the grading of the separate model:
 
 *<model_plot>*
 
@@ -120,7 +120,7 @@ Response:
 
 ### Q11 · Yes / No · 1 point
 
-Separate model: *discussion about question i)*
+Separate model: *discussion about question i)*, posterior distribution of the mean of the quality measurements of the sixth machine.
 
 Response:
 
@@ -128,7 +128,7 @@ Response:
 
 ### Q12 · Yes / No · 1 point
 
-Separate model:  *discussion about question ii)*
+Separate model:  *discussion about question ii)*, the predictive distribution for another quality measurement of the sixth machine.
 
 Response:
 
@@ -136,7 +136,7 @@ Response:
 
 ### Q13 · Yes / No · 1 point
 
-Separate model:  *discussion about question iii)*
+Separate model:  *discussion about question iii)*, the posterior distribution of the mean of the quality measurements of the seventh machine.
 
 Response:
 
@@ -145,7 +145,7 @@ Response:
 ### Explanation
 
 Pooled model:
-The following model solution plot is used as a reference in the grading for the pooled model:
+The following histograms are used as a reference in the grading of the pooled model:
 
 *<model_plot>*
 
@@ -161,7 +161,7 @@ Response:
 
 ### Q15 · Scale · 1 point
 
-Pooled model:  *discussion about question i)*
+Pooled model:  *discussion about question i)*, posterior distribution of the mean of the quality measurements of the sixth machine.
 
 Response:
 
@@ -169,7 +169,7 @@ Response:
 
 ### Q16 · Scale · 1 point
 
-Pooled model:  *discussion about question ii)*
+Pooled model:  *discussion about question ii)*, the predictive distribution for another quality measurement of the sixth machine.
 
 Response:
 
@@ -177,7 +177,7 @@ Response:
 
 ### Q17 · Yes / No · 1 point
 
-Pooled model:  *discussion about question iii)*
+Pooled model:  *discussion about question iii)*, the posterior distribution of the mean of the quality measurements of the seventh machine.
 
 Response:
 
@@ -186,7 +186,7 @@ Response:
 ### Explanation
 
 Hierarchical model:
-The following model solution plot is used as a reference in the grading for the hierarchical model:
+The following histograms are used as a reference in the grading of the hierarchical model:
 
 *<model_plot>*
 
@@ -202,7 +202,7 @@ Response:
 
 ### Q19 · Scale · 1 point
 
-Hierarchical model: *discussion about question i)*
+Hierarchical model: *discussion about question i)*, posterior distribution of the mean of the quality measurements of the sixth machine.
 
 Response:
 
@@ -210,7 +210,7 @@ Response:
 
 ### Q20 · Scale · 1 point
 
-Hierarchical model: *discussion about question ii)*
+Hierarchical model: *discussion about question ii)*, the predictive distribution for another quality measurement of the sixth machine.
 
 Response:
 
@@ -218,7 +218,7 @@ Response:
 
 ### Q21 · Scale · 1 point
 
-Hierarchical model: *discussion about question iii)*
+Hierarchical model: *discussion about question iii)*, the posterior distribution of the mean of the quality measurements of the seventh machine.
 
 Response:
 
