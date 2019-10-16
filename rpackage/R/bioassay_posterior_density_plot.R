@@ -4,8 +4,10 @@
 #' @param x vector of doses for each observation
 #' @param y vector of number of deaths for each observation
 #' @param n vector of number of animals for each observation
+#' @param p_log_posterior Function that outputs the logarithm of the posterior density. The function takes
+#' as input 5 arguments: alpha, beta, x, y, n
 #' @export
-bioassay_posterior_density_plot <- function(alpha_limits = c(0,1), beta_limits = c(0,10), x, y, n) {
+bioassay_posterior_density_plot <- function(alpha_limits = c(0,1), beta_limits = c(0,10), x, y, n, p_log_posterior) {
   # grid
   na <- 100
   nb <- 100
@@ -16,7 +18,7 @@ bioassay_posterior_density_plot <- function(alpha_limits = c(0,1), beta_limits =
   logpost <- matrix(nrow=length(ag), ncol=length(bg))
   for (i in 1:length(ag)) {
     for (j in 1:length(bg)) {
-      logpost[i,j] <- p_log_posterior(ag[i],bg[j], x, y, n)
+      logpost[i,j] <- p_log_posterior(alpha = ag[i],beta = bg[j], x = x, y = y, n = n)
     }
   }
   # unnormalized posterior
