@@ -54,7 +54,7 @@ For the a) part, is there at least one point estimate reported. Sample based est
 
 ### Q7 - 1 point
 
-For the a) part, is the 90% interval estimate reported? Sample based estimate is also ok.
+For the a) part, is the 90% posterior interval estimate reported? Sample based estimate is also ok.
 
 - No
 - Yes

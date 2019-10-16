@@ -45,28 +45,28 @@ Is source code included?
 
 ### Q5 - 1 point
 
-Does the plot in the report at 2a) look something like this:
+Does the plot in the report at 2 a) look something like this:
 
 - No
 - Yes
 
 ### Q6 - 1 point
 
-Does the plot in the report at 2b) look something like this:
+Does the plot in the report at 2 b) look something like this:
 
 - No
 - Yes
 
 ### Q7 - 1 point
 
-Is the computed mean in 1c) close to ...?
+Is the computed mean in 2 c) close to ...?
 
 - No
 - Yes
 
 ### Q8 - 1 point
 
-Is the variance in 1c) close to ...?
+Is the variance in 2 c) close to ...?
 
 - No
 - Yes
@@ -74,7 +74,7 @@ Is the variance in 1c) close to ...?
 
 ### Q9 - 1 point
 
-Is the interval in 1d) roughly [..., ...]? Remember that since the interval is computed from random samples, there is variation and the answers should be roughly the same!
+Is the interval in 2 d) roughly [..., ...]? Remember that since the interval is computed from random samples, there is variation and the answers should be roughly the same!
 
 - No
 - Yes
