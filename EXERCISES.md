@@ -146,12 +146,12 @@ are still organized for helping in the project work.
 | [Assignment 3](https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex3.pdf) | Chapters 2 and 3 | 23.9 (week 39) | 29.9 at 23:59 | 9 |
 | [Assignment 4](https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex4.pdf) | Chapters 3 and 10 | 30.9 (week 40) | 6.10 at 23:59 | 6 |
 | [Assignment 5](https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex5.pdf) | Chapters 10 and 11 | 7.10 (week 41) | 13.10 at 23:59 | 6 |
-| [Assignment 6](https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex6.pdf) | Chapters 10 and 11 | 14.10 (week 42) | 27.10 at 23:59 | 6 |
-| Exam week (21-28.10) |   |   |   |  |
+| [Assignment 6](https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex6.pdf) | Chapters 10-12 and Stan | 14.10 (week 42) | 27.10 at 23:59 | 6 |
+| Evaluation week (21-28.10) |   |   |   |  |
 | Project  | Projects introduced: form a group of 1-3 (2 is preferred) | 28.10 (week 44) | 3.11 at 23:59 | - |
 | [Assignment 7](https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex7.pdf) | Chapter 5 | 28.10 (week 44) | 3.11 at 23:59 | 6 |
 | Project | Decide topic and start the project (no assign. on week 45) |   | 10.11 at 23:59 |  - |
 | [Assignment 8](https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex8.pdf) | Chapter 7 | 11.11 (week 46) | 17.11 at 23:59 | 6 |
 | [Assignment 9](https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex9.pdf) | Chapter 9 | 18.11 (week 47) | 24.11 at 23:59 | 3 |
 | Project | Finish the project work (no assign. on weeks 48 & 49) |   | 8.12 at 23:59 | 24 |
-| Project presentation | Present project work during week 50 (exam week) |  | | |
+| Project presentation | Present project work during week 50 (evaluation week) |  | | |
