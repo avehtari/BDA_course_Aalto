@@ -168,6 +168,6 @@ We now have an FAQ for the exercises [here](FAQ.md). Has solutions to commonly a
 The course material has been greatly improved by the previous and
 current course assistants (in alphabetical order): Michael Riis
 Andersen, Paul Bürkner, Akash Dakar, Alejandro Catalina, Kunal Ghosh,
-Joona Karjalainen, Juho Kokkala, Måns Magnusson, Topi Paananen, Markus
-Paasiniemi, Juho Piironen, Jaakko Riihimäki, Eero Siivola, Tuomas
-Sivula, Teemu Säilynoja, Jarno Vanhatalo.
+Joona Karjalainen, Juho Kokkala, Måns Magnusson, Janne Ojanen, Topi
+Paananen, Markus Paasiniemi, Juho Piironen, Jaakko Riihimäki, Eero
+Siivola, Tuomas Sivula, Teemu Säilynoja, Jarno Vanhatalo.
