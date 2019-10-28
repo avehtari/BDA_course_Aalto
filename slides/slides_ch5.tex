@@ -6,17 +6,17 @@
 
 \mode<presentation>
 {
-  \usetheme{Copenhagen}
-  % oder ...
-
-  %\setbeamercovered{transparent}
-  % oder auch nicht
+  \usetheme{Warsaw}
 }
+\setbeamertemplate{itemize items}[circle]
+\setbeamercolor{frametitle}{bg=white,fg=navyblue}
 
 
-\usepackage[T1]{fontenc}
-\usepackage[latin1]{inputenc}
+% \usepackage[pdftex]{graphicx}
+%\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
 \usepackage{times}
+\usepackage{microtype}
 \usepackage{epic,epsfig}
 \usepackage{subfigure,float}
 \usepackage{amsmath,amsfonts,amssymb}
@@ -43,6 +43,7 @@
 \definecolor{forestgreen}{rgb}{0.1333,0.5451,0.1333}
 \definecolor{navyblue}{rgb}{0,0,0.5}
 \renewcommand{\emph}[1]{\textcolor{navyblue}{#1}}
+\definecolor{darkgreen}{rgb}{0,0.3922,0}
 
 %%%%%%%%%%%%%%%%%%% for hiding figures %%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{color}
@@ -59,7 +60,7 @@
 \graphicspath{{./figs/}}
 
 \pdfinfo{
-  /Title      (Bayesian data analysis 5)
+  /Title      (Bayesian data analysis, ch 5)
   /Author     (Aki Vehtari) %
   /Keywords   (Bayesian probability theory, Bayesian inference, Bayesian data analysis)
 }
@@ -68,7 +69,7 @@
 \parindent=0pt
 \parskip=8pt
 \tolerance=9000
-\abovedisplayshortskip=0pt
+\abovedisplayshortskip=2pt
 
 \setbeamertemplate{navigation symbols}{}
 \setbeamertemplate{headline}[default]{}
@@ -135,7 +136,7 @@
 
   \begin{itemize}
 \item 5.1 Lead-in to hierarchical models
-\item 5.2 Exchangeability (important concept)
+\item 5.2 Exchangeability (useful concept)
 \item 5.3 Bayesian analysis of hierarchical models (we can do computation with Stan)
 \item 5.4 Hierarchical normal model (we can do computation with Stan)
 \item 5.5 Example: parallel experiments in eight schools (uses hierarchical normal model, part of exercises)
@@ -430,7 +431,7 @@
     \pause
   \item SAT
     \begin{itemize}
-    \item standardised multiple choice test
+    \item standardized multiple choice test
     \item mean about 500 and standard deviation about 100
     \item most scores between 200 and 800
     \item different topics, e.g., V=Verbal, M=Mathematics
@@ -450,7 +451,7 @@
       PSAT-V
     \item part of students were coached
     \item linear regression was used to estimate the coaching effect
-      $y_j$ for the shool $j$ (could be denoted with $\bar{y}_{.j}$,
+      $y_j$ for the school $j$ (could be denoted with $\bar{y}_{.j}$,
       too) and variances $\sigma_j^2$
     \item $y_j$ approximately normally distributed, with variances
       assumed to be known based on about 30 students per school
@@ -531,6 +532,17 @@
 
 \begin{frame}
 
+  {\Large\color{navyblue} Hierarchical model and group size}
+
+    \hspace{0.2cm} Separate \hspace{4.3cm} Hierarchical
+  \begin{minipage}[b]{12cm}
+    {  \hspace{-0.7cm}~\includegraphics[width=6cm]{radon2.pdf}\includegraphics[width=6cm]{radon4.pdf}}
+  \end{minipage}
+  
+\end{frame}
+
+\begin{frame}
+
   {\Large\color{navyblue} Exchangeability}
 
   \begin{itemize}
@@ -587,76 +599,6 @@
 \end{frame}
 
 % \note{Elinolojen parantaminen vaikutti
-
-\begin{frame}
-
-  {\Large\color{navyblue} Exchangeability}
-
-  \begin{itemize}
-  \item The simplest form of the exchangeability (but not the only
-    one) for the parameters $\theta$ conditional independence
-    \begin{equation*}
-      p(x_1,\ldots,x_J|\theta)=\prod_{j=1}^J p(x_j|\theta)
-    \end{equation*}
-  \item<2-> Let $(x_n)_{n=1}^{\infty}$ to be an infinite sequence of
-    exchangeable random variables. De Finetti's theorem then says that
-    there is some random variable $\theta$ so that $x_j$ are
-    conditionally independent given $\theta$, and joint density for
-    $x_1,\ldots,x_J$ can be written in the \textit{iid mixture} form
-    \begin{equation*}
-      p(x_1,\ldots,x_J)=\int \left[\prod_{j=1}^J p(x_j|\theta)\right]p(\theta)d\theta
-    \end{equation*}
-
-  %   \vspace{-6mm}
-  % \item marginal distribution of $\theta$
-  %   \begin{equation*}
-  %     p(\theta)=\int \left[\prod_{j=1}^J p(\theta_j|\phi)\right]p(\phi)d\phi
-  %   \end{equation*}
-  % \item mixture of iid distributions
-   \end{itemize}
-\end{frame}
-
-\begin{frame}
-
-  {\Large\color{navyblue} Exchangeability}
-
-  \begin{itemize}
-  \item Counter example: A six sided die with probabilities (a finite sequence!)
-    $\theta_1,\ldots,\theta_6$
-    \begin{itemize}
-    \item without additional knowledge $\theta_1,\ldots,\theta_6$
-      exchangeable
-    \item due to the constraint $\sum_{j=1}^6\theta_j$, parameters
-      are not independent and thus joint distribution can not be
-      presented as iid mixture
-    \end{itemize}
-    % \item Tehtävä 5.2+
-%    \pause
-%  \item Esimerkki: Noppa jonka sivujen todennäköisyydet
-%    $\theta_1,\ldots,\theta_{1000000}$
-%    \begin{itemize}
-%      \item nopan sivun arvo pariton tai parillinen
-%      \item vaikka $\theta_1,\ldots,\theta_{1000000}$ eivät
-%        riippumattomia, jos tutkitaan parittomien ja parillisten
-%        sivujen todennäköisyyksiä, pienellä nopanheittojen määrällä
-%        ($n \ll 1000000$)
-%        voidaan toimia aivan kuin $\theta_1,\ldots,\theta_{1000000}$
-%        riippumattomia
-%      \item vrt. de Finettin lause
-%    \end{itemize}
-  \end{itemize}
-\end{frame}
-
- \begin{frame}
-
-   {\Large\color{navyblue} Exchangeability}
-
-   \begin{itemize}
-   \item See examples in the BDA\_notes\_ch5.pdf
-   \end{itemize}
-
- \end{frame}
-
 \begin{frame}
 
   {\Large\color{navyblue} Exchangeability and additional information}
@@ -707,6 +649,76 @@
     \end{itemize}
 \end{itemize}
 \end{frame}
+
+\begin{frame}
+
+  {\Large\color{navyblue} Exchangeability}
+
+  \begin{itemize}
+  \item The simplest form of the exchangeability (but not the only
+    one) for the parameters $\theta$ conditional independence
+    \begin{equation*}
+      p(x_1,\ldots,x_J|\theta)=\prod_{j=1}^J p(x_j|\theta)
+    \end{equation*}
+  \item<2-> Let $(x_n)_{n=1}^{\infty}$ to be an infinite sequence of
+    exchangeable random variables. De Finetti's theorem then says that
+    there is some random variable $\theta$ so that $x_j$ are
+    conditionally independent given $\theta$, and joint density for
+    $x_1,\ldots,x_J$ can be written in the \textit{iid mixture} form
+    \begin{equation*}
+      p(x_1,\ldots,x_J)=\int \left[\prod_{j=1}^J p(x_j|\theta)\right]p(\theta)d\theta
+    \end{equation*}
+
+  %   \vspace{-6mm}
+  % \item marginal distribution of $\theta$
+  %   \begin{equation*}
+  %     p(\theta)=\int \left[\prod_{j=1}^J p(\theta_j|\phi)\right]p(\phi)d\phi
+  %   \end{equation*}
+  % \item mixture of iid distributions
+   \end{itemize}
+\end{frame}
+
+\begin{frame}
+
+  {\Large\color{navyblue} Exchangeability - Counter example}
+
+  \begin{itemize}
+  \item A six sided die with probabilities (a finite sequence!)
+    $\theta_1,\ldots,\theta_6$
+    \begin{itemize}
+    \item without additional knowledge $\theta_1,\ldots,\theta_6$
+      exchangeable
+    \item due to the constraint $\sum_{j=1}^6\theta_j$, parameters
+      are not independent and thus joint distribution can not be
+      presented as iid mixture
+    \end{itemize}
+    % \item Tehtävä 5.2+
+%    \pause
+%  \item Esimerkki: Noppa jonka sivujen todennäköisyydet
+%    $\theta_1,\ldots,\theta_{1000000}$
+%    \begin{itemize}
+%      \item nopan sivun arvo pariton tai parillinen
+%      \item vaikka $\theta_1,\ldots,\theta_{1000000}$ eivät
+%        riippumattomia, jos tutkitaan parittomien ja parillisten
+%        sivujen todennäköisyyksiä, pienellä nopanheittojen määrällä
+%        ($n \ll 1000000$)
+%        voidaan toimia aivan kuin $\theta_1,\ldots,\theta_{1000000}$
+%        riippumattomia
+%      \item vrt. de Finettin lause
+%    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+ \begin{frame}
+
+   {\Large\color{navyblue} Exchangeability}
+
+   \begin{itemize}
+   \item See more examples in the BDA\_notes\_ch5.pdf
+   \end{itemize}
+
+ \end{frame}
+
 
 \end{document}
 
