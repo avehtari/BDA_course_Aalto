@@ -162,3 +162,12 @@ We now have an FAQ for the exercises [here](FAQ.md). Has solutions to commonly a
 | [Assignment 9](https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex9.pdf) | Chapter 9 | 18.11 (week 47) | 24.11 at 23:59 | 3 |
 | Project | Finish the project work (no assign. on weeks 48 & 49) |   | 8.12 at 23:59 | 24 |
 | Project presentation | Present project work during week 50 (evaluation week) |  | | |
+
+## Acknowledgements
+
+The course material has been greatly improved by the previous and
+current course assistants (in alphabetical order): Michael Riis
+Andersen, Paul Bürkner, Akash Dakar, Alejandro Catalina, Kunal Ghosh,
+Joona Karjalainen, Juho Kokkala, Måns Magnusson, Topi Paananen, Markus
+Paasiniemi, Juho Piironen, Jaakko Riihimäki, Eero Siivola, Tuomas
+Sivula, Teemu Säilynoja, Jarno Vanhatalo.
