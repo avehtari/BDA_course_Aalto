@@ -6,17 +6,17 @@
 
 \mode<presentation>
 {
-  \usetheme{Copenhagen}
-  % oder ...
-
-  %\setbeamercovered{transparent}
-  % oder auch nicht
+  \usetheme{Warsaw}
 }
+\setbeamertemplate{itemize items}[circle]
+\setbeamercolor{frametitle}{bg=white,fg=navyblue}
 
 
-\usepackage[T1]{fontenc}
-\usepackage[latin1]{inputenc}
+% \usepackage[pdftex]{graphicx}
+%\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
 \usepackage{times}
+\usepackage{microtype}
 \usepackage{epic,epsfig}
 %\usepackage{subfigure,float}
 \usepackage{amsmath,amsfonts,amssymb}
@@ -36,21 +36,6 @@
 \usepackage{natbib}
 \bibliographystyle{apalike}
 
-\hypersetup{%
-  bookmarksopen=true,
-  bookmarksnumbered=true,
-  pdftitle={Stan},
-  pdfsubject={Bayesian data analysis},
-  pdfauthor={Aki Vehtari},
-  pdfkeywords={},
-  pdfstartview={FitH -32768},
-  colorlinks=true,
-  linkcolor=navyblue,
-  citecolor=navyblue,
-  filecolor=navyblue,
-  urlcolor=navyblue
-}
-
 % \definecolor{hutblue}{rgb}{0,0.2549,0.6784}
 % \definecolor{midnightblue}{rgb}{0.0977,0.0977,0.4375}
 % \definecolor{hutsilver}{rgb}{0.4863,0.4784,0.4784}
@@ -60,6 +45,7 @@
 \definecolor{forestgreen}{rgb}{0.1333,0.5451,0.1333}
 \definecolor{navyblue}{rgb}{0,0,0.5}
 \renewcommand{\emph}[1]{\textcolor{navyblue}{#1}}
+\definecolor{darkgreen}{rgb}{0,0.3922,0}
 
 %%%%%%%%%%%%%%%%%%% for hiding figures %%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{color}
@@ -76,7 +62,7 @@
 \graphicspath{{./figs/}}
 
 \pdfinfo{
-  /Title      (Bayesian data analysis 6)
+  /Title      (Bayesian data analysis, ch 6)
   /Author     (Aki Vehtari) %
   /Keywords   (Bayesian probability theory, Bayesian inference, Bayesian data analysis)
 }
@@ -85,7 +71,7 @@
 \parindent=0pt
 \parskip=8pt
 \tolerance=9000
-\abovedisplayshortskip=0pt
+\abovedisplayshortskip=2pt
 
 \setbeamertemplate{navigation symbols}{}
 \setbeamertemplate{headline}[default]{}
@@ -299,7 +285,8 @@
   {\Large\color{navyblue} Posterior predictive checking}
 
   \begin{itemize}
-  \item<1-> Posterior predictive $p$-value
+    \only<4->{\color{gray}}
+  \item<1-> \textit{Posterior predictive $p$-value}
     \begin{eqnarray*}
       p & = & \Pr(T(y^{\rep},\theta)\geq T(y,\theta)|y)\\
       & = & \int\int
@@ -307,7 +294,7 @@
     \end{eqnarray*}
     where $I$ is an indicator function
     \begin{itemize}
-    \item<2-> having $(y^{\rep\,(s)},\theta^{(s)})$ from the posterior predictive
+    \item<2-> \only<4->{\color{gray}} having $(y^{\rep\,(s)},\theta^{(s)})$ from the posterior predictive
       distribution, easy to compute
       \begin{equation*}
         T(y^{\rep (s)},\theta^{(s)})\geq T(y,\theta^{(s)}), \quad s=1,\ldots,S
@@ -316,11 +303,12 @@
     \vspace{-1.5\baselineskip}
   \item<3-> Posterior predictive $p$-value (ppp-value) estimated whether
     difference between the model and data could arise by chance
-  \item<4-> Not commonly used as the distribution of test statistic
-    often more information
+  \item<4-> \color{black} Not commonly used, since the distribution of test
+    statistic has more information
   \end{itemize}
 
 \end{frame}
+
 
 % \begin{frame}
 
@@ -419,8 +407,8 @@
 
   \begin{itemize}
   \item Example from Jonah Gabry, Daniel Simpson, Aki Vehtari, Michael
-    Betancourt, and Andrew Gelman (2017). Visualization in Bayesian
-    workflow. \url{https://arxiv.org/abs/1709.01449}
+    Betancourt, and Andrew Gelman (2019). Visualization in Bayesian
+    workflow. \url{https://doi.org/10.1111/rssa.12378}
   \item Estimation of human exposure to air pollution from particulate
     matter measuring less than 2.5 microns in diameter ($\mathrm{PM}_{2.5}$)
     \begin{itemize}
@@ -582,7 +570,7 @@
     \includegraphics[width=11cm]{mesquite_ppc.pdf}\\
   \vspace{-0.1\baselineskip} {Predicting the yields of mesquite bushes.\\
     \color{gray} \footnotesize
-    Gelman, Hill \& Vehtari (2019): Regression and Other Stories, Chapter 11.}\\
+    Gelman, Hill \& Vehtari (2020): Regression and Other Stories, Chapter 11.}\\
 
 \end{frame}
 
@@ -646,9 +634,8 @@ generated quantities {
 
   \begin{itemize}
   \item Jonah Gabry, Daniel Simpson, Aki Vehtari, Michael
-    Betancourt, and Andrew Gelman (2018). Visualization in Bayesian
-    workflow. Journal of the Royal Statistical Society Series A,
-    accepted for publication as discussion paper. \href{https://arxiv.org/abs/arXiv:1709.01449}{arXiv preprint arXiv:1709.01449}.
+    Betancourt, and Andrew Gelman (2019). Visualization in Bayesian
+    workflow. \url{https://doi.org/10.1111/rssa.12378}.
   \item Graphical posterior predictive checks using the bayesplot package
     \url{http://mc-stan.org/bayesplot/articles/graphical-ppcs.html}
   \item Another demo \href{http://avehtari.github.io/BDA_R_demos/demos_rstan/ppc/poisson-ppc.html}{demos\_rstan/ppc/poisson-ppc.Rmd}
