@@ -1,5 +1,13 @@
 # Frequently Asked Questions
 
+## How to access course material in Github
+
+Instead of trying to download each file separately via Github interface, it is recommnded to clone the repo or download it as a zip file.
+ - If you know how to use git, just clone the repo. Pull to get the latest updates.
+ - If you want to leearn to use git, you need to install a [git client](https://www.google.com/search?q=git+clients&oq=git+client).
+ - If you don't want to learn to use git, download a zip file. Click a green button "Clone or download" at git repo main page and choose "Download ZIP". Remember to download the latest updates.
+ - If you can't find the Download ZIP, click [here](https://github.com/avehtari/BDA_course_Aalto/archive/master.zip). Remember to download the latest updates.
+
 ## Using R and RStudio via Jupyterhub
 
 Instead of installing RStudio in your computer, you can use it in your web browser:

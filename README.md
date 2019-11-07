@@ -2,7 +2,7 @@
 
 This repository has course material for Bayesian Data Analysis course at Aalto (CS-E5710). Aalto students should check also [MyCourses announcements](https://mycourses.aalto.fi/mod/forum/view.php?id=448327).
 
-The material will be updated during the course. Exercise instructions and slides will be updated at latest on Monday of the corresponding week.
+The material will be updated during the course. Exercise instructions and slides will be updated at latest on Monday of the corresponding week. The best way to stay updated is to clone the repo and pull before checking new material. If you don't want to learn git and can't find the Download ZIP link, click [here](https://github.com/avehtari/BDA_course_Aalto/archive/master.zip).
 
 ## Prerequisites
 
@@ -90,10 +90,14 @@ Shorter video clips on selected topics are available in [a Panopto folder](https
  - [Lecture 3](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=ab958b4b-e2c4-4534-8305-aad100ba191f) on multiparameter models, joint, marginal and conditional distribution, normal model, bioassay example, grid sampling and grid evaluation.
  - [Lecture 4.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=8a3c7bbc-e2b8-4c16-97b2-aad800ba7927) on numerical issues, Monte Carlo, how many simulation draws are needed, how many digits to report, and [Lecture 4.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=44446861-eaa2-41b5-bf33-aad800caf18a) on direct simulation, curse of dimensionality, rejection sampling, importance sampling.
  - [Lecture 5.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=098dfdb4-f3b8-46aa-b988-aadf00bd3177) on Markov chain Monte Carlo, Gibbs sampling Metropolis algorithm, and [Lecture 5.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=9f657178-d8cf-4cb8-af62-aadf00cd9423) on warm-up, convergence diagnostics, R-hat, and effective sample size.
+ - [Lecture 6.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=1744f6a0-84d3-4218-8a86-aae600ba7e84) on HMC, NUTS, dynamic HMC and HMC specific convergence diagnostics, and [Lecture 6.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=e60ba1a9-f752-4b0a-88c6-aae600caa61a) on probabilistic programming and Stan.
+ - [Lecture 7.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=79dee6de-afa9-446f-b533-aaf400cabf2b) on hierarchical models, and [Lecture 7.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c822561c-f95d-44fc-a1d0-aaf400d9fae3) on exchangeability.
+ - [Project work info](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=2820df34-d958-4c6c-93f3-aaf400dece37)
+ - [Lecture 8.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=7047e366-0df6-453c-867f-aafb00ca2d78) on model checking, and [Lecture 8.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d7849131-0afd-4ae6-ad64-aafb00da36f4) on cross-validation part 1.
 
 ## R and Python
 
-We strongly recommend using R in the course as there are more packages for Stan and statistical analysis in R. If you are already fluent in Python, but not in R, then using Python may be easier, but it can still be more useful to learn also R. Unless you are already experienced and have figured out your preferred way to work with R, we recommend installing [RStudio Desktop](https://www.rstudio.com/products/rstudio/download/). TAs will provide brief introduction to use of RStudio during the first week TA sessions.
+We strongly recommend using R in the course as there are more packages for Stan and statistical analysis in R. If you are already fluent in Python, but not in R, then using Python may be easier, but it can still be more useful to learn also R. Unless you are already experienced and have figured out your preferred way to work with R, we recommend installing [RStudio Desktop](https://www.rstudio.com/products/rstudio/download/). TAs will provide brief introduction to use of RStudio during the first week TA sessions. See [FAQ](FAQ.md) for frequently asked questions about R problems in this course.
 
 ## Demos
 
@@ -142,3 +146,31 @@ vieraskielisten nimien taivutussääntöjen mukaan
 ## Frequently Asked Questions (FAQ)
 
 We now have an FAQ for the exercises [here](FAQ.md). Has solutions to commonly asked questions related RStudio setup, errors during package installations, etc.
+
+## Important dates for 2019 fall
+
+| Task | Topic | Published | Deadline | Points |
+| ---- | ----- | --------- | -------- | ------ |
+| [Assignment 1](https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex1.pdf) | Background | 9.9 (week 37) | 15.9 at 23:59 | 3 |
+| [Assignment 2](https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex2.pdf) | Chapters 1 and 2 | 16.9 (week 38) | 22.9 at 23:59 | 3 |
+| [Assignment 3](https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex3.pdf) | Chapters 2 and 3 | 23.9 (week 39) | 29.9 at 23:59 | 9 |
+| [Assignment 4](https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex4.pdf) | Chapters 3 and 10 | 30.9 (week 40) | 6.10 at 23:59 | 6 |
+| [Assignment 5](https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex5.pdf) | Chapters 10 and 11 | 7.10 (week 41) | 13.10 at 23:59 | 6 |
+| [Assignment 6](https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex6.pdf) | Chapters 10-12 and Stan | 14.10 (week 42) | 27.10 at 23:59 | 6 |
+| Evaluation week (21-28.10) |   |   |   |  |
+| Project  | Projects introduced: form a group of 1-3 (2 is preferred) | 28.10 (week 44) | 3.11 at 23:59 | - |
+| [Assignment 7](https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex7.pdf) | Chapter 5 | 28.10 (week 44) | 3.11 at 23:59 | 6 |
+| Project | Decide topic and start the project (no assign. on week 45) |   | 10.11 at 23:59 |  - |
+| [Assignment 8](https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex8.pdf) | Chapter 7 | 11.11 (week 46) | 17.11 at 23:59 | 6 |
+| [Assignment 9](https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex9.pdf) | Chapter 9 | 18.11 (week 47) | 24.11 at 23:59 | 3 |
+| Project | Finish the project work (no assign. on weeks 48 & 49) |   | 8.12 at 23:59 | 24 |
+| Project presentation | Present project work during week 50 (evaluation week) |  | | |
+
+## Acknowledgements
+
+The course material has been greatly improved by the previous and
+current course assistants (in alphabetical order): Michael Riis
+Andersen, Paul Bürkner, Akash Dakar, Alejandro Catalina, Kunal Ghosh,
+Joona Karjalainen, Juho Kokkala, Måns Magnusson, Janne Ojanen, Topi
+Paananen, Markus Paasiniemi, Juho Piironen, Jaakko Riihimäki, Eero
+Siivola, Tuomas Sivula, Teemu Säilynoja, Jarno Vanhatalo.
