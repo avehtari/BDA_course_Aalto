@@ -94,6 +94,7 @@ Shorter video clips on selected topics are available in [a Panopto folder](https
  - [Lecture 7.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=79dee6de-afa9-446f-b533-aaf400cabf2b) on hierarchical models, and [Lecture 7.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c822561c-f95d-44fc-a1d0-aaf400d9fae3) on exchangeability.
  - [Project work info](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=2820df34-d958-4c6c-93f3-aaf400dece37)
  - [Lecture 8.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=7047e366-0df6-453c-867f-aafb00ca2d78) on model checking, and [Lecture 8.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d7849131-0afd-4ae6-ad64-aafb00da36f4) on cross-validation part 1.
+ - [Lecture 9.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=50b2e73f-af0a-4715-b627-ab0200ca7bbd) PSIS-LOO and K-fold_CV, [Lecture 9.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=b0299d53-9454-4e33-9086-ab0200db14eeb) model selection, and [Lecture 9.3](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=4b6eeb48-ae64-4860-a8c3-ab0200e40ad8) extra lecture on variable selection with projection predictive variable selection.
 
 ## R and Python
 
