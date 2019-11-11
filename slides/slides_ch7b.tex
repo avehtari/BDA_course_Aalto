@@ -225,337 +225,6 @@
 
 \begin{document}
 
-\begin{frame}
-  
-   {\Large\color{navyblue} Chapter 7}
-
-   \begin{list1}
-   \item 7.1 Measures of predictive accuracy
-   \item 7.2 Information criteria and cross-validation
-     \begin{list2}
-     \item Instead of 7.2, read:\\
-       Vehtari, A., Gelman, A., Gabry, J. (2017). Practical Bayesian
-       model evaluation using leave-one-out cross-validation and
-       WAIC. Statistics and Computing. 27(5):1413–1432.
-       \href{http://arxiv.org/abs/1507.04544}{arXiv preprint}.
-     \end{list2}
-   \item 7.3 Model comparison based on predictive performance
-   \item 7.4 Model comparison using Bayes factors
-   \item 7.5 Continuous model expansion / sensitivity analysis
-   \item 7.5 Example (may be skipped)
-   \end{list1}
-
-\end{frame}
-
-\begin{frame}
-  
-   {\Large\color{navyblue} Model assesment, selection and inference after selection}
-
-   \begin{list1}
-   \item Extra material at \url{https://avehtari.github.io/modelselection/}
-     \begin{list2}
-       \item Videos, Slides, Notebooks, References
-       \item The most relevant for the course is the first part of the
-         talk ``Model assessment, comparison and selection at Master
-         class in Bayesian statistics, CIRM, Marseille''
-     \end{list2}
-   \end{list1}
-
-\end{frame}
-
-\begin{frame}{}
-
-{\Large\color{navyblue} Model comparison}
-
-\begin{list1}
-\item ``A popular hypothesis has it that primates with larger brains
-  produce more energetic milk, so that brains can grow quickly'' (from
-  Statistical Rethinking)
-  \begin{list2}
-    \item Model 1: formula = kcal.per.g $\sim$ neocortex
-    \item Model 2: formula = kcal.per.g $\sim$ neocortex + log(mass)
-  \end{list2}
-\end{list1}
-
-\vspace{10\baselineskip}
-{\small \url{mc-stan.org/loo/articles/loo2-example.html}}
-
-\end{frame}
-
-\begin{frame}
-
-  \only<1-2>{\includegraphics[width=10cm]{milkelpdloo.pdf}}
-  \only<3>{\includegraphics[width=10cm]{milkelpdloo2.pdf}}
-  \\
-  \only<2-3>{Model 1 elpd\_loo $\approx$ 3.7, SE=1.8\\
-  Model 2 elpd\_loo $\approx$ 8.4, SE=2.8}
-
-\end{frame}
-
-\begin{frame}[fragile]
-
-  {\includegraphics[width=10cm]{milkelpddiff.pdf}}
-  \\
-  {\scriptsize
-\begin{lstlisting}
-Model comparison: 
-(negative 'elpd_diff' favors 1st model, positive favors 2nd) 
-
-elpd_diff        se 
-      4.7       2.7 
-\end{lstlisting}}
-
-\end{frame}
-
-\begin{frame}
-
-  {\Large\color{navyblue} Arsenic well example -- Model comparison}
-
-   
-   \includegraphics[width=.8\textwidth]{arsenic12d.pdf}
-
-   An estimated difference in ${\rm elpd}_{\rm loo}$ of 16.4 with SE of 4.4.
-   
-{\small see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)}}
-\end{frame}
-
-\begin{frame}
-  
-{\Large\color{navyblue} Sometimes cross-validation is not needed}
-
-\vspace{-0.5\baselineskip}
-
-  \begin{list1}
-  \item Posterior predictive checking is often sufficient\\
-    \vspace{0.5\baselineskip}
-    \includegraphics[width=11cm]{mesquite_ppc.pdf}\\
-  \vspace{-0.1\baselineskip} {Predicting the yields of mesquite bushes.\\
-    \color{gray} \footnotesize
-    Gelman, Hill \& Vehtari (2019): Regression and Other Stories, Chapter 11.}\\
-  \vspace{-0.8\baselineskip}
-\end{list1}
-{\footnotesize
-  \begin{list2}
-  \item BDA3, Chapter 6
-  \vspace{-0.6\parskip}
-  \item Gabry, Simpson, Vehtari, Betancourt, Gelman
-    (2018). Visualization in Bayesian workflow. JRSS A, \href{https://arxiv.org/abs/1709.01449}{preprint
-      arXiv:1709.01449}
-  \vspace{-0.6\parskip}
-  \item \url{mc-stan.org/bayesplot/articles/graphical-ppcs.html}
-  \vspace{-0.6\parskip}
-  \item \url{betanalpha.github.io/assets/case_studies/principled_bayesian_workflow.html}
-   \end{list2}}
-\end{frame}
-
-\begin{frame}{}
-
-{\Large\color{navyblue} Sometimes cross-validation is not needed}
-
-\begin{list1}
-\item<+-> For some very simple cases you may assume that true model
-  is included in the list of models considered ($M$-closed)
-  \begin{list2}
-  \item<+-> see predictive model selection in $M$-closed case by
-    San Martini and Spezzaferri (1984)
-  \item<+-> but you should not force your design of experiment or
-    analysis to stay in the simplified world
-  \end{list2}
-% \item<+-> For fully non-parametric models you may assume that true model
-%   is included in the list of models considered ($M$-closed)
-%   \begin{list2}
-%   \item<+-> related to talk by Chris Holmes
-%   \item<.-> see
-%     \href{http://dx.doi.org/10.1214/12-SS102}{Vehtari \& Ojanen
-%       (2012)} for earlier references
-% \item<+-> posterior convergence rate can be slow for fully non-parametric models
-% \end{list2}
-\item<+-> In nested case, often easier and
-  more accurate to analyse posterior distribution of more complex
-  model directly \\
-  {\small \url{avehtari.github.io/modelselection/betablockers.html}}
-   % \begin{list2}
-   %   \item<3-> need to do some model checking anyway
-   % \end{list2}
-\end{list1}
-
-\end{frame}
-
-\begin{frame}{}
-
-  {\Large\color{navyblue} Sometimes predictive model comparison can be useful}
-
-      \begin{minipage}[t]{0.45\linewidth}
-        \begin{center}
-          \includegraphics[width=5cm]{fitg2_xx_areas.pdf}\\
-          Marginal posterior intervals
-        \end{center} 
-      \end{minipage}
-      \pause
-      \begin{minipage}[t]{0.45\linewidth}
-        \begin{center}
-          \includegraphics[width=5cm]{fitg2_xx_scatter.pdf}\\
-          Joint posterior density
-        \end{center} 
-      \end{minipage}
-
-            \begin{center}
-      {\scriptsize rstanarm + bayesplot}
-    \end{center}
-
-    \pause
-    {\small
-      see also \href{https://avehtari.github.io/modelselection/collinear.html}{Collinear demo}
-    }
-
-\end{frame}
-
-\begin{frame}{}
-
-  {\Large\color{navyblue}  What if one is not clearly better than others?}
-
-  \begin{list1}
-  \item<2-> Continuous expansion including all models?
-    \begin{list2}
-    \item and then analyse the posterior distribution directly\\
-        {\small \url{avehtari.github.io/modelselection/betablockers.html}}
-      \item sparse priors like regularized horseshoe prior instead of variable selection\\
-        {\small video, refs and demos at
-          \url{avehtari.github.io/modelselection/}}
-    \end{list2}
-  \item<3-> Model averaging with BMA or Bayesian stacking?\\
-    {\small \url{mc-stan.org/loo/articles/loo2-example.html}}
-  \item<4-> In a nested case choose simpler if assuming some cost for
-    extra parts?\\
-    {\small \url{andrewgelman.com/2018/07/26/parsimonious-principle-vs-integration-uncertainties/}}
-  \item<5-> In a nested case choose more complex if you want to take
-    into account all the uncertainties.\\
-    {\small \url{andrewgelman.com/2018/07/26/parsimonious-principle-vs-integration-uncertainties/}}
-  \end{list1}
-
-\end{frame}
-
-\begin{frame}
-
-  {\Large\color{navyblue} Model averaging}
-  
-  \begin{list1}
-  \item<+-> Prefer continuous model expansion
-  \item<+-> If needed integrate over the model space = model averaging
-  \item<+-> Bayesian stacking may work better than BMA
-    \begin{list2}
-    \item \href{https://projecteuclid.org/euclid.ba/1516093227}{Yao, Vehtari, Simpson, \& Gelman (2018)}
-    \end{list2}
-  \end{list1}
-  
-\end{frame}
-
-\begin{frame}{}
-
-  {\Large\color{navyblue}  Cross-validation and model selection}
-
-  \begin{list1}
-  \item<1-> Cross-validation can be used for model selection if
-    \begin{list2}
-      \item small number of models
-      \item the difference between models is clear
-    \end{list2}
-  \item<2-> Do not use cross-validation to choose from a large set of models
-    \begin{list2}
-    \item selection process leads to overfitting
-    % \item you may use projection predictive approach
-    % \item useful when correlating variables make the posterior
-    %   distribution analysis difficult\\
-    %   {\small video, refs and demos  at \url{avehtari.github.io/modelselection/}\\
-    %   and \href{http://link.springer.com/article/10.1007/s11222-016-9649-y}{Piironen \& Vehtari (2017)}}
-    \end{list2}
-  \item<3-> Overfitting in selection process is not unique for cross-validation
-  \end{list1}
-\end{frame}
-
-\begin{frame}
-  
-  {\Large\color{navyblue} Selection induced bias and overfitting}
-
-  \begin{itemize}
-  \item Selection induced bias in cross-validation
-    \begin{itemize}
-    \item same data is used to assess the performance and make the selection
-    \item the selected model fits more to the data
-    \item the CV estimate for the selected model is biased
-    \item recognised already, e.g., by Stone (1974)
-    \end{itemize}
-    \pause
-  \item Performance of the selection process itself can be assessed
-    using two level cross-validation, but it does not help choosing
-    better models
-    \pause
-  \item Bigger problem if there is a large number of models as in
-    covariate selection
-  \end{itemize}
-
-\end{frame}
-
-\begin{frame}
-
-  {\Large\color{navyblue} Selection induced bias in variable selection}
-
-  \includegraphics[width=\textwidth]{cv.pdf}
-
-\end{frame}
-
-\begin{frame}
-
-  {\Large\color{navyblue} Selection induced bias in variable selection}
-
-  \includegraphics[height=0.88\textheight]{simulated_searchpath.pdf}
-   \vspace{-1.5\baselineskip}
-   \mbox{{\hspace{8cm} \footnotesize \href{http://link.springer.com/article/10.1007/s11222-016-9649-y}{Piironen \& Vehtari (2017)}}}
-
-\end{frame}
-
-\begin{frame}
-
-  {\Large\color{navyblue} Selection induced bias in variable selection}
-
-  \includegraphics[height=0.88\textheight]{simulated_variability.pdf}
-   \vspace{-1.5\baselineskip}
-   \mbox{{\hspace{8cm} \footnotesize \href{http://link.springer.com/article/10.1007/s11222-016-9649-y}{Piironen \& Vehtari (2017)}}}
-
-\end{frame}
-
-\begin{frame}
-
-  {\Large\color{navyblue} Selection induced bias in variable selection}
-
-  \includegraphics[height=0.88\textheight]{real_searchpath.pdf}
-   \vspace{-2\baselineskip}
-   \mbox{{\hspace{9.5cm} \parbox[t]{12cm}{\footnotesize \href{http://link.springer.com/article/10.1007/s11222-016-9649-y}{Piironen \&\\ Vehtari (2017)}}}}
-
-\end{frame}
-
-\begin{frame}{}
-
-  {\Large\color{navyblue}  Take-home messages}
-
-  \begin{list1}
-  \item It's good to think predictions of observables, because
-    observables are the only ones we can observe
-  \item \only<1>{\color{gray}}Cross-validation can simulate predicting and observing new
-    data
-  \item \only<2>{\color{gray}}Cross-validation is good if you don't
-    trust your model
-  \item \only<3>{\color{gray}}Different variants of cross-validation
-    are useful in different scenarios
-  \item \only<4>{\color{gray}}Cross-validation has high variance, and
-    {\bf if} you trust your model you can beat cross-validation in
-    accuracy
-  \end{list1}
-  \only<5>{~}
-
-\end{frame}
-
-
 \begin{frame}{}
 
   {\Large\color{navyblue} Rich model vs feature selection?}
@@ -580,6 +249,21 @@ elpd_diff        se
     \end{itemize}
   \end{itemize}
   
+\end{frame}
+
+\begin{frame}{}
+
+  {\Large\color{navyblue} Note on the terminology}
+  
+\begin{itemize}
+\item Two different problems
+  \begin{itemize}
+  \item Find a \emph{minimal} subset of features $x_j$ that yield a good predictive model for $y$
+  \item Identify \emph{all} features $x_j$ that are statistically related to $y$
+  \end{itemize}\pause
+  I will focus ghere to the first case
+\end{itemize}
+
 \end{frame}
 
 \begin{frame}{}
@@ -720,25 +404,25 @@ Consider data
   
 \end{frame}
 
-\begin{frame}{}
+% \begin{frame}{}
 
-  {\Large\color{navyblue} (Iterative) Supervised Principal Components}
+%   {\Large\color{navyblue} (Iterative) Supervised Principal Components}
 
-  \begin{itemize}
-  \item Dimension reduction for high dimensional small data with
-    highly correlating features
-    \begin{itemize}
-    \item dimension reduction helps to speed up later computation
-      without discarding much information
-    \item supervised means that features correlating with the target
-      are favored in construcing the principal components
-    \end{itemize}
-    {\small
-    \item     Piironen and Vehtari (2018). Iterative supervised principal components. 21st AISTATS, PMLR 84:106-114. \href{http://proceedings.mlr.press/v84/piironen18a.html}{Online}.
-    }
-  \end{itemize}
+%   \begin{itemize}
+%   \item Dimension reduction for high dimensional small data with
+%     highly correlating features
+%     \begin{itemize}
+%     \item dimension reduction helps to speed up later computation
+%       without discarding much information
+%     \item supervised means that features correlating with the target
+%       are favored in construcing the principal components
+%     \end{itemize}
+%     {\small
+%     \item     Piironen and Vehtari (2018). Iterative supervised principal components. 21st AISTATS, PMLR 84:106-114. \href{http://proceedings.mlr.press/v84/piironen18a.html}{Online}.
+%     }
+%   \end{itemize}
   
-\end{frame}
+% \end{frame}
 
 \begin{frame}{}
 
@@ -925,16 +609,16 @@ Consider data
 \end{frame}
 
 
-\begin{frame}
+% \begin{frame}
   
-  {\Large\color{navyblue} Bodyfat}
+%   {\Large\color{navyblue} Bodyfat}
 
-  Projected posterior is different than posterior conditioned only on selected features
+%   Projected posterior is different than posterior conditioned only on selected features
 
-  \vspace{-0.7\baselineskip}
-  \includegraphics[width=11cm]{bodyfat_compare_sigmas.pdf}
+%   \vspace{-0.7\baselineskip}
+%   \includegraphics[width=11cm]{bodyfat_compare_sigmas.pdf}
 
-\end{frame}
+% \end{frame}
 
 % Case study \url{avehtari.github.io/modelselection/bodyfat.html}
 \begin{frame}
@@ -1710,16 +1394,36 @@ Glioma & 85 & 22283 & 95.8 & 14.2 & 15.6 & 2.6 \\
 \end{frame}
 
 
-\begin{frame}
+\begin{frame}{}
+
+  {\Large\color{navyblue} High dimensional small data}
+
+  \begin{itemize}
+  \item Projection predictive approachh works well also for small $n$, large $p$
+  \item See references for examples with $n = 54...102$, $p=1536...22283$
+    \begin{itemize}
+    \item could scale to bigger $n$ and bigger $p$
+    \end{itemize}
+  \item Good priors for the referenece modelo necessary
+    \begin{itemize}
+    \item shrinkage priors, hierarchical shrinkage priors
+    \item dimension reduction with factor models
+    \end{itemize}
+    \vspace{\baselineskip}
+  \end{itemize}
   
-  {\Large\color{navyblue} Bodyfat}
-
-  Projected posterior is different than posterior conditioned only on selected features
-
-  \vspace{-0.7\baselineskip}
-  \includegraphics[width=11cm]{bodyfat_compare_sigmas.pdf}
-
 \end{frame}
+
+% \begin{frame}
+  
+%   {\Large\color{navyblue} Bodyfat}
+
+%   Projected posterior is different than posterior conditioned only on selected features
+
+%   \vspace{-0.7\baselineskip}
+%   \includegraphics[width=11cm]{bodyfat_compare_sigmas.pdf}
+
+% \end{frame}
 
 % Case study \url{avehtari.github.io/modelselection/bodyfat.html}
 \begin{frame}
