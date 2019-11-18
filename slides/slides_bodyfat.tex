@@ -125,7 +125,8 @@
 \newcommand{\lN}{{\rm LN}}
 \newcommand{\Rss}{R^{\rm ss}}
 \newcommand{\invlogit}{\mbox{logit}^{-1}}
-
+\newcommand{\KLx}[2] { \mathrm{KL} {\left(#1 \, \| \, #2\right)} }
+\newcommand{\vs}[1] { \boldsymbol{#1} }
 % \DeclareMathOperator{\Poisson}{Poisson}
 \DeclareMathOperator{\Chi}{Chi}
 \DeclareMathOperator{\GP}{\mathcal{GP}}
@@ -238,6 +239,11 @@
     \Large{Aki Vehtari}\\
     \large{Aalto University}
 
+    \vskip 2\baselineskip
+
+    \pause
+    Introduce yourself
+
   
 \end{frame}
 
@@ -280,8 +286,8 @@
   % \end{itemize}
   \end{itemize}
   
-  \vspace{-0.7\baselineskip}
-  \includegraphics[width=7.7cm]{bodyfat_corr.pdf}
+  \vspace{-1\baselineskip}
+  \includegraphics[width=8.2cm]{bodyfat_corr.pdf}
 
 \end{frame}
 
@@ -308,6 +314,17 @@
   Posterior predictive checking
   
   \includegraphics[width=11cm]{bodyfat_ppc.pdf}
+
+\end{frame}
+
+\begin{frame}
+  
+  {\Large\color{navyblue} Bodyfat}
+
+  \only<1>{Marginal posteriors of coefficients}
+  \only<2>{{\color{red} Check that the font in all figures is big enough!}}
+  
+  \includegraphics[width=11cm]{bodyfat_mcmc_areas_small.pdf}
 
 \end{frame}
 
@@ -344,12 +361,74 @@
 \end{frame}
 
 \begin{frame}
+
+  {\Large\color{navyblue} {Projective predictive covariate selection}}
+    
+\begin{itemize}
+\item The full model predictive distribution represents our best knowledge about future $\tilde{y}$
+	\begin{align*}
+          p(\tilde{y} | D) = \int p(\tilde{y} | \vs\theta) p(\vs \theta| D) d\vs\theta,
+        \end{align*}
+        where $\vs \theta=(\vs \beta,\sigma^2)$) and $\vs \beta$ is in general non-sparse (all $\vs\beta_j \ne 0$)
+	% \item The predictive distribution $p(\tilde{y} \given D) \sim \frac{1}{S}\sum_s p(\tilde{y} \given \vs \theta^s)$ 
+	\item What is the best distribution $q_\perp(\vs \theta)$ given a
+          constraint that only selected covariates have nonzero coefficient
+          % ($||\vs \beta||_0 = k)$?
+	\item Optimization problem:
+	\begin{align*}
+		q_\perp = \arg \min_{q} \frac{1}{n} \sum_{i=1}^n 
+			\KLx{p(\tilde{y}_i \mid D)}{\int p(\tilde{y}_i \mid \vs \theta) q(\vs \theta) d\vs\theta}%,\\ \subjto\, ||\vs \beta||_0 = k
+	\end{align*}
+      \item Optimal projection from the full posterior to a sparse
+        posterior (with minimal predictive loss)
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+
+  {\Large\color{red} {For 10min presentation, too much information}}
+
+
+\begin{itemize}
+    \color{gray}
+\item The full model predictive distribution represents our best knowledge about future $\tilde{y}$
+	\begin{align*}
+          p(\tilde{y} | D) = \int p(\tilde{y} | \vs\theta) p(\vs \theta| D) d\vs\theta,
+        \end{align*}
+        where $\vs \theta=(\vs \beta,\sigma^2)$) and $\vs \beta$ is in general non-sparse (all $\vs\beta_j \ne 0$)
+	% \item The predictive distribution $p(\tilde{y} \given D) \sim \frac{1}{S}\sum_s p(\tilde{y} \given \vs \theta^s)$ 
+	\item What is the best distribution $q_\perp(\vs \theta)$ given a
+          constraint that only selected covariates have nonzero coefficient
+          % ($||\vs \beta||_0 = k)$?
+	\item Optimization problem:
+	\begin{align*}
+		q_\perp = \arg \min_{q} \frac{1}{n} \sum_{i=1}^n 
+			\KLx{p(\tilde{y}_i \mid D)}{\int p(\tilde{y}_i \mid \vs \theta) q(\vs \theta) d\vs\theta}%,\\ \subjto\, ||\vs \beta||_0 = k
+	\end{align*}
+      \item Optimal projection from the full posterior to a sparse
+        posterior (with minimal predictive loss)
+\end{itemize}
+
+
+\end{frame}
+
+
+\begin{frame}
   
   {\Large\color{navyblue} Bodyfat}
 
-  The predictive performance of the full and submodels
+  \only<1>{The predictive performance of the full and submodels
+
+      \includegraphics[width=11cm]{bodyfat_varsel_plot2.pdf}
+  }
+  \only<2>{The predictive performance of the full and submodels
+
+    {\color{gray} One of these plots is probably sufficient}
+    
+      \includegraphics[width=11cm]{bodyfat_varsel_plot_rmse.pdf}
+    }
   
-  \includegraphics[width=11cm]{bodyfat_varsel_plot2.pdf}
 
 \end{frame}
 
@@ -495,6 +574,9 @@
       additional convergence and model checking results
     \end{itemize}
   \end{itemize}
+
+
+Gaussian linear model with regularized horseshoe prior
   
   {\footnotesize
 \begin{lstlisting}
@@ -505,8 +587,46 @@ fitrhs <- stan_glm(formula, data = df, prior=rhs_prior,
                    QR=TRUE, seed=SEED, refresh=0)
 \end{lstlisting}
   }
+
+
 \end{frame}
 
+\begin{frame}[fragile]
+
+  {\Large\color{navyblue} Additional information}
+
+  \begin{itemize}
+  \item You can have additional slides after the conclusion for
+    supporting material to answer questions
+    \begin{itemize}
+    \item for example, in this course, include Stan code and
+      additional convergence and model checking results
+    \end{itemize}
+  \end{itemize}
+
+
+Gaussian linear model with regularized horseshoe prior
+  
+  {\footnotesize
+\begin{lstlisting}
+p0 <- 5 # prior guess for the number of relevant variables
+tau0 <- p0/(p-p0) * 1/sqrt(n)
+rhs_prior <- hs(global_scale=tau0)
+fitrhs <- stan_glm(formula, data = df, prior=rhs_prior, 
+                   QR=TRUE, seed=SEED, refresh=0)
+\end{lstlisting}
+  }
+
+For figures, e.g.,
+  
+  {\footnotesize
+\begin{lstlisting}
+theme_set(bayesplot::theme_default(base_family = "sans",
+          base_size=16))
+\end{lstlisting}
+  }
+
+\end{frame}
 
 \end{document}
 
