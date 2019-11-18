@@ -95,6 +95,8 @@ Shorter video clips on selected topics are available in [a Panopto folder](https
  - [Project work info](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=2820df34-d958-4c6c-93f3-aaf400dece37)
  - [Lecture 8.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=7047e366-0df6-453c-867f-aafb00ca2d78) on model checking, and [Lecture 8.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d7849131-0afd-4ae6-ad64-aafb00da36f4) on cross-validation part 1.
  - [Lecture 9.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=50b2e73f-af0a-4715-b627-ab0200ca7bbd) PSIS-LOO and K-fold-CV, [Lecture 9.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=b0299d53-9454-4e33-9086-ab0200db14eeb) model comparison and selection, and [Lecture 9.3](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=4b6eeb48-ae64-4860-a8c3-ab0200e40ad8) extra lecture on variable selection with projection predictive variable selection.
+ - [Lecture 10.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=82943720-de0f-4195-8639-ab0900ca2085) on decision analysis
+ - [Project presentation info](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=cad1e8f8-e1f0-408a-ad9d-ab0900db3977)
 
 ## R and Python
 
