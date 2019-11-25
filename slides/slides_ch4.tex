@@ -158,8 +158,8 @@
   \item<3> A most strict proof by LeCam in 1950's
   \end{itemize}
 \end{itemize}
-\vspace{-2.5\baselineskip}
-    \uncover<4->{\includegraphics[width=10cm]{bioassay_norm.pdf}}
+\vspace{-4.5\baselineskip}
+\uncover<4->{\hspace{-5mm}\includegraphics[width=11cm]{bioassay_norm.pdf}}
 
 \end{frame}
 
@@ -435,11 +435,11 @@
   \begin{itemize}
   \item Normal approximation can be computed numerically
     \begin{itemize}
-    \item iterative optimization to find a mode (maye use gradients)
+    \item iterative optimization to find a mode (may use gradients)
     \item autodiff or finite-difference for gradients and Hessian
     \item<2> e.g. in R, demo4\_1.R:
     {\scriptsize
-\begin{lstlisting}[language=R]
+\begin{lstlisting}[]
 bioassayfun <- function(w, df) {
   z <- w[1] + w[2]*df$x
   -sum(df$y*(z) - df$n*log1p(exp(z)))
@@ -462,7 +462,7 @@ Sigma <- solve(optimres$hessian)
   \begin{itemize}
   \item Normal approximation can be computed numerically
     \begin{itemize}
-    \item iterative optimization to find a mode (maye use gradients)
+    \item iterative optimization to find a mode (may use gradients)
     \item autodiff or finite-difference for gradients and Hessian
     \end{itemize}
   \item RStanARM has an option {\small\tt algorithm='optimizing'}
@@ -492,10 +492,11 @@ Sigma <- solve(optimres$hessian)
     \begin{itemize}
     \item e.g. Gaussian latent variable models, such as Gaussian
       processes (Ch 21)
-      \begin{itemize}
-      \item CS-E4070 - Special Course in Machine Learning and Data
-        Science: Gaussian processes - theory and applications
-    \end{itemize}
+    \item Rasmussen \& Williams: Gaussian Processes for Machine Learning
+    %   \begin{itemize}
+    %   \item CS-E4070 - Special Course in Machine Learning and Data
+    %     Science: Gaussian processes - theory and applications
+    % \end{itemize}
     \end{itemize}
   \item<4-> Accuracy can be improved by importance sampling (Ch 10)
   \end{itemize}
@@ -519,14 +520,13 @@ Sigma <- solve(optimres$hessian)
       \includegraphics[width=3.4cm]{bioassayis2d.pdf}
       \includegraphics[width=3.4cm]{bioassayis2s.pdf}
       \includegraphics[width=3.4cm]{bioassayis2h.pdf}\\}
-    \only<2-3>{Normal approximation is discussed more in BDA3 Ch 4\\}
     \only<3>{But the normal approximation is not that good here:\\ Grid sd(LD50) $\approx$ 0.1, Normal sd(LD50) $\approx$ .75!}
       \only<4->{
-        \makebox[0cm][t]{\hspace{-0.5cm}\rotatebox{90}{\hspace{1cm}SIR}}
+        \makebox[0cm][t]{\hspace{-0.5cm}\rotatebox{90}{\hspace{1cm}IS}}
       \includegraphics[width=3.4cm]{bioassayis3d.pdf}
       \includegraphics[width=3.4cm]{bioassayis3s.pdf}
       \includegraphics[width=3.4cm]{bioassayis3h.pdf}\\}
-    \only<5->{Grid sd(LD50) $\approx$ 0.1, SIR sd(LD50) $\approx$ 0.1}
+    \only<5->{Grid sd(LD50) $\approx$ 0.1, IS sd(LD50) $\approx$ 0.1}
     \end{center}
      \end{minipage}  
    }
@@ -535,14 +535,22 @@ Sigma <- solve(optimres$hessian)
 
 \begin{frame}
 
-    {\Large\color{navyblue} Normal approximation}
-
+  {\Large\color{navyblue} Normal approximation}
+  
   \begin{itemize}
-  \item Accuracy can be improved by importance sampling
-  \item Pareto-$k$ diagnostic of importance sampling weights can be
+  \item<1-> Accuracy can be improved by importance sampling
+  \item<1-> Pareto-$k$ diagnostic of importance sampling weights can be
     used for diagnostic
     \begin{itemize}
     \item in Bioassay example $k=0.57$, which is ok
+    \end{itemize}
+  \item<2-> RStanARM has an option {\small\tt algorithm='optimizing'}
+    \begin{itemize}
+    \item since version 2.19.2 (2019-10-03)
+      \begin{itemize}
+      \item[+] Pareto-$k$ diagnostic
+      \item[+] importance resampling (IR)
+      \end{itemize}
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -556,7 +564,7 @@ Sigma <- solve(optimres$hessian)
     \item<+-> Higher order derivatives at the mode can be used
     \item<+-> Split-normal and split-$t$ by Geweke use additional
       scaling along different principal axes
-    \item<+-> Other distributions can be used
+    \item<+-> Other distributions can be used (e.g. $t$-distribution)
     \item<+-> Instead of mode and Hessian at mode, e.g.
       \begin{itemize}
       \item variational inference (Ch 13)
@@ -590,10 +598,10 @@ Sigma <- solve(optimres$hessian)
 \uncover<2->{\footnotesize
   Grid sd(LD50) $\approx$ 0.090,\\
   Normal sd(LD50) $\approx$ .75,
-  Normal + SIR sd(LD50) $\approx$ 0.096 (Pareto-$k$ = 0.57)\\}
+  Normal + IR sd(LD50) $\approx$ 0.096 (Pareto-$k$ = 0.57)\\}
 \uncover<3->{\footnotesize
   VI sd(LD50) $\approx$ 0.13,
-  VI + SIR sd(LD50) $\approx$ 0.095 (Pareto-$k$ = 0.17)
+  VI + IR sd(LD50) $\approx$ 0.095 (Pareto-$k$ = 0.17)
   }
 
 \end{frame}
@@ -911,11 +919,12 @@ Sigma <- solve(optimres$hessian)
       \item<2-> Consistency
       \item<3-> Asymptotic unbiasedness
         \begin{itemize}
-        \item not that important in Bayesian inference
+        \item not that important in Bayesian inference, small and
+          decreasing error more important
         \end{itemize}
       \item<4-> Asymptotic efficiency
         \begin{itemize}
-        \item no other point estimate with smalle squared error
+        \item no other point estimate with smaller squared error
         \end{itemize}
       \item<5-> Calibration
         \begin{itemize}
@@ -923,12 +932,169 @@ Sigma <- solve(optimres$hessian)
           $\alpha\%$ cases
         \item $\alpha\%$-predictive interval has the true future values
           in $\alpha\%$ cases
+        \item approximate calibration with shorter intervals for
+          likely true values more important than exact calibration
+          with bad intervals for all possible values.
         \end{itemize}
       \end{itemize}
     \end{itemize}
     
 
 \end{frame}
+
+\begin{frame}
+
+  {\Large\color{navyblue} Frequentist statistics}
+  
+  \begin{itemize}
+  \item Frequentist statistics accepts only aleatory probabilities
+    \begin{itemize}
+    \item Estimates are based on data
+    \item Uncertainty of estimates are based on all possible data
+      sets which could have been generated by the data generating
+      mechanism
+      \begin{itemize}
+      \item<2-> inference is based also on data we did not observe
+      \end{itemize}
+    \end{itemize}
+  \item<3-> Estimates are derived to fullfil frequency properties
+    \begin{itemize}
+    \item Maximum likelihood fullfills just asymptotic frequency
+      properties
+    \item Common desiderata are 1) unbiasedness, 2) minimum
+      variance, 3) calibration of confidence interval
+    \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+
+  {\Large\color{navyblue} Frequentist statistics}
+  
+  \begin{itemize}
+  \item Estimates are derived to fullfil frequency properties
+    \begin{itemize}
+    \item Maximum likelihood fullfills just asymptotic frequency
+      properties
+    \item Common desiderata are 1) unbiasedness, 2) minimum
+      variance, 3) calibration of confidence interval
+    \end{itemize}
+  \item Requirement of unbiasedness may lead to higher variance or
+    silly estimates
+    \begin{itemize}
+    \item unbiased estimate for strictly positive parameter can be
+      negative
+    \end{itemize}
+  \item<2-> Confidence interval is defined to have true value inside the
+    interval in $\alpha\%$ cases of repeated data generation from the
+    data generating mechanism
+    \begin{itemize}
+    \item doesn't say how likely the true value is inside the interval
+      given the observed data
+    \item doesn't need be useful to have perfect calibration
+    \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+
+  {\Large\color{navyblue} Frequentist vs Bayes vs others}
+  
+  \begin{itemize}
+  \item There is a great amount of very useful frequentist statistics
+    \begin{itemize}
+    \item also for simple models and lot's of data there is not much
+      difference
+    \end{itemize}
+  \item<2-> Bayesian inference
+    \begin{itemize}
+    \item easier for complex, e.g. hierarchical, models
+    \item easier when model changes
+    \item a consistent way to add prior information
+    \end{itemize}
+  \item<3-> Lot of machine learning is not pure frequentist or
+    Bayesian
+  \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+
+  {\Large\color{navyblue} Hypothesis testing}
+  
+  \begin{itemize}
+  \item Frequentist approach can be used to to make estimates and
+    confidence intervals, but for some reason null hypothesis testing
+    has a very big role
+    \begin{itemize}
+    \item<2-> reporting just the null hypothesis testing result throws
+      away lot of useful information
+    \item<3-> some Bayesians are also into null hypothesis testing
+    \end{itemize}
+  \item<4-> Frequentist null hypothesis testing
+    \begin{itemize}
+    \item asks what if data is generated from the smaller model
+    \item doesn't tell whether the more complex model is good enough
+    \end{itemize}
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}
+
+  {\Large\color{navyblue} Bayesian hypothesis testing}
+
+  \begin{itemize}
+  \item Instead of hypothesis testing, report full posterior and
+    combine full posterior with utility/cost function
+    \begin{itemize}
+    \item for continuous posterior there is zero probability that
+      e.g. treatment effect is exactly zero
+    \end{itemize}
+  \item<2-> Equivalence testing
+    \begin{itemize}
+    \item e.g. what is the probability that the treatment is closer
+      than $\epsilon$ to zero, where $\epsilon$ is chosen based on
+      what is practically useful treatment effect size
+    \end{itemize}
+  \item<3-> Bayes factor
+    \begin{itemize}
+    \item null model has, e.g., the treatment effect fixed to 0
+    \item assumes that there is non-zero probability that the
+      treatment effect can be exactly zero
+    \end{itemize}
+  \item<4-> Predictive performance
+    \begin{itemize}
+    \item is there difference in predictive performance with, e.g.,
+      treatment effect fixed to zero or unknown treatment effect
+    \end{itemize}
+  \end{itemize}
+  
+
+\end{frame}
+
+\begin{frame}
+
+  {\Large\color{navyblue} Common statistical tests as Bayesian models}
+
+  \begin{tabular}{ll}
+   $t$-test &  {\tt stan\_glm(y \~\ 1)}\\
+   paired $t$-test &{\tt stan\_glm((y\_1 - y\_2) \~\  1)}\\
+   pearson correlation &{\tt stan\_glm(y \~\  1 + x)}\\
+   two-sample $t$-test &{\tt stan\_glm(y \~\  1 + gid)}\\
+    $\ldots$ &
+  \end{tabular}
+  
+  
+  See longer list and illustrations (with {\tt lm}) at
+  \url{https://lindeloev.github.io/tests-as-linear/}
+  
+
+\end{frame}
+
 
 \end{document}
 
