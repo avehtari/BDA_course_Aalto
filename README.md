@@ -98,6 +98,7 @@ Shorter video clips on selected topics are available in [a Panopto folder](https
  - [Lecture 10.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=82943720-de0f-4195-8639-ab0900ca2085) on decision analysis
  - [Project presentation info](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=cad1e8f8-e1f0-408a-ad9d-ab0900db3977)
  - [Lecture 11.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=e22fedc7-9fd3-4d1e-8318-ab1000ca45a4) on normal approximation (Laplace approximation) and [Lecture 11.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=a8e38a95-a944-4f3d-bf95-ab1000dbdf73) on large sample theory and counter examples.
+ - [Lecture 12.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=e998b5dd-bf8e-42da-9f7c-ab1700ca2702) on frequency evaluation, hypothesis testing and variable selection and [Lecture 12.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c43c862a-a5a4-45da-9b27-ab1700e12012) overview of modeling data collection (Ch8), linear models (Ch. 14-18), lasso, horseshoe and Gaussian processes (Ch 21).
 
 ## R and Python
 
