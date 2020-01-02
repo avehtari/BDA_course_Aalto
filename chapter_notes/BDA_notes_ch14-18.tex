@@ -1,0 +1,393 @@
+\documentclass[a4paper,11pt]{article}
+
+% \usepackage{babel}
+\usepackage[utf8]{inputenc}
+% \usepackage[T1]{fontenc}
+\usepackage{times}
+\usepackage{amsmath}
+\usepackage{microtype}
+\usepackage{url}
+\urlstyle{same}
+\usepackage{color}
+
+\usepackage[bookmarks=false]{hyperref}
+\hypersetup{%
+  bookmarksopen=true,
+  bookmarksnumbered=true,
+  pdftitle={Bayesian data analysis},
+  pdfsubject={Comments},
+  pdfauthor={Aki Vehtari},
+  pdfkeywords={Bayesian probability theory, Bayesian inference, Bayesian data analysis},
+  pdfstartview={FitH -32768},
+  colorlinks=true,
+  linkcolor=navyblue,
+  citecolor=black,
+  filecolor=black,
+  urlcolor=blue
+}
+
+
+% if not draft, smaller printable area makes the paper more readable
+\topmargin -4mm
+\oddsidemargin 0mm
+\textheight 225mm
+\textwidth 160mm
+
+%\parskip=\baselineskip
+\def\eff{\mathrm{rep}}
+
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\var}{var}
+\DeclareMathOperator{\Sd}{Sd}
+\DeclareMathOperator{\sd}{sd}
+\DeclareMathOperator{\Bin}{Bin}
+\DeclareMathOperator{\Beta}{Beta}
+\DeclareMathOperator{\Invchi2}{Inv-\chi^2}
+\DeclareMathOperator{\NInvchi2}{N-Inv-\chi^2}
+\DeclareMathOperator{\logit}{logit}
+\DeclareMathOperator{\N}{N}
+\DeclareMathOperator{\U}{U}
+\DeclareMathOperator{\tr}{tr}
+%\DeclareMathOperator{\Pr}{Pr}
+\DeclareMathOperator{\trace}{trace}
+\DeclareMathOperator{\rep}{\mathrm{rep}}
+
+\pagestyle{empty}
+
+\begin{document}
+\thispagestyle{empty}
+
+\section*{Bayesian data analysis -- reading instructions Part IV} 
+\smallskip
+{\bf Aki Vehtari}
+\smallskip
+\bigskip
+
+\noindent
+Part IV, Chapters 14--18 discuss basics of linear and generalized
+linear models with several examples. The parts discussing computation
+can be useful to provide additional insight on these models or
+sometimes for actual computation, it's likely that most of the readers
+will use some probabilistic programming framework for
+computation. Regression and other stories (ROS) by Gelman, Hill and
+Vehtari discusses linear and generalized linear models from the
+modeling perspective more thoroughly.
+
+\subsection*{Chapter 14: Introduction to regression models}
+
+Outline of the chapter 14:
+\begin{list}{$\bullet$}{\parsep=0pt\itemsep=2pt}
+\item[14.1] Conditional modeling
+  \begin{itemize}
+  \item formal justification of conditional modeling
+  \item if joint model factorizes $p(y,x|\theta,\phi)={\color{blue}p(y|x,\theta)}p(x|\phi)$\\
+    we can model just ${\color{blue}p(y|x,\theta)}$
+  \end{itemize}
+\item[14.2] Bayesian analysis of classical regression
+  \begin{itemize}
+  \item uninformative prior on $\beta$ and $\sigma^2$
+  \item connection to multivariate normal (cf. Chapter 3) is useful to understand as it then reveals what would be the conjugate prior
+  \item closed form posterior and posterior predictive distribution
+  \item these properties are sometimes useful and thus good to know,
+    but with probabilistic programming less often needed
+  \end{itemize}
+\item[14.3] Regression for causal inference: incumbency and voting
+  \begin{itemize}
+  \item Modelling example with bit of discussion on causal inference
+    (see more in ROS Chs. 18-21)
+  \end{itemize}
+\item[14.4] Goals of regression analysis
+  \begin{itemize}
+  \item discussion of what we can do with regression analysis (see
+    more in ROS)
+  \end{itemize}
+\item[14.5] Assembling the matrix of explanatory variables
+  \begin{itemize}
+  \item transformations, nonlinear relations, indicator variables,
+    interactions (see more in ROS)
+  \end{itemize}
+\item[14.6] Regularization and dimension reduction
+  \begin{itemize}
+  \item a bit outdated and short (Bayesian Lasso is not a good idea),
+    see more in lecture 9.3,
+    \url{https://avehtari.github.io/modelselection/} and
+    \url{https://betanalpha.github.io/assets/case_studies/bayes_sparse_regression.html})
+  \end{itemize}
+\item[14.7] Unequal variances and correlations
+  \begin{itemize}
+  \item useful concept, but computation is easier with probabilistic
+    programming frameworks
+  \end{itemize}
+\item[14.8] Including numerical prior information
+  \begin{itemize}
+  \item useful conceptually, but easy computation with probabilistic
+    programming frameworks makes it easier to define prior information
+    as the prior doesn't need to be conjugate
+  \item see more about priors in \url{https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations}
+  \end{itemize}
+\end{list}
+
+\subsection*{Chapter 15 Hierarchical linear models}
+
+Chapter 15 combines hierarchical models from Chapter 5 and linear
+models from Chapter 14. The chapter discusses some computational
+issues, but probabilistic programming frameworks make computation for
+hierarchical linear models easy.  
+
+\vspace{\baselineskip}
+\noindent
+Outline of the chapter 15:
+\begin{list}{$\bullet$}{\parsep=0pt\itemsep=2pt}
+\item[15.1] Regression coefficients exchangeable in batches
+    \begin{itemize}
+    \item exchangeability of parameters
+    \item the discussion of fixed-, random- and mixed-effects models
+      is incomplete
+      \begin{itemize}
+      \item we don't recommend using these terms, but they are so
+        popular that it's useful to know them
+      \item a relevant comment is \emph{The terms ‘fixed’ and ‘random’
+          come from the non-Bayesian statistical tradition and are
+          somewhat confusing in a Bayesian context where all unknown
+          parameters are treated as ‘random’ or, equivalently, as
+          having fixed but unknown values.}
+      \item often fixed effects correspond to population level
+        coefficients, random effects correspond to group or individual
+        level coefficients, and mixed model has both\\
+        \begin{tabular}[t]{ll}
+     {\tt y $\sim$ 1 + x} & fixed / population effect; pooled model\\
+     {\tt y $\sim$ 1 + (0 + x | g) } & random / group effects \\
+     {\tt y $\sim$ 1 + x + (1 + x | g) } & mixed effects; hierarchical model 
+        \end{tabular}
+      \end{itemize}
+    \end{itemize}
+  \item[15.2] Example: forecasting U.S. presidential elections
+    \begin{itemize}
+    \item illustrative example
+    \end{itemize}
+  \item[15.3] Interpreting a normal prior distribution as extra data
+    \begin{itemize}
+    \item includes very useful interpretation of hierarchical linear
+      model as a single linear model with certain design matrix
+    \end{itemize}
+  \item[15.4] Varying intercepts and slopes
+    \begin{itemize}
+    \item extends from hierarchical model for scalar parameter to
+      joint hierarchical model for several parameters
+    \end{itemize}
+  \item[15.5] Computation: batching and transformation
+    \begin{itemize}
+    \item Gibbs sampling part is mostly outdated
+    \item transformations for HMC is useful if you write your own
+      models, but the section is quite short and you can get more
+      information from Stan user guide 21.7 Reparameterization and
+      \url{https://mc-stan.org/users/documentation/case-studies/divergences_and_bias.html}
+    \end{itemize}
+  \item[15.6] Analysis of variance and the batching of coefficients
+    \begin{itemize}
+    \item ANOVA as Bayesian hierarchical linear model
+    \item rstanarm and brms packages make it easy to make ANOVA
+    \end{itemize}
+  \item[15.7] Hierarchical models for batches of variance components
+    \begin{itemize}
+    \item more variance components
+    \end{itemize}
+\end{list}
+
+\subsection*{Chapter 16 Generalized linear models}
+
+Chapter 16 extends linear models to have non-normal observation
+models. Model in Bioassay example in Chapter 3 is also generalized
+linear model. Chapter reviews the basics and discusses some
+computational issues, but probabilistic programming frameworks make
+computation for generalized linear models easy (especially with
+rstanarm and brms). Regression and other stories (ROS) by Gelman, Hill
+and Vehtari discusses generalized linear models from the modeling
+perspective more thoroughly.
+
+
+\vspace{\baselineskip}
+\noindent
+Outline of the chapter 16:
+\begin{list}{$\bullet$}{\parsep=0pt\itemsep=2pt}
+\item[16 Intro:]
+  Parts of generalized linear model (GLM):
+  \begin{itemize}
+  \item[1.] The linear predictor $\eta = X\beta$
+  \item[2.] The link function $g(\cdot)$ and $\mu = g^{-1}(\eta)$
+  \item[3.] Outcome distribution model with location parameter $\mu$
+    \begin{itemize}
+    \item the distribution can also depend on dispersion
+      parameter $\phi$
+    \item originally just exponential family distributions
+      (e.g. Poisson, binomial, negative-binomial), which all have
+      natural location-dispersion parameterization
+    \item after MCMC made computation easy, GLM can refer to
+      models where outcome distribution is not part of exponential
+      family and dispersion parameter may have its own latent linear
+      predictor
+    \end{itemize}
+  \end{itemize}
+\item[16.1] Standard generalized linear model likelihoods
+  \begin{itemize}
+  \item section title says ``likelihoods'', but it would be better to say ``observation models''
+  \item continuous data: normal, gamma, Weibull mentioned, but common
+    are also Student's $t$, log-normal, log-logistic, and various
+    extreme value distributions like generalized Pareto distribution
+  \item binomial (Bernoulli as a special case) for binary and count
+    data with upper limit
+    \begin{itemize}
+    \item Bioassay model uses binomial observation model
+    \end{itemize}
+  \item Poisson for count data with no upper limit
+    \begin{itemize}
+    \item Poisson is useful approximation of Binomial when the observed
+      counts are much smaller than the upper limit
+    \end{itemize}
+  \end{itemize}
+  \item[16.2] Working with generalized linear models
+  \begin{itemize}
+  \item bit of this and that information on how think about GLMs (see
+    ROS for more)
+  \item normal approximation to the likelihood is good for thinking
+    how much information non-normal observations provide, can be
+    useful for someone thinking about computation, but easy
+    computation with probabilistic programming frameworks means not
+    everyone needs this
+  \end{itemize}
+  \item[16.3] Weakly informative priors for logistic regression
+    \begin{itemize}
+    \item an excellent section although the recommendation on using
+      Cauchy has changed (see
+      \url{https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations})
+    \item the problem of separation is useful to understand
+    \item computation part is outdated as probabilistic programming
+      frameworks make the computation easy
+    \end{itemize}
+  \item[16.4] Overdispersed Poisson regression for police stops
+    \begin{itemize}
+    \item an example
+    \end{itemize}
+  \item[16.5] State-level opinions from national polls
+    \begin{itemize}
+    \item another example
+    \end{itemize}
+  \item[16.6] Models for multivariate and multinomial responses
+    \begin{itemize}
+    \item extension to multivariate responses
+    \item polychotomous data with multivariate binomial or Poisson
+    \item models for ordered categories
+    \end{itemize}
+  \item[16.7] Loglinear models for multivariate discrete data
+    \begin{itemize}
+    \item multinomial or Poisson as loglinear models
+    \end{itemize}
+  \end{list}
+
+\subsection*{Chapter 17 Models for robust inference}
+
+Chapter 17 discusses over-dispersed observation models. The discussion
+is useful beyond generalized linear models.  The computation is
+outdated. See Regression and other stories (ROS) by Gelman, Hill
+and Vehtari for more examples.
+
+\vspace{\baselineskip}
+\noindent
+Outline of the chapter 17:
+\begin{list}{$\bullet$}{\parsep=0pt\itemsep=2pt}
+ \item[17.1] Aspects of robustness
+  \begin{itemize}
+  \item overdispersed models are often connected to robustness of
+    inferences to outliers, but the observed data can be overdispersed
+    without any observation being outlier
+  \item outlier is sensible only in the context of the model, being
+    something not well modelled or something requiring extra model
+    component
+  \item switching to generic overdispersed model can help to recognize
+    problem in the non-robust model (sensitivity analysis), but it
+    can also throw away useful information in the ``outliers'' and it
+    would be useful to think what is the generative mechanism for
+    observations which are not like others
+  \end{itemize}
+  \item[17.2] Overdispersed versions of standard models\\
+    \begin{tabular}[t]{lcl}\small
+      normal & $\rightarrow$ & $t$-distribution\\
+      Poisson & $\rightarrow$ & negative-binomial \\
+      binomial & $\rightarrow$ & beta-binomial \\
+      probit & $\rightarrow$ & logistic / robit 
+    \end{tabular}
+  \item[17.3] Posterior inference and computation
+    \begin{itemize}
+    \item computation part is outdated as probabilistic programming
+      frameworks and MCMC make the computation easy
+    \item posterior is more likely to be multimodal
+    \end{itemize}
+  \item[17.4] Robust inference for the eight schools
+    \begin{itemize}
+    \item eight schools example is too small too see much difference
+    \end{itemize}
+  \item[17.5] Robust regression using t-distributed errors
+    \begin{itemize}
+    \item computation part is outdated as probabilistic programming
+      frameworks and MCMC make the computation easy
+    \item posterior is more likely to be multimodal
+    \end{itemize}
+\end{list}
+
+\subsection*{Chapter 18 Models for missing data}
+
+Chapter 18 extends the data collection modelling from Chapter 8. See
+Regression and other stories (ROS) by Gelman, Hill and Vehtari for
+more examples.
+
+\vspace{\baselineskip}
+\noindent
+Outline of the chapter 18:
+\begin{list}{$\bullet$}{\parsep=0pt\itemsep=2pt}
+  \item[18.1] Notation
+    \begin{itemize}
+    \item Missing completely at random (MCAR)\\
+      missingness does not depend on missing values or other observed
+      values (including covariates)
+    \item Missing at random (MAR)\\
+      missingness does not depend on missing values but may depend on
+      other observed values (including covariates)
+    \item Missing not at random (MNAR)\\
+      missingness depends on missing values
+    \end{itemize}
+  \item[18.2] Multiple imputation
+    \begin{itemize}
+    \item[1.] make a model predicting missing data
+    \item[2.] sample repeatedly from the missing data model to generate
+      multiple imputed data sets
+    \item[3.] make usual inference for each imputed data set
+    \item[4.] combine results
+    \item discussion of computation is partially outdated
+    \end{itemize}
+  \item[18.3] Missing data in the multivariate normal and $t$ models
+    \begin{itemize}
+    \item a special continuous data case computation, which can still
+      be useful as fast starting point
+    \end{itemize}
+  \item[18.4] Example: multiple imputation for a series of polls
+    \begin{itemize}
+    \item an example
+    \end{itemize}
+  \item[18.5] Missing values with counted data
+    \begin{itemize}
+    \item discussion of computation for count data (ie computation in
+      18.3 is not applicable)
+    \end{itemize}
+  \item[18.6] Example: an opinion poll in Slovenia
+    \begin{itemize}
+    \item another example
+    \end{itemize}
+\end{list}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
