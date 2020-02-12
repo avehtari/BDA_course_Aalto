@@ -18,9 +18,9 @@ The material will be updated during the course. Exercise instructions and slides
   + see e.g. [BDA_R_demos](https://github.com/avehtari/BDA_R_demos)
   + see e.g. [BDA_py_demos](https://github.com/avehtari/BDA_py_demos)
 
-This course has been designed for students studying computer science
-or computational science, and thus there is a lot of emphasise in
-computational aspects of Bayesian data analysis.  
+This course has been designed so that there is strong emphasis in
+computational aspects of Bayesian data analysis and using the latest
+computational tools.
 
 If you find BDA3 too difficult to start with, I recommend
  - For background prerequisites, see, e.g., chapters 2, 4 and 5 in [Kruschke, "Doing Bayesian Data Analysis"](https://sites.google.com/site/doingbayesiandataanalysis/). Some of my students have found this useful.
