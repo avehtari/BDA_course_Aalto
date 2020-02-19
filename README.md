@@ -110,7 +110,7 @@ Short video clips on selected introductory topics are available in [a Panopto fo
 
 ## R and Python
 
-We strongly recommend using R in the course as there are more packages for Stan and statistical analysis in R. If you are already fluent in Python, but not in R, then using Python may be easier, but it can still be more useful to learn also R. Unless you are already experienced and have figured out your preferred way to work with R, we recommend installing [RStudio Desktop](https://www.rstudio.com/products/rstudio/download/). TAs will provide brief introduction to use of RStudio during the first week TA sessions. See [FAQ](FAQ.md) for frequently asked questions about R problems in this course.
+We strongly recommend using R in the course as there are more packages for Stan and statistical analysis in R. If you are already fluent in Python, but not in R, then using Python may be easier, but it can still be more useful to learn also R. Unless you are already experienced and have figured out your preferred way to work with R, we recommend installing [RStudio Desktop](https://www.rstudio.com/products/rstudio/download/). TAs will provide brief introduction to use of RStudio during the first week TA sessions. See [FAQ](FAQ.md) for frequently asked questions about R problems in this course. The demo codes linked below provide useful starting points for all the exercises. If you are interested in learning more about making nice figures in R, I recommend [Kieran Healy's "Data Visualization - A practical introduction"](https://socviz.co/).
 
 ## Demos
 
