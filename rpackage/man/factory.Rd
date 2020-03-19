@@ -4,11 +4,20 @@
 \name{factory}
 \alias{factory}
 \title{factory}
-\format{A data frame with 6 columns and 5 rows}
+\format{A data frame with 5 rows and 6 variables:
+\describe{
+  \item{V1}{Machine 1}
+  \item{V2}{Machine 2}
+  \item{V3}{Machine 3}
+  \item{V4}{Machine 4}
+  \item{V5}{Machine 5}
+  \item{V6}{Machine 6}
+}}
 \usage{
 factory
 }
 \description{
-factory data set
+factory data set. The data contains quality control measurements
+from 6 machines in a factory.
 }
 \keyword{datasets}

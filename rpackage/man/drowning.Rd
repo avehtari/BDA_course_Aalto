@@ -4,11 +4,16 @@
 \name{drowning}
 \alias{drowning}
 \title{drowning}
-\format{A data frame with 2 columns and 37 rows}
+\format{A data frame with 37 rows and 2 variables:
+\describe{
+  \item{year}{year}
+  \item{drownings}{number of drownings in Finland}
+}}
 \usage{
 drowning
 }
 \description{
-drowning data set
+drowning data set. The data contains the number of people
+who have drowned per year in Finland between 1980 and 2016.
 }
 \keyword{datasets}

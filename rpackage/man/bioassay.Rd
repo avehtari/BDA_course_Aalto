@@ -4,11 +4,17 @@
 \name{bioassay}
 \alias{bioassay}
 \title{bioassay}
-\format{A data frame with 3 columns and 4 rows}
+\format{A data frame with 4 rows and 3 variables:
+\describe{
+  \item{x}{dose [log g/ml]}
+  \item{n}{number of animals}
+  \item{y}{number of deaths}
+}}
 \usage{
 bioassay
 }
 \description{
-bioassay data set
+Bioassay data set. Taken from Table 3.1
+in the BDA book
 }
 \keyword{datasets}

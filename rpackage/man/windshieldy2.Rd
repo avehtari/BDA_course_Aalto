@@ -9,6 +9,7 @@
 windshieldy2
 }
 \description{
-windshieldy2 data set
+windshieldy2 data set. The data represents a sample of
+windshields whose hardness has been measured.
 }
 \keyword{datasets}
