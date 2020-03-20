@@ -7,13 +7,19 @@
 dmvnorm(x, mean, sigma, log = FALSE)
 }
 \arguments{
-\item{x}{vector or matrix of values for which the density is computed. If \code{x} is a matrix, each row is taken to be a single draw.}
+\item{x}{vector or matrix of values for which the density is computed.
+If \code{x} is a vector, it represents a single draw.
+If \code{x} is a matrix, each row is taken to be a single draw.}
 
 \item{mean}{mean vector}
 
 \item{sigma}{covariance matrix}
 
-\item{log}{logical indicating whether to return on the log scale or not. False by default.}
+\item{log}{logical indicating whether to return on the log scale or not.
+False by default.}
+}
+\value{
+Densities of the draws x.
 }
 \description{
 Computes the density of a multivariate normal distribution
