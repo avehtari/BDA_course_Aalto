@@ -80,7 +80,7 @@ options(continue="  ", prompt="> ")
 
 <<echo=TRUE,eval=FALSE>>=
 library(markmyassignment)
-exercise_path <- 
+exercise_path <-
   "https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/tests/ex2.yml"
 set_assignment(exercise_path)
 # To check your code/functions, just run
@@ -102,23 +102,25 @@ can also be accessed from the {\tt aaltobda} R package as follows:
 <<echo=TRUE,eval=TRUE>>=
 library(aaltobda)
 data("algae")
-head(algae)
+# the data is now stored in the variable 'algae'
 @
 
-% In the year 2008 blue-green algae was observed at 44 sites.
-Let $\pi$ be the probability of a monitoring site having detectable
-blue-green algae levels.
-
-Use a binomial model for observations and a $\Beta(2,10)$ prior
-for $\pi$ in Bayesian inference. 
-Here it is not necessary to derive the posterior distribution as it has already been done in the book.
-Also, it is not necessary to write out the distributions; it is sufficient to use label-parameter format, e.g.\ $\Beta(\cdot,\cdot)$. Although recommended, any plotting is not required in this exercise.
-
-As a test case, we provide some results for the following data. It is also possible to check the functions below with \texttt{markmyassignment}. \textbf{Note!} This is \emph{only} a test case, you need to change to the full data {\tt algae} when reporting your results.
-
+So that you can test the correctness of your code implementations, we provide
+some results for the following \textbf{test data}. It is also possible to check the functions you need to implement with \texttt{markmyassignment}.
 <<echo=TRUE>>=
 algae_test <- c(0, 1, 1, 0, 0, 0)
 @
+\textbf{Note!} This data is \textbf{only for the tests}, you need to change to the full data {\tt algae} when reporting your results.
+
+% In the year 2008 blue-green algae was observed at 44 sites.
+Let $\pi$ be the probability of a monitoring site having detectable
+blue-green algae levels and $y$ the observations in \texttt{algae}.
+Use a binomial likelihood for the observations $y$ and a $\Beta(2,10)$ prior
+for $\pi$ to formulate a Bayesian model.
+Here it is not necessary to derive the posterior distribution for $\pi$ as it has already been done in the book.
+Also, it is not necessary to write out the distributions; it is sufficient to use label-parameter format, e.g.\ $\Beta(\cdot,\cdot)$.
+
+
 
 % See exercises/solution folder in teacher repo
 <<echo=FALSE>>=
@@ -127,11 +129,13 @@ beta_interval <- function(prior_alpha, prior_beta, data, prob) c(0.0846451, 0.39
 beta_low <- function(prior_alpha, prior_beta, data, pi_0) 0.4511238
 @
 
-In the report, formulate (1) model likelihood
-$p(y|\pi)$, (2) the prior $p(\pi)$, and (3) the resulting posterior $p(\pi|y)$.
+Your task is to formulate a Bayesian model and answer questions based on it:
 
-Use your model to answer the following questions:
 \begin{enumerate}[a)]
+\item formulate (1) model likelihood
+$p(y|\pi)$, (2) the prior $p(\pi)$, and (3) the resulting posterior $p(\pi|y)$.
+Report the posterior in the format $\Beta(\cdot,\cdot)$, where you replace
+$\cdot$'s with the correct numerical values.
 \item What can you say about the value of the unknown $\pi$ according
   to the observations and your prior knowledge? Summarize your results
   with a point estimate (i.e. $E(\pi|y)$) and a 90\% posterior interval. \textbf{Note!} Posterior intervals are also called credible intervals and are different from confidence intervals.
@@ -139,6 +143,7 @@ Use your model to answer the following questions:
 beta_point_est(prior_alpha = 2, prior_beta = 10, data = algae_test)
 beta_interval(prior_alpha = 2, prior_beta = 10, data = algae_test, prob = 0.9)
 @
+\textbf{Note!} Report the values using the data \texttt{algae}, not \texttt{algae\_test}.
 \item What is the probability that the proportion of monitoring sites with detectable algae levels $\pi$ is smaller than $\pi_0=0.2$ that is known from historical records?
 <<eval=TRUE, echo=TRUE>>=
 beta_low(prior_alpha = 2, prior_beta = 10, data = algae_test, pi_0 = 0.2)
