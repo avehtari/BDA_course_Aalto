@@ -53,7 +53,7 @@ ptnew <- function(q, df, mean = 0, scale = 1,
 #' @rdname StudentT
 #' @export
 qtnew <-  function(p, df, mean = 0, scale = 1) {
-  checkmate::assertNumeric(p)
+  checkmate::assertNumeric(p,lower = 0, upper = 1)
   checkmate::assertNumber(df, lower = 1e-6)
   checkmate::assertNumber(mean)
   checkmate::assertNumber(scale,lower = 1e-6)
@@ -64,7 +64,7 @@ qtnew <-  function(p, df, mean = 0, scale = 1) {
 #' @rdname StudentT
 #' @export
 rtnew <- function(n, df, mean = 0, scale = 1) {
-  checkmate::assertInt(n)
+  checkmate::assertCount(n)
   checkmate::assertNumber(df, lower = 1e-6)
   checkmate::assertNumber(mean)
   checkmate::assertNumber(scale,lower = 1e-6)
