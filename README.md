@@ -38,7 +38,7 @@ exercises and project work.
 Bayesian Data Analysis, 3rd ed, by by Andrew Gelman, John Carlin, Hal
 Stern, David Dunson, Aki Vehtari, and Donald Rubin. [Home page for the
 book](http://www.stat.columbia.edu/~gelman/book/). [Errata for the
-book](http://www.stat.columbia.edu/~gelman/book/errata_bda3.txt).
+book](http://www.stat.columbia.edu/~gelman/book/errata_bda3.txt). [Electronic edition for non-commercial purposes only](https://users.aalto.fi/~ave/BDA3.pdf).
 
 - Background (Ch 1)
 - Single-parameter models (Ch 2)
