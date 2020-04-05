@@ -2,6 +2,15 @@
 
 This repository has course material for Bayesian Data Analysis course at Aalto (CS-E5710). Aalto students should check also [MyCourses announcements](https://mycourses.aalto.fi/mod/forum/view.php?id=448327).
 
+The course material in the repo can be used in other courses. Text and videos licensed under CC-BY-NC 4.0. Code licensed under BSD-3.
+
+[The electronic version of the course book
+Bayesian Data Analysis, 3rd ed, by by Andrew Gelman, John Carlin, Hal
+Stern, David Dunson, Aki Vehtari, and Donald Rubin](https://users.aalto.fi/~ave/BDA3.pdf) is available for non-commercial purposes. Hard copies are available from [the publisher](https://www.crcpress.com/Bayesian-Data-Analysis/Gelman-Carlin-Stern-Dunson-Vehtari-Rubin/p/book/9781439840955) and many book stores.
+See also [home page for the
+book](http://www.stat.columbia.edu/~gelman/book/), [errata for the
+book](http://www.stat.columbia.edu/~gelman/book/errata_bda3.txt), and [chapter_notes](chapter_notes).
+
 The material will be updated during the course. Exercise instructions and slides will be updated at latest on Monday of the corresponding week. The best way to stay updated is to clone the repo and pull before checking new material. If you don't want to learn git and can't find the Download ZIP link, click [here](https://github.com/avehtari/BDA_course_Aalto/archive/master.zip).
 
 ## Prerequisites
@@ -27,12 +36,6 @@ If you find BDA3 too difficult to start with, I recommend
  - Richard McElreath's [Statistical Rethinking](https://xcelab.net/rm/statistical-rethinking/) book is easier and the latest videos of [Statistical Rethinking: A Bayesian Course Using R and Stan](https://github.com/rmcelreath/statrethinking_winter2019) are highly recommended even if you are following BDA3.
  - Michael Betancourt has a different point of view in his [introduction material](https://betanalpha.github.io/writing/), and many have found these also enlightening. Furthermore, his [Hamiltonian Monte Carlo videos](https://betanalpha.github.io/speaking/) are highly recommended if you are taking this course.
 
-## Assessment
-
-[Exercises](EXERCISES.md) (67\%) and a [project work](project_work)
-(33\%). Minimum of 50\% of points must be obtained from both the
-exercises and project work.
-
 ## Course contents following BDA3
 
 Bayesian Data Analysis, 3rd ed, by by Andrew Gelman, John Carlin, Hal
@@ -40,20 +43,20 @@ Stern, David Dunson, Aki Vehtari, and Donald Rubin. [Home page for the
 book](http://www.stat.columbia.edu/~gelman/book/). [Errata for the
 book](http://www.stat.columbia.edu/~gelman/book/errata_bda3.txt). [Electronic edition for non-commercial purposes only](https://users.aalto.fi/~ave/BDA3.pdf).
 
-- Background (Ch 1)
-- Single-parameter models (Ch 2)
-- Multiparameter models (Ch 3)
-- Computational methods (Ch 10)
-- Markov chain Monte Carlo (Ch 11--12)
-- Extra material for Stan and probabilistic programming (see below)
-- Hierarchical models (Ch 5)
-- Model checking (Ch 6)
+- Background (Ch 1, Lecture 1)
+- Single-parameter models (Ch 2, Lecture 2)
+- Multiparameter models (Ch 3, Lecture 3)
+- Computational methods (Ch 10 , Lecture 4)
+- Markov chain Monte Carlo (Chs 11-12, Lectures 5-6)
+- Extra material for Stan and probabilistic programming (see below, Lecture 6)
+- Hierarchical models (Ch 5, Lecture 7)
+- Model checking (Ch 6, Lectures 8-9)
   + [Visualization in Bayesian workflow](https://doi.org/10.1111/rssa.12378)
 - Evaluating and comparing models (Ch 7)
   + [Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC](http://link.springer.com/article/10.1007/s11222-016-9696-4)
   + [Videos and case studies](https://avehtari.github.io/modelselection/)
-- Decision analysis (Ch 9)
-- Large sample properties and Laplace approximation (Ch 4)
+- Decision analysis (Ch 9, Lecture 10)
+- Large sample properties and Laplace approximation (Ch 4, Lecture 11-12)
 - In addition you learn workflow for Bayesian data analysis
 
 ## How to study
@@ -75,8 +78,6 @@ Recommended way to go through the material is
   - including code for reproducing some of the figures
 - [Chapter notes](chapter_notes)
   - including reading instructions highlighting most important parts and terms
-
-Text licensed under CC-BY-NC 4.0. Code licensed under BSD-3.
 
 ## Videos
 
@@ -117,9 +118,15 @@ We strongly recommend using R in the course as there are more packages for Stan 
 - [R demos](https://github.com/avehtari/BDA_R_demos)
 - [Python demos](https://github.com/avehtari/BDA_py_demos)
 
+## Assessment
+
+[Exercises](EXERCISES.md) (67\%) and a [project work](project_work)
+(33\%). Minimum of 50\% of points must be obtained from both the
+exercises and project work.
+
 ## Self study exercises
 
-Good self study exercises for this course are listed below. Most of these have also [model solutions vailable](http://www.stat.columbia.edu/~gelman/book/solutions3.pdf).
+Great self study exercises for this course are listed below. Most of these have also [model solutions vailable](http://www.stat.columbia.edu/~gelman/book/solutions3.pdf).
 
 - 1.1-1.4, 1.6-1.8 (model solutions for 1.1-1.6)
 - 2.1-2.5, 2.8, 2.9, 2.14, 2.17, 2.22 (model solutions for 2.1-2.5, 2.7-2.13, 2.16, 2.17, 2.20, and 2.14 is in slides)
