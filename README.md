@@ -55,6 +55,7 @@ book](http://www.stat.columbia.edu/~gelman/book/errata_bda3.txt). [Electronic ed
 - Evaluating and comparing models (Ch 7)
   + [Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC](http://link.springer.com/article/10.1007/s11222-016-9696-4)
   + [Videos and case studies](https://avehtari.github.io/modelselection/)
+  + [Cross-validation FAQ](https://avehtari.github.io/modelselection/CV-FAQ.html)
 - Decision analysis (Ch 9, Lecture 10)
 - Large sample properties and Laplace approximation (Ch 4, Lecture 11-12)
 - In addition you learn workflow for Bayesian data analysis
@@ -152,6 +153,8 @@ Great self study exercises for this course are listed below. Most of these have 
 - [Dicing with the unknown](https://doi.org/10.1111/j.1740-9713.2004.00050.x)
 - [Logic, Probability, and Bayesian Inference](https://github.com/betanalpha/stan_intro/blob/master/stan_intro.pdf) by Michael Betancourt
 - [Origin of word Bayesian](http://jeff560.tripod.com/b.html)
+- [Model selection](https://avehtari.github.io/modelselection/)
+- [Cross-validation FAQ](https://avehtari.github.io/modelselection/CV-FAQ.html)
 
 
 ## Finnish terms
