@@ -7,7 +7,7 @@ test_that("beta_low()", {
   #-----------------------------------------------------------------------------------
   expect_true(exists("beta_low"),
               info = "Error: beta_low() is missing")
-  checkmate::expect_function(beta_low, args = c("prior_alpha", "prior_beta", "data", "prob"), 
+  checkmate::expect_function(beta_low, args = c("prior_alpha", "prior_beta", "data", "pi_0"), 
                              info = "Incorrect function arguments.")
   
   test <- c(0, 1, 1, 0, 1, 1)

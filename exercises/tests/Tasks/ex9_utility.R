@@ -8,7 +8,7 @@ test_that("utility()", {
   #-----------------------------------------------------------------------------------
   expect_true(exists("utility"),
               info = "Error: utility() is missing")
-  checkmate::expect_function(density_ratio, args = c("draws"), 
+  checkmate::expect_function(utility, args = c("draws"), 
                              info = "Incorrect function arguments.")
   
   expect_equivalent(utility(draws = c(123.80, 85.23, 70.16, 80.57, 84.91)),

@@ -7,7 +7,7 @@ test_that("beta_point_est()", {
   #-----------------------------------------------------------------------------------
   expect_true(exists("beta_point_est"),
               info = "Error: beta_point_est() is missing")
-  checkmate::expect_function(beta_point_est, args = c("prior_alpha", "prior_beta", "data", "prob"), 
+  checkmate::expect_function(beta_point_est, args = c("prior_alpha", "prior_beta", "data"), 
                              info = "Incorrect function arguments.")
   
   test <- c(0, 1, 1, 0, 1, 1)

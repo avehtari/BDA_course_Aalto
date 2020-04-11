@@ -8,7 +8,7 @@ test_that("p_red()", {
   #-----------------------------------------------------------------------------------
   expect_true(exists("p_red"),
               info = "Error: p_red() is missing")
-  checkmate::expect_function(p_red, args = c("fraternal_prob", "identical_prob"), 
+  checkmate::expect_function(p_red, args = c("boxes"), 
                              info = "Incorrect function arguments.")
   
   boxes <- matrix(c(2,2,1,5,5,1), ncol = 2, 

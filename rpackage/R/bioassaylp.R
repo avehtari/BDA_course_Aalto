@@ -9,8 +9,8 @@ bioassaylp <- function(alpha, beta, x, y, n) {
   checkmate::assertNumber(alpha)
   checkmate::assertNumber(beta)
   checkmate::assertNumeric(x, len = 4)
-  checkmate::assertInteger(y, len = 4, lower = 0)
-  checkmate::assertInteger(n, len = 4, lower = 1)
+  checkmate::assertIntegerish(y, len = 4, lower = 0)
+  checkmate::assertIntegerish(n, len = 4, lower = 1)
 
   t <- alpha + outer(beta,x)
   et <- exp(t)
