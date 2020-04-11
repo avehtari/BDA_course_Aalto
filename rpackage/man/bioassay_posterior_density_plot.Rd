@@ -4,8 +4,14 @@
 \alias{bioassay_posterior_density_plot}
 \title{Plot the posterior density in a grid using the implemented function p_log_posterior}
 \usage{
-bioassay_posterior_density_plot(alpha_limits = c(0, 1),
-  beta_limits = c(0, 10), x, y, n, p_log_posterior)
+bioassay_posterior_density_plot(
+  alpha_limits = c(0, 1),
+  beta_limits = c(0, 10),
+  x,
+  y,
+  n,
+  p_log_posterior
+)
 }
 \arguments{
 \item{alpha_limits}{length-2 vector representing the min and max values of the intercept parameter in the dose-response model}

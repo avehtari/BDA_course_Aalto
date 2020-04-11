@@ -4,11 +4,16 @@
 \name{algae}
 \alias{algae}
 \title{algae}
-\format{A vector with 274 elements}
+\format{A vector with 274 elements:
+\describe{
+  \item{1}{Algae present}
+  \item{0}{No algae present}
+}}
 \usage{
 algae
 }
 \description{
-algae data set
+Algae data set. The data contains the status of algae
+in 274 measurement sites in Finnish lakes and rivers.
 }
 \keyword{datasets}

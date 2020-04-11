@@ -2,6 +2,15 @@
 
 This repository has course material for Bayesian Data Analysis course at Aalto (CS-E5710). Aalto students should check also [MyCourses announcements](https://mycourses.aalto.fi/mod/forum/view.php?id=448327).
 
+The course material in the repo can be used in other courses. Text and videos licensed under CC-BY-NC 4.0. Code licensed under BSD-3.
+
+[The electronic version of the course book
+Bayesian Data Analysis, 3rd ed, by by Andrew Gelman, John Carlin, Hal
+Stern, David Dunson, Aki Vehtari, and Donald Rubin](https://users.aalto.fi/~ave/BDA3.pdf) is available for non-commercial purposes. Hard copies are available from [the publisher](https://www.crcpress.com/Bayesian-Data-Analysis/Gelman-Carlin-Stern-Dunson-Vehtari-Rubin/p/book/9781439840955) and many book stores.
+See also [home page for the
+book](http://www.stat.columbia.edu/~gelman/book/), [errata for the
+book](http://www.stat.columbia.edu/~gelman/book/errata_bda3.txt), and [chapter_notes](chapter_notes).
+
 The material will be updated during the course. Exercise instructions and slides will be updated at latest on Monday of the corresponding week. The best way to stay updated is to clone the repo and pull before checking new material. If you don't want to learn git and can't find the Download ZIP link, click [here](https://github.com/avehtari/BDA_course_Aalto/archive/master.zip).
 
 ## Prerequisites
@@ -18,38 +27,37 @@ The material will be updated during the course. Exercise instructions and slides
   + see e.g. [BDA_R_demos](https://github.com/avehtari/BDA_R_demos)
   + see e.g. [BDA_py_demos](https://github.com/avehtari/BDA_py_demos)
 
+This course has been designed so that there is strong emphasis in
+computational aspects of Bayesian data analysis and using the latest
+computational tools.
+
 If you find BDA3 too difficult to start with, I recommend
  - For background prerequisites, see, e.g., chapters 2, 4 and 5 in [Kruschke, "Doing Bayesian Data Analysis"](https://sites.google.com/site/doingbayesiandataanalysis/). Some of my students have found this useful.
  - Richard McElreath's [Statistical Rethinking](https://xcelab.net/rm/statistical-rethinking/) book is easier and the latest videos of [Statistical Rethinking: A Bayesian Course Using R and Stan](https://github.com/rmcelreath/statrethinking_winter2019) are highly recommended even if you are following BDA3.
  - Michael Betancourt has a different point of view in his [introduction material](https://betanalpha.github.io/writing/), and many have found these also enlightening. Furthermore, his [Hamiltonian Monte Carlo videos](https://betanalpha.github.io/speaking/) are highly recommended if you are taking this course.
-
-## Assessment
-
-[Exercises](EXERCISES.md) (67\%) and a [project work](project_work)
-(33\%). Minimum of 50\% of points must be obtained from both the
-exercises and project work.
 
 ## Course contents following BDA3
 
 Bayesian Data Analysis, 3rd ed, by by Andrew Gelman, John Carlin, Hal
 Stern, David Dunson, Aki Vehtari, and Donald Rubin. [Home page for the
 book](http://www.stat.columbia.edu/~gelman/book/). [Errata for the
-book](http://www.stat.columbia.edu/~gelman/book/errata_bda3.txt).
+book](http://www.stat.columbia.edu/~gelman/book/errata_bda3.txt). [Electronic edition for non-commercial purposes only](https://users.aalto.fi/~ave/BDA3.pdf).
 
-- Background (Ch 1)
-- Single-parameter models (Ch 2)
-- Multiparameter models (Ch 3)
-- Computational methods (Ch 10)
-- Markov chain Monte Carlo (Ch 11--12)
-- Extra material for Stan and probabilistic programming (see below)
-- Hierarchical models (Ch 5)
-- Model checking (Ch 6)
+- Background (Ch 1, Lecture 1)
+- Single-parameter models (Ch 2, Lecture 2)
+- Multiparameter models (Ch 3, Lecture 3)
+- Computational methods (Ch 10 , Lecture 4)
+- Markov chain Monte Carlo (Chs 11-12, Lectures 5-6)
+- Extra material for Stan and probabilistic programming (see below, Lecture 6)
+- Hierarchical models (Ch 5, Lecture 7)
+- Model checking (Ch 6, Lectures 8-9)
   + [Visualization in Bayesian workflow](https://doi.org/10.1111/rssa.12378)
 - Evaluating and comparing models (Ch 7)
   + [Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC](http://link.springer.com/article/10.1007/s11222-016-9696-4)
   + [Videos and case studies](https://avehtari.github.io/modelselection/)
-- Decision analysis (Ch 9)
-- Large sample properties and Laplace approximation (Ch 4)
+  + [Cross-validation FAQ](https://avehtari.github.io/modelselection/CV-FAQ.html)
+- Decision analysis (Ch 9, Lecture 10)
+- Large sample properties and Laplace approximation (Ch 4, Lecture 11-12)
 - In addition you learn workflow for Bayesian data analysis
 
 ## How to study
@@ -72,11 +80,13 @@ Recommended way to go through the material is
 - [Chapter notes](chapter_notes)
   - including reading instructions highlighting most important parts and terms
 
-Text licensed under CC-BY-NC 4.0. Code licensed under BSD-3.
-
 ## Videos
 
-Shorter video clips on selected topics are available in [a Panopto folder](https://aalto.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx#folderID=%22f0ec3a25-9e23-4935-873b-a9f401646812%22).
+The following video motivates why computational probabilistic methods and probabilistic programming are important part of modern Bayesian data analysis.
+
+- [Computational probabilistic modeling in 15mins](https://www.youtube.com/watch?v=ukE5aqdoLZI)
+
+Short video clips on selected introductory topics are available in [a Panopto folder](https://aalto.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx#folderID=%22f0ec3a25-9e23-4935-873b-a9f401646812%22) and listed below.
 
 - [1.1 Introduction to uncertainty and modelling](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d841f429-9c3d-4d24-8228-a9f400efda7b)
 - [1.2 Introduction to the course contents](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=13fc7889-cfd1-4d99-996c-a9f400f6e5a2)
@@ -84,32 +94,40 @@ Shorter video clips on selected topics are available in [a Panopto folder](https
 - [2.2 Predictive distribution and benefit of integration](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=75b9f18f-e379-4557-a5fa-a9f500f11b40)
 - [2.3 Priors and prior information](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=099659a5-f707-473d-8b03-a9f500f39eb5)
 
-2019 fall lecture videos will appear weekly to [a Panopto folder](https://aalto.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx#folderID=%22f0ec3a25-9e23-4935-873b-a9f401646812%22).
+2019 fall lecture videos are in [a Panopto folder](https://aalto.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx#folderID=%22f0ec3a25-9e23-4935-873b-a9f401646812%22) and listed below.
 
- - [Lecture 2.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=9c271082-5a8c-4b66-b6c2-aacc00fc683f) and [Lecture 2.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=70655a8a-0eb4-4ddd-9f52-aacc00fc67a2) on basics of Bayesian inference, observation model, likelihood, posterior and binomial model, predictive distribution and benefit of integration, priors and prior information, and one parameter normal model.
- - [Lecture 3](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=ab958b4b-e2c4-4534-8305-aad100ba191f) on multiparameter models, joint, marginal and conditional distribution, normal model, bioassay example, grid sampling and grid evaluation.
- - [Lecture 4.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=8a3c7bbc-e2b8-4c16-97b2-aad800ba7927) on numerical issues, Monte Carlo, how many simulation draws are needed, how many digits to report, and [Lecture 4.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=44446861-eaa2-41b5-bf33-aad800caf18a) on direct simulation, curse of dimensionality, rejection sampling, and importance sampling.
- - [Lecture 5.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=098dfdb4-f3b8-46aa-b988-aadf00bd3177) on Markov chain Monte Carlo, Gibbs sampling Metropolis algorithm, and [Lecture 5.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=9f657178-d8cf-4cb8-af62-aadf00cd9423) on warm-up, convergence diagnostics, R-hat, and effective sample size.
- - [Lecture 6.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=1744f6a0-84d3-4218-8a86-aae600ba7e84) on HMC, NUTS, dynamic HMC and HMC specific convergence diagnostics, and [Lecture 6.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=e60ba1a9-f752-4b0a-88c6-aae600caa61a) on probabilistic programming and Stan.
- - [Lecture 7.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=79dee6de-afa9-446f-b533-aaf400cabf2b) on hierarchical models, and [Lecture 7.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c822561c-f95d-44fc-a1d0-aaf400d9fae3) on exchangeability.
+ - [Lecture 2.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=9c271082-5a8c-4b66-b6c2-aacc00fc683f) and [Lecture 2.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=70655a8a-0eb4-4ddd-9f52-aacc00fc67a2) on basics of Bayesian inference, observation model, likelihood, posterior and binomial model, predictive distribution and benefit of integration, priors and prior information, and one parameter normal model (BDA3 Ch 1+2).
+ - [Lecture 3](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=ab958b4b-e2c4-4534-8305-aad100ba191f) on multiparameter models, joint, marginal and conditional distribution, normal model, bioassay example, grid sampling and grid evaluation (BDA3 Ch 3).
+ - [Lecture 4.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=8a3c7bbc-e2b8-4c16-97b2-aad800ba7927) on numerical issues, Monte Carlo, how many simulation draws are needed, how many digits to report, and [Lecture 4.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=44446861-eaa2-41b5-bf33-aad800caf18a) on direct simulation, curse of dimensionality, rejection sampling, and importance sampling (BDA3 Ch 10).
+ - [Lecture 5.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=098dfdb4-f3b8-46aa-b988-aadf00bd3177) on Markov chain Monte Carlo, Gibbs sampling Metropolis algorithm, and [Lecture 5.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=9f657178-d8cf-4cb8-af62-aadf00cd9423) on warm-up, convergence diagnostics, R-hat, and effective sample size (BDA3 Ch 11).
+ - [Lecture 6.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=1744f6a0-84d3-4218-8a86-aae600ba7e84) on HMC, NUTS, dynamic HMC and HMC specific convergence diagnostics, and [Lecture 6.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=e60ba1a9-f752-4b0a-88c6-aae600caa61a) on probabilistic programming and Stan (BDA3 Ch 12 + extra material).
+ - [Lecture 7.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=79dee6de-afa9-446f-b533-aaf400cabf2b) on hierarchical models, and [Lecture 7.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c822561c-f95d-44fc-a1d0-aaf400d9fae3) on exchangeability (BDA3 Ch 5).
  - [Project work info](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=2820df34-d958-4c6c-93f3-aaf400dece37)
- - [Lecture 8.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=7047e366-0df6-453c-867f-aafb00ca2d78) on model checking, and [Lecture 8.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d7849131-0afd-4ae6-ad64-aafb00da36f4) on cross-validation part 1.
- - [Lecture 9.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=50b2e73f-af0a-4715-b627-ab0200ca7bbd) PSIS-LOO and K-fold-CV, [Lecture 9.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=b0299d53-9454-4e33-9086-ab0200db14eeb) model comparison and selection, and [Lecture 9.3](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=4b6eeb48-ae64-4860-a8c3-ab0200e40ad8) extra lecture on variable selection with projection predictive variable selection.
- - [Lecture 10.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=82943720-de0f-4195-8639-ab0900ca2085) on decision analysis
+ - [Lecture 8.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=7047e366-0df6-453c-867f-aafb00ca2d78) on model checking, and [Lecture 8.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d7849131-0afd-4ae6-ad64-aafb00da36f4) on cross-validation part 1 (BDA3 Ch 6 + extra material).
+ - [Lecture 9.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=50b2e73f-af0a-4715-b627-ab0200ca7bbd) PSIS-LOO and K-fold-CV, [Lecture 9.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=b0299d53-9454-4e33-9086-ab0200db14eeb) model comparison and selection, and [Lecture 9.3](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=4b6eeb48-ae64-4860-a8c3-ab0200e40ad8) extra lecture on variable selection with projection predictive variable selection (extra material).
+ - [Lecture 10.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=82943720-de0f-4195-8639-ab0900ca2085) on decision analysis (BDA3 Ch 9).
  - [Project presentation info](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=cad1e8f8-e1f0-408a-ad9d-ab0900db3977)
+ - [Lecture 11.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=e22fedc7-9fd3-4d1e-8318-ab1000ca45a4) on normal approximation (Laplace approximation) and [Lecture 11.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=a8e38a95-a944-4f3d-bf95-ab1000dbdf73) on large sample theory and counter examples (BDA3 Ch 4).
+ - [Lecture 12.1](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=e998b5dd-bf8e-42da-9f7c-ab1700ca2702) on frequency evaluation, hypothesis testing and variable selection and [Lecture 12.2](https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c43c862a-a5a4-45da-9b27-ab1700e12012) overview of modeling data collection (Ch8), linear models (Ch. 14-18), lasso, horseshoe and Gaussian processes (Ch 21).
 
 ## R and Python
 
-We strongly recommend using R in the course as there are more packages for Stan and statistical analysis in R. If you are already fluent in Python, but not in R, then using Python may be easier, but it can still be more useful to learn also R. Unless you are already experienced and have figured out your preferred way to work with R, we recommend installing [RStudio Desktop](https://www.rstudio.com/products/rstudio/download/). TAs will provide brief introduction to use of RStudio during the first week TA sessions. See [FAQ](FAQ.md) for frequently asked questions about R problems in this course.
+We strongly recommend using R in the course as there are more packages for Stan and statistical analysis in R. If you are already fluent in Python, but not in R, then using Python may be easier, but it can still be more useful to learn also R. Unless you are already experienced and have figured out your preferred way to work with R, we recommend installing [RStudio Desktop](https://www.rstudio.com/products/rstudio/download/). TAs will provide brief introduction to use of RStudio during the first week TA sessions. See [FAQ](FAQ.md) for frequently asked questions about R problems in this course. The demo codes linked below provide useful starting points for all the exercises. If you are interested in learning more about making nice figures in R, I recommend [Kieran Healy's "Data Visualization - A practical introduction"](https://socviz.co/).
 
 ## Demos
 
 - [R demos](https://github.com/avehtari/BDA_R_demos)
 - [Python demos](https://github.com/avehtari/BDA_py_demos)
 
+## Assessment
+
+[Exercises](EXERCISES.md) (67\%) and a [project work](project_work)
+(33\%). Minimum of 50\% of points must be obtained from both the
+exercises and project work.
+
 ## Self study exercises
 
-Good self study exercises for this course are listed below. Most of these have also [model solutions vailable](http://www.stat.columbia.edu/~gelman/book/solutions3.pdf).
+Great self study exercises for this course are listed below. Most of these have also [model solutions vailable](http://www.stat.columbia.edu/~gelman/book/solutions3.pdf).
 
 - 1.1-1.4, 1.6-1.8 (model solutions for 1.1-1.6)
 - 2.1-2.5, 2.8, 2.9, 2.14, 2.17, 2.22 (model solutions for 2.1-2.5, 2.7-2.13, 2.16, 2.17, 2.20, and 2.14 is in slides)
@@ -135,6 +153,8 @@ Good self study exercises for this course are listed below. Most of these have a
 - [Dicing with the unknown](https://doi.org/10.1111/j.1740-9713.2004.00050.x)
 - [Logic, Probability, and Bayesian Inference](https://github.com/betanalpha/stan_intro/blob/master/stan_intro.pdf) by Michael Betancourt
 - [Origin of word Bayesian](http://jeff560.tripod.com/b.html)
+- [Model selection](https://avehtari.github.io/modelselection/)
+- [Cross-validation FAQ](https://avehtari.github.io/modelselection/CV-FAQ.html)
 
 
 ## Finnish terms

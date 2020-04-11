@@ -1,0 +1,138 @@
+\documentclass[a4paper,11pt,english]{article}
+
+\usepackage{babel}
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{times}
+\usepackage{amsmath}
+\usepackage{microtype}
+\usepackage{url}
+\urlstyle{same}
+
+\usepackage[bookmarks=false]{hyperref}
+\hypersetup{%
+  bookmarksopen=true,
+  bookmarksnumbered=true,
+  pdftitle={Bayesian data analysis},
+  pdfsubject={Comments},
+  pdfauthor={Aki Vehtari},
+  pdfkeywords={Bayesian probability theory, Bayesian inference, Bayesian data analysis},
+  pdfstartview={FitH -32768}
+}
+
+
+% if not draft, smaller printable area makes the paper more readable
+\topmargin -4mm
+\oddsidemargin 0mm
+\textheight 225mm
+\textwidth 160mm
+
+%\parskip=\baselineskip
+\def\eff{\mathrm{rep}}
+
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\var}{var}
+\DeclareMathOperator{\Sd}{Sd}
+\DeclareMathOperator{\sd}{sd}
+\DeclareMathOperator{\Bin}{Bin}
+\DeclareMathOperator{\Beta}{Beta}
+\DeclareMathOperator{\Invchi2}{Inv-\chi^2}
+\DeclareMathOperator{\NInvchi2}{N-Inv-\chi^2}
+\DeclareMathOperator{\logit}{logit}
+\DeclareMathOperator{\N}{N}
+\DeclareMathOperator{\U}{U}
+\DeclareMathOperator{\tr}{tr}
+%\DeclareMathOperator{\Pr}{Pr}
+\DeclareMathOperator{\trace}{trace}
+\DeclareMathOperator{\rep}{\mathrm{rep}}
+
+\pagestyle{empty}
+
+\begin{document}
+\thispagestyle{empty}
+
+\section*{Bayesian data analysis -- reading instructions 13} 
+\smallskip
+{\bf Aki Vehtari}
+\smallskip
+
+\subsection*{Chapter 13: Modal and distributional approximations}
+
+Chapter 4 presented normal distribution approximation at the mode (aka
+Laplace approximation). Chapter 13 discusses more about distributional
+approximations.
+
+Outline of the chapter 13
+\begin{list}{$\bullet$}{\parsep=0pt\itemsep=2pt}
+\item[13.1] Finding posterior modes
+  \begin{itemize}
+  \item[-] Newton's method is very fast if the distribution is close to
+    normal and the computation of the second derivatives is fast
+  \item[-] Stan uses limited-memory Broyden-Fletcher-Goldfarb-Shannon
+    (L-BFGS) which is a quasi-Newton method which needs only the first
+    derivatives (provided by Stan autodiff). L-BFGS is known for good
+    performance for wide variety of functions.
+  \end{itemize}
+\item[13.2] Boundary-avoiding priors for modal summaries
+  \begin{itemize}
+  \item[-] Although full integration is preferred, sometimes optimization
+    of some parameters may be sufficient and faster, and then
+    boundary-avoiding priors maybe useful.
+  \end{itemize}
+\item[13.3] Normal and related mixture approximations
+  \begin{itemize}
+  \item[-] Discusses how the normal approximation can be used to
+    approximate integrals of a a smooth function times the posterior.
+  \item[-] Discusses mixture and $t$ approximations.
+  \end{itemize}
+\item[13.4] Finding marginal posterior modes using EM
+  \begin{itemize}
+  \item[-] Expectation maximization is less important in the time of
+    efficient probabilistic programming frameworks, but can be
+    sometimes useful for extra efficiency.
+  \end{itemize}
+\item[13.5] Conditional and marginal posterior approximations
+  \begin{itemize}
+  \item[-] Even in the time of efficient probabilistic programming, the
+    methods discussed in this section can produce very big speedups
+    for a big set of commonly used models. The methods discussed are
+    important part of popular INLA software and are coming also to
+    Stan to speedup latent Gaussian variable models.
+  \end{itemize}
+\item[13.6] Example: hierarchical normal model
+\item[13.7] Variational inference
+  \begin{itemize}
+  \item[-] Variational inference (VI) is very popular in machine
+    learning, and this section presents it in terms of BDA. Auto-diff
+    variational inference in Stan was developed after BDA3 was
+    published. 
+  \end{itemize}
+\item[13.8] Expectation propagation
+  \begin{itemize}
+  \item[-] Practical efficient computation for expectation propagation
+    (EP) is applicable for more limited set of models than post-BDA3
+    black-box VI, but for those models EP provides better posterior
+    approximation. Variants of EP can be used for parallelization of
+    any Bayesian computation for hierarchical models.
+  \end{itemize}
+\item[13.9] Other approximations
+  \begin{itemize}
+  \item[-] Just brief mentions of INLA (uses methods discussed in 13.5),
+    CCD (deterministic adaptive quadrature approach) and ABC
+    (inference when you can only sample from the generative model).
+  \end{itemize}
+\item[13.10] Unknown normalizing factors
+  \begin{itemize}
+  \item[-] Often the normalizing factor is not needed, but it can be
+    estimated using importance, bridge or path sampling.
+  \end{itemize}
+\end{list}
+
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
