@@ -105,13 +105,11 @@ we will use a different prior distribution on the parameters $\alpha$ and $\beta
   \item[b)] Implement a function in R for computing the \textbf{logarithm} of the density of the
   prior distribution in a) for arbitrary values of $\alpha$ and $\beta$. Below is an example of how the function should be named and work if you want to check them with \texttt{markmyassignment}. 
 <<echo=FALSE>>=
-p_log_prior <- function(alpha,beta) -6.296435
+p_log_prior <- function(alpha, beta) -6.296435
 @
   
 <<echo=TRUE>>=
-alpha <- 3
-beta <- 9
-p_log_prior(alpha,beta)
+p_log_prior(alpha = 3, beta = 9)
 @  
  
 \textbf{Hint!} Use function {\tt dmvnorm} from the {\tt aaltobda} package. We use logarithms for better numerical accuracy in later questions.
@@ -119,16 +117,19 @@ p_log_prior(alpha,beta)
 \item[c)] Implement a function in R for computing the \textbf{logarithm} of the density of the posterior for arbitrary values of $\alpha$ and $\beta$ and data $x$, $y$ and $n$. Below is an example of how the function should be named and work if you want to check them with \texttt{markmyassignment}. 
  
 <<echo=FALSE>>=
-p_log_posterior <- function(alpha,beta,x,y,n) -15.78798
+p_log_posterior <- function(alpha, beta, x, y, n) -15.78798
 @
   
 <<echo=TRUE>>=
 library(aaltobda)
 data("bioassay")
-alpha <- 3
-beta <- 9
-p_log_posterior(alpha, beta, x = bioassay$x, y = bioassay$y, n = bioassay$n)
+p_log_posterior(alpha = 3, 
+                beta = 9, 
+                x = bioassay$x, 
+                y = bioassay$y, 
+                n = bioassay$n)
 @  
+
 \textbf{Hint!} Equation (3.16) in the course book. The \textbf{logarithm} of the prior density was already implemented in b). For computing the \textbf{logarithm} of the likelihood, use the {\tt bioassaylp} function from the {\tt aaltobda} package. The data can be loaded with the R command {\tt data("bioassay")}.\\
 \textbf{Hint!} Logarithm of the product of two densities is the sum of the log-densities, i.e. $\log ab = \log a + \log b$.
 
@@ -141,22 +142,20 @@ posterior_mean <- function(alpha, beta) c(0.503, 8.275)
 S_eff <- function(alpha, beta) 1.354
 @
 <<echo=TRUE>>=
-alpha <- c(1.896, -3.6,  0.374, 0.964, -3.123, -1.581)
-beta <- c(24.76, 20.04, 6.15, 18.65, 8.16, 17.4)
-log_importance_weights(alpha, beta)
-normalized_importance_weights(alpha, beta)
+a <- c(1.896, -3.6,  0.374, 0.964, -3.123, -1.581)
+b <- c(24.76, 20.04, 6.15, 18.65, 8.16, 17.4)
+log_importance_weights(alpha = a, beta = b)
+normalized_importance_weights(alpha = a, beta = b) 
 @
 \textbf{Hint!} Equation (10.3) in the course book.
 \item[f)] Sample draws of $\alpha$ and $\beta$ from the prior distribution from 1a). Implement a function for computing the posterior mean using importance sampling, and report the obtained mean.\\
 \textbf{Hint!} Use the function {\tt rmvnorm} from the {\tt aaltobda} package. Below is an example how the function would work with the example values for {\tt alpha} and {\tt beta} above. \textbf{Note!} The values below are \emph{only} a test case, you need to use correct draws for {\tt alpha} and {\tt beta} in the final report.
 <<echo=TRUE>>=
-alpha
-beta
-posterior_mean(alpha, beta)
+posterior_mean(alpha = a, beta = b)
 @
 \item[g)] Using the importance ratios, compute the effective sample size $S_{\text{eff}}$ and report it. If $S_{\text{eff}}$ is less than 1000, repeat f) with more draws. \textbf{Note!} The values below are \emph{only} a test case, you need to use correct draws for {\tt alpha} and {\tt beta} in the final report.\\
 <<echo=TRUE>>=
-S_eff(alpha, beta)
+S_eff(alpha = a, beta = b)
 @
 \textbf{Hint!} Equation (10.4) in the course book.
 \begin{itemize}
