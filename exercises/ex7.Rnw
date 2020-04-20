@@ -174,18 +174,62 @@ library(aaltobda)
 data("factory")
 @  
 
-Implement a separate, pooled and hierarchical Gaussian model described in Section 11.6 using Stan. In the pooled model, all the measurements are combined and no distinction is made between the machines. In the separate model, each machine has its model. Similarly, as in the model described in the book, use the same measurement standard deviation $\sigma$ for all the groups in the hierarchical model. In the separate model, however, use separate measurement standard deviation $\sigma_j$ for each group $j$. Use Stan's default uniform prior for all (non-hiearchical) parameters.
+Implement a separate, pooled and hierarchical Gaussian model described in Section 11.6 using Stan. In the pooled model, all the measurements are combined and no distinction is made between the machines. In the separate model, each machine has its model. Similarly, as in the model described in the book, use the same measurement standard deviation $\sigma$ for all the groups in the hierarchical model. In the separate model, however, use separate measurement standard deviation $\sigma_j$ for each group $j$. Use weakly--informative priors. See Stan's recommendations \href{https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations}{\textbf{here}} for suggestions on priors for the different parameters. For the hierachical model, use {\tt scaled\_inv\_chi\_square(4, 1)} priors for the standard deviations.
 
+As an example for the hierachical priors, consider the stan code in Listing~\ref{listing2} for the assignment, where we use {\tt cauchy(4, 1)} priors for the standard deviations.
+
+\begin{lstlisting}[
+    float,
+    caption=Example priors for the hierarchical model,
+    label=listing2,
+    basicstyle=\footnotesize\ttfamily,
+    numbers=left,
+    xleftmargin=2.7em,
+    frame=single,
+    framexleftmargin=2.2em
+]
+data {
+  int<lower=0> N;
+  int<lower=0> J;
+  vector[J] y[N];
+}
+parameters {
+  vector[J] mu;
+  real mu0;
+  real<lower=0> sigma0;
+  real<lower=0> sigma;
+}
+model {
+  mu0 ~ normal(90, 5);
+  mu ~ normal(0, sigma0);
+  sigma0 ~ cauchy(4, 1);
+  sigma ~ cauchy(4, 1);
+  for (i in 1:N)
+    for (j in 1:J)
+      y[i,j] ~ normal(mu0 + mu[j], sigma);
+}
+\end{lstlisting}
+
+Under these prior choices, the mean of the posterior for {\tt mu} looks like:
+
+<<echo=FALSE>>=
+mu <- c(-6.9663640,  6.5418345, -1.7270129,  8.9439851, -0.7354605, -2.4859669)
+@
+
+<<echo=TRUE>>=
+mu
+@
 
 
 Using each of the three models -- separate, pooled, and hierarchical -- report, comment and, if applicable, plot histogram for the following distributions:
 \begin{itemize}
-    \item [i)] the posterior distribution of the mean of the quality measurements of the sixth machine.
-    \item [ii)] the predictive distribution for another quality measurement of the sixth machine.
-    \item [iii)] the posterior distribution of the mean of the quality measurements of the seventh machine.
+    \item [i)] prior choice discussion for different weakly informative priors,
+    \item [ii)] the posterior distribution of the mean of the quality measurements of the sixth machine.
+    \item [iii)] the predictive distribution for another quality measurement of the sixth machine.
+    \item [iv)] the posterior distribution of the mean of the quality measurements of the seventh machine.
 \end{itemize}
 
-\textbf{Note!} The histograms of i) - iii) will be used as a reference for the pooled model and should be included.
+\textbf{Note!} The histograms of ii) - iv) will be used as a reference for the pooled model and should be included.
 
 \textbf{Hint!} See the example Stan-codes \href{http://avehtari.github.io/BDA_R_demos/demos_rstan/rstan_demo.html#8_comparison_of_k_groups_with_hierarchical_models}{\textbf{here}} for the comparison of $k$ groups with and without the hierarchical structure. What you need to do is change the dataset, implement the prediction for the future measurement of the sixth machine, and figure out the distribution for the mean of the quality measurements for the seventh machine in the hierarchical model.
 

@@ -120,15 +120,16 @@ Response:
 
 ### Q11 · Yes / No · 1 point
 
-Separate model: *discussion about question i)*, posterior distribution of the mean of the quality measurements of the sixth machine.
+Separate model: *discussion about question i)*, prior choice discussion.
 
 Response:
 
 *hidden responses*
 
+
 ### Q12 · Yes / No · 1 point
 
-Separate model:  *discussion about question ii)*, the predictive distribution for another quality measurement of the sixth machine.
+Separate model: *discussion about question ii)*, posterior distribution of the mean of the quality measurements of the sixth machine.
 
 Response:
 
@@ -136,7 +137,15 @@ Response:
 
 ### Q13 · Yes / No · 1 point
 
-Separate model:  *discussion about question iii)*, the posterior distribution of the mean of the quality measurements of the seventh machine.
+Separate model:  *discussion about question iii)*, the predictive distribution for another quality measurement of the sixth machine.
+
+Response:
+
+*hidden responses*
+
+### Q14 · Yes / No · 1 point
+
+Separate model:  *discussion about question iv)*, the posterior distribution of the mean of the quality measurements of the seventh machine.
 
 Response:
 
@@ -149,7 +158,7 @@ The following histograms are used as a reference in the grading of the pooled mo
 
 *<model_plot>*
 
-### Q14 · Scale · 1 point
+### Q15 · Scale · 1 point
 
 Pooled model: Is there a related Stan implementation (N.B. same implementation may be used for multiple models)?
 
@@ -159,25 +168,33 @@ Response:
 - Stan model implemented, but it seems clearly wrong or broken.
 - Seemingly valid Stan model implemented.
 
-### Q15 · Scale · 1 point
+### Q16 · Yes / No · 1 point
 
-Pooled model:  *discussion about question i)*, posterior distribution of the mean of the quality measurements of the sixth machine.
-
-Response:
-
-*hidden responses*
-
-### Q16 · Scale · 1 point
-
-Pooled model:  *discussion about question ii)*, the predictive distribution for another quality measurement of the sixth machine.
+Pooled model:  *discussion about question i)*, prior choice discussion.
 
 Response:
 
 *hidden responses*
 
-### Q17 · Yes / No · 1 point
+### Q17 · Scale · 1 point
 
-Pooled model:  *discussion about question iii)*, the posterior distribution of the mean of the quality measurements of the seventh machine.
+Pooled model:  *discussion about question ii)*, posterior distribution of the mean of the quality measurements of the sixth machine.
+
+Response:
+
+*hidden responses*
+
+### Q18 · Scale · 1 point
+
+Pooled model:  *discussion about question iii)*, the predictive distribution for another quality measurement of the sixth machine.
+
+Response:
+
+*hidden responses*
+
+### Q19 · Yes / No · 1 point
+
+Pooled model:  *discussion about question iv)*, the posterior distribution of the mean of the quality measurements of the seventh machine.
 
 Response:
 
@@ -190,7 +207,7 @@ The following histograms are used as a reference in the grading of the hierarchi
 
 *<model_plot>*
 
-### Q18 · Scale · 1 point
+### Q20 · Scale · 1 point
 
 Hierarchical model: Is there a related Stan implementation (N.B. same implementation may be used for multiple models).
 
@@ -200,25 +217,33 @@ Response:
 - Stan model implemented, but it seems clearly wrong or broken.
 - Seemingly valid Stan model implemented.
 
-### Q19 · Scale · 1 point
+### Q21 · Yes / No · 1 point
 
-Hierarchical model: *discussion about question i)*, posterior distribution of the mean of the quality measurements of the sixth machine.
-
-Response:
-
-*hidden responses*
-
-### Q20 · Scale · 1 point
-
-Hierarchical model: *discussion about question ii)*, the predictive distribution for another quality measurement of the sixth machine.
+Hierarchical model: *discussion about question i)*, prior choice discussion.
 
 Response:
 
 *hidden responses*
 
-### Q21 · Scale · 1 point
+### Q22 · Scale · 1 point
 
-Hierarchical model: *discussion about question iii)*, the posterior distribution of the mean of the quality measurements of the seventh machine.
+Hierarchical model: *discussion about question ii)*, posterior distribution of the mean of the quality measurements of the sixth machine.
+
+Response:
+
+*hidden responses*
+
+### Q23 · Scale · 1 point
+
+Hierarchical model: *discussion about question iii)*, the predictive distribution for another quality measurement of the sixth machine.
+
+Response:
+
+*hidden responses*
+
+### Q24 · Scale · 1 point
+
+Hierarchical model: *discussion about question iv)*, the posterior distribution of the mean of the quality measurements of the seventh machine.
 
 Response:
 
@@ -228,7 +253,7 @@ Response:
 
 Overall quality of the report
 
-### Q22 · Scale · 1 point
+### Q25 · Scale · 1 point
 Does the report follow the formatting instructions?
 
 - Not at all
@@ -236,6 +261,6 @@ Does the report follow the formatting instructions?
 - Mostly
 - Yes
 
-### Q23 · Text · Optional question
+### Q26 · Text · Optional question
 Justify your answers for overall quality of the report if needed
 
