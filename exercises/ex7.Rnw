@@ -93,12 +93,14 @@ Stan manual can be found at \url{http://mc-stan.org/documentation/}. From this w
 
 The provided data {\tt drowning} in the {\tt aaltobda} package contains the number of people drown per year in Finland 1980--2016.
 %
-We are going to fit a linear model with Gaussian noise to these data using time as the predictor and number of drownings as the target variable (see the related linear model example for the Kilpisjärvi-temperature data in the example Stan codes).
-We have two objective questions:
+A statistician are going to fit a linear model with Gaussian noise to these data using time as the predictor and number of drownings as the target variable (see the related linear model example for the Kilpisjärvi-temperature data in the example Stan codes).
+She has two objective questions:
 \begin{itemize}
     \item [i)] What is the trend of the number of people drown per year? We would plot the histogram of the slope of the linear model.
     \item [ii)] What is the prediction for the year 2019? We would plot the histogram of the posterior predictive distribution for the number of people drowning at $\tilde x=2019$.
 \end{itemize}
+
+Your task is to fix the stan code to be able to run this linear regression model.
 
 To access the data, use:
 
@@ -174,20 +176,93 @@ library(aaltobda)
 data("factory")
 @  
 
-Implement a separate, pooled and hierarchical Gaussian model described in Section 11.6 using Stan. In the pooled model, all the measurements are combined and no distinction is made between the machines. In the separate model, each machine has its model. Similarly, as in the model described in the book, use the same measurement standard deviation $\sigma$ for all the groups in the hierarchical model. In the separate model, however, use separate measurement standard deviation $\sigma_j$ for each group $j$. Use Stan's default uniform prior for all (non-hiearchical) parameters.
+Implement a separate, pooled and hierarchical Gaussian model described in Section 11.6 using Stan. In the pooled model, all the measurements are combined and no distinction is made between the machines. In the separate model, each machine has its own model. Similarly, as in the model described in the book, use the same measurement standard deviation $\sigma$ for all the groups in the hierarchical model. In the separate model, however, use separate measurement standard deviation $\sigma_j$ for each group $j$. You should use weakly informative priors for all your model.
 
+The provided Stan code in Listing~\ref{listing2} given on the next page is an example the separate model (but with very strange results, why?). This separate model can be summarized mathematically as:
+\begin{align*}
+    y_{ij} &\sim N(\mu_j,\sigma_j)\\
+    \mu_{j} &\sim N(0,1)\\
+    \sigma_{j} &\sim Inv-\chi^2(10)
+\end{align*}
 
+To run stan for that model, simply use:
 
-Using each of the three models -- separate, pooled, and hierarchical -- report, comment and, if applicable, plot histogram for the following distributions:
+<<eval=FALSE>>=
+data("factory")
+
+sm <- rstan::stan_model(file = "[path to stan model code]")
+
+stan_data <- list(y = factory,
+                  N = nrow(factory),
+                  J = ncol(factory))
+model <- rstan::sampling(sm, data = stan_data)
+model
+@
+
+<<eval=TRUE,echo=FALSE>>=
+cat("Inference for Stan model: 5cbfa723dd8fb382e0b647b3943db079.\n4 chains, each with iter=2000; warmup=1000; thin=1;\npost-warmup draws per chain=1000, total post-warmup draws=4000.\n")
+
+cat("              mean se_mean   sd      2.5%       25%       50%\nmu[1]       0.11    0.01  0.98   -1.81   -0.56    0.12    0.77\nmu[2]       0.10    0.01  1.00   -1.86   -0.56    0.10    0.79\n...\n")
+@
+
+\textbf{Note!} This are \emph{not} results you would expect to turn in in your report. You will need to change the separate model as well.
+
+Using each of the three models with weakly informative priors-- separate, pooled, and hierarchical -- report, comment and, if applicable, plot histogram for the following distributions:
 \begin{itemize}
     \item [i)] the posterior distribution of the mean of the quality measurements of the sixth machine.
     \item [ii)] the predictive distribution for another quality measurement of the sixth machine.
     \item [iii)] the posterior distribution of the mean of the quality measurements of the seventh machine.
 \end{itemize}
 
-\textbf{Note!} The histograms of i) - iii) will be used as a reference for the pooled model and should be included.
+The report should (at least) contain:
+\begin{itemize}
+    \item [a)] The plots used to answer question i)-iii) above.
+    \item [b)] Stan models as model code that use weakly informative priors for all your model.
+    \item [c)] Each model described with mathematical notation (as is done for the separate model above). Describe in words the difference between the three models. 
+    \item [d)] Include the posterior expectation for $\mu_1$ with a 90\% credibility interval for all three models but using a $N(0,10)$ prior for the $\mu$ paramater(s) and a Gamma$(1,1)$ prior for the $\sigma$ parameter(s). In the hiearchical model, use the $N(0,10)$ and Gamma$(1,1)$ as hyper-prior.
+\end{itemize}
 
-\textbf{Hint!} See the example Stan-codes \href{http://avehtari.github.io/BDA_R_demos/demos_rstan/rstan_demo.html#8_comparison_of_k_groups_with_hierarchical_models}{\textbf{here}} for the comparison of $k$ groups with and without the hierarchical structure. What you need to do is change the dataset, implement the prediction for the future measurement of the sixth machine, and figure out the distribution for the mean of the quality measurements for the seventh machine in the hierarchical model.
+\textbf{Hint!} See the example Stan-codes \href{http://avehtari.github.io/BDA_R_demos/demos_rstan/rstan_demo.html#8_comparison_of_k_groups_with_hierarchical_models}{\textbf{here}} for the comparison of $k$ groups with and without the hierarchical structure. 
+
+\begin{lstlisting}[
+    float,
+    caption=Stan code for a bad seperate model,
+    label=listing2,
+    basicstyle=\footnotesize\ttfamily,
+    numbers=left,
+    xleftmargin=2.7em,
+    frame=single,
+    framexleftmargin=2.2em
+]
+data {
+  int<lower=0> N;
+  int<lower=0> J;
+  vector[J] y[N];
+}
+
+parameters {
+  vector[J] mu;
+  vector<lower=0>[J] sigma;
+}
+
+model {
+  // priors
+  for (j in 1:J){
+    mu[j] ~ normal(0, 1);
+    sigma[j] ~ inv_chi_square(10);    
+  }
+
+  // likelihood
+  for (j in 1:J)
+    y[,j] ~ normal(mu[j], sigma[j]);
+}
+
+generated quantities {
+  real ypred;
+  // Compute predictive distribution for the first machine
+  ypred = normal_rng(mu[1], sigma[1]);
+}
+\end{lstlisting}
 
 
 \end{document}
