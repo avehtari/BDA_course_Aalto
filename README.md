@@ -32,8 +32,8 @@ computational aspects of Bayesian data analysis and using the latest
 computational tools.
 
 If you find BDA3 too difficult to start with, I recommend
- - For background prerequisites, see, e.g., chapters 2, 4 and 5 in [Kruschke, "Doing Bayesian Data Analysis"](https://sites.google.com/site/doingbayesiandataanalysis/). Some of my students have found this useful.
- - Richard McElreath's [Statistical Rethinking](https://xcelab.net/rm/statistical-rethinking/) book is easier and the latest videos of [Statistical Rethinking: A Bayesian Course Using R and Stan](https://github.com/rmcelreath/statrethinking_winter2019) are highly recommended even if you are following BDA3.
+ - Richard McElreath's [Statistical Rethinking, 2nd ed](https://xcelab.net/rm/statistical-rethinking/) book is easier than BDA3 and the 2nd ed is excellent. Statistical Rethinking doesn't go as deep in some details, math, algorithms and programming as BDA course. Richard's lecture videos of [Statistical Rethinking: A Bayesian Course Using R and Stan](https://github.com/rmcelreath/statrethinking_winter2019) are highly recommended even if you are following BDA3.
+ - For background prerequisites some students have found chapters 2, 4 and 5 in [Kruschke, "Doing Bayesian Data Analysis"](https://sites.google.com/site/doingbayesiandataanalysis/) useful.
  - Michael Betancourt has a different point of view in his [introduction material](https://betanalpha.github.io/writing/), and many have found these also enlightening. Furthermore, his [Hamiltonian Monte Carlo videos](https://betanalpha.github.io/speaking/) are highly recommended if you are taking this course.
 
 ## Course contents following BDA3
