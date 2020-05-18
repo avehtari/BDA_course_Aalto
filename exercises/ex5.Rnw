@@ -106,7 +106,7 @@ example of section 3.7 (BDA3) using the Metropolis algorithm. The Metropolis alg
 \end{align*}
 
 \begin{itemize}
-\item[a)] Start by implementing the density ratio function to compute $r$ in Eq. (11.1) in BDA3. Below is an example on how the function should work. You can test  the function using {\tt markmyassignment}.
+\item[a)] Start by implementing a function called \texttt{density\_ratio} to compute the density ratio function, $r$ in Eq. (11.1) in BDA3. Below is an example on how the function should work. You can test  the function using {\tt markmyassignment}.
 <<echo=FALSE>>=
 density_ratio <- function(alpha_propose, alpha_previous, beta_propose, beta_previous, x, y, n) 1.187524
 @
@@ -133,18 +133,30 @@ density_ratio(alpha_propose = 0.374, alpha_previous = 1.89,
 @  
 
 \textbf{Hint!} Compute with log-densities. Reasons are explained on page 261 (BDA3). Remember that $p_1/p_0=\exp(\log(p_1)-\log(p_0))$. For your convenience we have provided functions will evaluate the log-likelihood for given $\alpha$ and $\beta$ (see {\tt bioassaylp()} in the {\tt aaltobda} package). Notice that you still need to add the prior yourself and remember the unnormalized log posterior is simply the log-likelihood plus log-prior. For evaluating the log of the Gaussian prior you can use function {\tt dmvnorm} from package {\tt aaltobda}. It can be worthwhile to look up your implementation of {\tt p\_log\_posterior()} that you implemented in Assignment 4.
-\item[b)] Now implement the metropolis algorithm using {\tt density\_ratio()} as a function called {\tt metropolis\_bioassay()}. Be sure to define your starting points and your jumping rule (proposal distribution). Run the simulations long enough for approximate convergence. 
+
+\item[b)] Now implement a function called {\tt metropolis\_bioassay()} which implements the metropolis algorithm  using the {\tt density\_ratio()}. 
 
 \textbf{Hint!} Use a simple (normal) proposal distribution. Example proposals are $\alpha^* \sim N(\alpha_{t-1}, \sigma = 1)$ and $\beta^* \sim N(\beta_{t-1}, \sigma = 5)$. There is no need to try to find optimal proposal but test some different values for the jump scale ($\sigma$). Remember to report the one you used. Efficient proposals are dicussed in BDA3 p. 295--297 (not part of the course). In real-life a pre-run could be made with an automatic adaptive control to adapt the proposal distribution.
 \end{itemize}
 
-\item Include in the report the proposal distribution, number of chains used, the starting points (or the mechanism for generating them), the number of draws generated from each chain, and the warm-up length. Also plot the chains separately for alpha and beta, overlapping chains help to visually assess whether the chains have converged or not. However, in complex scenarios, visual assessment is not sufficient and $\hat{R}$ is a more robust indicator of convergence (of the metropolis chains).
+\item Include in the report the following:
+\begin{enumerate}
+\item[a)] The jumping rule (other name for the \emph{proposal distribution}). 
+\item[b)] The starting points of your metropolis chains (or the mechanism for generating them). 
+\item[c)] Report the chain length or the number of draws from each chain. Run the simulations long enough for approximate convergence. 
+\item[d)] Report the warm-up length.
+\item[e)] The number of metropolis chains used. It is a important that multiple metropolis chains be run for evaluating convergence. 
+\item[f)] Plot all chains for alpha (line plot) in a single plot, overlapping chains help in visually assessing whether chains have converged or not.
+\item[g)] Do the same for beta.
+% \item[h)] Report $\hat{R}$ for alpha and beta separately. In complex scenarios, visual assessment is not sufficient and $\hat{R}$ is a more robust indicator of convergence (of the metropolis chains).
+\end{enumerate}
 
-\item Use $\hat{R}$ for convergence analysis. You can either use Eq. (11.4) in BDA3 or the later version that can be found \href{https://arxiv.org/abs/1903.08008}{\textbf{here}}. You should specify which $\hat{R}$ you used. In R the best choice is to use function {\tt Rhat} from package {\tt rstan}. Remember to remove the warm-up samples before computing $\hat R$. Report also the $\hat R$ values for $\alpha$ and $\beta$ and discuss the convergence of the chains.
+% proposal distribution, number of chains used, the starting points (or the mechanism for generating them), the number of draws generated from each chain, and the warm-up length. Also plot the chains separately for alpha and beta, overlapping chains help to visually assess whether the chains have converged or not. However, in complex scenarios, visual assessment is not sufficient and $\hat{R}$ is a more robust indicator of convergence (of the metropolis chains).
+
+\item In complex scenarios, visual assessment is not sufficient and $\hat{R}$ is a more robust indicator of convergence of the metropolis chains. Use $\hat{R}$ for convergence analysis. You can either use Eq. (11.4) in BDA3 or the later version that can be found \href{https://arxiv.org/abs/1903.08008}{\textbf{here}}. You should specify which $\hat{R}$ you used. In R the best choice is to use function {\tt Rhat} from package {\tt rstan}. Remember to remove the warm-up samples before computing $\hat R$. Report also the $\hat R$ values for $\alpha$ and $\beta$ separately, and discuss the convergence of the chains.
 \textbf{This means that you should briefly explain how to interpret the obtained} $\hat R$ \textbf{values}.
 
 \item Plot the draws for $\alpha$ and $\beta$ (scatter plot) and include this plot in your report. You can compare the results to Figure~3.3b in BDA3 to verify that your code gives sensible results. Notice though that the results in Figure~3.3b are generated from posterior with a uniform prior, so even when your algorithm works perfectly, the results will look slightly different (although fairly similar).
-
 \end{enumerate}
 
 \end{document}
