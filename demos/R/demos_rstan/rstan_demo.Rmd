@@ -1,0 +1,410 @@
+---
+title: "Bayesian data analysis - RStan demos"
+author: "Aki Vehtari, Markus Paasiniemi"
+date: "First version 2017-07-17. Last modified `r format(Sys.Date())`."
+output:
+  html_document:
+    fig_caption: yes
+    toc: TRUE
+    toc_depth: 2
+    number_sections: TRUE
+    toc_float:
+      smooth_scroll: FALSE
+---
+
+# Setup  {.unnumbered}
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache=FALSE, message=FALSE, error=FALSE, warning=TRUE, comment=NA, out.width='95%')
+```
+
+**Load packages**
+```{r}
+library(tidyr) 
+library(rstan) 
+rstan_options(auto_write = TRUE)
+options(mc.cores = parallel::detectCores())
+library(loo)
+library(ggplot2)
+library(gridExtra)
+library(bayesplot)
+theme_set(bayesplot::theme_default(base_family = "sans"))
+library(shinystan)
+source('stan_utility.R')
+SEED <- 48927 # set random seed for reproducability
+```
+
+# Introduction
+
+This notebook contains several examples of how to use [Stan](https://mc-stan.org) in R with __rstan__. This notebook assumes basic knowledge of Bayesian inference and MCMC. The Stan models are stored in separate .stan-files. The examples are related to Bayesian data analysis course by Aki Vehtari.
+
+Note that you can easily analyse Stan fit objects returned by ```stan()``` with a ShinyStan package by calling ```launch_shinystan(fit)```.
+
+# Bernoulli model
+
+Toy data with sequence of failures (0) and successes (1). We would like to learn about the unknown probability of success.
+```{r}
+d_bern <- list(N = 10, y = c(1, 1, 1, 0, 1, 1, 1, 0, 1, 0))
+```
+
+Bernoulli model with a Beta(1,1) (uniform) prior
+```{r}
+writeLines(readLines("bern.stan"))
+```
+
+Sample form the posterior and show the summary
+```{r, results='hide'}
+fit_bern <- stan(file = 'bern.stan', data = d_bern, seed = SEED)
+```
+```{r}
+monitor(fit_bern, probs = c(0.1, 0.5, .9))
+```
+Plot the histogram of the posterior draws
+```{r}
+draws <- as.data.frame(fit_bern)
+mcmc_hist(draws, pars='theta')
+# or with base R
+# hist(draws[,'theta'])
+```
+
+# Binomial model
+
+Instead of sequence of 0's and 1's, we can summarize the data with the number of experiments and the number successes:
+```{r}
+d_bin <- list(N = 10, y = 7)
+```
+
+And then we use Binomial model with Beta(1,1) prior for the probability of success.
+```{r}
+writeLines(readLines("binom.stan"))
+```
+
+Sample from the posterior and plot the posterior. The histogram should look similar as in the Bernoulli case.
+```{r, results='hide'}
+fit_bin <- stan(file = 'binom.stan', data = d_bin, seed = SEED)
+```
+```{r}
+monitor(fit_bin, probs = c(0.1, 0.5, 0.9))
+```
+```{r}
+draws <- as.data.frame(fit_bin)
+mcmc_hist(draws, pars = 'theta')
+```
+
+Re-run the model with a new data. The compiled Stan program is re-used making the re-use faster.
+```{r, results='hide'}
+d_bin <- list(N = 100, y = 70)
+fit_bin <- stan(file = 'binom.stan', data = d_bin, seed = SEED)
+```
+```{r}
+monitor(fit_bin, probs = c(0.1, 0.5, 0.9))
+```
+```{r}
+draws <- as.data.frame(fit_bin)
+mcmc_hist(draws, pars = 'theta')
+```
+
+## Explicit transformation of variables
+
+In the above examples the probability of success $\theta$ was declared as
+
+```real<lower=0,upper=1> theta;```
+
+Stan makes automatic transformation of the variable to the unconstrained space using logit transofrmation for interval constrained and log transformation for half constraints.
+
+The following example shows how we can also make an explicit transformation and use binomial_logit function which takes the unconstrained parameter as an argument and uses logit transformation internally. This form can be useful for better numerical stability.
+
+```{r}
+writeLines(readLines("binomb.stan"))
+```
+Here we have used Gaussian prior in the unconstrained space, which produces close to uniform prior for theta.
+
+Sample from the posterior and plot the posterior. The histogram should look similar as with the previous models.
+
+```{r, results='hide'}
+d_bin <- list(N = 100, y = 70)
+fit_bin <- stan(file = 'binomb.stan', data = d_bin, seed = SEED)
+```
+```{r}
+monitor(fit_bin, probs = c(0.1, 0.5, 0.9))
+```
+```{r}
+draws <- as.data.frame(fit_bin)
+mcmc_hist(draws, pars = 'theta')
+```
+
+
+# Comparison of two groups with Binomial
+
+An experiment was performed to estimate the effect of beta-blockers on mortality of cardiac patients. A group of patients were randomly assigned to treatment and control groups:
+
+- out of 674 patients receiving the control, 39 died
+- out of 680 receiving the treatment, 22 died
+
+Data:
+
+```{r}
+d_bin2 <- list(N1 = 674, y1 = 39, N2 = 680, y2 = 22)
+```
+
+To analyse whether the treatment is useful, we can use Binomial model for both groups and compute odds-ratio:
+```{r}
+writeLines(readLines("binom2.stan"))
+```
+
+Sample from the posterior and plot the posterior
+```{r, results='hide'}
+fit_bin2 <- stan(file = 'binom2.stan', data = d_bin2, seed = SEED)
+```
+```{r}
+monitor(fit_bin2, probs = c(0.1, 0.5, 0.9))
+```
+```{r, warning=FALSE}
+draws <- as.data.frame(fit_bin2)
+mcmc_hist(draws, pars = 'oddsratio') +
+  geom_vline(xintercept = 1) +
+  scale_x_continuous(breaks = c(seq(0.25,1.5,by=0.25)))
+```
+
+# Linear Gaussian model
+
+The following file has Kilpisjärvi summer month temperatures 1952-2013:
+```{r}
+d_kilpis <- read.delim('kilpisjarvi-summer-temp.csv', sep = ';')
+d_lin <-list(N = nrow(d_kilpis),
+             x = d_kilpis$year,
+             xpred = 2016,
+             y = d_kilpis[,5])
+```
+
+Plot the data
+```{r}
+ggplot() +
+  geom_point(aes(x, y), data = data.frame(d_lin), size = 1) +
+  labs(y = 'Summer temp. @Kilpisjärvi', x= "Year") +
+  guides(linetype = F)
+```
+
+To analyse whether the average summer month temperature is rising, we use a linear model with Gaussian model for the unexplained variation. 
+
+## Gaussian linear model with adjustable priors
+
+The folloing Stan code allows also setting hyperparameter values as data allowing easier way to use different priors in different analyses:
+```{r}
+writeLines(readLines("lin.stan"))
+```
+
+Create another list with data and priors
+```{r}
+d_lin_priors <- c(list(
+    pmualpha = mean(unlist(d_kilpis[,5])), # centered
+    psalpha = 100, # weakly informative
+    pmubeta = 0, # a priori incr. and decr. as likely
+    psbeta = (.1--.1)/6), # avg temp prob does does not incr. more than a degree per 10 years
+  d_lin)
+```
+
+Run Stan
+```{r, results='hide'}
+fit_lin <- stan(file = 'lin.stan', data = d_lin_priors, seed = SEED)
+```
+Stan gives a warning: There were `r get_num_max_treedepth(fit_lin)` transitions after warmup that exceeded the maximum treedepth. You can use ShinyStan (```launch_shinystan(fit_lin)```) to look at the treedepth info and joint posterior of alpha and beta, to get a hint for the reason. ShinyStan helps also checking divergences, energy diagnostic, n_eff's and Rhats.
+
+Instead of interactive ShinyStan, we can also check the diagnostics as follows
+```{r}
+monitor(fit_lin, probs = c(0.1, 0.5, 0.9))
+```
+
+The following diagnostics are explained in [Robust Statistical Workflow with RStan Case Study](http://mc-stan.org/users/documentation/case-studies/rstan_workflow.html) by Michael Betancourt.
+```{r, message=TRUE}
+check_hmc_diagnostics(fit_lin)
+```
+
+
+Compute the probability that the summer temperature is increasing.
+```{r}
+samples_lin <- rstan::extract(fit_lin, permuted = T)
+mean(samples_lin$beta>0) # probability that beta > 0
+```
+
+Plot the data, the model fit and prediction for year 2016.
+```{r}
+mu <- apply(samples_lin$mu, 2, quantile, c(0.05, 0.5, 0.95)) %>%
+  t() %>% data.frame(x = d_lin$x, .)  %>% gather(pct, y, -x)
+
+pfit <- ggplot() +
+  geom_point(aes(x, y), data = data.frame(d_lin), size = 1) +
+  geom_line(aes(x, y, linetype = pct), data = mu, color = 'red') +
+  scale_linetype_manual(values = c(2,1,2)) +
+  labs(y = 'Summer temp. @Kilpisjärvi', x= "Year") +
+  guides(linetype = F)
+pars <- intersect(names(samples_lin), c('beta','sigma','ypred'))
+draws <- as.data.frame(fit_lin)
+phist <- mcmc_hist(draws, pars = pars)
+grid.arrange(pfit, phist, nrow = 2)
+```
+
+## Gaussian linear model with standardized data
+
+In the above we used the unnormalized data and as x values are far away from zero, this will cause very strong posterior dependency between alpha and beta (did you use ShinyStan for the above model?). The strong posterior dependency can be removed by normalizing the data to have zero mean. The following Stan code makes it in Stan. In generated quantities we do correspnding transformation back to the original scale.
+
+```{r}
+writeLines(readLines("lin_std.stan"))
+```
+
+```{r, results='hide'}
+fit_lin_std <- stan(file = 'lin_std.stan', data = d_lin, seed = SEED)
+```
+Now there were no warnings. You can use ShinyStan (```launch_shinystan(fit_lin)```) to look at the posterior and diagnostics and compare to the previous model results. We can also check diagnostics with the following commands.
+
+```{r, message=TRUE}
+monitor(fit_lin_std, probs = c(0.1, 0.5, 0.9))
+check_hmc_diagnostics(fit_lin_std)
+```
+
+We see that there are no warnings by diagnostics and n_eff's are higher than with the previous case with non-standardized data.
+
+Next we check that we get similar probability for beta>0.
+```{r}
+samples_lin_std <- rstan::extract(fit_lin_std, permuted = T)
+mean(samples_lin_std$beta>0) # probability that beta > 0
+```
+
+# Linear Student's t model.
+
+The temperatures used in the above analyses are averages over three months, which makes it more likely that they are normally distributed, but there can be extreme events in the feather and we can check whether more robust Student's t observation model woul give different results.
+
+```{r}
+writeLines(readLines("lin_t.stan"))
+```
+
+```{r, results='hide'}
+fit_lin_t <- stan(file = 'lin_t.stan', data = d_lin, seed = SEED)
+```
+We get some warnings, but these specific warnings are not critical if counts are small as here.
+
+Let's examine further diagnostics.
+```{r, message=TRUE}
+monitor(fit_lin_t, probs = c(0.1, 0.5, 0.9))
+check_hmc_diagnostics(fit_lin_t)
+```
+
+We get similar diagnostics as for the linear Gaussian model with non-standardised data.
+
+Compute the probability that the summer temperature is increasing.
+```{r}
+samples_lin_t <- extract(fit_lin_t, permuted = T)
+mean(samples_lin_t$beta>0) # probability that beta > 0
+```
+We get similar probability as with Gaussian obervation model.
+
+
+Plot data and the model fit
+```{r}
+mu <- apply(samples_lin_t$mu, 2, quantile, c(0.05, 0.5, 0.95)) %>%
+  t() %>% data.frame(x = d_lin$x, .)  %>% gather(pct, y, -x)
+
+pfit <- ggplot() +
+  geom_point(aes(x, y), data = data.frame(d_lin), size = 1) +
+  geom_line(aes(x, y, linetype = pct), data = mu, color = 'red') +
+  scale_linetype_manual(values = c(2,1,2)) +
+  labs(y = 'Summer temp. @Kilpisjärvi', x= "Year") +
+  guides(linetype = F)
+pars <- intersect(names(samples_lin_t), c('beta','sigma','nu','ypred'))
+draws <- as.data.frame(fit_lin_t)
+phist <- mcmc_hist(draws, pars = pars)
+grid.arrange(pfit, phist, nrow = 2)
+```
+We see also that the marginal posterior of nu is wide with lot of mass for values producing distrbution really close to Gaussian.
+
+# Pareto-smoothed importance-sampling leave-one-out cross-validation (PSIS-LOO)
+
+We can use leave-one-out cross-validation to compare the expected predictive performance. For the following three lines to execute, the log-likelihood needs to be evaluated in the stan code. For an example, see lin.stan and [Computing approximate leave-one-out cross-validation usig PSIS-LOO](http://mc-stan.org/loo/articles/loo2-with-rstan.html).
+```{r}
+log_lik <- extract_log_lik(fit_lin, merge_chains = FALSE)
+r_eff <- relative_eff(exp(log_lik)) 
+loo_lin <- loo(log_lik, r_eff = r_eff)
+log_lik_t <- extract_log_lik(fit_lin_t, merge_chains = FALSE)
+r_eff_t <- relative_eff(exp(log_lik)) 
+loo_lin_t <- loo(log_lik_t, r_eff = r_eff_t)
+compare(loo_lin, loo_lin_t)
+```
+There is no practical difference between Gaussian and Student's t observation model for this data.
+
+
+# Comparison of k groups with hierarchical models
+
+Let's compare the temperatures in three summer months.
+```{r}
+d_kilpis <- read.delim('kilpisjarvi-summer-temp.csv', sep = ';')
+d_grp <-list(N = 3*nrow(d_kilpis),
+             K = 3,
+             x = rep(1:3, nrow(d_kilpis)),
+             y = c(t(d_kilpis[,2:4])))
+```
+
+# Common variance (ANOVA) model
+```{r}
+writeLines(readLines("grp_aov.stan"))
+```
+
+Fit the model
+```{r, results='hide'} 
+fit_grp <- stan(file = 'grp_aov.stan', data = d_grp, seed = SEED)
+```
+```{r}
+monitor(fit_grp, probs = c(0.1, 0.5, 0.9))
+```
+
+## Common variance and hierarchical prior for mean.
+
+Results do not differ much from the previous, because there is only
+few groups and quite much data per group, but this works as an example of a hierarchical model.
+```{r}
+writeLines(readLines("grp_prior_mean.stan"))
+```
+
+Fit the model
+```{r, results='hide'} 
+fit_grp <- stan(file = 'grp_prior_mean.stan', data = d_grp, seed = SEED)
+```
+```{r}
+monitor(fit_grp, probs = c(0.1, 0.5, 0.9))
+```
+
+## Unequal variance and hierarchical prior for mean and variance
+
+```{r}
+writeLines(readLines("grp_prior_mean_var.stan"))
+```
+Fit the model
+```{r, results='hide'}
+fit_grp <- stan(file = 'grp_prior_mean_var.stan', data = d_grp, seed = SEED)
+```
+```{r}
+monitor(fit_grp, probs = c(0.1, 0.5, 0.9))
+```
+
+Plot the results
+```{r}
+samples_grp <- extract(fit_grp, permuted = T)
+
+temps <- data.frame(samples_grp$mu) %>%
+  setNames(c('June','July','August'))
+mcmc_areas(temps) + xlab('Temperature')
+```
+
+Probabilities that June is hotter than July, June is hotter than August
+and July is hotter than August:
+```{r}
+paste('p(TempJun > TempJul) = ', mean(temps$June > temps$July))
+paste('p(TempJun > TempAug) = ', mean(temps$June > temps$August))
+paste('p(TempJul > TempAug) = ', mean(temps$July > temps$August))
+```
+
+<br />
+
+# Licenses {.unnumbered}
+
+* Code &copy; 2017-2018, Aki Vehtari, 2017 Markus Paasiniemi, licensed under BSD-3.
+* Text &copy; 2017-2018, Aki Vehtari, licensed under CC-BY-NC 4.0.

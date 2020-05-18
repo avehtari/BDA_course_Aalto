@@ -1,0 +1,99 @@
+---
+title: "Bayesian data analysis - BDA3 chapter 6 demo 1"
+output: html_notebook
+---
+
+Authors: Aki Vehtari <Aki.Vehtari@aalto.fi>, Markus Paasiniemi <Markus.Paasiniemi@aalto.fi>
+
+Posterior predictive checking demo with Newcomb's light speed data.
+
+```{r}
+library(ggplot2)
+library(tidyr)
+
+# data
+data_path <- 'light.txt'
+y <- read.table(data_path)$V1
+# sufficient statistics
+n <- length(y)
+s <- sd(y)
+my <- mean(y)
+```
+
+Create 10 random replicate data sets from the posterior predictive density.
+Each set has same number of virtual observations as the original data set.
+```{r}
+sampt <- replicate(10, rt(n, n-1)*sqrt(1+1/n)*s+my) %>%
+  as.data.frame()
+```
+
+Replace one of the replicates with observed data. If you can spot which one has been replaced, it means that the replicates do not resemble the original data and thus the model has a defect.
+```{r}
+ind <- sample(10, 1)
+sampt_y <- replace(sampt, ind, y) %>% setNames(1:10) %>% gather()
+
+ggplot(data = sampt_y) +
+  geom_histogram(aes(x = value), fill = 'darkblue',
+                 color = 'black', binwidth = 4) +
+  facet_wrap(~key, nrow = 2) +
+  coord_cartesian(xlim = c(-50, 50)) +
+  labs(x = '', y = '', title= '') +
+  scale_y_continuous(breaks=NULL) +
+  theme(strip.background = element_blank())
+```
+
+Generate 1000 replicate data sets and plot the smallest observations
+in replicates and in the original data. Vertical line corresponds to
+the original data, histogram to the replicaed data.
+```{r}
+sampt1000 <- replicate(1000, rt(n, n-1)*sqrt(1+1/n)*s+my) %>%
+  as.data.frame()
+minvals <- data.frame(x = sapply(sampt1000, min))
+
+title1 <- 'Smallest observation in the replicated
+data (hist.) vs in the original data (vertical line)'
+ggplot(data = minvals) +
+  geom_histogram(aes(x = x), fill = 'darkblue',
+                 color = 'black', binwidth = 4) +
+  geom_vline(aes(xintercept = min(x)), data = data.frame(x = y),
+             color = 'red') +
+  coord_cartesian(xlim = c(-50, 20)) +
+  labs(x = '', y = '', title = title1) +
+  scale_y_continuous(breaks=NULL)
+```
+
+Example of poorly chosen test statistic. Here the test statistic is
+the variance of the data, which is also one of the parameters in the
+model.
+
+```{r}
+library(ggplot2)
+library(tidyr)
+# data
+data_path <- 'light.txt'
+y <- read.table(data_path)$V1
+# sufficient statistics
+n <- length(y)
+s <- sd(y)
+my <- mean(y)
+```
+
+Generate 1000 replicate data sets and plot the smallest observations
+in replicates and in the original data. Vertical line corresponds to
+the original data, histogram to the replicaed data.
+```{r}
+sampt2 <- replicate(1000, rt(n, n-1)*sqrt(1+1/n)*s+my) %>%
+  as.data.frame()
+
+sampt_vars <- data.frame(x = sapply(sampt2, var))
+
+title1 <- 'Light speed example with poorly chosen test statistic
+Pr(T(yrep,theta) <= T(y,theta)|y)=0.42'
+ggplot(data = sampt_vars) +
+  geom_histogram(aes(x = x), fill = 'darkblue',
+                 color = 'black', binwidth = 4) +
+  geom_vline(aes(xintercept = x), data = data.frame(x = s^2),
+             color = 'red') +
+  labs(x = '', y = '', title = title1) +
+  scale_y_continuous(breaks=NULL)
+```

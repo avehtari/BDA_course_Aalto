@@ -1,0 +1,196 @@
+---
+title: "Bayesian data analysis - traffic deaths in Finland"
+author: "Aki Vehtari"
+date: "First version 2017-09-28. Last modified `r format(Sys.Date())`."
+output:
+  html_document:
+    fig_caption: yes
+    toc: TRUE
+    toc_depth: 2
+    number_sections: TRUE
+    toc_float:
+      smooth_scroll: FALSE
+---
+
+# Setup  {.unnumbered}
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache=FALSE, message=FALSE, error=FALSE, warning=TRUE, comment=NA, out.width='95%')
+```
+
+**Load packages**
+```{r, comment=NA}
+library(ggplot2)
+library(tidyr)
+library(gridExtra)
+library(rstanarm)
+library(rstan)
+library(bayesplot)
+theme_set(theme_minimal())
+library(loo)
+rstan_options(auto_write = TRUE)
+options(mc.cores = parallel::detectCores())
+source("stan_utility.R")
+```
+
+# Introduction
+
+This notebook demonstrates time series analysis for traffic deaths per
+year in Finland. Currently when the the number of traffic deaths
+during previous year are reported, the press release claims that the
+the traffic safety in Finland has improved or worsened depending
+whether the number is smaller or larger than the year before. Time
+series analysis can be used to separate random fluctuation from the
+slowly changing traffic safety.
+
+# Data
+
+Read the data (there would data for earlier years, too, but this is
+sufficient for the demonstration)
+```{r}
+# file preview shows a header row
+deaths <- read.csv("trafficdeaths.csv", header = TRUE)
+head(deaths)
+```
+
+First plot just the data.
+```{r}
+ggplot() +
+  geom_point(aes(year, deaths), data = deaths, size = 1) +
+  labs(y = 'Traffic deaths', x= "Year") +
+  guides(linetype = F)
+```
+
+# Poisson regression model
+
+The number of deaths is count data, so we use Poisson observation
+model.  We first fit log-linear model for the Poisson intensity, which
+corresponds to assuming constant proportional change in the rate.
+
+```{r, comment=NA, results='hide'}
+fit_lin <- stan_glm(deaths ~ year, data = deaths, family="poisson",
+ 	            refresh=1000, iter=1000, chains=4, seed=583829)
+```
+```{r, comment=NA}
+summary(fit_lin, probs=c(0.1, 0.5, 0.9))
+```
+
+n_eff's and Rhat's are ok (see, e.g., [RStan
+workflow](http://mc-stan.org/users/documentation/case-studies/rstan_workflow.html)). Let's
+look at the posterior predictive distribution (median and 5% and 95%
+intervals).
+```{r}
+x_predict <- seq(1993,2023)
+N_predict <- length(x_predict)
+y_predict <- posterior_predict(fit_lin, newdata=data.frame(year=x_predict))
+mu <- apply(t(y_predict), 1, quantile, c(0.05, 0.5, 0.95)) %>%
+  t() %>% data.frame(x = x_predict, .) %>% gather(pct, y, -x)
+pfit <- ggplot() +
+  geom_point(aes(year, deaths), data = deaths, size = 1) +
+  geom_line(aes(x, y, linetype = pct), data = mu, color = 'red') +
+  scale_linetype_manual(values = c(2,1,2)) +
+  labs(x = 'Year', y = 'Traffic deaths') +
+  guides(linetype = F)
+(pfit)
+```
+
+Next we fit a non-linear spline model with `stan_gamm4`
+```{r}
+fit_gam <- stan_gamm4(deaths ~ year + s(year), data=deaths,
+                      family="poisson", adapt_delta=0.999, 
+                      refresh=1000, iter=2000, chain=4, seed=583829)
+summary(fit_gam, probs=c(0.1, 0.5, 0.9))
+```
+
+n_eff is clearly smaller than for the linear model, but Rhat's are ok.
+
+Let's look at the posterior predictive distribution.
+```{r}
+x_predict=seq(1993,2023)
+N_predict=length(x_predict)
+y_predict <- posterior_predict(fit_gam, newdata=data.frame(year=x_predict))
+mu <- apply(t(y_predict), 1, quantile, c(0.05, 0.5, 0.95)) %>%
+  t() %>% data.frame(x = x_predict, .) %>% gather(pct, y, -x)
+pfit <- ggplot() +
+  geom_point(aes(year, deaths), data = deaths, size = 1) +
+  geom_line(aes(x, y, linetype = pct), data = mu, color = 'red') +
+  scale_linetype_manual(values = c(2,1,2)) +
+  labs(x = 'Year', y = 'Traffic deaths') +
+  guides(linetype = F)
+(pfit)
+```
+
+The predictive median is clearly nonlinear. The predictive mean for
+future years stays at the same level as the most recent observations,
+but uncertainty increases quickly.
+
+Finally we fit Gaussian process centered on linear model. This is not
+yet available in rstanarm, and has been written directly in Stan
+language:
+```{r, comment=NA}
+writeLines(readLines("poisson_gp.stan"))
+```
+
+```{r, results='hide'}
+N<-nrow(deaths)
+Ey<-mean(deaths$deaths)
+d_data <- list(N=N, x=deaths$year, y=deaths$deaths, Ey=Ey, N_predict=N_predict,
+                     x_predict=x_predict, alpha0=2, beta0=4)
+fit_gp <- stan(file='poisson_gp.stan', data=d_data, refresh=1000, iter=4000,
+                     chains=4, seed=583829, init=0, control=list(adapt_delta=0.999))
+```
+
+Check inference.
+```{r}
+monitor(fit_gp, probs=c(0.1, 0.5, 0.9))
+check_treedepth(fit_gp)
+check_energy(fit_gp)
+check_div(fit_gp)
+```
+
+Let's look at the posterior predictive distribution.
+```{r}
+gp_params <- extract(fit_gp)
+mu <- apply(t(gp_params$y_predict), 1, quantile, c(0.05, 0.5, 0.95)) %>%
+  t() %>% data.frame(x = x_predict, .) %>% gather(pct, y, -x)
+pfit <- ggplot() +
+   geom_point(aes(year, deaths), data = deaths, size = 1) +
+  geom_line(aes(x, y, linetype = pct), data = mu, color = 'red') +
+  scale_linetype_manual(values = c(2,1,2)) +
+  labs(x = 'Year', y = 'Traffic deaths') +
+  guides(linetype = F)
+(pfit)
+```
+
+Finally we compare models using PSIS-LOO predictive performance estimates.
+
+```{r}
+(loo_lin<-loo(fit_lin))
+(loo_gam<-loo(fit_gam))
+compare(loo_lin, loo_gam)
+```
+```{r}
+log_lik_gp <- extract_log_lik(fit_gp, merge_chains = FALSE)
+(loo_gp<-loo(log_lik_gp, r_eff = relative_eff(exp(log_lik_gp))))
+compare(loo_lin, loo_gp)
+```
+
+There are no practical differences in predictive performance, which is
+partially due to small number of observations. Based on the posterior
+predictive distributions there are clear differences in the future
+predictions.
+
+<br />
+
+# Licenses {.unnumbered}
+
+* Code &copy; 2017-2018, Aki Vehtari, licensed under BSD-3.
+* Text &copy; 2017-2018, Aki Vehtari, licensed under CC-BY-NC 4.0.
+
+# Original Computing Environment {.unnumbered}
+
+```{r}
+sessionInfo()
+```
+
+<br />

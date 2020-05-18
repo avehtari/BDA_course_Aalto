@@ -1,0 +1,215 @@
+---
+title: "Does brain mass predict how much mammals sleep in a day?"
+author: "Aki Vehtari"
+date: "First version 2017-07-17. Last modified `r format(Sys.Date())`."
+output:
+  html_document:
+    fig_caption: yes
+    toc: TRUE
+    toc_depth: 2
+    number_sections: TRUE
+    toc_float:
+      smooth_scroll: FALSE
+---
+
+# Setup  {.unnumbered}
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache=FALSE, message=FALSE, error=FALSE, warning=FALSE, comment=NA, out.width='95%')
+```
+
+**Load packages**
+```{r}
+library(dplyr, warn.conflicts = FALSE)
+library(ggplot2)
+theme_set(theme_minimal())
+library(ggrepel)
+library(rstanarm)
+library(reshape2)
+```
+
+# Introduction
+
+This notebook was inspired by
+[a Tristan Mahr's notebook analysing whether brain mass predicts how much mammals sleep in a day](https://tjmahr.github.io/visualizing-uncertainty-rstanarm/).
+Tristan's original model had the problem that it would predict sleep
+times over 24h per day.
+
+# Mammal sleep data
+
+Let’s use the mammal sleep dataset from __ggplot2__. This dataset contains
+the number of hours spent sleeping per day for 83 different species of
+mammals along with each species’ brain mass (kg) and body mass (kg),
+among other measures. Here’s a first look at the data.  Preview sorted
+by brain/body ratio. The sorting was chosen so that humans show up in
+the preview.
+```{r}
+msleep %>% 
+  select(name, sleep_total, brainwt, bodywt, everything()) %>% 
+    arrange(desc(brainwt / bodywt))
+```
+
+Choose animals with known average brain weight, and add some transformed variables.
+```{r}
+msleep <- msleep %>% 
+  filter(!is.na(brainwt)) %>% 
+  mutate(log_brainwt = log10(brainwt), 
+         log_bodywt = log10(bodywt), 
+         log_sleep_total = log10(sleep_total),
+         logit_sleep_ratio = qlogis(sleep_total/24))
+```
+
+Make a list of examples and give some familiar species shorter names
+```{r}
+ex_mammals <- c("Domestic cat", "Human", "Dog", "Cow", "Rabbit",
+                "Big brown bat", "House mouse", "Horse", "Golden hamster")
+renaming_rules <- c(
+  "Domestic cat" = "Cat", 
+  "Golden hamster" = "Hamster", 
+  "House mouse" = "Mouse")
+
+ex_points <- msleep %>% 
+  filter(name %in% ex_mammals) %>% 
+  mutate(name = stringr::str_replace_all(name, renaming_rules))
+```
+
+Define these labels only once for all the plots
+```{r}
+lab_lines <- list(
+  brain_log = "Brain mass (kg., log-scaled)", 
+  sleep_raw = "Sleep per day (hours)",
+  sleep_log = "Sleep per day (log-hours)"
+)
+```
+
+Plot sleep times vs. average brain weights
+```{r}
+ggplot(msleep) + 
+  aes(x = brainwt, y = sleep_total) + 
+  geom_point(color = "grey40") +
+  # Circles around highlighted points + labels
+  geom_point(size = 3, shape = 1, color = "grey40", data = ex_points) +
+  geom_text_repel(aes(label = name), data = ex_points) + 
+  # Use log scaling on x-axis
+  scale_x_log10(breaks = c(.001, .01, .1, 1)) + 
+    labs(x = lab_lines$brain_log, y = lab_lines$sleep_raw)
+```
+
+# Regression model
+
+Next we use `stan_glm` from __rstanarm__ package to make a linear
+model for logit of the sleep ratio given log of the brain weight
+(Tristan made the model with untransformed variables).
+```{r, results='hide'}
+m1 <- stan_glm(
+  logit_sleep_ratio ~ log_brainwt, 
+  family = gaussian(), 
+  data = msleep, 
+  prior = normal(0, 3),
+  prior_intercept = normal(0, 3))
+```
+
+Check inference
+```{r}
+summary(m1, probs=c(0.1, 0.5, 0.9))
+```
+Prepare $x$ values for prediction:
+```{r}
+x_rng <- range(msleep$log_brainwt) 
+x_steps <- seq(x_rng[1], x_rng[2], length.out = 80)
+new_data <- data_frame(
+  observation = seq_along(x_steps), 
+  log_brainwt = x_steps)
+```
+
+Predict expected sleep time at new x values:
+```{r}
+preds<-posterior_linpred(m1,newdata=new_data)
+preds<-plogis(preds)*24
+```
+
+Plot draws of the expected sleep time lines:
+```{r}
+gg<-data.frame(log_brainwt=new_data$log_brainwt,preds=t(preds[1:400,]))
+gg<-melt(gg,id=c("log_brainwt"))
+names(gg)<-c("log_brainwt","pp","preds")
+
+# aesthetic controllers
+alpha_level <- .15
+col_draw <- "grey60"
+col_median <-  "#3366FF"
+
+ggplot(msleep) + 
+  aes(x = log_brainwt, y = sleep_total) + 
+  # Plot a random sample of rows as gray semi-transparent lines
+  geom_line(aes(x=log_brainwt, y=preds, group=pp), 
+              data = gg, color = col_draw, 
+              alpha = alpha_level) + 
+  geom_point() + 
+  scale_x_continuous(labels = function(x) 10 ^ x) +
+  labs(x = lab_lines$brain_log, y = lab_lines$sleep_raw)
+```
+
+Predict distribution of sleep times at new x values:
+```{r}
+preds_post <- posterior_predict(m1, newdata = new_data)
+preds_post<-plogis(preds_post)*24
+```
+
+Plot distribution of sleep times at new x values:
+```{r}
+pq<-data.frame(t(apply(t(preds_post), 1, quantile, probs = c(0.025, 0.5, 0.995), na.rm = TRUE)))
+names(pq)<-c("lower","median","upper")
+pq$log_brainwt<-new_data$log_brainwt
+
+ggplot(msleep) + 
+  aes(x = log_brainwt) + 
+  geom_ribbon(aes(ymin = lower, ymax = upper), data = pq, 
+              alpha = 0.4, fill = "grey60") + 
+  geom_line(aes(y = median), data = pq, colour = "#3366FF", size = 1) + 
+  geom_point(aes(y = sleep_total)) + 
+  scale_x_continuous(labels = function(x) 10 ^ x) +
+      labs(x = lab_lines$brain_log, y = lab_lines$sleep_raw)
+```
+
+Modeling the logit of the sleep ratio, and the transforming back to hours of sleep, 
+keeps the distribution of the sleep times restricted to be between 0 and 24 hours.
+
+
+<br />
+
+# Licenses {.unnumbered}
+
+* Code & Text &copy; 2016, Tristan Mahr, 2017-2018, Aki Vehtari, licensed under MIT
+
+Tristan's copyright: 
+
+The MIT License (MIT)
+
+Copyright (c) 2016 TJ Mahr
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+# Original Computing Environment {.unnumbered}
+
+```{r}
+sessionInfo()
+```
+
+<br />
