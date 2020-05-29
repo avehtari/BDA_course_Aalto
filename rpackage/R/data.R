@@ -19,6 +19,15 @@
 #' }
 "bioassay"
 
+#' @title bioassay_posterior
+#' @description Sample from the posterior of the bioassay model.
+#' @format A data frame with 1000 rows and 2 variables:
+#' \describe{
+#'   \item{alpha}{Parameter of the bioassay model}
+#'   \item{beta}{Parameter of the bioassay model}
+#' }
+"bioassay_posterior"
+
 #' @title drowning
 #' @description drowning data set. The data contains the number of people
 #' who have drowned per year in Finland between 1980 and 2016.
