@@ -88,8 +88,8 @@ pdf to peergrade to still get points from giving feedback. This is not
 allowed. If a student returns an empty pdf or it is obvious from the
 pdf that the student hasn't done any effort for the assignment, the
 student is not allowed to give feedback. The course staff will monitor
-returned assignments and if one has returned an empty pdf as an answer
-to the assignment, all points from that assignment will removed.
+returned assignments, and negative points will be awarded to empty assignments.
+If any student is reviewing an empty pdf, please contact course staff.
 
 ## Submission score
 
