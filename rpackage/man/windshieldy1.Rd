@@ -4,7 +4,9 @@
 \name{windshieldy1}
 \alias{windshieldy1}
 \title{windshieldy1}
-\format{A vector with 9 elements}
+\format{
+A vector with 9 elements
+}
 \usage{
 windshieldy1
 }

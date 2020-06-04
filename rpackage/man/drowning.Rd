@@ -4,11 +4,13 @@
 \name{drowning}
 \alias{drowning}
 \title{drowning}
-\format{A data frame with 37 rows and 2 variables:
+\format{
+A data frame with 37 rows and 2 variables:
 \describe{
   \item{year}{year}
   \item{drownings}{number of drownings in Finland}
-}}
+}
+}
 \usage{
 drowning
 }
