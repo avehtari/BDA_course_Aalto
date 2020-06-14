@@ -92,23 +92,7 @@ Response:
 
 Hierarchical model: factory data with Stan
 
-### Q9 · Yes / No · 1 point
-
-Is the source code included?
-
-Response:
-
-- No
-- Yes
-
-### Explanation
-
-Separate model:
-The following histograms are used as a reference in the grading of the separate model:
-
-*<model_plot>*
-
-### Q10 · Scale · 1 point
+### Q9 · Scale · 1 point
 
 Separate model: Is there a related Stan implementation (N.B. same implementation may be used for multiple models)?
 
@@ -117,6 +101,22 @@ Response:
 - No Stan model implemented.
 - Stan model implemented, but it seems clearly wrong or broken.
 - Seemingly valid Stan model implemented.
+
+### Q10 · Scale · 1 point 
+
+Is there a description using mathematical notation of the model?
+
+Response:
+
+- Yes
+- No
+
+### Explanation
+
+Separate model:
+The following histograms are used as a reference in the grading of the separate model:
+
+*<model_plot>*
 
 ### Q11 · Yes / No · 1 point
 
@@ -142,14 +142,15 @@ Response:
 
 *hidden responses*
 
-### Explanation
+### Q14 · Yes / No · 1 point
 
-Pooled model:
-The following histograms are used as a reference in the grading of the pooled model:
+Separate model: the for $\mu_1$ with a 90% credibility intervall using a N(0, 10) prior for $\mu$ and a Gamma(1, 1) prior for $\sigma$.
 
-*<model_plot>*
+Response:
 
-### Q14 · Scale · 1 point
+*hidden responses*
+
+### Q15 · Scale · 1 point
 
 Pooled model: Is there a related Stan implementation (N.B. same implementation may be used for multiple models)?
 
@@ -159,7 +160,23 @@ Response:
 - Stan model implemented, but it seems clearly wrong or broken.
 - Seemingly valid Stan model implemented.
 
-### Q15 · Scale · 1 point
+### Q16 · Scale · 1 point 
+
+Is there a description using mathematical notation of the model?
+
+Response:
+
+- Yes
+- No
+
+### Explanation
+
+Pooled model:
+The following histograms are used as a reference in the grading of the pooled model:
+
+*<model_plot>*
+
+### Q17 · Scale · 1 point
 
 Pooled model:  *discussion about question i)*, posterior distribution of the mean of the quality measurements of the sixth machine.
 
@@ -167,7 +184,7 @@ Response:
 
 *hidden responses*
 
-### Q16 · Scale · 1 point
+### Q18 · Scale · 1 point
 
 Pooled model:  *discussion about question ii)*, the predictive distribution for another quality measurement of the sixth machine.
 
@@ -175,7 +192,7 @@ Response:
 
 *hidden responses*
 
-### Q17 · Yes / No · 1 point
+### Q19 · Yes / No · 1 point
 
 Pooled model:  *discussion about question iii)*, the posterior distribution of the mean of the quality measurements of the seventh machine.
 
@@ -183,14 +200,15 @@ Response:
 
 *hidden responses*
 
-### Explanation
+### Q20 · Yes / No · 1 point
 
-Hierarchical model:
-The following histograms are used as a reference in the grading of the hierarchical model:
+Separate model: the for $\mu_1$ with a 90% credibility intervall using a N(0, 10) prior for $\mu$ and a Gamma(1, 1) prior for $\sigma$.
 
-*<model_plot>*
+Response:
 
-### Q18 · Scale · 1 point
+*hidden responses*
+
+### Q21 · Scale · 1 point
 
 Hierarchical model: Is there a related Stan implementation (N.B. same implementation may be used for multiple models).
 
@@ -200,7 +218,23 @@ Response:
 - Stan model implemented, but it seems clearly wrong or broken.
 - Seemingly valid Stan model implemented.
 
-### Q19 · Scale · 1 point
+### Q22 · Scale · 1 point 
+
+Is there a description using mathematical notation of the model?
+
+Response:
+
+- Yes
+- No
+
+### Explanation
+
+Hierarchical model:
+The following histograms are used as a reference in the grading of the hierarchical model:
+
+*<model_plot>*
+
+### Q23 · Scale · 1 point
 
 Hierarchical model: *discussion about question i)*, posterior distribution of the mean of the quality measurements of the sixth machine.
 
@@ -208,7 +242,7 @@ Response:
 
 *hidden responses*
 
-### Q20 · Scale · 1 point
+### Q24 · Scale · 1 point
 
 Hierarchical model: *discussion about question ii)*, the predictive distribution for another quality measurement of the sixth machine.
 
@@ -216,9 +250,17 @@ Response:
 
 *hidden responses*
 
-### Q21 · Scale · 1 point
+### Q25 · Scale · 1 point
 
 Hierarchical model: *discussion about question iii)*, the posterior distribution of the mean of the quality measurements of the seventh machine.
+
+Response:
+
+*hidden responses*
+
+### Q26 · Yes / No · 1 point
+
+Separate model: the for $\mu_1$ with a 90% credibility intervall using a N(0, 10) prior for $\mu$ and a Gamma(1, 1) prior for $\sigma$.
 
 Response:
 
@@ -228,7 +270,7 @@ Response:
 
 Overall quality of the report
 
-### Q22 · Scale · 1 point
+### Q27 · Scale · 1 point
 Does the report follow the formatting instructions?
 
 - Not at all
@@ -236,6 +278,6 @@ Does the report follow the formatting instructions?
 - Mostly
 - Yes
 
-### Q23 · Text · Optional question
+### Q28 · Text · Optional question
 Justify your answers for overall quality of the report if needed
 
