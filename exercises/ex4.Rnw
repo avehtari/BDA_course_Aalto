@@ -91,50 +91,48 @@ mark_my_assignment()
 
 \newpage
 
-\begin{enumerate}
-
-\item {\bf (Bioassay model and importance sampling)}. In this exercise, you will use a dose-response relation model that is used in Section 3.7 of the course book and in the chapter reading instructions \href{https://github.com/avehtari/BDA_course_Aalto/blob/master/chapter_notes/BDA_notes_ch3.pdf}{\textbf{here}}. The used likelihood is the same, but
-we will use a different prior distribution on the parameters $\alpha$ and $\beta$.
+{\bf Bioassay model}. In this exercise, you will use a dose-response relation model that is used in Section 3.7 of the course book and in the chapter reading instructions \href{https://github.com/avehtari/BDA_course_Aalto/blob/master/chapter_notes/BDA_notes_ch3.pdf}{\textbf{here}}. The used likelihood is the same, but instead of uniform priors,
+we will use a bivariate normal distribution as the joint prior distribution of the parameters $\alpha$ and $\beta$.
 
 
 \begin{itemize}
-    \item[a)] Construct a bivariate normal distribution as prior distribution for $(\alpha,\beta)$.
-    The marginal distributions are $\alpha \sim N(0,2^2), \beta \sim N(10,10^2)$ with correlation $\mathrm{corr}(\alpha, \beta)=0.5$. Report the mean and covariance
-    of the bivariate normal distribution.\\
-\textbf{Hint!} The mean and covariance of the bivariate normal distribution are a length-$2$ vector and a $2 \times 2$ matrix. The elements of the covariance matrix can be computed using the relation of correlation and covariance.
-  \item[b)] Implement a function in R for computing the \textbf{logarithm} of the density of the
-  prior distribution in a) for arbitrary values of $\alpha$ and $\beta$. Below is an example of how the function should be named and work if you want to check them with \texttt{markmyassignment}. 
-<<echo=FALSE>>=
-p_log_prior <- function(alpha, beta) -6.296435
-@
-  
-<<echo=TRUE>>=
-p_log_prior(alpha = 3, beta = 9)
-@  
- 
-\textbf{Hint!} Use function {\tt dmvnorm} from the {\tt aaltobda} package. We use logarithms for better numerical accuracy in later questions.
+    \item[a)] In the prior distribution for $(\alpha,\beta)$, the marginal distributions are $\alpha \sim N(0,2^2)$ and $\beta \sim N(10,10^2)$, and the correlation between them is $\mathrm{corr}(\alpha, \beta)=0.5$. Report the full mean and covariance of the bivariate normal distribution.
+\begin{itemize}
+\item \textbf{Hint!} The mean and covariance of the bivariate normal distribution are a length--$2$ vector and a $2 \times 2$ matrix. The elements of the covariance matrix can be computed using the relation of correlation and covariance.
+\end{itemize}
+\item[b)] You are given 4000 independent draws from the posterior distribution
+of the model. Load the draws with \texttt{ data("bioassay\_posterior")}. Report the mean as well as 5 $\%$ and 95 $\%$
+quantiles separately for both $\alpha$ and $\beta$. Report also the
+Monte Carlo standard errors (MCSEs) for the mean and quantile estimates.
+Report as many digits for the mean and
+quantiles as the MCSEs allow. In other words, leave out digits where
+MCSE is nonzero (Example: if posterior mean is 2.345678 and MCSE is 0.0012345, report two digits after the decimal sign, taking into account the usual rounding rule, so you would report 2.35. Further digits do not contain useful information due to the Monte Carlo uncertainty.). 
+\begin{itemize}
+\item \textbf{Note!} The answer is graded as correct only if the number of digits
+reported is correct! The number of significant digits can be different for the mean
+and quantile estimates.  In some other cases, the number of digits reported can be less than MCSE allows for practical reasons.
+\item \textbf{Hint!} Quantiles can be computed with the \texttt{quantile} function. With $S$ draws, the MCSE for $\text{E}[\theta]$ is $\sqrt{\text{Var} [\theta]/S}$.
+MCSE for the quantile estimates can be computed with the
+\texttt{mcse\_quantile} function from the {\tt aaltobda} package.
+\end{itemize}
 
-\item[c)] Implement a function in R for computing the \textbf{logarithm} of the density of the posterior for arbitrary values of $\alpha$ and $\beta$ and data $x$, $y$ and $n$. Below is an example of how the function should be named and work if you want to check them with \texttt{markmyassignment}. 
- 
-<<echo=FALSE>>=
-p_log_posterior <- function(alpha, beta, x, y, n) -15.78798
-@
-  
-<<echo=TRUE>>=
-library(aaltobda)
-data("bioassay")
-p_log_posterior(alpha = 3, 
-                beta = 9, 
-                x = bioassay$x, 
-                y = bioassay$y, 
-                n = bioassay$n)
-@  
+\end{itemize}
+{\bf Importance sampling}. Now we discard our posterior draws and
+switch to importance sampling.
 
-\textbf{Hint!} Equation (3.16) in the course book. The \textbf{logarithm} of the prior density was already implemented in b). For computing the \textbf{logarithm} of the likelihood, use the {\tt bioassaylp} function from the {\tt aaltobda} package. The data can be loaded with the R command {\tt data("bioassay")}.\\
-\textbf{Hint!} Logarithm of the product of two densities is the sum of the log-densities, i.e. $\log ab = \log a + \log b$.
 
-\item[d)] Plot the posterior density in a grid of points ($\alpha \in [-4,4]$, $\beta \in [-10,30]$) using the {\tt bioassay\_posterior\_density\_plot} function from the {\tt aaltobda} package. Pass the {\tt p\_log\_posterior} function you implemented in c) as argument to {\tt bioassay\_posterior\_density\_plot}.
-\item[e)] Implement two functions in: 1) A function for computing the log importance ratios (log importance weights) for draws from the prior distribution in 1a) when the target distribution is the posterior distribution. 2) A function for exponentiating the log importance ratios and normalizing them to sum to one. Below is a test example, the functions can also be tested with \texttt{markmyassignment}. \textbf{Note!} The values below are \emph{only} a test case, you need to use correct draws for {\tt alpha} and {\tt beta} in the final report. \\
+
+
+\begin{itemize}
+\item[c)] Implement a function for computing the log importance ratios (log importance weights) when the importance sampling \textbf{target distribution} is the posterior distribution, and the \textbf{proposal distribution} is the prior distribution from a). Below is a test example, the functions can also be tested with \texttt{markmyassignment}.
+% \textbf{Note!} The values below are \emph{only} a test case, you need to use 4000 draws for {\tt alpha} and {\tt beta} in the final report. \\
+\begin{itemize}
+\item \textbf{Note!} The values below are \emph{only} a test case. In this c) part, you
+only need to report the source code of your function, as it will be needed in
+later parts.
+\item \textbf{Hints!} Use the function {\tt rmvnorm} from the {\tt aaltobda} package for sampling. Non-log importance ratios are given by equation (10.3) in the course book. The fact that our proposal distribution is the same as
+the prior distribution makes this task easier. The \textbf{logarithm} of the likelihood can be computed with the {\tt bioassaylp} function from the {\tt aaltobda} package. The data required for the likelihood can be loaded with {\tt data("bioassay")}.
+\end{itemize}
 <<echo=FALSE>>=
 log_importance_weights <- function(alpha, beta) c(-8.95, -23.47, -6.02, -8.13, -16.61, -14.57)
 normalized_importance_weights <- function(alpha, beta) c(0.045, 0.000, 0.852, 0.103, 0.000, 0.000)
@@ -142,23 +140,36 @@ posterior_mean <- function(alpha, beta) c(0.503, 8.275)
 S_eff <- function(alpha, beta) 1.354
 @
 <<echo=TRUE>>=
-a <- c(1.896, -3.6,  0.374, 0.964, -3.123, -1.581)
-b <- c(24.76, 20.04, 6.15, 18.65, 8.16, 17.4)
-log_importance_weights(alpha = a, beta = b)
-normalized_importance_weights(alpha = a, beta = b) 
+alpha <- c(1.896, -3.6,  0.374, 0.964, -3.123, -1.581)
+beta <- c(24.76, 20.04, 6.15, 18.65, 8.16, 17.4)
+round(log_importance_weights(alpha, beta),2)
 @
-\textbf{Hint!} Equation (10.3) in the course book.
-\item[f)] Sample draws of $\alpha$ and $\beta$ from the prior distribution from 1a). Implement a function for computing the posterior mean using importance sampling, and report the obtained mean.\\
-\textbf{Hint!} Use the function {\tt rmvnorm} from the {\tt aaltobda} package. Below is an example how the function would work with the example values for {\tt alpha} and {\tt beta} above. \textbf{Note!} The values below are \emph{only} a test case, you need to use correct draws for {\tt alpha} and {\tt beta} in the final report.
-<<echo=TRUE>>=
-posterior_mean(alpha = a, beta = b)
-@
-\item[g)] Using the importance ratios, compute the effective sample size $S_{\text{eff}}$ and report it. If $S_{\text{eff}}$ is less than 1000, repeat f) with more draws. \textbf{Note!} The values below are \emph{only} a test case, you need to use correct draws for {\tt alpha} and {\tt beta} in the final report.\\
-<<echo=TRUE>>=
-S_eff(alpha = a, beta = b)
-@
-\textbf{Hint!} Equation (10.4) in the course book.
+\item[d)] Implement a function for computing normalized importance ratios
+from the unnormalized log ratios in c). In other words, exponentiate
+the log ratios and scale them such that they sum to one. Below is a test example, the functions can also be tested with \texttt{markmyassignment}.
 \begin{itemize}
+\item \textbf{Note!} The values below are \emph{only} a test case. In this d) part, you
+only need to report the source code of your function, as it will be needed in
+later parts.\\
+\end{itemize}
+<<echo=TRUE>>=
+alpha
+beta
+round(normalized_importance_weights(alpha = alpha, beta = beta),3)
+@
+\item[e)] Sample 4000 draws of $\alpha$ and $\beta$ from the prior distribution from a). Compute and plot a histogram of the 4000 normalized importance ratios.
+Use the functions you implemented in c) and d).
+\item[f)] Using the importance ratios, compute the importance sampling effective sample size $S_{\text{eff}}$ and report it. 
+\begin{itemize}
+\item \textbf{Note!} The values below are \emph{only} a test case, you need to use 4000 draws for {\tt alpha} and {\tt beta} in the final report.
+\end{itemize}
+<<echo=TRUE>>=
+alpha
+beta
+round(S_eff(alpha = alpha, beta = beta),3)
+@
+\begin{itemize}
+\item \textbf{Hint!} Equation (10.4) in the course book.
 \item \textbf{Note!} {\it BDA3 1st (2013) and 2nd (2014) printing have an error
    for $\tilde{w}(\theta^s)$ used in the effective sample size
    equation (10.4). The normalized weights equation should not have the
@@ -167,15 +178,31 @@ S_eff(alpha = a, beta = b)
    \url{http://www.stat.columbia.edu/~gelman/book/errata_bda3.txt}.
    The later printings and slides have the correct equation.}
  \end{itemize}
-\item[h)] Use importance resampling to obtain a posterior sample of size 1000 of $\alpha$ and $\beta$ and plot a scatterplot of the obtained posterior sample.
-\item[i)] Using the posterior sample obtained via importance resampling, report an estimate for $p(\beta > 0|x, n, y)$, that is, the probability that the drug is harmful.
-\item[j)] Using the posterior sample obtained via importance resampling, draw a histogram of the draws from the posterior distribution of the LD50 conditional on $\beta$ > 0.\\
-\textbf{Hint!} See Figure 3.4 and corresponding section in the course book. You can plot a basic histogram with R using the library {\tt ggplot2} and the command {\tt ggplot() + geom\_histogram(aes(ld50))}
+  \item[g)] Explain in your own words what the importance sampling effective
+ sample size represents. Also explain how the effective sample size is seen
+ in the histogram of the weights that you plotted in e).
+ \item[h)] Implement a function for computing the posterior mean using importance sampling, and compute the mean using your 4000 draws. Below is an example how the function would work with the example values for {\tt alpha} and {\tt beta} above.
+ Report the means for alpha and beta, and also the Monte Carlo standard errors (MCSEs) for the mean estimates.
+ Report the number of digits for the means based on the MCSEs.
+\begin{itemize}
+ \item \textbf{Note!} The values below are \emph{only} a test case, you need to use 4000 draws for {\tt alpha} and {\tt beta} in the final report.
+ \item \textbf{Hint!} Use the same equation for the MCSE of $\text{E}[\theta]$ as earlier ($\sqrt{\text{Var} [\theta]/S}$), but now replace $S$ with $S_{\text{eff}}$. To compute $\text{Var} [\theta]$ with importance sampling, use the identity
+$\text{Var}[\theta] = \text{E}[\theta^2] - \text{E}[\theta]^2$.
+ \end{itemize}
+<<echo=TRUE>>=
+alpha
+beta
+round(posterior_mean(alpha = alpha, beta = beta),3)
+@
+ % \item[i)] Based on how the Monte Carlo standard error (MCSE)
+ % for the mean in b)
+ % depends on the sample size, how many times larger or smaller do you think the
+ % MCSE is now when we used importance sampling for computing the mean? You don't
+ % need to calculate the MCSE again, just compare the effective sample
+ % size to the true sample size.
+ 
 \end{itemize}
 
-
-
-\end{enumerate}
 
 
 

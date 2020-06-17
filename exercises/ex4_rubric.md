@@ -24,7 +24,7 @@ Content
 
 ### Q3 - 1 point
 
-Are the mean and covariance of the prior in 1a) reported?
+Are the mean and covariance of the prior in a) reported?
 
 - Not reported
 - Yes, but they are not ...
@@ -32,79 +32,76 @@ Are the mean and covariance of the prior in 1a) reported?
 
 ### Q4 - 1 point
 
-Is the source code for p_log_prior in 1b) reported?
+Are the means and their MCSEs of alpha and beta in b) reported? Note that
+the number of digits reported must follow the rule given in the assignment.
 
-- No
-- Yes
+- Not reported
+- Yes, but they are not ...
+- Yes, and they are ...
 
 ### Q5 - 1 point
 
-Is the source code for p_log_posterior in 1c) reported?
+Are the quantiles and their MCSEs of alpha and beta in b) reported? Note that
+the number of digits reported must follow the rule given in the assignment.
 
-- No
-- Yes
+- Not reported
+- Yes, but they are not ...
+- Yes, and they are ...
 
 ### Q6 - 1 point
 
-Is the posterior density in 1d) plotted?
+Is the source code for the function in c) reported?
 
 - No
 - Yes
 
 ### Q7 - 1 point
 
-Does the posterior density in 1d) look something like this figure?
+Is the source code for the function in d) reported?
 
 - No
 - Yes
 
 ### Q8 - 1 point
 
-Is the source code for the two functions in 1e) reported?
+Does the posterior density in e) look something like this figure?
+
+- Not reported
+- Reported, but looks different
+- Reported and looks similar
+
+### Q9 - 1 point
+
+Is the effective sample size in f) reported?
+
+- No
+- Yes, but it is not between . and ..
+- Yes, and it is between . and ..
+
+### Q10 - 1 point
+
+The correct explanation for g) is roughly the following:
+...
+How is the answer?
+
+- Totally wrong/has not tried
+- Something is a bit wrong
+- Explanation is sensible
+
+### Q11 - 1 point
+
+Is the source code for the function in h) reported?
 
 - No
 - Yes
 
-### Q9 - 1 point
-
-Is the posterior mean in 1f) computed using importance sampling and reported?
-
-- No
-- Yes, and alpha is outside [-,-] or beta is outside [-,-]
-- Yes, and alpha is between [-,-] and beta is between [-,-]
-
-### Q10 - 1 point
-
-Is the effective sample size in 1g) reported?
-
-- No
-- Yes, but it is below 1000
-- Yes, and it is above 1000
-
-### Q11 - 1 point
-
-Is there a scatterplot in 1h) from a posterior sample obtained by importance resampling?
-
-- No
-- Yes, but it looks different from the posterior
-- Yes, and it looks like the points are sampled from the posterior
-
 ### Q12 - 1 point
 
-Is the estimate p(beta > 0 | x,n,y) from 1i) reported?
+Are the means and their MCSEs of alpha and beta in h) reported?
 
-- No
-- Yes, it is smaller than - or larger than -
-- Yes, it is exactly -
-- Yes, it is above - and below -
-
-### Q13 - 1 point
-
-Is the histogram of the LD50 in 1j) plotted?
-
-- No
-- Yes, and it is distributed much wider or narrower than [-,-]
-- Yes, and it is mostly contained in [-,-]
+- Not reported
+- Yes, but they are not ...
+- Yes, and they are ...
 
 ## S3 - 7.5 points
 
