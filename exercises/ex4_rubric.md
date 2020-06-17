@@ -24,7 +24,7 @@ Content
 
 ### Q3 - 1 point
 
-Are the mean and covariance of the prior in 1a) reported?
+In 1a), are the mean and covariance of the prior reported?
 
 - Not reported
 - Yes, but they are not ...
@@ -32,21 +32,21 @@ Are the mean and covariance of the prior in 1a) reported?
 
 ### Q4 - 1 point
 
-Is the source code for p_log_prior in 1b) reported?
+In 1 b), is the source code for p_log_prior reported?
 
 - No
 - Yes
 
 ### Q5 - 1 point
 
-Is the source code for p_log_posterior in 1c) reported?
+In 1 c), is the source code for p_log_posterior reported?
 
 - No
 - Yes
 
 ### Q6 - 1 point
 
-Is the posterior density in 1d) plotted?
+In 1 d), is the posterior density plotted?
 
 - No
 - Yes
@@ -60,14 +60,14 @@ Does the posterior density in 1d) look something like this figure?
 
 ### Q8 - 1 point
 
-Is the source code for the two functions in 1e) reported?
+In 1 e), is the source code for the two functions reported?
 
 - No
 - Yes
 
 ### Q9 - 1 point
 
-Is the posterior mean in 1f) computed using importance sampling and reported?
+In 1 f), is the posterior mean computed using importance sampling and reported?
 
 - No
 - Yes, and alpha is outside [-,-] or beta is outside [-,-]
@@ -75,7 +75,7 @@ Is the posterior mean in 1f) computed using importance sampling and reported?
 
 ### Q10 - 1 point
 
-Is the effective sample size in 1g) reported?
+In 1 g), is the effective sample size reported?
 
 - No
 - Yes, but it is below 1000
@@ -83,7 +83,7 @@ Is the effective sample size in 1g) reported?
 
 ### Q11 - 1 point
 
-Is there a scatterplot in 1h) from a posterior sample obtained by importance resampling?
+In 1 h), is there a scatterplot from a posterior sample obtained by importance resampling?
 
 - No
 - Yes, but it looks different from the posterior
@@ -91,7 +91,7 @@ Is there a scatterplot in 1h) from a posterior sample obtained by importance res
 
 ### Q12 - 1 point
 
-Is the estimate p(beta > 0 | x,n,y) from 1i) reported?
+For 1 i), is the estimate p(beta > 0 | x,n,y) reported?
 
 - No
 - Yes, it is smaller than - or larger than -
@@ -100,7 +100,7 @@ Is the estimate p(beta > 0 | x,n,y) from 1i) reported?
 
 ### Q13 - 1 point
 
-Is the histogram of the LD50 in 1j) plotted?
+In 1 j), is the histogram of the LD50 plotted?
 
 - No
 - Yes, and it is distributed much wider or narrower than [-,-]
@@ -110,7 +110,8 @@ Is the histogram of the LD50 in 1j) plotted?
 
 Overall quality of the report
 
-### Q14 · Scale · 1 point
+### Q14 - 1 point
+
 Does the report follow the formatting instructions?
 
 - Not at all
@@ -118,6 +119,40 @@ Does the report follow the formatting instructions?
 - Mostly
 - Yes
 
-### Q15 · Text · Optional question
+### Q15 -
 
-Justify your answers for overall quality of the report if needed
+In case the report doesn't fully follow the formatting instructions, specify the formatting instruction that is not followed. If applicable, specify the page of the report, where this difference in formatting is visible.
+
+## S4 - X.X points
+
+Time spent in the exercises.
+
+### Q16 -
+
+How was the time you used distributed in the assignment?
+
+- I used most of the time dealing with programming language's burden.
+- I used most time dealing with the exercise proper (math, derivations, etc.)
+- I used as much time time in programming and exercise.
+
+### Q17 -
+
+How much time did you spend on the assignment?
+
+- less than an hour
+- 1 to 5 hours.
+- more than 5 hours.
+
+### Q18 -
+
+How did the time you used in the assignment mach the time you expected to use?
+
+- I used considerably less time than I expected.
+- I used less time than I expected.
+- I used roughly the time I expected.
+- I used more time than I expected.
+- I used considerably more time than I expected.
+
+### Q19 -
+
+If in the previous question you selected either "I used considerably less time than I expected" or "I used considerably more time than I expected", please explain why you think the time used was considerably different from what you expected.

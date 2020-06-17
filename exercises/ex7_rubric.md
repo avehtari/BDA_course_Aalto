@@ -104,7 +104,7 @@ Response:
 
 ### Q10 · Scale · 1 point 
 
-Is there a description using mathematical notation of the model?
+Is the model described using mathematical notation?
 
 Response:
 
@@ -162,7 +162,7 @@ Response:
 
 ### Q16 · Scale · 1 point 
 
-Is there a description using mathematical notation of the model?
+Is the model described using mathematical notation?
 
 Response:
 
@@ -220,7 +220,7 @@ Response:
 
 ### Q22 · Scale · 1 point 
 
-Is there a description using mathematical notation of the model?
+Is the model described using mathematical notation?
 
 Response:
 
@@ -271,6 +271,7 @@ Response:
 Overall quality of the report
 
 ### Q27 · Scale · 1 point
+
 Does the report follow the formatting instructions?
 
 - Not at all
@@ -278,6 +279,41 @@ Does the report follow the formatting instructions?
 - Mostly
 - Yes
 
-### Q28 · Text · Optional question
-Justify your answers for overall quality of the report if needed
+### Q28 -
+
+In case the report doesn't fully follow the formatting instructions, specify the formatting instruction that is not followed. If applicable, specify the page of the report, where this difference in formatting is visible.
+
+## S5 - X.X points
+
+Time spent in the exercises.
+
+### Q29 -
+
+How was the time you used distributed in the assignment?
+
+- I used most of the time dealing with programming language's burden.
+- I used most time dealing with the exercise proper (math, derivations, etc.)
+- I used as much time time in programming and exercise.
+
+### Q30 -
+
+How much time did you spend on the assignment?
+
+- less than an hour
+- 1 to 5 hours.
+- more than 5 hours.
+
+### Q31 -
+
+How did the time you used in the assignment mach the time you expected to use?
+
+- I used considerably less time than I expected.
+- I used less time than I expected.
+- I used roughly the time I expected.
+- I used more time than I expected.
+- I used considerably more time than I expected.
+
+### Q32 -
+
+If in the previous question you selected either "I used considerably less time than I expected" or "I used considerably more time than I expected", please explain why you think the time used was considerably different from what you expected.
 

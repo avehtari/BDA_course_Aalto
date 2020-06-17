@@ -24,25 +24,28 @@ Metropolis
 
 ### Q3 - 1 point
 
-Is the implementation of `density_ratio` function included ?
+In 1 a), is the implementation of the `density_ratio` function included?
+
+- No
+- Yes
 
 ### Q4 - 1 point
 
-Is the implementation of `metropolis_bioassay` function included ?
+In 1 b), is the implementation of the `metropolis_bioassay` function included?
 
 - No
 - Yes
 
 ### Q5 - 1 point
 
-Is the proposal/jumping distribution reported ?
+2 a) Is the proposal/jumping distribution reported ?
 
 - No
 - Yes
 
 ### Q6 - 1 point
 
-Are the starting points or the mechanism how they are generated reported ?
+2 b) Are the starting points or the mechanism how they are generated reported?
 
 - No
 - Yes
@@ -50,7 +53,7 @@ Are the starting points or the mechanism how they are generated reported ?
 
 ### Q7 - 1 point
 
-Is the number of draws per chain reported ?
+2 c) Is the number of draws per chain reported?
 
 - No
 - Yes
@@ -58,30 +61,30 @@ Is the number of draws per chain reported ?
 
 ### Q8 - 1 point
 
-Is the warm-up length reported ?
+2 d) Is the warm-up length reported?
 
 - No
 - Yes
 
 ### Q9 - 1 point
 
-Is the number of chains reported ?
+2 e) Is the number of chains reported?
 
 - No
 - Yes
 
 ### Q10 - 1 point
 
-Are line plots of chains included ? (Separate plots for alpha and beta)
+2 f) and 2 g) Are line plots of the chains included? (Separate plots for alpha and beta)
 
-- No, plots not included
-- Yes, but both plots in a single figure. Or separate plots but scatter plots (scatter plots aren't useful for visual convergence evaluation).
-- Yes, but only plot for alpha or beta is included.
-- Yes, separate line plots for both alpha and beta included.
+- No plots are included
+- Yes, but both plots are in a single figure, or the plots are scatter plots (scatter plots aren't useful for visual convergence evaluation).
+- Yes, but only a plot for alpha or beta is included.
+- Yes, separate line plots for both alpha and beta are included.
 
 ### Q11 - 1 point
 
-Is there a discussion on the convergence of the chains ?
+Is there a discussion on the convergence of the chains? 
 
 - No discussion on convergence.
 - Yes, but the discussion is not convincing.
@@ -96,7 +99,7 @@ Is it mentioned which implementation of Rhat is used ? (Possible answers mention
 
 ### Q13 - 1 point
 
-Are the Rhat-values reported ?
+Are the Rhat-values for alpha and beta reported?
 
 - No
 - Yes, but incorrectly computed.
@@ -113,7 +116,8 @@ Is the interpretation of Rhat values correct (correct interpretation will be giv
 - Interpretation correct
 
 ### Q15 - 1 point
-Does the report contain a scatter plot about the draws? Do the results look reasonable, that is, roughly like in the Figure below (figure attached in peergrade)?
+
+Does the report contain a scatter plot of the draws of alpha and beta? Do the results look reasonable, that is, roughly like in the Figure below (figure attached in peergrade)?
 
 - No plot included
 - Plot included, but the results do not look like in the figure above
@@ -123,7 +127,8 @@ Does the report contain a scatter plot about the draws? Do the results look reas
 
 Overall quality of the report
 
-### Q16 · Scale · 1 point
+### Q16 - 1 point
+
 Does the report follow the formatting instructions?
 
 - Not at all
@@ -131,6 +136,40 @@ Does the report follow the formatting instructions?
 - Mostly
 - Yes
 
-### Q17 - Optional question
+### Q17 -
 
-Justify your answers for overall quality of the report if needed
+In case the report doesn't fully follow the formatting instructions, specify the formatting instruction that is not followed. If applicable, specify the page of the report, where this difference in formatting is visible.
+
+## S4 - X.X points
+
+Time spent in the exercises.
+
+### Q18 -
+
+How was the time you used distributed in the assignment?
+
+- I used most of the time dealing with programming language's burden.
+- I used most time dealing with the exercise proper (math, derivations, etc.)
+- I used as much time time in programming and exercise.
+
+### Q19 -
+
+How much time did you spend on the assignment?
+
+- less than an hour
+- 1 to 5 hours.
+- more than 5 hours.
+
+### Q20 -
+
+How did the time you used in the assignment mach the time you expected to use?
+
+- I used considerably less time than I expected.
+- I used less time than I expected.
+- I used roughly the time I expected.
+- I used more time than I expected.
+- I used considerably more time than I expected.
+
+### Q21 -
+
+If in the previous question you selected either "I used considerably less time than I expected" or "I used considerably more time than I expected", please explain why you think the time used was considerably different from what you expected.

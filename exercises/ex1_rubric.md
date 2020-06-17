@@ -24,7 +24,7 @@ Exercise 1
 
 ### Q3 - 1 point
 
-The correct answers for a) are roughly the following:
+The correct answers are roughly the following:
 ...
 How is the answer?
 
@@ -38,7 +38,7 @@ Exercise 2
 
 ### Q4 - 1 point
 
-Is source code included?
+Is the source code for the solutions included?
 
 - No
 - Yes
@@ -74,7 +74,7 @@ Is the variance in 2 c) close to ...?
 
 ### Q9 - 1 point
 
-Is the interval in 2 d) roughly [..., ...]? Remember that since the interval is computed from random samples, there is variation and the answers should be roughly the same!
+Is the interval in 2 d) roughly [..., ...]? Remember that since the interval is computed from random samples, there is variation but the interval should be roughly the same!
 
 - No
 - Yes
@@ -117,7 +117,7 @@ Is the source code available?
 
 ### Q14 - 1 point
 
-How is the answer for probability of picking a red ball?
+a) How is the answer for probability of picking a red ball?
 
 - No answer
 - Probability rules ... and ... used, but the result is not ...
@@ -125,7 +125,7 @@ How is the answer for probability of picking a red ball?
 
 ### Q15 - 1 point
 
-How is the answer for what box is most probable?
+b) How is the answer for what box is most probable?
 
 - No answer
 - Bayes rule used to compute probabilities for all boxes given that the picked ball is red, but the answers are not ....
@@ -158,4 +158,35 @@ Does the report follow the formatting instructions?
 
 ### Q18 -
 
-Justify your answers for the two questions above.
+In case the report doesn't fully follow the formatting instructions, specify the formatting instruction that is not followed. If applicable, specify the page of the report, where this difference in formatting is visible.
+
+## S8 - X.X points
+
+Time spent in the exercises.
+
+### Q19 -
+
+How was the time you used distributed in the assignment?
+- I used most of the time dealing with programming language's burden.
+- I used most time dealing with the exercise proper (math, derivations, etc.)
+- I used as much time time in programming and exercise.
+
+### Q20 -
+
+How much time did you spend on the assignment?
+- less than an hour
+- 1 to 5 hours.
+- more than 5 hours.
+
+### Q21 -
+
+How did the time you used in the assignment mach the time you expected to use?
+- I used considerably less time than I expected.
+- I used less time than I expected.
+- I used roughly the time I expected.
+- I used more time than I expected.
+- I used considerably more time than I expected.
+
+### Q22 -
+
+If in the previous question you selected either "I used considerably less time than I expected" or "I used considerably more time than I expected", please explain why you think the time used was considerably different from what you expected.
