@@ -32,7 +32,8 @@ Are the mean and covariance of the prior in a) reported?
 
 ### Q4 - 1 point
 
-Are the means and their MCSEs of alpha and beta in b) reported?
+Are the means and their MCSEs of alpha and beta in b) reported? Note that
+the number of digits reported must follow the rule given in the assignment.
 
 - Not reported
 - Yes, but they are not ...
@@ -40,7 +41,8 @@ Are the means and their MCSEs of alpha and beta in b) reported?
 
 ### Q5 - 1 point
 
-Are the quantiles and their MCSEs of alpha and beta in b) reported?
+Are the quantiles and their MCSEs of alpha and beta in b) reported? Note that
+the number of digits reported must follow the rule given in the assignment.
 
 - Not reported
 - Yes, but they are not ...
