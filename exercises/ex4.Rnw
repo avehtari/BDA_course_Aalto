@@ -53,7 +53,7 @@
 
 
 \begin{document}
-\SweaveOpts{concordance=TRUE}
+% \SweaveOpts{concordance=TRUE}
 
 \section*{Bayesian Data Analysis - Assignment 4}
 
@@ -62,6 +62,15 @@
 \HRule
 
 \input{general_info.tex}
+
+% General Knitr options
+% (this cannot be input since the file runs knitr before LaTeX)
+<<echo=FALSE,eval=TRUE>>=
+options(continue="  ", prompt="> ")
+knitr::opts_chunk$set(size = "small")
+@
+
+
 
 \newpage
 
@@ -74,12 +83,13 @@ This exercise is related to Chapters 3 and 10. The maximum amount of points from
 
 \textbf{Grading instructions:} The grading will be done in peergrade. All grading questions and evaluations for exercise 4 can be found \href{https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex4_rubric.md}{\textbf{here}}
 
-\textbf{Reporting accuracy:} As many significant digits as justified by the Monte Carlo error and posterior accuracy.
+\textbf{Reporting accuracy:} For posterior statistics of interest, only report digits for which the Monte Carlo standard error (MCSE) is zero. \emph{Example:} If you estimate $E(\mu)=1.234$ with MCSE($E(\mu)$) = 0.01, you should report $E(\mu)=1.2$.
 
 To use markmyassignment for this assignment, run the following code in R:
+
 <<echo=TRUE,eval=FALSE>>=
 library(markmyassignment)
-exercise_path <- 
+exercise_path <-
   "https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/tests/ex4.yml"
 set_assignment(exercise_path)
 # To check your code/functions, just run
@@ -106,7 +116,7 @@ quantiles separately for both $\alpha$ and $\beta$. Report also the
 Monte Carlo standard errors (MCSEs) for the mean and quantile estimates.
 Report as many digits for the mean and
 quantiles as the MCSEs allow. In other words, leave out digits where
-MCSE is nonzero (Example: if posterior mean is 2.345678 and MCSE is 0.0012345, report two digits after the decimal sign, taking into account the usual rounding rule, so you would report 2.35. Further digits do not contain useful information due to the Monte Carlo uncertainty.). 
+MCSE is nonzero (Example: if posterior mean is 2.345678 and MCSE is 0.0012345, report two digits after the decimal sign, taking into account the usual rounding rule, so you would report 2.35. Further digits do not contain useful information due to the Monte Carlo uncertainty.).
 \begin{itemize}
 \item \textbf{Note!} The answer is graded as correct only if the number of digits
 reported is correct! The number of significant digits can be different for the mean
@@ -159,7 +169,7 @@ round(normalized_importance_weights(alpha = alpha, beta = beta),3)
 @
 \item[e)] Sample 4000 draws of $\alpha$ and $\beta$ from the prior distribution from a). Compute and plot a histogram of the 4000 normalized importance ratios.
 Use the functions you implemented in c) and d).
-\item[f)] Using the importance ratios, compute the importance sampling effective sample size $S_{\text{eff}}$ and report it. 
+\item[f)] Using the importance ratios, compute the importance sampling effective sample size $S_{\text{eff}}$ and report it.
 \begin{itemize}
 \item \textbf{Note!} The values below are \emph{only} a test case, you need to use 4000 draws for {\tt alpha} and {\tt beta} in the final report.
 \end{itemize}
@@ -200,7 +210,7 @@ round(posterior_mean(alpha = alpha, beta = beta),3)
  % MCSE is now when we used importance sampling for computing the mean? You don't
  % need to calculate the MCSE again, just compare the effective sample
  % size to the true sample size.
- 
+
 \end{itemize}
 
 

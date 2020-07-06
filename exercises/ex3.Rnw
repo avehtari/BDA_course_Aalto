@@ -1,6 +1,6 @@
 \documentclass[a4paper,11pt]{article}
 
-\usepackage[pdftex]{graphicx}
+%\usepackage[pdftex]{graphicx}
 %\usepackage{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -53,12 +53,22 @@
 \pagestyle{empty}
 
 \begin{document}
-\SweaveOpts{concordance=TRUE}
+%\SweaveOpts{concordance=TRUE}
 \thispagestyle{empty}
 
 \section*{Bayesian data analysis -- Assignment 3}
 
+\HRule
+
 \input{general_info.tex}
+
+% General Knitr options
+% (this cannot be input since the file runs knitr before LaTeX)
+<<echo=FALSE,eval=TRUE>>=
+options(continue="  ", prompt="> ")
+knitr::opts_chunk$set(size = "small")
+@
+
 
 \newpage
 
@@ -71,12 +81,10 @@ This exercise is related to Chapters 2 and 3. The maximum amount of points from 
 \textbf{Grading instructions:} The grading will be done in peergrade. All grading questions and evaluations for assignment 3 can be found \href{https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex3_rubric.md}{\textbf{here}}.
 
 To use markmyassignment for this assignment, run the following code in R:
-<<echo=FALSE,eval=TRUE>>=
-options(continue="  ", prompt="> ")
-@
+
 <<echo=TRUE,eval=FALSE>>=
 library(markmyassignment)
-exercise_path <- 
+exercise_path <-
   "https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/tests/ex3.yml"
 set_assignment(exercise_path)
 # To check your code/functions, just run
@@ -89,9 +97,9 @@ mark_my_assignment()
 
 \subsection*{1. Inference for normal mean and deviation (3 points)}
 
-A factory has a production line for manufacturing car windshields. 
+A factory has a production line for manufacturing car windshields.
 A sample of windshields has been taken for testing hardness. The
-observed hardness values $\mathbf{y}_1$ can be found in file 
+observed hardness values $\mathbf{y}_1$ can be found in file
 {\tt windshieldy1.txt}. The data
 can also be accessed from the {\tt aaltobda} R package as follows:
 
@@ -101,7 +109,7 @@ data("windshieldy1")
 head(windshieldy1)
 @
 
-We may assume that the observations follow a normal distribution with an unknown standard deviation $\sigma$. We wish to obtain information about the unknown average hardness $\mu$. Here it is not necessary to derive the posterior distribution as it has already been done in the book. 
+We may assume that the observations follow a normal distribution with an unknown standard deviation $\sigma$. We wish to obtain information about the unknown average hardness $\mu$. Here it is not necessary to derive the posterior distribution as it has already been done in the book.
 
 Below are test examples that can be used. The functions below can also be tested with \texttt{markmyassignment}. \textbf{Note!} This is \emph{only} a test case. You need to change to the full data {\tt windshieldy} above when reporting your results.
 
@@ -134,7 +142,7 @@ mu_pred_interval(data = windshieldy_test, prob = 0.95)
 @
 \textbf{Note!} Predictive intervals are different from posterior intervals.
 \end{enumerate}
-\textbf{Hint} With a conjugate prior a closed form posterior is Student's $t$ form (see equations in the book). 
+\textbf{Hint} With a conjugate prior a closed form posterior is Student's $t$ form (see equations in the book).
 R users can use the {\tt dt} function after doing input normalisation. We have added an R function {\tt dtnew()} in the {\tt aaltobda} R package which does that. For generating samples, you can use the corresponding {\tt rtnew} function.
 
 
@@ -153,7 +161,7 @@ receiving the control, 39 died, and out of 680 receiving the
 treatment, 22 died. Assume that the outcomes are independent and
 binomially distributed, with probabilities of death of $p_0$ and $p_1$
 under the control and treatment, respectively. Set up a noninformative
-or weakly informative prior distribution on $(p_0,p_1)$. 
+or weakly informative prior distribution on $(p_0,p_1)$.
 
 In the report, formulate (1) model likelihood, (2) the prior, and (3) the resulting posterior.
 
@@ -185,7 +193,7 @@ data("windshieldy2")
 @
 
 We assume that the samples have unknown standard deviations $\sigma_1$
-and $\sigma_2$. 
+and $\sigma_2$.
 
 In the report, formulate (1) model likelihood, (2) the prior, and (3) the resulting posterior.
 
