@@ -4,11 +4,13 @@
 \name{algae}
 \alias{algae}
 \title{algae}
-\format{A vector with 274 elements:
+\format{
+A vector with 274 elements:
 \describe{
   \item{1}{Algae present}
   \item{0}{No algae present}
-}}
+}
+}
 \usage{
 algae
 }

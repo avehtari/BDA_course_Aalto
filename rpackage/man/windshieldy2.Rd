@@ -4,7 +4,9 @@
 \name{windshieldy2}
 \alias{windshieldy2}
 \title{windshieldy2}
-\format{A vector with 13 elements}
+\format{
+A vector with 13 elements
+}
 \usage{
 windshieldy2
 }
