@@ -26,8 +26,8 @@ The material will be updated during the course. Exercise instructions and slides
 - Some algebra and calculus
 - Basic visualisation techniques (R or Python)
   + histogram, density plot, scatter plot
-  + see e.g. [BDA_R_demos](https://github.com/avehtari/BDA_R_demos)
-  + see e.g. [BDA_py_demos](https://github.com/avehtari/BDA_py_demos)
+  + see e.g. [BDA_R_demos](demos/R)
+  + see e.g. [BDA_py_demos](demos/python)
 
 This course has been designed so that there is strong emphasis in
 computational aspects of Bayesian data analysis and using the latest
@@ -69,10 +69,10 @@ Recommended way to go through the material is
 - Read the chapter in BDA3 and check that you find the terms listed in the reading instructions.
 - Watch the corresponding [lecture video](https://aalto.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx#folderID=%22f0ec3a25-9e23-4935-873b-a9f401646812%22) to get explanations for most important parts.
 - Read corresponding additional information in the [chapter notes](chapter_notes).
-- Run the corresponding demos in [R demos](https://github.com/avehtari/BDA_R_demos) or 
-  [Python demos](https://github.com/avehtari/BDA_py_demos).
-- Read the exercise instructions and make the corresponding [exercises](exercises). Demo codes in [R demos](https://github.com/avehtari/BDA_R_demos) and 
-  [Python demos](https://github.com/avehtari/BDA_py_demos) have a lot of useful examples for handling data and plotting figures. If you have problems, visit TA sessions or ask in course slack channel.
+- Run the corresponding demos in [R demos](demos/R) or 
+  [Python demos](demos/python).
+- Read the exercise instructions and make the corresponding [exercises](exercises). Demo codes in [R demos](demos/R) and 
+  [Python demos](demos/python) have a lot of useful examples for handling data and plotting figures. If you have problems, visit TA sessions or ask in course slack channel.
 - If you want to learn more, make also self study exercises listed below
 
 ## Slides and chapter notes
