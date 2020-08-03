@@ -4,6 +4,9 @@ Exercises and evaluation criteria are in [exercises
 folder](exercises). Exercises are submitted in
 [peergrade](https://www.peergrade.io).
 
+(Please free to use these exercises in self study and other courses,
+but please do not publish complete answers online).
+
 ## Exercise sessions
 
 One can get personal help in in weekly exercise sessions. The sessions
