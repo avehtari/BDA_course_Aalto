@@ -76,3 +76,8 @@ tinytex::install_tinytex()
 * Install `RStan` along with the necessary C++ compiler toolchain as described [here](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started)
 
 
+## What is `tidyr` or `tidyverse` that is used in the R demos? What does `%>%` mean?
+* [Tidyverse](https://www.tidyverse.org/) is a collection of R packages designed for data science. The packages "share an underlying design philosophy, grammar, and data structures".
+* A clear characteristic that distinguishes tidyverse from the base R is the [pipe operator](https://style.tidyverse.org/pipes.html) `%>%`
+* In this course you do not need to use tidyverse. However, some packages belonging to tidyverse, such as `ggplot2`, can be useful for visualizing results in the reports.
+
