@@ -1,27 +1,42 @@
 # Frequently Asked Questions
 
-## How to access course material in Github
+## How to access the course material in Github
 
-Instead of trying to download each file separately via Github interface, it is recommnded to clone the repo or download it as a zip file.
- - If you know how to use git, just clone the repo. Pull to get the latest updates.
- - If you want to leearn to use git, you need to install a [git client](https://www.google.com/search?q=git+clients&oq=git+client).
- - If you don't want to learn to use git, download a zip file. Click a green button "Clone or download" at git repo main page and choose "Download ZIP". Remember to download the latest updates.
- - If you can't find the Download ZIP, click [here](https://github.com/avehtari/BDA_course_Aalto/archive/master.zip). Remember to download the latest updates.
+Instead of trying to download each file separately via the Github interface, it is recommended to use one of these options:
+ - The best way is to clone the repository using git, and use pull to get the latest updates.
+   - If you want to learn to use git, start by installing a [git client](https://www.google.com/search?q=git+clients&oq=git+client). There are plenty of good git tutorials online.
+ - If you don't want to learn to use git, download a the repository as a zip file. Click the green button "Code" at the main page of the repository and choose "Download ZIP" ([direct link](https://github.com/avehtari/BDA_course_Aalto/archive/master.zip)). Remember to download again during the course to get the latest updates.
 
-## Using R and RStudio via Jupyterhub
+## Problems installing R packages on Windows ?
 
-Instead of installing RStudio in your computer, you can use it in your web browser:
-- go to jupyter.cs.aalto.fi
-- choose R: General use (JupyterLab) 1.8.*
-- in Launcher click RStudio
-- in RStudio Files pane you can create folders and upload files from your computer to the server
-  - **notebooks** folder is currently the only persistent folder (stays there if you sign out) so upload files (and folders) to that folder!
-  - I got an error if I tried to upload whole BDA_R_demos repository as a zip file, but uploading smaller zip files work
-  - the maximum filesize will be increased in near future
-- after uploading files use Files pane to open, e.g., RMarkdown notebook
-- knitting of R and Rmd files work, too
+> ⚠️ Note that getting the setup needed for the course working on Windows might involve a bit more effort than on Linux and Mac. Consequently, **we recommmend using either Linux or MacOS**.
+> Moreover, `Stan`, the probabilistic programming language which we will use later on during the course requires a C++ compiler toolchain which is not available by default in Windows (blame Microsoft).
+> However, if you insist on using Windows and have a problem getting the setup working, below are two options to consider:
+
+## How to use R and RStudio remotely
+
+### Option 1: Using R and RStudio via Jupyterhub
+
+Instead of installing RStudio on your computer, you can use it in your web browser:
+- go to [jupyter.cs.aalto.fi](jupyter.cs.aalto.fi)
+- choose `R: General use (JupyterLab) 3.0.0`
+- in the Launcher click `RStudio`
+- in the RStudio Files pane (bottom right) you can create folders for your work and upload files from your computer to the server 
+  - the **notebooks** folder is currently the only persistent folder (stays there if you sign out) so save everything to that folder!
+  - You may get an error when uploading a large zip file, but uploading smaller zip files work. The maximum filesize will be increased in the future.
+- after uploading files use Files pane to open them ()e.g. an RMarkdown notebook)
+- knitting of R and Rmd files works as well
 - when running RStan, there is currently extra dialog popping up which required clicking Yes, but this will be fixed in near future
   - there is a limited memory available (3Gib) and bigger models and datasets can run out of memory with cryptic error message
+
+###  Option 2: Use Aalto Linux via remote-desktop solution provided by Aalto-IT.
+
+* Goto `vdi.aalto.fi`
+* Download VMWare Horizon application or use the web portal
+  * If using the VMWare Horizon application, click on `New Server` and enter `vdi.aalto.fi`
+* Enter your aalto username (aalto email works too) and password in the respective fields.
+* Select `Ubuntu 18.04`
+* Open `RStudio` from the panel on the left
 
 ## Error related to LC_CTYPE while installing `aaltobda` r-package.
 One of the reported errors was as follows:
@@ -56,24 +71,8 @@ install.packages("tinytex")
 tinytex::install_tinytex()
 ```
 
-## Windows user and have a lot of problems getting packages to install ?
-
-> ⚠️ Note that getting the setup needed for the course working on Windows might involve a bit more effort than on Linux and Mac. Consequently, **we recommmend using either Linux or MacOS**.
-> Moreover, `Stan` the probabilistic programming language which we will use later on during the course requires a C++ compiler toolchain which is not available by default in Windows (blame Microsoft).
-> However, if you insist on using Windows and have a problem getting the setup working, following are some possible workarounds / solutions :
-
-# Workaround: Use Linux via remote-desktop. (Quickest to get started with)
-
-One workaround might be to use Linux via the `remote desktop solution` provided by Aalto-IT. A couple of students (BDA-2019) have been using this already and it has been a pretty good experience.
-* Goto `vdi.aalto.fi`
-* Download VMWare Horizon application (you could also use the web portal, so no need to install anything)
-* Click on `New Server`.
-* Enter `vdi.aalto.fi`
-* Enter your aalto username (aalto email works too) and password in the respective fields.
-* Select `Ubuntu 16.04`
-* Click `Applications` (top left) -> `Programming` -> `RStudio`
-
-# Install the latest version of `R` and then install `RStan`
-* Remove existing R installations and install the latest version of [R](https://www.r-project.org/)
+## How to install the latest version of `RStan`
+* Make sure you have installed R version 3.4.0 or newer. If you don't, install a newer version using instructions from [https://www.r-project.org/](https://www.r-project.org/)
 * Install `RStan` along with the necessary C++ compiler toolchain as described [here](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started)
+
 
