@@ -1,3 +1,7 @@
+---
+title: Bayesian Data Analysis course @ Aalto
+---
+
 # Bayesian Data Analysis course
 
 This is the web page for the Bayesian Data Analysis course at Aalto (CS-E5710). Aalto students should check also [MyCourses announcements](https://mycourses.aalto.fi/mod/forum/view.php?id=448327). In Autumn 2020 the course will be arranged completely online.
