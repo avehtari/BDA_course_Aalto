@@ -13,34 +13,39 @@ This is the web page for the Bayesian Data Analysis course at Aalto (CS-E5710). 
 
 All the course material is available in a [git repo](https://github.com/avehtari/BDA_course_Aalto) (and these pages are for easier navigation). All the material can be used in other courses. Text and videos licensed under CC-BY-NC 4.0. Code licensed under BSD-3.
 
+<div style= "float:right;position: relative;">
+ ![](bda_cover.png)
+</div>
+
 [The electronic version of the course book
 Bayesian Data Analysis, 3rd ed, by by Andrew Gelman, John Carlin, Hal
 Stern, David Dunson, Aki Vehtari, and Donald Rubin](https://users.aalto.fi/~ave/BDA3.pdf) is available for non-commercial purposes. Hard copies are available from [the publisher](https://www.crcpress.com/Bayesian-Data-Analysis/Gelman-Carlin-Stern-Dunson-Vehtari-Rubin/p/book/9781439840955) and many book stores.
 See also [home page for the
 book](http://www.stat.columbia.edu/~gelman/book/), [errata for the
-book](http://www.stat.columbia.edu/~gelman/book/errata_bda3.txt), and [chapter_notes](chapter_notes).
+book](http://www.stat.columbia.edu/~gelman/book/errata_bda3.txt), and [chapter notes](chapter_notes/BDA_notes.pdf).
 
 The material will be updated during the course. Exercise instructions and slides will be updated at latest on Monday of the corresponding week. The best way to stay updated is to clone the repo and pull before checking new material. If you don't want to learn git and can't find the Download ZIP link, click [here](https://github.com/avehtari/BDA_course_Aalto/archive/master.zip).
 
 ## Prerequisites
 
-- Basic terms of probability theory
-  + probability, probability density, distribution
-  + sum, product rule, and Bayes' rule
-  + expectation, mean, variance, median
-  + in Finnish, see e.g. [Stokastiikka ja tilastollinen ajattelu](http://math.aalto.fi/~lleskela/LectureNotes003.html)
-  + in English, see e.g. Wikipedia and [Introduction to probability and statistics](https://ocw.mit.edu/courses/mathematics/18-05-introduction-to-probability-and-statistics-spring-2014/readings/)
-- Some algebra and calculus
-- Basic visualisation techniques (R or Python)
-  + histogram, density plot, scatter plot
-  + see e.g. [BDA_R_demos](https://github.com/avehtari/BDA_R_demos)
-  + see e.g. [BDA_py_demos](https://github.com/avehtari/BDA_py_demos)
+ - Basic terms of probability theory
+     - probability, probability density, distribution
+     - sum, product rule, and Bayes' rule
+     - expectation, mean, variance, median
+     - in Finnish, see e.g. [Stokastiikka ja tilastollinen ajattelu](http://math.aalto.fi/~lleskela/LectureNotes003.html)
+     - in English, see e.g. Wikipedia and [Introduction to probability and statistics](https://ocw.mit.edu/courses/mathematics/18-05-introduction-to-probability-and-statistics-spring-2014/readings/)
+ - Some algebra and calculus
+ - Basic visualisation techniques (R or Python)
+     - histogram, density plot, scatter plot
+     - see e.g. [BDA_R_demos](https://github.com/avehtari/BDA_R_demos)
+     - see e.g. [BDA_py_demos](https://github.com/avehtari/BDA_py_demos)
 
 This course has been designed so that there is strong emphasis in
 computational aspects of Bayesian data analysis and using the latest
 computational tools.
 
 If you find BDA3 too difficult to start with, I recommend
+
  - Richard McElreath's [Statistical Rethinking, 2nd ed](https://xcelab.net/rm/statistical-rethinking/) book is easier than BDA3 and the 2nd ed is excellent. Statistical Rethinking doesn't go as deep in some details, math, algorithms and programming as BDA course. Richard's lecture videos of [Statistical Rethinking: A Bayesian Course Using R and Stan](https://github.com/rmcelreath/statrethinking_winter2019) are highly recommended even if you are following BDA3.
  - For background prerequisites some students have found chapters 2, 4 and 5 in [Kruschke, "Doing Bayesian Data Analysis"](https://sites.google.com/site/doingbayesiandataanalysis/) useful.
  - For regression models, their connection to statistical testing and causal analysis see [Gelman, Hill and Vehtari, "Regression and Other Stories"]() useful.
@@ -60,11 +65,11 @@ book](http://www.stat.columbia.edu/~gelman/book/errata_bda3.txt). [Electronic ed
 - Extra material for Stan and probabilistic programming (see below, Lecture 6)
 - Hierarchical models (Ch 5, Lecture 7)
 - Model checking (Ch 6, Lectures 8-9)
-  + [Visualization in Bayesian workflow](https://doi.org/10.1111/rssa.12378)
+    + [Visualization in Bayesian workflow](https://doi.org/10.1111/rssa.12378)
 - Evaluating and comparing models (Ch 7)
-  + [Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC](http://link.springer.com/article/10.1007/s11222-016-9696-4)
-  + [Videos and case studies](https://avehtari.github.io/modelselection/)
-  + [Cross-validation FAQ](https://avehtari.github.io/modelselection/CV-FAQ.html)
+    + [Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC](http://link.springer.com/article/10.1007/s11222-016-9696-4)
+    + [Videos and case studies](https://avehtari.github.io/modelselection/)
+    + [Cross-validation FAQ](https://avehtari.github.io/modelselection/CV-FAQ.html)
 - Decision analysis (Ch 9, Lecture 10)
 - Large sample properties and Laplace approximation (Ch 4, Lecture 11-12)
 - In addition you learn workflow for Bayesian data analysis
@@ -72,10 +77,11 @@ book](http://www.stat.columbia.edu/~gelman/book/errata_bda3.txt). [Electronic ed
 ## How to study
 
 Recommended way to go through the material is
-- Read the reading instructions for a chapter in [chapter_notes](chapter_notes).
+
+- Read the reading instructions for a chapter in [chapter notes](chapter_notes/BDA_notes.pdf).
 - Read the chapter in BDA3 and check that you find the terms listed in the reading instructions.
 - Watch the corresponding [lecture video](https://aalto.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx#folderID=%22f0ec3a25-9e23-4935-873b-a9f401646812%22) to get explanations for most important parts.
-- Read corresponding additional information in the [chapter notes](chapter_notes).
+- Read corresponding additional information in the [chapter notes](chapter_notes/BDA_notes.pdf).
 - Run the corresponding demos in [R demos](https://github.com/avehtari/BDA_R_demos) or 
   [Python demos](https://github.com/avehtari/BDA_py_demos).
 - Read the exercise instructions and make the corresponding [exercises](exercises). Demo codes in [R demos](https://github.com/avehtari/BDA_R_demos) and 
@@ -84,10 +90,10 @@ Recommended way to go through the material is
 
 ## Slides and chapter notes
 
-- [Slides](slides)
-  - including code for reproducing some of the figures
-- [Chapter notes](chapter_notes)
-  - including reading instructions highlighting most important parts and terms
+- [Slides](https://github.com/avehtari/BDA_course_Aalto/tree/master/slides)
+    - including code for reproducing some of the figures
+- [Chapter notes](chapter_notes/BDA_notes.pdf)
+    - including reading instructions highlighting most important parts and terms
 
 ## Videos
 
@@ -160,7 +166,6 @@ Great self study exercises for this course are listed below. Most of these have 
 ## Extra reading
 
 - [Dicing with the unknown](https://doi.org/10.1111/j.1740-9713.2004.00050.x)
-- [Logic, Probability, and Bayesian Inference](https://github.com/betanalpha/stan_intro/blob/master/stan_intro.pdf) by Michael Betancourt
 - [Origin of word Bayesian](http://jeff560.tripod.com/b.html)
 - [Model selection](https://avehtari.github.io/modelselection/)
 - [Cross-validation FAQ](https://avehtari.github.io/modelselection/CV-FAQ.html)
@@ -177,7 +182,7 @@ vieraskielisten nimien taivutussääntöjen mukaan
 
 ## FAQ
 
-We now have an FAQ for the exercises [here](FAQ.md). Has solutions to commonly asked questions related RStudio setup, errors during package installations, etc.
+[FAQ for the exercises](FAQ.md) has solutions to commonly asked questions related RStudio setup, errors during package installations, etc.
 
 ## Important dates for 2019 fall
 
@@ -185,18 +190,18 @@ Dates for 2020 fall will be updated 17th August.
 
 | Task | Topic | Published | Deadline | Points |
 | ---- | ----- | --------- | -------- | ------ |
-| [Assignment 1](https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex1.pdf) | Background | 9.9 (week 37) | 15.9 at 23:59 | 3 |
-| [Assignment 2](https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex2.pdf) | Chapters 1 and 2 | 16.9 (week 38) | 22.9 at 23:59 | 3 |
-| [Assignment 3](https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex3.pdf) | Chapters 2 and 3 | 23.9 (week 39) | 29.9 at 23:59 | 9 |
-| [Assignment 4](https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex4.pdf) | Chapters 3 and 10 | 30.9 (week 40) | 6.10 at 23:59 | 6 |
-| [Assignment 5](https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex5.pdf) | Chapters 10 and 11 | 7.10 (week 41) | 13.10 at 23:59 | 6 |
-| [Assignment 6](https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex6.pdf) | Chapters 10-12 and Stan | 14.10 (week 42) | 27.10 at 23:59 | 6 |
+| [Assignment 1](exercises/ex1.pdf) | Background | 9.9 (week 37) | 15.9 at 23:59 | 3 |
+| [Assignment 2](exercises/ex2.pdf) | Chapters 1 and 2 | 16.9 (week 38) | 22.9 at 23:59 | 3 |
+| [Assignment 3](exercises/ex3.pdf) | Chapters 2 and 3 | 23.9 (week 39) | 29.9 at 23:59 | 9 |
+| [Assignment 4](exercises/ex4.pdf) | Chapters 3 and 10 | 30.9 (week 40) | 6.10 at 23:59 | 6 |
+| [Assignment 5](exercises/ex5.pdf) | Chapters 10 and 11 | 7.10 (week 41) | 13.10 at 23:59 | 6 |
+| [Assignment 6](exercises/ex6.pdf) | Chapters 10-12 and Stan | 14.10 (week 42) | 27.10 at 23:59 | 6 |
 | Evaluation week (21-28.10) |   |   |   |  |
 | Project  | Projects introduced: form a group of 1-3 (2 is preferred) | 28.10 (week 44) | 3.11 at 23:59 | - |
-| [Assignment 7](https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex7.pdf) | Chapter 5 | 28.10 (week 44) | 3.11 at 23:59 | 6 |
+| [Assignment 7](exercises/ex7.pdf) | Chapter 5 | 28.10 (week 44) | 3.11 at 23:59 | 6 |
 | Project | Decide topic and start the project (no assign. on week 45) |   | 10.11 at 23:59 |  - |
-| [Assignment 8](https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex8.pdf) | Chapter 7 | 11.11 (week 46) | 17.11 at 23:59 | 6 |
-| [Assignment 9](https://github.com/avehtari/BDA_course_Aalto/blob/master/exercises/ex9.pdf) | Chapter 9 | 18.11 (week 47) | 24.11 at 23:59 | 3 |
+| [Assignment 8](exercises/ex8.pdf) | Chapter 7 | 11.11 (week 46) | 17.11 at 23:59 | 6 |
+| [Assignment 9](exercises/ex9.pdf) | Chapter 9 | 18.11 (week 47) | 24.11 at 23:59 | 3 |
 | Project | Finish the project work (no assign. on weeks 48 & 49) |   | 8.12 at 23:59 | 24 |
 | Project presentation | Present project work during week 50 (evaluation week) |  | | |
 
