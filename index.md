@@ -1,8 +1,13 @@
 ---
-title: Bayesian Data Analysis course @ Aalto
+title: "Bayesian Data Analysis course @ Aalto"
+author: "Aki Vehtari"
+output:
+  html_document:
+    theme: readable
+    toc: true
+    toc_depth: 2
+    toc_float: true
 ---
-
-# Bayesian Data Analysis course
 
 This is the web page for the Bayesian Data Analysis course at Aalto (CS-E5710). Aalto students should check also [MyCourses announcements](https://mycourses.aalto.fi/mod/forum/view.php?id=448327). In Autumn 2020 the course will be arranged completely online. This web page will be much updated during the August.
 
@@ -170,11 +175,13 @@ vieraskielisten nimien taivutussääntöjen mukaan
 
 - [Lyhyt englanti-suomi sanasto kurssin termeistä](extra_reading/sanasto.pdf)
 
-## Frequently Asked Questions (FAQ)
+## FAQ
 
 We now have an FAQ for the exercises [here](FAQ.md). Has solutions to commonly asked questions related RStudio setup, errors during package installations, etc.
 
 ## Important dates for 2019 fall
+
+Dates for 2020 fall will be updated 17th August.
 
 | Task | Topic | Published | Deadline | Points |
 | ---- | ----- | --------- | -------- | ------ |
