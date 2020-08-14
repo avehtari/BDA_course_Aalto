@@ -142,7 +142,7 @@ exercises and project work.
 
 ## Self study exercises
 
-Great self study exercises for this course are listed below. Most of these have also [model solutions vailable](http://www.stat.columbia.edu/~gelman/book/solutions3.pdf).
+Great self study BDA3 exercises for this course are listed below. Most of these have also [model solutions vailable](http://www.stat.columbia.edu/~gelman/book/solutions3.pdf).
 
 - 1.1-1.4, 1.6-1.8 (model solutions for 1.1-1.6)
 - 2.1-2.5, 2.8, 2.9, 2.14, 2.17, 2.22 (model solutions for 2.1-2.5, 2.7-2.13, 2.16, 2.17, 2.20, and 2.14 is in slides)
