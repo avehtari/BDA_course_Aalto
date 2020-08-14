@@ -48,7 +48,7 @@ If you find BDA3 too difficult to start with, I recommend
 
  - Richard McElreath's [Statistical Rethinking, 2nd ed](https://xcelab.net/rm/statistical-rethinking/) book is easier than BDA3 and the 2nd ed is excellent. Statistical Rethinking doesn't go as deep in some details, math, algorithms and programming as BDA course. Richard's lecture videos of [Statistical Rethinking: A Bayesian Course Using R and Stan](https://github.com/rmcelreath/statrethinking_winter2019) are highly recommended even if you are following BDA3.
  - For background prerequisites some students have found chapters 2, 4 and 5 in [Kruschke, "Doing Bayesian Data Analysis"](https://sites.google.com/site/doingbayesiandataanalysis/) useful.
- - For regression models, their connection to statistical testing and causal analysis see [Gelman, Hill and Vehtari, "Regression and Other Stories"]() useful.
+ - For regression models, their connection to statistical testing and causal analysis see [Gelman, Hill and Vehtari, "Regression and Other Stories"](https://avehtari.github.io/ROS-Examples/).
 
 ## Course contents following BDA3
 
@@ -84,7 +84,7 @@ Recommended way to go through the material is
 - Read corresponding additional information in the [chapter notes](chapter_notes/BDA_notes.pdf).
 - Run the corresponding demos in [R demos](https://github.com/avehtari/BDA_R_demos) or 
   [Python demos](https://github.com/avehtari/BDA_py_demos).
-- Read the exercise instructions and make the corresponding [exercises](exercises). Demo codes in [R demos](https://github.com/avehtari/BDA_R_demos) and 
+- Read the exercise instructions and make the corresponding [exercises](https://github.com/avehtari/BDA_course_Aalto/tree/master/exercises). Demo codes in [R demos](https://github.com/avehtari/BDA_R_demos) and 
   [Python demos](https://github.com/avehtari/BDA_py_demos) have a lot of useful examples for handling data and plotting figures. If you have problems, visit TA sessions or ask in course slack channel.
 - If you want to learn more, make also self study exercises listed below
 
