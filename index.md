@@ -9,7 +9,7 @@ output:
     toc_float: true
 ---
 
-This is the web page for the Bayesian Data Analysis course at Aalto (CS-E5710). Aalto students should check also [MyCourses announcements](https://mycourses.aalto.fi/mod/forum/view.php?id=448327). In Autumn 2020 the course will be arranged completely online. This web page will be much updated during the August.
+This is the web page for the Bayesian Data Analysis course at Aalto (CS-E5710). Aalto students should check also [MyCourses announcements](https://mycourses.aalto.fi/user/index.php?id=28239). In Autumn 2020 the course will be arranged completely online. This web page will be much updated during the August.
 
 All the course material is available in a [git repo](https://github.com/avehtari/BDA_course_Aalto) (and these pages are for easier navigation). All the material can be used in other courses. Text and videos licensed under CC-BY-NC 4.0. Code licensed under BSD-3.
 
