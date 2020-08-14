@@ -4,7 +4,7 @@ title: Bayesian Data Analysis course @ Aalto
 
 # Bayesian Data Analysis course
 
-This is the web page for the Bayesian Data Analysis course at Aalto (CS-E5710). Aalto students should check also [MyCourses announcements](https://mycourses.aalto.fi/mod/forum/view.php?id=448327). In Autumn 2020 the course will be arranged completely online.
+This is the web page for the Bayesian Data Analysis course at Aalto (CS-E5710). Aalto students should check also [MyCourses announcements](https://mycourses.aalto.fi/mod/forum/view.php?id=448327). In Autumn 2020 the course will be arranged completely online. This web page will be much updated during the August.
 
 All the course material is available in a [git repo](https://github.com/avehtari/BDA_course_Aalto) (and these pages are for easier navigation). All the material can be used in other courses. Text and videos licensed under CC-BY-NC 4.0. Code licensed under BSD-3.
 
@@ -38,7 +38,7 @@ computational tools.
 If you find BDA3 too difficult to start with, I recommend
  - Richard McElreath's [Statistical Rethinking, 2nd ed](https://xcelab.net/rm/statistical-rethinking/) book is easier than BDA3 and the 2nd ed is excellent. Statistical Rethinking doesn't go as deep in some details, math, algorithms and programming as BDA course. Richard's lecture videos of [Statistical Rethinking: A Bayesian Course Using R and Stan](https://github.com/rmcelreath/statrethinking_winter2019) are highly recommended even if you are following BDA3.
  - For background prerequisites some students have found chapters 2, 4 and 5 in [Kruschke, "Doing Bayesian Data Analysis"](https://sites.google.com/site/doingbayesiandataanalysis/) useful.
- - Michael Betancourt has a different point of view in his [introduction material](https://betanalpha.github.io/writing/), and many have found these also enlightening. Furthermore, his [Hamiltonian Monte Carlo videos](https://betanalpha.github.io/speaking/) are highly recommended if you are taking this course.
+ - For regression models, their connection to statistical testing and causal analysis see [Gelman, Hill and Vehtari, "Regression and Other Stories"]() useful.
 
 ## Course contents following BDA3
 
