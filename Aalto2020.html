@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Bayesian Data Analysis course - Aalto 2020</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 66px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+.section h2 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+.section h3 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+.section h4 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+.section h5 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+.section h6 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Bayesian Data Analysis course</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Material</a>
+</li>
+<li>
+  <a href="Aalto2020.html">Aalto 2020</a>
+</li>
+<li>
+  <a href="assignments.html">Assignments</a>
+</li>
+<li>
+  <a href="project.html">Project</a>
+</li>
+<li>
+  <a href="FAQ.html">FAQ</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Bayesian Data Analysis course - Aalto 2020</h1>
+<h4 class="date">Page updated: 2020-08-16</h4>
+
+</div>
+
+
+<p>Aalto 2020 course will be completely online. More info coming soon.</p>
+<ul>
+<li><a href="https://mycourses.aalto.fi/user/index.php?id=28239">MyCourses</a> is used for important announcements and some questionnaires.</li>
+<li>There will be a course slack</li>
+</ul>
+<p>All the course material is available in a <a href="https://github.com/avehtari/BDA_course_Aalto">git repo</a> (and these pages are for easier navigation). All the material can be used in other courses. Text and videos licensed under CC-BY-NC 4.0. Code licensed under BSD-3.</p>
+<p>The material will be updated during the course. Exercise instructions and slides will be updated at latest on Monday of the corresponding week. The updated material will appear on web pages, or you can clone the repo and pull before checking new material. If you don't want to learn git, you can download the latest <a href="https://github.com/avehtari/BDA_course_Aalto/archive/master.zip">zip file</a>.</p>
+<div id="book-bda3" class="section level2">
+<h2>Book: BDA3</h2>
+<div style="float:right;position: relative;">
+<div class="figure">
+<img src="bda_cover.png" />
+
+</div>
+</div>
+<p><a href="https://users.aalto.fi/~ave/BDA3.pdf">The electronic version of the course book Bayesian Data Analysis, 3rd ed, by by Andrew Gelman, John Carlin, Hal Stern, David Dunson, Aki Vehtari, and Donald Rubin</a> is available for non-commercial purposes. Hard copies are available from <a href="https://www.crcpress.com/Bayesian-Data-Analysis/Gelman-Carlin-Stern-Dunson-Vehtari-Rubin/p/book/9781439840955">the publisher</a> and many book stores. See also <a href="http://www.stat.columbia.edu/~gelman/book/">home page for the book</a>, <a href="http://www.stat.columbia.edu/~gelman/book/errata_bda3.txt">errata for the book</a>, and <a href="chapter_notes/BDA_notes.pdf">chapter notes</a>.</p>
+</div>
+<div id="communication-channels" class="section level2">
+<h2>Communication channels</h2>
+<p>Primary communication channel is Slack. If you have any questions, please try to ask the course staff or other students there (active students helping others will get bonus points).</p>
+<p>Please also make sure your real name (first name + last name) is set correctly in Slack. However, if you wish to remain anonymous on Slack, it is also possible — you can simply pick a random nickname and leave your real name unspecified. However, please note that in those cases it may be more difficult for our course staff to provide help with problems you have encountered and you are not able to get <a href="assignments.html#Bonus_points">bonus points when helping others</a>.</p>
+<p>In Slack, we will have separate channels for each assignment and the project. Channel #general can be used for any kind of general discussions and questions related to the course. All important official announcements will be posted on #announcements (do not discuss on this channel). Any kind of feedback is welcome on channel #feedback. We have also got a channels #R, #Python, and #Stan for questions that are not specific to assignments or the project. Channel #queue is used as a queue for getting help during exercise sessions.</p>
+<p>Our lecturers and teaching assistants have names with &quot;(staff)&quot; or &quot;(TA)&quot; in the end on Slack.</p>
+<p>If you need one-to-one help, please take part in the <a href="assignments.html#TA_sessions">TA sessions</a> and ask there</p>
+<p>If you find errors in material, post in #feedback channel in Slack or <a href="https://github.com/avehtari/BDA_course_Aalto/issues">submit an issue in github</a>.</p>
+</div>
+<div id="assessment" class="section level2">
+<h2>Assessment</h2>
+<p><a href="assignments.html">Assignments</a> (67%) and a <a href="project.html">project work with presentation</a> (33%). Minimum of 50% of points must be obtained from both the exercises and project work.</p>
+</div>
+<div id="schedule-2020" class="section level2">
+<h2>Schedule 2020</h2>
+<p>Dates for 2020 fall will be updated 17th August.</p>
+<p>Currently the video links are for the videos recorded 2019. Part of the videos will be re-recorded.</p>
+<div id="course-introduction-bda-3-ch-1-prerequisites-assignment" class="section level3">
+<h3>1) Course introduction, BDA 3 Ch 1, prerequisites assignment</h3>
+<p>Course practicalities, material, assignments, project work, peergrading, QA sessions, TA sessions, prerequisites, Slack, etc.</p>
+<ul>
+<li>Watch video <a href="https://www.youtube.com/watch?v=ukE5aqdoLZI">Computational probabilistic modeling</a> (15min)</li>
+<li>Watch video <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d841f429-9c3d-4d24-8228-a9f400efda7b">Introduction to uncertainty and modelling</a> (18min)</li>
+<li>Watch video <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=13fc7889-cfd1-4d99-996c-a9f400f6e5a2">Introduction to the course contents</a> (8min)</li>
+<li><strong>Monday 7.9. 14:15-16 Introduction/practicalities lecture and Q&amp;A (online)</strong></li>
+<li>Read <a href="chapter_notes/BDA_notes_ch1.pdf">the reading instructions for Chapter 1</a></li>
+<li>Read BDA3 Chapter 1</li>
+<li>Read <a href="chapter_notes/BDA_notes_ch1.pdf">the additional comments for Chapter 1</a></li>
+<li>There are no R/Python demos for Chapter 1</li>
+<li><strong>Make <a href="exercises/ex1.pdf">Assignment 1</a>. Deadline Sunday 13.9. 23:59</strong>
+<ul>
+<li>this assignment checks that you have sufficient prerequisite skills (basic probability calculus, and R or Python)</li>
+<li><a href="EXERCISES.md">General information about assignments</a></li>
+<li><a href="templates/assignment_template.rmd">R markdown template for assignments</a></li>
+<li><a href="FAQ.md">FAQ for the exercises</a> has solutions to commonly asked questions related RStudio setup, errors during package installations, etc.</li>
+</ul></li>
+<li><strong>TA sessions Wednesday 9.9. 14-16, Thursday 10.9. 12-14, Friday 11.9. 10-12</strong></li>
+<li>Optional: Make BDA3 exercises 1.1-1.4, 1.6-1.8 (<a href="http://www.stat.columbia.edu/~gelman/book/solutions3.pdf">model solutions available for 1.1-1.6</a>)</li>
+<li>Start reading Chapters 1+2, see instructions below</li>
+</ul>
+</div>
+<div id="bda3-ch-12-basics-of-bayesian-inference" class="section level3">
+<h3>2) BDA3 Ch 1+2, basics of Bayesian inference</h3>
+<p>BDA3 Chapters 1+2, basics of Bayesian inference, observation model, likelihood, posterior and binomial model, predictive distribution and benefit of integration, priors and prior information, and one parameter normal model.</p>
+<ul>
+<li>Read <a href="chapter_notes/BDA_notes_ch2.pdf">the reading instructions for Chapter 2</a></li>
+<li>Read BDA3 Chapter 2</li>
+<li>Watch videos <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=9c271082-5a8c-4b66-b6c2-aacc00fc683f">Lecture 2.1</a> and <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=70655a8a-0eb4-4ddd-9f52-aacc00fc67a2">Lecture 2.2</a> on basics of Bayesian inference, observation model, likelihood, posterior and binomial model, predictive distribution and benefit of integration, priors and prior information, and one parameter normal model. BDA3 Ch 1+2.</li>
+<li>Optional summary videos:
+<ul>
+<li><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=7a297f7d-bb7b-4dd0-9913-a9f500ec822d">2.1 Observation model, likelihood, posterior and binomial model</a></li>
+<li><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=75b9f18f-e379-4557-a5fa-a9f500f11b40">2.2 Predictive distribution and benefit of integration</a></li>
+<li><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=099659a5-f707-473d-8b03-a9f500f39eb5">2.3 Priors and prior information</a></li>
+</ul></li>
+<li>Read <a href="chapter_notes/BDA_notes_ch2.pdf">the additional comments for Chapter 2</a></li>
+<li><strong>Monday 14.9. 14:15-16 Q&amp;A</strong></li>
+<li>There may be additional videos recorded based on Q&amp;A</li>
+<li>Check <a href="https://github.com/avehtari/BDA_R_demos/tree/master/demos_ch2">R demos for Chapter 2</a> <a href="https://github.com/avehtari/BDA_py_demos/tree/master/demos_ch2">or Python demos for Chapter 2</a></li>
+<li><strong>Make <a href="exercises/ex2.pdf">Assignment 2</a>. Deadline Sunday 20.9. 23:59</strong>
+<ul>
+<li><a href="EXERCISES.md">General information about assignments</a></li>
+<li><a href="FAQ.md">FAQ</a> has solutions to commonly asked questions related RStudio setup, errors during package installations, etc.</li>
+</ul></li>
+<li>Optional: Make BDA3 exercises 2.1-2.5, 2.8, 2.9, 2.14, 2.17, 2.22 (<a href="http://www.stat.columbia.edu/~gelman/book/solutions3.pdf">model solutions available for 2.1-2.5, 2.7-2.13, 2.16, 2.17, 2.20, and 2.14 is in course slides</a>)</li>
+<li><strong>TA sessions Wednesday 16.9. 14-16, Thursday 17.9. 12-14, Friday 18.9. 10-12</strong></li>
+</ul>
+</div>
+<div id="bda3-ch-3-multidimensional-posterior" class="section level3">
+<h3>3) BDA3 Ch 3, multidimensional posterior</h3>
+<p>Multiparameter models, joint, marginal and conditional distribution, normal model, bioassay example, grid sampling and grid evaluation. BDA3 Ch 3.</p>
+</div>
+<div id="bda3-ch-10-monte-carlo" class="section level3">
+<h3>4) BDA3 Ch 10, Monte Carlo</h3>
+</div>
+<div id="bda3-ch-11-markov-chain-monte-carlo" class="section level3">
+<h3>5) BDA3 Ch 11, Markov chain Monte Carlo</h3>
+</div>
+<div id="bda3-ch-12-stan-hmc-ppl-stan" class="section level3">
+<h3>6) BDA3 Ch 12 + Stan, HMC, PPL, Stan</h3>
+</div>
+<div id="bda3-ch-5-hierarchical-models" class="section level3">
+<h3>7) BDA3 Ch 5, hierarchical models</h3>
+</div>
+<div id="bda3-ch-6-extra-material-model-checking-cross-validation" class="section level3">
+<h3>8) BDA3 Ch 6 + extra material, model checking, cross-validation</h3>
+</div>
+<div id="extra-material-model-comparison-and-selection" class="section level3">
+<h3>9) extra material, model comparison and selection</h3>
+</div>
+<div id="bda3-ch-9-decision-analysis" class="section level3">
+<h3>10) BDA3 Ch 9, decision analysis</h3>
+</div>
+<div id="bda3-ch-4-extra-material-normal-approximation-frequency-properties" class="section level3">
+<h3>11) BDA3 Ch 4 + extra material, normal approximation, frequency properties</h3>
+</div>
+<div id="extra-material-overview-of-bda3-ch-8-14-18-21" class="section level3">
+<h3>12) extra material + overview of BDA3 Ch 8, 14-18, 21</h3>
+</div>
+</div>
+<div id="finnish-terms" class="section level2">
+<h2>Finnish terms</h2>
+<p>Sanasta &quot;bayesilainen&quot; esiintyy Suomessa muutamaa erilaista kirjoitustapaa. Muoto &quot;bayesilainen&quot; on muodostettu yleisen vieraskielisten nimien taivutussääntöjen mukaan &gt; &quot;Jos nimi on kirjoitettuna takavokaalinen mutta äännettynä etuvokaalinen, kirjoitetaan päätteseen tavallisesti takavokaali etuvokaalin sijasta, esim. Birminghamissa, Thamesilla.&quot; Terho Itkonen, Kieliopas, 6. painos, Kirjayhtymä, 1997.</p>
+<ul>
+<li><a href="extra_reading/sanasto.pdf">Lyhyt englanti-suomi sanasto kurssin termeistä</a></li>
+</ul>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
