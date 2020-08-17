@@ -2,7 +2,7 @@
 
 # Bayesian Data Analysis course material
 
-This repository has course material for Bayesian Data Analysis course at Aalto (CS-E5710). Aalto students should check also [MyCourses announcements](https://mycourses.aalto.fi/mod/forum/view.php?id=448327).
+This repository has course material for Bayesian Data Analysis course at Aalto (CS-E5710). See [the course web pages for more information](https://avehtari.github.io/BDA_course_Aalto/)
 
 The course material in the repo can be used in other courses. Text and videos licensed under CC-BY-NC 4.0. Code licensed under BSD-3.
 
