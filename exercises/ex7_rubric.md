@@ -104,7 +104,7 @@ Response:
 
 ### Q10 · Scale · 1 point 
 
-Is there a description using mathematical notation of the model?
+Is the model described using mathematical notation?
 
 Response:
 
@@ -162,7 +162,7 @@ Response:
 
 ### Q16 · Scale · 1 point 
 
-Is there a description using mathematical notation of the model?
+Is the model described using mathematical notation?
 
 Response:
 
@@ -220,7 +220,7 @@ Response:
 
 ### Q22 · Scale · 1 point 
 
-Is there a description using mathematical notation of the model?
+Is the model described using mathematical notation?
 
 Response:
 
@@ -271,6 +271,7 @@ Response:
 Overall quality of the report
 
 ### Q27 · Scale · 1 point
+
 Does the report follow the formatting instructions?
 
 - Not at all
@@ -278,6 +279,8 @@ Does the report follow the formatting instructions?
 - Mostly
 - Yes
 
-### Q28 · Text · Optional question
-Justify your answers for overall quality of the report if needed
+### Q28 -
+
+In case the report doesn't fully follow the formatting instructions, specify the formatting instruction that is not followed. If applicable, specify the page of the report, where this difference in formatting is visible.
+
 

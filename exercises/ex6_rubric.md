@@ -31,7 +31,7 @@ Is the source code included?
 
 ### Q4 
 
-Does the implemented Stan-model seem to be working?
+1. Does the implemented Stan-model seem to be working?
 
 - No implementation
 - Model implemented but results not visualized/reported
@@ -40,15 +40,15 @@ Does the implemented Stan-model seem to be working?
 
 ### Q5 
 
-Are the R_hat-values reported (potential scale reduction factor, Eq. (11.4) in the BDA3)?
+2. Are the R_hat values reported (potential scale reduction factor, Eq. (11.4) in the BDA3)?
 
 - No
 - Yes, but only for alpha or beta
-- Yes, single values both for alpha and beta
+- Yes, one value for alpha and one for beta
 
 ### Q6 
 
-Is the interpretation of Rhat values correct (correct interpretation will be given in peergrade)?
+2. Is the interpretation of Rhat values correct (correct interpretation will be given in peergrade)?
 
 - No interpretation or discussion about the R_hat-values, or conclusions clearly wrong
 - Somewhat correct
@@ -56,7 +56,7 @@ Is the interpretation of Rhat values correct (correct interpretation will be giv
 
 ### Q7
 
-Does the report contain a scatter plot about the draws? Do the results look reasonable, that is, roughly like in the Figure below (figure attached in peergrade)?
+3. Does the report contain a scatter plot of the draws? Do the results look reasonable, that is, roughly like in the Figure below (figure attached in peergrade)?
 
 - No plot included
 - Plot included, but the results do not look like in the figure above
@@ -76,9 +76,8 @@ Does the report follow the formatting instructions?
 - Mostly
 - Yes
 
+### Q9 -
 
-### Q9
-
-Justify your answers for overall quality of the report if needed
+In case the report doesn't fully follow the formatting instructions, specify the formatting instruction that is not followed. If applicable, specify the page of the report, where this difference in formatting is visible.
 
 
