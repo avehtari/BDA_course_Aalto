@@ -13,9 +13,9 @@ Instead of trying to download each file separately via the Github interface, it 
 
 ## Problems installing R packages on Windows ?
 
-⚠️ Note that getting the setup needed for the course working on Windows might involve a bit more effort than on Linux and Mac. Consequently, **we recommmend using either Linux or MacOS**.
+Getting the setup needed for the course working on Windows might involve a bit more effort than on Linux and Mac. Consequently, **we recommmend using either Linux or MacOS, or using R remotely**.
 Moreover, `Stan`, the probabilistic programming language which we will use later on during the course requires a C++ compiler toolchain which is not available by default in Windows (blame Microsoft).
-However, if you insist on using Windows and have a problem getting the setup working, below are two options to consider:
+However, if you want to use Windows and have a problem getting the setup working, below are two options to consider:
 
 ## How to use R and RStudio remotely
 
@@ -23,43 +23,49 @@ However, if you insist on using Windows and have a problem getting the setup wor
 
 Instead of installing RStudio on your computer, you can use it in your web browser:
 
-* go to [jupyter.cs.aalto.fi](https://jupyter.cs.aalto.fi)
-* choose `R: General use (JupyterLab) 3.0.0`
-* in the Launcher click `RStudio`
-* in the RStudio Files pane (bottom right) you can create folders for your work and upload files from your computer to the server 
-  * the **notebooks** folder is currently the only persistent folder (stays there if you sign out) so save everything to that folder!
-  * You may get an error when uploading a large zip file, but uploading smaller zip files work. The maximum filesize will be increased in the future.
-* after uploading files use Files pane to open them (e.g. an RMarkdown notebook)
-* knitting of R and Rmd files works as well
-* when running RStan, there is currently extra dialog popping up which required clicking Yes, but this will be fixed in near future
-  * there is a limited memory available (3Gib) and bigger models and datasets can run out of memory with cryptic error message
+* [Information about Aalto JupyterHub](https://scicomp.aalto.fi/aalto/jupyterhub/)
+* Go to [jupyter.cs.aalto.fi](https://jupyter.cs.aalto.fi)
+* Choose `R: General use (JupyterLab) 3.0.0`
+* In the Launcher click `RStudio`
+* In the RStudio Files pane (bottom right) you can create folders for your work and upload files from your computer to the server 
+    * The **notebooks** folder is the only persistent folder (stays there if you sign out) so save everything to that folder!
+    * You may get an error when uploading a large zip file, but uploading smaller zip files work. If you can't upload demo zip file contact the course staff via Slack.
+    * You may access your data as a network drive by SMB mounting it on your own computer - [see Accessing JupyterHub data](https://scicomp.aalto.fi/aalto/jupyterhub-data/). This allows you total control over your data.
+* After uploading files use Files pane to open them (e.g. an RMarkdown notebook)
+* Knitting of R and Rmd files works as well
+* When running RStan, there is currently extra dialog popping up which required clicking Yes, but this will be hopefully fixed at some point.
+* There is a limited memory available (3Gib) and bigger models and datasets can run out of memory with cryptic error message, but the demos and assignment models should run (if not, then contact the course staff via Slack).
+* See also [Aalto JupyterHub FAQ and bugs](https://scicomp.aalto.fi/aalto/jupyterhub/#faq-and-bugs)
 
 ###  Option 2: Use Aalto Linux via remote-desktop solution provided by Aalto-IT.
 
+* [Information about Aalto remote desktop](https://scicomp.aalto.fi/aalto/remoteaccess/#remote-desktop)
 * Goto [vdi.aalto.fi](https://vdi.aalto.fi)
 * Download VMWare Horizon application or use the web portal
-  * If using the VMWare Horizon application, click on `New Server` and enter `vdi.aalto.fi`
+    * If using the VMWare Horizon application, click on `New Server` and enter `vdi.aalto.fi`
 * Enter your aalto username (aalto email works too) and password in the respective fields.
 * Select `Ubuntu 18.04`
 * Open `RStudio` from the panel on the left
-
-
 
 
 ## Error related to LC_CTYPE while installing `aaltobda` r-package.
 
 When installing the `aaltobda` package, you may encounter an error like this:
 
->Error: (converted from warning) Setting LC_CTYPE failed, using "C"
->Execution halted
->Error: Failed to install 'aaltobda' from GitHub:
-> (converted from warning) installation of package '/var/folders/g6/bdv4dr4s6qq4zyxw2nzy26kr0000gn/T//Rtmp3uYwuD/file121f355845a3/aaltobda_0.1.tar.gz' had non-zero exit status
+
+```{r eval=FALSE}
+Error: (converted from warning) Setting LC_CTYPE failed, using "C"
+Execution halted
+Error: Failed to install 'aaltobda' from GitHub:
+ (converted from warning) installation of package '/var/folders/g6/bdv4dr4s6qq4zyxw2nzy26kr0000gn/T//Rtmp3uYwuD/file121f355845a3/aaltobda_0.1.tar.gz' had non-zero exit status
+```
 
 **Solution:**
 See the following StackOverflow solution. ([link](https://stackoverflow.com/a/3909546))
 
 ## Installing `knitr`
-If you just installed RStudio and R, chances are you don't have `knitr` installed, the package responsible of rendering your pdf.
+
+If you just installed RStudio and R, chances are you don't have `knitr` installed, the package responsible for rendering your notebook to pdf.
 
 **Solution:**
 ```{r eval=FALSE}
@@ -68,22 +74,32 @@ install.packages("knitr")
 You can also install packages from RStudio menu `Tools->Install Packages`.
 
 ## If `knitr` is installed but the pdf won't compile
+
 In this case it is possible that you don't have LaTeX installed, which is the package that runs the engine to process the text and render the pdf itself.
 
 **Solution:**
-Tinytex is the bare minimum Latex core that you need to install in order to run the pdf compiler. If you want to go further and download a full distribution of Latex, look at texlive for linux and mactex for macOS.
+Tinytex is the bare minimum Latex core that you need to install in order to run the pdf compiler. If you want to go further and download a full distribution of Latex, look at TeX Live for Linux and MacTeX for Mac OS.
 
 ```{r eval=FALSE}
 install.packages("tinytex")
 tinytex::install_tinytex()
 ```
 
-## How to install the latest version of `RStan`
+## How to install the latest version of `RStan` or `CmdStanR`
+
 * Make sure you have installed R version 3.4.0 or newer. If you don't, install a newer version using instructions from [https://www.r-project.org/](https://www.r-project.org/)
 * Install `RStan` along with the necessary C++ compiler toolchain as described [here](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started)
 
+Instead of RStan, you can also use new `CmdStanR`which maybe easier to install.
+* [CmdStanR](https://mc-stan.org/cmdstanr/) is a lightweight interface to Stan for R users (see CmdStanPy for Python).
+* CmdStanR avoids some installation problems as it doesn't require matching C++ tools for R and RStan
+
+## Workarounds for current Rstan Windows issues
+
+* [A list of the current RStan Windows problems and and known temporary workarounds](https://discourse.mc-stan.org/t/workarounds-for-current-rstan-windows-issues/17389)
 
 ## What is `tidyr` or `tidyverse` that is used in the R demos? What does `%>%` mean?
+
 * [Tidyverse](https://www.tidyverse.org/) is a collection of R packages designed for data science. The packages "share an underlying design philosophy, grammar, and data structures".
 * A clear characteristic that distinguishes tidyverse from the base R is the [pipe operator](https://style.tidyverse.org/pipes.html) `%>%`
 * In this course you do not need to use tidyverse. However, some packages belonging to tidyverse, such as `ggplot2`, can be useful for visualizing results in the reports.
