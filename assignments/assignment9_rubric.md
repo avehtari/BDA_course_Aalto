@@ -10,7 +10,7 @@ Can you open the pdf?
 Is the report anonymous?
 
 ## S2 · 85 points
-Exercise
+Assignment
 
 ### Q3 · Yes / No · 1 point
 Is source code included?
