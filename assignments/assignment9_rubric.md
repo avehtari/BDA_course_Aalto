@@ -10,7 +10,7 @@ Can you open the pdf?
 Is the report anonymous?
 
 ## S2 · 85 points
-Exercise
+Assignment
 
 ### Q3 · Yes / No · 1 point
 Is source code included?
@@ -63,7 +63,8 @@ Is some discussion provided whether the company should buy a new (7th) machine? 
 ## S3 · 7.5 points
 Overall quality of the report
 
-### Q12 · Scale · 1 point
+### Q12 · Scale · 1 poin
+
 Does the report follow the formatting instructions?
 
 - Not at all
@@ -71,5 +72,8 @@ Does the report follow the formatting instructions?
 - Mostly
 - Yes
 
-### Q13 · Text · Optional question
-Justify your answers for overall quality of the report if needed
+### Q13 -
+
+In case the report doesn't fully follow the formatting instructions, specify the formatting instruction that is not followed. If applicable, specify the page of the report, where this difference in formatting is visible.
+
+
