@@ -1,4 +1,4 @@
-# Assignment 1
+# Rubric for Assignment 1
 
 ## S1 - 7.5 points
 
