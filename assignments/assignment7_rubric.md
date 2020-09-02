@@ -6,7 +6,7 @@ Basic requirements
 
 ### Q1 · Yes / No · 1 points
 
-Can you open the pdf?
+Can you open the pdf and it's not blank?
 
 Response:
 
