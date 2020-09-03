@@ -6,7 +6,7 @@ Basic requirements
 
 ### Q1 - 1 point
 
-Can you open the pdf?
+Can you open the pdf and it's not blank?
 
 - No
 - Yes
@@ -31,7 +31,7 @@ Is the source code included?
 
 ### Q4 - 1 point
 
-Are the prior, likelihood and posterior forms in a) reported (derivation of posterior not necessary)?
+Are the prior, likelihood and posterior forms in a) reported? Derivation of posterior is not necessary.
 
 - No
 - Some missing
@@ -39,7 +39,7 @@ Are the prior, likelihood and posterior forms in a) reported (derivation of post
 
 ### Q5 - 1 point
 
-Is the reported resulting posterior correct ...?
+In a), is the reported resulting posterior correct ...?
 
 - It is not reported, that the posterior distribution is a ... .
 - It is reported, that the posterior distribution is ..., but the numerical values for the parameters are incorrect.
@@ -47,21 +47,21 @@ Is the reported resulting posterior correct ...?
 
 ### Q6 - 1 point
 
-For the b) part, is there at least one point estimate reported. Sample based estimates are also ok. Points should be given if the method is right, even if the result is wrong because the posterior was wrong in the first place. If the posterior was right, mean median, and mode are all approximately ....
+In part b), is there at least one point estimate reported. Sample based estimates are also ok. Points should be given if the method is right, even if the result is wrong due to a wrong posterior distribution being used. With the right posterior, mean, median, and mode are all approximately ....
 
 - No
 - Yes
 
 ### Q7 - 1 point
 
-For the b) part, is the 90% posterior interval estimate reported? Sample based estimate is also ok.
+In part b), is the 90% posterior interval estimate reported? Sample based estimate is ok.
 
 - No
 - Yes
 
 ### Q8 - 1 point
 
-For the c) part, is the posterior probability Pr(π<0.2|y) reported? Points should be given if the method is right, even if the result is wrong because the posterior was wrong. If the posterior was right, the result should be approximately ....
+In part c), is the posterior probability Pr(π<0.2|y) reported? Points should be given if the method is right, even if the result is wrong because the posterior used was wrong. If the posterior was right, the result should be approximately ....
 
 - No
 - Yes
@@ -77,7 +77,7 @@ For the d) part, does the report discuss ...?
 
 ### Q10 - 1 point
 
-For the e) part, Is there some comparison of results obtained with alternative prior parameters and some discussion about these?
+For the e) part, is there some comparison and discussion of results obtained with alternative prior parameters?
 
 - No
 - Yes, but the results and conclusions are clearly wrong
@@ -98,4 +98,5 @@ Does the report follow the formatting instructions?
 
 ### Q12 -
 
-Justify your answers for the two questions above.
+In case the report doesn't fully follow the formatting instructions, specify the formatting instruction that is not followed. If applicable, specify the page of the report, where this difference in formatting is visible.
+

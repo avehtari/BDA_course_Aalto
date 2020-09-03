@@ -6,7 +6,7 @@ Basic requirements
 
 ### Q1 - 1 point
 
-Can you open the pdf?
+Can you open the pdf and it's not blank?
 
 - No
 - Yes
@@ -107,7 +107,8 @@ Are the means and their MCSEs of alpha and beta in h) reported?
 
 Overall quality of the report
 
-### Q14 · Scale · 1 point
+### Q13 - 1 point
+
 Does the report follow the formatting instructions?
 
 - Not at all
@@ -115,6 +116,7 @@ Does the report follow the formatting instructions?
 - Mostly
 - Yes
 
-### Q15 · Text · Optional question
+### Q14 -
 
-Justify your answers for overall quality of the report if needed
+In case the report doesn't fully follow the formatting instructions, specify the formatting instruction that is not followed. If applicable, specify the page of the report, where this difference in formatting is visible.
+

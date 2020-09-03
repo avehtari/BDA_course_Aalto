@@ -6,7 +6,7 @@ Basic requirements
 
 ### Q1 - 1 point
 
-Can you open the pdf?
+Can you open the pdf and it's not blank?
 
 - No
 - Yes
@@ -31,7 +31,7 @@ Is the source code included?
 
 ### Q4 - 1 point
 
-Are the likelihood, prior and the posterior for computing the average hardness value reported (it is also ok to refer to the book)?
+Are the likelihood, prior and the posterior for computing the average hardness value reported? It is ok to refer to the book instead of deriving the distributions.
 
 - No
 - Yes, but some are missing
@@ -39,7 +39,7 @@ Are the likelihood, prior and the posterior for computing the average hardness v
 
 ### Q5 - 1 point
 
-For a)-part, were the point estimates and posterior interval provided? (The posterior mean should be close to ... and 95% posterior interval should be around [...,...])
+In part a), were the point estimates and posterior interval provided? (The posterior mean should be close to ... and 95% posterior interval should be around [..., ...])
 
 
 - No
@@ -48,7 +48,7 @@ For a)-part, were the point estimates and posterior interval provided? (The post
 
 ### Q6 - 1 point
 
-For a)-part, was the density plotted?
+In part a), was the density plotted?
 
 - No
 - Yes, but seem incorrect
@@ -56,7 +56,7 @@ For a)-part, was the density plotted?
 
 ### Q7 - 1 point
 
-For b)-part, was a formula or a simulation method presented for computing the posterior predictive distribution (it is also ok to refer to the book)?
+For b)-part, was a formula or a simulation method presented for computing the posterior predictive distribution? It is ok to refer to the book.
 
 - No
 - Yes, but seems incorrect
@@ -64,7 +64,7 @@ For b)-part, was a formula or a simulation method presented for computing the po
 
 ### Q8 - 1 point
 
-For b)-part, were the point estimate and predictive interval provided? (95% predictive interval should be around [...,...] and the mean the same as in a)-part).
+For b)-part, were the point estimate and predictive interval provided? (95% predictive interval should be around [...,...] and the mean the same as in part a).
 
 - No
 - Yes, but seems incorrect
@@ -91,7 +91,7 @@ Is the source code included?
 
 ### Q11 - 1 point
 
-Are the likelihood, prior and the posterior for the death probabilities reported (it is also ok to refer to the book)?
+Are the likelihood, prior and the posterior for the death probabilities reported? It is ok to refer to the book instead of deriving the distributions.
 
 - No
 - Yes, but some are missing
@@ -99,7 +99,7 @@ Are the likelihood, prior and the posterior for the death probabilities reported
 
 ### Q12 - 1 point
 
-Was the simulation algorithm in a)-part for computing the posterior for the odds ratio presented or implemented?
+In part a), was the simulation algorithm for computing the posterior of the odds ratio presented or implemented?
 
 - No
 - Yes, but seems incorrect
@@ -107,7 +107,7 @@ Was the simulation algorithm in a)-part for computing the posterior for the odds
 
 ### Q13 - 1 point
 
-In a)-part, was the odds ratio summarized with point estimate and posterior interval? (The mean should be something like ... and 95% posterior interval [..., ...])
+In a)-part, was the odds ratio summarized with a point estimate and a posterior interval? (The mean should be close to ... and 95% posterior interval approximately  [..., ...])
 
 - No
 - Yes, but results seem incorrect
@@ -115,7 +115,7 @@ In a)-part, was the odds ratio summarized with point estimate and posterior inte
 
 ### Q14 - 1 point
 
-Were some discussion about testing some alternative priors provided?
+In part b), was some discussion about testing alternative priors provided?
 
 - Not at all
 - Some analysis was provided but it was lacking or did not make sense
@@ -134,7 +134,7 @@ Is the source code included?
 
 ### Q16 - 1 point
 
-Are the likelihood, prior and the posterior for the windshield hardness values reported? (It is also ok to refer to the book or related formulas from exercise 1)
+Are the likelihood, prior and the posterior for the windshield hardness values reported? (It is ok to refer to the book or related formulas from exercise 1)
 
 - No
 - Yes, but some are missing
@@ -142,7 +142,7 @@ Are the likelihood, prior and the posterior for the windshield hardness values r
 
 ### Q17 - 1 point
 
-Was the simulation algorithm in a)-part for computing the difference in the means presented or implemented?
+In part a), was the simulation algorithm for computing the difference in the means presented or implemented?
 
 - No
 - Yes, but seems to be incorrect
@@ -150,7 +150,7 @@ Was the simulation algorithm in a)-part for computing the difference in the mean
 
 ### Q18 - 1 point
 
-In a)-part, was the posterior for the difference between the means in a)-part summarized with point and interval estimates? (The mean should be close to ... and 95% posterior interval [..., ...] or something close to it)
+In part a), was the posterior for the difference between the means summarized with point and interval estimates? (The mean should be close to ... and 95% posterior interval [..., ...] or something close to it)
 
 - No answer
 - Yes, but results seem incorrect or only one estimate was given
@@ -158,7 +158,7 @@ In a)-part, was the posterior for the difference between the means in a)-part su
 
 ### Q19 - 1 point
 
-Were some analysis or discussion provided for assessing whether the means could be the same?
+Was some analysis and discussion provided for assessing whether the means could be the same?
 
 - No
 - Yes, but the analysis or explanation seems incorrect
@@ -179,4 +179,5 @@ Does the report follow the formatting instructions?
 
 ### Q21 -
 
-Justify your answers for the two questions above.
+In case the report doesn't fully follow the formatting instructions, specify the formatting instruction that is not followed. If applicable, specify the page of the report, where this difference in formatting is visible.
+
