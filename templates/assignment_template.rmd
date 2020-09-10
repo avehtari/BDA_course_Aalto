@@ -11,6 +11,8 @@ output:
 
 This is a template with format instructions for Assignments in the Bayesian Data Analysis course at Aalto University. R markdown is a convenient way of writing exercise reports by combining text and R code using markdown syntax. To create your assignment, remove the formatting instructions and use this file as a template. Keep the header (the first lines of this file between two lines of ---) as it sets the author name to be anonymous, and you can set the title to match the assignment number.
 
+R markdown makes it easy to make a structured document with section and subsection titles, textual explanations, equations, code and figures in logical order. When you make changes to the code and re-run the notebook or "knit" (render) it to PDF, the relevant code is re-run and the figures and results are updated without need to copy and past (which is probe to errors).
+
 More information on how to use markdown, see [this](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) and more information on R markdown can be found [here](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf).
 
 Also, _R Markdown: The Definite Guide_, an extensive book on R Markdown can be found [here](https://bookdown.org/yihui/rmarkdown/).
@@ -47,13 +49,22 @@ Write clear code. The code is also part of your report and clarity of the report
 If in doubt additional source code can be included in an appendix. 
 
 # Format instructions
-§
+
 All exercises in the assignment should start with a header fully specifying that it is exercise X, as (in rmd use #):
 
 # Exercise 1)
+
+Subtasks in each assignments should be numbered and use header (in rmd use ##).
+
 ## a)
 
-Subtasks in each assignments should be numbered and use header (in rmd use ##). 
+For each subtask include necessary textual explanation, equations,
+code and figures so that the answer to the question flows
+naturally. You can think what kind of report would you like to review,
+and what kind of information would make it easier where there is error
+(if there are errors).
+
+# Code
 
 We can easily add R code as chunks in the following way:
 
@@ -61,18 +72,43 @@ We can easily add R code as chunks in the following way:
 5 + 5
 ```
 
+This R code is evaluated when running the notebook or when rendering to PDF.
+
+If you want to show and run the code, but the output is very long or messy and you prefer to hide the output from the rendered report you can use option results='hide'. This is useful especially later as Stan may output many lines.
+
+```{r, results='hide'}
+5 + 5
+```
+
+If you want to use some code in the notebook, but think it's not helpful for the reviewers you can exclude it from the generated PDF with option `include=FALSE`. You will see the next block in rmd, but not in the generated PDF.
+```{r, include=FALSE}
+5 + 5
+```
+
 # Plots
 
 Include plots, where we can specify the width and height of the figure.
 
-```{r, fig.height=2, fig.width=3}
+```{r, fig.height=3, fig.width=4}
 data("drowning") # Access the data in aaltobda package
-plot(drowning$year, drowning$drownings, type = "l")
+plot(drowning$year, drowning$drownings)
+```
+
+Or using qplot from ggplot2 package
+```{r, fig.height=3, fig.width=4}
+library(ggplot2)
+qplot(drowning$year, drowning$drownings)
+```
+
+Or using ggplot from ggplot2 package
+```{r, fig.height=3, fig.width=4}
+ggplot(data=drowning, aes(x=year, y=drownings)) + geom_point() +
+  labs(x='Year', y='Number of drownings')
 ```
 
 # Equations
 
-Equations should be correctly formated using LaTeX or being included as images if, for example, Microsoft Equations is used. 
+You can write equations using LaTeX syntax, or you can include them as images if, for example, you use Microsoft Equations. 
 
 In Markdown, equations can easily be formulated using LaTeX in line as $f(k) = {n \choose k} p^{k} (1-p)^{n-k}$ or use the math environment as follows:
 
