@@ -7,17 +7,23 @@ output:
     toc_depth: 1
 ---
 
-This is a template with format instructions for Assignments in the Bayesian Data Analysis course at Aalto University. R markdown is a convenient way of writing exercise reports by combining text and R code using markdown syntax. To create your assignment, remove the formatting instructions and use this file as a template.
+# Introduction
+
+This is a template with format instructions for Assignments in the Bayesian Data Analysis course at Aalto University. R markdown is a convenient way of writing exercise reports by combining text and R code using markdown syntax. To create your assignment, remove the formatting instructions and use this file as a template. Keep the header (the first lines of this file between two lines of ---) as it sets the author name to be anonymous, and you can set the title to match the assignment number.
+
+R markdown makes it easy to make a structured document with section and subsection titles, textual explanations, equations, code and figures in logical order. When you make changes to the code and re-run the notebook or "knit" (render) it to PDF, the relevant code is re-run and the figures and results are updated without need to copy and past (which is probe to errors).
 
 More information on how to use markdown, see [this](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) and more information on R markdown can be found [here](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf).
 
 Also, _R Markdown: The Definite Guide_, an extensive book on R Markdown can be found [here](https://bookdown.org/yihui/rmarkdown/).
 
-**Note** The report should be anonymous and submitted to [peergrade.io](peergrade.io) as `assignmentX.pdf`. If you have problem with creating a PDF file directly from R markdown, start by creating an HTML file and the just print the HTML to a PDF. 
+**Note** The report should be anonymous and submitted to [peergrade.io](peergrade.io) as `assignmentX.pdf`. If you have problem with creating a PDF file directly from R markdown, start by creating an HTML file and the just print the HTML to a PDF. You may also use other software to create the report pdf, but follow the general instructions in this file (see the [pdf version this file](https://github.com/avehtari/BDA_course_Aalto/blob/master/templates/assignment_template.pdf)).
 
 
 ```{r setup, include=FALSE}
-# This chunk just sets echo = TRUE as default (i.e. print all code)
+# This chunk sets echo = TRUE as default, that is print all code.
+# knitr::opts_chunk$set can be used to set other notebook generation options, too.
+# include=FALSE inside curly brackets makes this block not be included in the pdf.
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -25,14 +31,14 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Below are examples of how to load packages that are used in the assignment
 
-```{r, echo=TRUE}
+```{r}
 # To install aaltobda, see the General information in the assignment.
 library(aaltobda)
 ```
 
 # Including source code
 
-In general, all code needed to produce the essential parts needs to be included, so that it is possible to see, for peer reviewers, where errors may have happened
+In general, all code needed to produce the essential parts needs to be included, so that it is possible to see, for peer reviewers (and TAs), where errors may have happened.
 
 You can always look at the open rubrics to see how and what is asked for in each exercise.
 
@@ -44,12 +50,21 @@ If in doubt additional source code can be included in an appendix.
 
 # Format instructions
 
-All exercises in the assignment should start with header 1 fully specifying that it is exercise X, as:
+All exercises in the assignment should start with a header fully specifying that it is exercise X, as (in rmd use #):
 
 # Exercise 1)
+
+Subtasks in each assignments should be numbered and use header (in rmd use ##).
+
 ## a)
 
-Subtasks in each assignments should be numbered and use header 2 (two ##). 
+For each subtask include necessary textual explanation, equations,
+code and figures so that the answer to the question flows
+naturally. You can think what kind of report would you like to review,
+and what kind of information would make it easier where there is error
+(if there are errors).
+
+# Code
 
 We can easily add R code as chunks in the following way:
 
@@ -57,25 +72,72 @@ We can easily add R code as chunks in the following way:
 5 + 5
 ```
 
+This R code is evaluated when running the notebook or when rendering to PDF.
+
+If you want to show and run the code, but the output is very long or messy and you prefer to hide the output from the rendered report you can use option results='hide'. This is useful especially later as Stan may output many lines.
+
+```{r, results='hide'}
+5 + 5
+```
+
+If you want to use some code in the notebook, but think it's not helpful for the reviewers you can exclude it from the generated PDF with option `include=FALSE`. You will see the next block in rmd, but not in the generated PDF.
+```{r, include=FALSE}
+5 + 5
+```
+
 # Plots
 
 Include plots, where we can specify the width and height of the figure.
 
-```{r, fig.height=2, fig.width=3}
+```{r, fig.height=3, fig.width=4}
 data("drowning") # Access the data in aaltobda package
-plot(drowning$year, drowning$drownings, type = "l")
+plot(drowning$year, drowning$drownings)
+```
+
+Or using qplot from ggplot2 package
+```{r, fig.height=3, fig.width=4}
+library(ggplot2)
+qplot(drowning$year, drowning$drownings)
+```
+
+Or using ggplot from ggplot2 package
+```{r, fig.height=3, fig.width=4}
+ggplot(data=drowning, aes(x=year, y=drownings)) + geom_point() +
+  labs(x='Year', y='Number of drownings')
+```
+
+# Images
+
+You can include an existing image (e.g. scanned copy of pen and paper equations)
+
+![Parts of Bayesian workflow](bayes_workflow.jpg){ width=300 }
+
+or alternatively
+
+```{r, out.width = "250px"}
+knitr::include_graphics("bayes_workflow.jpg")
 ```
 
 # Equations
 
-Equations should be correctly formated using LaTeX or being included as images if, for example, Microsoft Equations is used. 
+You can write equations using LaTeX syntax, or you can include them as images if, for example, you use Microsoft Equations. 
 
-In Markdown, equations can easily be formulated using LaTeX in line as $f(k) = {n \choose k} p^{k} (1-p)^{n-k}$ or use the math environment as follows:
+In Markdown, equations can easily be formulated using LaTeX in line as $f(k) = {n \choose k} p^{k} (1-p)^{n-k}$. Or use the math environment as follows:
 
-$$\begin{array}{ccc}
+$$
+\begin{array}{ccc}
 x_{11} & x_{12} & x_{13}\\
-x_{21} & x_{22} & x_{23}
-\end{array}$$
+x_{21} & x_{22} & x_{23}.
+\end{array}
+$$
+
+The above example illustrated also multicolumn 'array'. Alternative way to make multiline equations with alignment is to use 'aligned' as follows;
+$$
+\begin{aligned}
+y & \sim \mathrm{normal}(\mu,1) \\
+\mu & \sim \mathrm{normal}(0,1).
+\end{aligned}
+$$
 
 If you are new to LaTeX equations, you could use the [latext4technics](https://www.latex4technics.com/) equation editor to create LaTeX equations to include in the report.
 
@@ -88,5 +150,6 @@ A short introduction to equations in LaTeX can be found [here](https://www.overl
 The language used in the course is English. Hence the report needs to be written in English.
 
 # Jupyter Notebook and other report formats
+
 You are allowed to use any format to produce your report, such as Jupyter Notebook, as long as you obide by the instructions in this template.
 
