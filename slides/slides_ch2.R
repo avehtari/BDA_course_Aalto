@@ -8,7 +8,7 @@
 library(tidyverse)
 library(purrr)
 library(ggplot2)
-theme_set(bayesplot::theme_default(base_family = "sans"))
+theme_set(bayesplot::theme_default(base_family = "sans", base_size=16))
 
 #' # Binomial model, Beta posterior
 #' 
@@ -31,8 +31,44 @@ ggplot(data.frame(x=0:10, y=dbinom(0:10, 10, 0.9)), aes(x=x, y=y)) +
     scale_x_discrete(breaks=0:10, limits=0:10) +
     labs(x="y", y="probability", title=bquote("Binomial distribution with " ~ theta ~ "=0.9, n=10"))
 
-#' Posterior of theta of Binomial model with y=10, n=10
+#' Likelihood
+ggplot(data.frame(x=seq(0,1,length.out=11), y=dbinom(6, 10, seq(0,1,length.out=11))), aes(x=x, y=y)) +
+    geom_point() +
+    scale_x_continuous(breaks=(0:10)/10) +
+    labs(x=bquote(theta), y=bquote("Likelihood (probability of y=6 given" ~ theta ~ ")"), title=bquote("Likelihood given y=6, n=10"))
+ggsave('figs/lbinom10a.pdf', width=6, height=4)
+
+#' Likelihood
+ggplot(data.frame(x=seq(0,1,length.out=101), y=dbinom(6, 10, seq(0,1,length.out=101))), aes(x=x, y=y)) +
+    geom_point() +
+    scale_x_continuous(breaks=seq(0,1,length.out=11)) +
+    labs(x=bquote(theta), y=bquote("Likelihood (probability of y=6 given" ~ theta ~ ")"), title=bquote("Likelihood given y=6, n=10"))
+ggsave('figs/lbinom10b.pdf', width=6, height=4)
+
+#' Likelihood
+ggplot(data.frame(x=seq(0,1,length.out=101), y=dbinom(6, 10, seq(0,1,length.out=101))), aes(x=x, y=y)) +
+    geom_point() + geom_line() +
+    scale_x_continuous(breaks=seq(0,1,length.out=11)) +
+    labs(x=bquote(theta), y=bquote("Likelihood (probability of y=6 given" ~ theta ~ ")"), title=bquote("Likelihood given y=6, n=10"))
+ggsave('figs/lbinom10c.pdf', width=6, height=4)
+
+#' Likelihood
+ggplot(data.frame(x=seq(0,1,length.out=101), y=dbinom(6, 10, seq(0,1,length.out=101))), aes(x=x, y=y)) +
+    geom_line() +
+    scale_x_continuous(breaks=seq(0,1,length.out=11)) +
+    labs(x=bquote(theta), y=bquote("Likelihood (probability of y=6 given" ~ theta ~ ")"), title=bquote("Likelihood given y=6, n=10"))
+ggsave('figs/lbinom10d.pdf', width=6, height=4)
+
+integrate(function(x) dbinom(6, 10, x), 0, 1)
+
+#' Posterior of theta of Binomial model with y=6, n=10 + unif prior
 ggplot(data = data.frame(x = c(0, 1)), aes(x)) +
+    stat_function(fun = dbeta, n = 601, args = list(shape1 = 7, shape2 = 5),
+                  color = "blue") +
+    labs(x=bquote(theta), y="", title=bquote("p(" ~ theta ~ "| y=6, n=10, M=binom) + unif. prior)"))
+
+#' Posterior of theta of Binomial model with y=10, n=10
+gggplot(data = data.frame(x = c(0, 1)), aes(x)) +
     stat_function(fun = dbeta, n = 601, args = list(shape1 = 11, shape2 = 1),
                   color = "blue") +
     geom_segment(x=11/12, xend=11/12, y=0, yend=11, color="red") +
