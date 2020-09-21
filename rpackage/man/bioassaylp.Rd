@@ -7,9 +7,9 @@
 bioassaylp(alpha, beta, x, y, n)
 }
 \arguments{
-\item{alpha}{intercept parameter in the dose-response model (single number)}
+\item{alpha}{intercept parameter in the dose-response model (vector or single number)}
 
-\item{beta}{slope parameter in the dose-response model (single number)}
+\item{beta}{slope parameter in the dose-response model (vector or single number)}
 
 \item{x}{vector of doses for each observation}
 
