@@ -3,7 +3,7 @@ SOURCESRNW=$(shell find . -name "*.Rnw")
 TARGETHTML = $(SOURCESMD:%.md=%.html)
 TARGETPDF = $(SOURCESRNW:%.Rnw=%.pdf)
 
-%.pdf: %.tex
+%.pdf: %.tex general_info.tex
 	pdflatex $<; /bin/rm assignment*.tex assignment*.aux assignment*.log assignment*.out
 
 %.tex: %.Rnw
