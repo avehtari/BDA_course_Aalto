@@ -285,10 +285,4 @@ In case the report doesn't fully follow the formatting instructions, specify the
 
 ### Q29 -
 
-Please provide also feedback on the presentation. Part of the
-course is practicing making data analysis reports. By providing
-feedback on the report presentation other students can learn what they
-can improve or what they already did well. You should be able to
-provide constructive or positive feedback for all non-empty reports,
-even if there is nothing to say about the technical correctness of the
-answers.
+Please provide also feedback on the presentation (e.g. text, layout, flow of the responses, figures, figure captions). Part of the course is practicing making data analysis reports. By providing feedback on the report presentation and other students can learn what they can improve or what they already did well. You should be able to provide constructive or positive feedback for all non-empty reports, even if there is nothing to say about the technical correctness of the answers. You can also provide feedback on code.
