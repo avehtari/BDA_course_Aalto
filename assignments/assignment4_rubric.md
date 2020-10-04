@@ -64,7 +64,7 @@ Is the source code for the function in d) reported?
 
 ### Q8 - 1 point
 
-Does the posterior density in e) look something like this figure?
+Does the histogram in e) look something like this figure?
 
 - Not reported
 - Reported, but looks different
