@@ -24,26 +24,33 @@ Metropolis
 
 ### Q3 - 1 point
 
-In 1 a), is the implementation of the `density_ratio` function included?
+Is the brief description of Metropolis-Hastings algorithm included (and it's not complete nonsense)? Provide also a brief comment on how clear you think that description is (and potentially mention errors if you see them).
 
 - No
 - Yes
 
 ### Q4 - 1 point
 
-In 1 b), is the implementation of the `metropolis_bioassay` function included?
+In 1 a), is the implementation of the `density_ratio` function included?
 
 - No
 - Yes
 
 ### Q5 - 1 point
 
-2 a) Is the proposal/jumping distribution reported ?
+In 1 b), is the implementation of the `metropolis_bioassay` function included?
 
 - No
 - Yes
 
 ### Q6 - 1 point
+
+2 a) Is the proposal/jumping distribution reported ?
+
+- No
+- Yes
+
+### Q7 - 1 point
 
 2 b) Are the starting points or the mechanism how they are generated reported?
 
@@ -51,7 +58,7 @@ In 1 b), is the implementation of the `metropolis_bioassay` function included?
 - Yes
 
 
-### Q7 - 1 point
+### Q8 - 1 point
 
 2 c) Is the number of draws per chain reported?
 
@@ -59,21 +66,21 @@ In 1 b), is the implementation of the `metropolis_bioassay` function included?
 - Yes
 
 
-### Q8 - 1 point
+### Q9 - 1 point
 
 2 d) Is the warm-up length reported?
 
 - No
 - Yes
 
-### Q9 - 1 point
+### Q10 - 1 point
 
 2 e) Is the number of chains reported?
 
 - No
 - Yes
 
-### Q10 - 1 point
+### Q11 - 1 point
 
 2 f) and 2 g) Are line plots of the chains included? (Separate plots for alpha and beta)
 
@@ -82,7 +89,7 @@ In 1 b), is the implementation of the `metropolis_bioassay` function included?
 - Yes, but only a plot for alpha or beta is included.
 - Yes, separate line plots for both alpha and beta are included.
 
-### Q11 - 1 point
+### Q12 - 1 point
 
 Is there a discussion on the convergence of the chains? 
 
@@ -90,14 +97,19 @@ Is there a discussion on the convergence of the chains?
 - Yes, but the discussion is not convincing.
 - Yes, discussed in the report.
 
-### Q12 - 1 point
+### Q13 - 1 point
 
 Is it mentioned which implementation of Rhat is used ? (Possible answers mentioned in peergrade)
 
 - No
 - Yes
 
-### Q13 - 1 point
+
+### Q14 - 1 point
+
+Is the brief description of Rhat included (and it's not complete nonsense)? Provide also a brief comment on how clear you think that description is (and potentially mention errors if you see them).
+
+### Q15 - 1 point
 
 Are the Rhat-values for alpha and beta reported?
 
@@ -107,7 +119,7 @@ Are the Rhat-values for alpha and beta reported?
 - Yes, but only for alpha or beta
 - Yes, single values both for alpha and beta
 
-### Q14 - 1 point
+### Q16 - 1 point
 
 Is the interpretation of Rhat values correct (correct interpretation will be given in peergrade)?
 
@@ -115,7 +127,7 @@ Is the interpretation of Rhat values correct (correct interpretation will be giv
 - Somewhat correct
 - Interpretation correct
 
-### Q15 - 1 point
+### Q17 - 1 point
 
 Does the report contain a scatter plot of the draws of alpha and beta? Do the results look reasonable, that is, roughly like in the Figure below (figure attached in peergrade)?
 
@@ -127,7 +139,7 @@ Does the report contain a scatter plot of the draws of alpha and beta? Do the re
 
 Overall quality of the report
 
-### Q16 - 1 point
+### Q18 - 1 point
 
 Does the report follow the formatting instructions?
 
@@ -136,10 +148,10 @@ Does the report follow the formatting instructions?
 - Mostly
 - Yes
 
-### Q17 -
+### Q19 -
 
 In case the report doesn't fully follow the formatting instructions, specify the formatting instruction that is not followed. If applicable, specify the page of the report, where this difference in formatting is visible.
 
-### Q18 -
+### Q20 -
 
 Please provide also feedback on the presentation (e.g. text, layout, flow of the responses, figures, figure captions). Part of the course is practicing making data analysis reports. By providing feedback on the report presentation and other students can learn what they can improve or what they already did well. You should be able to provide constructive or positive feedback for all non-empty reports, even if there is nothing to say about the technical correctness of the answers. You can also provide feedback on code.
