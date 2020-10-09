@@ -76,14 +76,14 @@ This assignment is related to Chapters 10 and 11. The maximum amount of points f
 
 \textbf{Reading instructions:} Chapter 10 and 11 in BDA3, see reading instructions \href{https://avehtari.github.io/BDA_course_Aalto/chapter_notes/BDA_notes_ch10.pdf}{\textbf{here}} and \href{https://avehtari.github.io/BDA_course_Aalto/chapter_notes/BDA_notes_ch11.pdf}{\textbf{here}}.
 
-\textbf{Grading instructions:} The grading will be done in peergrade. All grading questions and evaluations for assignment 6 can be found \href{https://avehtari.github.io/BDA_course_Aalto/assignments/assignment6_rubric.html}{\textbf{here}}
+\textbf{Grading instructions:} The grading will be done in peergrade. All grading questions and evaluations for assignment 6 can be found \href{https://avehtari.github.io/BDA_course_Aalto/assignments/assignment6_rubric.html}{\textbf{here}}.
 
 \textbf{Reporting accuracy:} For posterior statistics of interest, only report digits for which the Monte Carlo standard error (MCSE) is zero. \emph{Example:} If you estimate $E(\mu)=1.234$ with MCSE($E(\mu)$) = 0.01, you should report $E(\mu)=1.2$.
 
 
-\textbf{Installing and using {\tt rstan}:} See the Stan demos on how to use Stan from R. The Aalto Ubuntu desktops have the necessary libraries installed so there should be no need to install anything. To install Stan on your laptop, see the instructions below.
+\textbf{Installing and using \texttt{rstan}:} See the \href{https://avehtari.github.io/BDA_course_Aalto/demos.html}{Stan demos} on how to use Stan in R (or Python) . \href{https://jupyter.cs.aalto.fi}{jupyter.cs.aalto.fi} has working R and RStan environment and is probably the easiest way to use RStan. The Aalto Ubuntu desktops also have the necessary libraries installed. To install Stan on your laptop, see the instructions below and additional answers in \href{https://avehtari.github.io/BDA_course_Aalto/FAQ.html}{\textbf{FAQ}}. Recently there have been reports of installation problems with Windows and R 4.0 (see Stan discourse for more), so if you don't succeed in short amount of time, it is probably easier to use \href{https://jupyter.cs.aalto.fi}{jupyter.cs.aalto.fi}.
 
-In R, install package {\tt rstan}. Installation instructions on Linux, Mac and Windows can be found at \url{https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started}. Additional useful packages are {\tt loo}, {\tt bayesplot} and {\tt shinystan} (but you don't need these in this assignment). For Python users, the {\tt Arviz} library may be relevant.
+If you use \texttt{jupyter.cs.aalto.fi}, all necessary packages have been pre-installed. In your laptop, install package \texttt{rstan}. Installation instructions on Linux, Mac and Windows can be found at \url{https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started}. Additional useful packages are \texttt{loo}, \texttt{bayesplot} and \texttt{shinystan} (but you don't need these in this assignment). For Python users, \texttt{PyStan}, \texttt{CmdStanPy}, and  \texttt{Arviz} packages are useful.
 
 Stan manual can be found at \url{http://mc-stan.org/documentation/}. From this website, you can also find a lot of other useful material about Stan.
 
@@ -114,13 +114,22 @@ Use the Gaussian prior as in Assignment 4 and 5, that is % uniform prior as in t
     \vc \Sigma_0 = \begin{bmatrix} 2^2 & 10 \\ 10 & 10^2 \end{bmatrix}.
 \end{align*}
 
-\textbf{Hint!} You will need stan functions {\tt multi\_normal} and {\tt binomial\_logit} for implementing the prior and observation model, respectively. In Stan code, it is easiest to declare a variable (say {\tt theta}) which is a two-element vector so that the first value denotes $\alpha$ and latter one $\beta$. This is because the {\tt multi\_normal} function that you need for implementing the prior requires a vector as an input.
+\textbf{Hint!} You will need Stan functions \texttt{multi\_normal} and \texttt{binomial\_logit} for implementing the prior and observation model, respectively. In Stan code, it is easiest to declare a variable (say \texttt{theta}) which is a two-element vector so that the first value denotes $\alpha$ and latter one $\beta$. This is because the \texttt{multi\_normal} function that you need for implementing the prior requires a vector as an input.
 
-\item Use $\hat{R}$ for convergence analysis. You can either use Eq. (11.4) in BDA3 or the later version that can be found \href{https://arxiv.org/abs/1903.08008}{\textbf{here}}. You should specify which $\hat{R}$ you used. In R the best choice is to use function {\tt Rhat} from package {\tt rstan}. Note that Stan gives you these values automatically; in R  you can simply type {\tt print(fit)}, where {\tt fit} is the fit object returned by Stan's sampling function. Report the $\hat R$ values both for $\alpha$ and $\beta$ and discuss the convergence of the chains.
-\textbf{This means that you should briefly explain how to interpret the obtained} $\hat R$ \textbf{values}.
+\item Use $\widehat{R}$ for convergence analysis. You can either use Eq. (11.4) in BDA3 or the later version that can be found \href{https://arxiv.org/abs/1903.08008}{\textbf{here}}. You should specify which $\widehat{R}$ you used. In R the best choice is to use function \texttt{Rhat} from package \texttt{rstan} (see \texttt{?rstan::Rhat}). To check $\widehat{R}$ and other diagnostics, you can also call \texttt{monitor(fit)}, where \texttt{fit} is the fit object returned by Stan's sampling function. Report the $\widehat{R}$ values both for $\alpha$ and $\beta$ and discuss the convergence of the chains.
+\textbf{Briefly explain in your own words how to interpret the obtained} $\widehat{R}$ \textbf{values}.
 
 \item Plot the draws for $\alpha$ and $\beta$ (scatter plot) and include this plot in your report. You can compare the results to Figure~3.3b in BDA3 to verify that your code gives sensible results. Notice though that the results in Figure~3.3b are generated from posterior with a uniform prior, so even when your algorithm works perfectly, the results will look slightly different (although fairly similar).
 
+\item To develop the course and provide feedback to Stan developers, we collect information on which Stan setup you used and whether you had any problems in setting it up or using it. Please report,
+\begin{itemize}
+\item Operating system (Linux, Mac, Windows) or jupyter.cs.aalto.fi?
+\item Programming environment used: R or Python?
+\item Interface used: RStan, CmdStanR, PyStan, or CmdStanPy?
+\item Did you have installation or compilation problems?
+\item Did you try first installing locally, but switched to jupyter.cs.aalto.fi?
+\item In addition of these you can write what other things you found out difficult (or even frustrating) when making this assignment with Stan.
+\end{itemize}
 
 \end{enumerate}
 
