@@ -62,12 +62,15 @@ Is the source code included?
 - Plot included, but the results do not look like in the figure above
 - Plot included, and the results look roughly like in the figure above
 
+## Q8
+
+Does the report contain description of Stan setup used and whether there were any problems in setting it up or using it?
 
 ## S3
 
 Overall quality of the report
 
-### Q8 
+### Q9
 
 Does the report follow the formatting instructions?
 
@@ -76,10 +79,10 @@ Does the report follow the formatting instructions?
 - Mostly
 - Yes
 
-### Q9 -
+### Q10 -
 
 In case the report doesn't fully follow the formatting instructions, specify the formatting instruction that is not followed. If applicable, specify the page of the report, where this difference in formatting is visible.
 
-### Q10 -
+### Q11 -
 
 Please provide also feedback on the presentation (e.g. text, layout, flow of the responses, figures, figure captions). Part of the course is practicing making data analysis reports. By providing feedback on the report presentation and other students can learn what they can improve or what they already did well. You should be able to provide constructive or positive feedback for all non-empty reports, even if there is nothing to say about the technical correctness of the answers. You can also provide feedback on code.
