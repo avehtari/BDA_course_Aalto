@@ -64,18 +64,43 @@ Response:
 - It has been discussed, that ... , but there is no ﬁx presented for it or the ﬁx is clearly wrong.
 - There is a ﬁx presented for ... , that clearly solves the problem.
 
-### Q7 · Yes / No · 1 point
+### Q7 · Scale · 1 point
 
-Is there a suitable numerical value of approximately ... presented for τ.
+Fix #3: Is there a ﬁx for ...
+
+Response:
+
+- It has not been discussed, that ...
+- It has been discussed, that ... , but there is no ﬁx presented for it or the ﬁx is clearly wrong.
+- There is a ﬁx presented for ... , that clearly solves the problem.
+
+### Q8 · Yes / No · 1 point
+
+Is there a suitable numerical value of approximately ... presented for $\sigma_beta$.
 
 Response:
 
 - No
 - Yes
 
-### Q8 · Yes / No · 1 point
+### Q9 · Yes / No · 1 point
 
 Does the report discuss and correctly present how the desired prior can be implemented in the model code.
+
+Example implementation:<br>
+...
+
+Another example implementation:<br>
+...
+
+Response:
+
+- No
+- Yes
+
+### Q10 · Yes / No · 1 point
+
+Does the report discuss and correctly present prior also for the intercept?
 
 Example implementation:<br>
 ...
@@ -92,7 +117,7 @@ Response:
 
 Hierarchical model: factory data with Stan
 
-### Q9 · Scale · 1 point
+### Q11 · Scale · 1 point
 
 Separate model: Is there a related Stan implementation (N.B. same implementation may be used for multiple models)?
 
@@ -102,7 +127,7 @@ Response:
 - Stan model implemented, but it seems clearly wrong or broken.
 - Seemingly valid Stan model implemented.
 
-### Q10 · Scale · 1 point 
+### Q12 · Scale · 1 point 
 
 Is the model described using mathematical notation?
 
@@ -118,7 +143,7 @@ The following histograms are used as a reference in the grading of the separate 
 
 *<model_plot>*
 
-### Q11 · Yes / No · 1 point
+### Q13 · Yes / No · 1 point
 
 Separate model: *discussion about question i)*, posterior distribution of the mean of the quality measurements of the sixth machine.
 
@@ -126,7 +151,7 @@ Response:
 
 *hidden responses*
 
-### Q12 · Yes / No · 1 point
+### Q14 · Yes / No · 1 point
 
 Separate model:  *discussion about question ii)*, the predictive distribution for another quality measurement of the sixth machine.
 
@@ -134,7 +159,7 @@ Response:
 
 *hidden responses*
 
-### Q13 · Yes / No · 1 point
+### Q15 · Yes / No · 1 point
 
 Separate model:  *discussion about question iii)*, the posterior distribution of the mean of the quality measurements of the seventh machine.
 
@@ -142,7 +167,7 @@ Response:
 
 *hidden responses*
 
-### Q14 · Yes / No · 1 point
+### Q16 · Yes / No · 1 point
 
 Separate model: the for $\mu_1$ with a 90% credibility intervall using a N(0, 10) prior for $\mu$ and a Gamma(1, 1) prior for $\sigma$.
 
@@ -150,7 +175,7 @@ Response:
 
 *hidden responses*
 
-### Q15 · Scale · 1 point
+### Q17 · Scale · 1 point
 
 Pooled model: Is there a related Stan implementation (N.B. same implementation may be used for multiple models)?
 
@@ -160,7 +185,7 @@ Response:
 - Stan model implemented, but it seems clearly wrong or broken.
 - Seemingly valid Stan model implemented.
 
-### Q16 · Scale · 1 point 
+### Q18 · Scale · 1 point 
 
 Is the model described using mathematical notation?
 
@@ -176,7 +201,7 @@ The following histograms are used as a reference in the grading of the pooled mo
 
 *<model_plot>*
 
-### Q17 · Scale · 1 point
+### Q19 · Scale · 1 point
 
 Pooled model:  *discussion about question i)*, posterior distribution of the mean of the quality measurements of the sixth machine.
 
@@ -184,7 +209,7 @@ Response:
 
 *hidden responses*
 
-### Q18 · Scale · 1 point
+### Q20 · Scale · 1 point
 
 Pooled model:  *discussion about question ii)*, the predictive distribution for another quality measurement of the sixth machine.
 
@@ -192,7 +217,7 @@ Response:
 
 *hidden responses*
 
-### Q19 · Yes / No · 1 point
+### Q21 · Yes / No · 1 point
 
 Pooled model:  *discussion about question iii)*, the posterior distribution of the mean of the quality measurements of the seventh machine.
 
@@ -200,7 +225,7 @@ Response:
 
 *hidden responses*
 
-### Q20 · Yes / No · 1 point
+### Q22 · Yes / No · 1 point
 
 Separate model: the for $\mu_1$ with a 90% credibility intervall using a N(0, 10) prior for $\mu$ and a Gamma(1, 1) prior for $\sigma$.
 
@@ -208,7 +233,7 @@ Response:
 
 *hidden responses*
 
-### Q21 · Scale · 1 point
+### Q23 · Scale · 1 point
 
 Hierarchical model: Is there a related Stan implementation (N.B. same implementation may be used for multiple models).
 
@@ -218,7 +243,7 @@ Response:
 - Stan model implemented, but it seems clearly wrong or broken.
 - Seemingly valid Stan model implemented.
 
-### Q22 · Scale · 1 point 
+### Q24 · Scale · 1 point 
 
 Is the model described using mathematical notation?
 
@@ -234,7 +259,7 @@ The following histograms are used as a reference in the grading of the hierarchi
 
 *<model_plot>*
 
-### Q23 · Scale · 1 point
+### Q25 · Scale · 1 point
 
 Hierarchical model: *discussion about question i)*, posterior distribution of the mean of the quality measurements of the sixth machine.
 
@@ -242,7 +267,7 @@ Response:
 
 *hidden responses*
 
-### Q24 · Scale · 1 point
+### Q26 · Scale · 1 point
 
 Hierarchical model: *discussion about question ii)*, the predictive distribution for another quality measurement of the sixth machine.
 
@@ -250,7 +275,7 @@ Response:
 
 *hidden responses*
 
-### Q25 · Scale · 1 point
+### Q27 · Scale · 1 point
 
 Hierarchical model: *discussion about question iii)*, the posterior distribution of the mean of the quality measurements of the seventh machine.
 
@@ -258,7 +283,7 @@ Response:
 
 *hidden responses*
 
-### Q26 · Yes / No · 1 point
+### Q28 · Yes / No · 1 point
 
 Separate model: the for $\mu_1$ with a 90% credibility intervall using a N(0, 10) prior for $\mu$ and a Gamma(1, 1) prior for $\sigma$.
 
@@ -270,7 +295,7 @@ Response:
 
 Overall quality of the report
 
-### Q27 · Scale · 1 point
+### Q29 · Scale · 1 point
 
 Does the report follow the formatting instructions?
 
@@ -279,10 +304,10 @@ Does the report follow the formatting instructions?
 - Mostly
 - Yes
 
-### Q28 -
+### Q30 -
 
 In case the report doesn't fully follow the formatting instructions, specify the formatting instruction that is not followed. If applicable, specify the page of the report, where this difference in formatting is visible.
 
-### Q29 -
+### Q31 -
 
 Please provide also feedback on the presentation (e.g. text, layout, flow of the responses, figures, figure captions). Part of the course is practicing making data analysis reports. By providing feedback on the report presentation and other students can learn what they can improve or what they already did well. You should be able to provide constructive or positive feedback for all non-empty reports, even if there is nothing to say about the technical correctness of the answers. You can also provide feedback on code.
