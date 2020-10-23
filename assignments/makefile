@@ -4,7 +4,7 @@ TARGETHTML = $(SOURCESMD:%.md=%.html)
 TARGETPDF = $(SOURCESRNW:%.Rnw=%.pdf)
 
 %.pdf: %.tex general_info.tex
-	pdflatex $<; /bin/rm assignment*.tex assignment*.aux assignment*.log assignment*.out
+	pdflatex $<; pdflatex $<; /bin/rm assignment*.tex assignment*.aux assignment*.log assignment*.out
 
 %.tex: %.Rnw
 	Rscript -e 'Sweave("$<")'
