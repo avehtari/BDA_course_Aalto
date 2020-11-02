@@ -169,7 +169,7 @@ Response:
 
 ### Q16 · Yes / No · 1 point
 
-Separate model: the for $\mu_1$ with a 90% credibility intervall using a N(0, 10) prior for $\mu$ and a Gamma(1, 1) prior for $\sigma$.
+Separate model: the posterior expectation for $\mu_1$ with a 90% credibility interval using a N(0, 10) prior for $\mu$ and a Gamma(1, 1) prior for $\sigma$.
 
 Response:
 
@@ -227,7 +227,7 @@ Response:
 
 ### Q22 · Yes / No · 1 point
 
-Separate model: the for $\mu_1$ with a 90% credibility intervall using a N(0, 10) prior for $\mu$ and a Gamma(1, 1) prior for $\sigma$.
+Pooled model: the posterior expectation for $\mu_1$ with a 90% credibility interval using a N(0, 10) prior for $\mu$ and a Gamma(1, 1) prior for $\sigma$.
 
 Response:
 
@@ -285,7 +285,7 @@ Response:
 
 ### Q28 · Yes / No · 1 point
 
-Separate model: the for $\mu_1$ with a 90% credibility intervall using a N(0, 10) prior for $\mu$ and a Gamma(1, 1) prior for $\sigma$.
+Hierarchical model: the posterior expectation for $\mu_1$ with a 90% credibility interval using a N(0, 10) prior for $\mu$ and a Gamma(1, 1) prior for $\sigma$.
 
 Response:
 
