@@ -16,10 +16,10 @@ Assignment
 Is source code included?
 
 ### Q4 · Yes / No · 1 point
-Is there a stan code provided that seems reasonable for the problem? The code doesn't have to be correct, as far as it is somewhat reasonable.
+Is there a Stan code provided that seems reasonable for the problem? The code doesn't have to be correct, as far as it is somewhat reasonable.
 
 ### Q5 · Yes / No · 1 point
-Is there a reasonable code provided for computing the expected utilities for the six machines? (either as a part of Stan code or as separate R/Python code) The code doesn't have to be correct, as far as it is somewhat reasonable.
+Is there a reasonable code provided for computing the expected utilities for the six machines? (either as a part of Stan code or as separate R/Python code) You don't need to check that the code is perfect, but it should look like it's doing what is asked (not just some arbitrary code).
 
 ### Q6 · Scale · 1 point
 Are the expected utilities computed and reported? (The utility should be of the form XXX or equivalently XXX. The utilities should be roughly XXX, XXX, XXX, XXX, XXX, XXX for the machines 1,2,...,6, respectively. If default settings for stan are used, roughly +/-4 variation due to random error can occur.)
@@ -36,7 +36,7 @@ Are the machines ranked from worst to best? If the utilities were computed corre
 - Yes, and all results are correct
 
 ### Q8 · Scale · 1 point
-Is some discussion on the computed values for the expected utilities for the six machines provided? (E.g. [bla bla bla bla]) If there was a mistake in the utility computations it is OK if the discussion is correct with respect to obtained results.
+Is some discussion on the computed values for the expected utilities for the six machines provided? (E.g. [example shown in peergrade]). If there was a mistake in the utility computations it is OK if the discussion is correct with respect to obtained results.
 
 - No
 - Yes, but the provided discussion does not make sense or does not agree with the obtained results
@@ -53,7 +53,7 @@ Is the expected utility for the new (7th) machine computed and reported? (If the
 - Yes and the result seems plausible
 
 ### Q11 · Scale · 1 point
-Is some discussion provided whether the company should buy a new (7th) machine? (E.g.[bla bla bla bla]) If there was a mistake in the utility computations it is OK if the discussion is correct with respect to obtained results.
+Is some discussion provided whether the company should buy a new (7th) machine? (E.g.[example shown in peergrade]). If there was a mistake in the utility computations it is OK if the discussion is correct with respect to obtained results.
 
 - No
 - Yes, but the provided discussion does not make sense or is does not agree with the obtained results
