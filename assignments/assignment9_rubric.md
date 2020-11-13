@@ -63,7 +63,7 @@ Is some discussion provided whether the company should buy a new (7th) machine? 
 ## S3 · 7.5 points
 Overall quality of the report
 
-### Q12 · Scale · 1 poin
+### Q12 · Scale · 1 point
 
 Does the report follow the formatting instructions?
 
