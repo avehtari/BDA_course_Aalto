@@ -19,6 +19,15 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
@@ -26,12 +35,16 @@
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 
-<style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -44,32 +57,7 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 
 
@@ -79,10 +67,6 @@ h6 {
   max-width: 940px;
   margin-left: auto;
   margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
 }
 img {
   max-width:100%;
@@ -99,40 +83,13 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 66px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 71px;
-  margin-top: -71px;
-}
-.section h2 {
-  padding-top: 71px;
-  margin-top: -71px;
-}
-.section h3 {
-  padding-top: 71px;
-  margin-top: -71px;
-}
-.section h4 {
-  padding-top: 71px;
-  margin-top: -71px;
-}
-.section h5 {
-  padding-top: 71px;
-  margin-top: -71px;
-}
-.section h6 {
-  padding-top: 71px;
-  margin-top: -71px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -160,7 +117,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -172,7 +129,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -183,10 +140,23 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -198,7 +168,6 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
@@ -324,13 +293,13 @@ div.tocify {
 
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
 <div id="TOC" class="tocify">
 </div>
 </div>
 
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
 
 
 
@@ -373,12 +342,12 @@ div.tocify {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
 <h1 class="title toc-ignore">Bayesian Data Analysis course</h1>
-<h4 class="date">Page updated: 2020-10-01</h4>
+<h4 class="date">Page updated: 2020-11-20</h4>
 
 </div>
 
@@ -387,10 +356,7 @@ div.tocify {
 <p>Aalto students should check also <a href="https://mycourses.aalto.fi/user/index.php?id=28239">MyCourses announcements</a>. In Autumn 2020 the course will be arranged completely online. This web page will be much updated during the August.</p>
 <p>All the course material is available in a <a href="https://github.com/avehtari/BDA_course_Aalto">git repo</a> (and these pages are for easier navigation). All the material can be used in other courses. Text (except the BDA3 book) and videos licensed under CC-BY-NC 4.0. Code licensed under BSD-3.</p>
 <div style="float:right;position: relative;">
-<div class="figure">
-<img src="bda_cover.png" />
-
-</div>
+<p><img src="bda_cover.png" /></p>
 </div>
 <p><a href="https://users.aalto.fi/~ave/BDA3.pdf">The electronic version of the course book Bayesian Data Analysis, 3rd ed, by by Andrew Gelman, John Carlin, Hal Stern, David Dunson, Aki Vehtari, and Donald Rubin</a> is available for non-commercial purposes. Hard copies are available from <a href="https://www.crcpress.com/Bayesian-Data-Analysis/Gelman-Carlin-Stern-Dunson-Vehtari-Rubin/p/book/9781439840955">the publisher</a> and many book stores. See also <a href="http://www.stat.columbia.edu/~gelman/book/">home page for the book</a>, <a href="http://www.stat.columbia.edu/~gelman/book/errata_bda3.txt">errata for the book</a>, and <a href="chapter_notes/BDA_notes.pdf">chapter notes</a>.</p>
 <div id="prerequisites" class="section level2">
@@ -399,25 +365,25 @@ div.tocify {
 <li>Basic terms of probability theory
 <ul>
 <li>probability, probability density, distribution</li>
-<li>sum, product rule, and Bayes' rule</li>
+<li>sum, product rule, and Bayes’ rule</li>
 <li>expectation, mean, variance, median</li>
-<li>in Finnish, see e.g. <a href="http://math.aalto.fi/~lleskela/LectureNotes003.html">Stokastiikka ja tilastollinen ajattelu</a></li>
-<li>in English, see e.g. Wikipedia and <a href="https://ocw.mit.edu/courses/mathematics/18-05-introduction-to-probability-and-statistics-spring-2014/readings/">Introduction to probability and statistics</a></li>
+<li>in Finnish, see e.g. <a href="http://math.aalto.fi/~lleskela/LectureNotes003.html">Stokastiikka ja tilastollinen ajattelu</a></li>
+<li>in English, see e.g. Wikipedia and <a href="https://ocw.mit.edu/courses/mathematics/18-05-introduction-to-probability-and-statistics-spring-2014/readings/">Introduction to probability and statistics</a></li>
 </ul></li>
 <li>Some algebra and calculus</li>
 <li>Basic visualisation techniques (R or Python)
 <ul>
 <li>histogram, density plot, scatter plot</li>
-<li>see e.g. <a href="demos.html#BDA_R_demos">BDA R demos</a></li>
-<li>see e.g. <a href="demos.html#BDA_Python_demos">BDA Python demos</a></li>
+<li>see e.g. <a href="demos.html#BDA_R_demos">BDA R demos</a></li>
+<li>see e.g. <a href="demos.html#BDA_Python_demos">BDA Python demos</a></li>
 </ul></li>
 </ul>
 <p>This course has been designed so that there is strong emphasis in computational aspects of Bayesian data analysis and using the latest computational tools.</p>
 <p>If you find BDA3 too difficult to start with, I recommend</p>
 <ul>
-<li>For regression models, their connection to statistical testing and causal analysis see <a href="https://avehtari.github.io/ROS-Examples/">Gelman, Hill and Vehtari, &quot;Regression and Other Stories&quot;</a>.</li>
-<li>Richard McElreath's <a href="https://xcelab.net/rm/statistical-rethinking/">Statistical Rethinking, 2nd ed</a> book is easier than BDA3 and the 2nd ed is excellent. Statistical Rethinking doesn't go as deep in some details, math, algorithms and programming as BDA course. Richard's lecture videos of <a href="https://github.com/rmcelreath/statrethinking_winter2019">Statistical Rethinking: A Bayesian Course Using R and Stan</a> are highly recommended even if you are following BDA3.</li>
-<li>For background prerequisites some students have found chapters 2, 4 and 5 in <a href="https://sites.google.com/site/doingbayesiandataanalysis/">Kruschke, &quot;Doing Bayesian Data Analysis&quot;</a> useful.</li>
+<li>For regression models, their connection to statistical testing and causal analysis see <a href="https://avehtari.github.io/ROS-Examples/">Gelman, Hill and Vehtari, “Regression and Other Stories”</a>.</li>
+<li>Richard McElreath’s <a href="https://xcelab.net/rm/statistical-rethinking/">Statistical Rethinking, 2nd ed</a> book is easier than BDA3 and the 2nd ed is excellent. Statistical Rethinking doesn’t go as deep in some details, math, algorithms and programming as BDA course. Richard’s lecture videos of <a href="https://github.com/rmcelreath/statrethinking_winter2019">Statistical Rethinking: A Bayesian Course Using R and Stan</a> are highly recommended even if you are following BDA3.</li>
+<li>For background prerequisites some students have found chapters 2, 4 and 5 in <a href="https://sites.google.com/site/doingbayesiandataanalysis/">Kruschke, “Doing Bayesian Data Analysis”</a> useful.</li>
 </ul>
 </div>
 <div id="course-contents-following-bda3" class="section level2">
@@ -584,7 +550,7 @@ div.tocify {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -602,7 +568,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
+    $(this).parent().toggleClass('nav-tabs-open');
   });
 });
 </script>
