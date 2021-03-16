@@ -3,9 +3,9 @@
 #' Density, distribution function, quantile function and random generation for
 #' the Student-t distribution with location/mean \code{mean}, scale
 #' \code{scale}, and degrees of freedom \code{df}. See
-#' \href{https://en.wikipedia.org/wiki/Location%E2%80%93scale_family}{this}
+#' \href{https://en.wikipedia.org/wiki/Location\%E2\%80\%93scale_family}{this}
 #' or
-#' \href{https://en.wikipedia.org/wiki/Student%27s_t-distribution#Generalized_Student's_t-distribution}{this}
+#' \href{https://en.wikipedia.org/wiki/Student\%27s_t-distribution#Generalized_Student's_t-distribution}{this}
 #' link on how to get from the standard t-distribution to the t-distribution with
 #' additional location and scale parameters.
 #'
