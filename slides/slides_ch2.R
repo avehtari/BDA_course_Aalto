@@ -68,7 +68,7 @@ ggplot(data = data.frame(x = c(0, 1)), aes(x)) +
     labs(x=bquote(theta), y="", title=bquote("p(" ~ theta ~ "| y=6, n=10, M=binom) + unif. prior)"))
 
 #' Posterior of theta of Binomial model with y=10, n=10
-gggplot(data = data.frame(x = c(0, 1)), aes(x)) +
+ggplot(data = data.frame(x = c(0, 1)), aes(x)) +
     stat_function(fun = dbeta, n = 601, args = list(shape1 = 11, shape2 = 1),
                   color = "blue") +
     geom_segment(x=11/12, xend=11/12, y=0, yend=11, color="red") +
