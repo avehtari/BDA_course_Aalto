@@ -158,7 +158,7 @@ In part a), was the posterior for the difference between the means summarized wi
 
 ### Q19 - 1 point
 
-Was some analysis and discussion provided for assessing whether the means could be the same?
+In part b) was some analysis and discussion provided for assessing whether the means could be exactly the same?
 
 - No
 - Yes, but the analysis or explanation seems incorrect
