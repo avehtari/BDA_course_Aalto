@@ -24,7 +24,7 @@ Metropolis
 
 ### Q3 - 1 point
 
-Is the brief description of Metropolis-Hastings algorithm included (and it's not complete nonsense)? Provide also a brief comment on how clear you think that description is (and potentially mention errors if you see them).
+Is the brief description of Metropolis algorithm included (and it's not complete nonsense)? Provide also a brief comment on how clear you think that description is (and potentially mention errors if you see them).
 
 - No
 - Yes
