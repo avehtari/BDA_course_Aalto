@@ -60,6 +60,8 @@
 % Stan source code block
 \usepackage{listings}
 
+\lstset{literate={~}{{\raisebox{-.25em}{\textasciitilde}}}{1}}
+
 
 \begin{document}
 \SweaveOpts{concordance=TRUE}
@@ -131,7 +133,7 @@ Your tasks are the following:
 
   \textbf{Hint:} You may find some of the mistakes in the code using
   Stan syntax checker. If you copy the Stan code to a file ending
-  .stan and open it in RStudio (you can also choose from Rstudio menu
+  .stan and open it in RStudio (you can also choose from RStudio menu
   File$\rightarrow$New File$\rightarrow$Stan file to create a new Stan
   file), the editor will show you some syntax errors. More syntax
   errors might be detected by clicking `Check' in the bar just above
@@ -166,16 +168,16 @@ Your tasks are the following:
 \caption{Example plots for the results obtained for the problem in the Question 1. In the first subplot, the red lines indicate the resulting 5 \%, 50 \%, and 95 \% posterior quantiles for the transformed parameter \texttt{mu} at each year.}\label{fig1}
 \end{figure}
 
-\begin{lstlisting}[
-    float,
-    caption=Broken Stan code for question 1,
-    label=listing1,
-    basicstyle=\footnotesize\ttfamily,
-    numbers=left,
-    xleftmargin=2.7em,
-    frame=single,
-    framexleftmargin=2.2em
-]
+ \begin{lstlisting}[
+     float,
+     caption=Broken Stan code for question 1,
+     label=listing1,
+     basicstyle=\ttfamily,
+     numbers=left,
+     xleftmargin=2.7em,
+     frame=single,
+     framexleftmargin=2.2em
+     ]
 data {
     int<lower=0> N;  // number of data points
     vector[N] x;     // observation year
@@ -227,7 +229,7 @@ The provided Stan code in Listing~\ref{listing2} given on the next page is an ex
 \begin{align*}
     y_{ij} &\sim N(\mu_j,\sigma_j)\\
     \mu_{j} &\sim N(0,1)\\
-    \sigma_{j} &\sim Inv-\chi^2(10)
+    \sigma_{j} &\sim \Invchi2(10)
 \end{align*}
 
 To run Stan for that model, simply use:
@@ -276,7 +278,7 @@ your tasks are the following:
   \end{itemize}
 \item [d)] Report the posterior expectation for $\mu_1$ with a 90\%
   credible interval but using a $\operatorname{normal}(0,10)$ prior
-  for the $\mu$ paramater(s) and a $\operatorname{Gamma}(1,1)$ prior
+  for the $\mu$ parameter(s) and a $\operatorname{Gamma}(1,1)$ prior
   for the $\sigma$ parameter(s). For the hierarchical model, use the
   $\operatorname{normal}(0,10)$ and $\operatorname{Gamma}(1,1)$ as
   hyper-priors.
@@ -285,15 +287,15 @@ your tasks are the following:
 \textbf{Hint!} See the example Stan codes \href{http://avehtari.github.io/BDA_R_demos/demos_rstan/rstan_demo.html#8_comparison_of_k_groups_with_hierarchical_models}{\textbf{here}} for the comparison of $k$ groups with and without the hierarchical structure.
 
 \begin{lstlisting}[
-    float,
-    caption=Stan code for a bad seperate model,
-    label=listing2,
-    basicstyle=\footnotesize\ttfamily,
-    numbers=left,
-    xleftmargin=2.7em,
-    frame=single,
-    framexleftmargin=2.2em
-]
+     float,
+     caption=Stan code for a bad separate model,
+     label=listing2,
+     basicstyle=\ttfamily,
+     numbers=left,
+     xleftmargin=2.7em,
+     frame=single,
+     framexleftmargin=2.2em
+     ]
 data {
   int<lower=0> N;
   int<lower=0> J;
@@ -319,7 +321,8 @@ model {
 
 generated quantities {
   real ypred;
-  // Compute predictive distribution for the first machine
+  // Compute predictive distribution
+  // for the first machine
   ypred = normal_rng(mu[1], sigma[1]);
 }
 \end{lstlisting}
