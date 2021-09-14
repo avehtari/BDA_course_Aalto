@@ -127,7 +127,9 @@ a) How is the answer for probability of picking a red ball?
 
 b) How is the answer for what box is most probable?
 
--   No answer Bayes rule used to compute probabilities for all boxes given that the picked ball is red, but the answers are not p(A\|R)≈0.358, p(B\|R)≈0.251 and p(C\|R)≈0.391. (or non scaled results for A: 0.114, B:0.08, C:0.125) )
+-   No answer 
+
+-   Bayes rule used to compute probabilities for all boxes given that the picked ball is red, but the answers are not p(A\|R)≈0.358, p(B\|R)≈0.251 and p(C\|R)≈0.391. (or non scaled results for A: 0.114, B:0.08, C:0.125) )
 
 -   Bayes rule used to compute probabilities for all boxes given that the picked ball is red, the answers are p(A\|R)≈0.358, p(B\|R)≈0.251 and p(C\|R)≈0.391 and it is **not** explicitly said that the most probable box is box C. (or non scaled results for A: 0.114, B:0.08, C:0.125, and it is **not** said that this is biggest for C)
 
