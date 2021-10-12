@@ -24,21 +24,21 @@ Metropolis
 
 ### Q3 - 1 point
 
-Is the brief description of Metropolis algorithm included (and it's not complete nonsense)? Provide also a brief comment on how clear you think that description is (and potentially mention errors if you see them).
+In 1 a), is the implementation of the `density_ratio` function included?
 
 - No
 - Yes
 
 ### Q4 - 1 point
 
-In 1 a), is the implementation of the `density_ratio` function included?
+In 1 b), is the implementation of the `metropolis_bioassay` function included?
 
 - No
 - Yes
 
 ### Q5 - 1 point
 
-In 1 b), is the implementation of the `metropolis_bioassay` function included?
+Is the brief description of Metropolis algorithm included (and it's not complete nonsense)? Provide also a brief comment on how clear you think that description is (and potentially mention errors if you see them).
 
 - No
 - Yes
