@@ -24,35 +24,35 @@ Metropolis
 
 ### Q3 - 1 point
 
-Is the brief description of Metropolis algorithm included (and it's not complete nonsense)? Provide also a brief comment on how clear you think that description is (and potentially mention errors if you see them).
+In 1 a), is the implementation of the `density_ratio` function included?
 
 - No
 - Yes
 
 ### Q4 - 1 point
 
-In 1 a), is the implementation of the `density_ratio` function included?
+In 1 b), is the implementation of the `metropolis_bioassay` function included?
 
 - No
 - Yes
 
 ### Q5 - 1 point
 
-In 1 b), is the implementation of the `metropolis_bioassay` function included?
+2 a) Is the brief description of Metropolis algorithm included (and it's not complete nonsense)? Provide also a brief comment on how clear you think that description is (and potentially mention errors if you see them).
 
 - No
 - Yes
 
 ### Q6 - 1 point
 
-2 a) Is the proposal/jumping distribution reported ?
+2 b) Is the proposal/jumping distribution reported ?
 
 - No
 - Yes
 
 ### Q7 - 1 point
 
-2 b) Are the starting points or the mechanism how they are generated reported?
+2 c) Are the starting points or the mechanism how they are generated reported?
 
 - No
 - Yes
@@ -60,7 +60,7 @@ In 1 b), is the implementation of the `metropolis_bioassay` function included?
 
 ### Q8 - 1 point
 
-2 c) Is the number of draws per chain reported?
+2 d) Is the number of draws per chain reported?
 
 - No
 - Yes
@@ -68,21 +68,21 @@ In 1 b), is the implementation of the `metropolis_bioassay` function included?
 
 ### Q9 - 1 point
 
-2 d) Is the warm-up length reported?
+2 e) Is the warm-up length reported?
 
 - No
 - Yes
 
 ### Q10 - 1 point
 
-2 e) Is the number of chains reported?
+2 f) Is the number of chains reported?
 
 - No
 - Yes
 
 ### Q11 - 1 point
 
-2 f) and 2 g) Are line plots of the chains included? (Separate plots for alpha and beta)
+2 g) and 2 h) Are line plots of the chains included? (Separate plots for alpha and beta)
 
 - No plots are included
 - Yes, but both plots are in a single figure, or the plots are scatter plots (scatter plots aren't useful for visual convergence evaluation).
