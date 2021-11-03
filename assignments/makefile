@@ -7,7 +7,7 @@ TARGETPDF = $(SOURCESRNW:%.Rnw=%.pdf)
 	pdflatex $<; pdflatex $<; /bin/rm assignment*.tex assignment*.aux assignment*.log assignment*.out
 
 %.tex: %.Rnw
-	Rscript -e 'Sweave("$<")'
+	Rscript -e 'knitr::knit("$<")'
 
 %.html: %.md
 	Rscript -e 'rmarkdown::render("$<")'
