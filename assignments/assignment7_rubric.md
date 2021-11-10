@@ -137,8 +137,8 @@ Separate model: *Discussion about quection c part iii*, the posterior distributi
 
 ### Q16
 
-Separate model: When using the non-informative prior of Normal(0,10) and Gamma(1,1) for mu
-parameter(s) and sigma parameter(s), the posterior mean for mu for machine 1 has 90%
+Separate model: When using the prior of Normal(0,10) and Gamma(1,1) for mu
+parameter(s) and sigma parameter(s), the posterior for mu for machine 1 has 90%
 credibility intervals close to: ...
 
 - No or incorrect answer
@@ -188,8 +188,8 @@ Pooled model: *Discussion about question c part iii*, the posterior distribution
 
 ### Q22
 
-Pooled model: When using the non-informative prior of Normal(0,10) and Gamma(1,1) for mu
-parameter(s) and sigma parameter(s), the posterior mean for mu for machine 1 has 90%
+Pooled model: When using the prior of Normal(0,10) and Gamma(1,1) for mu
+parameter(s) and sigma parameter(s), the posterior for mu for machine 1 has 90%
 credibility intervals close to: ...
 
 - No answer
@@ -240,8 +240,8 @@ Hierarchical model: *Discussion about question c part iii*, the posterior distri
 
 ### Q28
 
-Hierarchical model: When using the non-informative prior of Normal(0,10) and Gamma(1,1) for
-mu parameter(s) and sigma parameter(s), the posterior mean for mu for machine 1 has 90%
+Hierarchical model: When using the prior of Normal(0,10) and Gamma(1,1) for
+mu parameter(s) and sigma parameter(s), the posterior for mu for machine 1 has 90%
 credibility intervals close to: ...
 
 - No answer
