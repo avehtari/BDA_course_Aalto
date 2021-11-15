@@ -119,13 +119,13 @@ The following histograms are used as a reference in the grading of the separate 
 
 *<model_plots>*
 
-Separate model: *Discussion about question c part i*, the posterior distribution of the mean of the quality measurements of the seventh machine
+Separate model: *Discussion about question c part i*, the posterior distribution of the mean of the quality measurements of the sixth machine
 
 *hidden responses*
 
 ### Q14
 
-Separate model: *Discussion about question c part ii*, the posterior distribution of the mean of the quality measurements of the seventh machine
+Separate model: *Discussion about question c part ii*, the predictive distribution of a quality measurement from the sixth machine
 
 *hidden responses*
 
@@ -170,13 +170,13 @@ The following histograms are used as a reference in the grading of the pooled mo
 
 *<model_plots>*
 
-Pooled model: *Discussion about question c part i*, the posterior distribution of the mean of the quality measurements of the seventh machine
+Pooled model: *Discussion about question c part i*, the posterior distribution of the mean of the quality measurements of the sixth machine
 
 *hidden responses*
 
 ### Q20
 
-Pooled model: *Discussion about question c part ii*, the posterior distribution of the mean of the quality measurements of the seventh machine
+Pooled model: *Discussion about question c part ii*, the predictive distribution of a quality measurement from the sixth machine
 
 *hidden responses*
 
@@ -222,13 +222,13 @@ The following histograms are used as a reference in the grading of the hierarchi
 *<model_plots>*
 
 
-Hierarchical model: *Discussion about question c part i*, the posterior distribution of the mean of the quality measurements of the seventh machine
+Hierarchical model: *Discussion about question c part i*, the posterior distribution of the mean of the quality measurements of the sixth machine
 
 *hidden responses*
 
 ### Q26
 
-Hierarchical model: *Discussion about question c part ii*, the posterior distribution of the mean of the quality measurements of the seventh machine
+Hierarchical model: *Discussion about question c part ii*, the predictive distribution of a quality measurement from the sixth machine
 
 *hidden responses*
 
