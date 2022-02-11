@@ -15,6 +15,10 @@ book](http://www.stat.columbia.edu/~gelman/book/errata_bda3.txt), and [chapter_n
 
 The material will be updated during the course. Exercise instructions and slides will be updated at latest on Monday of the corresponding week. The best way to stay updated is to clone the repo and pull before checking new material. If you don't want to learn git and can't find the Download ZIP link, click [here](https://github.com/avehtari/BDA_course_Aalto/archive/master.zip).
 
+## Bayesian Data Analysis (Global South) - 2022 Course
+
+This is a free course on Bayesian Data Analysis targeted for the Global south and other underrepresented groups, find more information on the course homepage [here](https://avehtari.github.io/BDA_course_Aalto/gsu2022.html)
+
 ## Acknowledgements
 
 The course material has been greatly improved by the previous and
