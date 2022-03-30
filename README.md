@@ -2,12 +2,12 @@
 
 # Bayesian Data Analysis course material
 
-This repository has course material for Bayesian Data Analysis course at Aalto (CS-E5710). See [the course web pages for more information](https://avehtari.github.io/BDA_course_Aalto/)
+This repository has course material for Bayesian Data Analysis course at Aalto (CS-E5710). See [the course web pages for more information](https://avehtari.github.io/BDA_course_Aalto/).
 
 The course material in the repo can be used in other courses. Text and videos licensed under CC-BY-NC 4.0. Code licensed under BSD-3.
 
 [The electronic version of the course book
-Bayesian Data Analysis, 3rd ed, by by Andrew Gelman, John Carlin, Hal
+Bayesian Data Analysis, 3rd ed, by Andrew Gelman, John Carlin, Hal
 Stern, David Dunson, Aki Vehtari, and Donald Rubin](https://users.aalto.fi/~ave/BDA3.pdf) is available for non-commercial purposes. Hard copies are available from [the publisher](https://www.crcpress.com/Bayesian-Data-Analysis/Gelman-Carlin-Stern-Dunson-Vehtari-Rubin/p/book/9781439840955) and many book stores.
 See also [home page for the
 book](http://www.stat.columbia.edu/~gelman/book/), [errata for the
