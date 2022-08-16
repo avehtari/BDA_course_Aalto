@@ -3,8 +3,9 @@
 \usepackage{babel}
 %\usepackage[latin1]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage{times}
+\usepackage{newtxtext} % times
 \usepackage{amsmath}
+\usepackage[varqu,varl]{inconsolata} % typewriter
 \usepackage{microtype}
 \usepackage{url}
 \urlstyle{same}
@@ -18,11 +19,11 @@
   pdfauthor={Aki Vehtari},
   pdfkeywords={Bayesian probability theory, Bayesian inference, Bayesian data analysis},
   pdfstartview={FitH -32768},
-    colorlinks=true,
-    linkcolor=black,
-    citecolor=black,
-    filecolor=black,
-    urlcolor=black,
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  filecolor=blue,
+  urlcolor=blue
 }
 
 
@@ -77,9 +78,9 @@ Outline of the chapter 3
 Normal model is used a lot as a building block of the models in the
 later chapters, so it is important to learn it now.
 Bioassay example is good example used to illustrate many important
-concepts and it is used in several exercises over the course.
+concepts and it is used in several exercises over the course.\\
 
-Demos (\url{https://github.com/avehtari/BDA_R_demos} and \url{https://github.com/avehtari/BDA_py_demos})
+R and Python demos at \url{https://avehtari.github.io/BDA_course_Aalto/demos.html}
 \begin{list}{$\bullet$}{\parsep=0pt\itemsep=2pt}
 \item demo3\_1: visualise joint density and marginal densities of
   posterior of normal distribution with unknown mean and variance
@@ -141,6 +142,28 @@ property has been used $\tr(ABC) = \tr(CAB) = \tr(BCA)$.
 See \emph{Earliest Known Uses of Some of the Words of Mathematics}
 \url{http://jeff560.tripod.com/mathword.html}.
 
+\subsection*{Using Monte Carlo to obtain draws from the posterior of generated quantities}
+
+Chapter 3 discusses closed form posteriors for binomial and normal
+models given conjugate priors. These are also used as part of the
+assignment. The assignment also requires forming a posterior for
+derived quantities, and these posterior don't have closed form (so no
+need to try derive them). As we know how to sample from the posterior
+of binomial and normal models, we can use these posterior draws to get
+draws from the posterior of derived quantity.
+
+For example, given posteriors $p(\theta_1|y_1)$ and $p(\theta_2|y_2)$ we want to find the posterior for the difference $p(\theta_1-\theta_2|y_1,y_2)$.
+\begin{enumerate}
+\item Sample $\theta_1^s$ from $p(\theta_1|y_1)$ and $\theta_2^s$ from
+  $p(\theta_2|y_2)$, we can compute posterior draws for the derived
+  quantity as $\delta^s=\theta_1^s-\theta_2^s$ ($s=1,\ldots,S$).
+\item $\delta^s$ are then draws from $p(\delta^s|y_1,y_2)$, and they
+  can be used to illustrate the posterior $p(\delta^s|y_1,y_2)$ with
+  histogram, and compute posterior mean, sd, and quantiles.
+\end{enumerate}
+
+This is one reason why Monte Carlo approaches are so commonly used.
+
 \subsection*{The number of  required Monte Carlo draws}
 
 This will discussed in chapter 10. Meanwhile, e.g., 1000 draws is sufficient.
@@ -188,6 +211,26 @@ Example codes in demo3\_6 can be helpful in exercises related to
 Bioassay example.
 
 \subsection*{Bayesian vs. frequentist statements in two group comparisons}
+
+When asking to compare groups, some students get confused as the
+frequentist testing is quite different. The frequentist testing is
+often focusing on a) differently named tests for different models and
+b) null hypothesis testing. In Bayesian inference a) the same Bayes
+rule and investigation of posterior is used for all models, b) null
+hypothesis testing is less common. We come later to decision making
+given posterior and utility/ cost function (Lecture 10.1) and more
+about null hypothesis testing (Lecture 12.1). Now it is assumed you
+will report the posterior (e.g. histogram), possible summaries, and
+report what you can infer from that.  Specifically as in this
+assignment the group comparisons are based on continuous model
+parameter, the probability of 0 difference is 0 (later lecture 12.1
+covers null hypothesis testing). Instead of forcing dichotomous answer
+(yes/no) about whether there is difference, report the whole posterior
+that tells also how big that difference might be. What big means
+depends on the application, which brings us back to the fact of
+importance of domain expertise. You are not experts on the application
+examples used in the assignment, but you can think how would you
+report what you have learned to a domain expert.
 
 Frank Harrell's recommendations how to state results in two group
 comparisons are excellent

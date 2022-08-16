@@ -13,12 +13,21 @@
 
 <title>Bayesian Data Analysis course - Demos</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
@@ -26,12 +35,16 @@
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 
-<style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -44,32 +57,8 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
+
 
 
 
@@ -79,10 +68,6 @@ h6 {
   max-width: 940px;
   margin-left: auto;
   margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
 }
 img {
   max-width:100%;
@@ -99,40 +84,16 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 66px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 71px;
-  margin-top: -71px;
-}
-.section h2 {
-  padding-top: 71px;
-  margin-top: -71px;
-}
-.section h3 {
-  padding-top: 71px;
-  margin-top: -71px;
-}
-.section h4 {
-  padding-top: 71px;
-  margin-top: -71px;
-}
-.section h5 {
-  padding-top: 71px;
-  margin-top: -71px;
-}
-.section h6 {
-  padding-top: 71px;
-  margin-top: -71px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -160,7 +121,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -172,7 +133,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -183,10 +144,23 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -198,7 +172,6 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
@@ -324,7 +297,7 @@ div.tocify {
 
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
+<div class="row">
 <div class="col-xs-12 col-sm-4 col-md-3">
 <div id="TOC" class="tocify">
 </div>
@@ -338,7 +311,7 @@ div.tocify {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -351,16 +324,16 @@ div.tocify {
   <a href="index.html">Material</a>
 </li>
 <li>
-  <a href="Aalto2020.html">Aalto 2020</a>
-</li>
-<li>
-  <a href="demos.html">Demos</a>
+  <a href="Aalto2022.html">Aalto 2022</a>
 </li>
 <li>
   <a href="assignments.html">Assignments</a>
 </li>
 <li>
   <a href="project.html">Project</a>
+</li>
+<li>
+  <a href="demos.html">Demos</a>
 </li>
 <li>
   <a href="FAQ.html">FAQ</a>
@@ -373,12 +346,12 @@ div.tocify {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
 <h1 class="title toc-ignore">Bayesian Data Analysis course - Demos</h1>
-<h4 class="date">Page updated: 2020-08-24</h4>
+<h4 class="date">Page updated: 2021-11-10</h4>
 
 </div>
 
@@ -387,22 +360,22 @@ div.tocify {
 <h2>BDA R demos</h2>
 <p>The <a href="https://github.com/avehtari/BDA_R_demos">BDA_R_demos repository</a> contains some R demos and additional notes for the book <a href="http://www.stat.columbia.edu/~gelman/book/">Bayesian Data Analysis, 3rd ed by Gelman, Carlin, Stern, Dunson, Vehtari, and Rubin (BDA3)</a>.</p>
 <p>Currently there are demos for BDA3 Chapters 2, 3, 4, 5, 6, 10, 11 and 12. Furthermore there are demos for <a href="https://github.com/stan-dev/rstan">RStan</a> and <a href="https://github.com/stan-dev/rstanarm">RStanARM</a>.</p>
-<p>The initial demos were originally written for Matlab/Octave by <a href="http://users.aalto.fi/~ave/">Aki Vehtari</a> and translated to R by <a href="https://github.com/paasim">Markus Paasiniemi</a>. Recently more demos have been added for <a href="demos_rstan">RStan and RStanARM</a>. Unless otherwise specified in specific files all code licensed under BSD-3 and all text, slides and figures licensed under CC-BY-NC 4.0.</p>
+<p>The initial demos were originally written for Matlab/Octave by <a href="http://users.aalto.fi/~ave/">Aki Vehtari</a> and translated to R by <a href="https://github.com/paasim">Markus Paasiniemi</a>. Recently more demos have been added for <a href="http://avehtari.github.io/BDA_R_demos/demos_rstan/rstan_demo.html">RStan</a>, <a href="http://avehtari.github.io/BDA_R_demos/demos_rstan/cmdstanr_demo.html">CmdStanR</a> and <a href="http://avehtari.github.io/BDA_R_demos/demos_rstan/rstanarm_demo.html">RStanARM</a>. Unless otherwise specified in specific files all code licensed under BSD-3 and all text, slides and figures licensed under CC-BY-NC 4.0.</p>
 <p>See also <a href="https://avehtari.github.io/modelselection/">Model Selection tutorial</a>.</p>
 <ul>
 <li><a href="https://codeload.github.com/avehtari/BDA_R_demos/zip/master">ZIP file for all R demos</a></li>
 <li><a href="https://avehtari.github.io/BDA_R_demos/demos_ch2/">Chapter 2</a>
 <ul>
-<li><a href="https://avehtari.github.io/BDA_R_demos/demos_ch2/demo2_1.html">2.1: Probability of a girl birth given placenta previa (BDA3 p. 37)</a></li>
+<li><a href="https://avehtari.github.io/BDA_R_demos/demos_ch2/demo2_1.html">2.1: Probability of a girl birth given placenta previa (BDA3 p. 37)</a></li>
 <li><a href="https://avehtari.github.io/BDA_R_demos/demos_ch2/demo2_2.html">2.2: Illustrate the effect of prior in binomial model</a></li>
 <li><a href="https://avehtari.github.io/BDA_R_demos/demos_ch2/demo2_3.html">2.3: Illustrate simulation based inference</a></li>
 <li><a href="https://avehtari.github.io/BDA_R_demos/demos_ch2/demo2_4.html">2.4: Illustrate grid and inverse-cdf sampling</a></li>
 </ul></li>
 <li><a href="https://avehtari.github.io/BDA_R_demos/demos_ch3">Chapter 3</a>
 <ul>
-<li><a href="https://avehtari.github.io/BDA_R_demos/demos_ch3/demo3_1_4.html">3.1_4: Normal model with unknown mean and variance (BDA3 section 3.2 on p. 64)</a></li>
-<li><a href="https://avehtari.github.io/BDA_R_demos/demos_ch3/demo3_5.html">3.5: Estimating the speed of light using normal model BDA3 p. 66</a></li>
-<li><a href="https://avehtari.github.io/BDA_R_demos/demos_ch3/demo3_6.html">3.6: Binomial regression and grid sampling with bioassay data (BDA3 p. 74-)</a></li>
+<li><a href="https://avehtari.github.io/BDA_R_demos/demos_ch3/demo3_1_4.html">3.1_4: Normal model with unknown mean and variance (BDA3 section 3.2 on p. 64)</a></li>
+<li><a href="https://avehtari.github.io/BDA_R_demos/demos_ch3/demo3_5.html">3.5: Estimating the speed of light using normal model BDA3 p. 66</a></li>
+<li><a href="https://avehtari.github.io/BDA_R_demos/demos_ch3/demo3_6.html">3.6: Binomial regression and grid sampling with bioassay data (BDA3 p. 74-)</a></li>
 </ul></li>
 <li><a href="https://avehtari.github.io/BDA_R_demos/demos_ch4">Chapter 4</a>
 <ul>
@@ -410,8 +383,8 @@ div.tocify {
 </ul></li>
 <li><a href="https://avehtari.github.io/BDA_R_demos/demos_ch5">Chapter 5</a>
 <ul>
-<li><a href="https://avehtari.github.io/BDA_R_demos/demos_ch5/demo5_1.html">5.1: Hierarchical model for Rats experiment (BDA3, p. 102)</a></li>
-<li><a href="https://avehtari.github.io/BDA_R_demos/demos_ch5/demo5_2.html">5.2: Hierarchical model for SAT-example data (BDA3, p. 102)</a></li>
+<li><a href="https://avehtari.github.io/BDA_R_demos/demos_ch5/demo5_1.html">5.1: Hierarchical model for Rats experiment (BDA3, p. 102)</a></li>
+<li><a href="https://avehtari.github.io/BDA_R_demos/demos_ch5/demo5_2.html">5.2: Hierarchical model for SAT-example data (BDA3, p. 102)</a></li>
 </ul></li>
 <li><a href="https://avehtari.github.io/BDA_R_demos/demos_ch6">Chapter 6</a>
 <ul>
@@ -443,6 +416,7 @@ div.tocify {
 <li><a href="https://avehtari.github.io/BDA_R_demos/demos_rstan">RStan and RStanARM</a>
 <ul>
 <li><a href="http://avehtari.github.io/BDA_R_demos/demos_rstan/rstan_demo.html">RStan demos</a></li>
+<li><a href="http://avehtari.github.io/BDA_R_demos/demos_rstan/cmdstanr_demo.html">CmdStanR demos</a></li>
 <li><a href="http://avehtari.github.io/BDA_R_demos/demos_rstan/rstanarm_demo.html">RStanARM demos</a></li>
 <li><a href="http://avehtari.github.io/BDA_R_demos/demos_rstan/ppc/poisson-ppc.html">Posterior predictive checking</a></li>
 <li><a href="http://avehtari.github.io/BDA_R_demos/demos_rstan/sleep.html">Does brain mass predict how much mammals sleep in a day?</a></li>
@@ -461,16 +435,16 @@ div.tocify {
 <li><a href="https://codeload.github.com/avehtari/BDA_py_demos/zip/master">ZIP file for all Python demos</a></li>
 <li><a href="https://github.com/avehtari/BDA_py_demos/tree/master/demos_ch2">Chapter 2</a>
 <ul>
-<li><a href="https://github.com/avehtari/BDA_py_demos/blob/master/demos_ch2/demo2_1.ipynb">2.1: Probability of a girl birth given placenta previa (BDA3 p. 37)</a></li>
+<li><a href="https://github.com/avehtari/BDA_py_demos/blob/master/demos_ch2/demo2_1.ipynb">2.1: Probability of a girl birth given placenta previa (BDA3 p. 37)</a></li>
 <li><a href="https://github.com/avehtari/BDA_py_demos/blob/master/demos_ch2/demo2_2.ipynb">2.2: Illustrate the effect of prior in binomial model</a></li>
 <li><a href="https://github.com/avehtari/BDA_py_demos/blob/master/demos_ch2/demo2_3.ipynb">2.3: Illustrate simulation based inference</a></li>
 <li><a href="https://github.com/avehtari/BDA_py_demos/blob/master/demos_ch2/demo2_4.ipynb">2.4: Illustrate grid and inverse-cdf sampling</a></li>
 </ul></li>
 <li><a href="https://github.com/avehtari/BDA_py_demos/tree/master/demos_ch3">Chapter 3</a>
 <ul>
-<li><a href="https://github.com/avehtari/BDA_py_demos/blob/master/demos_ch3/demo3_1-4.ipynb">3.1_4: Normal model with unknown mean and variance (BDA3 section 3.2 on p. 64)</a></li>
-<li><a href="https://github.com/avehtari/BDA_py_demos/blob/master/demos_ch3/demo3_5.ipynb">3.5: Estimating the speed of light using normal model BDA3 p. 66</a></li>
-<li><a href="https://github.com/avehtari/BDA_py_demos/blob/master/demos_ch3/demo3_6.ipynb">3.6: Binomial regression and grid sampling with bioassay data (BDA3 p. 74-)</a></li>
+<li><a href="https://github.com/avehtari/BDA_py_demos/blob/master/demos_ch3/demo3_1-4.ipynb">3.1_4: Normal model with unknown mean and variance (BDA3 section 3.2 on p. 64)</a></li>
+<li><a href="https://github.com/avehtari/BDA_py_demos/blob/master/demos_ch3/demo3_5.ipynb">3.5: Estimating the speed of light using normal model BDA3 p. 66</a></li>
+<li><a href="https://github.com/avehtari/BDA_py_demos/blob/master/demos_ch3/demo3_6.ipynb">3.6: Binomial regression and grid sampling with bioassay data (BDA3 p. 74-)</a></li>
 </ul></li>
 <li><a href="https://github.com/avehtari/BDA_py_demos/blob/master/demos_ch4">Chapter 4</a>
 <ul>
@@ -478,8 +452,8 @@ div.tocify {
 </ul></li>
 <li><a href="https://github.com/avehtari/BDA_py_demos/tree/master/demos_ch5">Chapter 5</a>
 <ul>
-<li><a href="https://github.com/avehtari/BDA_py_demos/tree/master/demos_ch5/demo5_1.ipynb">5.1: Hierarchical model for Rats experiment (BDA3, p. 102)</a></li>
-<li><a href="https://github.com/avehtari/BDA_py_demos/tree/master/demos_ch5/demo5_2.ipynb">5.2: Hierarchical model for SAT-example data (BDA3, p. 102)</a></li>
+<li><a href="https://github.com/avehtari/BDA_py_demos/tree/master/demos_ch5/demo5_1.ipynb">5.1: Hierarchical model for Rats experiment (BDA3, p. 102)</a></li>
+<li><a href="https://github.com/avehtari/BDA_py_demos/tree/master/demos_ch5/demo5_2.ipynb">5.2: Hierarchical model for SAT-example data (BDA3, p. 102)</a></li>
 </ul></li>
 <li><a href="https://github.com/avehtari/BDA_py_demos/tree/master/demos_ch6">Chapter 6</a>
 <ul>
@@ -499,7 +473,7 @@ div.tocify {
 <li><a href="https://github.com/avehtari/BDA_py_demos/tree/master/demos_ch11/demo11_1.ipynb">11.1: Gibbs sampling illustration</a></li>
 <li><a href="https://github.com/avehtari/BDA_py_demos/tree/master/demos_ch11/demo11_2.ipynb">11.2: Metropolis sampling + convergence illustration</a></li>
 </ul></li>
-<li><a href="https://avehtari.github.io/BDA_py_demos/demos_pystan">PyStan</a>
+<li><a href="https://github.com/avehtari/BDA_py_demos/tree/master/demos_pystan">PyStan</a>
 <ul>
 <li><a href="https://github.com/avehtari/BDA_py_demos/blob/master/demos_pystan/PyStan_test_installation.ipynb">PyStan test installation</a></li>
 <li><a href="https://github.com/avehtari/BDA_py_demos/blob/master/demos_pystan/pystan_demo.ipynb">PyStan demos</a></li>
@@ -530,7 +504,7 @@ div.tocify {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -548,7 +522,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
+    $(this).parent().toggleClass('nav-tabs-open');
   });
 });
 </script>
@@ -557,6 +531,9 @@ $(document).ready(function () {
 
 <script>
 $(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
 
     // move toc-ignore selectors from section div to header
     $('div.section.toc-ignore')

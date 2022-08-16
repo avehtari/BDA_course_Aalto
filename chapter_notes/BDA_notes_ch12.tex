@@ -3,9 +3,9 @@
 %\usepackage{babel}
 \usepackage[latin1]{inputenc}
 \usepackage[T1]{fontenc}
-% \usepackage[T1,mtbold,lucidacal,mtplusscr,subscriptcorrection]{mathtime}
-\usepackage{times}
+\usepackage{newtxtext} % times
 \usepackage{amsmath}
+\usepackage[varqu,varl]{inconsolata} % typewriter
 \usepackage{url}
 \urlstyle{same}
 
@@ -18,11 +18,11 @@
   pdfauthor={Aki Vehtari},
   pdfkeywords={Bayesian probability theory, Bayesian inference, Bayesian data analysis},
   pdfstartview={FitH -32768},
-    colorlinks=true,
-    linkcolor=black,
-    citecolor=black,
-    filecolor=black,
-    urlcolor=black
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  filecolor=blue,
+  urlcolor=blue
 }
 
 
@@ -66,14 +66,13 @@ Outline of the chapter 12
 \begin{list}{$\bullet$}{\parsep=0pt\itemsep=2pt}
 \item 12.1 Efficient Gibbs samplers (not part of the course)
 \item 12.2 Efficient Metropolis jump rules (not part of the course)
-\item 12.3 Further exetensions to Gibbs and Metropolis (not part of the course)
+\item 12.3 Further extensions to Gibbs and Metropolis (not part of the course)
 \item 12.4 Hamiltonian Monte Carlo (used in Stan)
 \item 12.5 Hamiltonian dynamics for a simple hierarchical model (read through)
 \item 12.6 Stan: developing a computing environment (read through)
 \end{list}
 
-\noindent
-Python/R Stan demos
+R and Python demos at \url{https://avehtari.github.io/BDA_course_Aalto/demos.html}
 \begin{list}{$\bullet$}{\parsep=0pt\itemsep=2pt}
 \item See rstan\_demo.Rmd, pystan\_demo.py, pystan\_demo.ipynb
   for demos how to use Stan from R/Python and several model examples
@@ -86,7 +85,7 @@ There is only 8 pages to read (sections 12.4-12.6) what is inside Stan.
 
 These don't include the specific version of dynamic HMC in Stan, but are useful illustrations anyway.
  \begin{itemize}
- \item Markov Chains: Why Walk When You Can Flow? \url{http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/}
+ \item Markov Chains: Why Walk When You Can Flow?\\ \url{http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/}
  \item MCMC animation site by Chi Feng \url{https://chi-feng.github.io/mcmc-demo/}
  \end{itemize}
 
@@ -119,8 +118,7 @@ in Stan has some further developments described (mostly) in
   \url{https://arxiv.org/abs/1701.02434}.
 \end{itemize}
 
-Instead of reading all above, you can also watch a nice introduction
-video
+Instead of reading all above, you can also watch a video
 \begin{itemize}
 \item Scalable Bayesian Inference with Hamiltonian Monte Carlo by
   Michael Betancourt
@@ -137,13 +135,14 @@ after BDA3 was published.
 \item Divergence diagnostic checks whether the discretized dynamic
 simulation has problems due to fast varying density. See more in a
 case study
-\url{http://mc-stan.org/users/documentation/case-studies/divergences_and_bias.html.}
+\url{http://mc-stan.org/users/documentation/case-studies/divergences_and_bias.html}
 \item BFMI checks whether momentum resampling in HMC is sufficiently efficient. See more in
 \url{https://arxiv.org/abs/1604.00695}
 \item Brief Guide to Stan's Warnings
 \url{https://mc-stan.org/misc/warnings.html} provides summary of
 available convergence diagnostics in Stan and how to interpret them.
 \end{itemize}
+
 \subsection*{Further information about Stan}
 
 \begin{itemize}
@@ -165,6 +164,17 @@ available convergence diagnostics in Stan and how to interpret them.
   \item Modeling Language User's Guide and Reference Manual (more complete reference with lot's of examples) \url{https://github.com/stan-dev/stan/releases/download/v2.17.0/stan-reference-2.17.0.pdf}
   \end{itemize}
 \end{itemize}
+
+\subsection*{Compiler and transpiler}
+
+This is a minor comment on the terminology. As a shorthand it's common to see mentioned just Stan compiler, but sometimes the transpiler term is also mentioned as in the slides for this part.
+
+Wikipedia (\url{https://en.wikipedia.org/wiki/Source-to-source_compiler}):\\
+\textit{A source-to-source translator, source-to-source compiler (S2S compiler), transcompiler, or transpiler[1] is a type of translator that takes the source code of a program written in a programming language as its input and produces an equivalent source code in the same or a different programming language. A source-to-source translator converts between programming languages that operate at approximately the same level of abstraction, while a traditional compiler translates from a higher level programming language to a lower level programming language.}
+
+So it is more accurate to say that the Stan model code is first transpiled to a C++ code, and then that C++ code is compiled to machine code to create an executable program. Cool thing about the new stanc3 transpiler (\url{https://github.com/stan-dev/stanc3}) is that it can create also, for example, LLVM IR or Tensorflow code.
+
+Using transpiler and compiler allows to develop Stan language to be good for writing models, but get the benefit of speed and external libraries of C++, Tensorflow, and whatever comes in the future.
 
 \end{document}
 

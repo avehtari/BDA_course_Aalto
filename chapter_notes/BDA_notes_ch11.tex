@@ -2,8 +2,9 @@
 
 \usepackage[utf8]{inputenc}
 %\usepackage[T1]{fontenc}
-\usepackage{times}
+\usepackage{newtxtext} % times
 \usepackage{amsmath}
+\usepackage[varqu,varl]{inconsolata} % typewriter
 \usepackage{microtype}
 \usepackage{url}
 \urlstyle{same}
@@ -18,10 +19,10 @@
   pdfkeywords={Bayesian probability theory, Bayesian inference, Bayesian data analysis},
   pdfstartview={FitH -32768},
   colorlinks=true,
-  linkcolor=black,
-  citecolor=black,
-  filecolor=black,
-  urlcolor=black
+  linkcolor=blue,
+  citecolor=blue,
+  filecolor=blue,
+  urlcolor=blue
 }
 
 
@@ -74,12 +75,12 @@ Outline of the chapter 11
 \item 11.6 Example: hierarchical normal model (skip this)
 \end{list}
 
-Demos 
+R and Python demos at \url{https://avehtari.github.io/BDA_course_Aalto/demos.html}
 \begin{list}{$\bullet$}{\parsep=0pt\itemsep=2pt}
 \item demo11\_1: Gibbs sampling
 \item demo11\_2: Metropolis sampling
 \item demo11\_3: Convergence of Markov chain
-\item demo11\_4: potential scale reduction $\hat{R}$
+\item demo11\_4: potential scale reduction $\widehat{R}$
 \end{list}
 
 Find all the terms and symbols listed below. When reading the chapter,
@@ -108,7 +109,7 @@ think might be unclear for others.
 \item mixing
 \item to diagnose convergence
 \item between- and within-sequence variances
-\item potential scale reduction, $\hat{R}$
+\item potential scale reduction, $\widehat{R}$
 \item the variance of the average of a correlated sequence
 \item autocorrelation
 \item variogram
@@ -189,33 +190,34 @@ beginning of the chain are not presentative of the true distribution
 unless the starting point was somehow samples directly from the target
 distribution. 
 
-\subsection*{$\hat{R}$ ja $n_\eff$}
+\subsection*{$\widehat{R}$, effective sample size (ESS, previously $n_\eff$)}
 
-There are many versions of $\hat{R}$ ja $n_\eff$. Beware that some
-software packages compute $\hat{R}$ using old inferior approaches.
+There are many versions of $\widehat{R}$ and effective sample size. Beware
+that some software packages compute $\widehat{R}$ using old inferior
+approaches.
 
-The $\hat{R}$ and the approach to estimate effective number of samples
-$n_\eff$ were updated in BDA3, and slightly updated version of this is
-described in Stan 2.18+ user guide. Since then we have developed even
-better $\hat{R}$, $ESS$ (effective sample size or $s_\eff$, with
-change from $n$ to $S$ is due to improved consistency in the notation)
-in
+The $\widehat{R}$ and the approach to estimate effective sample size were
+updated in BDA3, and slightly updated version of this is described in
+Stan 2.18+ user guide. Since then we have developed even better
+$\widehat{R}$, ESS (effective sample size with change from
+$n_\eff$ to ESS is due to improved consistency in the notation) in
  \begin{itemize}
  \item Aki Vehtari, Andrew Gelman, Daniel Simpson, Bob Carpenter, and
-   Paul-Christian Bürkner (2019). Rank-normalization, folding, and
-   localization: An improved R-hat for assessing convergence of
-   MCMC. arXiv preprint
-   arXiv:1903.08008 \url{<http://arxiv.org/abs/1903.08008>}.
+   Paul-Christian Bürkner (2020). Rank-normalization, folding, and
+   localization: An improved $\widehat{R}$ for assessing convergence of
+   MCMC.  {\em Bayesian analysis}, doi:10.1214/20-BA1221. \url{https://projecteuclid.org/euclid.ba/1593828229}.
  \end{itemize}
- New $\hat{R}$, ESS, and Monte Carlo error estimates are available in
+ New $\widehat{R}$, ESS, and Monte Carlo error estimates are available in
  RStan {\tt monitor} function in R, in {\tt posterior} package in R,
  and in ArviZ package in Python.
  
-Due to randomness in chains, $\hat{R}$ may get values slightly below 1.
+Due to randomness in chains, $\widehat{R}$ may get values slightly below 1.
 
 Brief Guide to Stan's Warnings
 \url{https://mc-stan.org/misc/warnings.html} provides summary of
 available convergence diagnostics in Stan and how to interpret them.
+
+Sometimes people write ``the number of effective samples'' which is wrong (it is possible that notation $n_\eff$ is partially to blame for this misconception). All the posterior draws in autocorrelated Markov chain are effective, but their efficiency for estimating an expectation depends on the autocorrelation. The effective sample size is not property of individual draws, but joint property of all draws in a sample. Effective sample size also depends on the functional and the effective sample size for a given dependent sample is often different when estimating, for example, $\E[\theta]$ or $\E[\theta^2]$. See more, for exampl, in \url{https://projecteuclid.org/euclid.ba/1593828229}.
 
 \end{document}
 

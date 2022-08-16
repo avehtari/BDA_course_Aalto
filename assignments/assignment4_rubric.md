@@ -64,7 +64,7 @@ Is the source code for the function in d) reported?
 
 ### Q8 - 1 point
 
-Does the posterior density in e) look something like this figure?
+Does the histogram in e) look something like this figure?
 
 - Not reported
 - Reported, but looks different
@@ -120,3 +120,6 @@ Does the report follow the formatting instructions?
 
 In case the report doesn't fully follow the formatting instructions, specify the formatting instruction that is not followed. If applicable, specify the page of the report, where this difference in formatting is visible.
 
+### Q15 -
+
+Please provide also feedback on the presentation (e.g. text, layout, flow of the responses, figures, figure captions). Part of the course is practicing making data analysis reports. By providing feedback on the report presentation and other students can learn what they can improve or what they already did well. You should be able to provide constructive or positive feedback for all non-empty reports, even if there is nothing to say about the technical correctness of the answers. You can also provide feedback on code.

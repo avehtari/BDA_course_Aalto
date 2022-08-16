@@ -13,12 +13,21 @@
 
 <title>Bayesian Data Analysis course</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
@@ -26,12 +35,16 @@
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 
-<style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -44,32 +57,8 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
+
 
 
 
@@ -79,10 +68,6 @@ h6 {
   max-width: 940px;
   margin-left: auto;
   margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
 }
 img {
   max-width:100%;
@@ -99,40 +84,16 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 66px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 71px;
-  margin-top: -71px;
-}
-.section h2 {
-  padding-top: 71px;
-  margin-top: -71px;
-}
-.section h3 {
-  padding-top: 71px;
-  margin-top: -71px;
-}
-.section h4 {
-  padding-top: 71px;
-  margin-top: -71px;
-}
-.section h5 {
-  padding-top: 71px;
-  margin-top: -71px;
-}
-.section h6 {
-  padding-top: 71px;
-  margin-top: -71px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -160,7 +121,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -172,7 +133,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -183,10 +144,23 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -198,7 +172,6 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
@@ -324,7 +297,7 @@ div.tocify {
 
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
+<div class="row">
 <div class="col-xs-12 col-sm-4 col-md-3">
 <div id="TOC" class="tocify">
 </div>
@@ -338,7 +311,7 @@ div.tocify {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -351,16 +324,16 @@ div.tocify {
   <a href="index.html">Material</a>
 </li>
 <li>
-  <a href="Aalto2020.html">Aalto 2020</a>
-</li>
-<li>
-  <a href="demos.html">Demos</a>
+  <a href="Aalto2022.html">Aalto 2022</a>
 </li>
 <li>
   <a href="assignments.html">Assignments</a>
 </li>
 <li>
   <a href="project.html">Project</a>
+</li>
+<li>
+  <a href="demos.html">Demos</a>
 </li>
 <li>
   <a href="FAQ.html">FAQ</a>
@@ -373,24 +346,25 @@ div.tocify {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
 <h1 class="title toc-ignore">Bayesian Data Analysis course</h1>
-<h4 class="date">Page updated: 2020-08-24</h4>
+<h4 class="date">Page updated: 2022-08-03</h4>
 
 </div>
 
 
 <p>This is the web page for the Bayesian Data Analysis course at Aalto (CS-E5710) by <a href="https://users.aalto.fi/~ave/">Aki Vehtari</a>.</p>
-<p>Aalto students should check also <a href="https://mycourses.aalto.fi/user/index.php?id=28239">MyCourses announcements</a>. In Autumn 2020 the course will be arranged completely online. This web page will be much updated during the August.</p>
+<p>This web page will be updated during the August.</p>
+<p>Aalto students should check also <a href="https://mycourses.aalto.fi/course/view.php?id=32457">MyCourses</a>. <strong>In 2022</strong> Aalto course can be taken online except for the final project presentation. The lectures will be given on campus, but recorded and the recording will be made available online after the course. The registration for the course lectures will be used to estimate the need for the resources. If you are unable to register for the course at the moment in the Sisu, there is no need to email the lecturer. You can start taking the course and register before the end of the course. Sisu shows rooms on campus for the computer exercises, but only some of the computer exercises and TA sessions are on campus and most of the session are online (we are preparing the schedule). You can choose which TA session to join each week separately, without a need to register for those sessions.</p>
+<ul>
+<li><a href="https://into.aalto.fi/display/ensaannot/Aalto+University+Code+of+Academic+Integrity+and+Handling+Violations+Thereof">Aalto University Code of Academic Integrity and Handling Violations Thereof</a></li>
+</ul>
 <p>All the course material is available in a <a href="https://github.com/avehtari/BDA_course_Aalto">git repo</a> (and these pages are for easier navigation). All the material can be used in other courses. Text (except the BDA3 book) and videos licensed under CC-BY-NC 4.0. Code licensed under BSD-3.</p>
 <div style="float:right;position: relative;">
-<div class="figure">
-<img src="bda_cover.png" />
-
-</div>
+<p><img src="bda_cover.png" /></p>
 </div>
 <p><a href="https://users.aalto.fi/~ave/BDA3.pdf">The electronic version of the course book Bayesian Data Analysis, 3rd ed, by by Andrew Gelman, John Carlin, Hal Stern, David Dunson, Aki Vehtari, and Donald Rubin</a> is available for non-commercial purposes. Hard copies are available from <a href="https://www.crcpress.com/Bayesian-Data-Analysis/Gelman-Carlin-Stern-Dunson-Vehtari-Rubin/p/book/9781439840955">the publisher</a> and many book stores. See also <a href="http://www.stat.columbia.edu/~gelman/book/">home page for the book</a>, <a href="http://www.stat.columbia.edu/~gelman/book/errata_bda3.txt">errata for the book</a>, and <a href="chapter_notes/BDA_notes.pdf">chapter notes</a>.</p>
 <div id="prerequisites" class="section level2">
@@ -399,25 +373,25 @@ div.tocify {
 <li>Basic terms of probability theory
 <ul>
 <li>probability, probability density, distribution</li>
-<li>sum, product rule, and Bayes' rule</li>
+<li>sum, product rule, and Bayes’ rule</li>
 <li>expectation, mean, variance, median</li>
-<li>in Finnish, see e.g. <a href="http://math.aalto.fi/~lleskela/LectureNotes003.html">Stokastiikka ja tilastollinen ajattelu</a></li>
-<li>in English, see e.g. Wikipedia and <a href="https://ocw.mit.edu/courses/mathematics/18-05-introduction-to-probability-and-statistics-spring-2014/readings/">Introduction to probability and statistics</a></li>
+<li>in Finnish, see e.g. <a href="http://math.aalto.fi/~lleskela/LectureNotes003.html">Stokastiikka ja tilastollinen ajattelu</a></li>
+<li>in English, see e.g. Wikipedia and <a href="https://ocw.mit.edu/courses/mathematics/18-05-introduction-to-probability-and-statistics-spring-2014/readings/">Introduction to probability and statistics</a></li>
 </ul></li>
 <li>Some algebra and calculus</li>
 <li>Basic visualisation techniques (R or Python)
 <ul>
 <li>histogram, density plot, scatter plot</li>
-<li>see e.g. <a href="demos.html#BDA_R_demos">BDA R demos</a></li>
-<li>see e.g. <a href="demos.html#BDA_Python_demos">BDA Python demos</a></li>
+<li>see e.g. <a href="demos.html#BDA_R_demos">BDA R demos</a></li>
+<li>see e.g. <a href="demos.html#BDA_Python_demos">BDA Python demos</a></li>
 </ul></li>
 </ul>
 <p>This course has been designed so that there is strong emphasis in computational aspects of Bayesian data analysis and using the latest computational tools.</p>
 <p>If you find BDA3 too difficult to start with, I recommend</p>
 <ul>
-<li>For regression models, their connection to statistical testing and causal analysis see <a href="https://avehtari.github.io/ROS-Examples/">Gelman, Hill and Vehtari, &quot;Regression and Other Stories&quot;</a>.</li>
-<li>Richard McElreath's <a href="https://xcelab.net/rm/statistical-rethinking/">Statistical Rethinking, 2nd ed</a> book is easier than BDA3 and the 2nd ed is excellent. Statistical Rethinking doesn't go as deep in some details, math, algorithms and programming as BDA course. Richard's lecture videos of <a href="https://github.com/rmcelreath/statrethinking_winter2019">Statistical Rethinking: A Bayesian Course Using R and Stan</a> are highly recommended even if you are following BDA3.</li>
-<li>For background prerequisites some students have found chapters 2, 4 and 5 in <a href="https://sites.google.com/site/doingbayesiandataanalysis/">Kruschke, &quot;Doing Bayesian Data Analysis&quot;</a> useful.</li>
+<li>For regression models, their connection to statistical testing and causal analysis see <a href="https://avehtari.github.io/ROS-Examples/">Gelman, Hill and Vehtari, “Regression and Other Stories”</a>.</li>
+<li>Richard McElreath’s <a href="https://xcelab.net/rm/statistical-rethinking/">Statistical Rethinking, 2nd ed</a> book is easier than BDA3 and the 2nd ed is excellent. Statistical Rethinking doesn’t go as deep in some details, math, algorithms and programming as BDA course. Richard’s lecture videos of <a href="https://github.com/rmcelreath/statrethinking_winter2019">Statistical Rethinking: A Bayesian Course Using R and Stan</a> are highly recommended even if you are following BDA3.</li>
+<li>For background prerequisites some students have found chapters 2, 4 and 5 in <a href="https://sites.google.com/site/doingbayesiandataanalysis/">Kruschke, “Doing Bayesian Data Analysis”</a> useful.</li>
 </ul>
 </div>
 <div id="course-contents-following-bda3" class="section level2">
@@ -485,18 +459,25 @@ div.tocify {
 <li><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=7a297f7d-bb7b-4dd0-9913-a9f500ec822d">2.1 Observation model, likelihood, posterior and binomial model</a></li>
 <li><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=75b9f18f-e379-4557-a5fa-a9f500f11b40">2.2 Predictive distribution and benefit of integration</a></li>
 <li><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=099659a5-f707-473d-8b03-a9f500f39eb5">2.3 Priors and prior information</a></li>
+<li><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=f4b61f2a-4a94-43f7-828c-ac460144f64f">Extra 2 recorded 2020</a> with extra explanations about likelihood, normalization term, density, and conditioning on model M.</li>
 </ul>
-<p>2019 fall lecture videos are in <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx#folderID=%22f0ec3a25-9e23-4935-873b-a9f401646812%22">a Panopto folder</a> and listed below.</p>
+<p>The lecture videos are in <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx#folderID=%22f0ec3a25-9e23-4935-873b-a9f401646812%22">a Panopto folder</a> and listed below.</p>
 <ul>
-<li><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=9c271082-5a8c-4b66-b6c2-aacc00fc683f">Lecture 2.1</a> and <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=70655a8a-0eb4-4ddd-9f52-aacc00fc67a2">Lecture 2.2</a> on basics of Bayesian inference, observation model, likelihood, posterior and binomial model, predictive distribution and benefit of integration, priors and prior information, and one parameter normal model. BDA3 Ch 1+2.</li>
+<li><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=9c271082-5a8c-4b66-b6c2-aacc00fc683f">Lecture 2.1</a> and <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=70655a8a-0eb4-4ddd-9f52-aacc00fc67a2">Lecture 2.2</a> on basics of Bayesian inference, observation model, likelihood, posterior and binomial model, predictive distribution and benefit of integration, priors and prior information, and one parameter normal model. BDA3 Ch 1+2.
+<ul>
+<li><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=158d119d-8673-4120-8669-ac3900c13304">Lecture 2 extra</a> with extra explanations about likelihood, normalization term, density, and conditioning on model M.</li>
+</ul></li>
 <li><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=ab958b4b-e2c4-4534-8305-aad100ba191f">Lecture 3</a> on multiparameter models, joint, marginal and conditional distribution, normal model, bioassay example, grid sampling and grid evaluation. BDA3 Ch 3.</li>
 <li><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=8a3c7bbc-e2b8-4c16-97b2-aad800ba7927">Lecture 4.1</a> on numerical issues, Monte Carlo, how many simulation draws are needed, how many digits to report, and <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=44446861-eaa2-41b5-bf33-aad800caf18a">Lecture 4.2</a> on direct simulation, curse of dimensionality, rejection sampling, and importance sampling. BDA3 Ch 10.</li>
 <li><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=098dfdb4-f3b8-46aa-b988-aadf00bd3177">Lecture 5.1</a> on Markov chain Monte Carlo, Gibbs sampling, Metropolis algorithm, and <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=9f657178-d8cf-4cb8-af62-aadf00cd9423">Lecture 5.2</a> on warm-up, convergence diagnostics, R-hat, and effective sample size. BDA3 Ch 11.</li>
-<li><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=1744f6a0-84d3-4218-8a86-aae600ba7e84">Lecture 6.1</a> on HMC, NUTS, dynamic HMC and HMC specific convergence diagnostics, and <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=e60ba1a9-f752-4b0a-88c6-aae600caa61a">Lecture 6.2</a> on probabilistic programming and Stan. BDA3 Ch 12 + <a href="#stan">extra material</a>.</li>
+<li><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=1744f6a0-84d3-4218-8a86-aae600ba7e84">Lecture 6.1</a> on HMC, NUTS, dynamic HMC and HMC specific convergence diagnostics, and <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=e60ba1a9-f752-4b0a-88c6-aae600caa61a">Lecture 6.2</a> on probabilistic programming and Stan. BDA3 Ch 12 + <a href="#stan">extra material</a>.
+<ul>
+<li><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=10b958d4-9a26-41d5-9afe-ac2e00ee9b50">Stan Extra introduction</a> Golf putting example, main features of Stan, benefits of probabilistic programming, and comparison to some other software.</li>
+</ul></li>
 <li><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=79dee6de-afa9-446f-b533-aaf400cabf2b">Lecture 7.1</a> on hierarchical models, and <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c822561c-f95d-44fc-a1d0-aaf400d9fae3">Lecture 7.2</a> on exchangeability. BDA3 Ch 5.</li>
 <li><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=2820df34-d958-4c6c-93f3-aaf400dece37">Project work info</a></li>
 <li><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=7047e366-0df6-453c-867f-aafb00ca2d78">Lecture 8.1</a> on model checking, and <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d7849131-0afd-4ae6-ad64-aafb00da36f4">Lecture 8.2</a> on cross-validation part 1. BDA3 Ch 6-7 + extra material.</li>
-<li><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=50b2e73f-af0a-4715-b627-ab0200ca7bbd">Lecture 9.1</a> PSIS-LOO and K-fold-CV, <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=b0299d53-9454-4e33-9086-ab0200db14eeb">Lecture 9.2</a> model comparison and selection, and <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=4b6eeb48-ae64-4860-a8c3-ab0200e40ad8">Lecture 9.3</a> extra lecture on variable selection with projection predictive variable selection. Extra material.</li>
+<li><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=50b2e73f-af0a-4715-b627-ab0200ca7bbd">Lecture 9.1</a> PSIS-LOO and K-fold-CV, <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=b0299d53-9454-4e33-9086-ab0200db14ee">Lecture 9.2</a> model comparison and selection, and <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=4b6eeb48-ae64-4860-a8c3-ab0200e40ad8">Lecture 9.3</a> extra lecture on variable selection with projection predictive variable selection. Extra material.</li>
 <li><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=82943720-de0f-4195-8639-ab0900ca2085">Lecture 10.1</a> on decision analysis. BDA3 Ch 9.</li>
 <li><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=cad1e8f8-e1f0-408a-ad9d-ab0900db3977">Project presentation info</a></li>
 <li><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=e22fedc7-9fd3-4d1e-8318-ab1000ca45a4">Lecture 11.1</a> on normal approximation (Laplace approximation) and <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=a8e38a95-a944-4f3d-bf95-ab1000dbdf73">Lecture 11.2</a> on large sample theory and counter examples. BDA3 Ch 4.</li>
@@ -505,7 +486,7 @@ div.tocify {
 </div>
 <div id="r-and-python" class="section level2">
 <h2>R and Python</h2>
-<p>We strongly recommend using R in the course as there are more packages for Stan and statistical analysis in R. If you are already fluent in Python, but not in R, then using Python may be easier, but it can still be more useful to learn also R. Unless you are already experienced and have figured out your preferred way to work with R, we recommend installing <a href="https://www.rstudio.com/products/rstudio/download/">RStudio Desktop</a>. See <a href="FAQ.html">FAQ</a> for frequently asked questions about R problems in this course. The <a href="demos.html">demo codes</a> provide useful starting points for all the assignments.</p>
+<p>We strongly recommend using R in the course as there are more packages for Stan and statistical analysis in R. If you are already fluent in Python, but not in R, then using Python may be easier, but it can still be more useful to learn also R. Unless you are already experienced and have figured out your preferred way to work with R, we recommend installing <a href="https://www.rstudio.com/products/rstudio/download/">RStudio Desktop</a> or using <a href="https://jupyter.cs.aalto.fi/">Aalto teaching JupyterHub</a>. See <a href="FAQ.html">FAQ</a> for frequently asked questions about R problems in this course. The <a href="demos.html">demo codes</a> provide useful starting points for all the assignments.</p>
 <ul>
 <li>For learning R programming basics we recommend
 <ul>
@@ -520,6 +501,7 @@ div.tocify {
 </div>
 <div id="demos" class="section level2">
 <h2>Demos</h2>
+<p>These demos include a lot of useful code for making the assignments.</p>
 <ul>
 <li><a href="demos.html#BDA_R_demos">R demos</a></li>
 <li><a href="demos.html#BDA_Python_demos">Python demos</a></li>
@@ -577,7 +559,7 @@ div.tocify {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -595,7 +577,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
+    $(this).parent().toggleClass('nav-tabs-open');
   });
 });
 </script>
@@ -604,6 +586,9 @@ $(document).ready(function () {
 
 <script>
 $(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
 
     // move toc-ignore selectors from section div to header
     $('div.section.toc-ignore')

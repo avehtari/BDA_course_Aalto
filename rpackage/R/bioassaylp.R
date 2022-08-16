@@ -1,13 +1,13 @@
 #' Unnormalized log-posterior for bioassay, assuming uniform prior
-#' @param alpha intercept parameter in the dose-response model (single number)
-#' @param beta slope parameter in the dose-response model (single number)
+#' @param alpha intercept parameter in the dose-response model (vector or single number)
+#' @param beta slope parameter in the dose-response model (vector or single number)
 #' @param x vector of doses for each observation
 #' @param y vector of number of deaths for each observation
 #' @param n vector of number of animals for each observation
 #' @export
 bioassaylp <- function(alpha, beta, x, y, n) {
-  checkmate::assertNumber(alpha)
-  checkmate::assertNumber(beta)
+  checkmate::assertNumeric(alpha)
+  checkmate::assertNumeric(beta)
   checkmate::assertNumeric(x, len = 4)
   checkmate::assertIntegerish(y, len = 4, lower = 0)
   checkmate::assertIntegerish(n, len = 4, lower = 1)

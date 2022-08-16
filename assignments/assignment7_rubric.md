@@ -1,276 +1,258 @@
 # Assignment 7
 
-## S1 · 7.5 points
+## S1
 
 Basic requirements
 
-### Q1 · Yes / No · 1 points
+#### Q1
 
 Can you open the pdf and it's not blank?
 
-Response:
-
 - No
 - Yes
 
-### Q2 · Yes / No · 1 points
+### Q2
 
 Is the report anonymous?
 
-Response:
-
 - No
 - Yes
 
-## S2 · 42.5 points
+## S2
 
 Linear model: drowning data with Stan
 
-### Q3 · Yes / No · 1 point
+### Q3
 
 Is the source code included?
 
-Response:
-
 - No
 - Yes
 
-### Q4 · Yes / No · 1 point
+### Q4
 
 Is the full resulting modiﬁed Stan model code presented in the report?
 
-Response:
-
 - No
 - Yes
 
-### Q5 · Scale · 1 point
+### Q5
 
-Fix #1: Is there a ﬁx for ...
+Fix #1: Is there a ﬁx for ... ?
 
-Response:
+- It has not been discussed that ...
+- It has been discussed that ..., but there is no ﬁx presented for it or the ﬁx is clearly wrong
+- There is a ﬁx presented for ..., that clearly solves the problem
+
+### Q6
+
+Fix #2: Is there a ﬁx for ...?
+
+- It has not been discussed that ...
+- It has been discussed that ..., but there is no ﬁx presented for it or the ﬁx is clearly wrong
+- There is a ﬁx presented for ... that clearly solves the problem
+
+### Q7
+
+Fix #3: Is there a ﬁx for ...?
 
 - It has not been discussed, that ...
-- It has been discussed, that ... , but there is no ﬁx presented for it or the ﬁx is clearly wrong.
-- There is a ﬁx presented for ... , that clearly solves the problem.
+- It has been discussed that ..., but there is no ﬁx presented for it or the ﬁx is clearly wrong
+- There is a ﬁx presented for ... that clearly solves the problem
 
-### Q6 · Scale · 1 point
+### Q8
 
-Fix #2: Is there a ﬁx for ...
-
-Response:
-
-- It has not been discussed, that ...
-- It has been discussed, that ... , but there is no ﬁx presented for it or the ﬁx is clearly wrong.
-- There is a ﬁx presented for ... , that clearly solves the problem.
-
-### Q7 · Yes / No · 1 point
-
-Is there a suitable numerical value of approximately ... presented for τ.
-
-Response:
+Is there a suitable numerical value of approximately ... presented for $\sigma_{\beta}$ (or ... for $\sigma_{\beta}^2$)?
 
 - No
 - Yes
 
-### Q8 · Yes / No · 1 point
+### Q9
 
-Does the report discuss and correctly present how the desired prior can be implemented in the model code.
+Does the report discuss and correctly present how the desired prior can be implemented in the
+model code?
 
-Example implementation:<br>
+Example implementation:
+
 ...
-
-Another example implementation:<br>
-...
-
-Response:
 
 - No
 - Yes
 
-## S3 · 42.5 points
+### Q10
+
+Does the report discuss and also correctly present a prior for the intercept?
+
+Example implementation:
+
+...
+
+- No
+- Yes
+
+## S3
 
 Hierarchical model: factory data with Stan
 
-### Q9 · Scale · 1 point
+### Q11
 
-Separate model: Is there a related Stan implementation (N.B. same implementation may be used for multiple models)?
+Separate model: Is the model described using mathematical notation and the difference to other
+models described in words?
 
-Response:
+- No equations and no description
+- Description but no equations
+- Equations but no description
+- Equations and description
 
-- No Stan model implemented.
-- Stan model implemented, but it seems clearly wrong or broken.
-- Seemingly valid Stan model implemented.
+### Q12
 
-### Q10 · Scale · 1 point 
+Separate model: Is there a related Stan implementation (N.B. same implementation may be used
+for multiple models)?
 
-Is the model described using mathematical notation?
+- No Stan model implemented
+- Stan model implemented, but it seems clearly wrong or broken
+- Seemingly valid Stan model implemented
 
-Response:
+### Q13
 
-- Yes
-- No
-
-### Explanation
-
-Separate model:
 The following histograms are used as a reference in the grading of the separate model:
 
-*<model_plot>*
+*<model_plots>*
 
-### Q11 · Yes / No · 1 point
-
-Separate model: *discussion about question i)*, posterior distribution of the mean of the quality measurements of the sixth machine.
-
-Response:
+Separate model: *Discussion about question c part i*, the posterior distribution of the mean of the quality measurements of the sixth machine
 
 *hidden responses*
 
-### Q12 · Yes / No · 1 point
+### Q14
 
-Separate model:  *discussion about question ii)*, the predictive distribution for another quality measurement of the sixth machine.
-
-Response:
+Separate model: *Discussion about question c part ii*, the predictive distribution of a quality measurement from the sixth machine
 
 *hidden responses*
 
-### Q13 · Yes / No · 1 point
+### Q15
 
-Separate model:  *discussion about question iii)*, the posterior distribution of the mean of the quality measurements of the seventh machine.
-
-Response:
+Separate model: *Discussion about quection c part iii*, the posterior distribution of the mean of the quality measurements of the seventh machine
 
 *hidden responses*
 
-### Q14 · Yes / No · 1 point
+### Q16
 
-Separate model: the for $\mu_1$ with a 90% credibility intervall using a N(0, 10) prior for $\mu$ and a Gamma(1, 1) prior for $\sigma$.
+Separate model: When using the prior of Normal(0,10) and Gamma(1,1) for mu
+parameter(s) and sigma parameter(s), the posterior for mu for machine 1 has 90%
+credibility intervals close to: ...
 
-Response:
+- No or incorrect answer
+- Answer is only partially correct
+- Answers look correct
 
-*hidden responses*
+### Q17
 
-### Q15 · Scale · 1 point
+Is the pooled model described using mathematical notation and difference to other models
+described in words?
 
-Pooled model: Is there a related Stan implementation (N.B. same implementation may be used for multiple models)?
+- No equations and no description
+- Description but no equations
+- Equations but no description
+- Equations and description
 
-Response:
+### Q18
 
-- No Stan model implemented.
-- Stan model implemented, but it seems clearly wrong or broken.
-- Seemingly valid Stan model implemented.
+Pooled model: Is there a related Stan implementation (N.B. same implementation may be used
+for multiple models)?
 
-### Q16 · Scale · 1 point 
+- No Stan model implemented
+- Stan model implemented, but it seems clearly wrong or broken
+- Seemingly valid Stan model implemented
 
-Is the model described using mathematical notation?
+### Q19
 
-Response:
-
-- Yes
-- No
-
-### Explanation
-
-Pooled model:
 The following histograms are used as a reference in the grading of the pooled model:
 
-*<model_plot>*
+*<model_plots>*
 
-### Q17 · Scale · 1 point
-
-Pooled model:  *discussion about question i)*, posterior distribution of the mean of the quality measurements of the sixth machine.
-
-Response:
+Pooled model: *Discussion about question c part i*, the posterior distribution of the mean of the quality measurements of the sixth machine
 
 *hidden responses*
 
-### Q18 · Scale · 1 point
+### Q20
 
-Pooled model:  *discussion about question ii)*, the predictive distribution for another quality measurement of the sixth machine.
-
-Response:
+Pooled model: *Discussion about question c part ii*, the predictive distribution of a quality measurement from the sixth machine
 
 *hidden responses*
 
-### Q19 · Yes / No · 1 point
+### Q21
 
-Pooled model:  *discussion about question iii)*, the posterior distribution of the mean of the quality measurements of the seventh machine.
-
-Response:
+Pooled model: *Discussion about question c part iii*, the posterior distribution of the mean of the quality measurements of the seventh machine
 
 *hidden responses*
 
-### Q20 · Yes / No · 1 point
+### Q22
 
-Separate model: the for $\mu_1$ with a 90% credibility intervall using a N(0, 10) prior for $\mu$ and a Gamma(1, 1) prior for $\sigma$.
+Pooled model: When using the prior of Normal(0,10) and Gamma(1,1) for mu
+parameter(s) and sigma parameter(s), the posterior for mu for machine 1 has 90%
+credibility intervals close to: ...
 
-Response:
+- No answer
+- Answer is only partially correct
+- Answer looks correct
 
-*hidden responses*
+### Q23
 
-### Q21 · Scale · 1 point
+Is the hierarchical model described using mathematical notation and difference to other models
+described in words?
 
-Hierarchical model: Is there a related Stan implementation (N.B. same implementation may be used for multiple models).
+- No equations and no description
+- Description but no equations
+- Equations but no description
+- Equations and description
 
-Response:
+### Q24
 
-- No Stan model implemented.
-- Stan model implemented, but it seems clearly wrong or broken.
-- Seemingly valid Stan model implemented.
+Hierarchical model: Is there a related Stan implementation (N.B. same implementation may be
+used for multiple models).
 
-### Q22 · Scale · 1 point 
+- No Stan model implemented
+- Stan model implemented, but it seems clearly wrong or broken
+- Seemingly valid Stan model implemented
 
-Is the model described using mathematical notation?
+### Q25
 
-Response:
-
-- Yes
-- No
-
-### Explanation
-
-Hierarchical model:
 The following histograms are used as a reference in the grading of the hierarchical model:
 
-*<model_plot>*
+*<model_plots>*
 
-### Q23 · Scale · 1 point
 
-Hierarchical model: *discussion about question i)*, posterior distribution of the mean of the quality measurements of the sixth machine.
-
-Response:
+Hierarchical model: *Discussion about question c part i*, the posterior distribution of the mean of the quality measurements of the sixth machine
 
 *hidden responses*
 
-### Q24 · Scale · 1 point
+### Q26
 
-Hierarchical model: *discussion about question ii)*, the predictive distribution for another quality measurement of the sixth machine.
-
-Response:
+Hierarchical model: *Discussion about question c part ii*, the predictive distribution of a quality measurement from the sixth machine
 
 *hidden responses*
 
-### Q25 · Scale · 1 point
+### Q27
 
-Hierarchical model: *discussion about question iii)*, the posterior distribution of the mean of the quality measurements of the seventh machine.
-
-Response:
+Hierarchical model: *Discussion about question c part iii*, the posterior distribution of the mean of the quality measurements of the seventh machine
 
 *hidden responses*
 
-### Q26 · Yes / No · 1 point
+### Q28
 
-Separate model: the for $\mu_1$ with a 90% credibility intervall using a N(0, 10) prior for $\mu$ and a Gamma(1, 1) prior for $\sigma$.
+Hierarchical model: When using the prior of Normal(0,10) and Gamma(1,1) for
+mu parameter(s) and sigma parameter(s), the posterior for mu for machine 1 has 90%
+credibility intervals close to: ...
 
-Response:
+- No answer
+- Answer is only partially correct
+- Answers look correct
 
-*hidden responses*
-
-## S4 · 7.5 points
+## S4
 
 Overall quality of the report
 
-### Q27 · Scale · 1 point
+### Q29
 
 Does the report follow the formatting instructions?
 
@@ -279,8 +261,16 @@ Does the report follow the formatting instructions?
 - Mostly
 - Yes
 
-### Q28 -
+### Q30
 
-In case the report doesn't fully follow the formatting instructions, specify the formatting instruction that is not followed. If applicable, specify the page of the report, where this difference in formatting is visible.
+In case the report doesn't fully follow the formatting instructions, specify the formatting
+instruction that is not followed. If applicable, specify the page of the report, where this difference
+in formatting is visible.
 
+### Q31
 
+Please provide also feedback on the presentation (e.g. text, layout, ﬂow of the responses, ﬁgures,
+ﬁgure captions). Part of the course is practicing making data analysis reports. By providing
+feedback on the report presentation and other students can learn what they can improve or what
+they already did well. You should be able to provide constructive or positive feedback for all nonempty reports, even if there is nothing to say about the technical correctness of the answers. You
+can also provide feedback on code.

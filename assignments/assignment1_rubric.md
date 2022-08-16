@@ -129,7 +129,8 @@ b) How is the answer for what box is most probable?
 
 - No answer
 - Bayes rule used to compute probabilities for all boxes given that the picked ball is red, but the answers are not ....
-- Bayes rule used to compute probabilities for all boxes given that the picked ball is red, the answers are ... and it is explicity said that the most probable box is box ....
+- Bayes rule used to compute probabilities for all boxes given that the picked ball is red, the answers are ... and it is **not** explicitly said that the most probable box is box ....
+- Bayes rule used to compute probabilities for all boxes given that the picked ball is red, the answers are ... and it is explicitly said that the most probable box is box ....
 
 ## S6 - 17 points
 
@@ -159,3 +160,7 @@ Does the report follow the formatting instructions?
 ### Q18 -
 
 In case the report doesn't fully follow the formatting instructions, specify the formatting instruction that is not followed. If applicable, specify the page of the report, where this difference in formatting is visible.
+
+### Q19 -
+
+Please provide also feedback on the presentation (e.g. text, layout, flow of the responses, figures, figure captions). Part of the course is practicing making data analysis reports. By providing feedback on the report presentation and other students can learn what they can improve or what they already did well. You should be able to provide constructive or positive feedback for all non-empty reports, even if there is nothing to say about the technical correctness of the answers. You can also provide feedback on code.

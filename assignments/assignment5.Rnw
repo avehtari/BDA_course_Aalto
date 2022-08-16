@@ -50,7 +50,7 @@
 \pagestyle{empty}
 
 \begin{document}
-\SweaveOpts{concordance=TRUE}
+%\SweaveOpts{concordance=TRUE}
 %\SweaveOpts{concordance=TRUE}
 \thispagestyle{empty}
 
@@ -76,7 +76,7 @@ This assignment is related to Chapters 10 and 11. The maximum amount of points f
 
 \textbf{Grading instructions:} The grading will be done in peergrade. All grading questions and evaluations for assignment 5 can be found \href{https://avehtari.github.io/BDA_course_Aalto/assignments/assignment5_rubric.html}{\textbf{here}}
 
-\textbf{Reporting accuracy:} For posterior statistics of interest, only report digits for which the Monte Carlo standard error (MCSE) is zero. \emph{Example:} If you estimate $E(\mu)=1.234$ with MCSE($E(\mu)$) = 0.01, you should report $E(\mu)=1.2$.
+\textbf{Reporting accuracy:} For posterior statistics of interest, only report digits for which the Monte Carlo standard error (MCSE) is zero. \emph{Example:} If you estimate $E(\mu)=1.234$ with MCSE($E(\mu)$) = 0.01, you should report $E(\mu)=1.2$. See lecture video 4.1 and \href{https://avehtari.github.io/BDA_course_Aalto/chapter_notes/BDA_notes_ch10.pdf}{the chapter notes} for more information.
 
 To use markmyassignment for this assignment, run the following code in R:
 
@@ -95,10 +95,10 @@ mark_my_assignment()
 \subsection*{Generalized linear model: Bioassay with Metropolis (6 points)}
 
 Metropolis algorithm: Replicate the computations for the bioassay
-example of section 3.7 (BDA3) using the Metropolis algorithm. The Metropolis algorithm is described in BDA3 Chapter 11.2. More information on the bioassay data can be found in Section 3.7 of the course book and in chapter 3 reading instructions \href{https://avehtari.github.io/BDA_course_Aalto/chapter_notes/BDA_notes_ch3.pdf}{\textbf{here}}.
+example of section 3.7 in BDA3 using the Metropolis algorithm. The Metropolis algorithm is described in BDA3 Chapter 11.2. More information on the bioassay data can be found in Section 3.7 in BDA3, and in \href{https://avehtari.github.io/BDA_course_Aalto/chapter_notes/BDA_notes_ch3.pdf}{\textbf{Chapter 3 notes}}.
 
 \begin{enumerate}
-\item Implement the Metropolis algorithm as an R function for the bioassay data. Use the Gaussian prior as in Assignment 4, that is % uniform prior as in the book $p(\alpha,\beta)\propto 1$.
+\item Implement the Metropolis algorithm as an R function for the bioassay data. Use the Gaussian prior as in Assignment 4, that is 
 \begin{align*}
     \begin{bmatrix}
     \alpha \\ \beta
@@ -107,13 +107,13 @@ example of section 3.7 (BDA3) using the Metropolis algorithm. The Metropolis alg
     \text{N} \left(\vs \mu_0, \vc \Sigma_0 \right), \qquad
     \text{where} \quad
     \vs \mu_0 = \begin{bmatrix} 0 \\ 10 \end{bmatrix} \quad \text{and} \quad
-    \vc \Sigma_0 = \begin{bmatrix} 2^2 & 10 \\ 10 & 10^2 \end{bmatrix}.
+    \vc \Sigma_0 = \begin{bmatrix} 2^2 & 12 \\ 12 & 10^2 \end{bmatrix}.
 \end{align*}
 
 \begin{itemize}
 \item[a)] Start by implementing a function called \texttt{density\_ratio} to compute the density ratio function, $r$ in Eq. (11.1) in BDA3. Below is an example on how the function should work. You can test  the function using {\tt markmyassignment}.
 <<echo=FALSE>>=
-density_ratio <- function(alpha_propose, alpha_previous, beta_propose, beta_previous, x, y, n) 1.187524
+density_ratio <- function(alpha_propose, alpha_previous, beta_propose, beta_previous, x, y, n) 1.305179
 @
 
 <<echo=TRUE, eval=FALSE>>=
@@ -128,7 +128,7 @@ density_ratio(alpha_propose = 1.89, alpha_previous = 0.374,
 @
 
 <<echo=FALSE>>=
-density_ratio <- function(alpha_propose, alpha_previous, beta_propose, beta_previous, x, y, n) 0.8420882
+density_ratio <- function(alpha_propose, alpha_previous, beta_propose, beta_previous, x, y, n) 0.7661784
 @
 
 <<echo=TRUE>>=
@@ -137,31 +137,35 @@ density_ratio(alpha_propose = 0.374, alpha_previous = 1.89,
               x = bioassay$x, y = bioassay$y, n = bioassay$n)
 @
 
-\textbf{Hint!} Compute with log-densities. Reasons are explained on page 261 (BDA3). Remember that $p_1/p_0=\exp(\log(p_1)-\log(p_0))$. For your convenience we have provided functions that will evaluate the log-likelihood for given $\alpha$ and $\beta$ (see {\tt bioassaylp()} in the {\tt aaltobda} package). Notice that you still need to add the prior yourself and remember the unnormalized log posterior is simply the sum of log-likelihood and log-prior. For evaluating the log of the Gaussian prior you can use the function {\tt dmvnorm} from package {\tt aaltobda}. It can be worthwhile to look up your implementation of {\tt p\_log\_posterior()} in Assignment 4.
+\textbf{Hint!} Compute with log-densities. Reasons are explained on page 261 of BDA3 and  lecture video 4.1. Remember that $p_1/p_0=\exp(\log(p_1)-\log(p_0))$. For your convenience we have provided functions that will evaluate the log-likelihood for given $\alpha$ and $\beta$ (see {\tt bioassaylp()} in the {\tt aaltobda} package). Notice that you still need to add the prior yourself and remember the unnormalized log posterior is simply the sum of log-likelihood and log-prior. For evaluating the log of the Gaussian prior you can use the function {\tt dmvnorm} from package {\tt aaltobda}. 
 
-\item[b)] Now implement a function called {\tt metropolis\_bioassay()} which implements the metropolis algorithm  using the {\tt density\_ratio()}.
+\item[b)] Now implement a function called {\tt Metropolis\_bioassay()} which implements the Metropolis algorithm  using the {\tt density\_ratio()}.
 
 \textbf{Hint!} Use a simple (normal) proposal distribution. Example proposals are $\alpha^* \sim N(\alpha_{t-1}, \sigma = 1)$ and $\beta^* \sim N(\beta_{t-1}, \sigma = 5)$. There is no need to try to find optimal proposal but test some different values for the jump scale ($\sigma$). Remember to report the one you used. Efficient proposals are dicussed in BDA3 p. 295--297 (not part of the course). In real-life a pre-run could be made with an automatic adaptive control to adapt the proposal distribution.
 \end{itemize}
 
 \item Include in the report the following:
 \begin{enumerate}
-\item[a)] The jumping rule (other name for the \emph{proposal distribution}).
-\item[b)] The starting points of your metropolis chains (or the mechanism for generating them).
-\item[c)] Report the chain length or the number of draws from each chain. Run the simulations long enough for approximate convergence.
-\item[d)] Report the warm-up length.
-\item[e)] The number of metropolis chains used. It is important that multiple metropolis chains are run for evaluating convergence. 
-\item[f)] Plot all chains for alpha in a single line-plot. Overlapping the chains in this way helps in visually assessing whether chains have converged or not.
-\item[g)] Do the same for beta.
-% \item[h)] Report $\hat{R}$ for alpha and beta separately. In complex scenarios, visual assessment is not sufficient and $\hat{R}$ is a more robust indicator of convergence (of the metropolis chains).
+\item[a)] Describe in your own words in one paragraph the basic idea of the Metropolis algorithm (see BDA3 Section 11.2, and lecture video 5.1).
+\item[b)] The proposal distribution (related to \emph{jumping rule}) you used. Describe briefly in words how you chose the final proposal distribution you used for the reported results.
+\item[c)] The initial points of your Metropolis chains (or the explicit mechanism for generating them).
+\item[d)] Report the chain length or the number of iterations for each chain. Run the simulations long enough for approximate convergence (see BDA Section 11.4, and lecture 5.2).
+\item[e)] Report the warm-up length (see BDA Section 11.4, and lecture 5.2).
+\item[f)] The number of Metropolis chains used. It is important that multiple Metropolis chains are run for evaluating convergence (see BDA Section 11.4, and lecture 5.2).. 
+\item[g)] Plot all chains for $\alpha$ in a single line-plot. Overlapping the chains in this way helps in visually assessing whether chains have converged or not.
+\item[h)] Do the same for $\beta$.
+% \item[h)] Report $\widehat{R}$ for $\alpha$ and $\beta$ separately. In complex scenarios, visual assessment is not sufficient and $\widehat{R}$ is a more robust indicator of convergence of the Markov chains.
 \end{enumerate}
 
-% proposal distribution, number of chains used, the starting points (or the mechanism for generating them), the number of draws generated from each chain, and the warm-up length. Also plot the chains separately for alpha and beta, overlapping chains help to visually assess whether the chains have converged or not. However, in complex scenarios, visual assessment is not sufficient and $\hat{R}$ is a more robust indicator of convergence (of the metropolis chains).
+\item In complex scenarios, visual assessment is not sufficient and $\widehat{R}$ is a more robust indicator of convergence of the Markov chains. Use $\widehat{R}$ for convergence analysis. You can either use Eq. (11.4) in BDA3 or the more recent version described \href{https://projecteuclid.org/euclid.ba/1593828229}{\textbf{here}}. You should specify which $\widehat{R}$ you used. In R the best choice is to use function {\tt Rhat} from package {\tt rstan}. Remember to remove the warm-up samples before computing $\widehat{R}$. Report the $\widehat{R}$ values for $\alpha$ and $\beta$ separately. Report the values for the proposal distribution you finally used.
+  \begin{enumerate}
+  \item[a]) Describe briefly in your own words the basic idea of $\widehat{R}$ and how to to interpret the obtained $\widehat{R}$ values.
+  \item[b]) Tell whether you obtained good $\widehat{R}$ with first
+    try, or whether you needed to run more iterations or how did you
+    modify the proposal distribution.
+  \end{enumerate}
 
-\item In complex scenarios, visual assessment is not sufficient and $\hat{R}$ is a more robust indicator of convergence of the metropolis chains. Use $\hat{R}$ for convergence analysis. You can either use Eq. (11.4) in BDA3 or the later version that can be found \href{https://arxiv.org/abs/1903.08008}{\textbf{here}}. You should specify which $\hat{R}$ you used. In R the best choice is to use function {\tt Rhat} from package {\tt rstan}. Remember to remove the warm-up samples before computing $\hat R$. Report also the $\hat R$ values for $\alpha$ and $\beta$ separately, and discuss the convergence of the chains.
-\textbf{This means that you should briefly explain how to interpret the obtained} $\hat R$ \textbf{values}.
-
-\item Plot the draws for $\alpha$ and $\beta$ (scatter plot) and include this plot in your report. You can compare the results to Figure~3.3b in BDA3 to verify that your code gives sensible results. Notice though that the results in Figure~3.3b are generated from posterior with a uniform prior, so even when your algorithm works perfectly, the results will look slightly different (although fairly similar).
+\item Plot the draws for $\alpha$ and $\beta$ (scatter plot) and include this plot in your report. You can compare the results to Figure~3.3b in BDA3 to verify that your code gives sensible results. Notice though that the results in Figure~3.3b are generated from posterior with a uniform prior, so even when if your algorithm works perfectly, the results will look slightly different (although fairly similar).
 \end{enumerate}
 
 \end{document}
