@@ -1,0 +1,203 @@
+---
+title: "BDA - Assignment X"
+author: "Anynomous"
+format: 
+  pdf:
+    toc: true
+editor: visual
+---
+
+# Introduction
+
+In addition to R-markdown, [Quarto](https://quarto.org/) can be used to write the assignment reports. This template contains essentially the same information as the [R-markdown template](https://github.com/avehtari/BDA_course_Aalto/blob/master/templates/assignment_template.rmd) but we illustrate how you can use Quarto for the assignments.
+
+Some useful resources to get started with Quarto:
+
+-   [Getting started with Quarto and Rstudio from the official webpage](https://quarto.org/docs/get-started/hello/rstudio.html)
+-   [A comprehensive user guide from the official webpage](https://quarto.org/docs/guide/)
+-   [Markdown basics](https://quarto.org/docs/authoring/markdown-basics.html)
+-   [Quarto FAQ for R-markdown users](https://quarto.org/docs/faq/rmarkdown.html)
+-   [Awesome Quarto - list by Mickaël Canouil](https://github.com/mcanouil/awesome-quarto)
+
+To create your assignment, remove the formatting instructions and use this file as a template. Keep the header (the first lines of this file between two lines of ---) as it sets the author name to be anonymous, and you can set the title to match the assignment number.
+
+As with R-markdown, you can use the text editor of your choice, but RStudio's editor is probably the easiest and you can choose the formatting (e.g. section headings, bolding, lists, figures, etc.) from the toolbar. Switching between the `source` and `visual` mode allows the quick preview of your formatting.
+
+**Note** The report should be anonymous and submitted to [peergrade.io](peergrade.io) as `assignmentX.pdf`. Note that converting Quarto-markdown reports to PDF requires a installation of PDF compilation engine (e.g. `pdflatex`). See more information on this from the [Quarto documentation](https://quarto.org/docs/output-formats/pdf-engine.html). Alternatively, if you have problem with creating a PDF file, start by creating an HTML file and the just print the HTML to a PDF. You may also use other software to create the report PDF, but follow the general instructions in this file (see the [pdf version of the template file](https://github.com/avehtari/BDA_course_Aalto/blob/master/templates/assignment_template.pdf)).
+
+# Loaded packages
+
+Below are examples of how to load packages that are used in the assignment. After installing the `aaltobda` package, you need to also load it in the beginning of every notebook where you want to use it with `library()` function:
+
+```{r}
+# To install aaltobda, see the General information in the assignment.
+
+library(aaltobda)
+```
+
+# Including source code
+
+In general, all code needed to produce the essential parts needs to be included, so that it is possible to see, for peer reviewers (and TAs), where errors may have happened.
+
+You can always look at the open rubrics to see how and what is asked for in each exercise.
+
+Try to avoid printing an excessive amount of code and think about what is essential for showing how did you get the result.
+
+Write clear code. The code is also part of your report and clarity of the report affects your score. If the code is not self-explanatory, add comments. In a notebook, you can interleave explaining text and code.
+
+If in doubt additional source code can be included in an appendix.
+
+# Format instructions
+
+All exercises in the assignment should start with a header fully specifying that it is exercise X, e.g.: (use \# in quarto / rmd for a header):
+
+# Exercise 1)
+
+Subtasks in each assignments should be numbered and use header (use \## for a sub-header).
+
+## a)
+
+For each subtask include necessary textual explanation, equations, code and figures so that the answer to the question flows naturally. You can think what kind of report would you like to review, and what kind of information would make it easier where there is error (if there are errors).
+
+# Code
+
+In Quarto, code is inserted in a same way as in R-markdown. In fact, Quarto can also render R-markdown documents.
+
+```{r}
+5 + 5
+```
+
+This R code is evaluated when running the notebook or when rendering to PDF.
+
+If you want to show and run the code, but the output is very long or messy and you prefer to hide the output from the rendered report you can use option `#| results: false`. This is useful especially later as Stan may output many lines. **Note that in Quarto, cell options are specified with the `#|`-syntax.**
+
+```{r}
+#| results: false
+5 + 5
+```
+
+If you want to use some code in the notebook, but think it's not helpful for the reviewers you can exclude it from the generated PDF with option `#| include: false`. You will see the next block in the qmd-file, but not in the generated PDF.
+
+```{r}
+#| include: false
+5 + 5
+```
+
+See more on the cell options from [Quarto documentation](https://quarto.org/docs/reference/cells/cells-knitr.html).
+
+# Plots
+
+Include plots, with a specific width and height for the figure. We can also add label and caption for the plot:
+
+```{r}
+#| label: fig-drowning1
+#| fig-cap: Number of drownings per year.
+#| fig.height: 3
+#| fig.width: 5
+data("drowning") # Access the data in aaltobda package
+plot(drowning$year, drowning$drownings)
+```
+
+Or using `qplot()` from `ggplot2` package:
+
+```{r}
+#| label: fig-drowning2
+#| fig-cap: Number of drownings per year with ggplot2.
+#| fig.height: 3
+#| fig.width: 5
+library(ggplot2)
+# see themes at https://ggplot2.tidyverse.org/reference/ggtheme.html
+theme_set(theme_classic())
+qplot(drowning$year, drowning$drownings) +
+  labs(x="Year", y="Drownings")
+```
+
+Or using `ggplot()` from `ggplot2` package with pipe `|>`
+
+```{r, fig.height=3, fig.width=4}
+drowning |>
+  ggplot(aes(x=year, y=drownings)) + 
+    geom_point() +
+    labs(x='Year', y='Number of drownings')
+```
+
+Or using `ggplot()` from `ggplot2` package without pipe. In the following code bloc `eval=FALSE` is used to show the code, but not display the same plot again.
+
+```{r, eval=FALSE, fig.height=3, fig.width=4}
+ggplot(data=drowning, aes(x=year, y=drownings)) + 
+  geom_point() +
+  labs(x='Year', y='Number of drownings')
+```
+
+You can then refer the figure using `@yourlabel`-syntax: @fig-drowning1, @fig-drowning2. Figure labels should start with `fig-` prefix. If you label equations or tables, they should start with`eq-` and `tbl-` prefixes respectively.
+
+# Images
+
+You can include an existing image (e.g. scanned copy of pen and paper equations). We will also add a label for cross-referencing.
+
+![Parts of Bayesian workflow](bayes_workflow.jpg){#fig-workflow width="350"}
+
+See @fig-workflow for illustration of parts of Bayesian workflow.
+
+# Equations
+
+You can write equations using LaTeX syntax, or you can include them as images if, for example, you use Microsoft Equations.
+
+In Markdown, equations can easily be formulated using LaTeX in line as $f(k) = {n \choose k} p^{k} (1-p)^{n-k}$. Or use the math environment as follows:
+
+$$
+\begin{array}{ccc}
+x_{11} & x_{12} & x_{13}\\
+x_{21} & x_{22} & x_{23}.
+\end{array}
+$$
+
+The above example illustrated also multicolumn 'array'. Alternative way to make multiline equations with alignment is to use 'aligned' as follows:
+
+$$
+\begin{aligned}
+y & \sim \mathrm{normal}(\mu,1) \\
+\mu & \sim \mathrm{normal}(0,1).
+\end{aligned}
+$$
+
+Labeling equations allows to refer them later in the text. For example:
+
+$$
+p(\theta | y) = \frac{p(y | \theta )p(\theta)}{p(y)}
+$$ {#eq-posterior}
+
+Posterior distribution of $\theta$ is given by @eq-posterior .
+
+If you are new to LaTeX equations, you could use the [latext4technics](https://www.latex4technics.com/) equation editor to create LaTeX equations to include in the report.
+
+A short introduction to equations in LaTeX can be found at <https://www.overleaf.com/learn/latex/Mathematical_expressions>.
+
+# Tables
+
+You can use `knitr::kable` to add formatted tables. Captioning and labeling works similarly as with plots.
+
+```{r}
+#| label: tbl-drownings
+#| tbl-cap: "First five rows of the drowning data."
+knitr::kable(head(drowning))
+
+```
+
+Compare this to raw output:
+
+```{r}
+# Raw output
+head(drowning)
+
+```
+
+Refer the table in the usual way: see @tbl-drownings.
+
+# Language
+
+The language used in the course is English. Hence the report needs to be written in English.
+
+# Jupyter Notebook and other report formats
+
+You are allowed to use any format to produce your report, such as Jupyter Notebook, as long as you follow the formatting instructions in this template. Using Quarto with Jupyter Lab is also possible. See [getting started guide for Jupyter Lab](https://quarto.org/docs/get-started/hello/jupyter.html).
