@@ -56,7 +56,7 @@ All exercises in the assignment should start with a header fully specifying that
 
 # Exercise 1)
 
-Subtasks in each assignments should be numbered and use header (in rmd use \#\#).
+Subtasks in each assignments should be numbered and use header (in rmd use \##).
 
 ## a)
 
@@ -88,22 +88,33 @@ If you want to use some code in the notebook, but think it's not helpful for the
 
 Include plots, where we can specify the width and height of the figure.
 
-```{r, fig.height=3, fig.width=4}
+```{r drowning1, fig.height=3, fig.width=4, fig.cap="Number of drownings per year."}
 data("drowning") # Access the data in aaltobda package
 plot(drowning$year, drowning$drownings)
 ```
 
-Or using qplot from ggplot2 package
+Or using `qplot()` from `ggplot2` package:
 
-```{r, fig.height=3, fig.width=4}
+```{r drowning2, fig.height=3, fig.width=4, fig.cap="Number of drownings per year with qplot."}
 library(ggplot2)
+# see themes at https://ggplot2.tidyverse.org/reference/ggtheme.html
+theme_set(theme_classic())
 qplot(drowning$year, drowning$drownings)+
   labs(x="Year", y="Drownings")
 ```
 
-Or using ggplot from ggplot2 package
+Or using ggplot from ggplot2 package with pipe `|>`
 
-```{r, fig.height=3, fig.width=4}
+```{r drowning3, fig.height=3, fig.width=4, fig.cap="Number of drownings per year with ggplot."}
+drowning |>
+  ggplot(aes(x=year, y=drownings)) + 
+    geom_point() +
+    labs(x='Year', y='Number of drownings')
+```
+
+Or using ggplot from ggplot2 package without pipe. In the following code bloc `eval=FALSE` is used to show the code, but not display the same plot again.
+
+```{r, eval=FALSE, fig.height=3, fig.width=4}
 ggplot(data=drowning, aes(x=year, y=drownings)) + 
   geom_point() +
   labs(x='Year', y='Number of drownings')
@@ -111,15 +122,9 @@ ggplot(data=drowning, aes(x=year, y=drownings)) +
 
 # Images
 
-You can include an existing image (e.g. scanned copy of pen and paper equations)
+You can include an existing image (e.g. scanned copy of pen and paper equations).
 
-![Parts of Bayesian workflow](bayes_workflow.jpg){width="350"}
-
-or alternatively
-
-```{r, out.width = "350px"}
-knitr::include_graphics("bayesian_workflow_illustration.pdf")
-```
+![Parts of Bayesian workflow](bayes_workflow.jpg){#fig-workflow width="350"}
 
 # Equations
 
@@ -134,7 +139,9 @@ x_{21} & x_{22} & x_{23}.
 \end{array}
 $$
 
-The above example illustrated also multicolumn 'array'. Alternative way to make multiline equations with alignment is to use 'aligned' as follows; $$
+The above example illustrated also multicolumn 'array'. Alternative way to make multiline equations with alignment is to use 'aligned' as follows;
+
+$$
 \begin{aligned}
 y & \sim \mathrm{normal}(\mu,1) \\
 \mu & \sim \mathrm{normal}(0,1).
@@ -146,6 +153,23 @@ If you are new to LaTeX equations, you could use the [latext4technics](https://w
 More information on using LaTeX in R markdown can be found in 2.5.3 in [R Markdown: The Definite Guide](https://bookdown.org/yihui/rmarkdown/).
 
 A short introduction to equations in LaTeX can be found at <https://www.overleaf.com/learn/latex/Mathematical_expressions>.
+
+# Tables
+
+You can use `knitr::kable` to add formatted tables. Captioning and labeling works similarly as with plots.
+
+```{r tbl-drownings, tbl.cap="First five rows of the drowning data."}
+knitr::kable(head(drowning))
+
+```
+
+Compare this to raw output:
+
+```{r drowning}
+# Raw output
+head(drowning)
+
+```
 
 # Language
 
