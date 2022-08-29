@@ -84,15 +84,15 @@ knitr::opts_chunk$set(size = "small")
 \subsubsection*{Information on this assignment}
 This assignment is related to Chapter 5. The maximum amount of points from this assignment is 6.
 
-\textbf{Reading instructions:} Chapter 5 in BDA3, see reading instructions \href{https://avehtari.github.io/BDA_course_Aalto/chapter_notes/BDA_notes_ch5.pdf}{\textbf{here}}.
+\textbf{Reading instructions:} Chapter 5 in BDA3, see \href{https://avehtari.github.io/BDA_course_Aalto/chapter_notes/BDA_notes_ch5.pdf}{\textbf{the reading instructions for Chapter 5}}.
 
-\textbf{Grading instructions:} The grading will be done in peergrade. All grading questions and evaluations for assignment 7 can be found \href{https://avehtari.github.io/BDA_course_Aalto/assignments/assignment7_rubric.html}{\textbf{here}}
+\textbf{Grading instructions:} The grading will be done in peergrade. All grading questions and evaluations for assignment 7 can be found \href{https://avehtari.github.io/BDA_course_Aalto/assignments/assignment7_rubric.html}{\textbf{in the rubric}}.
 
 \textbf{Reporting accuracy:} For posterior statistics of interest, only report digits for which the Monte Carlo standard error (MCSE) is zero. \emph{Example:} If you estimate $E(\mu)=1.234$ with MCSE($E(\mu)$) = 0.01, you should report $E(\mu)=1.2$.
 
-\textbf{Installing and using \texttt{rstan}:} See the \href{https://avehtari.github.io/BDA_course_Aalto/demos.html}{Stan demos} on how to use Stan in R (or Python) . \href{https://jupyter.cs.aalto.fi}{jupyter.cs.aalto.fi} has working R and RStan environment and is probably the easiest way to use RStan. The Aalto Ubuntu desktops also have the necessary libraries installed. To install Stan on your laptop, see the instructions below and additional answers in \href{https://avehtari.github.io/BDA_course_Aalto/FAQ.html}{\textbf{FAQ}}. Recently there have been reports of installation problems with Windows and R 4.0 (see Stan discourse for more), so if you don't succeed in a short amount of time, it is probably easier to use \href{https://jupyter.cs.aalto.fi}{jupyter.cs.aalto.fi}.
+\textbf{Installing and using \texttt{CmdStanR}:} See the \href{https://avehtari.github.io/BDA_course_Aalto/demos.html}{Stan demos} on how to use Stan in R (or Python) . \href{https://jupyter.cs.aalto.fi}{jupyter.cs.aalto.fi} has working R and CmdStanR environment and is probably the easiest way to use Stan. The Aalto Ubuntu desktops also have the necessary libraries installed. To install Stan on your laptop, see the instructions below and additional answers in \href{https://avehtari.github.io/BDA_course_Aalto/FAQ.html}{\textbf{FAQ}}. 
 
-If you use \texttt{jupyter.cs.aalto.fi}, all necessary packages have been pre-installed. In your laptop, install package \texttt{rstan}. Installation instructions on Linux, Mac and Windows can be found at \url{https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started}. Additional useful packages are \texttt{loo}, \texttt{bayesplot} and \texttt{shinystan} (but you don't need these in this assignment). For Python users, \texttt{PyStan}, \texttt{CmdStanPy}, and  \texttt{Arviz} packages are useful.
+If you use \texttt{jupyter.cs.aalto.fi}, all necessary packages have been pre-installed. In your laptop, install package \texttt{cmdstanr}. Installation instructions on Linux, Mac and Windows can be found at \url{https://mc-stan.org/cmdstanr/}. Additional useful packages are \texttt{loo}, \texttt{bayesplot} and \texttt{posterior} (but you don't need these in this assignment). For Python users, \texttt{PyStan}, \texttt{CmdStanPy}, and  \texttt{Arviz} packages are useful.
 
 Stan manual can be found at \url{https://mc-stan.org/users/documentation/}. From this website, you can also find a lot of other useful material about Stan.
 
@@ -133,7 +133,7 @@ Your tasks are the following:
 
   \textbf{Hint:} You may find some of the mistakes in the code using
   Stan syntax checker. If you copy the Stan code to a file ending
-  .stan and open it in RStudio (you can also choose from RStudio menu
+  \texttt{.stan} and open it in RStudio (you can also choose from RStudio menu
   File$\rightarrow$New File$\rightarrow$Stan file to create a new Stan
   file), the editor will show you some syntax errors. More syntax
   errors might be detected by clicking `Check' in the bar just above
@@ -207,7 +207,7 @@ generated quantities {
 
 \subsection*{2. Hierarchical model: factory data with Stan (3p)}
 
-\textbf{Note!} Both Assignment 8 and 9 build upon this part of the assignment, so it is important to get this assignment correct before you start with Assignment 8 and 9.
+\textbf{Note!} Both Assignment 8 and 9 build upon this part of the assignment, so it is important to get this assignment correct before you start with Assignment 8 and 9. If you need help, ask TAs.
 
 The \texttt{factory} data in the \texttt{aaltobda} package contains quality control measurements from 6 machines in a factory (units of the measurements are irrelevant here). In the data file, each column contains the measurements for a single machine. Quality control measurements are expensive and time-consuming, so only 5 measurements were done for each machine. In addition to the existing machines, we are interested in the quality of another machine (the seventh machine). To read in the data, just use:
 
@@ -235,16 +235,17 @@ The provided Stan code in Listing~\ref{listing2} given on the next page is an ex
 To run Stan for that model, simply use:
 
 <<eval=FALSE>>=
+library(cmdstanr)
 data("factory")
 
-sm <- rstan::stan_model(file = "[path to stan model code]")
+sm <- cmdstan_model(stan_file = "[path to stan model code]")
 
 stan_data <- list(
   y = factory,
   N = nrow(factory),
   J = ncol(factory)
 )
-model <- rstan::sampling(sm, data = stan_data)
+model <- sm$sample(data = stan_data, refresh=1000)
 model
 @
 
@@ -284,7 +285,7 @@ your tasks are the following:
   hyper-priors.
 \end{itemize}
 
-\textbf{Hint!} See the example Stan codes \href{http://avehtari.github.io/BDA_R_demos/demos_rstan/rstan_demo.html#8_comparison_of_k_groups_with_hierarchical_models}{\textbf{here}} for the comparison of $k$ groups with and without the hierarchical structure.
+\textbf{Hint!} See the example Stan codes \href{http://avehtari.github.io/BDA_R_demos/demos_rstan/cmdstanr_demo.html#8_comparison_of_k_groups_with_hierarchical_models}{\textbf{here}} for the comparison of $k$ groups with and without the hierarchical structure.
 
 \begin{lstlisting}[
      float,
