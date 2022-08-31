@@ -1,7 +1,29 @@
 ---
 title: "Bayesian Data Analysis course - Project work"
 date: "Page updated: `r format.Date(file.mtime('project.Rmd'),'%Y-%m-%d')`"
+params:
+  schedule_file: "schedule.csv"
+  project_dl: "6.12.2022"
+  project_feedback_dl: "9.12.2022"
+  project_presentations: "12.-16.12.2022"
+  exam_week_lecture_date: "17.10."
 ---
+
+```{r, echo=FALSE, results=FALSE}
+Sys.setlocale("LC_TIME", "C")
+
+schedule <- read.csv2(params$schedule_file, sep = "\t", header = FALSE, row.names = 1, col.names = paste("Week", 0:13, sep = ""))
+
+# parse a date from the schedule. Google sheets format DD/MM/YYYY
+sdate <- function(row, col, out_format = "%-d.%-m.", offset = 0) {
+  tidyr::replace_na(as.character(as.Date(schedule[row, col], format="%d/%m/%Y") + offset, format = out_format), schedule[row, col])
+}
+
+# return the string representation of the weekday of the scheduled day
+sday <- function(row, col) {
+  weekdays(as.Date(schedule[row, col], format = "%d/%m/%Y"))
+}
+```
 
 ## Project work details
 
@@ -26,9 +48,9 @@ according to all the parts of Bayesian workflow studied along the course.
 - Groups of 1 can reserve a presentation slot starting TBA. 
 - Groups that register late can reserve a presentation slot starting TBA.
 - Work on the project. TA session queue is also for project questions.
-- Project report deadline December 6, 2021. Submit in peergrade (separate "class", the link will be added to MyCourses).
-- Project report peer grading December 7-9, 2021 (so that you'll get feedback for the report before the presentations).
-- Project presentations December 13-17, 2021.
+- Project report deadline `r params$project_dl`. Submit in peergrade (separate "class", the link will be added to MyCourses).
+- Project report peer grading `r substr(params$project_dl, 1, 2)` - `r params$project_feedback_dl` (so that you'll get feedback for the report before the presentations).
+- Project presentations `r params$project_presentations`.
 
 ## Groups
 
