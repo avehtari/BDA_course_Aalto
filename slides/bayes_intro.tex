@@ -81,6 +81,21 @@
 \newcommand{\HN}{{\rm N^+}}
 \newcommand{\lN}{{\rm LN}}
 
+\definecolor{navyblue}{rgb}{0,0,0.5}
+\definecolor{darkgreen}{rgb}{0,0.3922,0}
+\definecolor{matblue}{rgb}{0,0.447,0.741}    
+\definecolor{matred}{rgb}{0.85,0.325,0.098}
+\definecolor{matyellow}{rgb}{0.929,0.694,0.125}
+\definecolor{matpurple}{rgb}{0.494,0.184,0.556}
+\definecolor{matgreen}{rgb}{0.466,0.674,0.188}
+\definecolor{matcyan}{rgb}{0.301,0.745,0.933}
+\definecolor{matdarkred}{rgb}{0.635,0.078,0.184}
+
+\newcommand{\nred}{{\color{matred}\#red}}
+\newcommand{\nyellow}{{\color{matyellow}\#yellow}}
+\newcommand{\red}{{\color{matred}\#red}}
+\newcommand{\yellow}{{\color{matyellow}\#yellow}}
+
 % Bibetal
   \providecommand{\Bibetal}{whatever}
   \renewcommand{\Bibetal}{\emph{et~al.}}
@@ -91,7 +106,7 @@
 \date{}
 
 \setbeamertemplate{navigation symbols}{}
-\setbeamertemplate{headline}[default]
+\setbeamertemplate{headline}[default]{}
 %\setbeamertemplate{headline}[text line]{\insertshorttitle\insertshortsubtitle}
 %\setbeamertemplate{footline}[frame number]
 %\setbeamertemplate{footline}[default]
@@ -139,6 +154,9 @@
     inverse probability in special case
   \item Modern Bayesian theory with rigorous proofs developed in
     20th century
+    \pause
+  \item A nice book about history: Sharon Bertsch McGrayne,
+    \textit{The Theory That Would Not Die}, 2012.
 \end{itemize}
 \end{frame}
 
@@ -208,15 +226,15 @@
 
   \begin{itemize}
   %\item<2-> probability of red $\frac{\mathrm{\#red}}{\mathrm{\#red+\#yellow}}{\onslide<3->=\theta}$ 
-  \item<2-> Probability of red $\frac{\mathrm{\#red}}{\mathrm{\#red+\#yellow}}=\theta$ 
+  \item<2-> Probability of red $\frac{\mathrm{\nred}}{\mathrm{\nred+\nyellow}}=\theta$ 
     \vspace{\baselineskip}
-  \item<3-> $p(y=\mathrm{red}|\theta)=\theta \quad$ aleatoric uncertainty
+  \item<3-> $p(y=\mathrm{\red}|\theta)=\theta \quad$ aleatoric uncertainty
     \vspace{\baselineskip}
   \item<4-> $p(\theta) \quad$ epistemic uncertainty
     \vspace{\baselineskip}
   \item<5-> Picking many chips updates our uncertainty about the proportion
     \vspace{\baselineskip}
-  \item<5-> $p(\theta|\mathrm{y=red,yellow,red,red,\ldots})=?$
+  \item<5-> $p(\theta|\mathrm{y=\red,\yellow,\red,\red,\ldots})=?$
     \vspace{\baselineskip}
   \item<6-> Bayes rule
       $p(\theta|y)=\frac{p(y|\theta)p(\theta)}{\int p(y|\theta)p(\theta) d\theta}$
@@ -243,12 +261,12 @@
 
   \begin{itemize}
   \item Bayes rule
-      $p(\theta|y)\propto p(y|\theta)p(\theta)$
+      ${\color{blue}p(\theta|y)}\propto {\color{darkgreen}p(y|\theta)}{\color{darkgreen}p(\theta)}$
     \vspace{\baselineskip}
-  \item Model: $p(y|\theta)$ as a function of $y$ given fixed $\theta$
+  \item Model: {\color{darkgreen}$p(\mathbf{y}|\theta)$} as a function of $\mathbf{y}$ given fixed $\theta$
     describes the aleatoric uncertainty \vspace{\baselineskip}
-  \item Likelihood: $p(y|\theta)$ %=L(\theta|y)$ 
-    as a function of $\theta$
+  \item Likelihood: {\color{darkgreen}$p(y|\boldsymbol\theta)$} %=L(\theta|y)$ 
+    as a function of $\boldsymbol\theta$
     given fixed $y$ provides information about epistemic uncertainty,
     but is not a probability distribution
     \vspace{\baselineskip}
@@ -257,6 +275,31 @@
   \end{itemize}
 \end{frame}
 
+\begin{frame}{Example of uncertainty in modeling}
+
+  % fake data
+  % mean fit
+  % mean fit + gaussian
+  % samples
+  % samples + gaussians
+  % 1D data
+  % gaussian fit
+  % gaussian samples
+  % posterior draws
+  % exact contours
+  % marginal with jitter?
+  % marginal outside of the plot?
+  % marginal with jitter in other direction
+  % marginal outside of the in other direction
+  
+  \only<1>{\includegraphics[width=10cm]{fakel_data.pdf}}
+  \only<2>{\includegraphics[width=10cm]{fakel_postmean.pdf}}
+  \only<3>{\includegraphics[width=10cm]{fakel_postmeanpred.pdf}}
+  \only<4>{\includegraphics[width=10cm]{fakel_postdraws.pdf}}
+  \only<5>{\includegraphics[width=10cm]{fakel_postdrawspred.pdf}}
+  \only<6>{\includegraphics[width=10cm]{fakel_postdrawspred2.pdf}}
+
+\end{frame}
 
 % \begin{frame}{Example application}
 %   \framesubtitle{wet age-related macular degeneration (wetAMD)}
@@ -408,9 +451,9 @@
 \begin{frame}{Computation}
 
   We need to be able to compute expectations with respect to posterior
-  distribution $p(\theta|y)$
+  distribution ${\color{blue}p(\theta|y)}$
   \begin{align*}
-    \E_{\theta|y}\left[ g(\theta) \right] = \int p(\theta|y)g(\theta) d\theta
+    \E_{\color{blue}{\theta|y}}\left[ g(\theta) \right] = \int {\color{blue}p(\theta|y)}g(\theta) d\theta
   \end{align*}
   
   \begin{itemize}
@@ -482,30 +525,30 @@
   
 \begin{frame}[fragile]
   \frametitle{Binomial model for treatment/control comparison}
+% data {
+%   int<lower=0> N1;
+%   int<lower=0> y1;
+%   int<lower=0> N2;
+%   int<lower=0> y2;
+% }
   {\footnotesize
   \begin{lstlisting}
-data {
-  int<lower=0> N1;
-  int<lower=0> y1;
-  int<lower=0> N2;
-  int<lower=0> y2;
-}
 parameters {
   real<lower=0,upper=1> theta1;
   real<lower=0,upper=1> theta2;
 }
 model {
-  theta1 ~ beta(1,1);
-  theta2 ~ beta(1,1);
-  y1 ~ binomial(N1,theta1);
-  y2 ~ binomial(N2,theta2);
-}
-generated quantities {
-  real oddsratio;
-  oddsratio = (theta2/(1-theta2))/(theta1/(1-theta1));
+  theta1 ~ beta(1, 1);
+  theta2 ~ beta(1, 1);
+  y1 ~ binomial(N1, theta1);
+  y2 ~ binomial(N2, theta2);
 }
   \end{lstlisting}
 }
+% generated quantities {
+%   real oddsratio;
+%   oddsratio = (theta2/(1-theta2))/(theta1/(1-theta1));
+% }
 \end{frame} 
 
 \begin{frame}[fragile]
