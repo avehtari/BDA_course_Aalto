@@ -52,6 +52,38 @@
 #' }
 "factory"
 
+#' @title kilpisjarvi
+#' @description Kilpisjärvi data set. The data contains the Kilpisjärvi
+#' summer month temperatures 1952--2013. Kilpisjärvi is in very northern
+#' part of Finland. Data by Finnish Meteorological Institute (CC-BY 4.0).
+#' Name of the observation station in FMI database is "Enontekiö Kilpisjärvi
+#' kyläkeskus"
+#' @format A data frame with 62 rows and 5 columns:
+#' \describe{
+#'   \item{year}{Year}
+#'   \item{temp.june}{Average temperature in June}
+#'   \item{temp.july}{Average temperature in July}
+#'   \item{temp.august}{Average temperature in August}
+#'   \item{temp.summer}{Average temperature in July--August}
+#' }
+"kilpisjarvi"
+
+#' @title kilpisjarvi2022
+#' @description Kilpisjärvi data set. The data contains the Kilpisjärvi
+#' summer month temperatures 1952--2022. Kilpisjärvi is in very northern
+#' part of Finland. Data by Finnish Meteorological Institute (CC-BY 4.0).
+#' Name of the observation station in FMI database is "Enontekiö Kilpisjärvi
+#' kyläkeskus"
+#' @format A data frame with 71 rows and 5 columns:
+#' \describe{
+#'   \item{year}{Year}
+#'   \item{temp.june}{Average temperature in June}
+#'   \item{temp.july}{Average temperature in July}
+#'   \item{temp.august}{Average temperature in August}
+#'   \item{temp.summer}{Average temperature in July--August}
+#' }
+"kilpisjarvi"
+
 #' @title windshieldy1
 #' @description windshieldy1 data set. The data represents a sample of
 #' windshields whose hardness has been measured.
