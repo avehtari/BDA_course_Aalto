@@ -13,6 +13,7 @@
 \usepackage[authoryear]{natbib}
 \usepackage{booktabs}
 \usepackage{url}
+\urlstyle{same}
 \usepackage{enumerate}
 \usepackage{listings}
 \usepackage{lastpage}
@@ -115,19 +116,289 @@
 
 % The animate package
 % \usepackage{animate}
+\title[]{Bayesian data analysis}
+\subtitle{Introduction}
+
+\author{Aki Vehtari}
+
+\institute[Aalto University]{}
   
 \begin{document}
 
 \begin{frame}
-  
-  \frametitle{Decision making in case of uncertainties}
+  \frametitle{Bayesian data analysis (Aalto fall 2022)}  %
+  \framesubtitle{}
+  \begin{itemize}
+  \item Book: Gelman, Carlin, Stern, Dunson, Vehtari \& Rubin: Bayesian Data
+    Analysis, Third Edition. {\footnotesize (online pdf available)}
+  \item The course website has more detailed information than these slides\\
+    {\small\url{https://avehtari.github.io/BDA_course_Aalto/Aalto2022.html}}
+  \item Timetable: see the course website
+  \item TAs: Anna Riha, Elena Shaw, Kunal Ghosh, Andrew Johnson, Noa
+    Kallioinen, David Kohns, Leevi Lindgren, Yann McLatchie, Teemu
+    Sailynoja, Niko Siccha
+    % \item Oodi mentions TA session this week on Wednesday, but that
+    %   has cancelled.
+    \end{itemize}
+    \vspace{-0.25\baselineskip}
+ \begin{center}
+   \includegraphics[width=2.6cm]{figs/BDA3.jpg}
+ \end{center}
 
-  \begin{center}
-    \includegraphics[width=10.5cm]{irma.png}
-  \end{center}
 \end{frame}
 
-\begin{frame}{Bayesian Analysis}
+% \begin{frame}{Bayesian Data Analysis -- Introduction}
+
+  
+% \end{frame}
+
+\begin{frame}{Uncertainty and decision making}
+
+  \begin{itemize}
+  \item Predicting concrete quality
+  \end{itemize}
+  
+  \vspace{2\baselineskip}
+  \only<1>{
+      \hspace{-6mm}
+    \begin{minipage}[c]{0.475\linewidth}
+    \includegraphics[height=3.7cm,trim=200 0 254 0,clip]{45396382385_3aa7f81768_k_ccby.jpg}
+    \end{minipage}
+    \begin{minipage}[c]{0.8cm}
+      \centering
+      \hspace{3mm}$\rightarrow$\hspace{-1.5mm}
+    \end{minipage}
+    \begin{minipage}[c]{0.475\linewidth}
+    \includegraphics[height=3.7cm]{ConcreteBridge.jpg}
+    \end{minipage}
+    }
+  % \uncover<2->{
+  %   \includegraphics[width=5cm]{45396382385_3aa7f81768_k.jpg}\\
+  %   \vspace{-0.5mm}
+  %   $\downarrow$\\
+  %   \vspace{1mm}
+  %   \includegraphics[width=5cm]{ConcreteBridge.jpg}
+  %   }
+  % \includegraphics[width=5cm]{slump1b-eps-converted-to.pdf}
+%     %https://www.flickr.com/photos/tareqsalahuddin/7273434238
+%   \uncover<3->{\includegraphics[width=6cm]{7273434238_a40e5fc127_c.jpg}}}\\
+% \vspace{0.5\baselineskip}
+% \uncover<4->{\hspace{3.8cm}\includegraphics[width=7cm]{data_population_simple.pdf}}
+
+\end{frame}
+
+\begin{frame}{Uncertainty and decision making\footnote{\color{gray}with E. Siivola, Aalto and S. Weber, Novartis Pharma}}
+
+  \vspace{-0.5\baselineskip}
+\begin{itemize}
+\item Everolimus is immunosuppressant to prevent rejection of organ
+  transplants
+\item Pharmacokinetic model of drug and body, optimal dosage depends on weight\\
+  \begin{minipage}[t]{\textwidth}
+    \vspace{-.2\baselineskip}
+  \hspace{-1.2cm}\includegraphics[width=6cm]{2compartment_graph.png}
+  \includegraphics[width=6cm]{data_population_simple.pdf}
+\end{minipage}
+    \vspace{.2\baselineskip}
+\item<2-> Model fitted with 500 adults, extrapolation to children?
+\item<3-> Maturation effect, 17 observations from children
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Uncertainty in modeling}
+
+  % fake data
+  % mean fit
+  % mean fit + gaussian
+  % samples
+  % samples + gaussians
+  % 1D data
+  % gaussian fit
+  % gaussian samples
+  % posterior draws
+  % exact contours
+  % marginal with jitter?
+  % marginal outside of the plot?
+  % marginal with jitter in other direction
+  % marginal outside of the in other direction
+  
+  \only<1>{\includegraphics[width=10cm]{fakel_data.pdf}}
+  \only<2>{\includegraphics[width=10cm]{fakel_postmean.pdf}}
+  \only<3>{\includegraphics[width=10cm]{fakel_postmeanpred.pdf}}
+  \only<4>{\includegraphics[width=10cm]{fakel_postdraws.pdf}}
+  \only<5>{\includegraphics[width=10cm]{fakel_postdrawspred.pdf}}
+%  \only<6>{\includegraphics[width=10cm]{fakel_postdrawspred2.pdf}}
+
+\end{frame}
+
+% \begin{frame}{Uncertainty and decision making}
+
+%   \vspace{\baselineskip}
+%   \centering
+%   \uncover<1->{\includegraphics[width=6.5cm]{7273434238_a40e5fc127_c.jpg}}\\
+% \vspace{0.5\baselineskip}
+% \uncover<2->{  \centering
+% \includegraphics[width=6.5cm]{data_population_simple.pdf}}
+
+% \end{frame}
+
+\begin{frame}{Bayesian probability theory}
+
+  \vspace{\baselineskip}
+  
+  expert information \hfill \uncover<3->{data}
+
+  \hspace{0.8cm}\uncover<2->{$\searrow$} \hfill \uncover<4->{$\swarrow$}\hspace{0.8cm}
+
+  \uncover<2->{
+    \begin{minipage}[t]{0.45\linewidth}\center
+mathematical model \\ + \\ uncertainty with probabilities
+\end{minipage}
+} \hfill \uncover<4->{
+  \begin{minipage}[t]{0.05\linewidth}
+    ~\\
++\\
+\end{minipage}
+\hfill
+  \begin{minipage}[t]{0.45\linewidth}
+    Bayesian probability theory\\
+    \vspace{-\baselineskip}
+{\color{gray}\footnotesize
+  \begin{align*}
+    %  p(\theta|y) & \propto p(y|\theta)p(\theta) \\
+     p(\theta|y) & = \frac{p(y|\theta)p(\theta)}{p(y)} \\
+    p(\tilde{y}|y) & = \int p(\tilde{y}|\theta) p(\theta|y)d\theta
+    % E[\tilde{y}] & = \int p(\tilde{y}|y)d\tilde{y} \\
+  \end{align*}}
+\end{minipage}
+}
+
+   \vspace{-2\baselineskip}
+  % \vspace{-\baselineskip}
+
+  \center 
+
+  \uncover<5->{$\downarrow$
+  
+    updated uncertainty\\
+    \uncover<6->{+\\ understandable trusted models}}
+
+\end{frame}
+
+\begin{frame}{Bayesian inference with computers}
+
+  \vspace{\baselineskip}
+\hspace{1cm}  \begin{minipage}[t]{0.8\linewidth}
+  mathematical model to computer
+      \vspace{\baselineskip}
+
+probabilistic programming
+      \vspace{\baselineskip}
+
+computation, automatic inference algorithms
+      \vspace{\baselineskip}
+
+limitations of computers
+\end{minipage}
+
+\end{frame}
+
+\begin{frame}{Yes, but did it work?}
+
+  \vspace{\baselineskip}
+\hspace{1cm}  \begin{minipage}[t]{0.8\linewidth}
+computation + inference diagnostics
+      \vspace{\baselineskip}
+
+model diagnostics
+      \vspace{\baselineskip}
+
+limitations of mathematical models
+      \vspace{\baselineskip}
+
+improve and iterate
+\end{minipage}
+
+\end{frame}
+
+\begin{frame}{Probabilistic programming and Stan}
+
+  Stan is a probabilistic programming framework and ecosystem
+
+  40+ developers, 100+ contributors, 100K+ users
+
+  % \includegraphics[width=2cm]{Stan_logo.png}
+  \center
+  \vspace{\baselineskip}
+  \includegraphics[width=2.5cm]{stan_logo_wide.png}\\
+  mc-stan.org
+% \includegraphics[width=11cm]{mystery.jpeg}
+  
+\end{frame}
+
+\begin{frame}{Bayesian Data Analysis course}
+
+  \begin{itemize}
+  \item Probability distributions as model building blocks
+    \begin{itemize}
+    \item need to understand the math part (prereq.)
+    \item continuous vs discrete (prereq.)
+    \item observation model, likelihood, prior
+    \item constructing bigger models
+    \end{itemize}
+  \item<2-> Computation
+    \begin{itemize}
+    \item 
+  We need to be able to compute expectations% with respect to posterior
+  %distribution ${\color{blue}p(\theta|y)}$
+  \begin{align*}
+    \E_{\color{blue}{\theta|y}}\left[ g(\theta) \right] = \int {\color{blue}p(\theta|y)}g(\theta) d\theta
+  \end{align*}
+    \item when analytic solutions are not available, computational
+      approximations with finite number of function evaluations
+    \item grid, importance sampling, Monte Carlo, Markov chain Monte Carlo
+    \end{itemize}
+  \item<3-> Workflow
+    \begin{itemize}
+    \item steps of model building, inference, and diagnostics
+    \end{itemize}
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Impact on society}
+
+  \vspace{\baselineskip}
+    Better modelling and quantification of uncertainty\\
+  \hspace{0.5cm}  \begin{minipage}[t]{0.8\linewidth}
+  \vspace{0.5\baselineskip}
+    
+  \begin{itemize}
+  \item[$\rightarrow$] better science
+  \vspace{\baselineskip}
+  
+\item[$\rightarrow$] better informed decision making\\ in companies, government, and NGOs
+\end{itemize}
+  % $\rightarrow$ better science
+  % \vspace{\baselineskip}
+  
+  % $\rightarrow$ better informed decision making in companies\\ \hspace{1cm} government, and NGOs
+\end{minipage}
+
+\end{frame}
+
+
+% \begin{frame}
+  
+%   \frametitle{Decision making in case of uncertainties}
+
+%   \begin{center}
+%     \includegraphics[width=10.5cm]{irma.png}
+%   \end{center}
+% \end{frame}
+
+\begin{frame}{Bayesian probability theory}
 
   \begin{itemize}
   \item Based on Bayesian probability theory
@@ -275,31 +546,6 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Example of uncertainty in modeling}
-
-  % fake data
-  % mean fit
-  % mean fit + gaussian
-  % samples
-  % samples + gaussians
-  % 1D data
-  % gaussian fit
-  % gaussian samples
-  % posterior draws
-  % exact contours
-  % marginal with jitter?
-  % marginal outside of the plot?
-  % marginal with jitter in other direction
-  % marginal outside of the in other direction
-  
-  \only<1>{\includegraphics[width=10cm]{fakel_data.pdf}}
-  \only<2>{\includegraphics[width=10cm]{fakel_postmean.pdf}}
-  \only<3>{\includegraphics[width=10cm]{fakel_postmeanpred.pdf}}
-  \only<4>{\includegraphics[width=10cm]{fakel_postdraws.pdf}}
-  \only<5>{\includegraphics[width=10cm]{fakel_postdrawspred.pdf}}
-  \only<6>{\includegraphics[width=10cm]{fakel_postdrawspred2.pdf}}
-
-\end{frame}
 
 % \begin{frame}{Example application}
 %   \framesubtitle{wet age-related macular degeneration (wetAMD)}
@@ -331,24 +577,24 @@
 
 % \end{frame}
 
-\begin{frame}{Example application: Drug dosage for liver transplant\footnote{\color{gray}with E. Siivola, Aalto and S. Weber, Novartis Pharma}}
+% \begin{frame}{Example application: Drug dosage for liver transplant\footnote{\color{gray}with E. Siivola, Aalto and S. Weber, Novartis Pharma}}
 
-  \vspace{-0.5\baselineskip}
-\begin{itemize}
-\item Everolimus is immunosuppressant to prevent rejection of organ
-  transplants
-\item Pharmacokinetic model of drug and body, optimal dosage depends on weight\\
-  \begin{minipage}[t]{\textwidth}
-    \vspace{-.2\baselineskip}
-  \hspace{-1.2cm}\includegraphics[width=6cm]{2compartment_graph.png}
-  \includegraphics[width=6cm]{data_population_simple.pdf}
-\end{minipage}
-    \vspace{.2\baselineskip}
-\item<2-> Model fitted with 500 adults, extrapolation to children?
-\item<3-> Maturation effect, 17 observations from children
-\end{itemize}
+%   \vspace{-0.5\baselineskip}
+% \begin{itemize}
+% \item Everolimus is immunosuppressant to prevent rejection of organ
+%   transplants
+% \item Pharmacokinetic model of drug and body, optimal dosage depends on weight\\
+%   \begin{minipage}[t]{\textwidth}
+%     \vspace{-.2\baselineskip}
+%   \hspace{-1.2cm}\includegraphics[width=6cm]{2compartment_graph.png}
+%   \includegraphics[width=6cm]{data_population_simple.pdf}
+% \end{minipage}
+%     \vspace{.2\baselineskip}
+% \item<2-> Model fitted with 500 adults, extrapolation to children?
+% \item<3-> Maturation effect, 17 observations from children
+% \end{itemize}
 
-\end{frame}
+% \end{frame}
 
 
 \begin{frame}{The art of probabilistic modeling}
@@ -370,198 +616,6 @@
     \end{itemize}
   \end{itemize}
 \end{frame}
-
-\begin{frame}
-
-  \begin{columns}[T] % align columns
- \begin{column}{.49\textwidth}
-{  \footnotesize
-  \begin{itemize}
- \item Galaxy clusters for cosmology
- \item Coagulation of blood
- \item Gene regulation
- \item Pharmacokinetics and -dynamics
- \item Decision support
- \item Effects of nutrition for diabetes
- \item Evolutionary anthropology
- \item Clinical trial designs
- \item Daily demand for gas
- \item Brain structure trees
- \item School enrollment
- \item Sports
- \item Product demand
- \end{itemize}
- }
-\end{column}
- \begin{column}{.49\textwidth}
-{    \footnotesize
-  \begin{itemize}
- \item Cocoa bean fermentation
- \item Marine propulsion power
- \item Alcohol consumption trends
- \item Flood probability
- \item Instantaneous heart rate distributions
- \item Drug dosing regimens in pediatrics
- \item Human T stem cell memory cells
- \item Fairness in university admission policies
- \item Destruction of bacteria and bacterial spores under heat
- \end{itemize}
- }
-\end{column}
-\end{columns}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Bayesian data analysis}  %
-  \framesubtitle{Example analyses}
-  \begin{itemize}
-  \item Treatment/control
-    \begin{itemize}
-    \item randomize patients to treatment or control
-    \item is the treatment effective?
-    \end{itemize}
-    \pause
-  \item Continuous valued treatment
-    \begin{itemize}
-    \item randomize patients with different dosages
-    \item which dosage is sufficient without too many side effects?
-    \end{itemize}
-    \pause
-  \item Different effects for different patients?
-    \begin{itemize}
-    \item Is the treatment effect different for male/female, child/adult, light/heavy, ...
-    \end{itemize}
-  \end{itemize}
-
-\end{frame}
-
-\begin{frame}{Bayesian approach}
-
-  \begin{itemize}
-  \item Benefits of Bayesian approach
-    \begin{itemize}
-    \item integrate over uncertainties to focus to interesting parts
-    \item use relevant prior information
-    \item hierarchical models
-    \item model checking and evaluation
-    \end{itemize}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Computation}
-
-  We need to be able to compute expectations with respect to posterior
-  distribution ${\color{blue}p(\theta|y)}$
-  \begin{align*}
-    \E_{\color{blue}{\theta|y}}\left[ g(\theta) \right] = \int {\color{blue}p(\theta|y)}g(\theta) d\theta
-  \end{align*}
-  
-  \begin{itemize}
-  \item Analytic
-    \begin{itemize}
-    \item only for very simple models
-    \end{itemize}
-  \item Monte Carlo, Markov chain Monte Carlo
-    \begin{itemize}
-    \item generic
-    \end{itemize}
-  \item Distributional approximations
-    \begin{itemize}
-    \item e.g. Laplace, variational, expectation propagation
-    \item less generic, but can be much faster with sufficient accuracy
-    \end{itemize}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  
-  \frametitle{Probabilistic programming}
-  
-  \begin{center}
-   \vspace{-\baselineskip}
-    \includegraphics[width=5cm]{wide_ensemble.png}\\
-   \vspace{2\baselineskip}
-  {\large Enables agile workflow for developing probabilistic models}\\
-   \vspace{\baselineskip}
-   language \, -- \,
-   automated inference \, -- \,
-   diagnostics
-   \vspace{\baselineskip}
-  \vfill
-    \includegraphics[width=1.5cm]{stan_logo_wide.png}\\
-    \url{mc-stan.org}
-  \end{center}
-
-\end{frame}
-
-% \begin{frame}{Probabilistic programming}
-
-%   \begin{itemize}
-%     \item Wikipedia ``A probabilistic programming language (PPL) is a
-%       programming language designed to describe probabilistic models
-%       and then perform inference in those models''
-%       \pause
-%     \item Specifically designed language and software
-%       \begin{itemize}
-%       \item cleaner notation for probabilistic models
-%       \item more efficient inference
-%       \item support for workflow
-%       \end{itemize}
-%     \end{itemize}
-% \end{frame}
-
-\begin{frame}[fragile]
-  \frametitle{Binomial model for treatment/control comparison}
-
-  \begin{itemize}
-  \item Two groups of patients: treatment and control
-    \begin{itemize}
-    \item Binary outcome
-    \item Is the treatment useful?
-    \end{itemize}
-  \end{itemize}
-
-\end{frame}
-  
-\begin{frame}[fragile]
-  \frametitle{Binomial model for treatment/control comparison}
-% data {
-%   int<lower=0> N1;
-%   int<lower=0> y1;
-%   int<lower=0> N2;
-%   int<lower=0> y2;
-% }
-  {\footnotesize
-  \begin{lstlisting}
-parameters {
-  real<lower=0,upper=1> theta1;
-  real<lower=0,upper=1> theta2;
-}
-model {
-  theta1 ~ beta(1, 1);
-  theta2 ~ beta(1, 1);
-  y1 ~ binomial(N1, theta1);
-  y2 ~ binomial(N2, theta2);
-}
-  \end{lstlisting}
-}
-% generated quantities {
-%   real oddsratio;
-%   oddsratio = (theta2/(1-theta2))/(theta1/(1-theta1));
-% }
-\end{frame} 
-
-\begin{frame}[fragile]
-  \frametitle{Binomial model for treatment/control comparison}
-
-  RStanARM
-  {\scriptsize
-  \begin{lstlisting}
-    fit_bin2 <- stan_glm(y/N ~ grp2, family = binomial(),
-                         data = d_bin2, weights = N)
-  \end{lstlisting}
-}
-\end{frame} 
 
 \begin{frame}{Modeling nature}
 
@@ -585,6 +639,221 @@ model {
   \end{itemize}
 
 \end{frame}
+
+% \begin{frame}
+
+%   \begin{columns}[T] % align columns
+%  \begin{column}{.49\textwidth}
+% {  \footnotesize
+%   \begin{itemize}
+%  \item Galaxy clusters for cosmology
+%  \item Coagulation of blood
+%  \item Gene regulation
+%  \item Pharmacokinetics and -dynamics
+%  \item Decision support
+%  \item Effects of nutrition for diabetes
+%  \item Evolutionary anthropology
+%  \item Clinical trial designs
+%  \item Daily demand for gas
+%  \item Brain structure trees
+%  \item School enrollment
+%  \item Sports
+%  \item Product demand
+%  \end{itemize}
+%  }
+% \end{column}
+%  \begin{column}{.49\textwidth}
+% {    \footnotesize
+%   \begin{itemize}
+%  \item Cocoa bean fermentation
+%  \item Marine propulsion power
+%  \item Alcohol consumption trends
+%  \item Flood probability
+%  \item Instantaneous heart rate distributions
+%  \item Drug dosing regimens in pediatrics
+%  \item Human T stem cell memory cells
+%  \item Fairness in university admission policies
+%  \item Destruction of bacteria and bacterial spores under heat
+%  \end{itemize}
+%  }
+% \end{column}
+% \end{columns}
+% \end{frame}
+
+% \begin{frame}
+%   \frametitle{Bayesian data analysis}  %
+%   \framesubtitle{Example analyses}
+%   \begin{itemize}
+%   \item Treatment/control
+%     \begin{itemize}
+%     \item randomize patients to treatment or control
+%     \item is the treatment effective?
+%     \end{itemize}
+%     \pause
+%   \item Continuous valued treatment
+%     \begin{itemize}
+%     \item randomize patients with different dosages
+%     \item which dosage is sufficient without too many side effects?
+%     \end{itemize}
+%     \pause
+%   \item Different effects for different patients?
+%     \begin{itemize}
+%     \item Is the treatment effect different for male/female, child/adult, light/heavy, ...
+%     \end{itemize}
+%   \end{itemize}
+
+% \end{frame}
+
+% \begin{frame}{Bayesian approach}
+
+%   \begin{itemize}
+%   \item Benefits of Bayesian approach
+%     \begin{itemize}
+%     \item integrate over uncertainties to focus to interesting parts
+%     \item use relevant prior information
+%     \item hierarchical models
+%     \item model checking and evaluation
+%     \end{itemize}
+%   \end{itemize}
+% \end{frame}
+
+% \begin{frame}{Computation}
+
+%   We need to be able to compute expectations with respect to posterior
+%   distribution ${\color{blue}p(\theta|y)}$
+%   \begin{align*}
+%     \E_{\color{blue}{\theta|y}}\left[ g(\theta) \right] = \int {\color{blue}p(\theta|y)}g(\theta) d\theta
+%   \end{align*}
+  
+%   \begin{itemize}
+%   \item Analytic
+%     \begin{itemize}
+%     \item only for very simple models
+%     \end{itemize}
+%   \item Monte Carlo, Markov chain Monte Carlo
+%     \begin{itemize}
+%     \item generic
+%     \end{itemize}
+%   \item Distributional approximations
+%     \begin{itemize}
+%     \item e.g. Laplace, variational, expectation propagation
+%     \item less generic, but can be much faster with sufficient accuracy
+%     \end{itemize}
+%   \end{itemize}
+% \end{frame}
+
+% \begin{frame}
+  
+%   \frametitle{Probabilistic programming}
+  
+%   \begin{center}
+%    \vspace{-\baselineskip}
+%     \includegraphics[width=5cm]{wide_ensemble.png}\\
+%    \vspace{2\baselineskip}
+%   {\large Enables agile workflow for developing probabilistic models}\\
+%    \vspace{\baselineskip}
+%    language \, -- \,
+%    automated inference \, -- \,
+%    diagnostics
+%    \vspace{\baselineskip}
+%   \vfill
+%     \includegraphics[width=1.5cm]{stan_logo_wide.png}\\
+%     \url{mc-stan.org}
+%   \end{center}
+
+% \end{frame}
+
+% \begin{frame}{Probabilistic programming}
+
+%   \begin{itemize}
+%     \item Wikipedia ``A probabilistic programming language (PPL) is a
+%       programming language designed to describe probabilistic models
+%       and then perform inference in those models''
+%       \pause
+%     \item Specifically designed language and software
+%       \begin{itemize}
+%       \item cleaner notation for probabilistic models
+%       \item more efficient inference
+%       \item support for workflow
+%       \end{itemize}
+%     \end{itemize}
+% \end{frame}
+
+% \begin{frame}[fragile]
+%   \frametitle{Binomial model for treatment/control comparison}
+
+%   \begin{itemize}
+%   \item Two groups of patients: treatment and control
+%     \begin{itemize}
+%     \item Binary outcome
+%     \item Is the treatment useful?
+%     \end{itemize}
+%   \end{itemize}
+
+% \end{frame}
+  
+% \begin{frame}[fragile]
+%   \frametitle{Binomial model for treatment/control comparison}
+% % data {
+% %   int<lower=0> N1;
+% %   int<lower=0> y1;
+% %   int<lower=0> N2;
+% %   int<lower=0> y2;
+% % }
+%   {\footnotesize
+%   \begin{lstlisting}
+% parameters {
+%   real<lower=0,upper=1> theta1;
+%   real<lower=0,upper=1> theta2;
+% }
+% model {
+%   theta1 ~ beta(1, 1);
+%   theta2 ~ beta(1, 1);
+%   y1 ~ binomial(N1, theta1);
+%   y2 ~ binomial(N2, theta2);
+% }
+%   \end{lstlisting}
+% }
+% % generated quantities {
+% %   real oddsratio;
+% %   oddsratio = (theta2/(1-theta2))/(theta1/(1-theta1));
+% % }
+% \end{frame} 
+
+% \begin{frame}[fragile]
+%   \frametitle{Binomial model for treatment/control comparison}
+
+%   RStanARM
+%   {\scriptsize
+%   \begin{lstlisting}
+%     fit_bin2 <- stan_glm(y/N ~ grp2, family = binomial(),
+%                          data = d_bin2, weights = N)
+%   \end{lstlisting}
+% }
+% \end{frame} 
+
+% \begin{frame}{Modeling nature}
+
+%   \begin{itemize}
+%   \item Drop a ball from different heights and measure time
+%     \pause
+%     \begin{itemize}
+%     \item Newton
+%     \item air resistance, air pressure, shape and surface structure of the ball
+%     \item relativity
+%     \end{itemize}
+%     \pause
+%   \item Taking into account the accuracy of the measurements, how
+%     accurate model is needed?
+%     \pause
+%     \begin{itemize}
+%     \item often simple models are adequate and useful
+%     \item \emph{All models are wrong, but some of them are useful},
+%       George P. Box
+%     \end{itemize}
+%   \end{itemize}
+
+% \end{frame}
 
 \begin{frame}{Reminder: Uncertainty and probabilistic modeling}
 
@@ -619,23 +888,23 @@ model {
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Rest of the course}
+% \begin{frame}{Rest of the course}
 
-  \begin{itemize}
-  \item Basic models which can be used as building blocks
-    \vspace{\baselineskip}
-  \item Basic computation
-    \vspace{\baselineskip}
-  \item Typical simple scientific data analysis cases
-     \begin{itemize}
-     \item e.g. comparison of treatments
-     \end{itemize}
-    \vspace{\baselineskip}
-  \item Presentation of the results
-  \end{itemize}
-\end{frame}
+%   \begin{itemize}
+%   \item Basic models which can be used as building blocks
+%     \vspace{\baselineskip}
+%   \item Basic computation
+%     \vspace{\baselineskip}
+%   \item Typical simple scientific data analysis cases
+%      \begin{itemize}
+%      \item e.g. comparison of treatments
+%      \end{itemize}
+%     \vspace{\baselineskip}
+%   \item Presentation of the results
+%   \end{itemize}
+% \end{frame}
 
-\begin{frame}{Some important terms}
+\begin{frame}{Pre-requisites}
   
   \begin{itemize}
   \item[-] probability
