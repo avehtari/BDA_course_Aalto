@@ -11,7 +11,7 @@ editor: visual
 
 In addition to R-markdown, [Quarto](https://quarto.org/) can be used to write the assignment reports. This template contains essentially the same information as the [R-markdown template](https://github.com/avehtari/BDA_course_Aalto/blob/master/templates/assignment_template.rmd) but we illustrate how you can use Quarto for the assignments.
 
-Some useful resources to get started with Quarto:
+Some useful resources to get started with Quarto (also an example of a list):
 
 -   [Getting started with Quarto and Rstudio from the official webpage](https://quarto.org/docs/get-started/hello/rstudio.html)
 -   [A comprehensive user guide from the official webpage](https://quarto.org/docs/guide/)
@@ -92,8 +92,8 @@ Include plots, with a specific width and height for the figure. We can also add 
 ```{r}
 #| label: fig-drowning1
 #| fig-cap: Number of drownings per year.
-#| fig.height: 3
-#| fig.width: 5
+#| fig-height: 3
+#| fig-width: 5
 data("drowning") # Access the data in aaltobda package
 plot(drowning$year, drowning$drownings)
 ```
@@ -103,8 +103,8 @@ Or using `qplot()` from `ggplot2` package:
 ```{r}
 #| label: fig-drowning2
 #| fig-cap: Number of drownings per year with ggplot2.
-#| fig.height: 3
-#| fig.width: 5
+#| fig-height: 3
+#| fig-width: 5
 library(ggplot2)
 # see themes at https://ggplot2.tidyverse.org/reference/ggtheme.html
 theme_set(theme_classic())
@@ -179,9 +179,9 @@ You can use `knitr::kable` to add formatted tables. Captioning and labeling work
 
 ```{r}
 #| label: tbl-drownings
-#| tbl-cap: "First five rows of the drowning data."
-knitr::kable(head(drowning))
-
+#| tbl-cap: "First six rows of the drowning data."
+library(knitr)
+kable(head(drowning), col.names=c("Year","Drownings"))
 ```
 
 Compare this to raw output:
@@ -189,7 +189,14 @@ Compare this to raw output:
 ```{r}
 # Raw output
 head(drowning)
+```
 
+It is also possible to control the number of digits, which is helpful to improve readability:
+
+```{r}
+#| label: tbl-mtcars
+#| tbl-cap: "First five rows of the mtcars data."
+kable(head(mtcars), digits=1)
 ```
 
 Refer the table in the usual way: see @tbl-drownings.
