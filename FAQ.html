@@ -143,11 +143,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -351,7 +355,7 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Bayesian Data Analysis course - FAQ</h1>
-<h4 class="date">Page updated: 2022-08-25</h4>
+<h4 class="date">Page updated: 2022-09-07</h4>
 
 </div>
 
@@ -393,7 +397,7 @@ div.tocify {
 <ul>
 <li><a href="https://scicomp.aalto.fi/aalto/jupyterhub/">Information about Aalto JupyterHub</a></li>
 <li>Go to <a href="https://jupyter.cs.aalto.fi">jupyter.cs.aalto.fi</a></li>
-<li>Choose <code>R: General use (JupyterLab)</code></li>
+<li>Choose <code>CS-E5710 - Bayesian Data Analysis (2022) -r-ubuntu:5.0.6-dev14-bayes</code></li>
 <li>In the Launcher click <code>RStudio</code></li>
 <li>In the RStudio Files pane (bottom right) you can create folders for your work and upload files from your computer to the server
 <ul>
