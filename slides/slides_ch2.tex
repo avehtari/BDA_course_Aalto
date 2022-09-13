@@ -124,12 +124,31 @@
   \item glance through Poisson and exponential
   \end{itemize}
 \item 2.7 glance through this example, which illustrates benefits of prior information, no need to read all the details (it's quite long example)
-\item 2.8 Noninformative and weakly informative priors
+\item 2.8--2.9 Noninformative and weakly informative priors
 \end{itemize}
 
 \end{frame}
 
-%%%%
+ \begin{frame}{Outline of the lecture 2}
+
+   \begin{itemize}
+   \item Binomial model is the simplest model
+     \begin{itemize}
+     \item useful to discuss likelihood, posterior, prior,
+       integration, posterior summaries
+     \item very commonly used as a building block
+     \item examples:
+       \begin{itemize}
+       \item coin tossing
+       \item chips from bag
+       \item covid tests and vaccines
+       \item classification / logistic regression
+       \end{itemize}
+     \end{itemize}
+   \end{itemize}
+   
+ \end{frame}
+ %%%% 
 
 %only in video
 \begin{frame}{Binomial: known $\theta$}
@@ -199,72 +218,126 @@
 {\hspace{-18mm}\scriptsize    $p({\color{red}y}|n=10,\theta=0.9)$:\, 0.00 0.00 0.00 0.00 0.00 0.00 0.01 0.06 0.19 0.39 0.35}}
     \only<2>{\includegraphics[width=9cm]{dbinom10.pdf}\\
       \vspace{-0.6\baselineskip}
-{\hspace{-22mm}\scriptsize    $p({\color{red}y}=6|n=10,\theta=0.5)$:\, 0.00 0.01 0.04 0.12 0.21 0.25 \textbf{0.21} 0.12 0.04 0.01 0.00}}
+{\hspace{-22mm}\scriptsize    $p({\color{red}y=6}|n=10,\theta=0.5)$:\, 0.00 0.01 0.04 0.12 0.21 0.25 \textbf{0.21} 0.12 0.04 0.01 0.00}}
   \only<3>{\includegraphics[width=9cm]{dbinom10b.pdf}\\
       \vspace{-0.6\baselineskip}
-{\hspace{-22mm}\scriptsize    $p({\color{red}y}=6|n=10,\theta=0.9)$:\, 0.00 0.00 0.00 0.00 0.00 0.00 \textbf{0.01} 0.06 0.19 0.39 0.35}}
+{\hspace{-22mm}\scriptsize    $p({\color{red}y=6}|n=10,\theta=0.9)$:\, 0.00 0.00 0.00 0.00 0.00 0.00 \textbf{0.01} 0.06 0.19 0.39 0.35}}
 \end{center}
 \end{frame}
 
-\begin{frame}{Binomial: unknown $\theta$}
+\begin{frame}
+  \frametitle{Binomial: unknown $\theta$}
 
   \begin{itemize}
-  \item Posterior with Bayes rule (function of $\theta$, continuous)
+  \item {\color{blue}Likelihood} (function of {\color{red}$\theta$}, continuous)
+    \begin{align*}
+      p(y|{\color{red}\theta},n) = \binom{n}{y} {\color{red}\theta}^y(1-{\color{red}\theta})^{n-y}
+    \end{align*}
+  \end{itemize}
+
+  \begin{center}
+    \only<1>{\includegraphics[width=9cm]{lbinom10a.pdf}\\
+      \vspace{-0.6\baselineskip}
+{\hspace{-12mm}\scriptsize $p(y=6|n=10,{\color{red}\theta})$:\, 0.00\, 0.00\, 0.01\,\, 0.04\, 0.11\, \textbf{0.21}\, 0.25\, 0.20\, 0.09\, \textbf{0.01}\,\, 0.00}}
+    \only<2>{\includegraphics[width=9cm]{lbinom10b.pdf}\\
+      \vspace{-0.6\baselineskip}
+{\hspace{-14mm}\scriptsize we can compute the value for any ${\color{red}\theta}$, but in practice can evaluate only finite times}}
+    \only<3>{\includegraphics[width=9cm]{lbinom10c.pdf}\\
+      \vspace{-0.6\baselineskip}
+      \only<3>{\hspace{-14mm}\scriptsize $\,$ with sufficient many evaluations, linearly interpolated plot looks smooth}}
+    \only<4-6>{\includegraphics[width=9cm]{lbinom10d.pdf}\\
+      \vspace{-0.6\baselineskip}
+      \only<4>{\hspace{-14mm}\scriptsize $\,$ looks smooth, and we'll get back to later to computational cost issues}
+      \only<5>{\hspace{-14mm}\scriptsize $\,$ likelihood function describes uncertainty, but is not normalized distribution}
+      \only<6>{\scriptsize\texttt{integrate(function({\color{red}theta}) dbinom(6, 10, {\color{red}theta}), 0, 1)} $\approx 0.09 \neq 1$ }}
+\end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Binomial: unknown $\theta$}
+
+  \begin{itemize}
+  \item {\color{blue}Posterior} with Bayes rule (function of ${\color{red}\theta}$, continuous)
     \begin{equation*}
-      p(\theta|y,n,M)=\frac{p(y|\theta,n,M)p(\theta|n,M)}{p(y|n,M)}
+      p({\color{red}\theta}|y,n)=\frac{p(y|{\color{red}\theta},n)p({\color{red}\theta}|n)}{p(y|n)}
     \end{equation*}
     \pause
-    where $p(y|n,M)=\int p(y|\theta,n,M)p(\theta|n,M) d\theta$
+    where $p(y|n)=\int p(y|{\color{red}\theta},n)p({\color{red}\theta}|n) d{\color{red}\theta}$
   \item<3-> Start with uniform prior
     \begin{align*}
-      p(\theta|n,M)=p(\theta|M)=1,\, \text{when}\,\, 0\leq\theta\leq 1
+      p({\color{red}\theta}|n)=p({\color{red}\theta}|M)=1,\, \text{when}\,\, 0\leq{\color{red}\theta}\leq 1
     \end{align*}
   \item<4-> Then
     \begin{align*}
-      p(\theta|y,n,M)&=\frac{p(y|\theta,n,M)}{p(y|n,M)} 
-      =\frac{\binom{n}{y} \theta^y(1-\theta)^{n-y}}{\int_0^1
-        \binom{n}{y} \theta^y(1-\theta)^{n-y} d\theta} \\
-        &=\frac{1}{Z}\theta^y(1-\theta)^{n-y}
+      p({\color{red}\theta}|y,n)&=\frac{p(y|{\color{red}\theta},n)}{p(y|n)} 
+      =\frac{\binom{n}{y} {\color{red}\theta}^y(1-{\color{red}\theta})^{n-y}}{\int_0^1
+        \binom{n}{y} {\color{red}\theta}^y(1-{\color{red}\theta})^{n-y} d{\color{red}\theta}} \\
+        &=\frac{1}{Z}{\color{red}\theta}^y(1-{\color{red}\theta})^{n-y}
     \end{align*}
   \end{itemize}
 
 \end{frame}
 
-\begin{frame}{Binomial: unknown $\theta$}
+\begin{frame}
+  \frametitle{Binomial: unknown $\theta$}
 
   \begin{itemize}
   \item Normalization term $Z$ (constant given $y$)
     \begin{equation*}
-      Z= \int_0^1 \theta^y(1-\theta)^{n-y} d\theta = \frac{\Gamma(y+1)\Gamma(n-y+1)}{\Gamma(n+2)}
+      Z=p(y|n)= \int_0^1 {\color{red}\theta}^y(1-{\color{red}\theta})^{n-y} d{\color{red}\theta} = \frac{\Gamma(y+1)\Gamma(n-y+1)}{\Gamma(n+2)}
     \end{equation*}
-  \item Normalisation term has \emph{Beta} function form 
-    \begin{itemize}
-    \item when integrated over $(0,1)$
-      the result can presented with Gamma functions
-    \item with integers  $\Gamma(n)=(n-1)!$
-    \item for large integers even this is challenging and usually
-      $\log \Gamma(\cdot)$ is computed instead of $\Gamma(\cdot)$
-    \end{itemize}
+  \item<2-> Evaluate with $y=6, n=10$\\
+    {\scriptsize\texttt{y<-6;n<-10;\\integrate(function(theta) theta\^{}y*(1-theta)\^{}(n-y), 0, 1)} $\approx 0.0004329$}\\
+    \uncover<2->{{\scriptsize\texttt{gamma(6+1)*gamma(10-6+1)/gamma(10+2)} $\approx 0.0004329$}}\\
+    \uncover<3->{\scriptsize usually computed via $\log \Gamma(\cdot)$ due to the
+      limitations of floating point presentation}
+  % \item<3-> Normalisation term has \emph{Beta} function form 
+  %   \begin{itemize}
+  %   \item when integrated over $(0,1)$
+  %     the result can presented with Gamma functions
+  %   \item with integers  $\Gamma(n)=(n-1)!$
+  %   \item for large integers even this is challenging and usually
+  %     $\log \Gamma(\cdot)$ is computed instead of $\Gamma(\cdot)$
+  %   \end{itemize}
   \end{itemize}
 
 \end{frame}
+
+% \begin{frame}{Binomial: unknown $\theta$}
+
+%   \begin{itemize}
+%   \item Normalization term $Z$ (constant given $y$)
+%     \begin{equation*}
+%       Z= \int_0^1 \theta^y(1-\theta)^{n-y} d\theta = \frac{\Gamma(y+1)\Gamma(n-y+1)}{\Gamma(n+2)}
+%     \end{equation*}
+%   \item Normalisation term has \emph{Beta} function form 
+%     \begin{itemize}
+%     \item when integrated over $(0,1)$
+%       the result can presented with Gamma functions
+%     \item with integers  $\Gamma(n)=(n-1)!$
+%     \item for large integers even this is challenging and usually
+%       $\log \Gamma(\cdot)$ is computed instead of $\Gamma(\cdot)$
+%     \end{itemize}
+%   \end{itemize}
+
+% \end{frame}
 
 \begin{frame}{Binomial: unknown $\theta$}
 
   \begin{itemize}
   \item Posterior is
     \begin{align*}
-      p(\theta|y,n,M) = \frac{\Gamma(n+2)}{\Gamma(y+1)\Gamma(n-y+1)}\theta^y(1-\theta)^{n-y},
+      p(\theta|y,n) = \frac{\Gamma(n+2)}{\Gamma(y+1)\Gamma(n-y+1)}\theta^y(1-\theta)^{n-y},
     \end{align*}
-    \only<2>{
+    \uncover<2>{
     which is called Beta distribution
     \begin{align*}
       \theta|y,n \sim \text{Beta}(y+1,n-y+1)
     \end{align*}}
   \end{itemize}
-  \vspace{0.5\baselineskip}
+  %\vspace{0.5\baselineskip}
   \begin{center}
-    \only<2>{\includegraphics[width=9cm]{dbbeta10c.pdf}}
+    \uncover<2>{\includegraphics[width=9cm]{dbbeta10c.pdf}}
   \end{center}
 \end{frame}
 
@@ -290,7 +363,7 @@
 
 \end{frame}
 
-\begin{frame}{Binomial: computation*}
+\begin{frame}{Binomial: computation}
 
   \begin{itemize}
   \item Beta CDF not trivial to compute
@@ -301,6 +374,10 @@
   \end{itemize}
   % Lagandre, Gamma function
 
+  \begin{center}
+    {\includegraphics[width=9cm]{dbbeta10c.pdf}}
+  \end{center}
+  
 \end{frame}
 % Beta distribution named by C. Gini 1911
 
@@ -318,13 +395,37 @@
 \end{frame}
 
 %%%% predictive distribution
+\begin{frame}
+  \frametitle{Binomial: unknown $\theta$}
+
+  Sometimes conditioning on the model $M$ is explicitly shown
+  
+  \begin{itemize}
+  \item {\color{blue}Posterior} with Bayes rule (function of $\theta$, continuous)
+    \begin{equation*}
+      p(\theta|y,n,M)=\frac{p(y|\theta,n,M)p(\theta|n,M)}{p(y|n,M)}
+    \end{equation*}
+    where $p(y|n,M)=\int p(y|\theta,n,M)p(\theta|n,M) d\theta$
+    \vspace{0.5\baselineskip}
+    \uncover<2->{\begin{itemize}
+    \item makes it more clear that likelihood and prior are both part
+      of the model
+    \item makes it more clear that there is no absolute probability
+      for $p(y|n)$, but it depends on the model $M$
+    \item in case of two models, we can evaluate marginal likelihoods
+      $p(y|n,M_1)$ and $p(y|n,M_2)$ (more in Ch 7)
+    \item<3-> usually dropped to make the notation more concise
+    \end{itemize}}
+  \end{itemize}
+
+\end{frame}
 
 \begin{frame}{Predictive distribution -- Effect of integration}
 
   \begin{itemize}
   \item Predictive distribution for new $\tilde{y}$ (discrete)
     \begin{align*}
-      \uncover<2->{p(\tilde{y}=1|y,n,M)} & \uncover<2->{= \int_0^1} p(\tilde{y}=1|\theta,y,n,M) \uncover<2->{p(\theta|y,n,M)d\theta}\\
+      \uncover<2->{p({\color{red}\tilde{y}=1}|y,n,M)} & \uncover<2->{= \int_0^1} p({\color{red}\tilde{y}=1}|\theta,y,n,M) \uncover<2->{p(\theta|y,n,M)d\theta}\\
       &\uncover<3->{= \int_0^1 \theta p(\theta|y,n,M)d\theta}\\
       &\uncover<4->{= \E[\theta|y]}
     \end{align*}
@@ -359,7 +460,7 @@
   \begin{itemize}
   \item {\color{blue} Prior predictive} distribution for new $\tilde{y}$ (discrete)
     \begin{align*}
-      p(\tilde{y}=1|M) &= \int_0^1 p(\tilde{y}=1|\theta,y,n,M){\color{blue}p(\theta|M)}d\theta
+      p(\tilde{y}=1|M) &= \int_0^1 p(\tilde{y}=1|\theta,M){\color{blue}p(\theta|M)}d\theta
     \end{align*}
   \item {\color{red} Posterior predictive} distribution for new $\tilde{y}$ (discrete)
     \begin{align*}
@@ -720,14 +821,14 @@ blue-green algae levels.
 \begin{frame}{Normal / Gaussian}
 
   \begin{itemize}
-  \item Observations $y$ real valued
+  \item Observations ${\color{red}y}$ real valued
   \item Mean $\theta$ and variance $\sigma^2$ (or deviation $\sigma$)\\
-    (first assume $\sigma^2$ known)
+    This week assume $\sigma^2$ known (preparing for the next week)
   \end{itemize}
   \vskip -2mm
   \begin{align*}
-    p(y|\theta)&=\frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}(y-\theta)^2\right)\\
-    y & \sim \N(\theta,\sigma^2)
+    p({\color{red}y}|\theta)&=\frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}({\color{red}y}-\theta)^2\right)\\
+    {\color{red}y} & \sim \N(\theta,\sigma^2)
   \end{align*}
 
   \begin{center}
@@ -752,14 +853,16 @@ blue-green algae levels.
 
   \begin{itemize}
   \item De Moivre, Laplace, Gauss, Chebysev, Liapounov, Markov, et al.
-  \item Given certain conditions sum (and mean) of random variables
-    approach Gaussian distribution as d $n \rightarrow \infty$
+  \item Given certain conditions, distribution of sum (and mean) of
+    random variables approach Gaussian distribution as
+    $n \rightarrow \infty$
   \item Problems
     \begin{itemize}
-    \item does not hold for all distributions, e.g., Cauchy
-    \item may require large $n$,\\ e.g.
+    \item does not hold for distributions with infinite variance,
+      e.g., Cauchy
+    \item<2-> may require large $n$,\\ e.g.
       Binomial, when $\theta$ close to $0$ or $1$
-    \item does not hold if one the variables has much larger scale
+    \item<3-> does not hold if one the variables has much larger scale
     \end{itemize}
   \end{itemize}
 
@@ -883,16 +986,30 @@ blue-green algae levels.
 
 \end{frame}
 
- % \begin{frame}
- %   \frametitle{Some other one parameter models}
+ \begin{frame}
+   \frametitle{Normal model}
 
- %   \begin{itemize}
- %   \item Poisson
- %   \item Exponential
- %   \item Cauchy
- %   \end{itemize}
+   \begin{itemize}
+   \item Gets more interesting when both mean and variance are unknown
+     \begin{itemize}
+     \item next week
+     \end{itemize}
+   \item<2-> The mean can be also a function of covariates
+     \begin{itemize}
+     \item normal linear regression
+     \end{itemize}
+   \end{itemize}
+ \end{frame}
+
+ \begin{frame}
+   \frametitle{Some other one parameter models}
+
+   \begin{itemize}
+   \item Poisson, useful for count data (e.g. in epidemiology)
+   \item Exponential, useful for time to an event (e.g. particle decay)
+   \end{itemize}
    
- % \end{frame}
+ \end{frame}
 
 
 \end{document}
