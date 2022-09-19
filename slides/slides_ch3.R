@@ -8,6 +8,7 @@
 #+ setup, message=FALSE, error=FALSE, warning=FALSE
 library(dplyr)
 library(tidyr)
+library(purrr)
 library(rstanarm)
 options(mc.cores = parallel::detectCores())
 library(ggplot2)
@@ -116,7 +117,7 @@ set.seed(2141)
 y <- sigma*rnorm(n)
 fake <- data.frame(y)
 
-#' **Fit Gaussian**
+#' **Fit normal**
 #+ results='hide'
 fit_1 <- stan_glm(y ~ 1, data = fake, seed=2141)
 #+
@@ -142,15 +143,15 @@ p1 <- ggplot(fake, aes(x = y, y = 0)) +
 p1
 ggsave('figs/fakeg_data.pdf', width=6, height=4)
 
-#' **Plot Gaussian with posterior mean parameters**
+#' **Plot normal with posterior mean parameters**
 p2 <- p1 +
     stat_function(fun = dnorm, n = 101,
                   args = list(mean = mean(sims[,1]), sd = mean(sims[,2]))) +
-  labs(title = "Gaussian fit with posterior mean", y="density") 
+  labs(title = "Normal fit with posterior mean", y="density") 
 p2
 ggsave('figs/fakeg_postmean.pdf', width=6, height=4)
 
-#' **Plot Gaussian with posterior mean parameters + mean and sd**
+#' **Plot normal with posterior mean parameters + mean and sd**
 muhat <- mean(sims[,1])
 sigmahat <- mean(sims[,2])
 p2mu <- p2 +
@@ -179,7 +180,7 @@ postdf <- pmap_df(draws, ~ data_frame(x = seq(-4, 4, length.out = 101), id=..3,
 p2s <- p1 + 
     geom_line(data=postdf, aes(group = id, x = x, y = density),
               linetype=1, color="blue", alpha=0.2) +
-    labs(title = "Gaussians with posterior draw parameters", y="density") 
+    labs(title = "Normals with posterior draw parameters", y="density") 
 p2s
 ggsave('figs/fakeg_postgaussiandraws.pdf', width=6, height=4)
 
@@ -229,6 +230,7 @@ dsinvchisq <- function(x, nu, s2){
 
 #' Sample 1000 random numbers from p(sigma2|y)
 ns <- 1000
+set.seed(1)
 sigma2  <- rsinvchisq(ns, n-1, s2)
 
 #' Sample from p(mu|sigma2,y)
@@ -265,15 +267,15 @@ p1 <- ggplot(data.frame(y), aes(x = y, y = 0)) +
 p1
 ggsave('figs/fake3_data.pdf', width=6, height=4)
 
-#' **Plot Gaussian with posterior mean parameters**
+#' **Plot normal with posterior mean parameters**
 p2 <- p1 +
     stat_function(fun = dnorm, n = 101,
                   args = list(mean = my, sd = sigmahat)) +
-  labs(title = "Gaussian fit with posterior mean", y="density") 
+  labs(title = "Normal fit with posterior mean", y="density") 
 p2
 ggsave('figs/fake3_postmean.pdf', width=6, height=4)
 
-#' **Plot Gaussian with posterior mean parameters + mean and sd**
+#' **Plot normal with posterior mean parameters + mean and sd**
 p2mu <- p2 +
     geom_segment(aes(x=my, xend=my, y=0, yend=dnorm(0, 0, sigmahat)),
                  linetype=2) +
@@ -298,7 +300,7 @@ postdf <- pmap_df(draws[1:100,], ~ data_frame(x = xynew, id=..3,
 p2s <- p1 + 
     geom_line(data=postdf, aes(group = id, x = x, y = density),
               linetype=1, color="blue", alpha=0.2) +
-    labs(title = "Gaussians with posterior draw parameters", y="density") 
+    labs(title = "Normals with posterior draw parameters", y="density") 
 p2s
 ggsave('figs/fake3_postgaussiandraws.pdf', width=6, height=4)
 
@@ -553,21 +555,21 @@ pred1 <- ggplot() +
 pred1
 ggsave('figs/fake3_pred1.pdf', width=4, height=4)
 
-#' Create a plot of the predicitive distribution as mixture of Gaussians
+#' Create a plot of the predicitive distribution as mixture of normals
 pred1s <- pred1 + 
   geom_line(data=postdf, aes(group = id, x = x, y = density),
            linetype=1, color='blue', alpha=0.2)
 pred1s
 ggsave('figs/fake3_pred1s.pdf', width=4, height=4)
 
-#' Create a plot of the predicitive distribution as mixture of Gaussians
+#' Create a plot of the predicitive distribution as mixture of normals
 #' and draw from each
 pred1ss <- pred1s +
     geom_point(data = dfy, aes(ynew, p, color = '1'), alpha=0.2, shape=16, size=1)
 pred1ss
 ggsave('figs/fake3_pred1ss.pdf', width=4, height=4)
 
-#' Create a plot of the predicitive distribution as mixture of Gaussians,
+#' Create a plot of the predicitive distribution as mixture of normals,
 #' draw from each, and the exact predicitive distribution
 pred1ss +
   geom_line(data = dfp, aes(xynew, draw, color = '3'), size=2) +
@@ -682,10 +684,10 @@ pb1 <- ggplot(df1, aes(x=x, y=y)) +
 pb1
 ggsave('figs/bioassay_data.pdf', width=6, height=4)
 
-#' Fit Gaussian regression (a wrong model)
+#' Fit normal regression (a wrong model)
 fit0 <- stan_glm(y ~ x, data=df1)
 
-#' Plot Gaussian regression
+#' Plot normal regression
 pb2 <- pb1 +
     geom_abline(intercept = coef(fit0)[1], slope = coef(fit0)[2],
                 linetype='dashed') +
@@ -693,7 +695,7 @@ pb2 <- pb1 +
 pb2
 ggsave('figs/bioassay_fitlin.pdf', width=6, height=4)
 
-#' Plot Gaussian regression with extended range
+#' Plot normal regression with extended range
 pb3 <- pb2 +
     scale_x_continuous(minor_breaks=NULL, limits=c(-1.5,1.5)) +
     scale_y_continuous(breaks = -1:6, minor_breaks=NULL, limits=c(-.5,5.5)) +
@@ -877,7 +879,7 @@ logl <- function(df, a, b)
 
 #' Calculate likelihoods: apply logl function for each observation
 #' ie. each row of data frame of x, n and y
-pc <- apply(df1, 1, logl, cA, cB) %>%
+p <- apply(df1, 1, logl, cA, cB) %>%
   # sum the log likelihoods of observations
   # and exponentiate to get the joint likelihood
     rowSums() %>% exp()
@@ -885,8 +887,8 @@ pc <- apply(df1, 1, logl, cA, cB) %>%
 #' Plot posterior density evaluated in a coarser grid
 xl <- c(-1, 5)
 yl <- c(-2, 30)
-posc <- ggplot(data = data.frame(cA ,cB, pc), aes(cA, cB)) +
-  geom_raster(aes(fill = pc), interpolate = F) +
+posc <- ggplot(data = data.frame(cA ,cB, p), aes(cA, cB)) +
+  geom_raster(aes(fill = p), interpolate = F) +
   coord_cartesian(xlim = xl, ylim = yl) +
   labs(title = 'Posterior density evaluated in a grid', x = TeX('$\\alpha$'), y = TeX('$\\beta$')) +
     scale_fill_gradient(low = 'white', high = 'red')
