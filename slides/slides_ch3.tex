@@ -61,6 +61,7 @@
 \def\z{{\mathbf z}}
 
 \DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\I}{I}
 \DeclareMathOperator{\Var}{Var}
 \DeclareMathOperator{\var}{var}
 \DeclareMathOperator{\Sd}{Sd}
@@ -198,10 +199,10 @@
     \includegraphics[width=10cm]{norm1d_2.pdf}}
   \only<6-7>{Here evaluated in grid with bin width 0.5 \uncover<1>{$\frac{1}{\sqrt{2\pi}\sigma}$}
     \includegraphics[width=10cm]{norm1d_3.pdf}
-    \uncover<7>{$\E(\theta) \approx \sum_s^S \theta^{(s)} w_s \approx 1,\text{ where } w_s=0.5 p(\theta)$}}
+    \uncover<7>{$\E(\theta) = \int \theta p(\theta) d\theta \approx \sum_s^S \theta^{(s)} w_s \approx 1,\text{ where } w_s=0.5 p(\theta)$}}
   \only<8>{Here evaluated in grid with bin width 0.5 \uncover<1>{$\frac{1}{\sqrt{2\pi}\sigma}$}
     \includegraphics[width=10cm]{norm1d_3b.pdf}
-    $p(\theta \leq 0) \approx \sum_s^S I(\theta^{(s)} \leq 0) w_s \approx 0.22$}
+    $p(\theta \leq 0) = \int_{\infty}^0 p(\theta) d\theta \approx \sum_s^S \I(\theta^{(s)} \leq 0) w_s \approx 0.22$}
   \only<9>{Here evaluated in grid with bin width 0.1 \uncover<1>{$\frac{1}{\sqrt{2\pi}\sigma}$}
     \includegraphics[width=10cm]{norm1d_4.pdf}}
   \only<10>{Histogram of 200 random draws, bin width 0.5 \uncover<1>{$\frac{1}{\sqrt{2\pi}\sigma}$}
@@ -217,7 +218,7 @@
   }
   \only<16>{Histogram of 200 random draws, bin width 0 \uncover<1>{$\frac{1}{\sqrt{2\pi}\sigma}$}
     \includegraphics[width=10cm]{norm1d_7b.pdf}
-    $p(\theta \leq 0) \approx \frac{1}{S}\sum_s^S I(\theta^{(s)} \leq 0) \approx 0.14$}
+    $p(\theta \leq 0) \approx \frac{1}{S}\sum_s^S \I(\theta^{(s)} \leq 0) \approx 0.14$}
 
 \end{frame}
 
@@ -225,12 +226,16 @@
 \begin{frame}{Monte Carlo and posterior draws}
   
   \begin{itemize}
-  \item $\theta^{(s)}$ draws from $p(\theta \mid y)$ can be used
+  \item ${\color{blue}\theta^{(s)}}$ draws from $p(\theta \mid y)$ can be used
     \begin{itemize}
     \item<1-> for visualization
     \item<2-> to approximate expectations (integrals)
       \begin{align*}
-        E_{p(\theta \mid y)}[\theta] = \int \theta p(\theta \mid y) \approx \frac{1}{S}\sum_{s=1}^{S} \theta^{(s)}
+        E_{p(\theta \mid y)}[{\color{blue}\theta}] = \int {\color{blue}\theta} p(\theta \mid y) \approx \frac{1}{S}\sum_{s=1}^{S} {\color{blue}\theta^{(s)}}
+      \end{align*}
+    \item<3-> easy to approximate expectations of functions
+      \begin{align*}
+        E_{p(\theta \mid y)}[{\color{blue}g(\theta)}] = \int {\color{blue}g(\theta)} p(\theta \mid y) \approx \frac{1}{S}\sum_{s=1}^{S} {\color{blue}g(\theta^{(s)})}
       \end{align*}
     \end{itemize}
   \end{itemize}
@@ -708,6 +713,9 @@
     \begin{itemize}
     \item easy to sample from the two distributions, and obtain
       samples of the differences
+      \begin{align*}
+        \delta^{(s)} = \mu_1^{(s)} - \mu_2^{(s)}
+      \end{align*}
     \end{itemize}
   \end{itemize}
   
