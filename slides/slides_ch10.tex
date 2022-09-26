@@ -113,8 +113,8 @@
 \item 10.1 Numerical integration (overview)
 \item 10.2 Distributional approximations (overview, more in Chapter 4 and 13)
 \item 10.3 Direct simulation and rejection sampling (overview)
-\item 10.4 Importance sampling (used in PSIS-LOO discussed later)
-\item 10.5 How many simulation draws are needed? (Ex 10.1 and 10.2)
+\item 10.4 \textbf{Importance sampling} (used in PSIS-LOO discussed later)
+\item 10.5 \textbf{How many simulation draws are needed?} (Ex 10.1 and 10.2)
   \begin{itemize}
   \item see chapter notes and extra slides for how many significant
     digits to report
@@ -401,6 +401,9 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
     %   i.e. Monte Carlo error is very small (for the expectation)
     %   \pause
     \item See BDA3 Ch 4 for counter-examples for asymptotic normality
+      \pause
+    \item $\sigma_\theta/\sqrt{S}$ is called Monte Carlo standard
+      error (MCSE)
     \end{itemize}
 \end{itemize}
 
@@ -425,7 +428,7 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
     \only<2>{\includegraphics[width=8cm]{kilpis_phist100.pdf}}
     \only<3>{\includegraphics[width=8cm]{kilpis_phist100_mcse1a.pdf}}
     \only<4>{\includegraphics[width=8cm]{kilpis_phist100_mcse1b.pdf}}
-    \only<3>{$\sigma_\theta\approx 0.83,\, \text{MCSE} \approx 0.083,$\\ in repeated sampling we may expect mean estimate to vary within (1.8, 2.1) (90\% interval)}
+    \only<3>{$\sigma_\theta\approx 0.83,\, \text{MCSE} = \sigma_\theta/\sqrt{S} \approx 0.083,$\\ in repeated sampling we may expect mean estimate to vary within (1.8, 2.1) (90\% interval)}
     \only<4>{$\sigma_\theta\approx 0.83,\, \text{MCSE} \approx 0.026,$\\ in repeated sampling we may expect mean estimate to vary within (1.9, 2.0) (90\% interval)}
 %     \uncover<3-4>{\vspace{0.5\baselineskip}\color{gray} $\text{total deviation}^2 = \sigma_\theta^2 + \text{MCSE}^2$}
   \end{center}
@@ -465,19 +468,21 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
     \begin{itemize}
     \item $I(\cdot)$ is binomially distributed as $p(\theta \in A)$
         \begin{itemize}
+        \item use beta CDF, or normal approximation
         \item[$\rightarrow$] $\var(I(\cdot)) =  p(1-p)$  (Appendix A, p. 579)
         \item[$\rightarrow$] standard deviation of $p$ is $\sqrt{p(1-p)/S}$
         \end{itemize}
         \pause
-      \item if $S=100$ and $p\approx 0.5$, $\sqrt{p(1-p)/S}=0.05$\\
-        i.e. accuracy is about $5\%$ units
+      \item if $S=100$ and we observe $\frac{1}{S}\sum_l I(\theta^{(s)} \in A)=0.05$,\\ then $\sqrt{p(1-p)/S} \approx 0.02$\\
+        i.e. accuracy is about $4\%$ units\\
+        or from quantiles of beta distribution the range is $(0.02,0.11)$
         \pause
-      \item $S=2500$ draws needed for $1\%$ unit accuracy
+      \item $S=2000$ draws needed for $1\%$ unit accuracy
     \end{itemize}
     \pause
   \item To  estimate small probabilities, a large number of draws is needed
     \begin{itemize}
-    \item to be able to estimate $p$, need to get draws with
+    \item to be able to estimate small $p$, need to get draws with
       $\theta^{(l)} \in A$, which in expectation requires $S \gg 1/p$
     \end{itemize}
 \end{itemize}
@@ -494,6 +499,24 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
     \only<5>{\includegraphics[width=10cm]{kilpis_ppneg_mcse4000.pdf}}
   \end{center}
 
+\end{frame}
+
+\begin{frame}{From probabilities to quantiles}
+
+  \begin{itemize}
+  \item Probability: $p(\theta < A)\approx \frac{1}{S}\sum_l I(\theta^{(s)} < A)$
+  \item 5\%-quantile: Find $A$ so that $p(\theta < A)=0.05$
+  \item<2-> If $S=1000$ and uncertainty interval for 5\% probability
+    is $(0.04,0.06)$ (see earlier slide), we can find uncertainty
+    interval $(A^-,A^+)$, so that $p(\theta < A^-)=0.04$, and
+    $p(\theta < A^+)=0.06$
+    \begin{itemize}
+    \item<3-> we can summarise this interval by transforming it to MCSE
+    \item<3-> see examples in \url{https://avehtari.github.io/casestudies/Digits/digits.html}
+    \item<3-> {\color{gray}if interested, see algorithm details in \href{https://doi.org/10.1214/20-BA1221}{Vehtari, Gelman, Simpson, Carpenter, \& Bürkner (2021), doi.org/10.1214/20-BA1221}.}
+    \end{itemize}
+  \end{itemize}
+  
 \end{frame}
 
 \begin{frame}{How many digits to show in reports?}
@@ -549,6 +572,7 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
 
 \end{frame}
 
+
 \begin{frame}{How many simulation draws are needed?}
 
   \begin{itemize}
@@ -558,21 +582,21 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
     \item marginalization (Rao-Blackwellization)
     \item variance reduction methods, such, control variates
     \end{itemize}
-  \end{itemize}
-
-\end{frame}
-
-\begin{frame}{How many simulation draws are needed?}
-
-  \begin{itemize}
-  \item Number of independent draws needed doesn't depend on the number of dimensions
+  \item<2-> Number of independent draws needed doesn't depend on the
+    number of dimensions
     \begin{itemize}
-    \item but it may be difficult to obtain independent draws in high dimensional case
+    \item but it may be difficult to obtain independent draws in high
+      dimensional case
+    \end{itemize}
+  \item<3-> Some algorithms are less efficient
+    \begin{itemize}
+    \item Compute MCSE using \textit{effective sample size (ESS)}
+      instead of the number of draws $S$
+    \item Usually ESS$<S$
     \end{itemize}
   \end{itemize}
 
 \end{frame}
-
 
 \begin{frame}{Direct simulation}
 
@@ -701,7 +725,7 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
 \begin{frame}{Rejection sampling}
 
   \begin{itemize}
-  \item The number of accepted draws is the effective sample size
+  \item The effective sample size (ESS) is the number of accepted draws
     \begin{itemize}
     \item with bad proposal distribution may require a lot of trials
     \item selection of good proposal gets very difficult when
@@ -738,7 +762,8 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
 \begin{frame}{Some uses of importance sampling}
 
   In general selection of good proposal gets more difficult when the
-  number of dimensions increase, but there are many use case
+  number of dimensions increase, but there are many special use case
+  which scale well (e.g. I've used IS up to 10k dimensions)
 
   \uncover<2->{
   \begin{itemize}
@@ -768,9 +793,9 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
       choosing $g(\theta)$ so that ${\color{darkgreen} w(\theta)}$ is bounded
     \item generally not trivial
     \end{itemize}
-  \item<3-> If variance is infinite, but mean is finite\\
-    $\rightarrow$
-    \textit{generalized CLT and asymptotic consistency} 
+  % \item<3-> If variance is infinite, but mean is finite\\
+  %   $\rightarrow$
+  %   \textit{generalized CLT and asymptotic consistency} 
   \item<4-> Pre-asymptotic and asymptotic behavior can be really different!
   \end{itemize}
   
@@ -870,8 +895,8 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
        \includegraphics[width=8cm]{bioassayisw2.pdf}\\
          \vspace{-2\baselineskip}
          \begin{align*}
-           S_{\rm eff} & = \frac{1}{\sum_{s=1}^S (\tilde{w}(\theta^s))^2}, \quad \text{where } \tilde{w}(\theta^s)=w(\theta^s)/\sum_{s'=1}^Sw(\theta^{s'})\\
-           \only<3->{S_{\rm eff} & \approx 396}
+           \text{ESS} & = \frac{1}{\sum_{s=1}^S (\tilde{w}(\theta^s))^2}, \quad \text{where } \tilde{w}(\theta^s)=w(\theta^s)/\sum_{s'=1}^Sw(\theta^{s'})\\
+           \only<3->{\text{ESS} & \approx 396, \quad (\text{ESS}< S=1000)}
          \end{align*}
            \only<2>{{\color{red}
                \makebox[0cm][c]{\parbox{9.5cm}{\vspace{-2.5\baselineskip} \footnotesize BDA3 1st (2013) and 2nd (2014) printing have an error for $\tilde{w}(\theta^s)$. The equation should not have the multiplier S (the normalized weights should sum to one). Online version is correct. Errata for the book\\ \url{http://www.stat.columbia.edu/~gelman/book/errata_bda3.txt}\vspace{-2\baselineskip}}}}}
@@ -888,14 +913,14 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
        \includegraphics[width=8cm]{bioassayisw2.pdf}\\
          \vspace{-2\baselineskip}
          \begin{align*}
-           S_{\rm eff} & = \frac{1}{\sum_{s=1}^S (\tilde{w}(\theta^s))^2}, \quad \text{is based on variance of } \tilde{w}(\theta^s) \\
-           S_{\rm eff} & \approx 396 \\
+           \text{ESS} & = \frac{1}{\sum_{s=1}^S (\tilde{w}(\theta^s))^2}, \quad \text{is based on variance of } \tilde{w}(\theta^s) \\
+           \text{ESS} & \approx 396 \\
          \end{align*}
        \end{center}
        
          \vspace{-2\baselineskip}
-         \uncover<2->{If all $\tilde{w}(\theta^s)=1/S$, then $S_{\rm eff}=1/(SS^{-2})=S$\\}
-         \uncover<3->{If one $\tilde{w}(\theta^s)=1$, and others $0$, then $S_{\rm eff}=1/1=1$}
+         \uncover<2->{If all $\tilde{w}(\theta^s)=1/S$, then $\text{ESS}=1/(SS^{-2})=S$\\}
+         \uncover<3->{If one $\tilde{w}(\theta^s)=1$, and others $0$, then $\text{ESS}=1/1=1$}
 
 \end{frame}
 
@@ -906,8 +931,8 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
        \includegraphics[width=8cm]{bioassayisw2.pdf}\\
          \vspace{-2\baselineskip}
          \begin{align*}
-           S_{\rm eff} & = \frac{1}{\sum_{s=1}^S (\tilde{w}(\theta^s))^2}, \quad \text{is based on variance of } \tilde{w}(\theta^s) \\
-           S_{\rm eff} & \approx 396 \\ \uncover<1->{&\text{Pareto-$k$ diagnostic preferably $<$ 0.7: }}\uncover<2->{ \hat{k} \approx 0.65}
+           \text{ESS} & = \frac{1}{\sum_{s=1}^S (\tilde{w}(\theta^s))^2}, \quad \text{is based on variance of } \tilde{w}(\theta^s) \\
+           \text{ESS} & \approx 396 \\ \uncover<1->{&\text{Pareto-$k$ diagnostic preferably $<$ 0.7: }}\uncover<2->{ \hat{k} \approx 0.65}
          \end{align*}
   \end{center}
 
@@ -969,8 +994,8 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
        \includegraphics[width=8cm]{bioassayisw2.pdf}\\
          \vspace{-2\baselineskip}
          \begin{align*}
-           S_{\rm eff} & = \frac{1}{\sum_{s=1}^S (\tilde{w}(\theta^s))^2}, \quad \text{is based on variance of } \tilde{w}(\theta^s) \\
-           S_{\rm eff} & \approx 396 \\ \uncover<1->{&\text{Pareto-$k$ diagnostic preferably $<$ 0.7: }}\uncover<1->{ \hat{k} \approx 0.65}
+           \text{ESS} & = \frac{1}{\sum_{s=1}^S (\tilde{w}(\theta^s))^2}, \quad \text{is based on variance of } \tilde{w}(\theta^s) \\
+           \text{ESS} & \approx 396 \\ \uncover<1->{&\text{Pareto-$k$ diagnostic preferably $<$ 0.7: }}\uncover<1->{ \hat{k} \approx 0.65}
          \end{align*}
   \end{center}
 
