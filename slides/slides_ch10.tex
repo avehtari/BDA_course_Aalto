@@ -468,8 +468,7 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
     \begin{itemize}
     \item $I(\cdot)$ is binomially distributed as $p(\theta \in A)$
         \begin{itemize}
-        \item use Beta for better accuracy or normal approximation as
-          quick approach
+        \item use beta CDF, or normal approximation
         \item[$\rightarrow$] $\var(I(\cdot)) =  p(1-p)$  (Appendix A, p. 579)
         \item[$\rightarrow$] standard deviation of $p$ is $\sqrt{p(1-p)/S}$
         \end{itemize}
@@ -591,7 +590,9 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
     \end{itemize}
   \item<3-> Some algorithms are less efficient
     \begin{itemize}
-    \item Use \textit{Effective sample size (ESS)} instead of $S$
+    \item Compute MCSE using \textit{effective sample size (ESS)}
+      instead of the number of draws $S$
+    \item Usually ESS$<S$
     \end{itemize}
   \end{itemize}
 
@@ -895,7 +896,7 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
          \vspace{-2\baselineskip}
          \begin{align*}
            \text{ESS} & = \frac{1}{\sum_{s=1}^S (\tilde{w}(\theta^s))^2}, \quad \text{where } \tilde{w}(\theta^s)=w(\theta^s)/\sum_{s'=1}^Sw(\theta^{s'})\\
-           \only<3->{\text{ESS} & \approx 396}
+           \only<3->{\text{ESS} & \approx 396, \quad (\text{ESS}< S=1000)}
          \end{align*}
            \only<2>{{\color{red}
                \makebox[0cm][c]{\parbox{9.5cm}{\vspace{-2.5\baselineskip} \footnotesize BDA3 1st (2013) and 2nd (2014) printing have an error for $\tilde{w}(\theta^s)$. The equation should not have the multiplier S (the normalized weights should sum to one). Online version is correct. Errata for the book\\ \url{http://www.stat.columbia.edu/~gelman/book/errata_bda3.txt}\vspace{-2\baselineskip}}}}}
