@@ -138,27 +138,27 @@
 
   \vspace{-1.5\baselineskip}
    \begin{align*}
-     E_{\color{blue} p(\theta|y)}[f(\theta)] & = \int f(\theta) {\color{blue} p(\theta|y)} d\theta,\\
+     E_{\color{blue} p(\theta \mid y)}[f(\theta)] & = \int f(\theta) {\color{blue} p(\theta \mid y)} d\theta,\\
      \text{where} \quad
-     {\color{blue} p(\theta|y)} & = \frac{\color{darkgreen}p(y|\theta)p(\theta)}{\color{red} \int p(y|\theta)p(\theta) d\theta}
+     {\color{blue} p(\theta \mid y)} & = \frac{\color{darkgreen}p(y \mid \theta)p(\theta)}{\color{red} \int p(y \mid \theta)p(\theta) d\theta}
    \end{align*}
-     \uncover<2->{We can easily evaluate ${\color{darkgreen} p(y|\theta)p(\theta)}$ for any $\theta$, but the integral ${\color{red} \int p(y|\theta)p(\theta) d\theta}$ is usually difficult.}
+     \uncover<2->{We can easily evaluate ${\color{darkgreen} p(y \mid \theta)p(\theta)}$ for any $\theta$, but the integral ${\color{red} \int p(y \mid \theta)p(\theta) d\theta}$ is usually difficult.}
 
-   \uncover<3->{We can use the unnormalized posterior ${\color{darkgreen} q(\theta|y)
-     = p(y|\theta)p(\theta)}$, for example, in}
+   \uncover<3->{We can use the unnormalized posterior ${\color{darkgreen} q(\theta \mid y)
+     = p(y \mid \theta)p(\theta)}$, for example, in}
  \begin{itemize}
    \vspace{-0.5\baselineskip}
     \item<4-> Grid (equal spacing) evaluation with self-normalization
       \begin{align*}
-        E_{\color{blue} p(\theta|y)}[f(\theta)] \approx
-        \frac{\sum_{s=1}^S \left[f(\theta^{(s)}){\color{darkgreen}q(\theta^{(s)}|y)}\right]}{\sum_{s=1}^S{\color{darkgreen}q(\theta^{(s)}|y)}}
+        E_{\color{blue} p(\theta \mid y)}[f(\theta)] \approx
+        \frac{\sum_{s=1}^S \left[f(\theta^{(s)}){\color{darkgreen}q(\theta^{(s)} \mid y)}\right]}{\sum_{s=1}^S{\color{darkgreen}q(\theta^{(s)} \mid y)}}
       \end{align*}
     \item<5-> Monte Carlo methods which can sample from
-      ${\color{blue}p(\theta^{(s)}|y)}$ using only
-      ${\color{darkgreen}q(\theta^{(s)}|y)}$
+      ${\color{blue}p(\theta^{(s)} \mid y)}$ using only
+      ${\color{darkgreen}q(\theta^{(s)} \mid y)}$
          \vspace{-0.5\baselineskip}
       \begin{align*}
-        E_{\color{blue} p(\theta|y)}[f(\theta)] \approx \frac{1}{S} \sum_{s=1}^S f(\theta^{(s)})
+        E_{\color{blue} p(\theta \mid y)}[f(\theta)] \approx \frac{1}{S} \sum_{s=1}^S f(\theta^{(s)})
       \end{align*}
     \end{itemize}
    
@@ -222,7 +222,7 @@
   \begin{itemize}
   \item Produce draws $\theta^{(t)}$, given $\theta^{(t-1)}$, from a
     Markov chain, which has been constructed so that its equilibrium
-    distribution is $p(\theta|y)$
+    distribution is $p(\theta \mid y)$
     \begin{itemize}
     \item<2->[+] generic
     \item<2->[+] combine sequence of easier Monte Carlo draws to form a Markov chain
@@ -244,14 +244,14 @@
   \item Set of random variables $\theta^1,\theta^2,\ldots$, so that
     with all values of $t$, $\theta^t$ depends only on the previous $\theta^{(t-1)}$
     \begin{equation*}
-      p(\theta^t|\theta^1,\ldots,\theta^{(t-1)})=p(\theta^t|\theta^{(t-1)})
+      p(\theta^t \mid {\color{gray}\theta^1,\ldots,}\theta^{(t-1)})=p(\theta^t \mid \theta^{(t-1)})
     \end{equation*}
   \item<2-> Chain has to be initialized with some starting point $\theta^0$
-  \item<3-> Transition distribution $T_t(\theta^t|\theta^{t-1})$ (may
+  \item<3-> Transition distribution $T_t(\theta^t \mid \theta^{t-1})$ (may
     depend on $t$)
     \begin{itemize}
     \item by choosing a suitable transition distribution, the
-      stationary distribution of Markov chain is $p(\theta|y)$
+      stationary distribution of Markov chain is $p(\theta \mid y)$
     \end{itemize}
   \end{itemize}
 
@@ -277,9 +277,9 @@
     \vspace{-.5\baselineskip}
      \item<3-> Basic algorithm {
       \begin{align*}
-         \text{sample $\theta_j^t$ from} \quad & p(\theta_j|\theta_{-j}^{t-1}, y),\\
+         \text{sample $\theta_j^t$ from} \quad & p(\theta_j \mid \theta_{-j}^{t-1}, y),\\
       \text{where} \quad
-        & \theta^{t-1}_{-j}= (\theta^t_1,\dots,\theta^t_{j-1},
+        & \theta^{t-1}_{-j}= (\theta^t_1,\dots,\theta^t_{j-1},\,\,
         \theta^{t-1}_{j+1},\dots,\theta^{t-1}_d)
       \end{align*}
       }
@@ -332,13 +332,13 @@
       \item[2.] $t=1,2,\ldots$
         \begin{itemize}
         \item[(a)] pick a proposal $\theta^{*}$ from the proposal distribution
-          $J_t(\theta^{*}|\theta^{t-1})$. \\
+          $J_t(\theta^{*} \mid \theta^{t-1})$. \\
           Proposal distribution has to be symmetric, i.e.\\
-          $J_t({\color{blue} \theta_a}|{\color{red} \theta_b})=J_t({\color{red} \theta_b}|{\color{blue} \theta_a})$, for all
+          $J_t({\color{blue} \theta_a} \mid {\color{red} \theta_b})=J_t({\color{red} \theta_b} \mid {\color{blue} \theta_a})$, for all
           ${\color{blue} \theta_a},{\color{red} \theta_b}$
         \item<2->[(b)] calculate acceptance ratio
           \begin{equation*}
-            r=\frac{p(\theta^{*}|y)}{p(\theta^{t-1}|y)}
+            r=\frac{p(\theta^{*} \mid y)}{p(\theta^{t-1} \mid y)}
           \end{equation*}
           \vspace{-6mm}
         \item<3->[(c)] set
@@ -350,7 +350,7 @@
             \end{cases}
           \end{equation*}
           \uncover<4>{
-          ie, if $p(\theta^{*}|y)>p(\theta^{t-1}|y)$ accept the proposal always \\
+          ie, if $p(\theta^{*} \mid y)>p(\theta^{t-1} \mid y)$ accept the proposal always \\
           \hspace{0.4cm}and otherwise accept the proposal with probability $r$}
       \end{itemize}
       \vspace{-1.5\baselineskip}
@@ -358,9 +358,9 @@
       ie, the new state is the same as previous
       \item<6-> step c is executed by generating a random number from 
         $\U(0,1)$
-      \item<7-> $p(\theta^*|y)$ and $p(\theta^{t-1}|y)$ have the same
-        normalization terms, and thus instead of $p(\cdot|y)$,
-        unnormalized $q(\cdot|y)$ can be used, as the normalization
+      \item<7-> $p(\theta^* \mid y)$ and $p(\theta^{t-1} \mid y)$ have the same
+        normalization terms, and thus instead of $p(\cdot \mid y)$,
+        unnormalized $q(\cdot \mid y)$ can be used, as the normalization
         terms cancel out!
     \end{itemize}
   \end{itemize}
@@ -380,7 +380,7 @@
            \theta_1\\
            \theta_2
          \end{pmatrix}
-         \right| y \sim
+         \right \mid  y \sim
          \N\left(
            \begin{pmatrix}
              y_1\\
@@ -393,7 +393,7 @@
        \right)
        \end{equation*}
      \item proposal distribution
-       $J_t(\theta^{*}|\theta^{t-1})=\N(\theta^{*}|\theta^{t-1},\sigma_p^2)$
+       $J_t(\theta^{*} \mid \theta^{t-1})=\N(\theta^{*} \mid \theta^{t-1},\sigma_p^2)$
      \item \href{https://avehtari.github.io/BDA_R_demos/demos_ch11/demo11_2.html}{demo11\_2}
      \end{itemize}
    \item<2-> More examples {\small \url{https://chi-feng.github.io/mcmc-demo/}}
@@ -448,34 +448,34 @@
 \begin{frame}{Why Metropolis algorithm works}
 
   \begin{itemize}
-  \item[2.] Prove that this stationary distribution is the desired target distribution $p(\theta|y)$
+  \item[2.] Prove that this stationary distribution is the desired target distribution $p(\theta \mid y)$
     \begin{itemize}
     \item[-] consider starting algorithm at time $t-1$ with a draw
-      $\theta^{t-1} \sim p(\theta|y)$ 
+      $\theta^{t-1} \sim p(\theta \mid y)$ 
     \item<2->[-] consider any two such points ${\color{blue} \theta_a}$ and ${\color{red} \theta_b}$ drawn
-      from $p(\theta|y)$ and labeled so that
-      $p({\color{red} \theta_b}|y)\geq p({\color{blue} \theta_a}|y)$
+      from $p(\theta \mid y)$ and labeled so that
+      $p({\color{red} \theta_b} \mid y)\geq p({\color{blue} \theta_a} \mid y)$
     \item<3->[-] the unconditional probability density of a transition from ${\color{blue} \theta_a}$ to ${\color{red} \theta_b}$ is
       \vspace{-0.5\baselineskip}
       \begin{equation*}
         p(\theta^{t-1}={\color{blue} \theta_a},\theta^{t}={\color{red} \theta_b})=
-        p({\color{blue} \theta_a}|y)J_t({\color{red} \theta_b}|{\color{blue} \theta_a}),
+        p({\color{blue} \theta_a} \mid y)J_t({\color{red} \theta_b} \mid {\color{blue} \theta_a}),
       \end{equation*}
       \vspace{-1\baselineskip}
     \item<4->[-] the unconditional probability density of a transition from ${\color{red} \theta_b}$ to ${\color{blue} \theta_a}$ is
       \vspace{-0.5\baselineskip}
       \begin{eqnarray*}
         p(\theta^{t}={\color{blue} \theta_a},\theta^{t-1}={\color{red} \theta_b}) & = &
-        p({\color{red} \theta_b}|y)J_t({\color{blue} \theta_a}|{\color{red} \theta_b})\left(\frac{p({\color{blue} \theta_a}|y)}{p({\color{red} \theta_b}|y)}\right)\\
-        \pause &  = &  p({\color{blue} \theta_a}|y)J_t({\color{blue} \theta_a}|{\color{red} \theta_b}),
+        p({\color{red} \theta_b} \mid y)J_t({\color{blue} \theta_a} \mid {\color{red} \theta_b})\left(\frac{p({\color{blue} \theta_a} \mid y)}{p({\color{red} \theta_b} \mid y)}\right)\\
+        \pause &  = &  p({\color{blue} \theta_a} \mid y)J_t({\color{blue} \theta_a} \mid {\color{red} \theta_b}),
       \end{eqnarray*}
       \uncover<5->{
       which is the same as the probability of transition from ${\color{blue} \theta_a}$ to ${\color{red} \theta_b}$,
-      since we have required that $J_t(\cdot|\cdot)$ is symmetric}
+      since we have required that $J_t(\cdot \mid \cdot)$ is symmetric}
       \pause
     \item<6->[-] since their joint distribution is symmetric, $\theta^t$ and
       $\theta^{t-1}$ have the same marginal distributions, and so
-      $p(\theta|y)$ is the stationary distribution of the Markov chain of $\theta$
+      $p(\theta \mid y)$ is the stationary distribution of the Markov chain of $\theta$
     \end{itemize}
   \end{itemize}
 
@@ -489,8 +489,8 @@
     \item acceptance ratio includes ratio of proposal distributions
       \begin{equation*}
         r =
-        \frac{p(\theta^{*}|y)/J_t(\theta^{*}|\theta^{t-1})}{p(\theta^{t-1}|y)/J_t(\theta^{t-1}|\theta^{*})} \pause =
-        \frac{p(\theta^{*}|y)J_t(\theta^{t-1}|\theta^{*})}{p(\theta^{t-1}|y)J_t(\theta^{*}|\theta^{t-1})}
+        \frac{p(\theta^{*} \mid y)/J_t(\theta^{*} \mid \theta^{t-1})}{p(\theta^{t-1} \mid y)/J_t(\theta^{t-1} \mid \theta^{*})} \pause =
+        \frac{p(\theta^{*} \mid y)J_t(\theta^{t-1} \mid \theta^{*})}{p(\theta^{t-1} \mid y)J_t(\theta^{*} \mid \theta^{t-1})}
       \end{equation*}
     \end{itemize}
   \end{itemize}
@@ -516,7 +516,7 @@
   \begin{itemize}
   \item Ideal proposal distribution is the distribution itself
     \begin{itemize}
-    \item $J(\theta^{*}|\theta)\equiv p(\theta^{*}|y)$ for all
+    \item $J(\theta^{*} \mid \theta)\equiv p(\theta^{*} \mid y)$ for all
       $\theta$
     \item acceptance probability is $1$
     \item independent draws
@@ -767,7 +767,7 @@
   \begin{itemize}
     \item Monte Carlo estimates still valid (central limit theorem holds)
       \begin{align*}
-        E_{\color{blue} p(\theta|y)}[f(\theta)] \approx \frac{1}{S} \sum_{s=1}^S f(\theta^{(s)})
+        E_{\color{blue} p(\theta \mid y)}[f(\theta)] \approx \frac{1}{S} \sum_{s=1}^S f(\theta^{(s)})
       \end{align*}
     \item Estimation of Monte Carlo error is more difficult
       \begin{itemize}
@@ -844,9 +844,9 @@
     \end{itemize}
     \vspace{2mm}
   \item<5-> Estimate total variance
-    $\var(\theta|y)$ as a weighted mean of $W$ and $B$
+    $\var(\theta \mid y)$ as a weighted mean of $W$ and $B$
     \begin{equation*}
-      \widehat{\var}^{+}(\theta|y) = \frac{N-1}{N}W+\frac{1}{N}B
+      \widehat{\var}^{+}(\theta \mid y) = \frac{N-1}{N}W+\frac{1}{N}B
     \end{equation*}
   \end{itemize}  
 
@@ -866,9 +866,9 @@
 
   \begin{itemize}
   \item Estimate total variance
-    $\var(\theta|y)$ as a weighted mean of $W$ and $B$
+    $\var(\theta \mid y)$ as a weighted mean of $W$ and $B$
     \begin{equation*}
-      \widehat{\var}^{+}(\theta|y) = \frac{N-1}{N}W+\frac{1}{N}B
+      \widehat{\var}^{+}(\theta \mid y) = \frac{N-1}{N}W+\frac{1}{N}B
     \end{equation*}
     \vspace{-0.5\baselineskip}
     \begin{itemize}
@@ -879,10 +879,10 @@
   \item<2-> Given finite $N$, $W$ \emph{underestimates} marginal posterior variance
     \begin{itemize}
     \item single chains have not yet visited all points in the distribution
-    \item when $N\rightarrow\infty, \quad \E(W)\rightarrow \var(\theta|y)$
+    \item when $N\rightarrow\infty, \quad \E(W)\rightarrow \var(\theta \mid y)$
     \end{itemize}
     \vspace{0.5\baselineskip}
-  \item<3-> As $\widehat{\var}^{+}(\theta|y)$ overestimates and $W$ underestimates,
+  \item<3-> As $\widehat{\var}^{+}(\theta \mid y)$ overestimates and $W$ underestimates,
     compute
     \begin{equation*}
       \widehat{R}=\sqrt{\frac{\widehat{\var}^{+}}{W}}
