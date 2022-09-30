@@ -68,6 +68,7 @@
 
 \def\eff{\text{eff}}
 \def\ESS{\text{ESS}}
+\def\Seff{S_\eff}
 
 \DeclareMathOperator{\E}{E}
 \DeclareMathOperator{\Var}{Var}
@@ -116,7 +117,7 @@
     \end{itemize}
   \item 11.5 Effective number of simulation draws (important)
     \begin{itemize}
-    \item effective sample size (ESS)
+    \item effective sample size (ESS / $\Seff$)
     \end{itemize}
   \item 11.6 Example: hierarchical normal model (quick glance)
   \end{itemize}
@@ -128,12 +129,12 @@
 \item demo11\_1: Gibbs sampling
 \item demo11\_2: Metropolis sampling
 \item demo11\_3: Convergence of Markov chain
-\item demo11\_4: split-$\widehat{R}$ and effective sample size (ESS or $S_{\mathrm{eff}}$)
+\item demo11\_4: split-$\widehat{R}$ and effective sample size (ESS or $\Seff$)
 \end{itemize}
 
 \end{frame}
 
-\begin{frame}{It's all about expectations}
+\begin{frame}{It's all about expectations (reminder)}
 
   \vspace{-1.5\baselineskip}
    \begin{align*}
@@ -172,7 +173,7 @@
     \item Inverse CDF works for 1D
     \item Analytic transformations work for only certain distributions
     \item Factorization works only for certain joint distributions
-    \item Grid evaluation and sampling works in less than a few dimensions
+    \item Grid evaluation and sampling works in a few dimensions
     \item Rejection sampling works mostly in 1D (truncation is a special case)
     \item Importance sampling is reliable only in special cases
     \end{itemize}
@@ -189,13 +190,20 @@
 \begin{frame}{Markov chain}
 
   \begin{itemize}
-  \item<1-> Andrey Markov proved weak law of large numbers and central
+  \item<1-> \emph{Andrey Markov} proved weak law of large numbers and central
     limit theorem for certain dependent-random sequences, which were
     later named Markov chains
+    \begin{itemize}
+    \item {\color{gray} CLT saying the sum / mean converges towards normal (if the variance is finite)}
+    \end{itemize}
   \item<2-> The probability of each event depends only on the state
     attained in the previous event (or finite number of previous events)
   \item<3-> Markov's one example was the sequence of letters in
     Pushkin's novel ``Yevgeniy Onegin''
+    \begin{itemize}
+    \item<4-> {\color{gray} Deep learning language models are super
+        big Markov models}
+    \end{itemize}
   \end{itemize}
 
 \end{frame}  
@@ -212,7 +220,7 @@
 \begin{frame}{Markov chain Monte Carlo (MCMC)}
 
   \begin{itemize}
-  \item Produce draws $\theta^{(t)}$ given $\theta^{(t-1)}$ from a
+  \item Produce draws $\theta^{(t)}$, given $\theta^{(t-1)}$, from a
     Markov chain, which has been constructed so that its equilibrium
     distribution is $p(\theta|y)$
     \begin{itemize}
@@ -326,8 +334,8 @@
         \item[(a)] pick a proposal $\theta^{*}$ from the proposal distribution
           $J_t(\theta^{*}|\theta^{t-1})$. \\
           Proposal distribution has to be symmetric, i.e.\\
-          $J_t(\theta_a|\theta_b)=J_t(\theta_b|\theta_a)$, for all
-          $\theta_a,\theta_b$
+          $J_t({\color{blue} \theta_a}|{\color{red} \theta_b})=J_t({\color{red} \theta_b}|{\color{blue} \theta_a})$, for all
+          ${\color{blue} \theta_a},{\color{red} \theta_b}$
         \item<2->[(b)] calculate acceptance ratio
           \begin{equation*}
             r=\frac{p(\theta^{*}|y)}{p(\theta^{t-1}|y)}
@@ -444,25 +452,25 @@
     \begin{itemize}
     \item[-] consider starting algorithm at time $t-1$ with a draw
       $\theta^{t-1} \sim p(\theta|y)$ 
-    \item<2->[-] consider any two such points $\theta_a$ and $\theta_b$ drawn
+    \item<2->[-] consider any two such points ${\color{blue} \theta_a}$ and ${\color{red} \theta_b}$ drawn
       from $p(\theta|y)$ and labeled so that
-      $p(\theta_b|y)\geq p(\theta_a|y)$
-    \item<3->[-] the unconditional probability density of a transition from $\theta_a$ to $\theta_b$ is
+      $p({\color{red} \theta_b}|y)\geq p({\color{blue} \theta_a}|y)$
+    \item<3->[-] the unconditional probability density of a transition from ${\color{blue} \theta_a}$ to ${\color{red} \theta_b}$ is
       \vspace{-0.5\baselineskip}
       \begin{equation*}
-        p(\theta^{t-1}=\theta_a,\theta^{t}=\theta_b)=
-        p(\theta_a|y)J_t(\theta_b|\theta_a),
+        p(\theta^{t-1}={\color{blue} \theta_a},\theta^{t}={\color{red} \theta_b})=
+        p({\color{blue} \theta_a}|y)J_t({\color{red} \theta_b}|{\color{blue} \theta_a}),
       \end{equation*}
       \vspace{-1\baselineskip}
-    \item<4->[-] the unconditional probability density of a transition from $\theta_b$ to $\theta_a$ is
+    \item<4->[-] the unconditional probability density of a transition from ${\color{red} \theta_b}$ to ${\color{blue} \theta_a}$ is
       \vspace{-0.5\baselineskip}
       \begin{eqnarray*}
-        p(\theta^{t}=\theta_a,\theta^{t-1}=\theta_b) & = &
-        p(\theta_b|y)J_t(\theta_a|\theta_b)\left(\frac{p(\theta_a|y)}{p(\theta_b|y)}\right)\\
-        \pause &  = &  p(\theta_a|y)J_t(\theta_a|\theta_b),
+        p(\theta^{t}={\color{blue} \theta_a},\theta^{t-1}={\color{red} \theta_b}) & = &
+        p({\color{red} \theta_b}|y)J_t({\color{blue} \theta_a}|{\color{red} \theta_b})\left(\frac{p({\color{blue} \theta_a}|y)}{p({\color{red} \theta_b}|y)}\right)\\
+        \pause &  = &  p({\color{blue} \theta_a}|y)J_t({\color{blue} \theta_a}|{\color{red} \theta_b}),
       \end{eqnarray*}
       \uncover<5->{
-      which is the same as the probability of transition from $\theta_a$ to $\theta_b$,
+      which is the same as the probability of transition from ${\color{blue} \theta_a}$ to ${\color{red} \theta_b}$,
       since we have required that $J_t(\cdot|\cdot)$ is symmetric}
       \pause
     \item<6->[-] since their joint distribution is symmetric, $\theta^t$ and
@@ -748,7 +756,7 @@
       \end{itemize}
     \item<4-> Convergence diagnostics 
       \begin{itemize}
-      \item Do we get samples from the target distribution?
+      \item Is the sample representative of the target distribution?
       \end{itemize}
   \end{itemize}
 
@@ -817,7 +825,7 @@
 \begin{frame}{$\widehat{R}$}
 
   \begin{itemize}
-  \item $M$ chains, each having $N$ draws (with new R-hat notation)
+  \item $M$ chains, each having $N$ draws (with new $\widehat{R}$ notation)
   \item<2-> Within chains variance $W$
     \begin{equation*}
       W=\frac{1}{M}\sum_{m=1}^M s^2_m ,\text{ where } 
@@ -950,7 +958,7 @@
 
     Vehtari, Gelman, Simpson, Carpenter, Bürkner
   (2020). Rank-normalization, folding, and localization: An improved
-  R-hat for assessing convergence of MCMC. Bayesian Analysis, doi:10.1214/20-BA1221. \url{https://projecteuclid.org/euclid.ba/1593828229}.
+  $\widehat{R}$ for assessing convergence of MCMC. Bayesian Analysis, doi:10.1214/20-BA1221. \url{https://projecteuclid.org/euclid.ba/1593828229}.
 
 \end{frame}
 
@@ -1011,28 +1019,43 @@
 
 \begin{frame}{Autocorrelation}
 
-  \vspace{-0.5\baselineskip}
-  \includegraphics[width=4.5cm]{Metrop1.pdf}
-  \uncover<2->{\includegraphics[width=7cm]{Metrop1trace.pdf}\\}
+  \vspace{-1.2\baselineskip}
+  \hspace{-5mm}\begin{minipage}[t][][b]{4.5cm}
+    \includegraphics[width=4.5cm]{Metrop1.pdf}
+  \end{minipage}
+  \begin{minipage}[t][][b]{5cm}
+    \uncover<2->{\includegraphics[width=7cm]{Metrop1trace.pdf}}
+  \end{minipage}
+  \vspace{-\baselineskip}
   \uncover<3->{\includegraphics[width=7cm]{Metrop1acf.pdf}}
-  
+
 \end{frame}
 
-\begin{frame}{Autocorrelation}
+\begin{frame}{Autocorrelation {\large (slow mixing due to small step size)}}
 
-  \vspace{-0.5\baselineskip}
+  \vspace{-1.2\baselineskip}
+  \hspace{-5mm}\begin{minipage}[t][][b]{4.5cm}
   \includegraphics[width=4.5cm]{Metrop2.pdf}
-  {\includegraphics[width=7cm]{Metrop2trace.pdf}\\}
-  {\includegraphics[width=7cm]{Metrop2acf.pdf}}
+  \end{minipage}
+  \begin{minipage}[t][][b]{5cm}
+    \includegraphics[width=7cm]{Metrop2trace.pdf}
+  \end{minipage}
+  \vspace{-\baselineskip}
+  \includegraphics[width=7cm]{Metrop2acf.pdf}
   
 \end{frame}
 
-\begin{frame}{Autocorrelation}
+\begin{frame}{Autocorrelation {\large (slow mixing due to many rejections)}}
 
-  \vspace{-0.5\baselineskip}
-  \includegraphics[width=4.5cm]{Metrop3.pdf}
-  {\includegraphics[width=7cm]{Metrop3trace.pdf}\\}
-  {\includegraphics[width=7cm]{Metrop3acf.pdf}}
+  \vspace{-1.2\baselineskip}
+  \hspace{-5mm}\begin{minipage}[t][][b]{4.5cm}
+    \includegraphics[width=4.5cm]{Metrop3.pdf}
+  \end{minipage}
+  \begin{minipage}[t][][b]{5cm}
+    \includegraphics[width=7cm]{Metrop3trace.pdf}
+  \end{minipage}
+  \vspace{-\baselineskip}
+  \includegraphics[width=7cm]{Metrop3acf.pdf}
   
 \end{frame}
 
@@ -1043,14 +1066,15 @@
     error in case of MCMC
   \item For expectation $\bar{\theta}$
     \begin{equation*}
-      \Var[\bar{\theta}] = \frac{\sigma^2_\theta}{S_\eff}
+      \Var[\bar{\theta}] = \frac{\sigma^2_\theta}{\color{blue}S_\eff}
     \end{equation*}
-    where $S_\eff=S/\tau$ (=ESS), and $\tau$ is sum of autocorrelations
+    where ${\color{blue}S_\eff=S/\tau}$ (=ESS),\\ and ${\color{blue}\tau}$ is sum of autocorrelations
+    \only<1>{\includegraphics[width=7cm]{Metrop1acf.pdf}}
     \begin{itemize}
-      \item<2-> $\tau$ describes how many dependent draws correspond to one independent sample
-      \item<3-> new R-hat paper $S=NM$ (in BDA3 $N=nm$ and $n_\eff=N/\tau$)
+      \item<2-> ${\color{blue}\tau}$ describes how many dependent draws correspond to one independent sample
+      \item<3-> new $\widehat{R}$ paper $S=NM$ (in BDA3 $N=nm$ and $n_\eff=N/\tau$)
       \item<4-> BDA3 focuses on $S_\eff$ and not the Monte Carlo error directly\\
-        new R-hat paper discusses more about MCSEs for different quantities
+        new $\widehat{R}$ paper discusses more about MCSEs for different quantities
     \end{itemize}
   \end{itemize}  
 \end{frame}
@@ -1076,27 +1100,30 @@
 
 \begin{frame}{Time series analysis}
 
+    \vspace{-0.5\baselineskip}
   \begin{itemize}
   \item Estimation of $\tau$
+    \vspace{-1.5\baselineskip}
     \begin{align*}
       \tau = 1 + 2 \sum_{t=1}^\infty \hat{\rho}_t
     \end{align*}
-    where $\hat{\rho}_t$ is empirical autocorrelation 
+    where $\hat{\rho}_t$ is empirical autocorrelation \\
+    \uncover<2->{\includegraphics[width=7cm]{Metrop1acf_500.pdf}}
     \begin{itemize}
-    \item<2-> empirical autocorrelation function is noisy and thus
+    \item<3-> empirical autocorrelation function is noisy and thus
       estimate of $\tau$ is noisy
-    \item<2-> noise is larger for longer lags (less observations)
-    \item<3-> less noisy estimate is obtained by truncating
+    \item<3-> noise is larger for longer lags (less observations)
+    \item<4-> less noisy estimate is obtained by truncating
     \begin{align*}
       \hat{\tau} = 1 + 2 \sum_{t=1}^T \hat{\rho}_t
     \end{align*}
     \end{itemize}
-    \item<4-> As $\tau$ is estimated from a finite number of draws,
-      it's expectation is overoptimistic
-      \begin{itemize}
-      \item if $\hat{\tau}>MN/20$ then the estimate is unreliable
+    % \item<5-> As $\tau$ is estimated from a finite number of draws,
+    %   it's expectation is overoptimistic
+    %   \begin{itemize}
+    %   \item if $\hat{\tau}>MN/20$ then the estimate is unreliable
 
-      \end{itemize}
+    %   \end{itemize}
     \end{itemize}
 \end{frame}
 
@@ -1131,7 +1158,7 @@
   
    {\Large\color{navyblue} Effective sample size}
 
-   Effective sample size $\ESS = S_\eff \approx S/\hat{\tau}$\\
+   Effective sample size $\ESS = S_\eff \approx S/{\color{blue}\hat{\tau}}$\\
    \uncover<2->{
   \makebox[12cm][t]{
     \hspace{-.7cm}
@@ -1143,7 +1170,7 @@
      \begin{minipage}[t][4cm][t]{6cm}
        \vspace{-3.5cm}
        \begin{align*}
-         \hat{\tau} & = 1 + 2 \sum_{t=1}^T \hat{\rho}_t\\
+         {\color{blue}\hat{\tau}} & = 1 + 2 \sum_{t=1}^T \hat{\rho}_t\\
                  & \approx 24
        \end{align*}
      \end{minipage}
@@ -1157,7 +1184,7 @@
   
    {\Large\color{navyblue} Effective sample size}
 
-   Effective sample size $\ESS = S_\eff \approx S/\hat{\tau}$\\
+   Effective sample size $\ESS = S_\eff \approx S/{\color{blue}\hat{\tau}}$\\
   \makebox[12cm][t]{
     \hspace{-.7cm}
      \begin{minipage}{12cm}
@@ -1168,7 +1195,7 @@
      \begin{minipage}[t][4cm][t]{6cm}
        \vspace{-3.5cm}
        \begin{align*}
-         \hat{\tau} & = 1 + 2 \sum_{t=1}^T \hat{\rho}_t\\
+         {\color{blue}\hat{\tau}} & = 1 + 2 \sum_{t=1}^T \hat{\rho}_t\\
                  & \approx 104
        \end{align*}
      \end{minipage}
@@ -1181,7 +1208,7 @@
   
    {\Large\color{navyblue} Effective sample size}
 
-   Effective sample size $\ESS = S_\eff \approx S/\hat{\tau}$\\
+   Effective sample size $\ESS = S_\eff \approx S/{\color{blue}\hat{\tau}}$\\
   \makebox[12cm][t]{
     \hspace{-.7cm}
      \begin{minipage}{12cm}
@@ -1192,7 +1219,7 @@
      \begin{minipage}[t][4cm][t]{6cm}
        \vspace{-3.5cm}
        \begin{align*}
-         \hat{\tau} & = 1 + 2 \sum_{t=1}^T \hat{\rho}_t\\
+         {\color{blue}\hat{\tau}} & = 1 + 2 \sum_{t=1}^T \hat{\rho}_t\\
                  & \approx 63
        \end{align*}
      \end{minipage}
@@ -1228,7 +1255,7 @@
   
    {\Large\color{navyblue} Next week: HMC, NUTS, and dynamic HMC}
 
-   Effective sample size $\ESS = S_\eff \approx S/\hat{\tau}$\\
+   Effective sample size $\ESS = S_\eff \approx S/{\color{blue}\hat{\tau}}$\\
   \makebox[12cm][t]{
     \hspace{-.7cm}
      \begin{minipage}{12cm}
@@ -1239,7 +1266,7 @@
      \begin{minipage}[t][4cm][t]{6cm}
        \vspace{-3.5cm}
        \begin{align*}
-         \hat{\tau} & = 1 + 2 \sum_{t=1}^T \hat{\rho}_t\\
+         {\color{blue}\hat{\tau}} & = 1 + 2 \sum_{t=1}^T \hat{\rho}_t\\
                  & \approx 1.6
        \end{align*}
      \end{minipage}
