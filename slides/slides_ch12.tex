@@ -81,6 +81,7 @@
 \DeclareMathOperator{\sd}{sd}
 \DeclareMathOperator{\Gammad}{Gamma}
 \DeclareMathOperator{\Invgamma}{Inv-gamma}
+\DeclareMathOperator{\normal}{normal}
 \DeclareMathOperator{\Bin}{Bin}
 \DeclareMathOperator{\Negbin}{Neg-bin}
 \DeclareMathOperator{\Poisson}{Poisson}
@@ -119,17 +120,27 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Extra material for dynamic HMC}
+\begin{frame}{Extra material for HMC / NUTS}
 
   \begin{itemize}
-  \item Michael Betancourt (2018).  A Conceptual Introduction to
+  \item An introduction for applied users with good visualizations:\\
+    Cole C. Monnahan, James T. Thorson, and Trevor A. Branch (2016)
+    Faster estimation of Bayesian models in ecology using Hamiltonian
+    Monte Carlo. \url{https://dx.doi.org/10.1111/2041-210X.12681}
+  \item A review of why HMC works:\\
+    Radford Neal (2012). MCMC using Hamiltonian
+    dynamics. \url{https://arxiv.org/abs/1206.1901}
+  \item The No-U-Turn Sampler:\\
+    Matthew D. Hoffman and Andrew Gelman (2014). The No-U-Turn
+    Sampler: Adaptively Setting Path Lengths in Hamiltonian Monte
+    Carlo. \url{https://jmlr.csail.mit.edu/papers/v15/hoffman14a.html}
+  \item Multinomial variant of NUTS:\\
+    Michael Betancourt (2018).  A Conceptual Introduction to
     Hamiltonian Monte Carlo. \url{https://arxiv.org/abs/1701.02434}
-  \item Cole C. Monnahan, James T. Thorson, and Trevor A. Branch
-    (2016) Faster estimation of Bayesian models in ecology using
-    Hamiltonian Monte Carlo. \url{https://dx.doi.org/10.1111/2041-210X.12681}
   \end{itemize}
 
 \end{frame}
+
 
 \begin{frame}{Extra material for Stan}
 
@@ -161,13 +172,13 @@
 
   \begin{itemize}
   \item demo12\_1: HMC
+  \item \url{https://chi-feng.github.io/mcmc-demo/}
   \item \url{http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/}
-  \item rstan\_demo
-  \item rstanarm\_demo
+  \item cmdstanr\_demo, rstan\_demo
   \item \url{http://sumsar.net/blog/2017/01/bayesian-computation-with-stan-and-farmer-jons/}
   \item \url{http://mc-stan.org/documentation/case-studies.html}
-  \item \url{https://cran.r-project.org/package=rstan}
-  \item \url{https://cran.r-project.org/package=rstanarm}
+  \item \url{https://mc-stan.org/cmdstanr/}
+  \item \url{https://mc-stan.org/rstan/}
   \end{itemize}
   
 \end{frame}
@@ -197,17 +208,13 @@
   \only<14>{\hspace{-5mm}\includegraphics[width=12cm]{hmc1mcerr.pdf}}
 \end{frame}
 
-\begin{frame}{Hamiltonian Monte Carlo}
+\begin{frame}{Hamiltonian Monte Carlo / No-U-Turn sampling}
 
   \begin{itemize}
-  \item Uses log density (negative log density is called energy)
-  \item Uses gradient of log density for more efficient sampling
-  \item Augments parameter space with momentum variables
-  \item Simulation of Hamiltonian dynamics reduces random walk
-    \begin{itemize}
-    \item Explanation of HMC with black board
-    \item \url{http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/}
-    \end{itemize}
+  \item[1.] HMC basics (static HMC)
+  \item[2.] HMC + leapfrog discretization + Metropolis (static HMC)
+  \item[3.] NUTS + slice sampling + Metropolis (dynamic HMC)
+  \item[4.] NUTS + multinomial (dynamic HMC)
   \end{itemize}
 
 \end{frame}
@@ -215,68 +222,269 @@
 \begin{frame}{Hamiltonian Monte Carlo}
 
   \begin{itemize}
-  \item Uses gradient of log density for more efficient sampling
-  \item Alternating dynamic simulation and sampling energy level 
-  \item<2-> Parameters: step size, number of steps in each chain
-  \item<3-> No U-Turn Sampling (NUTS) and dynamic HMC
+  \item Previously
     \begin{itemize}
-    \item adaptively selects number of steps to improve robustness and
-      efficiency
-    \item dynamic HMC refers to dynamic trajectory length
-    \item to keep reversibility of Markov chain, need to simulate in two directions
-    \item {\footnotesize \url{http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/}}
+    \item Factorizing: sample from 1) $p(\sigma^2)$, 2) $p(\mu \mid \sigma^2)$
+    \item Gibbs: sample from 1) $p(\sigma^2 \mid \mu)$, 2) $p(\mu \mid \sigma^2)$
     \end{itemize}
-  \item<4-> Dynamic simulation is discretized
+  \item<2-> HMC
     \begin{itemize}
-    \item small step size gives accurate simulation, but requires more log density evaluations
-    \item large step size reduces computation, but increases
-      simulation error which needs to be taken into account in the
-      Markov chain
-    \item black board explanation of the effect of step size
+    \item Augment with $\phi$ (the same dimensionality as $\theta$)
+    \item Sample from 1) $p(\phi)$, 2) $p(\theta,\phi)$
     \end{itemize}
-\end{itemize}
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Hamiltonian Monte Carlo}
+
+  \begin{itemize}
+  \item[1)] Sample from $p(\phi)$
+    \begin{itemize}
+    \item define $p(\phi) = \normal(0,1)$
+    \end{itemize}
+  \item[2)] Sample from $p(\theta,\phi)$
+    \begin{itemize}
+    \item Hamiltonian dynamic simulation
+    \end{itemize}
+  
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Hamiltonian dynamic simulation}
+
+  \begin{itemize}
+  \item Statistical mechanics and canonical distribution
+    \begin{align*}
+      p(\theta,\phi)&=p(\theta)p(\phi)\\
+      &=\frac{1}{Z}\exp(-H(\theta,\phi))\\
+      &=\frac{1}{Z}\exp(-(U(\theta)+K(\phi)))
+    \end{align*}
+    where $H$ is Hamiltonian energy function, $U$ is potential energy
+    function, $K$ is kinetic energy function, and $\phi$ can now be
+    considered to be a momentum variable
+  \item<2-> The potential energy is the neg log density\\
+    $U(\theta)=-\log(p(\theta))+C$
+  \end{itemize}
+  
+  
+\end{frame}
+
+\begin{frame}{Hamiltonian dynamic simulation}
+
+ Equations of motion, use also the gradient
+  \begin{align*}
+    \frac{d\theta_i}{dt} & = \frac{\partial H}{\partial p_i}\\
+    \frac{d\phi_i}{dt} & = -\frac{\partial H}{\partial \theta_i}
+  \end{align*}
+
+  \includegraphics[width=10cm]{hmc_dynamics.png}\\
+  {\footnotesize From Monnahan et al (2017)}
+  
+\end{frame}
+
+\begin{frame}{Leapfrog discretization}
+
+  \begin{itemize}
+  \item Leapfrog discretization
+    \begin{itemize}
+    \item preserves volume
+    \item reversible
+    \item discretization error does not usually grow in time
+    \end{itemize}
+  \end{itemize}
+  \includegraphics[width=10cm]{hmc_leapfrog.png}\\
+  {\footnotesize From Neal (2012)}
+  
+\end{frame}
+
+\begin{frame}{Leapfrog discretization + Metropolis}
+
+  \vspace{-0.5\baselineskip}
+  \begin{itemize}
+  \item Leapfrog discretization
+    \begin{itemize}
+    \item due to the dicretization error the simulation steps away
+      from the constant contour
+    \end{itemize}
+  \item<2-> Metropolis step with
+    $r=\exp\left(H(\theta^*,\phi^*)-H(\theta^{(t-1)},\phi^{(t-1)})\right)$
+    \begin{itemize}
+    \item accept if the Hamiltonian energy in the end is higher 
+    \item accept with some probability if the Hamiltonian energy in
+      the end is lower
+    \end{itemize}
+  \end{itemize}
+    \vspace{-0.6\baselineskip}
+    \begin{center}
+      \includegraphics[width=5cm,trim=150 0 0 10,clip]{hmc_leapfrog.png}
+      {\footnotesize~~ From Neal (2012)}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Leapfrog discretization, step size}
+
+  \vspace{-0.5\baselineskip}
+  \begin{itemize}
+    \item Small step size $\rightarrow$ high acceptance rate, but many
+      log density and gradient evaluations
+    \item Big step size $\rightarrow$ less log density and gradient
+      evaluations, but lower acceptance rate \uncover<2->{and the simulation may
+      diverge}
+    \end{itemize}
+  \only<1>{\includegraphics[height=5cm,trim=0 0 140 0,clip]{hmc_leapfrog_2d.png}}\only<2>{\includegraphics[height=5cm]{hmc_leapfrog_2d.png}}\\
+  {\footnotesize From Monnahan et al (2017)}
+\end{frame}
+
+\begin{frame}{Leapfrog discretization, the number of steps}
+
+    \begin{itemize}
+    \item Many steps can reduce random walk
+    \item Many steps require many log density and gradient evaluations
+    \end{itemize}
+  {\includegraphics[height=5cm,trim=0 0 140 0,clip]{hmc_leapfrog_2d.png}}\\
+  {\footnotesize From Monnahan et al (2017)}
+\end{frame}
+  
+\begin{frame}{Static Hamiltonian Monte Carlo}
+
+  \begin{itemize}
+  \item Fixed number of steps
+  \item Demo \url{https://chi-feng.github.io/mcmc-demo/}
+  \end{itemize}
 
 \end{frame}
 
-\begin{frame}{Adaptive dynamic HMC in Stan}
+\begin{frame}{No-U-Turn sampler}
+
+    \begin{itemize}
+    \item Adaptively selects number of steps to improve robustness and
+      efficiency
+      \begin{itemize}
+      \item NUTS is a dynamic HMC algorithm, where dynamic refers to
+        the dynamic trajectory length
+      \item simulate until a U-turn is detected
+      \item the number of simulation steps doubled if no U-turn yet
+      \end{itemize}
+    \item<2-> To keep reversibility of Markov chain
+      \begin{itemize}
+      \item need to simulate in two directions
+      \item choose a point along the simulation path with slice
+        sampling
+      \item Metropolis acceptance step for the selected point
+      \end{itemize}
+    \item<3-> For further efficiency
+      \begin{itemize}
+      \item simulation path parts further away from the starting point
+        can have higher probability
+      \item max treedepth to keep computation in control
+      \end{itemize}
+    \item<4-> Demo \url{https://chi-feng.github.io/mcmc-demo/}
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}{No-U-Turn sampler with multinomial sampling}
+
+    \begin{itemize}
+    \item Original NUTS
+      \begin{itemize}
+      \item choose a point along the simulation path with slice sampling
+      \item possibly with bigger weighting for further points
+      \item Metropolis acceptance step for the selected point
+      \item if the proposal is rejected the previous state is also the
+        new state
+      \end{itemize}
+    \item<2-> NUTS with multinomial sampling
+      \begin{itemize}
+      \item compute the probability of selecting a point and accepting
+        it for all points
+      \item select the point with multinomial sampling
+      \item more likely to accept a point that is not the previous one
+      \end{itemize}
+    \item<3-> Demo \url{https://chi-feng.github.io/mcmc-demo/}
+    \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Mass matrix and the step size adaptation}
 
   \begin{itemize}
-  \item Dynamic HMC using growing tree to increase simulation
-    trajectory until no-U-turn criterion stopping
-    \begin{itemize}
-    \item max treedepth to keep computation in control
-    \item<2-> pick a draw along the trajectory with probabilities adjusted
-      to take into account the error in the discretized dynamic
-      simulation
-    \item<3-> give bigger weight for tree parts further away to increase
-      probability of jumping further away
-    \end{itemize}
-  \item<4-> Mass matrix and step size adaptation in Stan
-    \begin{itemize}
-    \item<4-> mass matrix refers to having different scaling for different
+  \item Mass matrix refers to having different scaling for different
       parameters and optionally also rotation to reduce correlations
-    \item<5-> mass matrix and step size adjustment and are estimated
-      during initial adaptation phase
-    \item<6-> step size is adjusted to be as big as possible while keeping
-      discretization error in control (adapt\_delta)
-    \end{itemize}
-  \item<7-> After adaptation the algorithm parameters are fixed
-  \item<8-> After warmup store iterations for inference
-  \item<9-> See more details in Stan reference manual
+      \begin{itemize}
+      \item mass matrix is estimated during the adaptation phase of
+        the warm-up
+      \item mass matrix is estimated using the draws so far
+      \end{itemize}
+    \item<2-> Step size
+      \begin{itemize}
+      \item adjusted to be as big as possible while keeping
+        discretization error in control (adapt\_delta)
+      \end{itemize}
+    \item<3-> After adaptation the algorithm parameters are fixed and
+      some more iterations run to finish the warmup
 \end{itemize}
 
 \end{frame}
 
 \begin{frame}{Max tree depth diagnostic}
 
+  \vspace{-0.5\baselineskip}
   \begin{itemize}
-  \item Dynamic HMC specific diagnostic
-  \item Indicates inefficiency in sampling leading to higher
-    autocorrelations and lower ESS ($n_{\rm eff}$)
-  \item Different parameterizations matter
+  \item NUTS specific diagnostic
+    \begin{itemize}
+    \item the dynamic simulation is build as a binary tree\\
+      \includegraphics[width=8.5cm]{hmc_binary_tree.png}\\ {\scriptsize from Hoffman \& Gelman (2014)}      
+    \item<2-> maximum simulation length is capped to avoid very long
+      waiting times in case of bad behavior
+    \end{itemize}
+  \item<3-> Indicates inefficiency in sampling leading to higher
+    autocorrelations and lower ESS ($S_{\eff}$)
+    \begin{itemize}
+    \item very low inefficiency can indicate problems that need to be
+      inverse-distance
+    \item moderate inefficiency doesn't invalidate the result
+    \end{itemize}
+  \item<4-> Different parameterizations matter
   \end{itemize}
+
+  
 \end{frame}
 
+\begin{frame}{Divergences}
+
+    \vspace{-0.25\baselineskip}
+  \begin{itemize}
+  \item HMC specific: indicates that Hamiltonian dynamic simulation
+    has problems with unexpected fast changes in log-density (compared
+    to the used step size)
+    \begin{itemize}
+    \item indicates possibility of biased estimates
+    \end{itemize}
+    \vspace{0.25\baselineskip}
+      \includegraphics[height=5cm,trim=140 0 0 0,clip]{hmc_leapfrog_2d.png}\\
+  {\footnotesize From Monnahan et al (2017)}
+  % \item {\small \url{http://mc-stan.org/users/documentation/case-studies/divergences_and_bias.html}}
+  %    \only<1>{\phantom{\includegraphics[width=8cm]{unnamed-chunk-6-1.png}}}
+  %    \only<2>{\includegraphics[width=8cm]{unnamed-chunk-6-1.png}}
+  %    \only<3>{\includegraphics[width=8cm]{unnamed-chunk-7-1.png}}
+  %    \only<4>{\includegraphics[width=8cm]{unnamed-chunk-9-1.png}}
+  %    \only<5>{\includegraphics[width=8cm]{unnamed-chunk-12-1.png}}
+  %    \only<6>{\includegraphics[width=8cm]{unnamed-chunk-13-1.png}}
+  %    \only<7>{\includegraphics[width=8cm]{unnamed-chunk-15-1.png}}
+  %    \only<8>{\includegraphics[width=8cm]{unnamed-chunk-21-1.png}}
+  %    \only<9>{\includegraphics[width=8cm]{unnamed-chunk-31-1.png}}
+  %  \end{itemize}
+    \vspace{0.25\baselineskip}
+    \item<2-> Demo \url{https://chi-feng.github.io/mcmc-demo/}
+    \end{itemize}
+  \end{frame}
+
+
+  % \item Different parameterizations matter
 
 \begin{frame}{Divergences}
 
@@ -286,7 +494,6 @@
     \begin{itemize}
     \item indicates possibility of biased estimates
     \end{itemize}
-  \item Different parameterizations matter
   \item {\small \url{http://mc-stan.org/users/documentation/case-studies/divergences_and_bias.html}}
      \only<1>{\phantom{\includegraphics[width=8cm]{unnamed-chunk-6-1.png}}}
      \only<2>{\includegraphics[width=8cm]{unnamed-chunk-6-1.png}}
@@ -299,6 +506,7 @@
      \only<9>{\includegraphics[width=8cm]{unnamed-chunk-31-1.png}}
   \end{itemize}
 \end{frame}
+
 
 \begin{frame}{Problematic distributions}
 
@@ -351,7 +559,7 @@
     \item diagnostics
     \end{itemize}
   \item Many frameworks
-    Stan, PyMC3, Pyro (Uber), Edward (Google), Birch, ELFI, ...
+    Stan, PyMC, Pyro (Uber), TFP (Google), Turing.jl, JAGS, ELFI, ...
   \end{itemize}
   
 \end{frame}
@@ -364,7 +572,7 @@
      \begin{itemize}
      \item autodiff to compute gradients of the log density
      \end{itemize}
-   \item<2-> More than ten thousand users in social, biological, and
+   \item<2-> More than 100K users in social, biological, and
      physical sciences, medicine, engineering, and business
      
    \item<3-> Several full time developers, 40+ developers, more than 100 contributors
