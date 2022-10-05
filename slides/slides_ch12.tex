@@ -224,13 +224,21 @@
   \begin{itemize}
   \item Previously
     \begin{itemize}
-    \item Factorizing: sample from 1) $p(\sigma^2)$, 2) $p(\mu \mid \sigma^2)$
-    \item Gibbs: sample from 1) $p(\sigma^2 \mid \mu)$, 2) $p(\mu \mid \sigma^2)$
+    \item<+-> Factorizing: sample from\\
+      1) $p(\sigma^2)$,\\
+      2) $p(\mu \mid \sigma^2)$
+    \item<+-> Gibbs: sample from\\
+      1) $p(\sigma^2 \mid \mu)$,\\
+      2) $p(\mu \mid \sigma^2)$
+    \item<+-> Metropolis: jointly $p(\mu,\sigma)$\\
+      jump distribution is a combination of proposal distribution and
+      point mass at the previous value
     \end{itemize}
-  \item<2-> HMC
+  \item<+-> HMC
     \begin{itemize}
     \item Augment with $\phi$ (the same dimensionality as $\theta$)
-    \item Sample from 1) $p(\phi)$, 2) $p(\theta,\phi)$
+    \item 1) sample directly from $p(\phi)$,\\
+      2) make a special Metropolis step in $p(\theta,\phi)$
     \end{itemize}
   \end{itemize}
   
@@ -243,9 +251,9 @@
     \begin{itemize}
     \item define $p(\phi) = \normal(0,1)$
     \end{itemize}
-  \item[2)] Sample from $p(\theta,\phi)$
+  \item[2)] Metropolis update for $p(\theta,\phi)$
     \begin{itemize}
-    \item Hamiltonian dynamic simulation
+    \item proposal from Hamiltonian dynamic simulation
     \end{itemize}
   
   \end{itemize}
@@ -258,12 +266,16 @@
   \item Statistical mechanics and canonical distribution
     \begin{align*}
       p(\theta,\phi)&=p(\theta)p(\phi)\\
-      &=\frac{1}{Z}\exp(-H(\theta,\phi))\\
-      &=\frac{1}{Z}\exp(-(U(\theta)+K(\phi)))
+      &=\frac{1}{Z}\exp(-(U(\theta)+K(\phi)))\\
+      &=\frac{1}{Z}\exp(-H(\theta,\phi))
     \end{align*}
-    where $H$ is Hamiltonian energy function, $U$ is potential energy
-    function, $K$ is kinetic energy function, and $\phi$ can now be
-    considered to be a momentum variable
+    where
+    \begin{itemize}
+    \item $U$ is potential energy function
+    \item $K$ is kinetic energy function
+    \item $H$ is Hamiltonian energy function
+    \item $\phi$ is called a momentum variable
+    \end{itemize}
   \item<2-> The potential energy is the neg log density\\
     $U(\theta)=-\log(p(\theta))+C$
   \end{itemize}
@@ -323,6 +335,22 @@
     \end{center}
 \end{frame}
 
+\begin{frame}{Two steps of Hamiltonian Monte Carlo}
+
+  \vspace{-0.6\baselineskip}
+  \begin{itemize}
+  \item Perfect simulation keeps $p(\theta,\phi)$ constant
+  \item<2-> Discretized simulation keeps changes in
+    $p(\theta,\phi)$ small
+  \item<3-> Alternating sampling from $p(\phi)$ is crucial for moving
+    to $(\theta,\phi)$ points with different joint density
+  \end{itemize}
+  
+  \includegraphics[width=10cm]{hmc_leapfrog.png}\\
+      {\footnotesize~~ From Neal (2012)}
+
+\end{frame}
+
 \begin{frame}{Leapfrog discretization, step size}
 
   \vspace{-0.5\baselineskip}
@@ -358,29 +386,30 @@
 
 \begin{frame}{No-U-Turn sampler}
 
+  \vspace{-0.5\baselineskip}
     \begin{itemize}
-    \item Adaptively selects number of steps to improve robustness and
-      efficiency
+    \item Adaptively selects number of steps
       \begin{itemize}
       \item NUTS is a dynamic HMC algorithm, where dynamic refers to
         the dynamic trajectory length
-      \item simulate until a U-turn is detected
-      \item the number of simulation steps doubled if no U-turn yet
+      \item<2-> simulate until a U-turn is detected
+      \item<2-> the number of simulation steps doubled if no U-turn yet\\
+      \only<2-3>{\includegraphics[width=8.5cm]{hmc_binary_tree.png}\\ {\scriptsize from Hoffman \& Gelman (2014)}      }
       \end{itemize}
-    \item<2-> To keep reversibility of Markov chain
+    \item<3-> To keep reversibility of Markov chain
       \begin{itemize}
       \item need to simulate in two directions
       \item choose a point along the simulation path with slice
         sampling
       \item Metropolis acceptance step for the selected point
       \end{itemize}
-    \item<3-> For further efficiency
+    \item<4-> For further efficiency
       \begin{itemize}
       \item simulation path parts further away from the starting point
         can have higher probability
       \item max treedepth to keep computation in control
       \end{itemize}
-    \item<4-> Demo \url{https://chi-feng.github.io/mcmc-demo/}
+    \item<5-> Demo \url{https://chi-feng.github.io/mcmc-demo/}
     \end{itemize}
 
 \end{frame}
@@ -696,7 +725,7 @@ model {
 
     \vspace{-0.5\baselineskip}
     \begin{itemize}
-    \item $\sim$ is syntactic sugar and this is equivalent to
+    \item[] $\sim$ is syntactic sugar and this is equivalent to
     \end{itemize}
 
   {\small
@@ -761,21 +790,21 @@ model {
 \end{frame}
 
 \begin{frame}[fragile]
-  \frametitle{RStan}
+  \frametitle{CmdStanR}
 
   {\small\color{gray}
     {\only<1>{\color{black}}
       RStan
 \begin{lstlisting}[language=R]
-library(rstan) 
-rstan_options(auto_write = TRUE)
-options(mc.cores = parallel::detectCores())
+library(cmdstanr) 
+options(mc.cores = 1)
 \end{lstlisting}
     }
 {\only<2>{\color{black}}
-\begin{lstlisting}[language=R]
+\begin{lstlisting}[]
 d_bin <- list(N = 10, y = 7)
-fit_bin <- stan(file = 'binom.stan', data = d_bin)
+mod_bin <- cmdstan_model(stan_file = 'binom.stan')
+fit_bin <- mod_bin$sample(data = d_bin)
 \end{lstlisting}
 }
 }
@@ -834,6 +863,7 @@ fit = model.sampling(data=data)
 
 %  Beta-blockers $N_1 = 674, y_1 = 39, N_2 = 680, y_2 = 22$
   
+  \vspace{-0.5\baselineskip}
   {\small\color{gray}
     {\only<1>{\color{black}}
 \begin{lstlisting}[language=Stan]
@@ -890,41 +920,25 @@ generated quantities {
   \frametitle{Difference between proportions}
   
   {\small
-\begin{lstlisting}[language=R]
+\begin{lstlisting}[]
 d_bin2 <- list(N1 = 674, y1 = 39, N2 = 680, y2 = 22)
-fit_bin2 <- stan(file = 'binom2.stan', data = d_bin2)
+mod_bin2 <- cmdstan_model(stan_file = 'binom2.stan')
+fit_bin2 <- mod_bin2$sample(data = d_bin2, refresh=1000)
 \end{lstlisting}
   }
 
   {\tiny
 \begin{lstlisting}
-starting worker pid=10151 on localhost:11783 at 10:03:27.872
-starting worker pid=10164 on localhost:11783 at 10:03:28.087
-starting worker pid=10176 on localhost:11783 at 10:03:28.295
-starting worker pid=10185 on localhost:11783 at 10:03:28.461
+> Running MCMC with 4 parallel chains...
 
-SAMPLING FOR MODEL 'binom2' NOW (CHAIN 1).
-
-Gradient evaluation took 6e-06 seconds
-1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
-Adjust your expectations accordingly!
-
-
-Iteration:    1 / 2000 [  0%]  (Warmup)
-Iteration:  200 / 2000 [ 10%]  (Warmup)
+Chain 1 Iteration:    1 / 2000 [  0%]  (Warmup) 
+Chain 1 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+Chain 1 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+Chain 1 Iteration: 2000 / 2000 [100%]  (Sampling) 
 ...
-Iteration: 1000 / 2000 [ 50%]  (Warmup)
-Iteration: 1001 / 2000 [ 50%]  (Sampling)
-...
-Iteration: 2000 / 2000 [100%]  (Sampling)
-
- Elapsed Time: 0.012908 seconds (Warm-up)
-               0.017027 seconds (Sampling)
-               0.029935 seconds (Total)
-
-
-SAMPLING FOR MODEL 'binom2' NOW (CHAIN 2).
-...
+All 4 chains finished successfully.
+Mean chain execution time: 0.0 seconds.
+Total execution time: 0.2 seconds.
 \end{lstlisting}
   }
 
@@ -934,25 +948,18 @@ SAMPLING FOR MODEL 'binom2' NOW (CHAIN 2).
   \frametitle{Difference between proportions}
   
   {\small
-\begin{lstlisting}[language=R]
-monitor(fit_bin2, probs = c(0.1, 0.5, 0.9))
+\begin{lstlisting}[]
+fit_bin2$summary()
 \end{lstlisting}
   }
 
-  {\scriptsize
+  {\tiny
 \begin{lstlisting}
-Inference for the input samples 
-(4 chains: each with iter=1000; warmup=0):
-
-            mean se_mean  sd    10%    50%    90% n_eff Rhat
-theta1       0.1       0 0.0    0.0    0.1    0.1  3280    1
-theta2       0.0       0 0.0    0.0    0.0    0.0  3171    1
-oddsratio    0.6       0 0.2    0.4    0.6    0.8  3108    1
-lp__      -253.5       0 1.0 -254.8 -253.2 -252.6  1922    1
-
-For each parameter, n_eff is a crude measure of effective sample size,
-and Rhat is the potential scale reduction factor on split chains (at 
-convergence, Rhat=1).
+  variable      mean   median     sd    mad       q5      q95  rhat ess_bulk  ess_tail
+1 lp__      -253.    -253.    1.0    0.74   -255.    -253.      1.0    1751.     2231.
+2 theta1       0.059    0.059 0.0093 0.0093    0.045    0.075   1.0    3189.     2657.
+3 theta2       0.034    0.033 0.0069 0.0067    0.023    0.046   1.0    3229.     2163.
+4 oddsratio    0.57     0.55  0.16   0.15      0.35     0.87    1.0    2998.     2685.
 \end{lstlisting}
   }
 
@@ -967,7 +974,7 @@ convergence, Rhat=1).
   
   {\small
 \begin{lstlisting}
-draws <- as.data.frame(fit_bin2)
+draws <- fit_bin2$draws()
 mcmc_hist(draws, pars = 'oddsratio') +
   geom_vline(xintercept = 1) +
   scale_x_continuous(breaks = c(seq(0.25,1.5,by=0.25)))
@@ -980,21 +987,21 @@ mcmc_hist(draws, pars = 'oddsratio') +
 \end{frame}
 
 
-\begin{frame}[fragile]
-  \frametitle{HMC specific diagnostics}
+% \begin{frame}[fragile]
+%   \frametitle{HMC specific diagnostics}
   
-  {\scriptsize
-\begin{lstlisting}
-check_treedepth(fit_bin2)
-check_energy(fit_bin2)
-check_div(fit_bin2)
+%   {\scriptsize
+% \begin{lstlisting}
+% check_treedepth(fit_bin2)
+% check_energy(fit_bin2)
+% check_div(fit_bin2)
 
-[1] "0 of 4000 iterations saturated the maximum tree depth of 10 (0%)"
-[1] "0 of 4000 iterations ended with a divergence (0%)"
-\end{lstlisting}
-  }
+% [1] "0 of 4000 iterations saturated the maximum tree depth of 10 (0%)"
+% [1] "0 of 4000 iterations ended with a divergence (0%)"
+% \end{lstlisting}
+%   }
   
-\end{frame}
+% \end{frame}
   
 \begin{frame}{Shinystan}
 
@@ -1054,7 +1061,7 @@ data {
   }
 
   \begin{itemize}
-  \item difference between {\tt vector[N] x}\, and\, {\tt real x[N]}
+  \item difference between {\small\tt vector[N] x}\, and\, {\small\tt array[N] real x}
   \end{itemize}
 \end{frame}
 
@@ -1167,10 +1174,8 @@ model {
 
 {\scriptsize
 \begin{lstlisting}
-There were 14 transitions after warmup that exceeded the maximum
-treedepth. Increase max_treedepth above 10. See 
-http://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded
-Examine the pairs() plot to diagnose sampling problems
+Warning: 1 of 4000 (0.0%) transitions hit the maximum treedepth limit of 10.
+See https://mc-stan.org/misc/warnings for details.
 \end{lstlisting}
 }
   
@@ -1284,7 +1289,7 @@ fit_bin2 <- stan_glm(y/N ~ grp2, family = binomial(), data = d_bin2,
   \end{itemize}
 
   {\scriptsize
-\begin{lstlisting}[language=R]
+\begin{lstlisting}[]
 fit_bin2 <- brm(y/N ~ grp2, family = binomial(), data = d_bin2,
                     weights = N)
 
@@ -1305,7 +1310,7 @@ Geomagnetic storms
 
 \begin{frame}[fragile]
   \frametitle{Extreme value analysis}
-  {\small
+  {\footnotesize
   \begin{lstlisting}[language=Stan]
 data {
   int<lower=0> N;
@@ -1369,10 +1374,13 @@ functions {
   \begin{itemize}
   \item R
     \begin{itemize}
+    \item posterior --- posterior handling and diagnostics
     \item shinystan --- interactive diagnostics
-    \item bayesplot --- visualization and model checking (see model checking in Ch 6)
-    \item loo --- cross-validation model assessment, comparison and averaging (see Ch 7)
+    \item bayesplot --- visualization and model checking\\ (see model checking in Ch 6)
+    \item tideybayes and ggdist -- more visualization
+    \item loo --- cross-validation model assessment and comparison (see Ch 7)
     \item projpred --- projection predictive variable selection
+    \item priorsense --- prior and likelihood sensitivity diagnostics
     \end{itemize}
     \vspace{\baselineskip}
   \item Python
@@ -1386,18 +1394,18 @@ functions {
 \begin{frame}{Different interfaces}
 
   \begin{itemize}
+  \item CmdStanR / CmdStanPy
+    \begin{itemize}
+    \item Lightweight interface on top of commandline program CmdStan
+    \item Lacks some features that are not needed in this course, but
+      is usually easier to install
+    \end{itemize}
   \item RStan / PyStan
     \begin{itemize}
     \item C++ functions of Stan are called directly from R / Python
     \item Higher integration between R/Python and Stan, but maybe more
       difficult to install due to more requirements of compatible C++
       compilers and libraries
-    \end{itemize}
-  \item CmdStanR / CmdStanPy
-    \begin{itemize}
-    \item Lightweight interface on top of commandline program CmdStan
-    \item Lacks some features that are not needed in this course, but
-      is usually easier to install
     \end{itemize}
   \item More recent useful R packages
     \begin{itemize}
