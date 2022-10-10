@@ -189,9 +189,9 @@
   \begin{itemize}
   \item Uses log density (negative log density is called energy)
   \item Uses gradient of log density for more efficient sampling
-  \item Augments parameter space with momentum variables
+  % \item Augments parameter space with momentum variables
   \end{itemize}
-  \vspace{-0.5\baselineskip}
+  \vspace{-0.6\baselineskip}
   \only<1>{\phantom{\includegraphics[width=9cm]{hmcdemo01.pdf}}}
   \only<2>{\includegraphics[width=9cm]{hmcdemo01.pdf}}
   \only<3>{\includegraphics[width=9cm]{hmcdemo02.pdf}}
@@ -238,7 +238,7 @@
     \begin{itemize}
     \item Augment with $\phi$ (the same dimensionality as $\theta$)
     \item 1) sample directly from $p(\phi)$,\\
-      2) make a special Metropolis step in $p(\theta,\phi)$
+      2) make a special joint Metropolis step for $p(\theta,\phi)=p(\theta)p(\phi)$
     \end{itemize}
   \end{itemize}
   
@@ -251,7 +251,7 @@
     \begin{itemize}
     \item define $p(\phi) = \normal(0,1)$
     \end{itemize}
-  \item[2)] Metropolis update for $p(\theta,\phi)$
+  \item[2)] Metropolis update for $p(\theta,\phi)=p(\theta)p(\phi)$
     \begin{itemize}
     \item proposal from Hamiltonian dynamic simulation
     \end{itemize}
@@ -276,7 +276,7 @@
     \item $H$ is Hamiltonian energy function
     \item $\phi$ is called a momentum variable
     \end{itemize}
-  \item<2-> The potential energy is the neg log density\\
+  \item<2-> The potential energy is the negative log density\\
     $U(\theta)=-\log(p(\theta))+C$
   \end{itemize}
   
@@ -291,6 +291,24 @@
     \frac{d\phi_i}{dt} & = -\frac{\partial H}{\partial \theta_i}
   \end{align*}
 
+  \includegraphics[width=10cm]{hmc_dynamics.png}\\
+  {\footnotesize From Monnahan et al (2017)}
+  
+\end{frame}
+
+\begin{frame}{Hamiltonian Monte Carlo}
+
+  \begin{itemize}
+  \item[1)] Sample from $p(\phi)$
+    \begin{itemize}
+    \item define $p(\phi) = \normal(0,1)$
+    \end{itemize}
+  \item[2)] Metropolis update for $p(\theta,\phi)=p(\theta)p(\phi)$
+    \begin{itemize}
+    \item proposal from Hamiltonian dynamic simulation $p(\theta,\phi) \propto \exp(-H(\theta,\phi))$
+    \end{itemize}
+  
+  \end{itemize}
   \includegraphics[width=10cm]{hmc_dynamics.png}\\
   {\footnotesize From Monnahan et al (2017)}
   
@@ -1064,6 +1082,7 @@ data {
 
   \begin{itemize}
   \item difference between {\small\tt vector[N] x}\, and\, {\small\tt array[N] real x}
+  \item<2-> no integer vectors: {\small\tt array[N] int x}
   \end{itemize}
 \end{frame}
 
