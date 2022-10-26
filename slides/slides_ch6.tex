@@ -102,6 +102,7 @@
 \DeclareMathOperator{\Beta}{Beta}
 \DeclareMathOperator{\logit}{logit}
 \DeclareMathOperator{\N}{N}
+\DeclareMathOperator{\normal}{normal}
 \DeclareMathOperator{\U}{U}
 \DeclareMathOperator{\BF}{BF}
 \DeclareMathOperator{\Invchi2}{Inv-\chi^2}
@@ -139,7 +140,7 @@
   \item 6.1 The place of model checking in applied Bayesian statistics
   \item 6.2 Do the inferences from the model make sense?
   \item 6.3 Posterior predictive checking
-  \item 6.4 Graphical posterior predictive checks (can be skipped)
+  \item 6.4 Graphical posterior predictive checks (can be skimmed)
   \item 6.5 Model checking for the educational testing example
   \end{itemize}
   
@@ -185,12 +186,12 @@
   \begin{itemize}
   \item<1-> Newcomb's speed of light measurements
     \begin{itemize}
-    \item model $y\sim\N(\mu,\sigma)$ with prior $(\mu,\log\sigma)\propto 1$
+    \item model $y\sim\normal(\mu,\sigma)$ with prior $(\mu,\log\sigma)\propto 1$
     \end{itemize}
   \item<2-> Posterior predictive replicate $y^{\rm rep}$
     \begin{itemize}
     \item<3-> draw $\mu^{(s)},\sigma^{(s)}$ from the posterior $p(\mu,\sigma|y)$
-    \item<4-> draw $y^{\mathrm{rep}\,(s)}$ from $\N(\mu^{(s)},\sigma^{(s)})$
+    \item<4-> draw $y^{\mathrm{rep}\,(s)}$ from $\normal(\mu^{(s)},\sigma^{(s)})$
     \item<5-> repeat $n$ times to get $y^{\mathrm{rep}}$ with $n$ replicates\\~\\
     \uncover<6->{\includegraphics[width=7cm]{light_ppc_1hist.pdf}}
       \end{itemize}
@@ -220,6 +221,41 @@
 
 \end{frame}
 
+\begin{frame}{Posterior predictive checking -- bayesplot}
+
+  \vspace{-1\baselineskip}
+  \texttt{ppc\_hist(y, yrep[1:8,])}
+  
+  \includegraphics[height=8cm]{Newcomb_ppc_hist.pdf}
+
+\end{frame}
+
+\begin{frame}{Posterior predictive checking -- bayesplot}
+
+  \vspace{-1\baselineskip}
+  \texttt{ppc\_dens\_overlay(y, yrep[1:100,])}
+  
+  \includegraphics[height=8cm]{Newcomb_ppc_dens_overlay.pdf}
+
+\end{frame}
+
+\begin{frame}{Posterior predictive checking -- bayesplot}
+
+  \vspace{-1\baselineskip}
+  \texttt{ppc\_ecdf\_overlay(y, yrep[1:100,])}
+  
+  \includegraphics[height=8cm]{Newcomb_ppc_ecdf_overlay.pdf}
+
+\end{frame}
+
+\begin{frame}{Posterior predictive checking -- bayesplot}
+
+  \vspace{-1\baselineskip}
+  \texttt{ppc\_scatter(y, yrep[1:4,]) + geom\_abline()}
+  
+  \includegraphics[height=7.5cm]{Newcomb_ppc_scatter.pdf}
+
+\end{frame}
 
 \begin{frame}{Posterior predictive checking with test statistic}
 
@@ -264,6 +300,42 @@
 
 \end{frame}
 
+\begin{frame}{Posterior predictive checking -- bayesplot}
+
+  \vspace{-1\baselineskip}
+  \texttt{ppc\_stat(y, yrep)}, the default statistic "mean" is usually bad
+  
+  \includegraphics[height=8cm]{Newcomb_ppc_stat_mean.pdf}
+
+\end{frame}
+
+\begin{frame}{Posterior predictive checking -- bayesplot}
+
+  \vspace{-1\baselineskip}
+  \texttt{ppc\_stat(y, yrep, stat="min")}
+  
+  \includegraphics[height=8cm]{Newcomb_ppc_stat_min.pdf}
+
+\end{frame}
+
+\begin{frame}{Posterior predictive checking -- bayesplot}
+
+  \vspace{-1\baselineskip}
+  \texttt{ppc\_stat(y, yrep, stat="max")}
+  
+  \includegraphics[height=8cm]{Newcomb_ppc_stat_max.pdf}
+
+\end{frame}
+
+\begin{frame}{Posterior predictive checking -- bayesplot}
+
+  \vspace{-1\baselineskip}
+  \texttt{ppc\_stat2d(y, yrep, stat=c("min","max"))}
+  
+  \includegraphics[height=8cm]{Newcomb_ppc_stat2d_minmax.pdf}
+
+\end{frame}
+
 \begin{frame}{Posterior predictive checking}
 
   \begin{itemize}
@@ -283,14 +355,69 @@
       \end{equation*}
     \end{itemize}
     \vspace{-1.5\baselineskip}
-  \item<3-> Posterior predictive $p$-value (ppp-value) estimated whether
+  \item<3-> Posterior predictive $p$-value (ppp-value) estimates whether
     difference between the model and data could arise by chance
-  \item<4-> \color{black} Not commonly used, since the distribution of test
-    statistic has more information
+  \item<4-> \color{black} Not commonly used, as
+    \begin{itemize}
+    \item the distribution of test statistic has more information
+    \item not calibrated in case of non-ancillary statistic
+    \end{itemize}
   \end{itemize}
 
 \end{frame}
 
+\begin{frame}{Posterior predictive checking -- example}
+
+  \begin{itemize}
+  \item In general it is often better to improve the model than remove
+    data
+  \item There can be cases where after the first model fit, it is
+    clear that some data are clearly incorrectly measured, but there
+    has to be really strong justifications for dropping out
+    observations
+  \item<2-> Let's assume that in Newcomb experiment, the two observations
+    with negative values are clearly incorrect and let's refit by
+    removing them
+  \end{itemize}
+
+\end{frame}
+
+  
+\begin{frame}{Posterior predictive checking (good fit)}
+
+  \vspace{-1\baselineskip}
+  \texttt{ppc\_hist(y2, y2rep[1:8,])}
+  
+  \includegraphics[height=8cm]{Newcomb_ppc_hist_nooutliers.pdf}
+
+\end{frame}
+
+\begin{frame}{Posterior predictive checking (good fit)}
+
+  \vspace{-1\baselineskip}
+  \texttt{ppc\_dens\_overlay(y2, y2rep[1:100,])}
+  
+  \includegraphics[height=8cm]{Newcomb_ppc_dens_overlay_nooutliers.pdf}
+
+\end{frame}
+
+\begin{frame}{Posterior predictive checking (good fit)}
+
+  \vspace{-1\baselineskip}
+  \texttt{ppc\_ecdf\_overlay(y2, y2rep[1:100,])}
+  
+  \includegraphics[height=8cm]{Newcomb_ppc_ecdf_overlay_nooutliers.pdf}
+
+\end{frame}
+
+\begin{frame}{Posterior predictive checking (good fit)}
+
+  \vspace{-1\baselineskip}
+  \texttt{ppc\_stat2d(y2, y2rep, stat=c("min","max"))}
+  
+  \includegraphics[height=8cm]{Newcomb_ppc_stat2d_minmax_nooutliers.pdf}
+
+\end{frame}
 
 % \begin{frame}
 
@@ -331,7 +458,7 @@
     would be uniform between 0 and 1
     \begin{itemize}
     \item holds better for cross-validation predictive tests
-      (cross-validation Ch 7) 
+      (cross-validation BDA3 Ch 7) 
     \end{itemize}
   \end{itemize}
 
@@ -417,7 +544,7 @@
 \begin{frame}{Example: Exposure to air pollution}
 
   Prior predictive checking
-
+  \vspace{-1\baselineskip}
   \begin{center}
     \only<1>{\includegraphics[width=11cm]{pm25_pp1a.pdf}}
     \only<2>{\includegraphics[width=11cm]{pm25_pp1b.pdf}}
@@ -524,14 +651,14 @@
 % \end{subfigure}
 % \end{figure}
 
-\vspace{2\baselineskip}
-{\scriptsize EDIT 2020: These plots use boundary corrected KDE which is a better
-choice than the non-boundary corrected KDE used in the plots in the
-paper and the 2019 lecture.}
+% \vspace{2\baselineskip}
+% {\scriptsize EDIT 2020: These plots use boundary corrected KDE which is a better
+% choice than the non-boundary corrected KDE used in the plots in the
+% paper and the 2019 lecture.}
 
 \end{frame}
 
-\begin{frame}{Example of posterior predictive checking}
+\begin{frame}{PPC for binary target}
   
     \includegraphics[width=11cm]{mesquite_ppc.pdf}\\
   \vspace{-0.1\baselineskip} {Predicting the yields of mesquite bushes.\\
@@ -540,14 +667,16 @@ paper and the 2019 lecture.}
 
 \end{frame}
 
-\begin{frame}{Example of posterior predictive checking}
+\begin{frame}{PPC for binary target}
 
+  \vspace{-0.75\baselineskip}
   Diabetes prediction with logistic regression -
   \href{https://avehtari.github.io/modelselection/diabetes.html}{diabetes demo}
   
      \only<1>{\vspace{-.6\baselineskip}\includegraphics[width=8.5cm]{diabetes_corrplot.pdf}}
      \only<2>{PPC with binning for binary data\\ \includegraphics[width=11cm]{diabetes_calibration_binned.pdf}}
-     \only<3>{PPC with non-linear regression for binary data\\ \includegraphics[width=11cm]{diabetes_calibration_regression.pdf}}
+     % \only<3>{PPC with non-linear regression for binary data\\ \includegraphics[width=11cm]{diabetes_calibration_regression.pdf}}
+     \only<3>{PPC with monotonic regression for binary data\\ \includegraphics[width=11cm]{diabetes_reliabilitydiag.pdf}}
 
 \end{frame}
 
@@ -590,21 +719,62 @@ generated quantities {
  }
 \end{frame}
 
+\begin{frame}{PPC for count data -- Poisson model}
+  
+  \vspace{-1\baselineskip}
+  \texttt{ppc\_dens\_overlay(y, yrep[1:50,])}
+
+    \includegraphics[height=8cm]{poisson_ppc_dens_overlay.pdf}
+
+\end{frame}
+
+\begin{frame}{PPC for count data -- Poisson model}
+  
+  \vspace{-1\baselineskip}
+  \texttt{ppc\_rootogram(y, yrep)}
+
+    \includegraphics[height=8cm]{poisson_ppc_rootogram.pdf}
+
+\end{frame}
+
+\begin{frame}{PPC for count data -- Poisson model}
+  
+  \vspace{-1\baselineskip}
+  \texttt{prop\_zero <- function(x) mean(x == 0)}\\
+  \texttt{ppc\_stat(y, yrep, stat = "prop\_zero")}
+
+    \includegraphics[height=7.5cm]{poisson_ppc_stat_propzero.pdf}
+
+\end{frame}
+
+\begin{frame}{PPC for count data -- hurdle truncated Poisson model}
+  
+  \vspace{-1\baselineskip}
+  \texttt{ppc\_rootogram(y, yrep2)}
+
+    \includegraphics[height=8cm]{poisson2_ppc_rootogram.pdf}
+
+\end{frame}
+
+\begin{frame}{PPC for count data -- hurdle truncated Poisson model}
+  
+  \vspace{-1\baselineskip}
+  \texttt{prop\_zero <- function(x) mean(x == 0)}\\
+  \texttt{ppc\_stat(y, yrep2, stat = "prop\_zero")}
+
+    \includegraphics[height=7.5cm]{poisson2_ppc_stat_propzero.pdf}
+
+\end{frame}
 
 \begin{frame}{Further reading and examples}
 
   \begin{itemize}
-  \item Jonah Gabry, Daniel Simpson, Aki Vehtari, Michael
-    Betancourt, and Andrew Gelman (2019). Visualization in Bayesian
+  \item Gabry, Simpson, Vehtari, Betancourt, and Gelman
+    (2019). Visualization in Bayesian
     workflow. \url{https://doi.org/10.1111/rssa.12378}.
   \item Graphical posterior predictive checks using the bayesplot package
     \url{http://mc-stan.org/bayesplot/articles/graphical-ppcs.html}
   \item Another demo \href{http://avehtari.github.io/BDA_R_demos/demos_rstan/ppc/poisson-ppc.html}{demos\_rstan/ppc/poisson-ppc.Rmd}
-  \item Michael Betancourt's workflow case study with prior and posterior predictive checking
-    \begin{itemize}
-    \item for RStan \url{https://betanalpha.github.io/assets/case_studies/principled_bayesian_workflow.html}
-    \item for PyStan \url{https://github.com/betanalpha/jupyter_case_studies/blob/master/principled_bayesian_workflow/principled_bayesian_workflow.ipynb}
-    \end{itemize}
   \end{itemize}
   
 \end{frame}
