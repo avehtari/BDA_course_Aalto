@@ -139,6 +139,7 @@
 \DeclareMathOperator{\Chi}{Chi}
 \DeclareMathOperator{\GP}{\mathcal{GP}}
 %\DeclareMathOperator{\N}{N}
+\DeclareMathOperator{\normal}{normal}
 \DeclareMathOperator{\KL}{KL}
 
 \DeclareMathOperator*{\argmax}{arg\,max}
@@ -1102,7 +1103,39 @@ model1 -14.4       6.1
     
 \end{frame}
 
-\begin{frame}{LOO difference uncertainty estimate}
+\begin{frame}[fragile]
+  \frametitle{8 schools -- Model comparison}
+
+  {\scriptsize
+\begin{lstlisting}
+> loo_compare(pooled, hierarchical)
+            elpd_diff se_diff
+pooled        0.0       0.0   
+hierarchical -0.3       0.7   
+\end{lstlisting}}
+
+  No difference between pooled and hierarchical for predicting the
+  future observations for a new school (exchangeble with the schools
+  in the data).
+
+
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Poisson vs Hurdle-Poisson example}
+
+  {\scriptsize
+\begin{lstlisting}
+               elpd_diff se_diff
+Hurdle-Poisson    0.0       0.0 
+Poisson        -215.9      22.1 
+\end{lstlisting}}
+
+Clear difference (which was also obvious in posterior predictive checks)
+
+\end{frame}
+
+\begin{frame}{LOO difference uncertainty estimate reliability}
 \vspace{-0.2\baselineskip}
 
   \begin{list1}
@@ -1228,9 +1261,78 @@ model1 -14.4       6.1
   more accurate to analyse posterior distribution of more complex
   model directly \\
   {\small \url{avehtari.github.io/modelselection/betablockers.html}}
+  \begin{list2}
+  \item instead of comparing\\
+    \vspace{0.2\baselineskip}
+    Model 1: $y \sim \normal(\alpha, \sigma)$\\
+    \vspace{0.2\baselineskip}
+    vs\\
+    \vspace{0.2\baselineskip}
+    Model 2: $y \sim \normal(\alpha + \beta x, \sigma)$\\
+    \vspace{0.2\baselineskip}
+    look at the posterior of $\beta$ directly
+  \end{list2}
    % \begin{list2}
    %   \item<3-> need to do some model checking anyway
    % \end{list2}
+\end{list1}
+
+\end{frame}
+
+\begin{frame}{Model selection needed to avoid overfitting?}
+
+\begin{list1}
+\item Classic example is polynomial model with increasing number of components
+  \begin{list2}
+  \item overfits also with Bayesian inference and weak priors
+  \end{list2}
+\end{list1}
+\vspace{-0.5\baselineskip}
+\only<2>{\includegraphics[height=7cm]{overfit_simdata.pdf}}
+\only<3>{\includegraphics[height=7cm]{overfit_elpd_poly.pdf}}
+
+\end{frame}
+
+\begin{frame}{Model selection needed to avoid overfitting?}
+
+\begin{list1}
+\item Gaussian process can be used as a prior on function space
+  \begin{list2}
+  \item GP can be approximated with basis functions
+  \item<2-> more basis functions makes the approximation more
+    accurate, but doesn't inflate the prior on function space
+  \end{list2}
+\end{list1}
+\vspace{-0.5\baselineskip}
+
+\end{frame}
+
+\begin{frame}{Model is not needed to avoid overfitting}
+
+\begin{list1}
+\item Gaussian process can be used as a prior on function space
+  \begin{list2}
+  \item GP can be approximated with basis functions
+  \item more basis functions makes the approximation more
+    accurate, but doesn't inflate the prior on function space
+  \end{list2}
+\end{list1}
+\vspace{-0.5\baselineskip}
+{\includegraphics[height=6.8cm]{overfit_elpd_GP.pdf}}
+
+\end{frame}
+
+\begin{frame}{Model is not needed to avoid overfitting}
+
+\begin{list1}
+\item No overfiitng when using good priors that keep the prior on the
+  predictive space approximately constant when more components are
+  added, e.g.
+  \begin{list2}
+    \item Gaussian procesees
+    \item (regularized) Horseshoe for sparsity
+    \item R2-D2 and R2-D2-M2 for prior on $R^2$
+  \end{list2}
 \end{list1}
 
 \end{frame}
@@ -1307,7 +1409,7 @@ model1 -14.4       6.1
       \item small number of models
       \item the difference between models is clear
     \end{list2}
-  \item<2-> Do not use cross-validation to choose from a large set of models
+  \item<2-> Be careful if using cross-validation to choose from a large set of models
     \begin{list2}
     \item selection process can lead to severe overfitting
     % \item you may use projection predictive approach
