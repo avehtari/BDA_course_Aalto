@@ -646,13 +646,34 @@ See help('pareto-k-diagnostic') for details.
 \begin{frame}{Pareto smoothed importance sampling LOO}
 
   \begin{list1}
-  \item We want to compute ${\color{navyblue}p(y_i \mid x_{-i}, y_{-i})} = \int p(y_i \mid x_i,\theta){\color{blue} p(\theta \mid x_{-i}, y_{-i})} d\theta$
-  \item Proposal distribution is full posterior $\theta^{(s)} \sim p(\theta \mid x,y)$
-  \item Target distribution is LOO-posterior ${\color{blue} p(\theta \mid x_{-i}, y_{-i})}$
+  \item ${\color{navyblue}p(y_i \mid x_{-i}, y_{-i})} = \int p(y_i \mid x_i,\theta){\color{blue} p(\theta \mid x_{-i}, y_{-i})} d\theta$
+  \item Proposal $p(\theta \mid x,y)$ and target ${\color{blue} p(\theta \mid x_{-i}, y_{-i})}$
   \item Importance ratio
     \begin{align*}
     {\color{darkgreen} w_i^{(s)}} & = \frac{{\color{blue} p(\theta^{(s)} \mid x_{-i}, y_{-i})}}{p(\theta^{(s)} \mid x,y)}\propto \frac{1}{p(y_i \mid \theta^{(s)})}\\
-     {\color{darkgreen}\tilde{w}_i^{(s)}}&{=\frac{{\color{darkgreen} w_i^{(s)}}}{\sum_{s'=1}^S {\color{darkgreen} w_i^{(s')}}}}
+      {\color{darkgreen}\tilde{w}_i^{(s)}}&{=\frac{{\color{darkgreen} w_i^{(s)}}}{\sum_{s'=1}^S {\color{darkgreen} w_i^{(s')}}}}\\
+      p(y_i \mid x_i,x_{-i},y_{-i}) & \approx \sum_{s=1}^S \left[{\color{darkgreen}  \tilde{w}_i^{(s)}} p(y_i \mid x_i,\theta^{(s)})\right] \\
+                                  & \uncover<2->{\approx  \frac {\sum_{s=1}^S \left[{\color{darkgreen}  {w}_i^{(s)}} p(y_i \mid x_i,\theta^{(s)})\right]}{\sum_{s'=1}^S {\color{darkgreen} w_i^{(s')}}}} \\
+                                  & \uncover<3->{\approx \frac{1}{\frac{1}{S}\sum_{s'=1}^S {\color{darkgreen} w_i^{(s')}}} } \uncover<4->{ = \frac{1}{\frac{1}{S}\sum_{s=1}^S {\frac{1}{p(y_i \mid \theta^{(s)})}}} }
+    \end{align*}
+  \end{list1}
+
+  \begin{list1}
+  \item The variability of importance weights matter
+    \begin{list2}
+    \item Pareto-$\hat{k}$ diagnostic
+    \item Pareto smoothed importance sampling LOO (PSIS-LOO)
+    \end{list2}
+  \end{list1}
+\end{frame}
+
+\begin{frame}{Pareto smoothed importance sampling LOO}
+
+  \begin{list1}
+  \item ${\color{navyblue}p(y_i \mid x_{-i}, y_{-i})} = \int p(y_i \mid x_i,\theta){\color{blue} p(\theta \mid x_{-i}, y_{-i})} d\theta$\\
+    \begin{align*}
+      p(y_i \mid x_i,x_{-i},y_{-i}) & \approx \sum_{s=1}^S \left[{\color{darkgreen}  \tilde{w}_i^{(s)}} p(y_i \mid x_i,\theta^{(s)})\right] \\
+                                  & {\approx \frac{1}{\frac{1}{S}\sum_{s'=1}^S {\color{darkgreen} w_i^{(s')}}} }
     \end{align*}
   \end{list1}
 
@@ -1019,15 +1040,21 @@ generated quantities {
    \end{list2}}
 \end{frame}
 
-\begin{frame}{Sometimes cross-validation is not needed}
+% \begin{frame}{Sometimes cross-validation is not needed}
 
-  \begin{list1}
-  \item With good priors that keep the prior on predictive space
-    consistent, there is no need to do model selection to avoid
-    overfitting
-  \end{list1}
+%   \begin{list1}
+%   \item With good priors that keep the prior on predictive space
+%     consistent, no need to do model selection to avoid
+%     overfitting
+%   \end{list1}
+%   \vspace{-0.6\baselineskip}
+%   \only<1>{\includegraphics[width=8cm]{overfit_simdata.pdf}}
+%   \only<2>{\includegraphics[width=8cm]{overfit_elpd_poly.pdf}\\
+%   Polynomial with wide priors implies prior favoring overfitting}
+%    \only<3>{\includegraphics[width=8cm]{overfit_elpd_GP.pdf}\\
+%  GP basis functions imply prior not favoring overfitting}
   
-\end{frame}
+% \end{frame}
 
 % \begin{frame}{}
 
