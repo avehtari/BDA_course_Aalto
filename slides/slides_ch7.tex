@@ -599,12 +599,12 @@ See help('pareto-k-diagnostic') for details.
 \begin{frame}{Importance sampling leave-one-out cross-validation}
 
   \begin{list1}
-  \item We want to compute ${\color{navyblue}p(y_i \mid x_{-i}, y_{-i})} = \int p(y_i \mid x_i,\theta){\color{blue} p(\theta \mid x_{-i}, y_{-i})} d\theta$
+  \item We want to compute ${\color{navyblue}p(y_i \mid x_i,x_{-i}, y_{-i})} = \int p(y_i \mid x_i,\theta){\color{blue} p(\theta \mid x_{-i}, y_{-i})} d\theta$
   \item<2-> Proposal distribution is full posterior $\theta^{(s)} \sim p(\theta \mid x,y)$
   \item<2-> Target distribution is LOO-posterior ${\color{blue} p(\theta \mid x_{-i}, y_{-i})}$
   \item<3-> Importance ratio
     \begin{align*}
-    {\color{darkgreen} w_i^{(s)}} & = \frac{{\color{blue} p(\theta^{(s)} \mid x_{-i}, y_{-i})}}{p(\theta^{(s)} \mid x,y)}\propto \frac{1}{p(y_i \mid \theta^{(s)})}\\
+    {\color{darkgreen} w_i^{(s)}} & = \frac{{\color{blue} p(\theta^{(s)} \mid x_{-i}, y_{-i})}}{p(\theta^{(s)} \mid x,y)}\propto \frac{1}{p(y_i \mid x_i,\theta^{(s)})}\\
       \uncover<4>{\color{darkgreen}\tilde{w}_i^{(s)}}&\uncover<4>{=\frac{{\color{darkgreen} w_i^{(s)}}}{\sum_{s'=1}^S {\color{darkgreen} w_i^{(s')}}}}
     \end{align*}
     % \begin{itemize}
@@ -646,15 +646,15 @@ See help('pareto-k-diagnostic') for details.
 \begin{frame}{Pareto smoothed importance sampling LOO}
 
   \begin{list1}
-  \item ${\color{navyblue}p(y_i \mid x_{-i}, y_{-i})} = \int p(y_i \mid x_i,\theta){\color{blue} p(\theta \mid x_{-i}, y_{-i})} d\theta$
+  \item ${\color{navyblue}p(y_i \mid x_i,x_{-i}, y_{-i})} = \int p(y_i \mid x_i,\theta){\color{blue} p(\theta \mid x_{-i}, y_{-i})} d\theta$
   \item Proposal $p(\theta \mid x,y)$ and target ${\color{blue} p(\theta \mid x_{-i}, y_{-i})}$
   \item Importance ratio
     \begin{align*}
-    {\color{darkgreen} w_i^{(s)}} & = \frac{{\color{blue} p(\theta^{(s)} \mid x_{-i}, y_{-i})}}{p(\theta^{(s)} \mid x,y)}\propto \frac{1}{p(y_i \mid \theta^{(s)})}\\
+    {\color{darkgreen} w_i^{(s)}} & = \frac{{\color{blue} p(\theta^{(s)} \mid x_{-i}, y_{-i})}}{p(\theta^{(s)} \mid x,y)}\propto \frac{1}{p(y_i \mid x_i,\theta^{(s)})}\\
       {\color{darkgreen}\tilde{w}_i^{(s)}}&{=\frac{{\color{darkgreen} w_i^{(s)}}}{\sum_{s'=1}^S {\color{darkgreen} w_i^{(s')}}}}\\
       p(y_i \mid x_i,x_{-i},y_{-i}) & \approx \sum_{s=1}^S \left[{\color{darkgreen}  \tilde{w}_i^{(s)}} p(y_i \mid x_i,\theta^{(s)})\right] \\
                                   & \uncover<2->{\approx  \frac {\sum_{s=1}^S \left[{\color{darkgreen}  {w}_i^{(s)}} p(y_i \mid x_i,\theta^{(s)})\right]}{\sum_{s'=1}^S {\color{darkgreen} w_i^{(s')}}}} \\
-                                  & \uncover<3->{\approx \frac{1}{\frac{1}{S}\sum_{s'=1}^S {\color{darkgreen} w_i^{(s')}}} } \uncover<4->{ = \frac{1}{\frac{1}{S}\sum_{s=1}^S {\frac{1}{p(y_i \mid \theta^{(s)})}}} }
+                                  & \uncover<3->{\approx \frac{1}{\frac{1}{S}\sum_{s'=1}^S {\color{darkgreen} w_i^{(s')}}} } \uncover<4->{ = \frac{1}{\frac{1}{S}\sum_{s=1}^S {\frac{1}{p(y_i \mid x_i,\theta^{(s)})}}} }
     \end{align*}
   \end{list1}
 
@@ -670,7 +670,7 @@ See help('pareto-k-diagnostic') for details.
 \begin{frame}{Pareto smoothed importance sampling LOO}
 
   \begin{list1}
-  \item ${\color{navyblue}p(y_i \mid x_{-i}, y_{-i})} = \int p(y_i \mid x_i,\theta){\color{blue} p(\theta \mid x_{-i}, y_{-i})} d\theta$\\
+  \item ${\color{navyblue}p(y_i \mid x_i,x_{-i}, y_{-i})} = \int p(y_i \mid x_i,\theta){\color{blue} p(\theta \mid x_{-i}, y_{-i})} d\theta$\\
     \begin{align*}
       p(y_i \mid x_i,x_{-i},y_{-i}) & \approx \sum_{s=1}^S \left[{\color{darkgreen}  \tilde{w}_i^{(s)}} p(y_i \mid x_i,\theta^{(s)})\right] \\
                                   & {\approx \frac{1}{\frac{1}{S}\sum_{s'=1}^S {\color{darkgreen} w_i^{(s')}}} }
