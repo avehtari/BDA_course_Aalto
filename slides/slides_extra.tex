@@ -125,11 +125,40 @@
 
 \begin{document} 
 
+\begin{frame}{rstanarm, brms, bambi, and formula syntax}
+
+  \vspace{-0.5\baselineskip}
+  \begin{itemize}
+  \item<+-> R (and systems before R) have used a formula syntax to describe
+    models, e.g.
+    \begin{itemize}
+    \item<+-> linear model: {\texttt{y $\sim$ 1 + x}\, or\, \texttt{y $\sim$ x}}
+    \item<+-> spline model: \texttt{y $\sim$ s(x)}
+    \item<+-> binomial model:\\ \texttt{deaths $\sim$ dosage, family = binomial}
+    \item<+-> hierarchical model:\\ \texttt{weight $\sim$ age + (age | ratid)}
+    \end{itemize}
+  \item<+-> \texttt{rstanarm} has pre-compiled Stan models
+    \begin{itemize}
+    \item no need to wait compilation time
+    \item limited size of the pre-compiled binaries in CRAN limits the number of model, family, prior combinations
+    \end{itemize}
+  \item<+-> \texttt{brms}
+    \begin{itemize}
+    \item extended formula syntax, e.g.\\
+    heteroscedastic linear model: {\texttt{bf(y $\sim$ x, sigma $\sim$ x)}}
+    \item user defined families
+    \item requires compilation of the generated Stan code
+    \end{itemize}
+  \item<+-> \texttt{bambi} implements formula syntax in Python
+  \end{itemize}
+
+\end{frame}
+
 \begin{frame}
   
   {\large\color{navyblue} Chapter 8: Modelling accounting for data collection}
 
-  Highly recommended to read. Very informative, but also dense chapter.
+  Highly recommended to read. Very informative, but also a dense chapter.
   
   \begin{itemize}
   \item We need to model the data collection unless it is ignorable
@@ -163,16 +192,16 @@
     \item<3-> these properties are sometimes useful and thus good to know,
       but with probabilistic programming less often needed
     \end{itemize}
-  \item<4-> Bit on causal analysis (see much more in ROS)
-  \item<5-> Assembling matrix of explanatory variables
+  \item<4-> Bit on causal analysis (see much more in ROS Ch 18--21)
+  \item<5-> Assembling matrix of explanatory variables (see also ROS Ch 10,12)
     \begin{itemize}
     \item identifiability, collinearity, nonlinear relations,
       indicator and categorical variables, interactions
-    \item variable selection is not much discussed (see lectures 9.2,9.3)
+    \item variable selection is not much discussed (extra lecture)
     \end{itemize}
-  \item<6-> Regularization
+  \item<6-> Regularization (see also ROS Ch 12)
     \begin{itemize}
-    \item not much discussed (see more in lecture 9.3 and e.g. \url{https://betanalpha.github.io/assets/case_studies/bayes_sparse_regression.html})
+    \item not much discussed (see extra lectures)
     \end{itemize}
   \item<7-> Unequal variances and correlations
   \end{itemize}
@@ -230,14 +259,13 @@
   \includegraphics[width=6.5cm]{rhs_vs_spikeandslab.png}
 
   \vspace{-0.5\baselineskip}
-  for more see
-  \vspace{-0.5\baselineskip}
   \begin{itemize}
   \item 
   {\small Piironen and Vehtari (2017). Sparsity information and
       regularization in the horseshoe and other shrinkage priors. In
       Electronic Journal of Statistics, 11(2):5018-5051. \href{https://projecteuclid.org/euclid.ejs/1513306866}{Online}}
-  \item  \url{https://betanalpha.github.io/assets/case_studies/bayes_sparse_regression.html}
+  \item {\small\texttt{rstanarm}: \texttt{prior=hs()}}
+  \item {\small\texttt{brms}: \texttt{prior=horseshoe()}}
   \end{itemize}
   
 
@@ -247,7 +275,7 @@
 
   {\Large\color{navyblue} Projpred selection vs. Lasso}
 
-  See projpred in lecture 9.3
+  See projpred in an extra lecture
   
 Same simulated regression data as in lecture 9,3, \\ 
 $n=50$, $p=500$, $p_\text{rel} = 150$, $\rho=0.5$
@@ -302,7 +330,7 @@ $n=50$, $p=500$, $p_\text{rel} = 150$, $\rho=0.5$
 
   \begin{itemize}
   \item Bioassay model is an example of GLM
-  \item<2-> Components:
+  \item<2-> Components: (see also ROS Ch 13--15)
     \begin{itemize}
     \item[1.] The linear predictor $\eta = X\beta$
     \item<3->[2.] The link function $g(\cdot)$ and $\mu = g^{-1}(\eta)$
@@ -318,8 +346,13 @@ $n=50$, $p=500$, $p_\text{rel} = 150$, $\rho=0.5$
         family and dispersion parameter may have its own latent linear
         predictor
       \end{itemize}
-    \item<8-> Hierarchical GLM natural extension
-    \item<9-> 16.3 Weakly informative priors section is excellent
+      \uncover<8->{\hspace{-1cm}\small
+        \begin{tabular}[t]{ll}
+     {\tt deaths $\sim$ dosage,} & {\tt family = binomial}\\
+        \end{tabular}
+        }
+      \item<9-> Hierarchical GLM natural extension
+    \item<10-> 16.3 Weakly informative priors section is excellent
       although the recommendation on using Cauchy has changed (see
       \url{https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations})
       
@@ -334,7 +367,7 @@ $n=50$, $p=500$, $p_\text{rel} = 150$, $\rho=0.5$
   {\large\color{navyblue} Chapter 17: Models for robust inference}
 
   \begin{itemize}
-  \item For example\\
+  \item For example (see also ROS Ch 15)\\
     \begin{tabular}[t]{lcl}\small
       normal & $\rightarrow$ & $t$-distribution\\
       Poisson & $\rightarrow$ & negative-binomial \\
@@ -376,7 +409,9 @@ $n=50$, $p=500$, $p_\text{rel} = 150$, $\rho=0.5$
       multiple imputed data sets
     \item[3.] make usual inference for each imputed data set
     \item[4.] combine results
+    \item<6-> \texttt{mice} package is ver flexible
     \end{itemize}
+  \item<7-> \texttt{brms} can handle some missing data
   \end{itemize}
   
 \end{frame}
@@ -424,7 +459,7 @@ $n=50$, $p=500$, $p_\text{rel} = 150$, $\rho=0.5$
 
 \begin{frame}
 
-  \vspace{-0.85\baselineskip}
+  \vspace{-0.75\baselineskip}
   \begin{itemize}
   \small
   \item Easy to make additive models\\
@@ -454,16 +489,48 @@ $n=50$, $p=500$, $p_\text{rel} = 150$, $\rho=0.5$
   \begin{itemize}
   \item GP specific software (e.g. GPy, GPflow, GPyTorch) scale
     computationally better for GPs than Stan
-  \item Stan has some built-in covariance functions (and soon GPU support)
+  \item Stan has some built-in covariance functions
+  \item Hilbert space basis function approximation of GPs is fast for 1D-3D (\href{https://arxiv.org/abs/2004.11408v2}{Riutort-Mayol et al., 2022})
+    \begin{itemize}
+    \item \href{https://avehtari.github.io/casestudies/Birthdays/birthdays.html}{Birthday example}
+    \item \href{https://avehtari.github.io/casestudies/Motorcycle/motorcycle_gpcourse.html}{Motorcycle example}
+    \end{itemize}
   \item In case of non-Gaussian outcome models, sampling of latent
     variables can be slow (Laplace integration over the latents coming)
-  \item<2-> Instead of covariance matrix based approach, for low
-    dimensional cases faster to use basis function representation
+  \item<2-> \texttt{brms}:
     \begin{itemize}
-    \item e.g. {\tt stan\_glm(y $\sim$ s(x, bs="gp"))}
+    \item covariance matrix based computation:\\ {\tt y $\sim$ gp(x)} 
+    \item Hilbert space basis function approximation:\\
+    {\tt y $\sim$ gp(x, k=20)} 
     \end{itemize}
   \end{itemize}
+  
+\end{frame}
 
+\begin{frame}{Regression and Other Stories}
+
+  \begin{itemize}
+  \item Gelman, Hill, and Vehtari (2020). Regression and Other Stories.
+    \begin{itemize}
+    \item uses Bayesian inference, but maths and computation is minimal
+    \item focuses on different models and how think about modeling
+    \item a lot of different examples
+    \item \url{https://avehtari.github.io/ROS-Examples/}
+    \end{itemize}
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Bayesian workflow}
+
+  \vspace{-\baselineskip}\footnotesize
+  Gelman, Vehtari, Simpson, Margossian, Carpenter, Yao, Kennedy,
+  Gabry, Bürkner, and Modrák (2020). Bayesian
+  workflow. \href{https://arxiv.org/abs/2011.01808}{arXiv:2011.01808}
+  
+  \centering
+  \vspace{-0.5\baselineskip}
+  \includegraphics[width=7.5cm]{workflow_overview.pdf}
   
 \end{frame}
 
