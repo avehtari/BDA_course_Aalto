@@ -143,11 +143,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -176,8 +180,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -185,16 +189,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -327,6 +324,15 @@ div.tocify {
   <a href="Aalto2022.html">Aalto 2022</a>
 </li>
 <li>
+  <a href="gsu2023.html">BDA GSU 2023</a>
+</li>
+<li>
+  <a href="assignments_gsu.html">GSU Assignments</a>
+</li>
+<li>
+  <a href="project_gsu.html">GSU Project</a>
+</li>
+<li>
   <a href="assignments.html">Assignments</a>
 </li>
 <li>
@@ -360,12 +366,12 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">Bayesian Data Analysis course - Project work (GSU)</h1>
-<h4 class="date">Page updated: 2022-08-03</h4>
+<h4 class="date">Page updated: 2023-02-01</h4>
 
 </div>
 
 
-<p>Bayesian Data Analysis Global South (GSU) 2022</p>
+<p>Bayesian Data Analysis Global South (GSU) 2023</p>
 <div id="project-work-details" class="section level2">
 <h2>Project work details</h2>
 <p>Project work involves choosing a data set and performing a whole analysis according to all the parts of Bayesian workflow studied along the course. In this course instance there are no project presentations, but you will get feedback from your peers. You can do the project work in groups if you like.</p>
@@ -373,7 +379,7 @@ div.tocify {
 <div id="project-schedule" class="section level2">
 <h2>Project schedule</h2>
 <ul>
-<li>See <a href="gsu2022.html#Schedule_2022">the overall schedule of the GSU 2022 course</a></li>
+<li>See <a href="gsu2023.html#Schedule_2023">the overall schedule of the GSU 2023 course</a></li>
 <li>Start working on the project in midway of the course.</li>
 <li>Project report deadline 15th May Submit in peergrade (separate “class”, the class code will be posted in the course chat announcements).</li>
 <li>Project report peer grading 18-20th May.</li>
@@ -386,15 +392,15 @@ div.tocify {
 </div>
 <div id="evaluation" class="section level2">
 <h2>Evaluation</h2>
-<p>In this course instanve the project work’s evaluation consists of only from</p>
+<p>In this course instance the project work’s evaluation consists of only from</p>
 <ul>
 <li>peergraded project report (40%) (within peergrade submission 80% and feedack 20%)</li>
 </ul>
 </div>
 <div id="project-report" class="section level2">
 <h2>Project report</h2>
-<p>In the project report you practice presenting the problem and data analysis results, which means that minimal listing of code and figures is not a good report. There are different levels for how data analysis project could be reported. This report should be more than a summary of results without workflow steps. While describing the steps and decisions made during the workflow, to keep the report readable some of the diagnostic outputs and code can be put in the appendix. If you are uncertain you can ask TAs in TA sessions whether you are on a good level of amount of details.</p>
-<p>The report should include</p>
+<p>In the project report you practice presenting the problem and data analysis results, which means that minimal listing of code and figures is not a good report. There are different levels for how data analysis project could be reported. This report should be more than a summary of results without workflow steps. While describing the steps and decisions made during the workflow, to keep the report readable some of the <strong>diagnostic outputs and code</strong> can be put in the <strong>appendix</strong>. If you are uncertain you can ask TAs in TA sessions whether you are on a good level of amount of details.</p>
+<p>The report <strong>should not be over 20 pages</strong> and should include</p>
 <ol style="list-style-type: decimal">
 <li>Introduction describing
 <ul>
@@ -411,13 +417,13 @@ div.tocify {
 <li>variable selection with many models.</li>
 </ul></li>
 <li>Informative or weakly informative priors, and justification of their choices.</li>
-<li>The model code (Stan, brms, rstanarm, PyMC3).</li>
-<li>How to the inference for models was run, that is, what options were used. This is also more clear as combination of textual explanation and the actual code line.</li>
-<li>Convergence diagnostics (<span class="math inline">\(\widehat{R}\)</span>, ESS, divergences) and what was done if the convergence was not good with the first try.</li>
-<li>Posterior predictive checks and what was done to improve the model.</li>
+<li>Stan, rstanarm or brms code.</li>
+<li>How the Stan model was run, that is, what options were used. This is also more clear as combination of textual explanation and the actual code line.</li>
+<li>Convergence diagnostics (<span class="math inline">\(\widehat{R}\)</span>, ESS, divergences) and what was done if the convergence was not good with the first try. <u>This should be reported for all models.</u></li>
+<li>Posterior predictive checks and what was done to improve the model. <u>This should be reported for all models.</u></li>
+<li><strong>Optional/Bonus</strong>: Predictive performance assessment if applicable (e.g. classification accuracy) and evaluation of practical usefulness of the accuracy. This should be reported for all models as well.</li>
+<li>Sensitivity analysis with respect to prior choices (i.e. checking whether the result changes a lot if prior is changed). <u>This should be reported for all models.</u></li>
 <li>Model comparison (e.g. with LOO-CV).</li>
-<li>Predictive performance assessment if applicable (e.g. classification accuracy) and evaluation of practical usefulness of the accuracy.</li>
-<li>Sensitivity analysis with respect to prior choices (i.e. checking whether the result changes a lot if prior is changed)</li>
 <li>Discussion of issues and potential improvements.</li>
 <li>Conclusion what was learned from the data analysis.</li>
 <li>Self-reflection of what the you/group learned while making the project.</li>
@@ -427,12 +433,18 @@ div.tocify {
 <h2>Data sets</h2>
 <p>As some data sets have been overused for these particular goals, note that the following ones are forbidden in this work (more can be added to this list so make sure to check it regularly):</p>
 <ul>
-<li>extremly common data sets like titanic, mtcars, iris</li>
+<li>extremely common data sets like titanic, mtcars, iris</li>
 <li>Baseball batting (used by Bob Carpenter’s StanCon case study).</li>
 <li>Data sets used in the course demos</li>
 </ul>
 <p>It’s best to use a dataset for which there is no ready made analysis in internet, but if you choose a dataset used already in some online case study, provide the link to previous studies and report how your analysis differs from those (for example if someone has made non-Bayesian analysis and you do the full Bayesian analysis).</p>
 <p>Depending on the model and the structure of the data, a good data set would have more than 100 observations but less than 1 million. If you know an interesting big data set, you can use a smaller subset of the data to keep the computation times feasible. It would be good that the data has some structure, so that it is sensible to use multilevel/hierarchical models.</p>
+<p>If you’re looking for inspiration or you’re not sure where to begin, take a browse over <a href="https://github.com/awesomedata/awesome-public-datasets">this list of datasets</a> arranged by topic, the datasets mentioned in the <a href="https://github.com/avehtari/BDA_course_Aalto/blob/gh-pages/project_work/slides_project_work.pdf">lecture slides</a> (see slide 6), or else look at some of these publically accessible databases:</p>
+<ul>
+<li><a href="https://data.europa.eu/data/datasets?locale=en&amp;minScoring=0">EU data</a></li>
+<li><a href="https://www.icpsr.umich.edu/web/pages/ICPSR/index.html">ICPSR</a></li>
+<li><a href="https://data.worldbank.org/">The World Bank</a></li>
+</ul>
 </div>
 <div id="model-requirements" class="section level2">
 <h2>Model requirements</h2>
@@ -441,6 +453,7 @@ div.tocify {
 <li>A hierarchical model is a model where the prior of certain parameter contain other parameters that are also estimated in the model. For instance, <code>b ~ normal(mu, sigma)</code>, <code>mu ~ normal(0, 1)</code>, <code>sigma ~ exponential(1)</code>.</li>
 <li>Do not impose hard constrains on a parameter unless they are natural to them. <code>uniform(a, b)</code> should not be used unless the boundaries are really logical boundaries and values beyond the boundaries are completely impossible.</li>
 <li>At least some models should include covariates. Modelling the outcome without predictors is likely too simple for the project.</li>
+<li><code>brms</code> and <code>rstanarm</code> can be used, but you need to report the priors used (including reporting the priors <code>brms</code> and <code>rstanamr</code> assign by default).</li>
 </ul>
 </div>
 <div id="some-examples" class="section level2">
@@ -451,11 +464,12 @@ div.tocify {
 <li>Some <a href="https://mc-stan.org/users/documentation/case-studies">Stan case studies</a> focus on some specific methods, but there are many case studies that are excellent examples for this course. They don’t include all the steps required in this course, but are good examples of writing. Some of them are longer or use more advanced models than required in this course.
 <ul>
 <li><a href="https://mc-stan.org/users/documentation/case-studies/boarding_school_case_study.html">Bayesian workflow for disease transmission modeling in Stan</a></li>
-<li><a href="https://mc-stan.org/users/documentation/case-studies/model-based_causal_inference_for_RCT.html">Model-based Inference for Causal Effects in Completely Randomized Experments</a></li>
+<li><a href="https://mc-stan.org/users/documentation/case-studies/model-based_causal_inference_for_RCT.html">Model-based Inference for Causal Effects in Completely Randomized Experiments</a></li>
 <li><a href="https://mc-stan.org/users/documentation/case-studies/bball-hmm.html">Tagging Basketball Events with HMM in Stan</a></li>
 <li><a href="https://mc-stan.org/users/documentation/case-studies/golf.html">Model building and expansion for golf putting</a></li>
 <li><a href="https://mc-stan.org/users/documentation/case-studies/dyadic_irt_model.html">A Dyadic Item Response Theory Model</a></li>
 <li><a href="https://mc-stan.org/users/documentation/case-studies/lotka-volterra-predator-prey.html">Predator-Prey Population Dynamics: the Lotka-Volterra model in Stan</a></li>
+<li><a href="https://dansblog.netlify.app/posts/2022-09-04-everybodys-got-something-to-hide-except-me-and-my-monkey/everybodys-got-something-to-hide-except-me-and-my-monkey.html">Hierarchical model for motivational shifts in aging monkeys</a></li>
 </ul></li>
 <li>Some <a href="https://github.com/stan-dev/stancon_talks">StanCon case studies</a> (scroll down) can also provide good project ideas.</li>
 </ul>
