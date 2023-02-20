@@ -1,0 +1,379 @@
+---
+title: "Assignment 1 - Bayesian data analysis"
+author: "Aki Vehtari et al."
+format: 
+  html:
+    toc: true
+    code-tools: true
+    code-line-numbers: true
+    standalone: true
+    self-contained: true
+    embed-resources: true  
+    number-sections: true
+    mainfont: Georgia, serif
+    fontsize: 1.2em
+  pdf:  
+    documentclass: article
+    number-sections: true
+reference-location: margin
+citation-location: margin 
+comments:
+  hypothesis: true
+editor: source
+filters:
+  - assignments.lua 
+execute:
+    cache: true
+    daemon: 999999 
+---   
+  
+# General information
+ 
+
+The exercises of this assignment are not necessarily related to Chapter 
+1, but rather work to test whether or not you have sufficient knowledge
+to participate in the course. The first question checks that you
+remember basic terms of probability calculus. The second exercise checks
+your basic computer skills and guides you to learn some R functions. In
+the last three ones you will first write the math for solving the
+problems (you can, for example, write the equations in markdown or scan
+and include hand written answers), and then implement the final
+equations in R (and then you can use markmyassignment to check your
+results).   
+   
+**The maximum amount of points from this assignment is 3.**  
+
+We prepared a **[quarto template](template1.html)** to help you get started. 
+   
+::: {.hint}             
+**Reading instructions**:         
+   
+Chapter 1 in BDA3, see [**the reading
+instructions**](https://avehtari.github.io/BDA_course_Aalto/chapter_notes/BDA_notes_ch1.pdf).
+
+**Grading instructions**: 
+ 
+The grading will be done in peergrade.  
+All grading questions and evaluations for this assignment are contained within this document
+in the collapsible **Rubric** blocks. 
+ 
+:::        
+       
+       
+{{< include general_info.md >}}          
+
+
+    
+ 
+# Basic probability theory notation and terms  
+ 
+This can be trivial or you may need to refresh your memory on these concepts (see, e.g. Aalto course *First Course in Probability and
+Statistics*). Explain each of the following terms with one sentence:  
+   
+-   probability 
+-   probability mass (function)
+-   probability density (function) 
+-   probability distribution
+-   discrete probability distribution  
+-   continuous probability distribution   
+-   cumulative distribution function (cdf)        
+-   likelihood  
+       
+    
+ 
+
+ 
+::: {.rubric weight=17}    
+
+  
+* How is the answer?
+    - Totally wrong/has not tried 
+    - Something sensible written   
+    - All/almost all are correct (>=70% correct) 
+:::
+      
+# Basic computer skills
+   
+ 
+This task deals with elementary plotting
+and computing skills needed during the rest of the course. You can
+use either R or Python, although R is the recommended language and
+we will only guarantee support in R. For documentation in R, just
+type `?{function name here}`.
+
+
+
+
+::: {.subtask letter=a}
+Plot the density function of the Beta-distribution, with mean
+$\mu = 0.2$ and variance $\sigma^2=0.01$. The parameters
+$\alpha$ and $\beta$ of the Beta-distribution are related to the  
+mean and variance according to the following equations
+$$\begin{aligned}  
+    \alpha = \mu \left( \frac{\mu(1-\mu)}{\sigma^2} - 1 \right), \quad
+    \beta = \frac{\alpha (1-\mu) }{\mu} \,.\end{aligned}$$
+
+:::
+
+
+
+::: {.help}
+## Interactive Beta distribution PDF visualization 
+
+Below you can find an interactive visualization of the probability density function of the Beta distribution.
+You can set the two parameters of the beta distribution ($\alpha$ and $\beta$, see e.g. [Wikipedia](https://en.wikipedia.org/wiki/Beta_distribution) for further details). This is only meant to help you get a feel for the Beta distribution, for subtask 3.a) you will still have to plot the density function yourself.
+
+```{ojs}
+//| code-fold: true
+
+math = require('https://unpkg.com/mathjs@5.9.0/dist/math.min.js')
+xs = d3.range(0, 1, 1e-3)
+viewof alpha = Inputs.input(2)
+viewof beta = Inputs.input(3) 
+Inputs.form([
+    Inputs.bind(
+        Inputs.range([0, 10], {value: 2, step: 0.1, label: "alpha"}),
+        viewof alpha
+    ), 
+    Inputs.bind(
+        Inputs.range([0, 10], {value: 3, step: 0.1, label: "beta"}), 
+        viewof beta
+    ),
+], {
+    template: (inputs) => htl.html`<div style="display: flex; gap: 3em">
+  ${inputs}
+</div>`
+  })
+
+class BetaDistribution {
+    constructor(alpha, beta){
+        this.alpha = alpha;
+        this.beta = beta;
+        this.normalizing_constant = math.gamma(alpha) * math.gamma(beta) / math.gamma(alpha + beta)
+    }
+    pdf(x){
+        return Math.pow(x, alpha-1) * Math.pow(1 - x, beta-1) / this.normalizing_constant;
+    }
+    pdfs(x){
+        return x.map(x => this.pdf(x));
+    }
+}
+Plot.plot({
+    marks: [
+        Plot.line(d3.zip(xs, new BetaDistribution(alpha, beta).pdfs(xs))),
+        Plot.ruleX([0]),
+        Plot.ruleY([0]),
+        Plot.text([`The PDF of the Beta(${alpha}, ${beta}) distribution`], {frameAnchor: "top", fontSize: 20, dy: -40})
+    ],
+    x: {label: "x"},
+    y: {label: "PDF"},
+    marginTop: 60, 
+    style: {fontSize: "1em", width: "100%"},
+})
+```
+
+:::
+
+
+
+::: {.subtask letter=b} 
+Take a sample of 1000 random numbers from the above distribution
+and plot a histogram of the results. Compare visually to the
+density function.  
+:::
+
+
+ 
+
+
+::: {.subtask letter=c} 
+
+Compute the sample mean and variance from the drawn sample.
+Verify that they match (roughly) to the true mean and variance
+of the distribution.  
+
+:::
+
+
+
+
+
+::: {.subtask letter=d}
+Estimate the central 95% probability interval of the distribution from the drawn samples.   
+:::
+
+
+
+
+
+
+::: {.rubric weight=17}
+
+* Is the source code for the solutions included?
+* Does the plot in a) look something like this: **...**
+* Does the plot in b) look something like this: **...**
+* Is the computed mean in c) close to **...**?
+* Is the variance in c) close to **...**?
+* Is the probability interval in d) roughly **...**? Remember that since the interval is computed from random samples, there is variation and the answers should be roughly the same!
+  
+:::
+
+::: {.help}
+## Further formatting recommendations
+
+* Please try to include as much code and output as needed, but as little as possible.
+* Please make sure that the plots are properly labeled and are easily legible and understandable. This means
+    * they should have x- and y-labels,
+    * the text within should be of a size comparable to the size of the surrounding text and
+    * each plot should have a concise but descriptive caption or title.
+* Please make sure to report a sensible number of digits when reporting numbers. You will get more precise instructions later on, but for now think independently about how many digits of your results are important for the assignment. 
+
+:::
+  
+# Bayes' theorem 1   
+ 
+A group of researchers has designed a new  
+inexpensive and painless test for detecting lung cancer. The test is
+intended to be an initial screening test for the population in
+general. A positive result (presence of lung cancer) from the test
+would be followed up immediately with medication, surgery or more
+extensive and expensive test. The researchers know from their
+studies the following facts:
+
+-   Test gives a positive result in 98$\%$ of the time when the test
+    subject has lung cancer.
+-   Test gives a negative result in 96 $\%$ of the time when the
+    test subject does not have lung cancer.
+-   In general population approximately one person in 1000 has lung
+    cancer.
+
+::: {.subtask}
+
+The researchers are happy with these preliminary results (about
+97$\%$ success rate), and wish to get the test to market as soon as
+possible. How would you advise them? Base your answer on Bayes' rule
+computations.
+
+:::
+
+
+
+::: {.hint} 
+**Hint**:
+
+Relatively high false negative (cancer doesn't get
+detected) or high false positive (unnecessarily administer
+medication) rates are typically bad and undesirable in tests.
+:::
+
+
+Here are some probability values that can help you figure
+out if you copied the right conditional probabilities from the
+question.
+ 
+-   P(Test gives positive \| Subject does not have lung cancer) =
+    4$\%$
+-   P(Test gives positive **and** Subject has lung cancer) =
+    0.098$\%$ this is also referred to as the **joint probability**
+    of *test being positive* and the *subject having lung cancer*.
+
+
+
+
+::: {.rubric weight=17}
+
+* Is p(has cancer|test result is positive) computed using Bayes' formula
+(or its complement p(does not have cancer|test result is positive))?
+* Is the result p(has cancer|test result is positive)=**...** (or p(does not have cancer|test result
+is positive)=**...**)
+* Is the result motivated with something like **...**
+
+:::
+
+# Bayes' theorem 2
+
+We have three boxes, A, B, and C. There are
+
+-   2 red balls and 5 white balls in the box A,
+-   4 red balls and 1 white ball in the box B, and
+-   1 red ball and 3 white balls in the box C.
+
+Consider a random experiment in which one of the boxes is randomly
+selected and from that box, one ball is randomly picked up. After
+observing the color of the ball it is replaced in the box it came
+from. Suppose also that on average box A is selected 40% of the time
+and box B 10% of the time (i.e. $P(A) = 0.4$).
+
+
+
+::: {.subtask letter=a}
+What is the probability of picking a red ball?
+Implement an R function to compute that probability.
+:::
+
+
+
+
+
+
+::: {.subtask letter=b}
+If a red ball was picked, from which box did it most probably come from?
+Implement an R function to compute the probabilities for each box.
+:::
+
+
+
+
+
+::: {.rubric weight=17}
+
+
+* Is the source code available?
+* How is the answer for probability of picking a red ball?
+    - No answer
+    - Probability rules **...** and **...** used, but the result is not **...**
+    - Probability rules **...** and **...** used, and the result is **...**
+* How is the answer for what box is most probable?
+    - No answer
+    - Bayes rule used to compute probabilities for all boxes given that the picked ball is red, but the answers are not **...**
+    - Bayes rule used to compute probabilities for all boxes given that the picked ball is red, the answers are p**...** and it is not explicity said that the most probable box is box **...**
+    - Bayes rule used to compute probabilities for all boxes given that the picked ball is red, the answers are **...** and it is explicity said that the most probable box is box **...**
+
+::: 
+
+# Bayes' theorem 3 
+  
+Assume that on average fraternal twins (two
+fertilized eggs and then could be of different sex) occur once in
+150 births and identical twins (single egg divides into two separate
+embryos, so both have the same sex) once in 400 births (**Note!**
+This is not the true value, see Exercise 1.6, page 28, in BDA3).
+American male singer-actor Elvis Presley (1935 -- 1977) had a twin
+brother who died in birth. Assume that an equal number of boys and
+girls are born on average. 
+
+::: {.subtask}
+What is the probability that Elvis was an
+identical twin? Show the steps how you derived the equations to
+compute that probability and implement a function in R that computes the probability.
+:::
+
+
+
+
+
+
+::: {.rubric weight=17}
+
+* How is the answer for probability of Elvis having had an identical twin brother?
+    - No answer
+    - Probability that Elvis had an identical twin brother is computed using Bayes rule, but the result is not roughly **...**
+    - Probability that Elvis had an identical twin brother is computed using Bayes rule, and the result is roughly **...**
+
+
+
+:::
+
+    
+
+{{< include overall_quality.md >}}
