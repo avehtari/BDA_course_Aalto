@@ -1,0 +1,190 @@
+---
+title: "Assignment 2 - Bayesian data analysis"
+author: "Aki Vehtari et al."
+format: 
+  html:
+    toc: true
+    code-tools: true
+    code-line-numbers: true
+    standalone: true
+    self-contained: true
+    embed-resources: true  
+    number-sections: true
+    mainfont: Georgia, serif
+    fontsize: 1.2em
+reference-location: margin
+citation-location: margin 
+comments:
+  hypothesis: true
+editor: source
+filters:
+  - assignments.lua 
+execute:
+    cache: true 
+    daemon: 999999 
+---
+::: {.hidden}
+$$
+% You can add TeX macros here for HTML, see https://quarto.org/docs/authoring/markdown-basics.html#equations
+\renewcommand{\BetaDist}{\mathrm{Beta}}
+$$
+:::
+
+
+# General information
+
+This assignment is related to Chapters 1 and 2. 
+You may find an additional discussion
+about choosing priors in a [**blog post by Andrew
+Gelman**](http://andrewgelman.com/2017/10/04/worry-rigged-priors/).
+
+**The maximum amount of points from this assignment is 3.**
+
+We prepared a **[quarto template](template2.html)** to help you get started. 
+   
+::: {.hint}             
+**Reading instructions**:       
+
+Chapter 1 and 2 in BDA3, see [**the reading
+instructions for Chapter
+1**](https://avehtari.github.io/BDA_course_Aalto/chapter_notes/BDA_notes_ch1.pdf)
+and [**the reading instructions for Chapter
+2**](https://avehtari.github.io/BDA_course_Aalto/chapter_notes/BDA_notes_ch2.pdf).
+
+**Grading instructions:** 
+ 
+The grading will be done in peergrade.  
+All grading questions and evaluations for this assignment are contained within this document
+in the collapsible **Rubric** blocks. 
+:::
+
+
+{{< include general_info.md >}}
+
+
+
+# Inference for binomial proportion
+
+Algae status is monitored in 274 sites at Finnish lakes and rivers. The
+observations for the 2008 algae status at each site are presented in
+the dataset `algae` in the `aaltobda` package ('0': no algae, '1': algae present). 
+
+
+
+
+Let $\pi$ be the probability of a monitoring site having detectable
+blue-green algae levels and $y$ the observations in `algae`. Use a
+binomial model for the observations $y$ and a $\BetaDist(2,10)$ prior for
+binomial model parameter $\pi$ to formulate a Bayesian model. Here it is
+not necessary to derive the posterior distribution for $\pi$ as it has
+already been done in the book and it suffices to refer to that
+derivation. Also, it is not necessary to write out the distributions; it
+is sufficient to use label-parameter format, e.g. $\BetaDist(\alpha,\beta)$.
+
+Your task is to perform Bayesian inference for a binomial model and answer
+questions based on it:
+
+::: {.subtask letter=a}
+Formulate 
+
+1. the likelihood $p(y|\pi)$ as a function of $\pi$,
+2. the prior $p(\pi)$, and 
+3. the resulting posterior $p(\pi|y)$.
+
+Report the posterior in the format $\BetaDist(\alpha,\beta)$, where you
+replace $\alpha$ and $\beta$ with the correct numerical values.
+:::
+
+::: {.hint} 
+**Hint**:
+
+With a conjugate prior, a closed-form posterior has Beta form
+(see equations in the book and in the slides).
+:::
+
+
+
+::: {.subtask letter=b}
+What can you say about the value of the unknown $\pi$ according to
+the observations and your prior knowledge? Summarize your results
+with a point estimate (i.e. $E(\pi|y)$) and a 90% posterior
+interval. 
+:::
+
+::: {.hint} 
+**Hint**:
+
+Posterior intervals are also called credible
+intervals and are different from confidence intervals. 
+:::
+
+
+
+::: {.subtask letter=c} 
+What is the probability that the proportion of monitoring sites with
+detectable algae levels $\pi$ is smaller than $\pi_0=0.2$ that is
+known from historical records?
+:::
+
+
+::: {.subtask letter=d}
+What assumptions are required in order to use this kind of a model
+with this type of data? 
+:::
+
+::: {.hint} 
+**Hint**:
+
+No need to discuss exchangeability yet, as
+it is discussed in more detail in BDA Chapter 5 and Lecture 7.
+:::
+
+
+
+::: {.subtask letter=e} 
+Make prior sensitivity analysis by testing a couple of different
+reasonable priors and plot the different posteriors. Summarize the
+results by one or two sentences.
+:::
+
+
+
+
+::: {.rubric weight=85}
+
+* Is source code included?
+* Are the prior, likelihood and posterior forms in a) reported (derivation of posterior not necessary)?
+    * No
+    * Some missing
+    * Yes
+* Is the reported resulting posterior correct **...**?
+  * It is not reported, that the posterior distribution is a **...** distribution.
+  * It is reported, that the posterior distribution is **...**, but the numerical values for the
+  parameters are incorrect
+  * It is reported, that the posterior distribution is **...**, and the numerical values for the
+parameters are correct.
+* In part b), is there at least one point estimate reported. Sample based estimates are also ok. Points
+should be given if the method is right, even if the result is wrong due to a wrong posterior distribution
+being used. With the right posterior, mean, median, and mode are all approximately **...**.
+* For the b) part, is the 90% posterior interval reported? Sample based estimate is also ok. Points
+should be given if the method is right, even if the result is wrong because the posterior was wrong in
+the first place. If the posterior was right, the 90% posterior interval is roughly **...**.
+* For the c) part, is the posterior probability Pr(π<0.2|y) reported? Points should be given if the method
+is right, even if the result is wrong because the posterior was wrong. If the posterior was right, the
+result should be approximately **...**.
+* For the d) part, does the report discuss **...**
+    * No
+    * No, but other reasonable assumptions are discussed
+    * Yes, but not quite right or some missing
+    * Yes
+* For the e) part, is there some comparison and discussion of results obtained with alternative prior
+parameters?
+    * No
+    * Yes, but the results and conclusions are clearly wrong
+    * Yes
+
+:::
+
+    
+
+{{< include overall_quality.md >}}
