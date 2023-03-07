@@ -1,0 +1,310 @@
+---
+title: "Assignment 3"
+author: anonymous # <-- hand in anonymously
+format: 
+  html:
+    toc: true
+    code-tools: true
+    code-line-numbers: true
+    standalone: true
+    self-contained: true
+    embed-resources: true  
+    number-sections: true
+    mainfont: Georgia, serif
+    linkcolor: "#212529"
+    fontsize: 1.2em
+    page-layout: article
+  pdf:  
+    documentclass: article
+    number-sections: true
+reference-location: margin
+citation-location: margin 
+comments:
+  hypothesis: true
+editor: source
+---
+
+
+# General information
+
+:::: {.content-hidden when-format="pdf"}
+::: {.callout-warning collapse=false}
+ 
+## Setup 
+
+
+*This block will only be visible in your HTML output, but will be hidden when rendering to PDF for the submission.*
+**Make sure that this does not get displayed in the PDF!**
+            
+
+
+
+This is the template for [assignment 3](assignment3.html). You can download the qmd-files ([full](https://raw.githubusercontent.com/avehtari/BDA_course_Aalto/gh-pages/assignments/template3.qmd), [simple](https://raw.githubusercontent.com/avehtari/BDA_course_Aalto/gh-pages/assignments/simple_template3.qmd)) or copy the code from this rendered document after clicking on `</> Code` in the top right corner.
+
+**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.** 
+
+The following will set-up [`markmyassignment`](https://github.com/MansMeg/markmyassignment) to check your functions at the end of the notebook:
+ 
+```{r} 
+if(!require(markmyassignment)){
+    install.packages("markmyassignment")
+    library(markmyassignment)
+}
+assignment_path = paste("https://github.com/avehtari/BDA_course_Aalto/",
+"blob/master/assignments/tests/assignment3.yml", sep="")
+set_assignment(assignment_path)    
+```       
+
+The following installs and loads the `aaltobda` package:
+```{r}
+if(!require(aaltobda)){
+    install.packages("remotes")
+    remotes::install_github("avehtari/BDA_course_Aalto", subdir = "rpackage", upgrade="never")
+    library(aaltobda)
+}
+```
+The following installs and loads the [`latex2exp` package](https://github.com/stefano-meschiari/latex2exp), which allows us to use LaTeX in plots:
+```{r}
+if(!require(latex2exp)){
+    install.packages("latex2exp")
+    library(latex2exp)
+}
+```
+
+:::
+::::
+
+
+
+
+# Inference for normal mean and deviation (3 points) 
+
+**Loading the library and the data.**
+``` {r}
+data("windshieldy1")
+# The data are now stored in the variable `windshieldy1`.
+# The below displays the data:
+windshieldy1
+```
+The below data is **only for the tests**, you need to change to the
+full data `windshieldy1` when reporting your results.
+``` {r}
+windshieldy_test <- c(13.357, 14.928, 14.896, 14.820)
+```
+
+
+## (a)
+
+
+**Write your answers here!** 
+
+
+## (b)
+
+
+**Write your answers and code here!** 
+
+**Keep the below name and format for the functions to work with `markmyassignment`:**
+```{r} 
+# Useful functions: mean(), length(), sqrt(), sum()
+# and qtnew(), dtnew() (from aaltobda)
+
+mu_point_est <- function(data) {
+    # Do computation here, and return as below.
+    # This is the correct return value for the test data provided above.
+    14.5
+    
+}
+mu_interval <- function(data, prob = 0.95) {
+    # Do computation here, and return as below.
+    # This is the correct return value for the test data provided above.
+    c(13.3, 15.7)
+    
+}
+```
+
+You can plot the density as below if you implement `mu_pdf` to compute the PDF of the posterior $p(\mu|y)$ of the average hardness $\mu$.
+
+```{r}
+#| label: fig-2b-density
+#| fig-cap: PDF of the posterior $p(\mu|y)$ of the average hardness $\mu$
+mu_pdf <- function(data, x){
+    # Compute necessary parameters here.
+    # These are the correct parameters for `windshieldy_test` 
+    # with the provided uninformative prior.
+    df = 4
+    location = 14.5
+    scale = 0.3817557
+    # Use the computed parameters as below to compute the PDF:
+     
+    dtnew(x, df, location, scale)
+}
+
+x_interval = mu_interval(windshieldy1, .999)
+lower_x = x_interval[1]
+upper_x = x_interval[2]
+x = seq(lower_x, upper_x, length.out=1000)
+plot(
+    x, mu_pdf(windshieldy1, x), type="l", 
+    xlab=TeX(r'(average hardness $\mu$)'), 
+    ylab=TeX(r'(PDF of the posterior $p(\mu|y)$)')
+)
+```
+
+
+## (c)
+
+
+**Write your answers and code here!**
+
+**Keep the below name and format for the functions to work with `markmyassignment`:**
+```{r} 
+# Useful functions: mean(), length(), sqrt(), sum()
+# and qtnew(), dtnew() (from aaltobda)
+
+mu_pred_point_est <- function(data) {
+    # Do computation here, and return as below.
+    # This is the correct return value for the test data provided above.
+    14.5
+    
+}
+mu_pred_interval <- function(data, prob = 0.95) {
+    # Do computation here, and return as below.
+    # This is the correct return value for the test data provided above.
+    c(11.8, 17.2)
+    
+}
+```
+
+You can plot the density as below if you implement `mu_pred_pdf` to compute the PDF of the posterior predictive $p(\tilde{y}|y)$ of a new hardness observation $\tilde{y}$.
+
+```{r}
+#| label: fig-2c-density
+#| fig-cap: PDF of the posterior predictive $p(\tilde{y}|y)$ of a new hardness observation $\tilde{y}$
+mu_pred_pdf <- function(data, x){
+    # Compute necessary parameters here.
+    # These are the correct parameters for `windshieldy_test` 
+    # with the provided uninformative prior.
+    df = 4
+    location = 14.5
+    scale = 1.553903
+    # Use the computed parameters as below to compute the PDF:
+     
+    dtnew(x, df, location, scale)
+}
+
+x_interval = mu_pred_interval(windshieldy1, .999)
+lower_x = x_interval[1]
+upper_x = x_interval[2]
+x = seq(lower_x, upper_x, length.out=1000)
+plot(
+    x, mu_pred_pdf(windshieldy1, x), type="l", 
+    xlab=TeX(r'(new hardness observation $\tilde{y}$)'), 
+    ylab=TeX(r'(PDF of the posterior predictive $p(\tilde{y}|y)$)')
+)
+```
+
+
+# Inference for the difference between proportions (3 points) 
+## (a)
+
+
+**Write your answers here!** 
+
+
+## (b)
+
+
+**Write your answers and code here!**
+
+The below data is **only for the tests**:
+``` {r}
+set.seed(4711)
+no_samples = 1000
+p0 = rbeta(no_samples, 5, 95)
+p1 = rbeta(no_samples, 10, 90)
+
+```
+
+**Keep the below name and format for the functions to work with `markmyassignment`:**
+
+```{r} 
+# Useful function: mean(), quantile()
+
+posterior_odds_ratio_point_est <- function(p0, p1) {
+    # Do computation here, and return as below.
+    # This is the correct return value for the test data provided above.
+    2.650172
+    
+}
+posterior_odds_ratio_interval <- function(p0, p1, prob = 0.95) {
+    # Do computation here, and return as below.
+    # This is the correct return value for the test data provided above.
+    c(0.6796942,7.3015964)
+    
+}
+```
+
+
+
+
+## (c)
+
+
+**Write your answers and code here!** 
+
+
+# Inference for the difference between normal means (3 points) 
+
+**Loading the library and the data.**
+``` {r}
+data("windshieldy2")
+# The new data are now stored in the variable `windshieldy2`.
+# The below displays the first few rows of the new data:
+head(windshieldy2)
+```
+
+
+## (a)
+
+
+**Write your answers here!** 
+
+
+## (b)
+
+
+**Write your answers and code here!** 
+```{r} 
+# Useful functions: mean(), length(), sqrt(), sum(),
+# rtnew() (from aaltobda), quantile() and hist().
+```
+
+
+## (c)
+
+
+**Write your answers here!** 
+
+
+
+:::: {.content-hidden when-format="pdf"}
+::: {.callout-warning collapse=false}
+
+## markmyassignment
+
+
+*This block will only be visible in your HTML output, but will be hidden when rendering to PDF for the submission.*
+**Make sure that this does not get displayed in the PDF!**
+            
+
+
+The following will check the functions for which `markmyassignment` has been set up:
+ 
+```{r}  
+mark_my_assignment()    
+```      
+
+:::
+::::
+
