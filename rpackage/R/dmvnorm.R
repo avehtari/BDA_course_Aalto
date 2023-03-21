@@ -19,11 +19,11 @@ dmvnorm <- function(x, mean, sigma, log = FALSE) {
 
   checkmate::assert(checkmate::checkMatrix(x),checkmate::checkVector(x))
 
-  if (class(x) == "matrix") {
+  if (inherits(x, "matrix")) {
     checkmate::assert(dim(x)[2] == length(mean),
                       .var.name = 'check that x has correct dimensions')
   }
-  else if (class(x) == "numeric") {
+  else if (inherits(x, "numeric") ) {
     checkmate::assert(length(x) == length(mean),
                       .var.name = 'check that x has correct length')
   }
