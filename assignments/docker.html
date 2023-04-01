@@ -4541,6 +4541,9 @@ vertical-align: -.125em;
 <section id="docker-usage-instructions" class="level1">
 <h1>Docker usage instructions</h1>
 <p>Once you have installed docker you should be able to start the virtual machine that we have set up with the following command:</p>
+<p><strong>For Windows (Run the following command in Powershell not in command prompt):</strong></p>
+<pre><code>docker run --rm -ti -v ${PWD}:/home/rstudio/workspace -e USERID=$UID -e DISABLE_AUTH=true -p 127.0.0.1:8787:8787 meenaljhajharia/bda-docker:latest</code></pre>
+<p><strong>For other Operating Systems:</strong></p>
 <pre><code>docker run --rm -ti -v $PWD:/home/rstudio/workspace -e USERID=$UID -e DISABLE_AUTH=true -p 127.0.0.1:8787:8787 meenaljhajharia/bda-docker:latest</code></pre>
 <ul>
 <li><code>-v $PWD:/home/rstudio/workspace</code> makes the directory from which the docker command is run accessible to the VM under /home/rstudio/workspace</li>
@@ -4827,76 +4830,84 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class>
-<div class="sourceCode" id="cb3" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1"></a><span class="co">---</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="an">author:</span><span class="co"> &quot;Aki Vehtari et al.&quot;</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="an">title:</span><span class="co"> How to set up docker</span></span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="an">format:</span><span class="co"> </span></span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="co">  html:</span></span>
-<span id="cb3-6"><a href="#cb3-6"></a><span class="co">    toc: true</span></span>
-<span id="cb3-7"><a href="#cb3-7"></a><span class="co">    code-tools: true</span></span>
-<span id="cb3-8"><a href="#cb3-8"></a><span class="co">    code-line-numbers: true</span></span>
-<span id="cb3-9"><a href="#cb3-9"></a><span class="co">    standalone: true</span></span>
-<span id="cb3-10"><a href="#cb3-10"></a><span class="co">    self-contained: true</span></span>
-<span id="cb3-11"><a href="#cb3-11"></a><span class="co">    embed-resources: true  </span></span>
-<span id="cb3-12"><a href="#cb3-12"></a><span class="co">---</span></span>
-<span id="cb3-13"><a href="#cb3-13"></a></span>
-<span id="cb3-14"><a href="#cb3-14"></a><span class="fu"># Docker installation instructions</span></span>
-<span id="cb3-15"><a href="#cb3-15"></a></span>
-<span id="cb3-16"><a href="#cb3-16"></a>See <span class="co">[</span><span class="ot">https://docs.docker.com/get-docker/</span><span class="co">](https://docs.docker.com/get-docker/)</span>:</span>
-<span id="cb3-17"><a href="#cb3-17"></a></span>
-<span id="cb3-18"><a href="#cb3-18"></a><span class="at">&gt; Docker is an open platform for developing, shipping, and running applications. Docker enables you to separate your applications from your infrastructure so you can deliver software quickly. With Docker, you can manage your infrastructure in the same ways you manage your applications. By taking advantage of Docker’s methodologies for shipping, testing, and deploying code quickly, you can significantly reduce the delay between writing code and running it in production.</span></span>
-<span id="cb3-19"><a href="#cb3-19"></a><span class="at">&gt;</span></span>
-<span id="cb3-20"><a href="#cb3-20"></a><span class="at">&gt; You can download and install Docker on multiple platforms. Refer to the following section and choose the best installation path for you.</span></span>
-<span id="cb3-21"><a href="#cb3-21"></a></span>
-<span id="cb3-22"><a href="#cb3-22"></a>Further instructions for <span class="co">[</span><span class="ot">Mac</span><span class="co">](https://docs.docker.com/desktop/install/mac-install/)</span>, <span class="co">[</span><span class="ot">Windows</span><span class="co">](https://docs.docker.com/desktop/install/windows-install/)</span> and <span class="co">[</span><span class="ot">Linux</span><span class="co">](https://docs.docker.com/desktop/install/linux-install/)</span>.</span>
-<span id="cb3-23"><a href="#cb3-23"></a></span>
-<span id="cb3-24"><a href="#cb3-24"></a>With Linux things should be self-explanatory enough for the users that self-select to use Linux. For Mac installation instructions should be easy to follow, but do tell if they are not. For Windows, things might get a bit more complicated, but it should be less painful than trying to get Stan to work.</span>
-<span id="cb3-25"><a href="#cb3-25"></a></span>
-<span id="cb3-26"><a href="#cb3-26"></a><span class="fu">## Docker installation instructions for Windows</span></span>
-<span id="cb3-27"><a href="#cb3-27"></a></span>
-<span id="cb3-28"><a href="#cb3-28"></a>It looks like you&#39;d ideally enable <span class="co">[</span><span class="ot">Windows Subsystem for Linux</span><span class="co">](https://en.wikipedia.org/wiki/Windows_Subsystem_for_Linux)</span> (WSL) in its second version, see <span class="co">[</span><span class="ot">https://github.com/rocker-org/rocker/wiki/Sharing-files-with-host-machine</span><span class="co">](https://github.com/rocker-org/rocker/wiki/Sharing-files-with-host-machine)</span>:</span>
-<span id="cb3-29"><a href="#cb3-29"></a></span>
-<span id="cb3-30"><a href="#cb3-30"></a><span class="at">&gt; For better performance, it is recommended to set up a Linux distribution on WSL2 and save your files in the Linux file system.</span></span>
-<span id="cb3-31"><a href="#cb3-31"></a><span class="at">See the best practices of Docker Desktop WSL2 backend for details. https://docs.docker.com/docker-for-windows/wsl/#best-practices</span></span>
-<span id="cb3-32"><a href="#cb3-32"></a></span>
-<span id="cb3-33"><a href="#cb3-33"></a>Instruction on how to install it can be found at <span class="co">[</span><span class="ot">https://learn.microsoft.com/en-us/windows/wsl/install</span><span class="co">](https://learn.microsoft.com/en-us/windows/wsl/install)</span>:</span>
-<span id="cb3-34"><a href="#cb3-34"></a></span>
-<span id="cb3-35"><a href="#cb3-35"></a><span class="at">&gt; ### Install Linux on Windows with WSL</span></span>
-<span id="cb3-36"><a href="#cb3-36"></a><span class="at">&gt; Developers can access the power of both Windows and Linux at the same time on a Windows machine. The Windows Subsystem for Linux (WSL) lets developers install a Linux distribution (such as Ubuntu, OpenSUSE, Kali, Debian, Arch Linux, etc) and use Linux applications, utilities, and Bash command-line tools directly on Windows, unmodified, without the overhead of a traditional virtual machine or dualboot setup.</span></span>
-<span id="cb3-37"><a href="#cb3-37"></a><span class="at">&gt;</span></span>
-<span id="cb3-38"><a href="#cb3-38"></a><span class="at">&gt; ### Prerequisites</span></span>
-<span id="cb3-39"><a href="#cb3-39"></a><span class="at">&gt; You must be running Windows 10 version 2004 and higher (Build 19041 and higher) or Windows 11 to use the commands below. If you are on earlier versions please see the manual install page.</span></span>
-<span id="cb3-40"><a href="#cb3-40"></a><span class="at">&gt;</span></span>
-<span id="cb3-41"><a href="#cb3-41"></a><span class="at">&gt; ### Install WSL command</span></span>
-<span id="cb3-42"><a href="#cb3-42"></a><span class="at">&gt; You can now install everything you need to run WSL with a single command. Open PowerShell or Windows Command Prompt in administrator mode by right-clicking and selecting &quot;Run as administrator&quot;, enter the wsl --install command, then restart your machine.</span></span>
-<span id="cb3-43"><a href="#cb3-43"></a><span class="at">&gt;</span></span>
-<span id="cb3-44"><a href="#cb3-44"></a><span class="at">&gt;</span></span>
-<span id="cb3-45"><a href="#cb3-45"></a><span class="at">&gt; ```</span></span>
-<span id="cb3-46"><a href="#cb3-46"></a><span class="at">&gt; wsl --install</span></span>
-<span id="cb3-47"><a href="#cb3-47"></a><span class="at">&gt; ```</span></span>
-<span id="cb3-48"><a href="#cb3-48"></a><span class="at">&gt; This command will enable the features necessary to run WSL and install the Ubuntu distribution of Linux. (This default distribution can be changed).</span></span>
-<span id="cb3-49"><a href="#cb3-49"></a><span class="at">&gt;</span></span>
-<span id="cb3-50"><a href="#cb3-50"></a><span class="at">&gt; If you&#39;re running an older build, or just prefer not to use the install command and would like step-by-step directions, see WSL manual installation steps for older versions.</span></span>
-<span id="cb3-51"><a href="#cb3-51"></a><span class="at">&gt;</span></span>
-<span id="cb3-52"><a href="#cb3-52"></a><span class="at">&gt; The first time you launch a newly installed Linux distribution, a console window will open and you&#39;ll be asked to wait for files to de-compress and be stored on your machine. All future launches should take less than a second.</span></span>
-<span id="cb3-53"><a href="#cb3-53"></a></span>
-<span id="cb3-54"><a href="#cb3-54"></a></span>
-<span id="cb3-55"><a href="#cb3-55"></a><span class="fu"># Docker usage instructions</span></span>
-<span id="cb3-56"><a href="#cb3-56"></a></span>
-<span id="cb3-57"><a href="#cb3-57"></a>Once you have installed docker you should be able to start the virtual machine that we have set up with the following command:</span>
-<span id="cb3-58"><a href="#cb3-58"></a></span>
-<span id="cb3-59"><a href="#cb3-59"></a><span class="in">```</span></span>
-<span id="cb3-60"><a href="#cb3-60"></a><span class="in">docker run --rm -ti -v $PWD:/home/rstudio/workspace -e USERID=$UID -e DISABLE_AUTH=true -p 127.0.0.1:8787:8787 meenaljhajharia/bda-docker:latest</span></span>
-<span id="cb3-61"><a href="#cb3-61"></a><span class="in">```</span></span>
-<span id="cb3-62"><a href="#cb3-62"></a></span>
-<span id="cb3-63"><a href="#cb3-63"></a><span class="ss">- </span><span class="in">`-v $PWD:/home/rstudio/workspace`</span> makes the directory from which the docker command is run accessible to the VM under /home/rstudio/workspace</span>
-<span id="cb3-64"><a href="#cb3-64"></a><span class="ss">- </span><span class="in">`-e USERID=$UID`</span> makes docker+rstudio play nice with the mounted files (see https://github.com/rocker-org/rocker/wiki/Sharing-files-with-host-machine),</span>
-<span id="cb3-65"><a href="#cb3-65"></a><span class="ss">- </span><span class="in">`-e DISABLE_AUTH=true`</span> disables the need to authenticate, which would be unsafe, but</span>
-<span id="cb3-66"><a href="#cb3-66"></a><span class="ss">- </span><span class="in">`-p 127.0.0.1:8787:8787`</span> only allows access from the local machine, which makes it safe(ish) again.</span>
-<span id="cb3-67"><a href="#cb3-67"></a></span>
-<span id="cb3-68"><a href="#cb3-68"></a>After starting the docker container like that, you can go to http://localhost:8787/ which shows you Rstudio with all necessary packages installed. There you can access your files in the <span class="in">`workspace`</span> folder. </span>
-<span id="cb3-69"><a href="#cb3-69"></a></span>
-<span id="cb3-70"><a href="#cb3-70"></a>**Any changes outside of that folder will be reset once you restart the docker container, so save your work in the workspace folder.**</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">---</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="an">author:</span><span class="co"> &quot;Aki Vehtari et al.&quot;</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="an">title:</span><span class="co"> How to set up docker</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="an">format:</span><span class="co"> </span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="co">  html:</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="co">    toc: true</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="co">    code-tools: true</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="co">    code-line-numbers: true</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="co">    standalone: true</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="co">    self-contained: true</span></span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="co">    embed-resources: true  </span></span>
+<span id="cb4-12"><a href="#cb4-12"></a><span class="co">---</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a></span>
+<span id="cb4-14"><a href="#cb4-14"></a><span class="fu"># Docker installation instructions</span></span>
+<span id="cb4-15"><a href="#cb4-15"></a></span>
+<span id="cb4-16"><a href="#cb4-16"></a>See <span class="co">[</span><span class="ot">https://docs.docker.com/get-docker/</span><span class="co">](https://docs.docker.com/get-docker/)</span>:</span>
+<span id="cb4-17"><a href="#cb4-17"></a></span>
+<span id="cb4-18"><a href="#cb4-18"></a><span class="at">&gt; Docker is an open platform for developing, shipping, and running applications. Docker enables you to separate your applications from your infrastructure so you can deliver software quickly. With Docker, you can manage your infrastructure in the same ways you manage your applications. By taking advantage of Docker’s methodologies for shipping, testing, and deploying code quickly, you can significantly reduce the delay between writing code and running it in production.</span></span>
+<span id="cb4-19"><a href="#cb4-19"></a><span class="at">&gt;</span></span>
+<span id="cb4-20"><a href="#cb4-20"></a><span class="at">&gt; You can download and install Docker on multiple platforms. Refer to the following section and choose the best installation path for you.</span></span>
+<span id="cb4-21"><a href="#cb4-21"></a></span>
+<span id="cb4-22"><a href="#cb4-22"></a>Further instructions for <span class="co">[</span><span class="ot">Mac</span><span class="co">](https://docs.docker.com/desktop/install/mac-install/)</span>, <span class="co">[</span><span class="ot">Windows</span><span class="co">](https://docs.docker.com/desktop/install/windows-install/)</span> and <span class="co">[</span><span class="ot">Linux</span><span class="co">](https://docs.docker.com/desktop/install/linux-install/)</span>.</span>
+<span id="cb4-23"><a href="#cb4-23"></a></span>
+<span id="cb4-24"><a href="#cb4-24"></a>With Linux things should be self-explanatory enough for the users that self-select to use Linux. For Mac installation instructions should be easy to follow, but do tell if they are not. For Windows, things might get a bit more complicated, but it should be less painful than trying to get Stan to work.</span>
+<span id="cb4-25"><a href="#cb4-25"></a></span>
+<span id="cb4-26"><a href="#cb4-26"></a><span class="fu">## Docker installation instructions for Windows</span></span>
+<span id="cb4-27"><a href="#cb4-27"></a></span>
+<span id="cb4-28"><a href="#cb4-28"></a>It looks like you&#39;d ideally enable <span class="co">[</span><span class="ot">Windows Subsystem for Linux</span><span class="co">](https://en.wikipedia.org/wiki/Windows_Subsystem_for_Linux)</span> (WSL) in its second version, see <span class="co">[</span><span class="ot">https://github.com/rocker-org/rocker/wiki/Sharing-files-with-host-machine</span><span class="co">](https://github.com/rocker-org/rocker/wiki/Sharing-files-with-host-machine)</span>:</span>
+<span id="cb4-29"><a href="#cb4-29"></a></span>
+<span id="cb4-30"><a href="#cb4-30"></a><span class="at">&gt; For better performance, it is recommended to set up a Linux distribution on WSL2 and save your files in the Linux file system.</span></span>
+<span id="cb4-31"><a href="#cb4-31"></a><span class="at">See the best practices of Docker Desktop WSL2 backend for details. https://docs.docker.com/docker-for-windows/wsl/#best-practices</span></span>
+<span id="cb4-32"><a href="#cb4-32"></a></span>
+<span id="cb4-33"><a href="#cb4-33"></a>Instruction on how to install it can be found at <span class="co">[</span><span class="ot">https://learn.microsoft.com/en-us/windows/wsl/install</span><span class="co">](https://learn.microsoft.com/en-us/windows/wsl/install)</span>:</span>
+<span id="cb4-34"><a href="#cb4-34"></a></span>
+<span id="cb4-35"><a href="#cb4-35"></a><span class="at">&gt; ### Install Linux on Windows with WSL</span></span>
+<span id="cb4-36"><a href="#cb4-36"></a><span class="at">&gt; Developers can access the power of both Windows and Linux at the same time on a Windows machine. The Windows Subsystem for Linux (WSL) lets developers install a Linux distribution (such as Ubuntu, OpenSUSE, Kali, Debian, Arch Linux, etc) and use Linux applications, utilities, and Bash command-line tools directly on Windows, unmodified, without the overhead of a traditional virtual machine or dualboot setup.</span></span>
+<span id="cb4-37"><a href="#cb4-37"></a><span class="at">&gt;</span></span>
+<span id="cb4-38"><a href="#cb4-38"></a><span class="at">&gt; ### Prerequisites</span></span>
+<span id="cb4-39"><a href="#cb4-39"></a><span class="at">&gt; You must be running Windows 10 version 2004 and higher (Build 19041 and higher) or Windows 11 to use the commands below. If you are on earlier versions please see the manual install page.</span></span>
+<span id="cb4-40"><a href="#cb4-40"></a><span class="at">&gt;</span></span>
+<span id="cb4-41"><a href="#cb4-41"></a><span class="at">&gt; ### Install WSL command</span></span>
+<span id="cb4-42"><a href="#cb4-42"></a><span class="at">&gt; You can now install everything you need to run WSL with a single command. Open PowerShell or Windows Command Prompt in administrator mode by right-clicking and selecting &quot;Run as administrator&quot;, enter the wsl --install command, then restart your machine.</span></span>
+<span id="cb4-43"><a href="#cb4-43"></a><span class="at">&gt;</span></span>
+<span id="cb4-44"><a href="#cb4-44"></a><span class="at">&gt;</span></span>
+<span id="cb4-45"><a href="#cb4-45"></a><span class="at">&gt; ```</span></span>
+<span id="cb4-46"><a href="#cb4-46"></a><span class="at">&gt; wsl --install</span></span>
+<span id="cb4-47"><a href="#cb4-47"></a><span class="at">&gt; ```</span></span>
+<span id="cb4-48"><a href="#cb4-48"></a><span class="at">&gt; This command will enable the features necessary to run WSL and install the Ubuntu distribution of Linux. (This default distribution can be changed).</span></span>
+<span id="cb4-49"><a href="#cb4-49"></a><span class="at">&gt;</span></span>
+<span id="cb4-50"><a href="#cb4-50"></a><span class="at">&gt; If you&#39;re running an older build, or just prefer not to use the install command and would like step-by-step directions, see WSL manual installation steps for older versions.</span></span>
+<span id="cb4-51"><a href="#cb4-51"></a><span class="at">&gt;</span></span>
+<span id="cb4-52"><a href="#cb4-52"></a><span class="at">&gt; The first time you launch a newly installed Linux distribution, a console window will open and you&#39;ll be asked to wait for files to de-compress and be stored on your machine. All future launches should take less than a second.</span></span>
+<span id="cb4-53"><a href="#cb4-53"></a></span>
+<span id="cb4-54"><a href="#cb4-54"></a></span>
+<span id="cb4-55"><a href="#cb4-55"></a><span class="fu"># Docker usage instructions</span></span>
+<span id="cb4-56"><a href="#cb4-56"></a></span>
+<span id="cb4-57"><a href="#cb4-57"></a>Once you have installed docker you should be able to start the virtual machine that we have set up with the following command:</span>
+<span id="cb4-58"><a href="#cb4-58"></a></span>
+<span id="cb4-59"><a href="#cb4-59"></a>**For Windows (Run the following command in Powershell not in command prompt):**</span>
+<span id="cb4-60"><a href="#cb4-60"></a></span>
+<span id="cb4-61"><a href="#cb4-61"></a><span class="in">```</span></span>
+<span id="cb4-62"><a href="#cb4-62"></a><span class="in">docker run --rm -ti -v ${PWD}:/home/rstudio/workspace -e USERID=$UID -e DISABLE_AUTH=true -p 127.0.0.1:8787:8787 meenaljhajharia/bda-docker:latest</span></span>
+<span id="cb4-63"><a href="#cb4-63"></a><span class="in">```</span></span>
+<span id="cb4-64"><a href="#cb4-64"></a></span>
+<span id="cb4-65"><a href="#cb4-65"></a>**For other Operating Systems:**</span>
+<span id="cb4-66"><a href="#cb4-66"></a></span>
+<span id="cb4-67"><a href="#cb4-67"></a><span class="in">```</span></span>
+<span id="cb4-68"><a href="#cb4-68"></a><span class="in">docker run --rm -ti -v $PWD:/home/rstudio/workspace -e USERID=$UID -e DISABLE_AUTH=true -p 127.0.0.1:8787:8787 meenaljhajharia/bda-docker:latest</span></span>
+<span id="cb4-69"><a href="#cb4-69"></a><span class="in">```</span></span>
+<span id="cb4-70"><a href="#cb4-70"></a></span>
+<span id="cb4-71"><a href="#cb4-71"></a><span class="ss">- </span><span class="in">`-v $PWD:/home/rstudio/workspace`</span> makes the directory from which the docker command is run accessible to the VM under /home/rstudio/workspace</span>
+<span id="cb4-72"><a href="#cb4-72"></a><span class="ss">- </span><span class="in">`-e USERID=$UID`</span> makes docker+rstudio play nice with the mounted files (see https://github.com/rocker-org/rocker/wiki/Sharing-files-with-host-machine),</span>
+<span id="cb4-73"><a href="#cb4-73"></a><span class="ss">- </span><span class="in">`-e DISABLE_AUTH=true`</span> disables the need to authenticate, which would be unsafe, but</span>
+<span id="cb4-74"><a href="#cb4-74"></a><span class="ss">- </span><span class="in">`-p 127.0.0.1:8787:8787`</span> only allows access from the local machine, which makes it safe(ish) again.</span>
+<span id="cb4-75"><a href="#cb4-75"></a></span>
+<span id="cb4-76"><a href="#cb4-76"></a>After starting the docker container like that, you can go to http://localhost:8787/ which shows you Rstudio with all necessary packages installed. There you can access your files in the <span class="in">`workspace`</span> folder. </span>
+<span id="cb4-77"><a href="#cb4-77"></a></span>
+<span id="cb4-78"><a href="#cb4-78"></a>**Any changes outside of that folder will be reset once you restart the docker container, so save your work in the workspace folder.**</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
