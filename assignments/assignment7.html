@@ -5289,7 +5289,52 @@ Have you set your priors?
     \sigma_{j} &amp;\sim \exp(1)
 \end{aligned}
 \]</span></p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode numberSource stan number-lines code-with-copy"><code class="sourceCode stan"></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode numberSource stan number-lines code-with-copy"><code class="sourceCode stan"><span id="cb35-1"><a href="#cb35-1"></a><span class="kw">data</span> {</span>
+<span id="cb35-2"><a href="#cb35-2"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; N_observations;</span>
+<span id="cb35-3"><a href="#cb35-3"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; N_diets;</span>
+<span id="cb35-4"><a href="#cb35-4"></a>  <span class="dt">array</span>[N_observations] <span class="dt">int</span> diet_idx; <span class="co">// Pair observations to their diets.</span></span>
+<span id="cb35-5"><a href="#cb35-5"></a>  <span class="dt">vector</span>[N_observations] weight;</span>
+<span id="cb35-6"><a href="#cb35-6"></a>}</span>
+<span id="cb35-7"><a href="#cb35-7"></a></span>
+<span id="cb35-8"><a href="#cb35-8"></a><span class="kw">parameters</span> {</span>
+<span id="cb35-9"><a href="#cb35-9"></a>  <span class="co">// Average weight of chicks with a given diet.</span></span>
+<span id="cb35-10"><a href="#cb35-10"></a>  <span class="dt">vector</span>[N_diets] mean_diet;</span>
+<span id="cb35-11"><a href="#cb35-11"></a></span>
+<span id="cb35-12"><a href="#cb35-12"></a>  <span class="co">// Standard deviation of weights observed among chicks sharing a diet.</span></span>
+<span id="cb35-13"><a href="#cb35-13"></a>  <span class="dt">vector</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt;[N_diets] sd_diet;</span>
+<span id="cb35-14"><a href="#cb35-14"></a>}</span>
+<span id="cb35-15"><a href="#cb35-15"></a></span>
+<span id="cb35-16"><a href="#cb35-16"></a><span class="kw">model</span> {</span>
+<span id="cb35-17"><a href="#cb35-17"></a>  <span class="co">// Priors</span></span>
+<span id="cb35-18"><a href="#cb35-18"></a>  <span class="co">// These look bad. I need to think about these again.</span></span>
+<span id="cb35-19"><a href="#cb35-19"></a></span>
+<span id="cb35-20"><a href="#cb35-20"></a>  <span class="cf">for</span> (diet <span class="cf">in</span> <span class="dv">1</span>:N_diets) {</span>
+<span id="cb35-21"><a href="#cb35-21"></a>    mean_diet[diet] ~ normal(<span class="dv">0</span>, <span class="dv">10</span>);</span>
+<span id="cb35-22"><a href="#cb35-22"></a>    sd_diet[diet] ~ exponential(<span class="dv">1</span>);</span>
+<span id="cb35-23"><a href="#cb35-23"></a>  }</span>
+<span id="cb35-24"><a href="#cb35-24"></a></span>
+<span id="cb35-25"><a href="#cb35-25"></a>  <span class="co">// Likelihood</span></span>
+<span id="cb35-26"><a href="#cb35-26"></a>  <span class="cf">for</span> (obs <span class="cf">in</span> <span class="dv">1</span>:N_observations) {</span>
+<span id="cb35-27"><a href="#cb35-27"></a>    weight[obs] ~ normal(mean_diet[diet_idx[obs]], sd_diet[diet_idx[obs]]);</span>
+<span id="cb35-28"><a href="#cb35-28"></a>  }</span>
+<span id="cb35-29"><a href="#cb35-29"></a></span>
+<span id="cb35-30"><a href="#cb35-30"></a>  <span class="co">// Best practice would be to write the likelihood without the for loop as:</span></span>
+<span id="cb35-31"><a href="#cb35-31"></a>  <span class="co">// weight ~ normal(mean_diet[diet_idx], sd_diet[diet_idx]);</span></span>
+<span id="cb35-32"><a href="#cb35-32"></a>}</span>
+<span id="cb35-33"><a href="#cb35-33"></a></span>
+<span id="cb35-34"><a href="#cb35-34"></a><span class="kw">generated quantities</span> {</span>
+<span id="cb35-35"><a href="#cb35-35"></a>  <span class="dt">real</span> weight_pred;</span>
+<span id="cb35-36"><a href="#cb35-36"></a>  <span class="dt">real</span> mean_five;</span>
+<span id="cb35-37"><a href="#cb35-37"></a>  <span class="co">// The below is just there to make the plotting in the template work with the &quot;wrong model&quot;. </span></span>
+<span id="cb35-38"><a href="#cb35-38"></a>  <span class="dt">real</span> sd_diets = sd_diet[<span class="dv">4</span>];</span>
+<span id="cb35-39"><a href="#cb35-39"></a></span>
+<span id="cb35-40"><a href="#cb35-40"></a>  <span class="co">// Sample from the (posterior) predictive distribution of the fourth diet.</span></span>
+<span id="cb35-41"><a href="#cb35-41"></a>  weight_pred = normal_rng(mean_diet[<span class="dv">4</span>], sd_diet[<span class="dv">4</span>]);</span>
+<span id="cb35-42"><a href="#cb35-42"></a></span>
+<span id="cb35-43"><a href="#cb35-43"></a>  <span class="co">// Construct samples of the mean of the fifth diet.</span></span>
+<span id="cb35-44"><a href="#cb35-44"></a>  <span class="co">// We only have the prior...</span></span>
+<span id="cb35-45"><a href="#cb35-45"></a>  mean_five = normal_rng(<span class="dv">0</span>, <span class="dv">10</span>);</span>
+<span id="cb35-46"><a href="#cb35-46"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-warning no-icon callout-captioned">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-30-contents" aria-controls="callout-30" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
