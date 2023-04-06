@@ -81,6 +81,8 @@ return {
     Header = function(el)
       if el.level == 1 then
         current_header = el.content
+        rubric_count = rubric_count + 1
+        current_letter = ""
       end
       -- quarto.utils.dump(el)
       return el
@@ -100,7 +102,7 @@ return {
         })
         -- table.insert(el.classes, "column-margin")
       elseif el.classes:includes("rubric") then
-        rubric_count = rubric_count + 1
+        -- rubric_count = rubric_count + 1
         local h = resolveHeadingCaption(el)
         if h == nil then
           h = table.copy(current_header)
@@ -126,7 +128,7 @@ return {
         if h == nil then
           h = table.copy(current_header)
         end
-        table.insert(h, 1, "Subrubric " ..(rubric_count+1).. "."..current_letter..": ")
+        table.insert(h, 1, "Subrubric " ..(rubric_count).. "."..current_letter..": ")
         local w = el.attr.attributes["weight"]
         if w ~= nil then
           table.insert(h, " - " .. el.attr.attributes["weight"] .. "/100 points")
@@ -134,7 +136,7 @@ return {
         add_question_numbering(el.content[1])
         return quarto.Callout({
           appearance = nil,
-          caption = "Subrubric " ..(rubric_count+1).. "."..current_letter..")",
+          caption = "Subrubric " ..(rubric_count).. "."..current_letter..")",
           collapse = false,
           content = el.content,
           icon = false,
@@ -142,7 +144,7 @@ return {
           id = el.attr.identifier,
         })
       elseif el.classes:includes("answer") then
-        local answer_count = rubric_count + 1
+        local answer_count = rubric_count
         local h = resolveHeadingCaption(el)
         if h == nil then
           h = table.copy(current_header)
@@ -172,9 +174,9 @@ return {
         else
           current_letter = el.attr.attributes["letter"]
         end
-        local caption = "Task "..(rubric_count + 1)
+        local caption = "Task "..(rubric_count)
         if current_letter ~= nil then
-          caption = "Subtask "..(rubric_count + 1).."."..current_letter..")"
+          caption = "Subtask "..(rubric_count).."."..current_letter..")"
         end
         return quarto.Callout({
           appearance = nil,
