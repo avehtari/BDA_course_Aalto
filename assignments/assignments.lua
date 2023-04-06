@@ -6,7 +6,10 @@ local question_count = 0
 -- local recommendations_count = 0
 local current_header = {""}
 local current_letter = ""
-local letter_sequence = {"", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l"}
+local letter_sequence = {
+  "", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", 
+  "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
+}
 -- https://stackoverflow.com/questions/38282234/returning-the-index-of-a-value-in-a-lua-table
 local letter_indices = {}
 for k, v in pairs(letter_sequence) do
@@ -118,12 +121,31 @@ return {
           type = "note",
           id = el.attr.identifier,
         })
+      elseif el.classes:includes("subrubric") then
+        local h = resolveHeadingCaption(el)
+        if h == nil then
+          h = table.copy(current_header)
+        end
+        table.insert(h, 1, "Subrubric " ..(rubric_count+1).. "."..current_letter..": ")
+        local w = el.attr.attributes["weight"]
+        if w ~= nil then
+          table.insert(h, " - " .. el.attr.attributes["weight"] .. "/100 points")
+        end
+        add_question_numbering(el.content[1])
+        return quarto.Callout({
+          appearance = nil,
+          caption = "Subrubric " ..(rubric_count+1).. "."..current_letter..")",
+          collapse = false,
+          content = el.content,
+          icon = false,
+          type = "note",
+          id = el.attr.identifier,
+        })
       elseif el.classes:includes("answer") then
         local answer_count = rubric_count + 1
         local h = resolveHeadingCaption(el)
         if h == nil then
           h = table.copy(current_header)
-          -- h = current_header 
         end
         table.insert(h, 1, "Answer S" ..answer_count..": ")
         -- add_question_numbering(el.content[1])
@@ -214,57 +236,57 @@ return {
           type = "tip",
           id = el.attr.identifier, 
         })
-      -- elseif el.classes:includes("both") then
-      --   -- local answer_count = rubric_count + 1
-      --   local h = resolveHeadingCaption(el)
-      --   if h == nil then
-      --     h = "Included in assignment and student submission"
-      --   else
-      --     table.insert(h, 1, "Included in assignment and student submission: ")
-      --   end
-      --   return quarto.Callout({
-      --     appearance = nil,
-      --     caption = h,
-      --     collapse = false,
-      --     content = el.content,
-      --     icon = true,
-      --     type = "tip",
-      --     id = el.attr.identifier, 
-      --   })
-      -- elseif el.classes:includes("aalto") then
-      --   -- local answer_count = rubric_count + 1
-      --   local h = resolveHeadingCaption(el)
-      --   if h == nil then
-      --     h = "Included in Aalto assignment"
-      --   else
-      --     table.insert(h, 1, "Included in Aalto assignment: ")
-      --   end
-      --   return quarto.Callout({
-      --     appearance = nil,
-      --     caption = h,
-      --     collapse = false,
-      --     content = el.content,
-      --     icon = true,
-      --     type = "tip",
-      --     id = el.attr.identifier, 
-      --   })
-      -- elseif el.classes:includes("gsu") then
-      --   -- local answer_count = rubric_count + 1
-      --   local h = resolveHeadingCaption(el)
-      --   if h == nil then
-      --     h = "Included in GSU assignment"
-      --   else
-      --     table.insert(h, 1, "Included in GSU assignment: ")
-      --   end
-      --   return quarto.Callout({
-      --     appearance = nil,
-      --     caption = h,
-      --     collapse = false,
-      --     content = el.content,
-      --     icon = true,
-      --     type = "tip",
-      --     id = el.attr.identifier, 
-      --   })
+      elseif el.classes:includes("both") and config[1] == "ta" then
+        -- local answer_count = rubric_count + 1
+        local h = resolveHeadingCaption(el)
+        if h == nil then
+          h = "Included in assignment and student submission"
+        else
+          table.insert(h, 1, "Included in assignment and student submission: ")
+        end
+        return quarto.Callout({
+          appearance = nil,
+          caption = h,
+          collapse = false,
+          content = el.content,
+          icon = true,
+          type = "tip",
+          id = el.attr.identifier, 
+        })
+      elseif el.classes:includes("aalto") and config[1] == "ta" then
+        -- local answer_count = rubric_count + 1
+        local h = resolveHeadingCaption(el)
+        if h == nil then
+          h = "Included in Aalto assignment"
+        else
+          table.insert(h, 1, "Included in Aalto assignment: ")
+        end
+        return quarto.Callout({
+          appearance = nil,
+          caption = h,
+          collapse = false,
+          content = el.content,
+          icon = true,
+          type = "tip",
+          id = el.attr.identifier, 
+        })
+      elseif el.classes:includes("gsu") and config[1] == "ta" then
+        -- local answer_count = rubric_count + 1
+        local h = resolveHeadingCaption(el)
+        if h == nil then
+          h = "Included in GSU assignment"
+        else
+          table.insert(h, 1, "Included in GSU assignment: ")
+        end
+        return quarto.Callout({
+          appearance = nil,
+          caption = h,
+          collapse = false,
+          content = el.content,
+          icon = true,
+          type = "tip",
+          id = el.attr.identifier, 
+        })
       elseif el.classes:includes("showcase") then
         -- local answer_count = rubric_count + 1
         local h = resolveHeadingCaption(el)

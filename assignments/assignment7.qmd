@@ -1,0 +1,537 @@
+---
+title: "Assignment 7"
+subtitle: "Hierarchical model in Stan"
+author: "Aki Vehtari et al."
+format:
+  html:
+    toc: true
+    code-tools: true
+    code-line-numbers: true
+    standalone: true
+    self-contained: true
+    embed-resources: true
+    number-sections: true
+    mainfont: Georgia, serif
+    # linkcolor: "#212529"
+    fontsize: 1.2em
+    page-layout: article
+reference-location: margin
+citation-location: margin
+comments:
+  hypothesis: true
+editor: source
+filters:
+  - assignments.lua
+  - include-code-files.lua
+execute:
+  daemon: 999999
+---
+
+# General information
+
+**The maximum amount of points from this assignment is 9.**
+
+We have prepared a **[quarto template](template7.html)** to help you get started.
+
+:::{.gsu}
+We recommend you use the [docker container](docker.html). 
+**Unfortunately, you will have to update the docker container, which however should be easy. 
+See the new instructions at the [end of the above link](docker.html#updating-docker).**
+:::
+
+
+:::{.hint}
+**Reading instructions**:
+
+Chapter 5 in BDA3, see [**the reading instructions for Chapter 5**](https://avehtari.github.io/BDA_course_Aalto/chapter_notes/BDA_notes_ch5.pdf).
+
+{{< include grading_instructions.md >}}
+
+{{< include cmdstanr.md >}}
+:::
+
+{{< include reporting_accuracy.md >}}
+
+{{< include general_info.md >}}
+
+
+
+:::: {.content-hidden when-format="pdf"}
+::: {.callout-tip collapse=true}
+
+## Setup
+The following loads several needed packages:
+
+```{r}
+#| label: imports
+
+library(aaltobda)
+library(bayesplot)
+library(cmdstanr)
+library(dplyr)
+library(ggplot2)
+library(ggdist) # for stat_dotsinterval
+library(posterior)
+if(!require(brms)){
+    install.packages("brms")
+    library(brms)
+}
+
+# Set more readable themes with bigger font for plotting packages.
+ggplot2::theme_set(theme_minimal(base_size = 14))
+bayesplot::bayesplot_theme_set(theme_minimal(base_size = 14))
+
+# This registers CmdStan as the backend for compiling cmdstan-chunks.
+check_cmdstan_toolchain(fix = TRUE, quiet = TRUE)
+register_knitr_engine(override = FALSE)
+```
+
+:::
+::::
+
+
+# Hierarchical Model: Chicken Data with Stan (6p)
+
+**Do not look at the secret dataset until you have defined your priors.**
+
+A secret dataset, included in base `r`, contains weight measurements from 50 chicks from their birth until the age of 21 days. For this task, we are interested in modeling the weight of a chick at the age of 12 days.
+
+## Choosing a weakly informative prior by intuition
+To prepare you for your projects, we will first guide you through two possible processes for choosing a weakly informative prior. It is important that your priors are not informed by data, so ideally, *you should not have looked at the dataset yet*.
+
+In the absence of additional information, we will assume that chick weights at 12 days of age ($w$) follow a normal distribution:
+$$
+w\sim\mathcal N (\mu,\sigma).
+$$
+Our task will be to define weakly informative priors for the parameters of the mean, $\mu$, and standard deviation, $\sigma$.
+
+Here, $\mu$ represents the population or "true" mean chick weight at 12 days, and $\sigma$ represents the standard-deviation of the current weights $w$ around that population mean. For this exercise, we will be specifying a normal prior for $\mu$:
+
+$$
+\mu\sim\mathcal N (\mu_0,\sigma_0)
+$$
+
+In the above, $\mu_0$ represents our prior knowledge of what we believe the population weight to be and $\sigma_0$ represents our level of certainty in this belief. To specify a weakly-informative prior for $\mu$ we need to select values of $\mu_0$ and $\sigma_0$ that imply the range of plausible values that $\mu$ could take.
+
+We can do this by our own intuitive prior knowledge (if such intuition exists), or by searching for external references.
+
+In modeling, weakly informed priors are quite subjective, which means that justification for prior choice can be considered more important than the specific choice itself. For the subtasks below, you will not be graded on the accuracy or precision of your numbers, but on your justification of them. The numerical choices you make should make sense and be understandable to an external reviewer of your work (even if they may not agree with your choices).
+
+:::{.subtask letter=a}
+Based on your own past experience and estimation skills, what would you guess is a typical weight range of a fully grown chicken in grams? For example, would it make sense if a chicken weighed 1 million grams? 0.005 grams? What about a chicken that weighed more than you? More than a car? Note that is not important to have a very precise or accurate guess here, the key goal is simply to identify the range of plausible (or at least possible) values.
+
+Justify your choice with 1-3 sentences.
+:::
+
+::::{.subrubric}
+### Weight range by intuition
+* Does the chosen range meet the following common sense criteria?
+  * The range is always above **...** and below **...**.
+* Is the justification based on some sort of logic, even if you may disagree?
+::::
+
+:::{.subtask}
+Adjust this range for a 12-day old chick and choose a mean $\mu_0$ for the weakly informed prior of the parameter $\mu.$ Justify your adjustment and choice with 1-3 sentences.
+:::
+
+::::{.subrubric}
+### Prior mean by intuition
+* Does the chosen prior mean meet the following common sense criteria?
+  * The range is always above **...** and below **...**.
+* Is the justification based on some sort of logic, even if you may disagree?
+::::
+
+:::{.subtask}
+Choosing the standard deviation of a prior requires a little more caution; overconfident (i.e. narrow) priors can have a strong effect on your results,
+whereas less confident priors are more easily overcome with observed data.
+Given that overconfidence is a common human bias, a good intuition-based standard deviation should focus on eliminating the impossible values, rather than including the most likely values. Using this constraint, choose a lower and/or upper bound for the weight of any 12-day old chick. Justify your choice with 1-3 sentences.
+:::
+
+:::{.hint}
+Depending on your choice of range above for a "typical" chick, this range excluding the impossible values is likely to be wider.
+:::
+
+::::{.subrubric}
+### Prior standard deviation by intuition
+* Does the chosen range meet the following common sense criteria?
+  * The range is always above **...** and below **...**.
+* Is the justification based on some sort of logic, even if you may disagree?
+::::
+
+:::{.subtask}
+A common technique recommended by [Andrew Gelman for Stan users](https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations) considers standardized data, and is that a weakly informed prior should have a standard deviation of an order of magnitude larger than the data. What is your standard deviation? Under Gelman's recommendation, what $\sigma$ should you use for your prior?
+:::
+
+::::{.subrubric}
+#### Prior standard deviation by intuition
+* Do the two standard deviations meet the following common sense criteria?
+  - Both values are **...**
+  - The prior $\sigma$ is 10 times larger than **...**
+* Given the choice of mean from above, the prior's range defined by $\mu \pm \sigma$ overlaps with **...**.
+::::
+
+:::{.subtask}
+Write down in mathematical form the final prior you found using this prior definition technique.
+:::
+
+::::{.subrubric}
+### Prior by intuition
+
+* Does the final prior exist in mathematical notation?
+* Does the prior reflect the choices made above (i.e. $\mu, \sigma$)?
+::::
+
+## Choosing a weakly informative prior using external references
+Next, we'll use external references to pick the weakly informed prior. This technique is more general and doesn't assume you would have prior knowledge.
+
+:::{.subtask}
+Consult a trustworthy source on the weight range of farm chickens, e.g. books, articles, a farmer friend. If the recommended values are for a fully grown chicken, make a reasonable adjustment for a 12-day old chick. What is the weight range of a 12-day old chicken? Cite your source and justify any adjustments you make to the reference range.
+:::
+
+::::{.subrubric}
+### Weight range by reference
+* Does the reference range meet the following common sense criteria?
+  * The range is always above **...** and below **...**.
+* Is there a citation? If an adjustment was made, was it justified by logic, even if you disagree?
+::::
+
+:::{.subtask}
+Based on this reference range, what will you choose for the mean of our weakly informed prior? Justify your choice with 1-3 sentences.
+:::
+
+::::{.subrubric}
+### Weight range by reference
+
+* Does the mean value meet the following common sense criteria?
+  * The range is always above **...** and below **...**.
+::::
+
+Next we choose the standard deviation of the prior. We could use the same technique as before, but we'll walk you through another common approach. Assume that $99.7\%$ of all 12-day old chicks fall into the reference range you found. Under our assumption of a Normal distribution, this range will encompass values between $\mu \pm 3\sigma$.
+
+:::{.subtask}
+Assuming symmetry, use the mean you chose and either the upper or lower bound $b$ of your reference range to solve the correct version of the following equations to find your associated choice of $\sigma$: (show your work)
+
+- For upper bound $b$: $Pr(\mu + 3\sigma < b) \approx 0.997$, solving for $\sigma$.
+- For lower bound $b$: $Pr(\mu - 3\sigma > b) \approx 0.997$, solving for $\sigma$.
+:::
+
+::::{.subrubric}
+### Prior standard deviation by intuition
+
+* Does the calculated $\sigma$ value meet the following common sense criteria?
+  - The value is above **...** and below **...**.
+* Did they show their work?
+::::
+
+:::{.subtask}
+Write down in mathematical form the final prior you found using this prior definition technique.
+:::
+
+::::{.subrubric}
+### Prior by reference
+
+* Does the final prior exist in mathematical notation?
+* Does the prior reflect the choices made above (i.e. $\mu, \sigma$)?
+::::
+
+## Non-normal priors
+The previous steps all assumed we could use a prior which is Normally distributed, but this may not always be the correct assumption to make.
+
+:::{.subtask}
+Under what mathematical/statistical circumstances would a Normal distributed prior not make sense? List at least one circumstance.  Are there values that the Normal distribution can take on which would not make sense for some types of variables?
+:::
+
+:::{.hint}
+Consider the nature of any variable you are trying to define a prior over.
+:::
+
+::::{.subrubric}
+### Non-normal priors
+
+* Example cases include variables that **...** or variables that **...**
+::::
+
+## Modeling diet effects on chicken weight
+
+In addition to chick weights, the data also contains a categorical variable indicating which diet the chick received. In the data file, each column contains the measurements for a single chick at a given point of time.
+
+In addition to the existing diets, we are interested in the quality of another box of feed (the fifth diet), which a farmer happened to find yesterday at a dark corner of his warehouse. To read in the data, and to have a peek at the first 6 rows, just use:
+
+::::{.callout-important collapse=true}
+# Data inside, don't peek before you have set your priors!
+:::{.callout-important collapse=true}
+# Have you set your priors?
+```{r}
+#| message: false
+data("ChickWeight")
+
+Chick12 <- ChickWeight |> filter(Time == 12)
+
+head(Chick12)
+```
+:::
+::::
+
+In the following analysis, we will model the **weight of a chick at the age of 12 days**. We will use the following three Gaussian models:
+
+-   a separate model, in which each diet is modelled individually
+-   a pooled model, in which all measurements are combined and there is no distinction between diets
+-   a hierarchical model, which has a hierarchical structure as described in [BDA3](https://users.aalto.fi/~ave/BDA3.pdf) Section 11.6
+
+As in the model described in the book, use the same measurement standard deviation $\sigma$ for all the groups in the hierarchical model. In the separate model, however, use separate measurement standard deviation $\sigma_d$ for each diet $d$. You should use weakly informative priors for all your models, preferably one of the ones you already defined (and justified) in the previous/above section.
+
+The provided Stan code below is given as an example of a separate model. Note that the author has left a comment expressing uncertainty about their prior choices. This separate model can be summarized mathematically as:
+$$
+\begin{aligned}
+    w_{ij} &\sim N(\mu_j,\sigma_j)\\
+    \mu_{j} &\sim N(0,1)\\
+    \sigma_{j} &\sim \exp(1)
+\end{aligned}
+$$
+
+```{.stan include="additional_files/assignment7/chickens_separate.stan"}
+```
+
+
+
+
+:::{.subtask}
+Describe the models with mathematical notation (as is done for the separate model above). Also describe in words the difference between the model and the other models.
+:::
+
+
+
+
+
+
+
+
+::::{.subrubric}
+
+* Are the models described using mathematical notation and the difference to other models described in words?
+  - No equations and no description
+  - Description but no equations
+  - Equations but no description
+  - Equations and description
+::::
+
+:::{.subtask}
+Implement the models in Stan and include the code in the report. Use weakly informative priors for all of your models.
+:::
+
+:::{.hint}
+When sampling for the hierarchical model, you will very likely get a warning about divergent transitions. This tells you that the sampler is having difficulties in sampling the joint posterior and this may lead to biased inference. We will return to this in the next task.
+:::
+
+
+
+
+
+
+
+
+::::{.subrubric}
+### All models
+
+* Is there a related Stan implementation?
+  - No Stan model implemented
+  - Stan model implemented, but it seems clearly wrong or broken
+  - Seemingly valid Stan model implemented
+::::
+
+
+
+
+
+:::{.subtask}
+Use the provided code in the template to
+plot the **posterior distribution of the mean of the weight measurements of the fourth diet** and comment on the possible differences you observe
+between the models.
+:::
+
+::::{.subrubric}
+* Is there a comparison plotted for the posteriors of the mean of diet 4? Does it look something like the model solution plot?
+  -   No comparison plotted
+  -   Comparison plotted but it clearly differs from the example
+  -   Comparison plotted and it approximately matches the example
+* Separate model: Is the result for the separate model discussed?
+  -   The result is not discussed.
+  -   There is some discussion, but it is not mentioned that **...**.
+  -   The result is discussed and the separate model is recognised as **...**.
+* Pooled model: Is the result for the pooled model discussed?
+  -   The result is not discussed.
+  -   There is some discussion, but it is not mentioned that **...**.
+  -   The result is discussed and the pooled model is recognised as **...**.
+* Hierarchical model: Is the result for the hierarchical model discussed?
+  -   The result is not discussed.
+  -   There is some discussion, but it is not mentioned that **...**.
+  -   The result is discussed and the hierarchical model is recognised as **...**.
+::::
+
+:::{.subtask}
+Use the provided code in the template to
+plot the **predictive distribution for another weight measurement from a chick having the fourth diet** and comment on the possible differences you observe
+between the models.
+:::
+
+::::{.subrubric}
+
+* Is there a comparison plotted for the predictive distributions of the weight of a chick with diet 4? Does it look something like the model solution plot?
+  -   No comparison plotted
+  -   Comparison plotted but it clearly differs from the example
+  -   Comparison plotted and it approximately matches the example
+* Separate model: Is the result for the separate model discussed?
+  -   The result is not discussed.
+  -   There is some discussion, but it is not mentioned that **...**.
+  -   The result is discussed and the separate model is recognised as **...**.
+* Pooled model: Is the result for the pooled model discussed?
+  -   The result is not discussed.
+  -   There is some discussion, but it is not mentioned that **...**.
+  -   The result is discussed and the pooled model is recognised as **...**.
+* Hierarchical model: Is the result for the hierarchical model discussed?
+  -   The result is not discussed.
+  -   There is some discussion, but it is not mentioned that **...**.
+  -   The result is discussed and the hierarchical model is recognised as **...**.
+::::
+
+::: {.subtask}
+Use the provided code in the template to
+plot the **posterior distribution of the mean of the weight measurements of a new fifth diet** and comment on the possible differences you observe
+between the models.
+:::
+
+::::{.subrubric}
+* Is there a comparison plotted for the posterior distributions of the mean weight with a new diet? Does it look something like the model solution plot?
+  -   No comparison plotted
+  -   Comparison plotted but it clearly differs from the example
+  -   Comparison plotted and it approximately matches the example
+* Separate model: Is the result for the separate model discussed?
+  -   The result is not discussed.
+  -   There is some discussion, but it is not mentioned that **...**.
+  -   The result is discussed and the separate model is recognised as **...**.
+  -   In addition to the previous option, it is recognised that the separate model only **...**.
+* Pooled model: Is the result for the pooled model discussed?
+  -   The result is not discussed.
+  -   There is some discussion, but it is not mentioned that **...**.
+    -   The result is discussed and the pooled model is recognised as **...**.
+    -   In addition to the previous option, it is mentioned that **...**.
+* Hierarchical model: Is the result for the hierarchical model discussed?
+  -   The result is not discussed.
+    -   There is some discussion, but it is not mentioned that **...**.
+    -   The result is discussed and the hierarchical model is recognised as **...**.
+::::
+
+:::{.subtask}
+For each model, report the **posterior expectation for the mean weight of diet 4 with a 90% credible interval**.
+:::
+
+:::{.hint}
+See the example Stan codes [here](http://avehtari.github.io/BDA_R_demos/demos_rstan/cmdstanr_demo.html#8_comparison_of_k_groups_with_hierarchical_models) for the comparison of $K$ groups with and without the hierarchical structure.
+:::
+
+::::{.subrubric}
+* For the separate model, is the posterior 90% credibility interval for the mean of the fourth diet close to: **...** (small deviation is fine).
+  - No or incorrect answer
+  - Answer is only partially correct
+  - Answers look correct
+* For the pooled model, is the posterior 90% credibility interval for the mean of the fourth diet close to: **...** (small deviation is fine).
+  - No answer
+  - Answer is only partially correct
+  - Answer looks correct
+* For the hierarchical model, is the posterior 90% credibility interval for the mean of the fourth diet close to: **...** (small deviation is fine).
+  - No answer
+  - Answer is only partially correct.
+  - Answers look correct.
+
+::::
+
+# Hierarchical model with BRMS (3p)
+
+The goal of this task is to discuss an alternative parameterization of hierarchical models and introduce the `brms`-package.
+
+[`brms`](https://paul-buerkner.github.io/brms/) is a high-level interface for Stan providing tools to fit a wide range of Bayesian models, including hierarchical ones. In the previous section, you might have noted that the hierarchical implementation of the model may have had divergent transitions during the sampling. This is related to the [Neal's funnel](https://mc-stan.org/docs/stan-users-guide/reparameterization.html), where the sampling algorithm would need to change the step size in order to effectively sample the posterior. One trick to improve sampling is to use an alternative parameterization for the model. This parameterization is called the non-centered parameterization (@eq-non-centered) and often it can help with the divergent transitions. In short,In short,
+we sample parameters from a distribution with an easier geometry for the sample to explore efficiently and then transfrom those valuse to the joint distribution of interest.
+$$
+\begin{aligned}
+w_{i, d} &\sim \operatorname{normal}(\mu, \sigma) \\
+\sigma &\sim \pi(\sigma) \\
+\mu &= \mu_0 + z_d \tau \\
+z_d &\sim \operatorname{normal}(0, 1) \\
+\mu_0 &\sim \pi(\mu_0) \\
+\tau &\sim \pi(\tau) \\
+\end{aligned}
+$$ {#eq-non-centered}
+
+The hierarchical models made with `brms` use the non-centered parameterization. 
+Your tasks are the following:
+
+:::{.subtask letter=a}
+Use the function in the template to make a scatter plot of the posterior draws produced by the hierarchical model of the population level standard deviation parameter $\tau$ and the mean parameter of the fourth diet, $\mu_4$. The possible divergent transitions are highlighted in red. In the report show the plot and comment if there are any divergent transitions.
+:::
+
+
+
+:::{.subrubric}
+* Is there a scatter plot of $\tau$ and $\mu_4$ and some comments provided in the report?
+  - No scatter plot or comments
+  - The scatter plot is included, and divergent transitions are visible, but not commented on.
+  - The scatter plot and comments on the divergences are included.
+:::
+
+To sample from the same model using `brms`, in the tempalte set the weakly informative priors for the hierarchical model you used in the previous task. `brms` has an internal convention to name model parameters, but the parameter names from @eq-non-centered map into `brms` names with the following logic:
+
+ - $\mu_0$ corresponds to `class="Intercept"`
+ - $\sigma$ corresponds to `class="sigma"`
+ - $\tau$ corresponds to `class="sd"`.
+
+:::{.subtask}
+Replace `normal(0,1)` in the `brm` call in the template with the expressions you had for the priors in your hierarchical Stan model. Then, run the code chunk to fit the hierarchical model using `brms`.
+:::
+
+
+
+
+
+::: {.subrubric}
+* Is the `brms` code shown and do the priors agree with the priors specified above?
+:::
+
+:::{.subtask}
+Report the **posterior expectation for the mean weight of diet 4 $\mu_4$ with a 90% credible interval**, using the code block in the template. How does it compare with your results from the first task?
+:::
+
+
+::: {.subrubric}
+* For the `brms`` model, is the posterior 90% credibility interval for the mean of the fourth diet close to: **...** (small deviation is fine).
+  - No answer
+  - Answer is only partially correct.
+  - Answers look correct.
+:::
+
+:::{.subtask}
+Use the code in the template to make a **scatter plot of the group standard deviation parameter $\tau$ and group specific mean parameter**. 
+:::
+
+
+::: {.subrubric}
+* Is there a scatter plot of $\tau$ and $\mu_4$ and some comments provided in the report?
+  - No scatter plot or comments
+  - The scatter plot is included, and divergent transitions are visible, but not commented on.
+  - The scatter plot and comments on the divergences are included.
+:::
+
+:::{.subtask}
+In your report, address the following questions based on the plots you made for both parameterisations:
+
+ - Which of the parametrizations resulted in fewer divergent transitions?
+ - Comment for both parametrizations: for which kind of values of $\tau$, do the divergent transitions occur (if there are any)? It also might be that no clear pattern can be seen.
+ - Does centered parametrization have problems sampling from some specific region of the parameter space compared to the non-centered parametrization.
+:::
+::: {.subrubric}
+* Has it been discussed which parametrization resulted in fewer divergent transitions?
+* Has it been discussed for which values of $\tau$ the divergences occured?
+* Has it been discussed whether/where the centered parametrization has problems sampling?
+:::
+
+{{< include overall_quality.md >}}
+ 
