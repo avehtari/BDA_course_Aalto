@@ -93,7 +93,7 @@ return {
         local h = resolveHeadingCaption(el)
         return quarto.Callout({
           appearance = nil,
-          caption = h,
+          title = h, caption = h,
           collapse = false,
           content = el.content,
           icon = true,
@@ -116,7 +116,7 @@ return {
         add_question_numbering(el.content[1])
         return quarto.Callout({
           appearance = nil,
-          caption = h,
+          title = h, caption = h,
           collapse = false,
           content = el.content,
           icon = false,
@@ -136,7 +136,7 @@ return {
         add_question_numbering(el.content[1])
         return quarto.Callout({
           appearance = nil,
-          caption = "Subrubric " ..(rubric_count).. "."..current_letter..")",
+          title = "Subrubric " ..(rubric_count).. "."..current_letter..")", caption = "Subrubric " ..(rubric_count).. "."..current_letter..")",
           collapse = false,
           content = el.content,
           icon = false,
@@ -153,8 +153,8 @@ return {
         -- add_question_numbering(el.content[1])
         return quarto.Callout({
           appearance = nil,
-          caption = h,
-          collapse = false,
+          title = h, caption = h,
+          collapse = true,
           content = el.content,
           icon = false,
           type = "important",
@@ -174,13 +174,13 @@ return {
         else
           current_letter = el.attr.attributes["letter"]
         end
-        local caption = "Task "..(rubric_count)
+        local title = "Task "..(rubric_count)
         if current_letter ~= nil then
-          caption = "Subtask "..(rubric_count).."."..current_letter..")"
+          title = "Subtask "..(rubric_count).."."..current_letter..")"
         end
         return quarto.Callout({
           appearance = nil,
-          caption = caption,
+          title = title, caption = title,
           collapse = false,
           content = el.content,
           icon = false,
@@ -197,7 +197,7 @@ return {
         end
         return quarto.Callout({
           appearance = nil,
-          caption = h,
+          title = h, caption = h,
           collapse = view~="ta",
           content = el.content,
           icon = true,
@@ -214,7 +214,7 @@ return {
         end
         return quarto.Callout({
           appearance = nil,
-          caption = h,
+          title = h, caption = h,
           collapse = false,
           content = el.content,
           icon = true,
@@ -231,7 +231,7 @@ return {
         end
         return quarto.Callout({
           appearance = nil,
-          caption = h,
+          title = h, caption = h,
           collapse = false,
           content = el.content,
           icon = true,
@@ -248,7 +248,7 @@ return {
         end
         return quarto.Callout({
           appearance = nil,
-          caption = h,
+          title = h, caption = h,
           collapse = false,
           content = el.content,
           icon = true,
@@ -265,7 +265,7 @@ return {
         end
         return quarto.Callout({
           appearance = nil,
-          caption = h,
+          title = h, caption = h,
           collapse = false,
           content = el.content,
           icon = true,
@@ -282,7 +282,7 @@ return {
         end
         return quarto.Callout({
           appearance = nil,
-          caption = h,
+          title = h, caption = h,
           collapse = false,
           content = el.content,
           icon = true,
@@ -299,7 +299,7 @@ return {
         end
         return quarto.Callout({
           appearance = nil,
-          caption = h,
+          title = h, caption = h,
           collapse = false,
           content = el.content,
           icon = true,
@@ -315,7 +315,7 @@ return {
         end
         return quarto.Callout({
           appearance = nil,
-          caption = h,
+          title = h, caption = h,
           collapse = false,
           content = el.content,
           icon = true,
