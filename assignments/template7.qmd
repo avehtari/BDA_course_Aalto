@@ -31,7 +31,7 @@ editor: source
 
 # General information
 
-This is the template for [assignment 7](assignment7.html). You can download the [separate model with bad priors](https://raw.githubusercontent.com/avehtari/BDA_course_Aalto/gh-pages/assignments/additional_files/assignment7/chickens_separate.stan) and the [qmd-file](https://raw.githubusercontent.com/avehtari/BDA_course_Aalto/gh-pages/assignments/template6.qmd) or copy the code from this rendered document after clicking on `</> Code` in the top right corner.
+This is the template for [assignment 7](assignment7.html). You can download the [separate model with bad priors](https://raw.githubusercontent.com/avehtari/BDA_course_Aalto/gh-pages/assignments/additional_files/assignment7/chickens_separate.stan) and the [qmd-file](https://raw.githubusercontent.com/avehtari/BDA_course_Aalto/gh-pages/assignments/template7.qmd) or copy the code from this rendered document after clicking on `</> Code` in the top right corner.
 
 **Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.** 
 
@@ -209,13 +209,14 @@ in a single plot easier.
 n_samples <- nrow(fit_hierarchical$sampler_diagnostics(format = "matrix"))
 
 # Collect samples and the model used to a data frame.
+mean_diet_4_separate = extract_variable(fit_separate, "mean_diet[4]")
+mean_diet_4_pooled = extract_variable(fit_pooled, "mean_diet[4]")
+mean_diet_4_hierarchical = extract_variable(fit_hierarchical, "mean_diet[4]")
 posterior_mean_diet_4 <- data.frame(
   model_name = rep(c("Separate", "Pooled", "Hierarchical"),
               each = n_samples),
   mean_diet_4 = c(
-   extract_variable(fit_separate, "mean_diet[4]"),
-   extract_variable(fit_pooled, "mean_diet[4]"),
-   extract_variable(fit_hierarchical, "mean_diet[4]")
+   mean_diet_4_separate, mean_diet_4_pooled, mean_diet_4_hierarchical
   ))
 
 predicted_weight_diet_4 <- data.frame(
@@ -370,8 +371,9 @@ brms_fit = brm(
 
 
 
-Because `brms` is a bit chatty, suppress it's output in the PDF using the block above, but copy the code you executed into the code block below, which doesn't execute:
+Because `brms` is a bit chatty, suppress its output in the PDF using the block above, but copy the code you executed into the code block below, which doesn't execute:
 ```{r}
+#| eval: false
 # Copy the you used to fit the brms model here
 ```
 
