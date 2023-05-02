@@ -7,9 +7,9 @@ format:
     toc: true
     code-tools: true
     code-line-numbers: true
-    standalone: true
-    self-contained: true
-    embed-resources: true
+    # standalone: true
+    # self-contained: true
+    # embed-resources: true
     number-sections: true
     mainfont: Georgia, serif
     # linkcolor: "#212529"
@@ -195,7 +195,7 @@ Creating a dummy fit just to be able to generate an example plot below.
 Generate a similar plot for your hierarchical model.
 
 ```{r}
-# The brns-formula (weights ~ ...) below is not one that you should be using in your models!
+# The brms-formula (weights ~ ...) below is not one that you should be using in your models!
 dummy_fit <- brms::brm(
   weight ~ 1 + Time + Chick,
   data = ChickWeight,
@@ -235,7 +235,7 @@ The below function takes a brms fit object and computes either the [root-mean-sq
 # Compute RMSE or LOO-RMSE
 rmse <- function(fit, use_loo=FALSE){
   mean_y_pred <- if(use_loo){
-    colSums(weights(loo(fit, save_psis=TRUE)$psis, log=FALSE) * brms::posterior_predict(fit)) 
+    brms::loo_predict(fit)
   }else{
     colMeans(brms::posterior_predict(fit)) 
   }
