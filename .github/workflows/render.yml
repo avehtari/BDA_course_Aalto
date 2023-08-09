@@ -30,6 +30,7 @@ jobs:
                   git config --global user.email "aki.vehtari@aalto.fi"
                   git checkout master
                   git diff --name-only HEAD^ | grep '[.]*Rmd$' > last_modified_rmd_files.txt
+		  git diff --name-only HEAD^ | grep '[.]*qmd$' > last_modified_qmd_files.txt
                   while read -r filename; do   echo "$filename"; Rscript -e "rmarkdown::render('$filename')";   done < last_modified_rmd_files.txt
                   while read -r filename; do   echo "$filename"; quarto render $filename;   done < last_modified_qmd_files.txt
 
