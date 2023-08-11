@@ -67,6 +67,45 @@ ggplot(data = data.frame(x = c(0, 1)), aes(x)) +
                   color = "blue") +
     labs(x=bquote(theta), y="", title=bquote("p(" ~ theta ~ "| y=6, n=10, M=binom) + unif. prior)"))
 
+#' Posterior of theta of Binomial model with y=0, n=0
+p1=ggplot(data = data.frame(x = c(0, 1)), aes(x)) +
+    stat_function(fun = dbeta, n = 601, args = list(shape1 = 1, shape2 = 11),
+                  color = "blue") +
+    labs(x=bquote(theta), y="",
+         title=bquote("Posterior of " ~ theta ~ " of Binomial model with y=0, n=10")) +
+  theme(plot.title = element_text(size=16))
+
+p1+ annotate(geom ="text", x=1/12, y=-0.5, label="Mean", color="white")
+ggsave('binom_0_10_post.pdf',width=6,height=4)
+
+p1 + geom_segment(x=1/12, xend=1/12, y=0, yend=11, color="red") +
+  annotate(geom ="text", x=1/12, y=-0.5, label="Mean")
+ggsave('binom_0_10_post_mean.pdf',width=6,height=4)
+
+p1 + geom_segment(x=0/12, xend=0/12, y=0, yend=11, color="red") +
+  annotate(geom ="text", x=0/12, y=-0.5, label="Mode")
+ggsave('binom_0_10_post_mode.pdf',width=6,height=4)
+
+#' Posterior of theta of Binomial model with y=150, n=1000
+p1=ggplot(data = data.frame(x = c(0, 1)), aes(x)) +
+    stat_function(fun = dbeta, n = 601, args = list(shape1 = 150+1, shape2 = 850+1),
+                  color = "blue") +
+    labs(x=bquote(theta), y="",
+         title=bquote("Posterior of " ~ theta ~ " of Binomial model with y=150, n=1000")) +
+  theme(plot.title = element_text(size=16))
+
+p1+ annotate(geom ="text", x=151/1002, y=-0.5, label="Mean", color="white")
+ggsave('binom_150_1000_post.pdf',width=6,height=4)
+
+p1 + geom_segment(x=151/1002, xend=151/1002, y=0, yend=35, color="red") +
+  annotate(geom ="text", x=151/1001, y=-0.5, label="Mean")
+ggsave('binom_150_1000_post_mean.pdf',width=6,height=4)
+
+p1 + geom_segment(x=149/998, xend=149/998, y=0, yend=35, color="red") +
+  annotate(geom ="text", x=149/998, y=-0.5, label="Mode")
+ggsave('binom_150_1000_post_mode.pdf',width=6,height=4)
+
+
 #' Posterior of theta of Binomial model with y=10, n=10
 ggplot(data = data.frame(x = c(0, 1)), aes(x)) +
     stat_function(fun = dbeta, n = 601, args = list(shape1 = 11, shape2 = 1),

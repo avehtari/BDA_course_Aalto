@@ -1,0 +1,10 @@
+cd /work
+git config --global --add safe.directory /work
+git config --global user.name "avehtari"
+git config --global user.email "aki.vehtari@aalto.fi"
+git checkout master
+rmdfiles=$(git diff --name-only HEAD^ | grep '[.]*Rmd$')
+# qmdfiles=$(git diff --name-only HEAD^ | grep '[.]*qmd$')
+while read -r filename; do   echo "$filename"; Rscript -e "rmarkdown::render('$filename')";   done <<< "$rmdfiles"
+# while read -r filename; do   echo "$filename"; quarto render $filename;   done <<< "$qmdfiles"
+
