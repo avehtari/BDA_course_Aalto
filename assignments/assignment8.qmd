@@ -1,0 +1,294 @@
+---
+title: "Assignment 8"
+subtitle: "LOO-CV model comparison"
+author: "Aki Vehtari et al."
+format:
+  html:
+    toc: true
+    code-tools: true
+    code-line-numbers: true
+    # standalone: true
+    # self-contained: true
+    # embed-resources: true
+    number-sections: true
+    mainfont: Georgia, serif
+    # linkcolor: "#212529"
+    fontsize: 1.2em
+    page-layout: article
+# reference-location: margin
+# citation-location: margin
+comments:
+  hypothesis: true
+editor: source
+filters:
+  - assignments.lua
+  - include-code-files.lua
+execute:
+  daemon: 999999
+---
+
+# General information
+
+**The maximum amount of points from this assignment is 6.**
+
+We have prepared a **[quarto template](template8.html)** to help you get started.
+
+:::{.gsu}
+We recommend you use the [docker container](docker.html). 
+:::
+
+
+:::{.hint}
+**Reading instructions**:
+
+Chapter 7 in BDA3, see [**the reading instructions for Chapter 7**](https://avehtari.github.io/BDA_course_Aalto/chapter_notes/BDA_notes_ch7.pdf). The
+[‘loo‘ package vignette on the basics of LOO](https://mc-stan.org/loo/articles/loo2-with-rstan.html)
+shows an example of how to modify Stan code and use the package with Stan models. Also read
+about PSIS-LOO in the [PSIS-LOO paper](https://link.springer.com/article/10.1007/s11222-016-9696-4).
+
+{{< include grading_instructions.md >}}
+
+{{< include cmdstanr.md >}}
+:::
+
+{{< include reporting_accuracy.md >}}
+
+{{< include general_info.md >}}
+
+
+
+
+# A hierarchical model for chicken weight time series
+
+## Exploratory data analysis
+
+In the first part of this assignment, you will explore the dataset `ChickWeight`. In particular, you will see what information is recorded in the dataset, and how you can use visualisation to learn more about the dataset. More information can be found on the corresponding page of the [R documentation](https://www.rdocumentation.org/packages/datasets/versions/3.6.2/topics/ChickWeight).
+
+```{r}
+head(ChickWeight, 10)
+```
+
+:::{.subtask letter=a}
+Create a histogram to explore the range of chicken weights. 
+Describe what you see in the plot. What is the qualitative range of the data?
+:::
+
+
+:::{.subrubric}
+* Does the plot look correct and is it readable?
+* Has it been stated that the data is **...**?
+:::
+
+:::{.subtask}
+Plot the weight of each chicken over time in a line plot. Add colours based on the diet.
+Describe what you see in the plot. 
+:::
+
+
+:::{.subrubric}
+* Does the plot look correct and is it readable?
+* Has it been recognized that there is variation between **...** and **...**?
+:::
+
+## Linear regression
+
+In this section, you will build a model that predicts the weight of a
+chicken over time and depending on the diet. After each model fit, you
+will use posterior predictive checks to see how well the predictions
+match the observations. Then you will adjust the model by adding more
+complexity, and check again.
+
+::: {.subtask}
+Using `brms`, implement a pooled linear regression with a normal
+likelihood / observation family and `weight` as the predicted
+variable using `Diet` and `Time` as predictors. Try to use weakly informative priors.
+:::
+::: {.hint}
+For the prior on `Time`, consider how much the weight of a chicken (in grams) could possibly
+change each day. For the priors on the effects of different diets,
+consider how much average weight difference would be possible between
+diets.
+
+Note that as `Diet` is a categorical variable, the priors need to be
+specified for each category (apart from `Diet1` which is taken to be
+the baseline).
+:::
+
+
+:::{.subrubric}
+* Is the brms-formula **...**?
+* Is the family **...**?
+* Are the prior standard deviations around **...**?
+:::
+
+
+Next, you can use the `bayesplot` package to check the posterior
+predictions in relation to the observed data using the [`pp_check` function](https://mc-stan.org/bayesplot/reference/pp_check.html). 
+The function plots the $y$ values, which are the observed data, 
+and the $y_\text{rep}$ values, which are replicated data sets from the
+posterior predictive distribution.
+
+:::{.subtask}
+Perform the posterior predictive check with the default arguments.
+What do you observe? Based on the plot, do the posterior predictions
+encapsulate the main features of the observed data? Point out any
+major differences between the predictions and the observed data.
+Answer the following questions:
+
+* Are there qualitative differences between the observed data and the predicted data?
+* Do the observed data seem quantitatively similar?
+:::
+
+
+:::{.subrubric}
+* Does the plot look correct and is it readable?
+* Has it been recognized that the predicted data include **...**?
+* Has it been recognized that the observed and predicted data **...**?
+:::
+
+The default density plot is not always informative, but `bayesplot`
+has different settings that can be used to create plots more
+appropriate for specific data.
+
+:::{.subtask}
+Create another plot with grouping to the PPC plot using the arguments
+`type = "intervals_grouped"` and `group = "Diet"`.
+What do you observe? Point out any major differences
+between the predictions and the observed data.
+Based on your visualisations, how could the model be improved?
+:::
+
+
+:::{.subrubric}
+* Does the plot look correct and is it readable?
+* Is there at least one reasonable way to improve the model, e.g. **...**?
+:::
+
+## Log-normal linear regression
+
+Based on the identified issues from the posterior predictive check,
+the model can be improved. It is advisable to change only one or a few
+things about a model at once. At this stage, focus on changing the
+likelihood family to better account for the observed data.
+
+One option is to use the lognormal likelihood, which only allows
+positive values. In `brms` you can change the observation model family
+and likelihood to this by setting the argument `family = "lognormal"`.
+Note that when using the log-normal observation model, the regression
+coefficients represent the change in the log weight of a chicken. The
+priors have been adjusted accordingly in the template.
+
+::: {.subtask}
+Adjust the model, fit it and create the same two posterior predictive
+check plots. Comment on your observations. Does the new model better
+capture some aspects of the data?
+:::
+::: {.hint}
+:::
+
+
+:::{.subrubric}
+* Do the plots look correct and are they readable?
+* Has it been recognized that the fit to data is **...**?
+:::
+
+## Hierarchical log-normal linear regression
+
+The model can further be improved by directly considering potential
+differences in growth rate for individual chicken. Some chickens may
+innately grow faster than others, and this difference can be included
+by including both population and group level effects in to the model.
+
+To include a group effect in `brms`, the code `+
+(predictor|group)` can be added to the model formula. In this case,
+the predictor is `Time` and the group is `Chick`.
+
+::: {.subtask}
+Create the same two plots as for the previous models. Comment on what
+you see. Do the predictions seem to better capture the observed data?
+Are there remaining discrepancies between the predictions and observed
+data that could be addressed?
+:::
+
+:::{.subrubric}
+* Do the plots look correct and are they readable?
+* Has it been recognized that the fit to data is **...**?
+:::
+
+:::{.subtask}
+Have you encountered any convergence issues in the above models? Report and comment.
+:::
+:::{.subrubric}
+* Has there been a potentially brief discussion of the standard convergence criteria (Rhat, ESS, divergent transitions) for all models?
+:::
+
+## Model comparison using the ELPD
+
+There are many ways of comparing models[^footnote1]. Commonly, we evaluate point predictions, such as the mean of the predictive distribution[^footnote2], or accuracy of the whole posterior predictive. Whether we prioritise point or density predictive accuracy may serve different purposes and lead to different outcomes for model choice [^footnote3]. It is common, however, to report predictive accuracy via log-scores and point-predictive accuracy via root-mean-squared-error based on the empirical average of the predictive distribution. To cross-validate both metrics on left out observations without re-fitting the models, we use Pareto-smoothed importance sampling as discussed in the course materials (see lecture slides for chapter 7). 
+
+We start comparing models based on the log-score. Use `loo::loo()` and `loo::loo_compare()` to quantify the differences in predictive performance.
+
+[^footnote1]: In principle, when comparing models based on accuracy in predictions or parameter estimation (if true parameter values are available to you, as e.g. in simulation studies), we want to use so called strictly proper scoring rules that will always indicate when a "better" model is better and the score reaches its uniquely defined best value at the "true" model, if it is also well defined. See [**Gneiting and Raftery, (2007)**](https://www.tandfonline.com/doi/abs/10.1198/016214506000001437) for and in depth treatment of this topic.
+
+[^footnote2]: NOT predictions based on the mean of the posterior parameters, but first generating the predictive distribution and then computing an average.
+
+[^footnote3]: For instance, a unimodal and bi-modal predictive density may have the same expected value, but very different areas of high posterior density and therefore very different log-scores.
+
+:::{.subtask}
+Answer the following questions using `loo`/`loo_compare`:
+
+* Which model has the best predictive performance? 
+* Does the uncertainty influence the decision of which model is best?
+:::
+
+
+:::{.subrubric}
+* Do the results look correct and have they been presented in a readable way? They should be roughly **...**.
+* Has it been recognized that the best model is **...** and that the uncertainty is **...**?
+:::
+:::{.subtask}
+Assess whether the approximation to the LOO-CV distributions are reliable.
+Consult the $\hat{k}$ statistic which informs on the convergence rate of PSIS. 
+Plot the $\hat{k}$ values for each model against the data point ID and discuss.
+Are they as expected?
+:::
+:::{.hint}
+For hierarchical models, it may be more important to think about how well the individual group is predicted and how many observations there are in a group compared to the number of parameters estimated. Also check out [this discussion on the Stan forums](https://discourse.mc-stan.org/t/a-quick-note-what-i-infer-from-p-loo-and-pareto-k-values/3446).
+:::
+
+ 
+:::{.subrubric}
+* Do the plots look correct and are they readable?
+* Has it been explained why the $\hat{k}$ values are highest for the **...**? **...**
+:::
+:::{.subtask}
+Perform a PPC for the hierarchical model for 
+
+* a few of the chickens with the highest $\hat{k}$ values and
+* a few of the chickens with the lowest $\hat{k}$ values
+
+using the code in the template. What do you observe?
+:::
+
+
+
+:::{.subrubric}
+* Does the plot look correct and is it readable?
+* Has it been recognized that the chickens with high $\hat{k}$ values **...**?
+:::
+
+## Model comparison using the RMSE
+
+:::{.subtask}
+Use the function in the template to compare the RMSE and the LOO-RMSE for the three models.
+Explain the difference between the RMSE and the LOO-RMSE in 1-3 sentences. Is one generally lower than the other? Why?
+:::
+
+
+:::{.subrubric}
+* Do the results look correct and have they been presented in a readable way?
+* Has it been recognized that the RMSE is **...** than the LOO-RMSE because **...**?
+:::
+
+{{< include overall_quality.md >}}
+  

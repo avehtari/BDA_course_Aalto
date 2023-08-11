@@ -1,0 +1,86 @@
+---
+author: "Aki Vehtari et al."
+title: How to set up docker
+format: 
+  html:
+    toc: true
+    code-tools: true
+    code-line-numbers: true
+    standalone: true
+    self-contained: true
+    embed-resources: true  
+---
+
+# Docker installation instructions
+
+See [https://docs.docker.com/get-docker/](https://docs.docker.com/get-docker/):
+
+> Docker is an open platform for developing, shipping, and running applications. Docker enables you to separate your applications from your infrastructure so you can deliver software quickly. With Docker, you can manage your infrastructure in the same ways you manage your applications. By taking advantage of Docker’s methodologies for shipping, testing, and deploying code quickly, you can significantly reduce the delay between writing code and running it in production.
+>
+> You can download and install Docker on multiple platforms. Refer to the following section and choose the best installation path for you.
+
+Further instructions for [Mac](https://docs.docker.com/desktop/install/mac-install/), [Windows](https://docs.docker.com/desktop/install/windows-install/) and [Linux](https://docs.docker.com/desktop/install/linux-install/).
+
+With Linux things should be self-explanatory enough for the users that self-select to use Linux. For Mac installation instructions should be easy to follow, but do tell if they are not. For Windows, things might get a bit more complicated, but it should be less painful than trying to get Stan to work.
+
+## Docker installation instructions for Windows
+
+It looks like you'd ideally enable [Windows Subsystem for Linux](https://en.wikipedia.org/wiki/Windows_Subsystem_for_Linux) (WSL) in its second version, see [https://github.com/rocker-org/rocker/wiki/Sharing-files-with-host-machine](https://github.com/rocker-org/rocker/wiki/Sharing-files-with-host-machine):
+
+> For better performance, it is recommended to set up a Linux distribution on WSL2 and save your files in the Linux file system.
+See the best practices of Docker Desktop WSL2 backend for details. https://docs.docker.com/docker-for-windows/wsl/#best-practices
+
+Instruction on how to install it can be found at [https://learn.microsoft.com/en-us/windows/wsl/install](https://learn.microsoft.com/en-us/windows/wsl/install):
+
+> ### Install Linux on Windows with WSL
+> Developers can access the power of both Windows and Linux at the same time on a Windows machine. The Windows Subsystem for Linux (WSL) lets developers install a Linux distribution (such as Ubuntu, OpenSUSE, Kali, Debian, Arch Linux, etc) and use Linux applications, utilities, and Bash command-line tools directly on Windows, unmodified, without the overhead of a traditional virtual machine or dualboot setup.
+>
+> ### Prerequisites
+> You must be running Windows 10 version 2004 and higher (Build 19041 and higher) or Windows 11 to use the commands below. If you are on earlier versions please see the manual install page.
+>
+> ### Install WSL command
+> You can now install everything you need to run WSL with a single command. Open PowerShell or Windows Command Prompt in administrator mode by right-clicking and selecting "Run as administrator", enter the wsl --install command, then restart your machine.
+>
+>
+> ```
+> wsl --install
+> ```
+> This command will enable the features necessary to run WSL and install the Ubuntu distribution of Linux. (This default distribution can be changed).
+>
+> If you're running an older build, or just prefer not to use the install command and would like step-by-step directions, see WSL manual installation steps for older versions.
+>
+> The first time you launch a newly installed Linux distribution, a console window will open and you'll be asked to wait for files to de-compress and be stored on your machine. All future launches should take less than a second.
+
+
+# Docker usage instructions
+
+Once you have installed docker you should be able to start the virtual machine that we have set up with the following command:
+
+**For Windows (Run the following command in Powershell not in command prompt):**
+
+```
+docker run --rm -ti -v ${PWD}:/home/rstudio/workspace -e USERID=$UID -e DISABLE_AUTH=true -p 127.0.0.1:8787:8787 meenaljhajharia/bda-docker:latest
+```
+
+**For other Operating Systems:**
+
+```
+docker run --rm -ti -v $PWD:/home/rstudio/workspace -e USERID=$UID -e DISABLE_AUTH=true -p 127.0.0.1:8787:8787 meenaljhajharia/bda-docker:latest
+```
+
+- `-v $PWD:/home/rstudio/workspace` makes the directory from which the docker command is run accessible to the VM under /home/rstudio/workspace
+- `-e USERID=$UID` makes docker+rstudio play nice with the mounted files (see https://github.com/rocker-org/rocker/wiki/Sharing-files-with-host-machine),
+- `-e DISABLE_AUTH=true` disables the need to authenticate, which would be unsafe, but
+- `-p 127.0.0.1:8787:8787` only allows access from the local machine, which makes it safe(ish) again.
+
+After starting the docker container like that, you can go to http://localhost:8787/ which shows you Rstudio with all necessary packages installed. There you can access your files in the `workspace` folder. 
+
+**Any changes outside of that folder will be reset once you restart the docker container, so save your work in the workspace folder.**
+
+# Updating docker
+
+To update the docker container to the latest version, which fixes some bugs and installs some packages
+where installation had failed before, run:
+```
+docker pull meenaljhajharia/bda-docker:latest
+```
