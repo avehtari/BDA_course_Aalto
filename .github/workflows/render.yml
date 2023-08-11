@@ -29,15 +29,16 @@ jobs:
                   git config --global user.name "avehtari"
                   git config --global user.email "aki.vehtari@aalto.fi"
                   git checkout master
-                  git diff --name-only HEAD^ | grep '[.]*Rmd$' > last_modified_rmd_files.txt
-		  git diff --name-only HEAD^ | grep '[.]*qmd$' > last_modified_qmd_files.txt
-                  while read -r filename; do   echo "$filename"; Rscript -e "rmarkdown::render('$filename')";   done < last_modified_rmd_files.txt
-                  while read -r filename; do   echo "$filename"; quarto render $filename;   done < last_modified_qmd_files.txt
+                  rmdfiles=$(git diff --name-only HEAD^ | grep '[.]*Rmd$')
+                  # qmdfiles=$(git diff --name-only HEAD^ | grep '[.]*qmd$')
+                  while read -r filename; do   echo "$filename"; Rscript -e "rmarkdown::render('$filename')";   done <<< "$rmdfiles"
+                  # while read -r filename; do   echo "$filename"; quarto render $filename;   done <<< "$qmdfiles"
 
           - name: GitHub Pages action
             uses: peaceiris/actions-gh-pages@v3.6.1
+            if: github.ref == 'refs/heads/master'
             with:
-              github_token: ${{ secrets.GH_ACTION_ }}
-              publish_branch: master
-              publish_dir: docs
-
+              github_token: ${{ secrets.GH_ACTION}}
+              publish_branch: gh-pages
+              keep_files: true
+              publish_dir: .
