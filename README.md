@@ -19,7 +19,7 @@ The material will be updated during the course. Exercise instructions and slides
 
 The course material has been greatly improved by the previous and
 current course assistants (in alphabetical order): Michael Riis
-Andersen, Paul Bürkner, Akash Dakar, Alejandro Catalina, Kunal Ghosh,
+Andersen, Paul Bürkner, Akash Dhaka, Alejandro Catalina, Kunal Ghosh,
 Joona Karjalainen, Juho Kokkala, Måns Magnusson, Janne Ojanen, Topi
 Paananen, Markus Paasiniemi, Juho Piironen, Jaakko Riihimäki, Eero
 Siivola, Tuomas Sivula, Teemu Säilynoja, Jarno Vanhatalo.

@@ -31,7 +31,7 @@ jobs:
                   git checkout master
                   rmdfiles=$(git diff --name-only HEAD^ | grep '[.]*Rmd$')
                   # qmdfiles=$(git diff --name-only HEAD^ | grep '[.]*qmd$')
-                  while read -r filename; do   echo "$filename"; Rscript -e "rmarkdown::render('$filename')";   done <<< "$rmdfiles"
+                  if [ -n "${rmdfiles}" ]; then while read -r filename; do   echo "$filename"; Rscript -e "rmarkdown::render('$filename')";   done <<< "$rmdfiles"; fi
                   # while read -r filename; do   echo "$filename"; quarto render $filename;   done <<< "$qmdfiles"
 
           - name: GitHub Pages action
