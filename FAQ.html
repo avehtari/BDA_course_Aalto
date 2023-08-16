@@ -1899,6 +1899,35 @@ assignments if you submit the project work in period III.</li>
 </ul></li>
 </ul>
 </div>
+<div id="m1-macs-with-python-and-stan" class="section level2">
+<h2>M1 Macs with Python and Stan</h2>
+<p>Unfortunately the installation of <code>pystan</code> will fail on an
+M1 Mac, as there is not a binary wheel available for the
+<code>httpstan</code> dependency. A recommended alternative here is the
+<a href="https://mc-stan.org/cmdstanpy/">CmdStanPy package</a>.</p>
+<p>M1 Mac users that are intent on using <code>pystan</code> will need
+to complete the following steps to build <code>httpstan</code> from
+source and then install <code>pystan</code>:</p>
+<div id="build-and-install-httpstan" class="section level3">
+<h3>Build and Install <code>httpstan</code></h3>
+<pre><code># Download httpstan source
+git clone https://github.com/stan-dev/httpstan
+cd httpstan
+# Build shared libraries and generate code
+python3 -m pip install poetry
+# Build httpstan source
+#   - There will be many compiler warnings, these are safe to ignore
+make -j8
+# Build the httpstan wheel
+python3 -m poetry build
+# Install the wheel
+python3 -m pip install dist/*.whl</code></pre>
+</div>
+<div id="install-pystan" class="section level3">
+<h3>Install <code>pystan</code></h3>
+<pre><code>python3 -m pip install pystan</code></pre>
+</div>
+</div>
 
 
 
