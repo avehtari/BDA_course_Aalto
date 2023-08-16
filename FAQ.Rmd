@@ -47,7 +47,7 @@ Instead of installing RStudio on your computer, you can use it in your web brows
 * Go to [jupyter.cs.aalto.fi](https://jupyter.cs.aalto.fi)
 * Choose `CS-E5710 - Bayesian Data Analysis (2022) -r-ubuntu:5.0.6-dev14-bayes`
 * In the Launcher click `RStudio`
-* In the RStudio Files pane (bottom right) you can create folders for your work and upload files from your computer to the server 
+* In the RStudio Files pane (bottom right) you can create folders for your work and upload files from your computer to the server
     * The **notebooks** folder is the only persistent folder (stays there if you sign out) so save everything to that folder!
     * You may get an error when uploading a large zip file, but uploading smaller zip files work. If you can't upload demo zip file contact the course staff via Zulip.
     * You may access your data as a network drive by SMB mounting it on your own computer - [see Accessing JupyterHub data](https://scicomp.aalto.fi/aalto/jupyterhub-data/). This allows you to have total control over your data.
@@ -183,3 +183,32 @@ This should open the file in the window.
     - First we hope you can resolve the issue, but if nothing works, then you can continue the project work alone.
 - I was not able a) to do the project or b) to give a presentation because [some personal problem]. Can a) I submit it later, b) present later.
     - Things happen and you don't need to tell the course staff your personal reasons (especially you shouldn't tell any health issue details). Everyone gets a second change in period III. In period III there is second project submission deadline and presentation slots. If you are happy with your assignment score, you don't need to re-submit assignments if you submit the project work in period III.
+
+## M1 Macs with Python and Stan
+
+Unfortunately the installation of `pystan` will fail on an M1 Mac, as there is not a binary wheel available for the `httpstan` dependency. A recommended alternative here is the [CmdStanPy package](https://mc-stan.org/cmdstanpy/).
+
+M1 Mac users that are intent on using `pystan` will need to complete the following steps to build `httpstan` from source and then install `pystan`:
+
+### Build and Install `httpstan`
+
+```
+# Download httpstan source
+git clone https://github.com/stan-dev/httpstan
+cd httpstan
+# Build shared libraries and generate code
+python3 -m pip install poetry
+# Build httpstan source
+#   - There will be many compiler warnings, these are safe to ignore
+make -j8
+# Build the httpstan wheel
+python3 -m poetry build
+# Install the wheel
+python3 -m pip install dist/*.whl
+```
+
+### Install `pystan`
+
+```
+python3 -m pip install pystan
+```
