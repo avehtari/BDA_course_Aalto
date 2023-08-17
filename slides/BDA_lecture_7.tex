@@ -1,0 +1,746 @@
+\documentclass[finnish,english,t]{beamer}
+%\documentclass[finnish,english,handout]{beamer}
+
+% Uncomment if want to show notes
+% \setbeameroption{show notes}
+
+\mode<presentation>
+{
+  % \usetheme{Warsaw}
+}
+\setbeamertemplate{itemize items}[circle]
+\setbeamercolor{frametitle}{bg=white,fg=navyblue}
+
+
+% \usepackage[pdftex]{graphicx}
+%\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{times}
+\usepackage{microtype}
+\usepackage{epic,epsfig}
+\usepackage{subfigure,float}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{inputenc}
+\usepackage{afterpage}
+\usepackage{url}
+\urlstyle{same}
+\usepackage{amsbsy}
+\usepackage{eucal}
+\usepackage{rotating}
+\usepackage{listings}
+\usepackage{lstbayes}
+\usepackage[all,poly,ps,color]{xy}
+
+\usepackage{natbib}
+\bibliographystyle{apalike}
+
+ \definecolor{hutblue}{rgb}{0,0.2549,0.6784}
+% \definecolor{midnightblue}{rgb}{0.0977,0.0977,0.4375}
+% \definecolor{hutsilver}{rgb}{0.4863,0.4784,0.4784}
+% \definecolor{lightgray}{rgb}{0.95,0.95,0.95}
+% \definecolor{section}{rgb}{0,0.2549,0.6784}
+% \definecolor{list1}{rgb}{0,0.2549,0.6784}
+\definecolor{forestgreen}{rgb}{0.1333,0.5451,0.1333}
+\definecolor{navyblue}{rgb}{0,0,0.5}
+\renewcommand{\emph}[1]{\textcolor{navyblue}{#1}}
+\definecolor{darkgreen}{rgb}{0,0.3922,0}
+\definecolor{set11}{HTML}{E41A1C}
+\definecolor{set12}{HTML}{377EB8}
+\definecolor{set13}{HTML}{4DAF4A}
+
+%%%%%%%%%%%%%%%%%%% for hiding figures %%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{color}
+\newcommand{\hide}[5][white]{
+	% usage: \hhide[color]{vspace,hspace,height,width}
+	% note: all measures are relative units measured in \textwidth
+	%\begin{minipage}{0.99\textwidth}
+	\vspace{#2\textwidth}
+	\hspace{#3\textwidth}
+	\textcolor{#1}{  \rule{#5\textwidth}{#4\textwidth}  }
+	% \end{minipage}
+      }
+
+\graphicspath{{./figs/}}
+
+\pdfinfo{
+  /Title      (Bayesian data analysis, ch 5)
+  /Author     (Aki Vehtari) %
+  /Keywords   (Bayesian probability theory, Bayesian inference, Bayesian data analysis)
+}
+
+
+\parindent=0pt
+\parskip=8pt
+\tolerance=9000
+\abovedisplayshortskip=2pt
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{headline}[default]{}
+\setbeamertemplate{headline}[text line]{\insertsection}
+\setbeamertemplate{footline}[frame number]
+
+
+\def\o{{\mathbf o}}
+\def\t{{\mathbf \theta}}
+\def\w{{\mathbf w}}
+\def\x{{\mathbf x}}
+\def\y{{\mathbf y}}
+\def\z{{\mathbf z}}
+
+\def\peff{p_{\mathrm{eff}}}
+\def\eff{\mathrm{eff}}
+
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\var}{var}
+\DeclareMathOperator{\Sd}{Sd}
+\DeclareMathOperator{\sd}{sd}
+\DeclareMathOperator{\Gammad}{Gamma}
+\DeclareMathOperator{\Invgamma}{Inv-gamma}
+\DeclareMathOperator{\Bin}{Bin}
+\DeclareMathOperator{\Negbin}{Neg-bin}
+\DeclareMathOperator{\Poisson}{Poisson}
+\DeclareMathOperator{\Beta}{Beta}
+\DeclareMathOperator{\logit}{logit}
+\DeclareMathOperator{\N}{N}
+\DeclareMathOperator{\U}{U}
+\DeclareMathOperator{\BF}{BF}
+\DeclareMathOperator{\Invchi2}{Inv-\chi^2}
+\DeclareMathOperator{\NInvchi2}{N-Inv-\chi^2}
+\DeclareMathOperator{\InvWishart}{Inv-Wishart}
+\DeclareMathOperator{\tr}{tr}
+% \DeclareMathOperator{\Pr}{Pr}
+\def\euro{{\footnotesize \EUR\, }}
+\DeclareMathOperator{\rep}{\mathrm{rep}}
+
+\def\dashxy(#1){%
+  /xydash{[#1] 0 setdash}def}
+\def\grayxy(#1){%
+  /xycolor{#1 setgray}def}
+\newgraphescape{D}[1]{!{\ar @*{[!\dashxy(2 2)]} "#1"}}
+\newgraphescape{P}[1]{!{\ar "#1"}}
+\newgraphescape{F}[1]{!{*+=<2em>[F=]{#1}="#1"}}
+\newgraphescape{O}[1]{!{*+=<2em>[F]{#1}="#1"}}
+\newgraphescape{V}[1]{!{*+=<2em>[o][F]{#1}="#1"}}
+\newgraphescape{B}[3]{!{{ "#1"*+#3\frm{} }.{ "#2"*+#3\frm{} } *+[F:!\grayxy(0.75)]\frm{}}}
+
+\title[]{Bayesian data analysis}
+\subtitle{}
+
+\author{Aki Vehtari}
+
+\institute[Aalto]{}
+
+\begin{document}
+
+\begin{frame}{Chapter 5}
+
+  \begin{itemize}
+\item 5.1 Lead-in to hierarchical models
+\item 5.2 Exchangeability (useful concept)
+\item 5.3 Bayesian analysis of hierarchical models (but we use Stan for computation)
+\item 5.4 Hierarchical normal model (but we use Stan for computation)
+\item 5.5 Example: parallel experiments in eight schools (uses hierarchical normal model, part of assignment, but we use Stan for computation)
+\item {\color{gray}5.6 Meta-analysis (can be skipped)}
+\item 5.7 Weakly informative priors for hierarchical variance parameters
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Hierarchical model}
+
+  \begin{itemize}
+  \item In simple model: posterior for the parameters
+  \item In hierarchical model: posterior for the prior parameters
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Hierarchical model}
+
+  \begin{itemize}
+  \item Example: CVD treatment effectiveness
+    \begin{itemize}
+    \item in hospital $j$ the survival probability is ${\color{set12}\theta_j}$
+    \item observations $y_{ij}$ tell whether patient $i$ survived in
+      hospital $j$
+        \begin{xy}
+          \xymatrix{ {\color{set12}\theta_1}\ar[d] & {\color{set12}\theta_2}\ar[d] &
+            \cdots & {\color{set12}\theta_n}\ar[d] \\
+            y_{i1} & y_{i2} & & y_{in} }
+        \end{xy}
+        \pause
+      \item sensible to assume that ${\color{set12}\theta_j}$ are similar
+        \begin{xy}
+          \xymatrix{
+            & {\color{set11}\tau} \ar[dl] \ar[d] \ar[drr] & & &  \\
+            {\color{set12}\theta_1}\ar[d] & {\color{set12}\theta_2}\ar[d] &
+            \cdots & {\color{set12}\theta_n}\ar[d] \\
+            y_{i1} & y_{i2} & & y_{in} }
+        \end{xy}
+%        \pause
+      \item natural to think that ${\color{set12}\theta_j}$ have common population distribution
+      \item ${\color{set12}\theta_j}$ is not directly observed and the population
+        distribution is unknown
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Hierarchical model: terms}
+
+\begin{overlayarea}{12cm}{5.5cm}
+  \begin{itemize}
+  \item[Level 1:] observations given parameters $p(y_{ij} \mid {\color{set12}\theta_j})$
+  \item<2->[Level 2:] parameters given hyperparameters
+    $p({\color{set12}\theta_j} \mid {\color{set11}\tau})$
+  \end{itemize}
+  \begin{minipage}[b]{4cm}
+    \begin{xy}
+      \xymatrix{
+        p({\color{set11}\tau}) & & \tau \ar[dl] \ar[d] \ar[drr] & & & \text{\color{set11}hyperparameter} \\
+        p({\color{set12}\theta_j} \mid {\color{set11}\tau}) & {\color{set12}\theta_1}\ar[d] & {\color{set12}\theta_2}\ar[d] & \cdots &
+        {\color{set12}\theta_n}\ar[d] & \text{{\color{set12}parameters}} \\
+        p(y_{ij} \mid {\color{set12}\theta_j}) & y_{i1} & y_{i2} &  & y_{in} & \text{observations}
+      }
+    \end{xy}
+  \end{minipage}\\
+  \only<1>{\hide[white]{-0.3}{-0.2}{0.13}{1.2}} %
+\end{overlayarea}
+  Joint posterior
+  \begin{eqnarray*}
+    p({\color{set12}\theta},{\color{set11}\tau} \mid y) & \propto & p(y \mid {\color{set12}\theta},{\color{set11}\tau}) p({\color{set12}\theta},{\color{set11}\tau}) \\
+    & \propto & p(y \mid {\color{set12}\theta}) p({\color{set12}\theta} \mid {\color{set11}\tau}) p({\color{set11}\tau})
+  \end{eqnarray*}
+\end{frame}
+
+\begin{frame}{Compare}
+  \vspace{-0.5\baselineskip}
+	\begin{itemize}
+    \item<+-> "Separate model" (model with separate/independent effects)
+        \begin{xy}
+          \xymatrix{ {\color{set12}\theta_1}\ar[d] & {\color{set12}\theta_2}\ar[d] &
+            \cdots & {\color{set12}\theta_n}\ar[d] \\
+            y_{1} & y_{2} & & y_{n} }
+        \end{xy}
+     \item<+-> "Joint model" (model with a common effect / pooled model)
+        \begin{xy}
+          \xymatrix{
+            & {\color{set12}\theta} \ar[dl] \ar[d] \ar[drr] & & &  \\
+            y_{1} & y_{2} & \cdots & y_{n}}        \end{xy}
+      \item<+-> Hierarchical model\\
+        \vspace{-.5\baselineskip}\hspace{0cm}
+        \begin{xy}
+          \xymatrix{
+            & {\color{set11}\tau} \ar[dl] \ar[d] \ar[drr] & & &  \\
+            {\color{set12}\theta_1}\ar[d] & {\color{set12}\theta_2}\ar[d] &
+            \cdots & {\color{set12}\theta_n}\ar[d] \\
+            y_{1} & y_{2} & & y_{n} }
+        \end{xy}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Hierarchical binomial model: rats}
+
+  \begin{itemize}
+  \item Medicine testing
+  \item Type F344 female rats in control group given placebo
+    \begin{itemize}
+    \item count how many get endometrial stromal polyps
+    \item familiar binomial model example
+    \end{itemize}
+  \item<2-> Experiment has been repeated 71 times
+    {\scriptsize
+      \begin{tabular}{r r r r r r r r r r}
+        0/20 & 0/20 & 0/20 & 0/20 & 0/20 & 0/20 & 0/20 & 0/19 & 0/19 & 0/19 \\
+        0/19 & 0/18 & 0/18 & 0/17 & 1/20 & 1/20 & 1/20 & 1/20 & 1/19 & 1/19 \\
+        1/18 & 1/18 & 2/25 & 2/24 & 2/23 & 2/20 & 2/20 & 2/20 & 2/20 & 2/20 \\
+        2/20 & 1/10 & 5/49 & 2/19 & 5/46 & 3/27 & 2/17 & 7/49 & 7/47 & 3/20 \\
+        3/20 & 2/13 & 9/48 & 10/50 & 4/20 & 4/20 & 4/20 & 4/20 & 4/20 & 4/20 \\
+        4/20 & 10/48 & 4/19 & 4/19 & 4/19 & 5/22 & 11/46 & 12/49 & 5/20 & 5/20 \\
+        6/23 & 5/19 & 6/22 & 6/20 & 6/20 & 6/20 & 16/52 & 15/46 & 15/47 & 9/24 \\
+        4/14 &      &      &      &      &      &       &       &       & 
+      \end{tabular}}
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Hierarchical binomial model: rats}
+
+  \only<1>{\includegraphics[width=10cm]{rats_pooled.pdf}}
+  \only<2>{\includegraphics[width=10cm]{rats_separate.pdf}}
+
+  
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Hierarchical binomial model: rats}
+
+  \begin{itemize}
+  \item Hierarchical binomial model for rats\\
+    prior parameters {\color{set11} $\alpha$} and {\color{set11} $\beta$} are unknown
+    \begin{minipage}[t]{4cm}
+      \xygraph{
+        []              !O{y_j}
+        ([u]   !V{{\color{set12}\theta_j}}  !P{y_j}
+        ([u][l(0.33)] !V{\color{set11} \alpha} !P{{\color{set12}\theta_j}},
+        [u][r(0.33)] !V{\color{set11} \beta}  !P{{\color{set12}\theta_j}}),
+        [u][r(0.75)]  !F{n_j}    !P{y_j},
+        [r(1.0)]*{j},
+        [l(3.0)]*{y_j \mid n_j,{\color{set12}\theta_j} \sim \Bin(y_j \mid n_j,{\color{set12}\theta_j})},
+        [u][l(2.93)]*{{\color{set12}\theta_j} \mid {\color{set11}\alpha,\beta} \sim
+          \Beta({\color{set12}\theta_j} \mid {\color{set11}\alpha,\beta})},
+        [l(6.0)]*{~}
+        )
+        !B{{\color{set12}\theta_j}}{j}{++}
+      }
+    \end{minipage}
+    %\pause
+    \item Joint posterior
+      $p({\color{set12}\theta_1,\ldots,\theta_J},{\color{set11}\alpha},{\color{set11}\beta} \mid y)$
+      \begin{itemize}
+    \item multiple parameters
+      \pause
+      \item factorize
+        $\prod_{j=1}^J p({\color{set12}\theta_j} \mid {\color{set11}\alpha,\beta},y)p({\color{set11}\alpha,\beta} \mid y)$
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Hierarchical binomial model: rats}
+
+  \begin{itemize}
+  \item Population prior $\Beta({\color{set12}\theta_j} \mid {\color{set11}\alpha,\beta})$
+  \item Hyperprior $p({\color{set11}\alpha,\beta})$?
+    \begin{itemize}
+    \item ${\color{set11}\alpha,\beta}$ both affect the location and scale
+    \item BDA3 has
+      $p({\color{set11}\alpha,\beta})\propto({\color{set11}\alpha}+{\color{set11}\beta})^{-5/2}$
+      \begin{itemize}
+      \item diffuse prior for location and scale (BDA3 p. 110)
+      \end{itemize}
+    \end{itemize}
+    \item demo5\_1
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Hierarchical binomial model: rats}
+
+  \only<1>{\includegraphics[width=8cm]{rats_posterior.pdf}}
+  \only<2>{\includegraphics[width=10cm]{rats_hierdraws.pdf}}
+  \only<3>{\includegraphics[width=10cm]{rats_hierprior.pdf}}
+  \only<4-5>{\vspace{-0.3\baselineskip}\includegraphics[width=6.7cm]{rats_separate_less.pdf}\\}
+  \only<5>{\vspace{-0.3\baselineskip}
+    \includegraphics[width=6.7cm]{rats_hier_less.pdf}\\}
+  % \only<6>{\vspace{-0.3\baselineskip}
+  %   \includegraphics[width=6.7cm]{rats_hierprior.pdf}\\}
+
+\end{frame}
+
+\begin{frame}{Hierarchical model and group size: Rats}
+
+  \vspace{-\baselineskip}
+   \begin{minipage}[b]{12cm}
+    {  \hspace{-0.7cm}~\includegraphics[width=12cm]{rats_shrinkage_size.pdf}}
+   \end{minipage}
+  
+\end{frame}
+
+\begin{frame}{Hierarchical binomial model: rats}
+
+  {\vspace{-0.3\baselineskip}
+    \includegraphics[width=6.7cm]{rats_hier_less.pdf}\\}
+  {\vspace{-0.3\baselineskip}
+    \includegraphics[width=6.7cm]{rats_hierprior.pdf}\\}
+
+\end{frame}
+
+\begin{frame}{Hierarchical model and group size: Radon}
+
+  919 home radon levels in 85 counties in Minnesota:
+  
+    \hspace{0.2cm} Separate \hspace{4.3cm} Hierarchical
+  \begin{minipage}[b]{12cm}
+    {  \hspace{-0.9cm}~\includegraphics[width=6.3cm]{radon2.pdf}\includegraphics[width=6.3cm]{radon4.pdf}}
+  \end{minipage}
+  
+\end{frame}
+
+
+\begin{frame}{Hierarchical normal model: factory}
+
+  \begin{itemize}
+  \item Factory has 6 machines which quality is evaluated
+  \item Assume hierarchical model
+    \begin{itemize}
+    \item each machine has its own (average) quality $\theta_j$ and
+      common variance $\sigma^2$
+    \end{itemize}
+\begin{minipage}[b]{4cm}
+\begin{xy}
+\xygraph{
+  []              !O{y_{ij}}
+ ([u][l(0.75)]   !V{\theta_j}      !P{y_{ij}}
+ ([u][l(0.33)] !V{\mu_P}      !P{\theta_j},
+   [u][r(0.33)] !V{\sigma_P^2} !P{\theta_j}),
+  [u][r(1.75)]   !V{\sigma^2}   !P{y_{ij}},
+  [r(0.45)]*{i},
+  [r(0.9)]*{j},
+[l(3)]*{y_{ij} \mid \theta_j \sim \N(\theta_j,\sigma^2)},
+[u][l(3)]*{\theta_j \mid \mu_P,\sigma_P^2 \sim \N(\mu_P,\sigma_P^2)},
+)
+!B{y_{ij}}{i}{}
+!B{\theta_j}{j}{++}
+ }
+\end{xy}
+    \end{minipage}
+  \item Can be used to predict the future quality produced by each
+    machine and quality produced by a new similar machine
+%  \item Gibbs sampling exercise later
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Hierarchical normal model: factory}
+
+  \begin{itemize}
+  \item Factory has 6 machines which quality is evaluated
+  \item Assume hierarchical model
+    \begin{itemize}
+    \item each machine has its own (average) quality $\theta_j$ and
+      own variance $\sigma_j^2$
+    \end{itemize}
+\hspace{-1cm}~\begin{minipage}[b]{4cm}
+      \begin{xy}
+        \xygraph{
+          []              !O{y_{ij}}
+          ([u][l(0.75)]   !V{\theta_j}      !P{y_{ij}}
+          ([u][l(0.33)] !V{\mu_P}      !P{\theta_j},
+          [u][r(0.33)] !V{\sigma_P^2} !P{\theta_j}),
+          [u][r(0.75)]   !V{\sigma_j^2}   !P{y_{ij}}
+          ([u][l(0.33)] !V{\sigma_0^2}      !P{\sigma_j^2},
+          [u][r(0.33)] !V{\nu_0} !P{\sigma_j^2}),
+          [r(0.45)]*{i},
+          [r(0.9)]*{j},
+          [l(3.0)]*{y_{ij} \mid \theta_j \sim \N(\theta_j,\sigma_j^2)},
+          [u][l(3.0)]*{\theta_j \mid \mu_P,\sigma_P^2 \sim \N(\mu_P,\sigma_P^2)},
+          [u][r(3.25)]*{\sigma_j^2 \mid \sigma_0^2,\nu_0 \sim \Invchi2(\sigma_0^2,\nu_0)}
+          )
+          !B{y_{ij}}{i}{}
+          !B{\theta_j}{j}{++}
+        }
+      \end{xy}
+    \end{minipage}
+  \item Can be used to predict the future quality produced by each
+    machine and quality produced by a new similar machine
+%  \item Extra points for the Gibbs sampling exercise later
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Hierarchical normal model: 8 schools}
+
+  \begin{itemize}
+  \item Example: SAT coaching effectiveness
+    \begin{itemize}
+    \item in USA commonly used Scholastic Aptitude Test (SAT) is
+      designed so that short term practice should not improve the
+      results significantly
+    \item schools have anyway coaching courses
+    \item test the effectiveness of the coaching courses 
+    \end{itemize}
+    \pause
+  \item SAT
+    \begin{itemize}
+    \item standardized multiple choice test
+    \item mean about 500 and standard deviation about 100
+    \item most scores between 200 and 800
+    \item different topics, e.g., V=Verbal, M=Mathematics
+    \item pre-test PSAT
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Hierarchical normal model: 8 schools}
+
+  \begin{itemize}
+  \item Effectiveness of the SAT coaching
+    \begin{itemize}
+    \item students had made pre-tests PSAT-M and
+      PSAT-V
+    \item part of students were coached
+    \item linear regression was used to estimate the coaching effect
+      $y_j$ for the school $j$ (could be denoted with $\bar{y}_{.j}$,
+      too) and variances $\sigma_j^2$
+    \item $y_j$ approximately normally distributed, with variances
+      assumed to be known based on about 30 students per school
+    \item data is group means and variances (not personal results)
+    \end{itemize}
+    \pause
+  \item Data:
+    {\small
+    \begin{tabular}[t]{r | r r r r r r r r}
+      School & A & B & C & D & E & F & G & H \\
+      $y_j$ & 28 & 8 & -3 & 7 & -1 & 1 & 18 & 12 \\
+      $\sigma_j$ & 15 & 10 & 16 & 11 & 9 & 22 & 20 & 28
+    \end{tabular}}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Hierarchical normal model for group means}
+
+  \begin{itemize}
+  \item $J$ experiments, unknown $\theta_j$ and known $\sigma^2$
+    \begin{equation*}
+      y_{ij} \mid \theta_j \sim \N(\theta_j,\sigma^2), \quad
+      i=1,\ldots,n_j; \quad j=1,\ldots,J
+    \end{equation*}
+    \vspace{-6mm}
+  \item Group $j$ sample mean and sample variance
+    \begin{eqnarray*}
+      \bar{y}_{.j} & = & \frac{1}{n_j}\sum_{i=1}^{n_j}y_{ij}\\
+      \sigma_j^2 & = & \frac{\sigma^2}{n_j}
+    \end{eqnarray*}
+    \vspace{-6mm}
+    \pause
+  \item Use model
+    \begin{eqnarray*}
+      \bar{y}_{.j} \mid \theta_j \sim \N(\theta_j,\sigma_j^2)
+    \end{eqnarray*}
+     this model can be generalized so that, $\sigma_j^2$ can be
+    different from each other for other reasons than $n_j$
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Hierarchical normal model for group means}
+
+    \begin{minipage}[b]{4cm}
+      \begin{xy}
+        \xygraph{
+          []              !O{\bar{y}_{.j}}
+          ([u][l(0.5)]   !V{\theta_j}      !P{\bar{y}_{.j}}
+          ([u][l(0.33)] !V{\mu}      !P{\theta_j},
+          [u][r(0.33)] !V{\tau} !P{\theta_j}),
+          [u][r(0.5)]   !O{\sigma_j^2}   !P{\bar{y}_{.j}},
+  [r(1.0)]*{j},
+  [l(3.0)]*{\bar{y}_{.j} \mid \theta_j \sim \N(\theta_j,\sigma^2_j)},
+  [u][l(3.0)]*{\theta_j \mid \mu,\tau \sim \N(\mu,\tau^2)}
+  )
+  !B{\theta_j}{j}{++}
+}
+\end{xy}
+\end{minipage}
+\end{frame}
+
+\begin{frame}{Hierarchical normal model: 8 schools}
+
+  \only<1-3>{\includegraphics[width=8.3cm]{8schools_separate.pdf}\\}
+  \only<2-3>{\includegraphics[width=8.3cm]{8schools_pooled.pdf}\\}
+  \only<3>{\includegraphics[width=8.3cm]{8schools_hier.pdf}}
+  \only<4-6>{\includegraphics[width=5.5cm]{8schools_tau.pdf}\\}
+  \only<5-6>{\includegraphics[width=5.5cm]{8schools_condmu.pdf}\\}
+  \only<6>{\includegraphics[width=5.5cm]{8schools_condsd.pdf}}
+  
+\end{frame}
+
+\begin{frame}{Exchangeability}
+
+  \begin{itemize}
+  \item Justifies why we can use
+    \begin{itemize}
+    \item a joint model for data
+    \item a joint prior for a set of parameters
+    \end{itemize}
+  \item Less strict than independence
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Exchangeability}
+
+  \begin{itemize}
+  \item \textit{Exchangeability}: Parameters
+    $\theta_1,\ldots,\theta_J$ (or observations $y_1,\ldots,y_J$) are
+    exchangeable if the joint distribution $p$ is invariant to the
+    permutation of indices $(1,\ldots,J)$
+  \item e.g.
+    \begin{equation*}
+      p(\theta_1,\theta_2,\theta_3) = p(\theta_2,\theta_3,\theta_1)
+    \end{equation*}
+
+  \item Exchangeability implies symmetry: If there is no information
+    which can be used \textit{a priori} to separate $\theta_j$ form
+    each other, we can assume exchangeability. ("Ignorance implies
+    exchangeability")
+
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Exchangeability}
+
+  \begin{itemize}
+  \item Exchangeability does not mean that the results of the
+    experiments could not be different
+    \begin{itemize}
+    \item e.g. if we know that the experiments have been in two
+      different laboratories, and we know that the other laboratory
+      has better conditions for the rats, but we do not know which
+      experiments have been made in which laboratory
+    \item a priori experiments are exchangeable
+    \item model could have unknown parameter for the laboratory with a
+      conditional prior for rats assumed to come form the same place
+      (clustering model)
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+% \note{Elinolojen parantaminen vaikutti
+\begin{frame}{Exchangeability and additional information}
+
+  \begin{itemize}
+  \item Example: bioassay
+    \begin{itemize}
+      \item<+-> $y_i$ number of dead animals are not exchangeable alone
+      \item<+-> $x_i$ dose is additional information
+      \item<+-> $(x_i,y_i$) exchangeable and logistic regression was used
+    \begin{align*}
+      p(\alpha,\beta \mid y,n,x)\propto \prod_{i=1}^n p(y_i \mid \alpha,\beta,n_i,x_i)p(\alpha,\beta)
+    \end{align*}
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Hierarchical exchangeability}
+
+  \begin{itemize}
+  \item Example: hierarchical rats example
+    \begin{itemize}
+    \item<+-> all rats not exchangeable
+    \item<+-> in a single laboratory rats exchangeable
+    \item<+-> laboratories exchangeable
+    \item<+-> $\rightarrow$ hierarchical model
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  
+  {\Large\color{navyblue} Partial or conditional exchangeability}
+
+\begin{itemize}
+  \item Conditional exchangeability
+    \begin{itemize}
+    \item if $y_i$ is connected to an additional information $x_i$, so
+      that $y_i$ are not exchangeable, but $(y_i,x_i)$ exchangeable
+      use joint model or conditional model $(y_i \mid x_i)$.
+    \end{itemize}
+  \item<2-> Partial exchangeability
+    \begin{itemize}
+    \item if the observations can be grouped (a priori), then use
+      hierarchical model
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Exchangeability}
+
+  \begin{itemize}
+  \item The simplest form of the exchangeability (but not the only
+    one) for the parameters $\theta$ conditional independence
+    \begin{equation*}
+      p(x_1,\ldots,x_J \mid \theta)=\prod_{j=1}^J p(x_j \mid \theta)
+    \end{equation*}
+  % \item<2-> Let $(x_n)_{n=1}^{\infty}$ to be an infinite sequence of
+  %   exchangeable random variables. De Finetti's theorem then says that
+  %   there is some random variable $\theta$ so that $x_j$ are
+  %   conditionally independent given $\theta$, and joint density for
+  %   $x_1,\ldots,x_J$ can be written in the \textit{iid mixture} form
+  %   \begin{equation*}
+  %     p(x_1,\ldots,x_J)=\int \left[\prod_{j=1}^J p(x_j \mid \theta)\right]p(\theta)d\theta
+  %   \end{equation*}
+
+  %   \vspace{-6mm}
+  % \item marginal distribution of $\theta$
+  %   \begin{equation*}
+  %     p(\theta)=\int \left[\prod_{j=1}^J p(\theta_j \mid \phi)\right]p(\phi)d\phi
+  %   \end{equation*}
+  % \item mixture of iid distributions
+   \end{itemize}
+\end{frame}
+
+\begin{frame}{Exchangeability - Counter example}
+
+  \begin{itemize}
+  \item A six sided die with probabilities %(a finite sequence!)
+    $\theta_1,\ldots,\theta_6$
+    \begin{itemize}
+    \item without additional knowledge $\theta_1,\ldots,\theta_6$
+      exchangeable
+    \item due to the constraint $\sum_{j=1}^6\theta_j$, parameters
+      are not independent and thus joint distribution can not be
+      presented as iid %mixture
+    \end{itemize}
+    % \item Tehtävä 5.2+
+%    \pause
+%  \item Esimerkki: Noppa jonka sivujen todennäköisyydet
+%    $\theta_1,\ldots,\theta_{1000000}$
+%    \begin{itemize}
+%      \item nopan sivun arvo pariton tai parillinen
+%      \item vaikka $\theta_1,\ldots,\theta_{1000000}$ eivät
+%        riippumattomia, jos tutkitaan parittomien ja parillisten
+%        sivujen todennäköisyyksiä, pienellä nopanheittojen määrällä
+%        ($n \ll 1000000$)
+%        voidaan toimia aivan kuin $\theta_1,\ldots,\theta_{1000000}$
+%        riippumattomia
+%      \item vrt. de Finettin lause
+%    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+ \begin{frame}
+
+   {\Large\color{navyblue} Exchangeability}
+
+   \begin{itemize}
+   \item See more examples in the BDA\_notes\_ch5.pdf
+   \end{itemize}
+
+ \end{frame}
+
+\begin{frame}{Hierarchical linear model}
+
+  \centering
+  {\includegraphics[width=7.5cm]{plot2_bigger.png}}
+
+\end{frame}
+
+\begin{frame}{Hierarchical models and smooths}
+
+  \only<1>{\hspace*{-2.5cm}\includegraphics[width=16cm]{rstan_downloads_forecast.pdf}}
+  \only<2>{\hspace*{-.5cm}\includegraphics[width=11.25cm]{rstan_downloads_components.pdf}}
+  
+\end{frame}
+
+\begin{frame}{Hierarchical models and Bayesian deep learning}
+
+  \begin{itemize}
+  \item Prior scale on each weight layer is a hyperparameter
+    \begin{itemize}
+    \item connections between priors and drop-out / stochastic optimization
+    \item connections between posterior draws and big networks / ensembles
+    \end{itemize}
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Hierarchical models and smooths}
+
+  \only<1>{\hspace*{-2.5cm}\includegraphics[width=16cm]{rstan_downloads_forecast.pdf}}
+  \only<2>{\hspace*{-.5cm}\includegraphics[width=11.25cm]{rstan_downloads_components.pdf}}
+  
+\end{frame}
+  
+\end{document}
+
+%%% Local Variables: 
+%%% TeX-PDF-mode: t
+%%% TeX-master: t
+%%% End: 

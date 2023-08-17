@@ -1,0 +1,982 @@
+\documentclass[finnish,english,t]{beamer}
+%\documentclass[finnish,english,handout]{beamer}
+
+% Uncomment if want to show notes
+% \setbeameroption{show notes}
+
+\mode<presentation>
+{
+  % \usetheme{Warsaw}
+}
+\setbeamertemplate{itemize items}[circle]
+\setbeamercolor{frametitle}{bg=white,fg=navyblue}
+
+\usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc}
+\usepackage{times}
+\usepackage{microtype}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{graphicx}
+\graphicspath{{./figs/}{../../../presentations/Stancon2018Helsinki/figs/}}
+\usepackage{url}
+\urlstyle{same}
+
+\usepackage{natbib}
+\bibliographystyle{apalike}
+
+% \definecolor{hutblue}{rgb}{0,0.2549,0.6784}
+% \definecolor{midnightblue}{rgb}{0.0977,0.0977,0.4375}
+% \definecolor{hutsilver}{rgb}{0.4863,0.4784,0.4784}
+% \definecolor{lightgray}{rgb}{0.95,0.95,0.95}
+% \definecolor{section}{rgb}{0,0.2549,0.6784}
+% \definecolor{list1}{rgb}{0,0.2549,0.6784}
+ \definecolor{darkgreen}{rgb}{0,0.3922,0}
+ \definecolor{navyblue}{rgb}{0,0,0.5}
+\renewcommand{\emph}[1]{\textcolor{navyblue}{#1}}
+
+% \graphicspath{./pics}
+
+\pdfinfo{
+  /Title      (Bayesian data analysis, ch 3)
+  /Author     (Aki Vehtari) %
+  /Keywords   (Bayesian probability theory, Bayesian inference, Bayesian data analysis)
+}
+
+
+\parindent=0pt
+\parskip=8pt
+\tolerance=9000
+\abovedisplayshortskip=0pt
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{headline}[default]{}
+\setbeamertemplate{headline}[text line]{\insertsection}
+\setbeamertemplate{footline}[frame number]
+
+\def\o{{\mathbf o}}
+\def\t{{\mathbf \theta}}
+\def\w{{\mathbf w}}
+\def\x{{\mathbf x}}
+\def\y{{\mathbf y}}
+\def\z{{\mathbf z}}
+
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\I}{I}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\var}{var}
+\DeclareMathOperator{\Sd}{Sd}
+\DeclareMathOperator{\sd}{sd}
+\DeclareMathOperator{\Gammad}{Gamma}
+\DeclareMathOperator{\Invgamma}{Inv-gamma}
+\DeclareMathOperator{\Bin}{Bin}
+\DeclareMathOperator{\Negbin}{Neg-bin}
+\DeclareMathOperator{\Poisson}{Poisson}
+\DeclareMathOperator{\Beta}{Beta}
+\DeclareMathOperator{\logit}{logit}
+\DeclareMathOperator{\N}{N}
+\DeclareMathOperator{\normal}{normal}
+\DeclareMathOperator{\U}{U}
+\DeclareMathOperator{\BF}{BF}
+\DeclareMathOperator{\Invchi2}{Inv-\chi^2}
+\DeclareMathOperator{\NInvchi2}{N-Inv-\chi^2}
+\DeclareMathOperator{\InvWishart}{Inv-Wishart}
+\DeclareMathOperator{\tr}{tr}
+% \DeclareMathOperator{\Pr}{Pr}
+\def\euro{{\footnotesize \EUR\, }}
+\DeclareMathOperator{\rep}{\mathrm{rep}}
+
+
+
+\title[]{Bayesian data analysis}
+\subtitle{}
+
+\author{Aki Vehtari}
+
+\institute[Aalto]{}
+
+\begin{document}
+
+\begin{frame}{Chapter 3}
+
+  \begin{itemize}
+\item 3.1 Marginalization
+\item 3.2 Normal distribution with a noninformative prior (important)
+\item 3.3 Normal distribution with a conjugate prior (important)
+\item 3.4 Multinomial model (can be skipped)
+\item 3.5 Multivariate normal with known variance (useful for chapter 4)
+\item 3.6 Multivariate normal with unknown variance (glance through)
+\item 3.7 Bioassay example (very important, related to one of the exercises)
+\item 3.8 Summary (summary)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Normal / Gaussian}
+
+    \vspace{-2\baselineskip}
+    \begin{align*}
+    p({y}|\mu)&=\frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}({y}-\mu)^2\right)
+    \end{align*}
+    \vspace{-\baselineskip}
+  \begin{center}
+      \includegraphics[height=2cm,clip]{kuva2b_1}
+  \end{center}
+    \vspace{-\baselineskip}
+  \begin{itemize}
+  \item<2-> Normal: {\color{gray} some prominent statistician started
+      to use this term systematically in the end of 19th century (but
+      it's a bit of exaggeration)}
+  \item<3-> Gaussian: {\color{gray}favored by Germans (but it was
+      studied earlier by De Moivre and Laplace, and Gauss avoided
+      using it)}
+  \item<4-> Shorthand notation\\
+    \begin{itemize}
+    \item ${y} \sim \N(\mu,\sigma^2)$ with variance $\sigma^2$\\
+      (useful in derivations)
+    \item ${y} \sim \normal(\mu,\sigma)$ with deviation $\sigma$\\
+      (useful for interpreting prior and posterior scales, used in
+      Stan)
+    \end{itemize}
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Normal / Gaussian}
+
+  \begin{itemize}
+  \item<+-> Normal linear regression\\
+    {\color{gray}connection to least squares regression via $(y-\mu)^2$}
+  \item<+-> Analysis of real valued observations
+    \begin{itemize}
+    \item part of Assignment 3
+    \end{itemize}
+  \item<+-> Sometimes convenient approximation for discrete observations
+  \item<+-> Convenient as a prior distribution
+  \item<+-> Gaussian processes are in practice multivariate normals
+  \item<+-> Kalman filters are normals plus chain rule
+  \item<+-> Posterior distribution approximation with Laplace, variational
+    inference, expectation propagation
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Example of uncertainty in modeling}
+
+  % fake data
+  % mean fit
+  % mean fit + gaussian
+  % samples
+  % samples + gaussians
+  % 1D data
+  % gaussian fit
+  % gaussian samples
+  % posterior draws
+  % exact contours
+  % marginal with jitter?
+  % marginal outside of the plot?
+  % marginal with jitter in other direction
+  % marginal outside of the in other direction
+  
+  \only<1>{\includegraphics[width=10cm]{fakel_data.pdf}}
+  \only<2>{\includegraphics[width=10cm]{fakel_postmean.pdf}}
+  \only<3>{\includegraphics[width=10cm]{fakel_postmeanpred.pdf}}
+  \only<4>{\includegraphics[width=10cm]{fakel_postdraws.pdf}}
+  \only<5>{\includegraphics[width=10cm]{fakel_postdrawspred.pdf}}
+  % \only<6>{\includegraphics[width=10cm]{fakel_postdrawspred2.pdf}}
+
+\end{frame}
+
+\begin{frame}{Monte Carlo and posterior draws}
+
+  \only<1-2>{Density $p(\theta|\mu,\sigma)=\frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}(\theta-\mu)^2\right)$\\
+    \includegraphics[width=10cm]{norm1d_1.pdf}
+  \uncover<2>{$\E(\theta)=\int \theta p(\theta|\mu,\sigma) d\theta = \mu$}}
+  \only<3>{Density $p(\theta|\mu,\sigma)=\frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}(\theta-\mu)^2\right)$\\
+    \includegraphics[width=10cm]{norm1d_1b.pdf}
+  {$p(\theta \leq 0)=\int_{-\infty}^{0} p(\theta|\mu,\sigma) d\theta$},\,\, many numerical approximations}
+  \only<4>{In practice evaluate in finite number of locations \uncover<1>{$\frac{1}{\sqrt{2\pi}\sigma}$}\\
+    \includegraphics[width=10cm]{norm1d_2.pdf}}
+  \only<5>{Here evaluated in grid with bin width 0.5 \uncover<1>{$\frac{1}{\sqrt{2\pi}\sigma}$}\\
+    \includegraphics[width=10cm]{norm1d_2.pdf}}
+  \only<6-7>{Here evaluated in grid with bin width 0.5 \uncover<1>{$\frac{1}{\sqrt{2\pi}\sigma}$}
+    \includegraphics[width=10cm]{norm1d_3.pdf}
+    \uncover<7>{$\E(\theta) = \int \theta p(\theta) d\theta \approx \sum_s^S \theta^{(s)} w_s \approx 1,\text{ where } w_s=0.5 p(\theta)$}}
+  \only<8>{Here evaluated in grid with bin width 0.5 \uncover<1>{$\frac{1}{\sqrt{2\pi}\sigma}$}
+    \includegraphics[width=10cm]{norm1d_3b.pdf}
+    $p(\theta \leq 0) = \int_{-\infty}^0 p(\theta) d\theta \approx \sum_s^S \I(\theta^{(s)} \leq 0) w_s \approx 0.22$}
+  \only<9>{Here evaluated in grid with bin width 0.1 \uncover<1>{$\frac{1}{\sqrt{2\pi}\sigma}$}
+    \includegraphics[width=10cm]{norm1d_4.pdf}}
+  \only<10>{Histogram of 200 random draws, bin width 0.5 \uncover<1>{$\frac{1}{\sqrt{2\pi}\sigma}$}
+    \includegraphics[width=10cm]{norm1d_5.pdf}}
+  \only<11>{Histogram of 200 random draws, bin width 0.1 \uncover<1>{$\frac{1}{\sqrt{2\pi}\sigma}$}
+    \includegraphics[width=10cm]{norm1d_6.pdf}}
+  \only<12-15>{Histogram of 200 random draws, bin width 0 \uncover<1>{$\frac{1}{\sqrt{2\pi}\sigma}$}
+    \includegraphics[width=10cm]{norm1d_7.pdf}
+    \only<12>{each bin has either 0 or 1 draw (and 0's can be ignored)}
+    \only<13>{each bin with 1 draw has weight $1/S$}
+    \only<14>{$E(\theta) \approx \frac{1}{S}\sum_s^S \theta^{(s)} \approx 1$}
+    \only<15>{$E(\theta) \approx \frac{1}{S}\sum_s^S \theta^{(s)} \approx 1$,\,\, Monte Carlo estimate}
+  }
+  \only<16>{Histogram of 200 random draws, bin width 0 \uncover<1>{$\frac{1}{\sqrt{2\pi}\sigma}$}
+    \includegraphics[width=10cm]{norm1d_7b.pdf}
+    $p(\theta \leq 0) \approx \frac{1}{S}\sum_s^S \I(\theta^{(s)} \leq 0) \approx 0.14$}
+
+\end{frame}
+
+
+\begin{frame}{Monte Carlo and posterior draws}
+  
+  \begin{itemize}
+  \item ${\color{blue}\theta^{(s)}}$ draws from $p(\theta \mid y)$ can be used
+    \begin{itemize}
+    \item<1-> for visualization
+    \item<2-> to approximate expectations (integrals)
+      \begin{align*}
+        E_{p(\theta \mid y)}[{\color{blue}\theta}] = \int {\color{blue}\theta} p(\theta \mid y) \approx \frac{1}{S}\sum_{s=1}^{S} {\color{blue}\theta^{(s)}}
+      \end{align*}
+    \item<3-> easy to approximate expectations of functions
+      \begin{align*}
+        E_{p(\theta \mid y)}[{\color{blue}g(\theta)}] = \int {\color{blue}g(\theta)} p(\theta \mid y) \approx \frac{1}{S}\sum_{s=1}^{S} {\color{blue}g(\theta^{(s)})}
+      \end{align*}
+    \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Marginalization}
+
+  \begin{itemize}
+  \item<+-> Joint distribution of parameters
+    \begin{align*}
+      p(\theta_1,\theta_2 \mid y) \propto p(y \mid \theta_1,\theta_2)p(\theta_1,\theta_2)
+    \end{align*}
+  \item<+-> Marginalization
+      \begin{align*}
+        p(\theta_1 \mid y) = \int p(\theta_1,\theta_2 \mid y) d\theta_2
+      \end{align*}
+      $p(\theta_1 \mid y)$ is a marginal distribution
+       \vspace{0.5\baselineskip}
+  % \item Goal is to find marginal posterior of an interesting quantity
+  %   \begin{itemize}
+  %   \item a parameter of the model
+  %   \item future event
+  %   \end{itemize}
+    \item<+-> Monte Carlo approximation
+          \begin{align*}
+      p(\theta_1 \mid y) \approx  \frac{1}{S}\sum_{s=1}^{S} p(\theta_1 \mid \theta_2^{(s)}, y),
+    \end{align*}
+    where $\theta_2^{(s)}$ are draws from $p(\theta_2 \mid y)$
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Marginalization - predictive distribution}
+
+  \begin{itemize}
+  % \item Joint distribution of unknown future observation and parameters
+  %   \begin{align*}
+  %     p(\tilde{y},\theta \mid y) &= p(\tilde{y} \mid \theta,y) p(\theta \mid y)\\
+  %      &= p(\tilde{y} \mid \theta) p(\theta \mid y) \qquad \text{(often)}
+  %   \end{align*}
+  \item Posterior predictive distribution is obtained by marginalizing
+    out the posterior distribution
+      \begin{align*}
+        p(\tilde{y} \mid y)  & = \int p(\tilde{y}, \theta \mid y) d\theta\\
+                             & \uncover<2->{= \int p(\tilde{y} \mid \theta)p(\theta \mid y) d\theta}
+      \end{align*}
+    \end{itemize}
+
+\end{frame}
+
+% \begin{frame}
+%   \frametitle{Gaussian with unknown mean and variance}
+
+%   \begin{itemize}
+%   \item Observation model
+%     \begin{align*}
+%     \frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}(y-\theta)^2 \right)
+%     \end{align*}
+%   \item Uninformative prior
+%     \begin{align*}
+%       p(\mu,\sigma^2)\propto \sigma^{-2}
+%     \end{align*}
+%   \end{itemize}
+  
+% \end{frame}
+
+\begin{frame}{Normal distribution example}
+
+  \only<1>{\includegraphics[width=10cm]{fake3_data.pdf}}
+  \only<2>{\includegraphics[width=10cm]{fake3_postmean.pdf}}
+  \only<3>{\includegraphics[width=10cm]{fake3_postmeanmu.pdf}}
+  \only<4>{\includegraphics[width=10cm]{fake3_postmeanmusigma.pdf}}
+  \only<5>{\includegraphics[width=10cm]{fake3_postgaussiandraws.pdf}}
+  \only<6>{\includegraphics[width=10cm]{fake3_postgaussianmudraws.pdf}}
+  \only<7>{\includegraphics[width=10cm]{fake3_postdraws100.pdf}}
+  \only<8>{\includegraphics[width=10cm]{fake3_postdraws.pdf}}
+  \\
+    \vspace{-\baselineskip}
+  \only<2>{
+    \begin{align*}
+    p({\color{red} y} \mid  \mu, \sigma) = \frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}({\color{red} y}-\mu)^2 \right)
+    \end{align*}
+  }
+  \only<3>{
+    \begin{align*}
+    p(y \mid  {\color{red} \mu}, \sigma) = \frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}(y-{\color{red} \mu})^2 \right)
+    \end{align*}
+  }
+  \only<4>{
+    \begin{align*}
+    p(y \mid  \mu, {\color{red} \sigma}) = \frac{1}{\sqrt{2\pi}{\color{red} \sigma}}\exp\left(-\frac{1}{2{\color{red} \sigma}^2}(y-\mu)^2 \right)
+    \end{align*}
+  }
+  \only<5->{
+    \begin{align*}
+      {\color{blue} \mu^{(s)}, \sigma^{(s)}} \sim p(\mu, \sigma  \mid  y)
+    \end{align*}
+    }
+
+\end{frame}
+
+\begin{frame}
+
+  \vspace{-1\baselineskip}
+  {\hfill\includegraphics[width=5cm]{fake3_joint1b.pdf}}\\
+  \vspace{-5.5\baselineskip}
+  Joint posterior\\
+  \vspace{-.75\baselineskip}
+  \begin{align*}
+    {\color{blue} \mu^{(s)}, \sigma^{(s)}} & \sim p(\mu, \sigma  \mid  y) \\
+    \uncover<2->{\text{with } p(\mu,\sigma^2) & \propto \sigma^{-2}\\
+    \only<3>{\text{with } p(\mu,\sigma) & \propto \sigma^{-1} \text{ (see BDA3 p. 21 transformation of variables)}}}
+    \only<4>{p(\mu,\sigma^2 \mid y) & \propto  \sigma^{-2}\prod_{i=1}^n\frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}(y_i-\mu)^2\right)\\}
+    \uncover<5->{p(\mu,\sigma^2 \mid y) & \propto  \sigma^{-n-2}\exp\left(-\frac{1}{2\sigma^2}\sum_{i=1}^n(y_i-\mu)^2\right)}\\
+    \uncover<6->{&  = \sigma^{-n-2}\exp\left(-\frac{1}{2\sigma^2}\left[\sum_{i=1}^n(y_i-\bar{y})^2+n(\bar{y}-\mu)^2\right]\right)}\\
+    \uncover<6->{\color{gray} \text{where } \bar{y} & \color{gray} = \frac{1}{n}\sum_{i=1}^n y_i }\\
+    \uncover<7->{&  = \sigma^{-n-2}\exp\left(-\frac{1}{2\sigma^2}\left[(n-1)s^2+n(\bar{y}-\mu)^2\right]\right)}\\
+    \uncover<7->{\color{gray} \text{where }  s^2 & \color{gray} =\frac{1}{n-1}\sum_{i=1}^n(y_i-\bar{y})^2}
+  \end{align*}
+
+\end{frame}
+
+\begin{frame}{Normal - non-informative prior}
+  
+  \vspace{-1.5\baselineskip} 
+ \begin{align*}
+   &\onslide<1->{\sum_{i=1}^n(y_i-\mu)^2}\\
+   &\onslide<2->{\sum_{i=1}^n(y_i^2-2 y_i \mu + \mu^2)}\\
+\pause
+   &\onslide<3->{\sum_{i=1}^n(y_i^2-2 y_i \mu + \mu^2 -\bar{y}^2 + \bar{y}^2 - 2 y_i \bar{y} + 2 y_i \bar{y})}\\
+   &\onslide<4->{\sum_{i=1}^n(y_i^2-2 y_i \bar{y} + \bar{y}^2) + \sum_{i=1}^n(\mu^2 - 2 y_i \mu -\bar{y}^2  + 2 y_i \bar{y})}\\
+   &\onslide<5->{\sum_{i=1}^n(y_i-\bar{y})^2 + n(\mu^2 -  2\bar{y}\mu -\bar{y}^2  + 2 \bar{y}\bar{y})}\\
+   &\onslide<6->{\sum_{i=1}^n(y_i-\bar{y})^2 + n(\bar{y}-\mu)^2}
+ \end{align*}
+
+ % huomatkaa yhteys aiempiin tyhjentäviin tunnuslukuihin\\
+ % $\bar{y}$ ja
+ % $v=\frac{1}{n}\sum_{i=1}^{n}(y_i-\theta)^2$ \\
+ % $n-1$ selittyy vielä myöhemmin
+ % }
+\end{frame}
+
+\begin{frame}
+
+  {\includegraphics[width=5cm]{fake3_joint1.pdf}}
+  \uncover<3->{\includegraphics[width=5cm]{fake3_marginalsigma.pdf}}\\
+  \uncover<2->{\vspace{-\baselineskip}
+    \begin{minipage}{5cm}
+      \includegraphics[width=5cm]{fake3_marginalmu.pdf}
+    \end{minipage}
+  }
+  \begin{minipage}{5cm}
+    \vspace{-2\baselineskip}
+     \begin{align*}
+       {\color{blue} \mu^{(s)}, \sigma^{(s)}} & \sim p(\mu, \sigma  \mid  y) \\
+       \uncover<2->{\text{marginals}\\
+       p(\mu \mid y) & = \int p(\mu,\sigma \mid y) d \sigma }\\
+       \uncover<3->{p(\sigma \mid y) & = \int p(\mu,\sigma \mid y) d \mu }
+     \end{align*}
+  \end{minipage}
+
+\end{frame}
+
+\begin{frame}
+
+   {\large\color{navyblue} Marginal posterior $p(\sigma^2 \mid y)$ (easier for $\sigma^2$ than $\sigma$)}
+    \begin{eqnarray*}
+    p(\sigma^2 \mid y) & \propto & \int
+    p(\mu,\sigma^2 \mid y) d\mu\\
+    \uncover<2->{& \propto & \int
+    \sigma^{-n-2}\exp\left(-\frac{1}{2\sigma^2}\left[(n-1)s^2+n(\bar{y}-\mu)^2\right]\right) d\mu\\}
+    & \uncover<3->{\propto &
+    \sigma^{-n-2}\exp\left(-\frac{1}{2\sigma^2}(n-1)s^2\right)} \\
+    & \uncover<3->{&\int
+    \exp\left(-\frac{n}{2\sigma^2}(\bar{y}-\mu)^2\right) d\mu}\\
+    \uncover<4->{& &\hspace{2cm} \color{gray} \int \frac{1}{\sqrt{2\pi}\sigma} \exp\left(-\frac{1}{2\sigma^2}(y-\theta)^2\right) d\theta = 1}\\
+    & \uncover<5->{\propto &
+    \sigma^{-n-2}\exp\left(-\frac{1}{2\sigma^2}(n-1)s^2\right)\sqrt{2\pi\sigma^2/n}}\\
+    & \uncover<6->{\propto &
+    (\sigma^2)^{-(n+1)/2}\exp\left(-\frac{(n-1)s^2}{2\sigma^2}\right)} \\
+    \uncover<7->{p(\sigma^2 \mid y) &  = &  \Invchi2(\sigma^2 \mid n-1,s^2)}
+  \end{eqnarray*}
+
+\end{frame}
+
+\begin{frame}{Normal - non-informative prior}
+
+  \begin{itemize}
+  \item[] Known mean 
+    \begin{align*}
+      \sigma^2 \mid y & \sim \Invchi2(n,v)\\
+      \text{where} \quad v&=\frac{1}{n}\sum_{i=1}^{n}(y_i-\theta)^2
+    \end{align*}
+  \item[] Unknown mean
+    \begin{align*}
+      \sigma^2 \mid y & \sim \Invchi2(n-1,s^2)\\
+      \text{where} \quad s^2&=\frac{1}{n-1}\sum_{i=1}^{n}(y_i-\bar{y})^2
+  \end{align*}
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+
+  {\includegraphics[width=5cm]{fake3_joint2.pdf}}
+  {\includegraphics[width=5cm]{fake3_marginalsigma2.pdf}}\\\vspace{-\baselineskip}
+  % \begin{minipage}[b][5cm][t]{5cm}
+  % {~}
+  % \end{minipage}
+  \makebox[5cm][t]{
+    \hspace{-.7cm}
+  \begin{minipage}[b][5cm][t]{5cm}
+    \vspace{0.25\baselineskip}
+    Factorization
+    \vspace{-0.5\baselineskip}
+     \begin{align*}
+       p(\mu,\sigma^2 \mid y) & = {\color{darkgreen} p(\mu \mid \sigma^2,y)}{\color{blue} p(\sigma^2 \mid y)} \\
+       \uncover<2->{{\color{blue} p(\sigma^2 \mid y)} & = \Invchi2(\sigma^2 \mid  n-1,s^2)\\
+       (\sigma^2)^{(s)} & \sim {\color{blue} p(\sigma^2 \mid y)} \\}
+       \uncover<3->{{\color{darkgreen} p(\mu \mid \sigma^2,y)} & = \N(\mu \mid \bar{y},\sigma^2/n)\,} \uncover<4>{ \color{gray} {\textstyle \propto \exp\left(-\frac{n}{2\sigma^2}(\bar{y}-\mu)^2\right)}\\}
+        \only<5->{\mu^{(s)} & \sim {\color{darkgreen} p(\mu \mid \sigma^2,y)}\\}
+        \only<6->{{\color{red} \mu^{(s)}, \sigma^{(s)}} & \sim p(\mu, \sigma  \mid  y)}
+     \end{align*}
+   \end{minipage}
+   }
+\end{frame}
+
+\begin{frame}
+
+  {\includegraphics[width=5cm]{fake3_joint2.pdf}}
+  {\includegraphics[width=5cm]{fake3_marginalsigma2.pdf}}\\\vspace{-\baselineskip}
+  \begin{minipage}[b][5cm][t]{5cm}
+  \only<1-3>{~}
+  \only<4>{\includegraphics[width=5cm]{fake3_condsmu.pdf}}
+  \only<5>{\includegraphics[width=5cm]{fake3_condsmumean.pdf}}
+  \only<6>{\includegraphics[width=5cm]{fake3_marginalmu2.pdf}}
+  \end{minipage}
+  \makebox[5cm][t]{
+  \begin{minipage}[b][5cm][t]{5cm}
+    \small
+    \vspace{.25\baselineskip}
+    Factorization
+    %\vspace{-5\baselineskip}
+     \begin{align*}
+       p(\mu,\sigma^2 \mid y) & = {\color{darkgreen} p(\mu \mid \sigma^2,y)}{\color{blue} p(\sigma^2 \mid y)} \\
+       \uncover<2->{(\sigma^2)^{(s)} & \sim {\color{blue} p(\sigma^2 \mid y)}} \\
+       \uncover<3->{\color{darkgreen} p(\mu \mid  (\sigma^2)^{(s)},y) & = \N(\mu \mid \bar{y},(\sigma^2)^{(s)}/n)}\\
+       \uncover<5->{p(\mu \mid y) & \approx {\color{orange} \frac{1}{S}\sum_{s=1}^S \N(\mu \mid \bar{y},(\sigma^2)^{(s)}/n)}}
+     \end{align*}
+  \end{minipage}
+}
+\end{frame}
+
+\begin{frame}[fragile]
+  
+  {\color{navyblue} Marginal posterior $p(\mu \mid y)$}
+    \begin{align*}
+      p(\mu \mid y)&=\int_0^\infty p(\mu,\sigma^2 \mid y)d\sigma^2\\
+      \uncover<2->{& \propto \int_0^\infty \sigma^{-n-2}\exp\left(-{\only<4-5>{\color{blue}}\frac{1}{2\sigma^2}\left[{\only<3>{\color{blue}}(n-1)s^2+n(\bar{y}-\mu)^2}\right]}\right) d\sigma^2}
+    \end{align*}
+   \uncover<3->{Transformation\\}
+    \vspace{-1\baselineskip}
+    \begin{align*}
+      \uncover<3->{A=\only<3>{\color{blue}}(n-1)s^2+n(\mu-\bar{y})^2}\uncover<4->{\quad \text{and} \quad {\only<4-5>{\color{blue}}z=\frac{A}{2\sigma^2}}}
+    \end{align*}
+%  \vspace{-\baselineskip}
+    \begin{align*}
+     \uncover<5->{p(\mu \mid y)&\propto {\only<7>{\color{blue}}A^{-n/2}}\int_0^\infty {\only<5>{\color{blue}}z}^{(n-2)/2}\exp(-{\only<5>{\color{blue}}z})d{\only<5>{\color{blue}}z}}
+   \uncover<6->{\intertext{\color{gray} Recognize gamma integral\, $\Gamma(u) = \int_0^\infty x^{u-1}\exp(-x)dx$}}
+    \uncover<7->{&\propto {\only<7>{\color{blue}}[(n-1)s^2+n(\mu-\bar{y})^2]^{-n/2}}\\}
+    \uncover<8->{&\propto \left[1+\frac{n(\mu-\bar{y})^2}{(n-1)s^2}\right]^{-n/2}\\}
+    \uncover<9->{p(\mu \mid y) & = t_{n-1}(\mu \mid \bar{y},s^2/n) \color{gray} \quad \text{Student's $t$}}
+    \end{align*}
+
+\end{frame}
+
+% \note{Student oli William Gossetin pseudonyymi, joka julkaisi aiheesta 1908
+
+% Fisher nimtti jakaumaa ensimmäisenä Studentin jakaumaksi 1925
+% ja myöskin käytti ensimmäisen t-symbolia ja t-jakauma nimeä.
+
+% Työskenteli Guinnesin panimolla Dublinssa\\
+% kehitti $t$-jakauman ja $t$-testin oluen panemisen laadunvalvontaan
+% kun näytemäärät ovat pieniä\\
+% näytemäärät luonnollisesti pieniä, koska kokeiluja ei voi tehdä
+% paljon, koska tuotanto häiriintyy
+
+% Guinness ei antanut lupaa julkaista Gossetin omalla nimellä
+
+% Myöhemmin Gosset johti Guinnesin panimoa Lontoossa
+
+% muistakaa seuraavan kerran kun juotte Guinnesia
+% }
+
+% \begin{frame}
+%   \frametitle{Gaussian - non-informative prior}
+
+%   \begin{itemize}
+%   \item Marginal posterior $p(\mu \mid y)$
+%     \begin{equation*}
+%       p(\mu \mid y)=\int_0^\infty p(\mu \mid \sigma^2,y)p(\sigma^2 \mid y)d\sigma^2
+%     \end{equation*}
+%     \item see visualization demo3\_3
+%     \item marginal posterior of $\mu$ a mixture of normal
+%       distributions where mixing density is the marginal posterior of
+%       $\sigma^2$
+% \end{itemize}
+
+% \end{frame}
+
+\begin{frame}
+
+  {\includegraphics[width=5cm]{fake3_joint2.pdf}}
+  {\includegraphics[width=5cm]{fake3_marginalsigma2.pdf}}\\\vspace{-\baselineskip}
+  % \begin{minipage}[b][5cm][t]{5cm}
+  % {~}
+  % \end{minipage}
+  \makebox[5cm][t]{
+    \hspace{-.7cm}
+    \begin{minipage}[b][5cm][t]{5cm}
+      \vspace{0.25\baselineskip}
+      \small
+    { Predictive distribution for new $\tilde{y}$}
+    \vspace{-.75\baselineskip}
+    \begin{align*}
+      \only<6>{\color{orange}}p(\tilde{y} \mid y) & = \int p(\tilde{y} \mid \mu,\sigma)p(\mu,\sigma \mid y)d\mu\sigma\\
+      \uncover<2->{{\color{red} \mu^{(s)}, \sigma^{(s)}} & \sim p(\mu, \sigma  \mid  y)}\\
+      \uncover<3->{{\color{red} \tilde{y}^{(s)}} & \sim \color{blue} p(\tilde{y} \mid \mu^{(s)},\sigma^{(s)})}
+     \end{align*}
+   \end{minipage}
+   }
+  \begin{minipage}[b][5cm][t]{5cm}
+  \only<1-2>{~}
+  \only<3>{\includegraphics[width=5cm]{fake3_pred1.pdf}}
+  \only<4>{\includegraphics[width=5cm]{fake3_pred1s.pdf}}
+  \only<5>{\includegraphics[width=5cm]{fake3_pred1ss.pdf}}
+  \only<6>{\includegraphics[width=5cm]{fake3_pred1ss_exact.pdf}}
+  \end{minipage}
+\end{frame}
+
+\begin{frame}{Normal - posterior predictive distribution}
+
+   Posterior predictive distribution given known variance
+    \begin{align*}
+      p(\tilde{y} \mid \sigma^2,y) & = \int p(\tilde{y} \mid \mu,\sigma^2)p(\mu \mid \sigma^2,y)d\mu\\
+       \uncover<2->{& = \int \N(\tilde{y} \mid \mu,\sigma^2)\N(\mu \mid \bar{y},\sigma^2/n)d\mu\\ }
+       \uncover<3->{& = \N(\tilde{y} \mid \bar{y},(1+{\textstyle \frac{1}{n}})\sigma^2)}
+    \uncover<4->{\intertext{\, \, \, this is up to scaling factor same as $p(\mu \mid \sigma^2,y)$}}
+      \uncover<5->{p(\tilde{y} \mid y) & = t_{n-1}(\tilde{y} \mid \bar{y},(1+{\textstyle \frac{1}{n}})s^2)}
+    \end{align*}
+
+\end{frame}
+
+\begin{frame}
+  
+  {\large\color{navyblue} Simon Newcomb's light of speed experiment in 1882}
+
+  {\small
+  Newcomb measured ($n=66$) the time required for light to travel from
+  his laboratory on the Potomac River to a mirror at the base of the
+  Washington Monument and back, a total distance of 7422 meters.}
+  \begin{center}
+    \vspace{-0.5\baselineskip}
+    {\includegraphics[width=7.5cm]{newcomb_data.pdf}}\\
+    \vspace{-1\baselineskip}
+    \only<1>{\phantom{\includegraphics[width=7.5cm]{newcomb_posterior1.pdf}}}
+    \only<2>{\includegraphics[width=7.5cm]{newcomb_posterior1.pdf}}
+    \only<3>{\includegraphics[width=7.5cm]{newcomb_posterior2.pdf}}
+    \only<4>{\includegraphics[width=7.5cm]{newcomb_posterior3.pdf}}
+  \end{center}
+
+\end{frame}
+
+% \note{
+% Newcomb mittasi 66 kertaa ajan mikä valolla meni kulkea 7442m
+
+% Mittaus ei ole suoraan ko. nopeus
+
+% Voidaan epäillä kahta mittausta joiden arvo alle 0, koska ovat
+% kaukana muista
+
+% Pikakokeiluna voidaan kokeilla mitä jos nämä kaksi poistetaan
+
+% Tulos muuttuu, mutta huomataan, että edelleen Newcombin kokeessa
+% näyttisi olleen systemaattinen virhe
+
+% Tärkeää, muistaa, että vaikka käytetään kuinka hienoa mallia
+% tahansa, olemme voineet unohtaa jonkin asian joka kokeessa
+% aiheuttaa systemaattisen virheen
+
+% Kaukana olevien outlierien / karkulaisten poisto yleistä.
+% Oiekasti pitäisi pohtia mistä syystä nämä mittaukset poikkeavat
+
+% Voidaan myös tehdä malli, joka on robusti virhellisille
+% mittauksille, esim. korvataan normaalijakauma pitkähäntäisemmällä
+% $t$-jakaumalla tai tehdään malli joks sisältää kaksi komponenttia,
+% toinen hyville mittauksille ja toineen virheellisille ja annetaan
+% mallin automaattisesti päättellä millä todennäköisyydellä mikäkin
+% mittaus on virheellinen, mutta näistä enemmän myöhemmin
+% }
+
+\begin{frame}{Normal - conjugate prior}
+
+  \begin{itemize}
+  \item[-] Conjugate prior has to have a form
+    $p(\sigma^2)p(\mu \mid \sigma^2)$\\
+    (see the chapter notes)
+    \pause
+  \item[-] Handy parameterization
+    \begin{align*}
+      \mu \mid \sigma^2 & \sim \mathrm{N}(\mu_0,\sigma^2/\kappa_0)\\
+      \sigma^2 & \sim \Invchi2(\nu_0,\sigma_0^2)
+    \end{align*}
+    which can be written as
+    \begin{align*}
+      p(\mu,\sigma^2)=\NInvchi2(\mu_0,\sigma_0^2/\kappa_0;\nu_0,\sigma_0^2)
+    \end{align*}
+    \pause
+  \item[-] $\mu$ and $\sigma^2$ are a priori dependent
+    \begin{itemize}
+      \item[-] if $\sigma^2$ is large, then $\mu$ has wide prior
+    \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Normal - conjugate prior}
+
+  Joint posterior (exercise 3.9)
+    \begin{align*}
+      p(\mu,\sigma^2 \mid y)=\NInvchi2(\mu_n,\sigma_n^2/\kappa_n;\nu_n,\sigma_n^2)
+    \end{align*}
+    where
+    \begin{align*}
+      \mu_n & = \frac{\kappa_0}{\kappa_0+n}\mu_0 + \frac{n}{\kappa_0+n}\bar{y} \\
+      \kappa_n & = \kappa_0+n \\
+      \nu_n & = \nu_0+n \\
+      \nu_n\sigma_n^2 & =\nu_0\sigma_0^2 + (n-1)s^2 +
+      \frac{\kappa_0 n}{\kappa_0+n}(\bar{y}-\mu_0)^2
+    \end{align*}
+
+\end{frame}
+
+% \begin{frame}
+%   \frametitle{Gaussian - conjugate prior}
+
+%   \begin{itemize}
+%   \item Conditional $p(\mu \mid \sigma^2,y)$
+%     \begin{align*}
+%       \mu \mid \sigma^2,y & \sim \mathrm{N}(\mu_n,\sigma^2/\kappa_n)\\
+%       & =  \mathrm{N}\left(\frac{\frac{\kappa_0}{\sigma^2}\mu_0+\frac{n}{\sigma^2}\bar{y}}{\frac{\kappa_0}{\sigma^2}+\frac{n}{\sigma^2}},\frac{1}{\frac{\kappa_0}{\sigma^2}+\frac{n}{\sigma^2}}\right)
+%     \end{align*}
+%     \vspace{-2mm}
+%   \item Marginal $p(\sigma^2 \mid y)$
+%     \begin{align*}
+%       \sigma^2 \mid y \sim \Invchi2(\nu_n,\sigma_n^2)
+%     \end{align*}
+%     \vspace{-6mm}
+%   \item Marginal $p(\mu \mid y)$
+%     \begin{align*}
+%       \mu \mid y \sim t_{\nu_n}(\mu \mid \mu_n,\sigma_n^2/\kappa_n)
+%     \end{align*}
+%   \end{itemize}
+
+% \end{frame}
+
+\begin{frame}{Comparison of means of two normals}
+
+  \begin{itemize}
+  \item The difference of two normally distributed variables is
+    normally distributed
+  \item The difference of two $t$ distributed variables with different
+    variances and degrees of freedom doesn't have an easy form
+    \begin{itemize}
+    \item easy to sample from the two distributions, and obtain
+      samples of the differences
+      \begin{align*}
+        \delta^{(s)} = \mu_1^{(s)} - \mu_2^{(s)}
+      \end{align*}
+    \end{itemize}
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Multivariate normal}
+
+  \begin{itemize}
+  \item Observation model
+    \begin{align*}
+      p(y \mid \mu,\Sigma)\propto  \mid \Sigma \mid ^{-1/2}
+      \exp\left( -\frac{1}{2} (y-\mu)^T \Sigma^{-1} (y-\mu)\right),
+    \end{align*}
+  \item BDA3 p. 72--
+  \item New recommended LKJ-prior mentioned in Appendix A, see more
+    in Stan manual
+  \item<2-> Gaussian process and Gaussian Markov random field models
+    are in practice computed with multivariate normals
+    \begin{itemize}
+    \item GPs in BDA3 Chapter 21, and a course in spring
+    \item GPs and GMRFs often used also as priors for latent
+      functions and combined with non-normal observation models
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Normal linear regression}
+
+  \begin{itemize}
+  \item<+-> $y_i \sim \N(\alpha + \beta x_i, \sigma^2), \quad i = 1,\dots,N$
+  \item<+-> with normal fixed scale prior on $\alpha$ and $\beta$, and
+    known $\sigma^2$ the posterior is multivariate normal
+  \item<+-> with unknown $\sigma^2$, the posterior is multivariate $\NInvchi2$
+  \item<+-> with unknown prior scales and $\sigma^2$, numerical
+    integration needed
+  \item<+-> more in BDA3 Chapter 14 (not part of the course) and
+    Regression and Other Stories book
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Scale mixture of normals}
+
+  \begin{itemize}
+  \item Many useful distributions can be presented as scale mixture of
+    normals, e.g.
+    \begin{itemize}
+    \item Student's $t$
+    \item Cauchy
+    \item Double exponential aka Laplace
+    \item Horseshoe
+    \item R2-D2
+    \end{itemize}
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Multinomial model for categorical data}
+
+  \begin{itemize}
+  \item[-] Extension of binomial
+  \item[-] Observation model
+    \begin{align*}
+      p(y  \mid  \theta) \propto \prod_{j=1}^k \theta_j^{y_j},
+    \end{align*}
+  \item[-] BDA3 p. 69--
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Generalized linear model (GLM)}
+
+  \begin{itemize}
+  \item<+-> $y_i \sim p(g^{-1}(\alpha + \beta x_i), \phi), \quad i = 1,\dots,N$
+    \begin{itemize}
+    \item where $p$ is non-normal (in original definition in
+      exponential family)
+    \item and $g$ is a link function
+    \end{itemize}
+  \item<+-> Bioassay analysis is used as an example
+  \item<+-> More in BDA3 Chapter 16 and Regression and other stories
+    book
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Bioassay}
+
+{\footnotesize\vspace{-1mm}
+    \begin{tabular}{c c c}
+      \vspace{-1mm} Dose, $x_i$ & Number of & Number of \\
+      (log g/ml) & animals, $n_i$ & deaths, $y_i$ \\
+      \hline \vspace{-1mm}
+      -0.86 & 5 & \color{red} 0 \\ \vspace{-1mm}
+      -0.30 & 5 & \color{red} 1 \\ \vspace{-1mm}
+      -0.05 & 5 & \color{red} 3 \\ \vspace{-1mm}
+       0.73 & 5 & \color{red} 5
+    \end{tabular}
+  }~\parbox[t][3cm][b]{3.5cm}{\includegraphics[width=5cm]{bioassay_data_small.pdf}}
+  \vspace{2mm}
+  \pause
+
+  \vspace{-\baselineskip}
+  Find out lethal dose 50\% (LD50)
+    \begin{itemize}
+      \item[-] used to classify how hazardous chemical is
+      \item[-] 1984 EEC directive has 4 levels (see the chapter notes)
+      \end{itemize}
+      
+  \pause
+   Bayesian methods help to
+    \begin{itemize}
+    \item[-] reduce the number of animals needed
+    \item[-] easy to make sequential experiment and stop as soon as
+      desired accuracy is obtained
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Bioassay}
+
+  \vspace{-.5\baselineskip}
+  \only<1>{\includegraphics[width=10cm]{bioassay_data.pdf}}
+  \only<2>{\includegraphics[width=10cm]{bioassay_fitlin.pdf}}
+  \only<3>{\includegraphics[width=10cm]{bioassay_fitlin2.pdf}}
+  \only<4-5>{\includegraphics[width=10cm]{bioassay_data2.pdf}\\}
+  \only<6>{\includegraphics[width=10cm]{bioassay_fitbinom.pdf}\\}
+  \only<5->{Binomial model
+    \begin{align*}
+    y_i \mid {\only<6>{\color{blue}} \theta}_i & \sim \Bin({\only<6>{\color{blue}} \theta}_i,n_i) \uncover<6>{, \quad \logit({\only<6>{\color{blue}}\theta}_i)= \log\left(\frac{{\only<6>{\color{blue}}\theta}_i}{1-{\only<6>{\color{blue}}\theta}_i}\right) = \alpha+\beta x_i}
+    \end{align*}
+  }
+  
+\end{frame}
+
+\begin{frame}{Bioassay}
+  
+  \vspace{-1\baselineskip}
+
+    \begin{minipage}[b][5cm][t]{4cm}
+    \begin{align*}
+      y_i \mid \color{blue} \theta_i & \sim \Bin({\color{blue} \theta}_i, n_i)\\
+      \logit({\color{blue} \theta}_i) & = \log\left(\frac{{\color{blue} \theta}_i}{1-{\color{blue} \theta}_i}\right)\\
+                                     & = {\color{darkgreen} \alpha+\beta x_i} \\
+      \uncover<2->{\\ {\color{blue} \theta_i} & = \frac{1}{1+\exp(-({\color{darkgreen}\alpha+\beta x_i}))}}
+    \end{align*}
+  \end{minipage}~
+     \begin{minipage}[b][5cm][t]{6.5cm}
+    {\includegraphics[width=6.5cm]{bioassay_fitbinom.pdf}}
+    {\includegraphics[width=6.5cm]{bioassay_fitlogitspace.pdf}}
+  \end{minipage}
+\end{frame}
+
+\begin{frame}{Bioassay}
+
+  \vspace{-.5\baselineskip}
+  \only<1>{\includegraphics[width=10cm]{bioassay_fitbinom.pdf}}
+  \only<2>{\includegraphics[width=10cm]{bioassay_post.pdf}}
+  \only<3-5>{\includegraphics[width=10cm]{bioassay_postld50.pdf}\\}
+  \only<6>{\includegraphics[width=10cm]{bioassay_histld50.pdf}\\}
+  \only<3->{
+    \vspace{-1.5\baselineskip}
+        \begin{align*}
+      \mbox{LD50:}\;\;\;
+          \E\left(\frac{y}{n}\right)=\logit^{-1}(\alpha+\beta x) = 0.5
+          \uncover<4->{\quad \Rightarrow \quad & x_{\mathrm{LD50}}=-\alpha/\beta}\\
+          \uncover<5->{& x_{\mathrm{LD50}}^{(s)}=-\alpha^{(s)}/\beta^{(s)}}
+    \end{align*}
+  }
+\end{frame}
+
+\begin{frame}{Bioassay posterior}
+
+  \vspace{-1.5\baselineskip}
+    \begin{align*}
+      \intertext{\color{navyblue}Binomial model}
+      y_i \mid \theta_i & \sim \Bin(\theta_i,n_i)\\
+      \intertext{\color{navyblue}Link function}
+      \logit(\theta_i) & = \alpha+\beta x_i
+      \uncover<2->{
+  \intertext{\color{navyblue}Likelihood}
+      p(y_i \mid \alpha,\beta,n_i,x_i) & \propto
+                                         \theta_i^{y_i}[1-\theta_i]^{n_i-y_i}\\}
+      \uncover<3->{
+        p(y_i \mid \alpha,\beta,n_i,x_i) &  \propto
+                                           [\mathrm{logit}^{-1}(\alpha+\beta x_i)]^{y_i}[1-\mathrm{logit}^{-1}(\alpha+\beta x_i)]^{n_i-y_i}\\}
+      \uncover<4->{
+      \vspace{-1\baselineskip} \\
+      \intertext{\color{navyblue}Posterior (with uniform prior on $\alpha,\beta$)}
+      p(\alpha,\beta \mid y,n,x) & \propto p(\alpha,\beta)\prod_{i=1}^n p(y_i \mid \alpha,\beta,n_i,x_i)}
+    \end{align*}
+
+\end{frame}
+
+\begin{frame}{Bioassay}
+
+  \only<1>{\includegraphics[width=10cm]{bioassay_grid1.pdf}}
+  \only<2>{\includegraphics[width=10cm]{bioassay_grid2.pdf}\\
+  Density evaluated in grid, but plotted using interpolation}
+  \only<3>{\includegraphics[width=10cm]{bioassay_grid3.pdf}\\
+    Density evaluated in grid, and plotted without interpolation}
+  \only<4>{\includegraphics[width=10cm]{bioassay_grid3_1.pdf} \\
+    Density evaluated in a coarser grid}
+  \only<5>{\includegraphics[width=10cm]{bioassay_grid3_2.pdf}\\
+    \vspace{-0.5\baselineskip}
+    \begin{itemize}
+    \item[-] Approximate the density as piecewise constant function
+    \item[-] Evaluate density in a grid over some finite region 
+    \item[-] Density times cell area gives probability mass in each cell
+    \end{itemize}
+  }
+  \only<6>{\includegraphics[width=10cm]{bioassay_grid3_3.pdf}
+    \vspace{-0.5\baselineskip}
+    \begin{itemize}
+    \item[-] Densities at 1, 2, and 3: 0.0027 0.0010 0.0001
+    \item[-] Probabilities of cells 1, 2, and 3: 0.0431 0.0166 0.0010
+    \item[-] Probabilities of cells sum to 1
+    \end{itemize}
+  }
+  \only<7>{\includegraphics[width=10cm]{bioassay_grid4.png}\\}
+  \only<8>{\includegraphics[width=10cm]{bioassay_grid5.png}\\}
+  \only<9>{\includegraphics[width=10cm]{bioassay_grid6.png}\\}
+  \only<7-9>{
+    \vspace{-0.5\baselineskip}
+    \begin{itemize}
+    \item[-] Sample according to grid cell probabilities
+    \item<9>[-] Several draws can be from the same grid cell
+    \end{itemize}
+  }
+  \only<10>{\includegraphics[width=10cm]{bioassay_grid7.png}\\
+    \vspace{-0.5\baselineskip}
+    \begin{itemize}
+    \item[-] Jitter can be added to improve visualization
+    \end{itemize}
+  }
+  
+\end{frame}
+
+
+\begin{frame}{Grid sampling}
+
+  \begin{itemize}
+  \item[-] Draws can be used to estimate expectations, for example
+    \begin{align*}
+      E[x_{\mathrm{LD50}}] = E[-\alpha/\beta] & \approx \frac{1}{S}\sum_{s=1}^{S} -\frac{\alpha^{(s)}}{\beta^{(s)}}
+    \end{align*}
+  \item<2->[-] Instead of sampling, grid could be used to evaluate
+    functions directly, for example
+    \begin{align*}
+      \E[-\alpha/\beta] \approx \sum_{t=1}^{T} -\frac{\alpha^{(t)}}{\beta^{(t)}}w_{\mathrm{cell}}^{(t)} ,
+    \end{align*}
+    where $w_{\mathrm{cell}}^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(t)}$ and $\beta^{(t)}$ are center locations of grid cells
+  \item<3-> Grid sampling gets computationally too expensive in high
+    dimensions
+  \end{itemize}
+
+\end{frame}
+
+\end{document}
+
+%%% Local Variables: 
+%%% TeX-PDF-mode: t
+%%% TeX-master: t
+%%% End: 
