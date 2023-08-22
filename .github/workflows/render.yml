@@ -30,9 +30,9 @@ jobs:
                   git config --global user.email "aki.vehtari@aalto.fi"
                   git checkout master
                   rmdfiles=$(git diff --name-only HEAD^ | grep '[.]*Rmd$')
-                  # qmdfiles=$(git diff --name-only HEAD^ | grep '[.]*qmd$')
+                  qmdfiles=$(git diff --name-only HEAD^ | grep '[.]*qmd$')
                   if [ -n "${rmdfiles}" ]; then while read -r filename; do   echo "$filename"; Rscript -e "rmarkdown::render('$filename')";   done <<< "$rmdfiles"; fi
-                  # while read -r filename; do   echo "$filename"; quarto render $filename;   done <<< "$qmdfiles"
+                  if [ -n "${qmdfiles}" ]; then while read -r filename; do   echo "$filename"; quarto render $filename;   done <<< "$qmdfiles"; fi
 
           - name: GitHub Pages action
             uses: peaceiris/actions-gh-pages@v3.6.1
