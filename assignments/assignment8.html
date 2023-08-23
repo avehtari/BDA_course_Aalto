@@ -266,7 +266,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="general-information" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> General information</h1>
 <p><strong>The maximum amount of points from this assignment is 6.</strong></p>
-<p>We have prepared a <strong><a href="template8.html">quarto template</a></strong> to help you get started.</p>
+<p>We have prepared a <strong><a href="template8.html">quarto template specific for this assignment</a></strong> to help you get started.</p>
 <div class="gsu">
 <p>We recommend you use the <a href="docker.html">docker container</a>.</p>
 </div>
@@ -283,7 +283,13 @@ Tip
 <div id="callout-1" class="callout-1-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
 <p><strong>Reading instructions</strong>:</p>
-<p>Chapter 7 in BDA3, see <a href="https://avehtari.github.io/BDA_course_Aalto/chapter_notes/BDA_notes_ch7.pdf"><strong>the reading instructions for Chapter 7</strong></a>. The <a href="https://mc-stan.org/loo/articles/loo2-with-rstan.html">’loo‘ package vignette on the basics of LOO</a> shows an example of how to modify Stan code and use the package with Stan models. Also read about PSIS-LOO in the <a href="https://link.springer.com/article/10.1007/s11222-016-9696-4">PSIS-LOO paper</a>.</p>
+<ul>
+<li><a href="../BDA3_notes.html#ch6"><strong>The reading instructions for BDA3 Chapter 6</strong></a> (posterior predictive checking).</li>
+<li><a href="../BDA3_notes.html#ch7"><strong>The reading instructions for BDA3 Chapter 7</strong></a> (predictive performance).</li>
+<li>The <a href="https://mc-stan.org/loo/articles/loo2-with-rstan.html">’loo‘ package vignette on the basics of LOO</a> shows an example of how to modify Stan code and use the package with Stan models.</li>
+<li>Also read about PSIS-LOO in the <a href="https://link.springer.com/article/10.1007/s11222-016-9696-4">PSIS-LOO paper</a>.</li>
+<li><a href="https://avehtari.github.io/modelselection/CV-FAQ.html">CV-FAQ</a> includes a lot of informative answers to frequent questions and misconceptions.</li>
+</ul>
 <p><strong>Grading instructions:</strong></p>
 <p>The grading will be done in peergrade. All grading questions and evaluations for this assignment are contained within this document in the collapsible <strong>Rubric</strong> blocks.</p>
 <p><strong>Installing and using <code>CmdStanR</code>:</strong></p>
@@ -474,7 +480,7 @@ Has it been recognized that there is variation between <strong>…</strong> and 
 </section>
 <section id="linear-regression" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="linear-regression"><span class="header-section-number">2.2</span> Linear regression</h2>
-<p>In this section, you will build a model that predicts the weight of a chicken over time and depending on the diet. After each model fit, you will use posterior predictive checks to see how well the predictions match the observations. Then you will adjust the model by adding more complexity, and check again.</p>
+<p>In this section, you will build a model that predicts the weight of a chicken over time and depending on the diet. After sampling from the posteriors, you will use posterior predictive checks to see how well the predictions match the observations. Then you will adjust the model by adding more complexity, and check again.</p>
 <div class="callout callout-style-default callout-warning no-icon callout-captioned">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -487,7 +493,7 @@ Subtask 2.c)
 </div>
 <div id="callout-9" class="callout-9-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
-<p>Using <code>brms</code>, implement a pooled linear regression with a normal likelihood / observation family and <code>weight</code> as the predicted variable using <code>Diet</code> and <code>Time</code> as predictors. Try to use weakly informative priors.</p>
+<p>Using <code>brms</code>, implement a pooled linear regression with a normal model and <code>weight</code> as the predicted variable using <code>Diet</code> and <code>Time</code> as predictors. Try to use weakly informative priors.</p>
 </div>
 </div>
 </div>
@@ -616,8 +622,8 @@ Is there at least one reasonable way to improve the model, e.g.&nbsp;<strong>…
 </section>
 <section id="log-normal-linear-regression" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="log-normal-linear-regression"><span class="header-section-number">2.3</span> Log-normal linear regression</h2>
-<p>Based on the identified issues from the posterior predictive check, the model can be improved. It is advisable to change only one or a few things about a model at once. At this stage, focus on changing the likelihood family to better account for the observed data.</p>
-<p>One option is to use the lognormal likelihood, which only allows positive values. In <code>brms</code> you can change the observation model family and likelihood to this by setting the argument <code>family = "lognormal"</code>. Note that when using the log-normal observation model, the regression coefficients represent the change in the log weight of a chicken. The priors have been adjusted accordingly in the template.</p>
+<p>Based on the identified issues from the posterior predictive check, the model can be improved. It is advisable to change only one or a few things about a model at once. At this stage, focus on changing the observation model family to better account for the observed data.</p>
+<p>One option is to use the lognormal observation model, which only allows positive values. In <code>brms</code> you can change the observation model family to this by setting the argument <code>family = "lognormal"</code>. Note that when using the log-normal observation model, the regression coefficients represent the change in the log weight of a chicken. The priors have been adjusted accordingly in the template.</p>
 <div class="callout callout-style-default callout-warning no-icon callout-captioned">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -630,7 +636,7 @@ Subtask 2.f)
 </div>
 <div id="callout-16" class="callout-16-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
-<p>Adjust the model, fit it and create the same two posterior predictive check plots. Comment on your observations. Does the new model better capture some aspects of the data?</p>
+<p>Adjust the model, sample from the posterior and create the same two posterior predictive check plots. Comment on your observations. Does the new model better capture some aspects of the data?</p>
 </div>
 </div>
 </div>
@@ -751,7 +757,7 @@ Has there been a potentially brief discussion of the standard convergence criter
 </section>
 <section id="model-comparison-using-the-elpd" class="level2" data-number="2.5">
 <h2 data-number="2.5" class="anchored" data-anchor-id="model-comparison-using-the-elpd"><span class="header-section-number">2.5</span> Model comparison using the ELPD</h2>
-<p>There are many ways of comparing models<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. Commonly, we evaluate point predictions, such as the mean of the predictive distribution<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, or accuracy of the whole posterior predictive. Whether we prioritise point or density predictive accuracy may serve different purposes and lead to different outcomes for model choice <a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. It is common, however, to report predictive accuracy via log-scores and point-predictive accuracy via root-mean-squared-error based on the empirical average of the predictive distribution. To cross-validate both metrics on left out observations without re-fitting the models, we use Pareto-smoothed importance sampling as discussed in the course materials (see lecture slides for chapter 7).</p>
+<p>There are many ways of comparing models<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. Commonly, we evaluate point predictions, such as the mean of the predictive distribution<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, or accuracy of the whole posterior predictive. Whether we prioritise point or density predictive accuracy may serve different purposes and lead to different outcomes for model choice <a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. It is common, however, to report predictive accuracy via log-scores and point-predictive accuracy via root-mean-squared-error based on the empirical average of the predictive distribution. To cross-validate both metrics on left out observations without need to sample from each leave-one-out posterior, we use Pareto-smoothed importance sampling as discussed in the course materials (see Lecture 9).</p>
 <p>We start comparing models based on the log-score. Use <code>loo::loo()</code> and <code>loo::loo_compare()</code> to quantify the differences in predictive performance.</p>
 <div class="callout callout-style-default callout-warning no-icon callout-captioned">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-23-contents" aria-controls="callout-23" aria-expanded="true" aria-label="Toggle callout">
@@ -806,7 +812,7 @@ Subtask 2.j)
 </div>
 <div id="callout-25" class="callout-25-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
-<p>Assess whether the approximation to the LOO-CV distributions are reliable. Consult the <span class="math inline">\(\hat{k}\)</span> statistic which informs on the convergence rate of PSIS. Plot the <span class="math inline">\(\hat{k}\)</span> values for each model against the data point ID and discuss. Are they as expected?</p>
+<p>Assess whether the approximation to the LOO-CV distributions are reliable. Consult the <span class="math inline">\(\hat{k}\)</span> statistic which informs on the reliability of PSIS computation in PSIS-LOO. Plot the <span class="math inline">\(\hat{k}\)</span> values for each model against the data point ID and discuss. Are they as expected?</p>
 </div>
 </div>
 </div>
@@ -822,7 +828,7 @@ Tip
 </div>
 <div id="callout-26" class="callout-26-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
-<p>For hierarchical models, it may be more important to think about how well the individual group is predicted and how many observations there are in a group compared to the number of parameters estimated. Also check out <a href="https://discourse.mc-stan.org/t/a-quick-note-what-i-infer-from-p-loo-and-pareto-k-values/3446">this discussion on the Stan forums</a>.</p>
+<p>For hierarchical models, it may be more important to think about how well the individual group is predicted and how many observations there are in a group compared to the number of parameters estimated. Also check out <a href="https://avehtari.github.io/modelselection/CV-FAQ.html#17_What_to_do_if_I_have_high_Pareto_(hat%7Bk%7D)%E2%80%99s">CV-FAQ on high Pareto-<span class="math inline">\(\hat{k}\)</span> values</a>.</p>
 </div>
 </div>
 </div>
@@ -904,7 +910,7 @@ Subtask 2.l)
 </div>
 <div id="callout-30" class="callout-30-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
-<p>Use the function in the template to compare the RMSE and the LOO-RMSE for the three models. Explain the difference between the RMSE and the LOO-RMSE in 1-3 sentences. Is one generally lower than the other? Why?</p>
+<p>Use the function in the template to compare the RMSE and the LOO-RMSE for the three models. Explain the difference between the RMSE and the LOO-RMSE in 1–3 sentences. Is one generally lower than the other? Why?</p>
 </div>
 </div>
 </div>
@@ -980,7 +986,7 @@ Please provide also feedback on the presentation (e.g.&nbsp;text, layout, flow o
 <ol>
 <li id="fn1"><p>In principle, when comparing models based on accuracy in predictions or parameter estimation (if true parameter values are available to you, as e.g.&nbsp;in simulation studies), we want to use so called strictly proper scoring rules that will always indicate when a “better” model is better and the score reaches its uniquely defined best value at the “true” model, if it is also well defined. See <a href="https://www.tandfonline.com/doi/abs/10.1198/016214506000001437"><strong>Gneiting and Raftery, (2007)</strong></a> for and in depth treatment of this topic.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>NOT predictions based on the mean of the posterior parameters, but first generating the predictive distribution and then computing an average.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>For instance, a unimodal and bi-modal predictive density may have the same expected value, but very different areas of high posterior density and therefore very different log-scores.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>For instance, a unimodal and bimodal predictive density may have the same expected value, but very different areas of high posterior density and therefore very different log-scores.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1285,267 +1291,269 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb4-30"><a href="#cb4-30"></a></span>
 <span id="cb4-31"><a href="#cb4-31"></a>**The maximum amount of points from this assignment is 6.**</span>
 <span id="cb4-32"><a href="#cb4-32"></a></span>
-<span id="cb4-33"><a href="#cb4-33"></a>We have prepared a **[quarto template](template8.html)** to help you get started.</span>
-<span id="cb4-34"><a href="#cb4-34"></a></span>
-<span id="cb4-35"><a href="#cb4-35"></a>:::{.gsu}</span>
-<span id="cb4-36"><a href="#cb4-36"></a>We recommend you use the <span class="co">[</span><span class="ot">docker container</span><span class="co">](docker.html)</span>. </span>
-<span id="cb4-37"><a href="#cb4-37"></a>:::</span>
-<span id="cb4-38"><a href="#cb4-38"></a></span>
+<span id="cb4-33"><a href="#cb4-33"></a>We have prepared a **[quarto template specific for this</span>
+<span id="cb4-34"><a href="#cb4-34"></a>assignment](template8.html)** to help you get started.</span>
+<span id="cb4-35"><a href="#cb4-35"></a></span>
+<span id="cb4-36"><a href="#cb4-36"></a>:::{.gsu}</span>
+<span id="cb4-37"><a href="#cb4-37"></a>We recommend you use the <span class="co">[</span><span class="ot">docker container</span><span class="co">](docker.html)</span>. </span>
+<span id="cb4-38"><a href="#cb4-38"></a>:::</span>
 <span id="cb4-39"><a href="#cb4-39"></a></span>
-<span id="cb4-40"><a href="#cb4-40"></a>:::{.hint}</span>
-<span id="cb4-41"><a href="#cb4-41"></a>**Reading instructions**:</span>
-<span id="cb4-42"><a href="#cb4-42"></a></span>
-<span id="cb4-43"><a href="#cb4-43"></a>Chapter 7 in BDA3, see <span class="co">[</span><span class="ot">**the reading instructions for Chapter 7**</span><span class="co">](https://avehtari.github.io/BDA_course_Aalto/chapter_notes/BDA_notes_ch7.pdf)</span>. The</span>
-<span id="cb4-44"><a href="#cb4-44"></a><span class="co">[</span><span class="ot">‘loo‘ package vignette on the basics of LOO</span><span class="co">](https://mc-stan.org/loo/articles/loo2-with-rstan.html)</span></span>
-<span id="cb4-45"><a href="#cb4-45"></a>shows an example of how to modify Stan code and use the package with Stan models. Also read</span>
-<span id="cb4-46"><a href="#cb4-46"></a>about PSIS-LOO in the <span class="co">[</span><span class="ot">PSIS-LOO paper</span><span class="co">](https://link.springer.com/article/10.1007/s11222-016-9696-4)</span>.</span>
-<span id="cb4-47"><a href="#cb4-47"></a></span>
-<span id="cb4-48"><a href="#cb4-48"></a>{{&lt; include grading_instructions.md &gt;}}</span>
-<span id="cb4-49"><a href="#cb4-49"></a></span>
-<span id="cb4-50"><a href="#cb4-50"></a>{{&lt; include cmdstanr.md &gt;}}</span>
-<span id="cb4-51"><a href="#cb4-51"></a>:::</span>
-<span id="cb4-52"><a href="#cb4-52"></a></span>
-<span id="cb4-53"><a href="#cb4-53"></a>{{&lt; include reporting_accuracy.md &gt;}}</span>
-<span id="cb4-54"><a href="#cb4-54"></a></span>
-<span id="cb4-55"><a href="#cb4-55"></a>{{&lt; include general_info.md &gt;}}</span>
+<span id="cb4-40"><a href="#cb4-40"></a></span>
+<span id="cb4-41"><a href="#cb4-41"></a>:::{.hint}</span>
+<span id="cb4-42"><a href="#cb4-42"></a>**Reading instructions**:</span>
+<span id="cb4-43"><a href="#cb4-43"></a></span>
+<span id="cb4-44"><a href="#cb4-44"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**The reading instructions for BDA3 Chapter 6**</span><span class="co">](../BDA3_notes.html#ch6)</span> (posterior predictive checking).</span>
+<span id="cb4-45"><a href="#cb4-45"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**The reading instructions for BDA3 Chapter 7**</span><span class="co">](../BDA3_notes.html#ch7)</span> (predictive performance).</span>
+<span id="cb4-46"><a href="#cb4-46"></a><span class="ss">- </span>The <span class="co">[</span><span class="ot">‘loo‘ package vignette on the basics of LOO</span><span class="co">](https://mc-stan.org/loo/articles/loo2-with-rstan.html)</span></span>
+<span id="cb4-47"><a href="#cb4-47"></a>shows an example of how to modify Stan code and use the package with Stan models.</span>
+<span id="cb4-48"><a href="#cb4-48"></a><span class="ss">- </span>Also read</span>
+<span id="cb4-49"><a href="#cb4-49"></a>about PSIS-LOO in the <span class="co">[</span><span class="ot">PSIS-LOO paper</span><span class="co">](https://link.springer.com/article/10.1007/s11222-016-9696-4)</span>.</span>
+<span id="cb4-50"><a href="#cb4-50"></a><span class="ss">- </span><span class="co">[</span><span class="ot">CV-FAQ</span><span class="co">](https://avehtari.github.io/modelselection/CV-FAQ.html)</span> includes a lot of informative answers to frequent questions and misconceptions.</span>
+<span id="cb4-51"><a href="#cb4-51"></a></span>
+<span id="cb4-52"><a href="#cb4-52"></a>{{&lt; include grading_instructions.md &gt;}}</span>
+<span id="cb4-53"><a href="#cb4-53"></a></span>
+<span id="cb4-54"><a href="#cb4-54"></a>{{&lt; include cmdstanr.md &gt;}}</span>
+<span id="cb4-55"><a href="#cb4-55"></a>:::</span>
 <span id="cb4-56"><a href="#cb4-56"></a></span>
-<span id="cb4-57"><a href="#cb4-57"></a></span>
+<span id="cb4-57"><a href="#cb4-57"></a>{{&lt; include reporting_accuracy.md &gt;}}</span>
 <span id="cb4-58"><a href="#cb4-58"></a></span>
-<span id="cb4-59"><a href="#cb4-59"></a></span>
-<span id="cb4-60"><a href="#cb4-60"></a><span class="fu"># A hierarchical model for chicken weight time series</span></span>
+<span id="cb4-59"><a href="#cb4-59"></a>{{&lt; include general_info.md &gt;}}</span>
+<span id="cb4-60"><a href="#cb4-60"></a></span>
 <span id="cb4-61"><a href="#cb4-61"></a></span>
-<span id="cb4-62"><a href="#cb4-62"></a><span class="fu">## Exploratory data analysis</span></span>
+<span id="cb4-62"><a href="#cb4-62"></a><span class="fu"># A hierarchical model for chicken weight time series</span></span>
 <span id="cb4-63"><a href="#cb4-63"></a></span>
-<span id="cb4-64"><a href="#cb4-64"></a>In the first part of this assignment, you will explore the dataset <span class="in">`ChickWeight`</span>. In particular, you will see what information is recorded in the dataset, and how you can use visualisation to learn more about the dataset. More information can be found on the corresponding page of the <span class="co">[</span><span class="ot">R documentation</span><span class="co">](https://www.rdocumentation.org/packages/datasets/versions/3.6.2/topics/ChickWeight)</span>.</span>
+<span id="cb4-64"><a href="#cb4-64"></a><span class="fu">## Exploratory data analysis</span></span>
 <span id="cb4-65"><a href="#cb4-65"></a></span>
-<span id="cb4-68"><a href="#cb4-68"></a><span class="in">```{r}</span></span>
-<span id="cb4-69"><a href="#cb4-69"></a><span class="fu">head</span>(ChickWeight, <span class="dv">10</span>)</span>
-<span id="cb4-70"><a href="#cb4-70"></a><span class="in">```</span></span>
-<span id="cb4-71"><a href="#cb4-71"></a></span>
-<span id="cb4-72"><a href="#cb4-72"></a>:::{.subtask letter=a}</span>
-<span id="cb4-73"><a href="#cb4-73"></a>Create a histogram to explore the range of chicken weights. </span>
-<span id="cb4-74"><a href="#cb4-74"></a>Describe what you see in the plot. What is the qualitative range of the data?</span>
-<span id="cb4-75"><a href="#cb4-75"></a>:::</span>
-<span id="cb4-76"><a href="#cb4-76"></a></span>
-<span id="cb4-77"><a href="#cb4-77"></a></span>
-<span id="cb4-78"><a href="#cb4-78"></a>:::{.subrubric}</span>
-<span id="cb4-79"><a href="#cb4-79"></a><span class="ss">* </span>Does the plot look correct and is it readable?</span>
-<span id="cb4-80"><a href="#cb4-80"></a><span class="ss">* </span>Has it been stated that the data is **...**?</span>
-<span id="cb4-81"><a href="#cb4-81"></a>:::</span>
-<span id="cb4-82"><a href="#cb4-82"></a></span>
-<span id="cb4-83"><a href="#cb4-83"></a>:::{.subtask}</span>
-<span id="cb4-84"><a href="#cb4-84"></a>Plot the weight of each chicken over time in a line plot. Add colours based on the diet.</span>
-<span id="cb4-85"><a href="#cb4-85"></a>Describe what you see in the plot. </span>
-<span id="cb4-86"><a href="#cb4-86"></a>:::</span>
-<span id="cb4-87"><a href="#cb4-87"></a></span>
-<span id="cb4-88"><a href="#cb4-88"></a></span>
-<span id="cb4-89"><a href="#cb4-89"></a>:::{.subrubric}</span>
-<span id="cb4-90"><a href="#cb4-90"></a><span class="ss">* </span>Does the plot look correct and is it readable?</span>
-<span id="cb4-91"><a href="#cb4-91"></a><span class="ss">* </span>Has it been recognized that there is variation between **...** and **...**?</span>
-<span id="cb4-92"><a href="#cb4-92"></a>:::</span>
-<span id="cb4-93"><a href="#cb4-93"></a></span>
-<span id="cb4-94"><a href="#cb4-94"></a><span class="fu">## Linear regression</span></span>
+<span id="cb4-66"><a href="#cb4-66"></a>In the first part of this assignment, you will explore the dataset <span class="in">`ChickWeight`</span>. In particular, you will see what information is recorded in the dataset, and how you can use visualisation to learn more about the dataset. More information can be found on the corresponding page of the <span class="co">[</span><span class="ot">R documentation</span><span class="co">](https://www.rdocumentation.org/packages/datasets/versions/3.6.2/topics/ChickWeight)</span>.</span>
+<span id="cb4-67"><a href="#cb4-67"></a></span>
+<span id="cb4-70"><a href="#cb4-70"></a><span class="in">```{r}</span></span>
+<span id="cb4-71"><a href="#cb4-71"></a><span class="fu">head</span>(ChickWeight, <span class="dv">10</span>)</span>
+<span id="cb4-72"><a href="#cb4-72"></a><span class="in">```</span></span>
+<span id="cb4-73"><a href="#cb4-73"></a></span>
+<span id="cb4-74"><a href="#cb4-74"></a>:::{.subtask letter=a}</span>
+<span id="cb4-75"><a href="#cb4-75"></a>Create a histogram to explore the range of chicken weights. </span>
+<span id="cb4-76"><a href="#cb4-76"></a>Describe what you see in the plot. What is the qualitative range of the data?</span>
+<span id="cb4-77"><a href="#cb4-77"></a>:::</span>
+<span id="cb4-78"><a href="#cb4-78"></a></span>
+<span id="cb4-79"><a href="#cb4-79"></a></span>
+<span id="cb4-80"><a href="#cb4-80"></a>:::{.subrubric}</span>
+<span id="cb4-81"><a href="#cb4-81"></a><span class="ss">* </span>Does the plot look correct and is it readable?</span>
+<span id="cb4-82"><a href="#cb4-82"></a><span class="ss">* </span>Has it been stated that the data is **...**?</span>
+<span id="cb4-83"><a href="#cb4-83"></a>:::</span>
+<span id="cb4-84"><a href="#cb4-84"></a></span>
+<span id="cb4-85"><a href="#cb4-85"></a>:::{.subtask}</span>
+<span id="cb4-86"><a href="#cb4-86"></a>Plot the weight of each chicken over time in a line plot. Add colours based on the diet.</span>
+<span id="cb4-87"><a href="#cb4-87"></a>Describe what you see in the plot. </span>
+<span id="cb4-88"><a href="#cb4-88"></a>:::</span>
+<span id="cb4-89"><a href="#cb4-89"></a></span>
+<span id="cb4-90"><a href="#cb4-90"></a></span>
+<span id="cb4-91"><a href="#cb4-91"></a>:::{.subrubric}</span>
+<span id="cb4-92"><a href="#cb4-92"></a><span class="ss">* </span>Does the plot look correct and is it readable?</span>
+<span id="cb4-93"><a href="#cb4-93"></a><span class="ss">* </span>Has it been recognized that there is variation between **...** and **...**?</span>
+<span id="cb4-94"><a href="#cb4-94"></a>:::</span>
 <span id="cb4-95"><a href="#cb4-95"></a></span>
-<span id="cb4-96"><a href="#cb4-96"></a>In this section, you will build a model that predicts the weight of a</span>
-<span id="cb4-97"><a href="#cb4-97"></a>chicken over time and depending on the diet. After each model fit, you</span>
-<span id="cb4-98"><a href="#cb4-98"></a>will use posterior predictive checks to see how well the predictions</span>
-<span id="cb4-99"><a href="#cb4-99"></a>match the observations. Then you will adjust the model by adding more</span>
-<span id="cb4-100"><a href="#cb4-100"></a>complexity, and check again.</span>
-<span id="cb4-101"><a href="#cb4-101"></a></span>
-<span id="cb4-102"><a href="#cb4-102"></a>::: {.subtask}</span>
-<span id="cb4-103"><a href="#cb4-103"></a>Using <span class="in">`brms`</span>, implement a pooled linear regression with a normal</span>
-<span id="cb4-104"><a href="#cb4-104"></a>likelihood / observation family and <span class="in">`weight`</span> as the predicted</span>
-<span id="cb4-105"><a href="#cb4-105"></a>variable using <span class="in">`Diet`</span> and <span class="in">`Time`</span> as predictors. Try to use weakly informative priors.</span>
-<span id="cb4-106"><a href="#cb4-106"></a>:::</span>
-<span id="cb4-107"><a href="#cb4-107"></a>::: {.hint}</span>
-<span id="cb4-108"><a href="#cb4-108"></a>For the prior on <span class="in">`Time`</span>, consider how much the weight of a chicken (in grams) could possibly</span>
-<span id="cb4-109"><a href="#cb4-109"></a>change each day. For the priors on the effects of different diets,</span>
-<span id="cb4-110"><a href="#cb4-110"></a>consider how much average weight difference would be possible between</span>
-<span id="cb4-111"><a href="#cb4-111"></a>diets.</span>
-<span id="cb4-112"><a href="#cb4-112"></a></span>
-<span id="cb4-113"><a href="#cb4-113"></a>Note that as <span class="in">`Diet`</span> is a categorical variable, the priors need to be</span>
-<span id="cb4-114"><a href="#cb4-114"></a>specified for each category (apart from <span class="in">`Diet1`</span> which is taken to be</span>
-<span id="cb4-115"><a href="#cb4-115"></a>the baseline).</span>
-<span id="cb4-116"><a href="#cb4-116"></a>:::</span>
-<span id="cb4-117"><a href="#cb4-117"></a></span>
-<span id="cb4-118"><a href="#cb4-118"></a></span>
-<span id="cb4-119"><a href="#cb4-119"></a>:::{.subrubric}</span>
-<span id="cb4-120"><a href="#cb4-120"></a><span class="ss">* </span>Is the brms-formula **...**?</span>
-<span id="cb4-121"><a href="#cb4-121"></a><span class="ss">* </span>Is the family **...**?</span>
-<span id="cb4-122"><a href="#cb4-122"></a><span class="ss">* </span>Are the prior standard deviations around **...**?</span>
-<span id="cb4-123"><a href="#cb4-123"></a>:::</span>
-<span id="cb4-124"><a href="#cb4-124"></a></span>
-<span id="cb4-125"><a href="#cb4-125"></a></span>
-<span id="cb4-126"><a href="#cb4-126"></a>Next, you can use the <span class="in">`bayesplot`</span> package to check the posterior</span>
-<span id="cb4-127"><a href="#cb4-127"></a>predictions in relation to the observed data using the <span class="co">[</span><span class="ot">`pp_check` function</span><span class="co">](https://mc-stan.org/bayesplot/reference/pp_check.html)</span>. </span>
-<span id="cb4-128"><a href="#cb4-128"></a>The function plots the $y$ values, which are the observed data, </span>
-<span id="cb4-129"><a href="#cb4-129"></a>and the $y_\text{rep}$ values, which are replicated data sets from the</span>
-<span id="cb4-130"><a href="#cb4-130"></a>posterior predictive distribution.</span>
-<span id="cb4-131"><a href="#cb4-131"></a></span>
-<span id="cb4-132"><a href="#cb4-132"></a>:::{.subtask}</span>
-<span id="cb4-133"><a href="#cb4-133"></a>Perform the posterior predictive check with the default arguments.</span>
-<span id="cb4-134"><a href="#cb4-134"></a>What do you observe? Based on the plot, do the posterior predictions</span>
-<span id="cb4-135"><a href="#cb4-135"></a>encapsulate the main features of the observed data? Point out any</span>
-<span id="cb4-136"><a href="#cb4-136"></a>major differences between the predictions and the observed data.</span>
-<span id="cb4-137"><a href="#cb4-137"></a>Answer the following questions:</span>
-<span id="cb4-138"><a href="#cb4-138"></a></span>
-<span id="cb4-139"><a href="#cb4-139"></a><span class="ss">* </span>Are there qualitative differences between the observed data and the predicted data?</span>
-<span id="cb4-140"><a href="#cb4-140"></a><span class="ss">* </span>Do the observed data seem quantitatively similar?</span>
-<span id="cb4-141"><a href="#cb4-141"></a>:::</span>
-<span id="cb4-142"><a href="#cb4-142"></a></span>
-<span id="cb4-143"><a href="#cb4-143"></a></span>
-<span id="cb4-144"><a href="#cb4-144"></a>:::{.subrubric}</span>
-<span id="cb4-145"><a href="#cb4-145"></a><span class="ss">* </span>Does the plot look correct and is it readable?</span>
-<span id="cb4-146"><a href="#cb4-146"></a><span class="ss">* </span>Has it been recognized that the predicted data include **...**?</span>
-<span id="cb4-147"><a href="#cb4-147"></a><span class="ss">* </span>Has it been recognized that the observed and predicted data **...**?</span>
-<span id="cb4-148"><a href="#cb4-148"></a>:::</span>
-<span id="cb4-149"><a href="#cb4-149"></a></span>
-<span id="cb4-150"><a href="#cb4-150"></a>The default density plot is not always informative, but <span class="in">`bayesplot`</span></span>
-<span id="cb4-151"><a href="#cb4-151"></a>has different settings that can be used to create plots more</span>
-<span id="cb4-152"><a href="#cb4-152"></a>appropriate for specific data.</span>
-<span id="cb4-153"><a href="#cb4-153"></a></span>
-<span id="cb4-154"><a href="#cb4-154"></a>:::{.subtask}</span>
-<span id="cb4-155"><a href="#cb4-155"></a>Create another plot with grouping to the PPC plot using the arguments</span>
-<span id="cb4-156"><a href="#cb4-156"></a><span class="in">`type = "intervals_grouped"`</span> and <span class="in">`group = "Diet"`</span>.</span>
-<span id="cb4-157"><a href="#cb4-157"></a>What do you observe? Point out any major differences</span>
-<span id="cb4-158"><a href="#cb4-158"></a>between the predictions and the observed data.</span>
-<span id="cb4-159"><a href="#cb4-159"></a>Based on your visualisations, how could the model be improved?</span>
-<span id="cb4-160"><a href="#cb4-160"></a>:::</span>
-<span id="cb4-161"><a href="#cb4-161"></a></span>
-<span id="cb4-162"><a href="#cb4-162"></a></span>
-<span id="cb4-163"><a href="#cb4-163"></a>:::{.subrubric}</span>
-<span id="cb4-164"><a href="#cb4-164"></a><span class="ss">* </span>Does the plot look correct and is it readable?</span>
-<span id="cb4-165"><a href="#cb4-165"></a><span class="ss">* </span>Is there at least one reasonable way to improve the model, e.g. **...**?</span>
-<span id="cb4-166"><a href="#cb4-166"></a>:::</span>
-<span id="cb4-167"><a href="#cb4-167"></a></span>
-<span id="cb4-168"><a href="#cb4-168"></a><span class="fu">## Log-normal linear regression</span></span>
+<span id="cb4-96"><a href="#cb4-96"></a><span class="fu">## Linear regression</span></span>
+<span id="cb4-97"><a href="#cb4-97"></a></span>
+<span id="cb4-98"><a href="#cb4-98"></a>In this section, you will build a model that predicts the weight of a</span>
+<span id="cb4-99"><a href="#cb4-99"></a>chicken over time and depending on the diet. After sampling from the posteriors, you</span>
+<span id="cb4-100"><a href="#cb4-100"></a>will use posterior predictive checks to see how well the predictions</span>
+<span id="cb4-101"><a href="#cb4-101"></a>match the observations. Then you will adjust the model by adding more</span>
+<span id="cb4-102"><a href="#cb4-102"></a>complexity, and check again.</span>
+<span id="cb4-103"><a href="#cb4-103"></a></span>
+<span id="cb4-104"><a href="#cb4-104"></a>::: {.subtask}</span>
+<span id="cb4-105"><a href="#cb4-105"></a>Using <span class="in">`brms`</span>, implement a pooled linear regression with a normal</span>
+<span id="cb4-106"><a href="#cb4-106"></a>model and <span class="in">`weight`</span> as the predicted</span>
+<span id="cb4-107"><a href="#cb4-107"></a>variable using <span class="in">`Diet`</span> and <span class="in">`Time`</span> as predictors. Try to use weakly informative priors.</span>
+<span id="cb4-108"><a href="#cb4-108"></a>:::</span>
+<span id="cb4-109"><a href="#cb4-109"></a>::: {.hint}</span>
+<span id="cb4-110"><a href="#cb4-110"></a>For the prior on <span class="in">`Time`</span>, consider how much the weight of a chicken (in grams) could possibly</span>
+<span id="cb4-111"><a href="#cb4-111"></a>change each day. For the priors on the effects of different diets,</span>
+<span id="cb4-112"><a href="#cb4-112"></a>consider how much average weight difference would be possible between</span>
+<span id="cb4-113"><a href="#cb4-113"></a>diets.</span>
+<span id="cb4-114"><a href="#cb4-114"></a></span>
+<span id="cb4-115"><a href="#cb4-115"></a>Note that as <span class="in">`Diet`</span> is a categorical variable, the priors need to be</span>
+<span id="cb4-116"><a href="#cb4-116"></a>specified for each category (apart from <span class="in">`Diet1`</span> which is taken to be</span>
+<span id="cb4-117"><a href="#cb4-117"></a>the baseline).</span>
+<span id="cb4-118"><a href="#cb4-118"></a>:::</span>
+<span id="cb4-119"><a href="#cb4-119"></a></span>
+<span id="cb4-120"><a href="#cb4-120"></a></span>
+<span id="cb4-121"><a href="#cb4-121"></a>:::{.subrubric}</span>
+<span id="cb4-122"><a href="#cb4-122"></a><span class="ss">* </span>Is the brms-formula **...**?</span>
+<span id="cb4-123"><a href="#cb4-123"></a><span class="ss">* </span>Is the family **...**?</span>
+<span id="cb4-124"><a href="#cb4-124"></a><span class="ss">* </span>Are the prior standard deviations around **...**?</span>
+<span id="cb4-125"><a href="#cb4-125"></a>:::</span>
+<span id="cb4-126"><a href="#cb4-126"></a></span>
+<span id="cb4-127"><a href="#cb4-127"></a></span>
+<span id="cb4-128"><a href="#cb4-128"></a>Next, you can use the <span class="in">`bayesplot`</span> package to check the posterior</span>
+<span id="cb4-129"><a href="#cb4-129"></a>predictions in relation to the observed data using the <span class="co">[</span><span class="ot">`pp_check` function</span><span class="co">](https://mc-stan.org/bayesplot/reference/pp_check.html)</span>. </span>
+<span id="cb4-130"><a href="#cb4-130"></a>The function plots the $y$ values, which are the observed data, </span>
+<span id="cb4-131"><a href="#cb4-131"></a>and the $y_\text{rep}$ values, which are replicated data sets from the</span>
+<span id="cb4-132"><a href="#cb4-132"></a>posterior predictive distribution.</span>
+<span id="cb4-133"><a href="#cb4-133"></a></span>
+<span id="cb4-134"><a href="#cb4-134"></a>:::{.subtask}</span>
+<span id="cb4-135"><a href="#cb4-135"></a>Perform the posterior predictive check with the default arguments.</span>
+<span id="cb4-136"><a href="#cb4-136"></a>What do you observe? Based on the plot, do the posterior predictions</span>
+<span id="cb4-137"><a href="#cb4-137"></a>encapsulate the main features of the observed data? Point out any</span>
+<span id="cb4-138"><a href="#cb4-138"></a>major differences between the predictions and the observed data.</span>
+<span id="cb4-139"><a href="#cb4-139"></a>Answer the following questions:</span>
+<span id="cb4-140"><a href="#cb4-140"></a></span>
+<span id="cb4-141"><a href="#cb4-141"></a><span class="ss">* </span>Are there qualitative differences between the observed data and the predicted data?</span>
+<span id="cb4-142"><a href="#cb4-142"></a><span class="ss">* </span>Do the observed data seem quantitatively similar?</span>
+<span id="cb4-143"><a href="#cb4-143"></a>:::</span>
+<span id="cb4-144"><a href="#cb4-144"></a></span>
+<span id="cb4-145"><a href="#cb4-145"></a></span>
+<span id="cb4-146"><a href="#cb4-146"></a>:::{.subrubric}</span>
+<span id="cb4-147"><a href="#cb4-147"></a><span class="ss">* </span>Does the plot look correct and is it readable?</span>
+<span id="cb4-148"><a href="#cb4-148"></a><span class="ss">* </span>Has it been recognized that the predicted data include **...**?</span>
+<span id="cb4-149"><a href="#cb4-149"></a><span class="ss">* </span>Has it been recognized that the observed and predicted data **...**?</span>
+<span id="cb4-150"><a href="#cb4-150"></a>:::</span>
+<span id="cb4-151"><a href="#cb4-151"></a></span>
+<span id="cb4-152"><a href="#cb4-152"></a>The default density plot is not always informative, but <span class="in">`bayesplot`</span></span>
+<span id="cb4-153"><a href="#cb4-153"></a>has different settings that can be used to create plots more</span>
+<span id="cb4-154"><a href="#cb4-154"></a>appropriate for specific data.</span>
+<span id="cb4-155"><a href="#cb4-155"></a></span>
+<span id="cb4-156"><a href="#cb4-156"></a>:::{.subtask}</span>
+<span id="cb4-157"><a href="#cb4-157"></a>Create another plot with grouping to the PPC plot using the arguments</span>
+<span id="cb4-158"><a href="#cb4-158"></a><span class="in">`type = "intervals_grouped"`</span> and <span class="in">`group = "Diet"`</span>.</span>
+<span id="cb4-159"><a href="#cb4-159"></a>What do you observe? Point out any major differences</span>
+<span id="cb4-160"><a href="#cb4-160"></a>between the predictions and the observed data.</span>
+<span id="cb4-161"><a href="#cb4-161"></a>Based on your visualisations, how could the model be improved?</span>
+<span id="cb4-162"><a href="#cb4-162"></a>:::</span>
+<span id="cb4-163"><a href="#cb4-163"></a></span>
+<span id="cb4-164"><a href="#cb4-164"></a></span>
+<span id="cb4-165"><a href="#cb4-165"></a>:::{.subrubric}</span>
+<span id="cb4-166"><a href="#cb4-166"></a><span class="ss">* </span>Does the plot look correct and is it readable?</span>
+<span id="cb4-167"><a href="#cb4-167"></a><span class="ss">* </span>Is there at least one reasonable way to improve the model, e.g. **...**?</span>
+<span id="cb4-168"><a href="#cb4-168"></a>:::</span>
 <span id="cb4-169"><a href="#cb4-169"></a></span>
-<span id="cb4-170"><a href="#cb4-170"></a>Based on the identified issues from the posterior predictive check,</span>
-<span id="cb4-171"><a href="#cb4-171"></a>the model can be improved. It is advisable to change only one or a few</span>
-<span id="cb4-172"><a href="#cb4-172"></a>things about a model at once. At this stage, focus on changing the</span>
-<span id="cb4-173"><a href="#cb4-173"></a>likelihood family to better account for the observed data.</span>
-<span id="cb4-174"><a href="#cb4-174"></a></span>
-<span id="cb4-175"><a href="#cb4-175"></a>One option is to use the lognormal likelihood, which only allows</span>
-<span id="cb4-176"><a href="#cb4-176"></a>positive values. In <span class="in">`brms`</span> you can change the observation model family</span>
-<span id="cb4-177"><a href="#cb4-177"></a>and likelihood to this by setting the argument <span class="in">`family = "lognormal"`</span>.</span>
-<span id="cb4-178"><a href="#cb4-178"></a>Note that when using the log-normal observation model, the regression</span>
-<span id="cb4-179"><a href="#cb4-179"></a>coefficients represent the change in the log weight of a chicken. The</span>
-<span id="cb4-180"><a href="#cb4-180"></a>priors have been adjusted accordingly in the template.</span>
-<span id="cb4-181"><a href="#cb4-181"></a></span>
-<span id="cb4-182"><a href="#cb4-182"></a>::: {.subtask}</span>
-<span id="cb4-183"><a href="#cb4-183"></a>Adjust the model, fit it and create the same two posterior predictive</span>
-<span id="cb4-184"><a href="#cb4-184"></a>check plots. Comment on your observations. Does the new model better</span>
-<span id="cb4-185"><a href="#cb4-185"></a>capture some aspects of the data?</span>
-<span id="cb4-186"><a href="#cb4-186"></a>:::</span>
-<span id="cb4-187"><a href="#cb4-187"></a>::: {.hint}</span>
+<span id="cb4-170"><a href="#cb4-170"></a><span class="fu">## Log-normal linear regression</span></span>
+<span id="cb4-171"><a href="#cb4-171"></a></span>
+<span id="cb4-172"><a href="#cb4-172"></a>Based on the identified issues from the posterior predictive check,</span>
+<span id="cb4-173"><a href="#cb4-173"></a>the model can be improved. It is advisable to change only one or a few</span>
+<span id="cb4-174"><a href="#cb4-174"></a>things about a model at once. At this stage, focus on changing the</span>
+<span id="cb4-175"><a href="#cb4-175"></a>observation model family to better account for the observed data.</span>
+<span id="cb4-176"><a href="#cb4-176"></a></span>
+<span id="cb4-177"><a href="#cb4-177"></a>One option is to use the lognormal observation model, which only allows</span>
+<span id="cb4-178"><a href="#cb4-178"></a>positive values. In <span class="in">`brms`</span> you can change the observation model family</span>
+<span id="cb4-179"><a href="#cb4-179"></a>to this by setting the argument <span class="in">`family = "lognormal"`</span>.</span>
+<span id="cb4-180"><a href="#cb4-180"></a>Note that when using the log-normal observation model, the regression</span>
+<span id="cb4-181"><a href="#cb4-181"></a>coefficients represent the change in the log weight of a chicken. The</span>
+<span id="cb4-182"><a href="#cb4-182"></a>priors have been adjusted accordingly in the template.</span>
+<span id="cb4-183"><a href="#cb4-183"></a></span>
+<span id="cb4-184"><a href="#cb4-184"></a>::: {.subtask}</span>
+<span id="cb4-185"><a href="#cb4-185"></a>Adjust the model, sample from the posterior and create the same two posterior predictive</span>
+<span id="cb4-186"><a href="#cb4-186"></a>check plots. Comment on your observations. Does the new model better</span>
+<span id="cb4-187"><a href="#cb4-187"></a>capture some aspects of the data?</span>
 <span id="cb4-188"><a href="#cb4-188"></a>:::</span>
-<span id="cb4-189"><a href="#cb4-189"></a></span>
-<span id="cb4-190"><a href="#cb4-190"></a></span>
-<span id="cb4-191"><a href="#cb4-191"></a>:::{.subrubric}</span>
-<span id="cb4-192"><a href="#cb4-192"></a><span class="ss">* </span>Do the plots look correct and are they readable?</span>
-<span id="cb4-193"><a href="#cb4-193"></a><span class="ss">* </span>Has it been recognized that the fit to data is **...**?</span>
-<span id="cb4-194"><a href="#cb4-194"></a>:::</span>
-<span id="cb4-195"><a href="#cb4-195"></a></span>
-<span id="cb4-196"><a href="#cb4-196"></a><span class="fu">## Hierarchical log-normal linear regression</span></span>
+<span id="cb4-189"><a href="#cb4-189"></a>::: {.hint}</span>
+<span id="cb4-190"><a href="#cb4-190"></a>:::</span>
+<span id="cb4-191"><a href="#cb4-191"></a></span>
+<span id="cb4-192"><a href="#cb4-192"></a></span>
+<span id="cb4-193"><a href="#cb4-193"></a>:::{.subrubric}</span>
+<span id="cb4-194"><a href="#cb4-194"></a><span class="ss">* </span>Do the plots look correct and are they readable?</span>
+<span id="cb4-195"><a href="#cb4-195"></a><span class="ss">* </span>Has it been recognized that the fit to data is **...**?</span>
+<span id="cb4-196"><a href="#cb4-196"></a>:::</span>
 <span id="cb4-197"><a href="#cb4-197"></a></span>
-<span id="cb4-198"><a href="#cb4-198"></a>The model can further be improved by directly considering potential</span>
-<span id="cb4-199"><a href="#cb4-199"></a>differences in growth rate for individual chicken. Some chickens may</span>
-<span id="cb4-200"><a href="#cb4-200"></a>innately grow faster than others, and this difference can be included</span>
-<span id="cb4-201"><a href="#cb4-201"></a>by including both population and group level effects in to the model.</span>
-<span id="cb4-202"><a href="#cb4-202"></a></span>
-<span id="cb4-203"><a href="#cb4-203"></a>To include a group effect in <span class="in">`brms`</span>, the code `+</span>
-<span id="cb4-204"><a href="#cb4-204"></a>(predictor|group)` can be added to the model formula. In this case,</span>
-<span id="cb4-205"><a href="#cb4-205"></a>the predictor is <span class="in">`Time`</span> and the group is <span class="in">`Chick`</span>.</span>
-<span id="cb4-206"><a href="#cb4-206"></a></span>
-<span id="cb4-207"><a href="#cb4-207"></a>::: {.subtask}</span>
-<span id="cb4-208"><a href="#cb4-208"></a>Create the same two plots as for the previous models. Comment on what</span>
-<span id="cb4-209"><a href="#cb4-209"></a>you see. Do the predictions seem to better capture the observed data?</span>
-<span id="cb4-210"><a href="#cb4-210"></a>Are there remaining discrepancies between the predictions and observed</span>
-<span id="cb4-211"><a href="#cb4-211"></a>data that could be addressed?</span>
-<span id="cb4-212"><a href="#cb4-212"></a>:::</span>
-<span id="cb4-213"><a href="#cb4-213"></a></span>
-<span id="cb4-214"><a href="#cb4-214"></a>:::{.subrubric}</span>
-<span id="cb4-215"><a href="#cb4-215"></a><span class="ss">* </span>Do the plots look correct and are they readable?</span>
-<span id="cb4-216"><a href="#cb4-216"></a><span class="ss">* </span>Has it been recognized that the fit to data is **...**?</span>
-<span id="cb4-217"><a href="#cb4-217"></a>:::</span>
-<span id="cb4-218"><a href="#cb4-218"></a></span>
-<span id="cb4-219"><a href="#cb4-219"></a>:::{.subtask}</span>
-<span id="cb4-220"><a href="#cb4-220"></a>Have you encountered any convergence issues in the above models? Report and comment.</span>
-<span id="cb4-221"><a href="#cb4-221"></a>:::</span>
-<span id="cb4-222"><a href="#cb4-222"></a>:::{.subrubric}</span>
-<span id="cb4-223"><a href="#cb4-223"></a><span class="ss">* </span>Has there been a potentially brief discussion of the standard convergence criteria (Rhat, ESS, divergent transitions) for all models?</span>
-<span id="cb4-224"><a href="#cb4-224"></a>:::</span>
-<span id="cb4-225"><a href="#cb4-225"></a></span>
-<span id="cb4-226"><a href="#cb4-226"></a><span class="fu">## Model comparison using the ELPD</span></span>
+<span id="cb4-198"><a href="#cb4-198"></a><span class="fu">## Hierarchical log-normal linear regression</span></span>
+<span id="cb4-199"><a href="#cb4-199"></a></span>
+<span id="cb4-200"><a href="#cb4-200"></a>The model can further be improved by directly considering potential</span>
+<span id="cb4-201"><a href="#cb4-201"></a>differences in growth rate for individual chicken. Some chickens may</span>
+<span id="cb4-202"><a href="#cb4-202"></a>innately grow faster than others, and this difference can be included</span>
+<span id="cb4-203"><a href="#cb4-203"></a>by including both population and group level effects in to the model.</span>
+<span id="cb4-204"><a href="#cb4-204"></a></span>
+<span id="cb4-205"><a href="#cb4-205"></a>To include a group effect in <span class="in">`brms`</span>, the code `+</span>
+<span id="cb4-206"><a href="#cb4-206"></a>(predictor|group)` can be added to the model formula. In this case,</span>
+<span id="cb4-207"><a href="#cb4-207"></a>the predictor is <span class="in">`Time`</span> and the group is <span class="in">`Chick`</span>.</span>
+<span id="cb4-208"><a href="#cb4-208"></a></span>
+<span id="cb4-209"><a href="#cb4-209"></a>::: {.subtask}</span>
+<span id="cb4-210"><a href="#cb4-210"></a>Create the same two plots as for the previous models. Comment on what</span>
+<span id="cb4-211"><a href="#cb4-211"></a>you see. Do the predictions seem to better capture the observed data?</span>
+<span id="cb4-212"><a href="#cb4-212"></a>Are there remaining discrepancies between the predictions and observed</span>
+<span id="cb4-213"><a href="#cb4-213"></a>data that could be addressed?</span>
+<span id="cb4-214"><a href="#cb4-214"></a>:::</span>
+<span id="cb4-215"><a href="#cb4-215"></a></span>
+<span id="cb4-216"><a href="#cb4-216"></a>:::{.subrubric}</span>
+<span id="cb4-217"><a href="#cb4-217"></a><span class="ss">* </span>Do the plots look correct and are they readable?</span>
+<span id="cb4-218"><a href="#cb4-218"></a><span class="ss">* </span>Has it been recognized that the fit to data is **...**?</span>
+<span id="cb4-219"><a href="#cb4-219"></a>:::</span>
+<span id="cb4-220"><a href="#cb4-220"></a></span>
+<span id="cb4-221"><a href="#cb4-221"></a>:::{.subtask}</span>
+<span id="cb4-222"><a href="#cb4-222"></a>Have you encountered any convergence issues in the above models? Report and comment.</span>
+<span id="cb4-223"><a href="#cb4-223"></a>:::</span>
+<span id="cb4-224"><a href="#cb4-224"></a>:::{.subrubric}</span>
+<span id="cb4-225"><a href="#cb4-225"></a><span class="ss">* </span>Has there been a potentially brief discussion of the standard convergence criteria (Rhat, ESS, divergent transitions) for all models?</span>
+<span id="cb4-226"><a href="#cb4-226"></a>:::</span>
 <span id="cb4-227"><a href="#cb4-227"></a></span>
-<span id="cb4-228"><a href="#cb4-228"></a>There are many ways of comparing models<span class="ot">[^footnote1]</span>. Commonly, we evaluate point predictions, such as the mean of the predictive distribution<span class="ot">[^footnote2]</span>, or accuracy of the whole posterior predictive. Whether we prioritise point or density predictive accuracy may serve different purposes and lead to different outcomes for model choice <span class="ot">[^footnote3]</span>. It is common, however, to report predictive accuracy via log-scores and point-predictive accuracy via root-mean-squared-error based on the empirical average of the predictive distribution. To cross-validate both metrics on left out observations without re-fitting the models, we use Pareto-smoothed importance sampling as discussed in the course materials (see lecture slides for chapter 7). </span>
+<span id="cb4-228"><a href="#cb4-228"></a><span class="fu">## Model comparison using the ELPD</span></span>
 <span id="cb4-229"><a href="#cb4-229"></a></span>
-<span id="cb4-230"><a href="#cb4-230"></a>We start comparing models based on the log-score. Use <span class="in">`loo::loo()`</span> and <span class="in">`loo::loo_compare()`</span> to quantify the differences in predictive performance.</span>
+<span id="cb4-230"><a href="#cb4-230"></a>There are many ways of comparing models<span class="ot">[^footnote1]</span>. Commonly, we evaluate point predictions, such as the mean of the predictive distribution<span class="ot">[^footnote2]</span>, or accuracy of the whole posterior predictive. Whether we prioritise point or density predictive accuracy may serve different purposes and lead to different outcomes for model choice <span class="ot">[^footnote3]</span>. It is common, however, to report predictive accuracy via log-scores and point-predictive accuracy via root-mean-squared-error based on the empirical average of the predictive distribution. To cross-validate both metrics on left out observations without need to sample from each leave-one-out posterior, we use Pareto-smoothed importance sampling as discussed in the course materials (see Lecture 9). </span>
 <span id="cb4-231"><a href="#cb4-231"></a></span>
-<span id="cb4-232"><a href="#cb4-232"></a><span class="ot">[^footnote1]: </span>In principle, when comparing models based on accuracy in predictions or parameter estimation (if true parameter values are available to you, as e.g. in simulation studies), we want to use so called strictly proper scoring rules that will always indicate when a "better" model is better and the score reaches its uniquely defined best value at the "true" model, if it is also well defined. See <span class="co">[</span><span class="ot">**Gneiting and Raftery, (2007)**</span><span class="co">](https://www.tandfonline.com/doi/abs/10.1198/016214506000001437)</span> for and in depth treatment of this topic.</span>
+<span id="cb4-232"><a href="#cb4-232"></a>We start comparing models based on the log-score. Use <span class="in">`loo::loo()`</span> and <span class="in">`loo::loo_compare()`</span> to quantify the differences in predictive performance.</span>
 <span id="cb4-233"><a href="#cb4-233"></a></span>
-<span id="cb4-234"><a href="#cb4-234"></a><span class="ot">[^footnote2]: </span>NOT predictions based on the mean of the posterior parameters, but first generating the predictive distribution and then computing an average.</span>
+<span id="cb4-234"><a href="#cb4-234"></a><span class="ot">[^footnote1]: </span>In principle, when comparing models based on accuracy in predictions or parameter estimation (if true parameter values are available to you, as e.g. in simulation studies), we want to use so called strictly proper scoring rules that will always indicate when a "better" model is better and the score reaches its uniquely defined best value at the "true" model, if it is also well defined. See <span class="co">[</span><span class="ot">**Gneiting and Raftery, (2007)**</span><span class="co">](https://www.tandfonline.com/doi/abs/10.1198/016214506000001437)</span> for and in depth treatment of this topic.</span>
 <span id="cb4-235"><a href="#cb4-235"></a></span>
-<span id="cb4-236"><a href="#cb4-236"></a><span class="ot">[^footnote3]: </span>For instance, a unimodal and bi-modal predictive density may have the same expected value, but very different areas of high posterior density and therefore very different log-scores.</span>
+<span id="cb4-236"><a href="#cb4-236"></a><span class="ot">[^footnote2]: </span>NOT predictions based on the mean of the posterior parameters, but first generating the predictive distribution and then computing an average.</span>
 <span id="cb4-237"><a href="#cb4-237"></a></span>
-<span id="cb4-238"><a href="#cb4-238"></a>:::{.subtask}</span>
-<span id="cb4-239"><a href="#cb4-239"></a>Answer the following questions using <span class="in">`loo`</span>/<span class="in">`loo_compare`</span>:</span>
-<span id="cb4-240"><a href="#cb4-240"></a></span>
-<span id="cb4-241"><a href="#cb4-241"></a><span class="ss">* </span>Which model has the best predictive performance? </span>
-<span id="cb4-242"><a href="#cb4-242"></a><span class="ss">* </span>Does the uncertainty influence the decision of which model is best?</span>
-<span id="cb4-243"><a href="#cb4-243"></a>:::</span>
-<span id="cb4-244"><a href="#cb4-244"></a></span>
-<span id="cb4-245"><a href="#cb4-245"></a></span>
-<span id="cb4-246"><a href="#cb4-246"></a>:::{.subrubric}</span>
-<span id="cb4-247"><a href="#cb4-247"></a><span class="ss">* </span>Do the results look correct and have they been presented in a readable way? They should be roughly **...**.</span>
-<span id="cb4-248"><a href="#cb4-248"></a><span class="ss">* </span>Has it been recognized that the best model is **...** and that the uncertainty is **...**?</span>
-<span id="cb4-249"><a href="#cb4-249"></a>:::</span>
-<span id="cb4-250"><a href="#cb4-250"></a>:::{.subtask}</span>
-<span id="cb4-251"><a href="#cb4-251"></a>Assess whether the approximation to the LOO-CV distributions are reliable.</span>
-<span id="cb4-252"><a href="#cb4-252"></a>Consult the $\hat{k}$ statistic which informs on the convergence rate of PSIS. </span>
-<span id="cb4-253"><a href="#cb4-253"></a>Plot the $\hat{k}$ values for each model against the data point ID and discuss.</span>
-<span id="cb4-254"><a href="#cb4-254"></a>Are they as expected?</span>
-<span id="cb4-255"><a href="#cb4-255"></a>:::</span>
-<span id="cb4-256"><a href="#cb4-256"></a>:::{.hint}</span>
-<span id="cb4-257"><a href="#cb4-257"></a>For hierarchical models, it may be more important to think about how well the individual group is predicted and how many observations there are in a group compared to the number of parameters estimated. Also check out <span class="co">[</span><span class="ot">this discussion on the Stan forums</span><span class="co">](https://discourse.mc-stan.org/t/a-quick-note-what-i-infer-from-p-loo-and-pareto-k-values/3446)</span>.</span>
-<span id="cb4-258"><a href="#cb4-258"></a>:::</span>
-<span id="cb4-259"><a href="#cb4-259"></a></span>
-<span id="cb4-260"><a href="#cb4-260"></a> </span>
-<span id="cb4-261"><a href="#cb4-261"></a>:::{.subrubric}</span>
-<span id="cb4-262"><a href="#cb4-262"></a><span class="ss">* </span>Do the plots look correct and are they readable?</span>
-<span id="cb4-263"><a href="#cb4-263"></a><span class="ss">* </span>Has it been explained why the $\hat{k}$ values are highest for the **...**? **...**</span>
-<span id="cb4-264"><a href="#cb4-264"></a>:::</span>
-<span id="cb4-265"><a href="#cb4-265"></a>:::{.subtask}</span>
-<span id="cb4-266"><a href="#cb4-266"></a>Perform a PPC for the hierarchical model for </span>
-<span id="cb4-267"><a href="#cb4-267"></a></span>
-<span id="cb4-268"><a href="#cb4-268"></a><span class="ss">* </span>a few of the chickens with the highest $\hat{k}$ values and</span>
-<span id="cb4-269"><a href="#cb4-269"></a><span class="ss">* </span>a few of the chickens with the lowest $\hat{k}$ values</span>
-<span id="cb4-270"><a href="#cb4-270"></a></span>
-<span id="cb4-271"><a href="#cb4-271"></a>using the code in the template. What do you observe?</span>
-<span id="cb4-272"><a href="#cb4-272"></a>:::</span>
-<span id="cb4-273"><a href="#cb4-273"></a></span>
-<span id="cb4-274"><a href="#cb4-274"></a></span>
+<span id="cb4-238"><a href="#cb4-238"></a><span class="ot">[^footnote3]: </span>For instance, a unimodal and bimodal predictive density may have the same expected value, but very different areas of high posterior density and therefore very different log-scores.</span>
+<span id="cb4-239"><a href="#cb4-239"></a></span>
+<span id="cb4-240"><a href="#cb4-240"></a>:::{.subtask}</span>
+<span id="cb4-241"><a href="#cb4-241"></a>Answer the following questions using <span class="in">`loo`</span>/<span class="in">`loo_compare`</span>:</span>
+<span id="cb4-242"><a href="#cb4-242"></a></span>
+<span id="cb4-243"><a href="#cb4-243"></a><span class="ss">* </span>Which model has the best predictive performance? </span>
+<span id="cb4-244"><a href="#cb4-244"></a><span class="ss">* </span>Does the uncertainty influence the decision of which model is best?</span>
+<span id="cb4-245"><a href="#cb4-245"></a>:::</span>
+<span id="cb4-246"><a href="#cb4-246"></a></span>
+<span id="cb4-247"><a href="#cb4-247"></a></span>
+<span id="cb4-248"><a href="#cb4-248"></a>:::{.subrubric}</span>
+<span id="cb4-249"><a href="#cb4-249"></a><span class="ss">* </span>Do the results look correct and have they been presented in a readable way? They should be roughly **...**.</span>
+<span id="cb4-250"><a href="#cb4-250"></a><span class="ss">* </span>Has it been recognized that the best model is **...** and that the uncertainty is **...**?</span>
+<span id="cb4-251"><a href="#cb4-251"></a>:::</span>
+<span id="cb4-252"><a href="#cb4-252"></a>:::{.subtask}</span>
+<span id="cb4-253"><a href="#cb4-253"></a>Assess whether the approximation to the LOO-CV distributions are reliable.</span>
+<span id="cb4-254"><a href="#cb4-254"></a>Consult the $\hat{k}$ statistic which informs on the reliability of PSIS computation in PSIS-LOO. </span>
+<span id="cb4-255"><a href="#cb4-255"></a>Plot the $\hat{k}$ values for each model against the data point ID and discuss.</span>
+<span id="cb4-256"><a href="#cb4-256"></a>Are they as expected?</span>
+<span id="cb4-257"><a href="#cb4-257"></a>:::</span>
+<span id="cb4-258"><a href="#cb4-258"></a>:::{.hint}</span>
+<span id="cb4-259"><a href="#cb4-259"></a>For hierarchical models, it may be more important to think about how well the individual group is predicted and how many observations there are in a group compared to the number of parameters estimated. Also check out <span class="co">[</span><span class="ot">CV-FAQ on high Pareto-$\hat{k}$ values</span><span class="co">]</span>(https://avehtari.github.io/modelselection/CV-FAQ.html#17_What_to_do_if_I_have_high_Pareto_(hat{k})%E2%80%99s).</span>
+<span id="cb4-260"><a href="#cb4-260"></a>:::</span>
+<span id="cb4-261"><a href="#cb4-261"></a></span>
+<span id="cb4-262"><a href="#cb4-262"></a> </span>
+<span id="cb4-263"><a href="#cb4-263"></a>:::{.subrubric}</span>
+<span id="cb4-264"><a href="#cb4-264"></a><span class="ss">* </span>Do the plots look correct and are they readable?</span>
+<span id="cb4-265"><a href="#cb4-265"></a><span class="ss">* </span>Has it been explained why the $\hat{k}$ values are highest for the **...**? **...**</span>
+<span id="cb4-266"><a href="#cb4-266"></a>:::</span>
+<span id="cb4-267"><a href="#cb4-267"></a>:::{.subtask}</span>
+<span id="cb4-268"><a href="#cb4-268"></a>Perform a PPC for the hierarchical model for </span>
+<span id="cb4-269"><a href="#cb4-269"></a></span>
+<span id="cb4-270"><a href="#cb4-270"></a><span class="ss">* </span>a few of the chickens with the highest $\hat{k}$ values and</span>
+<span id="cb4-271"><a href="#cb4-271"></a><span class="ss">* </span>a few of the chickens with the lowest $\hat{k}$ values</span>
+<span id="cb4-272"><a href="#cb4-272"></a></span>
+<span id="cb4-273"><a href="#cb4-273"></a>using the code in the template. What do you observe?</span>
+<span id="cb4-274"><a href="#cb4-274"></a>:::</span>
 <span id="cb4-275"><a href="#cb4-275"></a></span>
-<span id="cb4-276"><a href="#cb4-276"></a>:::{.subrubric}</span>
-<span id="cb4-277"><a href="#cb4-277"></a><span class="ss">* </span>Does the plot look correct and is it readable?</span>
-<span id="cb4-278"><a href="#cb4-278"></a><span class="ss">* </span>Has it been recognized that the chickens with high $\hat{k}$ values **...**?</span>
-<span id="cb4-279"><a href="#cb4-279"></a>:::</span>
-<span id="cb4-280"><a href="#cb4-280"></a></span>
-<span id="cb4-281"><a href="#cb4-281"></a><span class="fu">## Model comparison using the RMSE</span></span>
+<span id="cb4-276"><a href="#cb4-276"></a></span>
+<span id="cb4-277"><a href="#cb4-277"></a></span>
+<span id="cb4-278"><a href="#cb4-278"></a>:::{.subrubric}</span>
+<span id="cb4-279"><a href="#cb4-279"></a><span class="ss">* </span>Does the plot look correct and is it readable?</span>
+<span id="cb4-280"><a href="#cb4-280"></a><span class="ss">* </span>Has it been recognized that the chickens with high $\hat{k}$ values **...**?</span>
+<span id="cb4-281"><a href="#cb4-281"></a>:::</span>
 <span id="cb4-282"><a href="#cb4-282"></a></span>
-<span id="cb4-283"><a href="#cb4-283"></a>:::{.subtask}</span>
-<span id="cb4-284"><a href="#cb4-284"></a>Use the function in the template to compare the RMSE and the LOO-RMSE for the three models.</span>
-<span id="cb4-285"><a href="#cb4-285"></a>Explain the difference between the RMSE and the LOO-RMSE in 1-3 sentences. Is one generally lower than the other? Why?</span>
-<span id="cb4-286"><a href="#cb4-286"></a>:::</span>
-<span id="cb4-287"><a href="#cb4-287"></a></span>
-<span id="cb4-288"><a href="#cb4-288"></a></span>
-<span id="cb4-289"><a href="#cb4-289"></a>:::{.subrubric}</span>
-<span id="cb4-290"><a href="#cb4-290"></a><span class="ss">* </span>Do the results look correct and have they been presented in a readable way?</span>
-<span id="cb4-291"><a href="#cb4-291"></a><span class="ss">* </span>Has it been recognized that the RMSE is **...** than the LOO-RMSE because **...**?</span>
-<span id="cb4-292"><a href="#cb4-292"></a>:::</span>
-<span id="cb4-293"><a href="#cb4-293"></a></span>
-<span id="cb4-294"><a href="#cb4-294"></a>{{&lt; include overall_quality.md &gt;}}</span>
-<span id="cb4-295"><a href="#cb4-295"></a>  </span>
+<span id="cb4-283"><a href="#cb4-283"></a><span class="fu">## Model comparison using the RMSE</span></span>
+<span id="cb4-284"><a href="#cb4-284"></a></span>
+<span id="cb4-285"><a href="#cb4-285"></a>:::{.subtask}</span>
+<span id="cb4-286"><a href="#cb4-286"></a>Use the function in the template to compare the RMSE and the LOO-RMSE for the three models.</span>
+<span id="cb4-287"><a href="#cb4-287"></a>Explain the difference between the RMSE and the LOO-RMSE in 1--3 sentences. Is one generally lower than the other? Why?</span>
+<span id="cb4-288"><a href="#cb4-288"></a>:::</span>
+<span id="cb4-289"><a href="#cb4-289"></a></span>
+<span id="cb4-290"><a href="#cb4-290"></a></span>
+<span id="cb4-291"><a href="#cb4-291"></a>:::{.subrubric}</span>
+<span id="cb4-292"><a href="#cb4-292"></a><span class="ss">* </span>Do the results look correct and have they been presented in a readable way?</span>
+<span id="cb4-293"><a href="#cb4-293"></a><span class="ss">* </span>Has it been recognized that the RMSE is **...** than the LOO-RMSE because **...**?</span>
+<span id="cb4-294"><a href="#cb4-294"></a>:::</span>
+<span id="cb4-295"><a href="#cb4-295"></a></span>
+<span id="cb4-296"><a href="#cb4-296"></a>{{&lt; include overall_quality.md &gt;}}</span>
+<span id="cb4-297"><a href="#cb4-297"></a>  </span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
