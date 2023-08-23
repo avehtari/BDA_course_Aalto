@@ -9,7 +9,7 @@ def docker_cmd(*args):
 def docker_run(*args): 
     user = os.environ.get("USER")
     print(f"[{user}]: Running:\n", "\n".join(args))
-    if user != "rstudio":
+    if user not in [None, "rstudio"]:
         print("I think we ARE NOT on docker...")
         os.system(docker_cmd(*args))
     else:
