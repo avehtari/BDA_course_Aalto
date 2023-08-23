@@ -170,9 +170,9 @@ fit_separate$cmdstan_diagnose()
 ### (l)
 
 
-**For the figures below, we use the earlier samples for the separate model with bad priors.
+**For the figures below, we use the earlier draws for the separate model with bad priors.
 When you have implemented the pooled and hierarchical models, edit the code below to
-include samples from your model into the figures.**
+include draws from your model posterior into the figures.**
 
 
 
@@ -189,7 +189,7 @@ include samples from your model into the figures.**
 
 
 ```{r}
-#| label: samples for pooled and hierarchical
+#| label: draws for pooled and hierarchical
 #| code-summary: Sampling the pooled & hierarhical models
 
 fit_pooled <- fit_separate
@@ -198,40 +198,40 @@ fit_hierarchical <- fit_separate
 
 ```
 
-Below, we collect the corresponding samples from the three models into a shared
-data frame using the `extract_variable` function. This makes plotting the samples
+Below, we collect the corresponding posterior draws from the three models into a shared
+data frame using the `extract_variable` function. This makes plotting the posterior
 in a single plot easier.
 ```{r}
 #| label: prepare data for plots
 #| code-summary: Prepare data for plots
 
-# Expect the same number of samples from each model.
-n_samples <- nrow(fit_hierarchical$sampler_diagnostics(format = "matrix"))
+# Expect the same number of posterior draws from each model.
+ndraws <- nrow(fit_hierarchical$sampler_diagnostics(format = "matrix"))
 
-# Collect samples and the model used to a data frame.
+# Collect posterior draws and the model used to a data frame.
 mean_diet_4_separate = extract_variable(fit_separate, "mean_diet[4]")
 mean_diet_4_pooled = extract_variable(fit_pooled, "mean_diet[4]")
 mean_diet_4_hierarchical = extract_variable(fit_hierarchical, "mean_diet[4]")
 posterior_mean_diet_4 <- data.frame(
   model_name = rep(c("Separate", "Pooled", "Hierarchical"),
-              each = n_samples),
+              each = ndraws),
   mean_diet_4 = c(
    mean_diet_4_separate, mean_diet_4_pooled, mean_diet_4_hierarchical
   ))
 
 predicted_weight_diet_4 <- data.frame(
   model_name = rep(c("Separate", "Pooled", "Hierarchical"),
-              each = n_samples),
+              each = ndraws),
   predicted_weight = c(
    extract_variable(fit_separate, "weight_pred"),
    extract_variable(fit_pooled, "weight_pred"),
    extract_variable(fit_hierarchical, "weight_pred")
   ))
 
-# Collect samples and the model used to a long data frame.
+# Collect posterior draws and the model used to a long data frame.
 posterior_mean_diet_5 <- data.frame(
   model_name = rep(c("Separate", "Pooled", "Hierarchical"),
-    each = n_samples
+    each = ndraws
   ),
   mean_diet_5 = c(
     extract_variable(fit_separate, "mean_five"),
@@ -382,7 +382,7 @@ Because `brms` is a bit chatty, suppress its output in the PDF using the block a
 
 
 ```{r}
-#| label: transformed posterior samples from brms
+#| label: transformed posterior draws from brms
 # Draws for mu_4
 mu_4 = posterior_epred(brms_fit, newdata = data.frame(Diet=4))
 
