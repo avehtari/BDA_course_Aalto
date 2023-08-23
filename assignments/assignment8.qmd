@@ -30,7 +30,8 @@ execute:
 
 **The maximum amount of points from this assignment is 6.**
 
-We have prepared a **[quarto template](template8.html)** to help you get started.
+We have prepared a **[quarto template specific for this
+assignment](template8.html)** to help you get started.
 
 :::{.gsu}
 We recommend you use the [docker container](docker.html). 
@@ -40,10 +41,13 @@ We recommend you use the [docker container](docker.html).
 :::{.hint}
 **Reading instructions**:
 
-Chapter 7 in BDA3, see [**the reading instructions for Chapter 7**](https://avehtari.github.io/BDA_course_Aalto/chapter_notes/BDA_notes_ch7.pdf). The
-[‘loo‘ package vignette on the basics of LOO](https://mc-stan.org/loo/articles/loo2-with-rstan.html)
-shows an example of how to modify Stan code and use the package with Stan models. Also read
+- [**The reading instructions for BDA3 Chapter 6**](../BDA3_notes.html#ch6) (posterior predictive checking).
+- [**The reading instructions for BDA3 Chapter 7**](../BDA3_notes.html#ch7) (predictive performance).
+- The [‘loo‘ package vignette on the basics of LOO](https://mc-stan.org/loo/articles/loo2-with-rstan.html)
+shows an example of how to modify Stan code and use the package with Stan models.
+- Also read
 about PSIS-LOO in the [PSIS-LOO paper](https://link.springer.com/article/10.1007/s11222-016-9696-4).
+- [CV-FAQ](https://avehtari.github.io/modelselection/CV-FAQ.html) includes a lot of informative answers to frequent questions and misconceptions.
 
 {{< include grading_instructions.md >}}
 
@@ -53,8 +57,6 @@ about PSIS-LOO in the [PSIS-LOO paper](https://link.springer.com/article/10.1007
 {{< include reporting_accuracy.md >}}
 
 {{< include general_info.md >}}
-
-
 
 
 # A hierarchical model for chicken weight time series
@@ -92,14 +94,14 @@ Describe what you see in the plot.
 ## Linear regression
 
 In this section, you will build a model that predicts the weight of a
-chicken over time and depending on the diet. After each model fit, you
+chicken over time and depending on the diet. After sampling from the posteriors, you
 will use posterior predictive checks to see how well the predictions
 match the observations. Then you will adjust the model by adding more
 complexity, and check again.
 
 ::: {.subtask}
 Using `brms`, implement a pooled linear regression with a normal
-likelihood / observation family and `weight` as the predicted
+model and `weight` as the predicted
 variable using `Diet` and `Time` as predictors. Try to use weakly informative priors.
 :::
 ::: {.hint}
@@ -168,17 +170,17 @@ Based on your visualisations, how could the model be improved?
 Based on the identified issues from the posterior predictive check,
 the model can be improved. It is advisable to change only one or a few
 things about a model at once. At this stage, focus on changing the
-likelihood family to better account for the observed data.
+observation model family to better account for the observed data.
 
-One option is to use the lognormal likelihood, which only allows
+One option is to use the lognormal observation model, which only allows
 positive values. In `brms` you can change the observation model family
-and likelihood to this by setting the argument `family = "lognormal"`.
+to this by setting the argument `family = "lognormal"`.
 Note that when using the log-normal observation model, the regression
 coefficients represent the change in the log weight of a chicken. The
 priors have been adjusted accordingly in the template.
 
 ::: {.subtask}
-Adjust the model, fit it and create the same two posterior predictive
+Adjust the model, sample from the posterior and create the same two posterior predictive
 check plots. Comment on your observations. Does the new model better
 capture some aspects of the data?
 :::
@@ -223,7 +225,7 @@ Have you encountered any convergence issues in the above models? Report and comm
 
 ## Model comparison using the ELPD
 
-There are many ways of comparing models[^footnote1]. Commonly, we evaluate point predictions, such as the mean of the predictive distribution[^footnote2], or accuracy of the whole posterior predictive. Whether we prioritise point or density predictive accuracy may serve different purposes and lead to different outcomes for model choice [^footnote3]. It is common, however, to report predictive accuracy via log-scores and point-predictive accuracy via root-mean-squared-error based on the empirical average of the predictive distribution. To cross-validate both metrics on left out observations without re-fitting the models, we use Pareto-smoothed importance sampling as discussed in the course materials (see lecture slides for chapter 7). 
+There are many ways of comparing models[^footnote1]. Commonly, we evaluate point predictions, such as the mean of the predictive distribution[^footnote2], or accuracy of the whole posterior predictive. Whether we prioritise point or density predictive accuracy may serve different purposes and lead to different outcomes for model choice [^footnote3]. It is common, however, to report predictive accuracy via log-scores and point-predictive accuracy via root-mean-squared-error based on the empirical average of the predictive distribution. To cross-validate both metrics on left out observations without need to sample from each leave-one-out posterior, we use Pareto-smoothed importance sampling as discussed in the course materials (see Lecture 9). 
 
 We start comparing models based on the log-score. Use `loo::loo()` and `loo::loo_compare()` to quantify the differences in predictive performance.
 
@@ -231,7 +233,7 @@ We start comparing models based on the log-score. Use `loo::loo()` and `loo::loo
 
 [^footnote2]: NOT predictions based on the mean of the posterior parameters, but first generating the predictive distribution and then computing an average.
 
-[^footnote3]: For instance, a unimodal and bi-modal predictive density may have the same expected value, but very different areas of high posterior density and therefore very different log-scores.
+[^footnote3]: For instance, a unimodal and bimodal predictive density may have the same expected value, but very different areas of high posterior density and therefore very different log-scores.
 
 :::{.subtask}
 Answer the following questions using `loo`/`loo_compare`:
@@ -247,12 +249,12 @@ Answer the following questions using `loo`/`loo_compare`:
 :::
 :::{.subtask}
 Assess whether the approximation to the LOO-CV distributions are reliable.
-Consult the $\hat{k}$ statistic which informs on the convergence rate of PSIS. 
+Consult the $\hat{k}$ statistic which informs on the reliability of PSIS computation in PSIS-LOO. 
 Plot the $\hat{k}$ values for each model against the data point ID and discuss.
 Are they as expected?
 :::
 :::{.hint}
-For hierarchical models, it may be more important to think about how well the individual group is predicted and how many observations there are in a group compared to the number of parameters estimated. Also check out [this discussion on the Stan forums](https://discourse.mc-stan.org/t/a-quick-note-what-i-infer-from-p-loo-and-pareto-k-values/3446).
+For hierarchical models, it may be more important to think about how well the individual group is predicted and how many observations there are in a group compared to the number of parameters estimated. Also check out [CV-FAQ on high Pareto-$\hat{k}$ values](https://avehtari.github.io/modelselection/CV-FAQ.html#17_What_to_do_if_I_have_high_Pareto_(hat{k})%E2%80%99s).
 :::
 
  
@@ -280,7 +282,7 @@ using the code in the template. What do you observe?
 
 :::{.subtask}
 Use the function in the template to compare the RMSE and the LOO-RMSE for the three models.
-Explain the difference between the RMSE and the LOO-RMSE in 1-3 sentences. Is one generally lower than the other? Why?
+Explain the difference between the RMSE and the LOO-RMSE in 1--3 sentences. Is one generally lower than the other? Why?
 :::
 
 
