@@ -319,7 +319,7 @@ Implement the models in Stan and include the code in the report. Use weakly info
 :::
 
 :::{.hint}
-When sampling for the hierarchical model, you will very likely get a warning about divergent transitions. This tells you that the sampler is having difficulties in sampling the joint posterior and this may lead to biased inference. We will return to this in the next task.
+When sampling from the posterior of the hierarchical model, you will very likely get a warning about divergent transitions. This tells you that the sampler is having difficulties in sampling the joint posterior and this may lead to biased inference. We will return to this in the next task.
 :::
 
 
@@ -448,7 +448,7 @@ See the example Stan codes [here](http://avehtari.github.io/BDA_R_demos/demos_rs
 
 The goal of this task is to discuss an alternative parameterization of hierarchical models and introduce the `brms`-package.
 
-[`brms`](https://paul-buerkner.github.io/brms/) is a high-level interface for Stan providing tools to fit a wide range of Bayesian models, including hierarchical ones. In the previous section, you might have noted that the hierarchical implementation of the model may have had divergent transitions during the sampling. This is related to the [Neal's funnel](https://mc-stan.org/docs/stan-users-guide/reparameterization.html), where the sampling algorithm would need to change the step size in order to effectively sample the posterior. One trick to improve sampling is to use an alternative parameterization for the model. This parameterization is called the non-centered parameterization (@eq-non-centered) and often it can help with the divergent transitions. In short,In short,
+[`brms`](https://paul-buerkner.github.io/brms/) is a high-level interface for Stan providing tools to fit a wide range of Bayesian models, including hierarchical ones. In the previous section, you might have noted that with the hierarchical implementation of the model there may be divergent transitions during the sampling from the posterior. This is related to the [Neal's funnel](https://mc-stan.org/docs/stan-users-guide/reparameterization.html), where the sampling algorithm would need to change the step size in order to effectively sample the posterior. One trick to improve sampling is to use an alternative parameterization for the model. This parameterization is called the non-centered parameterization (@eq-non-centered) and often it can help with the divergent transitions. In short,In short,
 we sample parameters from a distribution with an easier geometry for the sample to explore efficiently and then transfrom those valuse to the joint distribution of interest.
 $$
 \begin{aligned}
@@ -465,7 +465,7 @@ The hierarchical models made with `brms` use the non-centered parameterization.
 Your tasks are the following:
 
 :::{.subtask letter=a}
-Use the function in the template to make a scatter plot of the posterior draws produced by the hierarchical model of the population level standard deviation parameter $\tau$ and the mean parameter of the fourth diet, $\mu_4$. The possible divergent transitions are highlighted in red. In the report show the plot and comment if there are any divergent transitions.
+Use the function in the template to make a scatter plot of the posterior draws given the hierarchical model of the population level standard deviation parameter $\tau$ and the mean parameter of the fourth diet, $\mu_4$. The possible divergent transitions are highlighted in red. In the report show the plot and comment if there are any divergent transitions.
 :::
 
 
@@ -477,7 +477,7 @@ Use the function in the template to make a scatter plot of the posterior draws p
   - The scatter plot and comments on the divergences are included.
 :::
 
-To sample from the same model using `brms`, in the tempalte set the weakly informative priors for the hierarchical model you used in the previous task. `brms` has an internal convention to name model parameters, but the parameter names from @eq-non-centered map into `brms` names with the following logic:
+To sample from the posterior given the same model using `brms`, in the template set the weakly informative priors for the hierarchical model you used in the previous task. `brms` has an internal convention to name model parameters, but the parameter names from @eq-non-centered map into `brms` names with the following logic:
 
  - $\mu_0$ corresponds to `class="Intercept"`
  - $\sigma$ corresponds to `class="sigma"`
@@ -501,7 +501,7 @@ Report the **posterior expectation for the mean weight of diet 4 $\mu_4$ with a 
 
 
 ::: {.subrubric}
-* For the `brms` model, is the posterior 90% credible interval for the mean of the fourth diet close to: **...** (small/medium deviation is fine).
+* Given the `brms` model, is the posterior 90% credible interval for the mean of the fourth diet close to: **...** (small/medium deviation is fine).
   - No answer
   - Answer is only partially correct.
   - Answers look correct.
