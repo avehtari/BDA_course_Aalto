@@ -33,10 +33,14 @@ jobs:
                   # qmdfiles=$(git diff --name-only HEAD^ | grep '[.]*qmd$')
                   if [ -n "${rmdfiles}" ]; then while read -r filename; do   echo "$filename"; Rscript -e "rmarkdown::render('$filename')";   done <<< "$rmdfiles"; fi
                   # if [ -n "${qmdfiles}" ]; then while read -r filename; do   echo "$filename"; quarto render $filename;   done <<< "$qmdfiles"; fi
-                  cd assignments
-                  quarto install tinytex
-                  quarto render .
-
+                  diff_assignments=$(git diff --name-only HEAD^ | grep '^assignments/')
+                  if [ -n "${diff_assignments}" ]; then
+                    echo "Rendering assignments using quarto"
+                    cd assignments
+                    quarto install tinytex > /dev/null
+                    quarto render .
+                    cd ..
+                  fi
           - name: GitHub Pages action
             uses: peaceiris/actions-gh-pages@v3.6.1
             if: github.ref == 'refs/heads/master'
