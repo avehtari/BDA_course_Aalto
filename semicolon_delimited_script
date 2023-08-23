@@ -7,7 +7,7 @@ rmdfiles=$(git diff --name-only HEAD^ | grep '[.]*Rmd$')
 # qmdfiles=$(git diff --name-only HEAD^ | grep '[.]*qmd$')
 if [ -n "${rmdfiles}" ]; then while read -r filename; do   echo "$filename"; Rscript -e "rmarkdown::render('$filename')";   done <<< "$rmdfiles"; fi
 # if [ -n "${qmdfiles}" ]; then while read -r filename; do   echo "$filename"; quarto render $filename;   done <<< "$qmdfiles"; fi
-su rstudio
 cd assignments
-python3 render.py .
+quarto install tinytex
+quarto render .
 

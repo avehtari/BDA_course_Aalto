@@ -97,47 +97,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
 window.document.addEventListener("DOMContentLoaded", function () {
   let init = false;
 
-  // Manage the back to top button, if one is present.
-  let lastScrollTop = window.pageYOffset || document.documentElement.scrollTop;
-  const scrollDownBuffer = 5;
-  const scrollUpBuffer = 35;
-  const btn = document.getElementById("quarto-back-to-top");
-  const hideBackToTop = () => {
-    btn.style.display = "none";
-  };
-  const showBackToTop = () => {
-    btn.style.display = "inline-block";
-  };
-  if (btn) {
-    window.document.addEventListener(
-      "scroll",
-      function () {
-        const currentScrollTop =
-          window.pageYOffset || document.documentElement.scrollTop;
-
-        // Shows and hides the button 'intelligently' as the user scrolls
-        if (currentScrollTop - scrollDownBuffer > lastScrollTop) {
-          hideBackToTop();
-          lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop;
-        } else if (currentScrollTop < lastScrollTop - scrollUpBuffer) {
-          showBackToTop();
-          lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop;
-        }
-
-        // Show the button at the bottom, hides it at the top
-        if (currentScrollTop <= 0) {
-          hideBackToTop();
-        } else if (
-          window.innerHeight + currentScrollTop >=
-          document.body.offsetHeight
-        ) {
-          showBackToTop();
-        }
-      },
-      false
-    );
-  }
-
   function throttle(func, wait) {
     var timeout;
     return function () {
@@ -282,11 +241,7 @@ window.document.addEventListener("DOMContentLoaded", function () {
   window.addEventListener(
     "hashchange",
     function (e) {
-      if (
-        getComputedStyle(document.documentElement).scrollBehavior !== "smooth"
-      ) {
-        window.scrollTo(0, window.pageYOffset - headerOffset());
-      }
+      window.scrollTo(0, window.pageYOffset - headerOffset());
     },
     false
   );
@@ -672,10 +627,6 @@ window.document.addEventListener("DOMContentLoaded", function (_event) {
             }
           },
           getItems({ query }) {
-            if (query === null || query === "") {
-              return [];
-            }
-
             const limit = quartoSearchOptions.limit;
             if (quartoSearchOptions.algolia) {
               return algoliaSearch(query, limit, quartoSearchOptions.algolia);
@@ -1998,44 +1949,9 @@ window.document.addEventListener("DOMContentLoaded", function (_event) {
   for (const tabEl of tabEls) {
     const id = tabEl.getAttribute("data-bs-target");
     if (id) {
-      const columnEl = document.querySelector(
-        `${id} .column-margin, .tabset-margin-content`
-      );
+      const columnEl = document.querySelector(`${id} .column-margin`);
       if (columnEl)
-        tabEl.addEventListener("shown.bs.tab", function (event) {
-
-          const el = event.srcElement;
-          if (el) {
-            const visibleCls = `${el.id}-margin-content`;
-            // walk up until we find a parent tabset
-            let panelTabsetEl = el.parentElement;
-            while (panelTabsetEl) {
-              if (panelTabsetEl.classList.contains("panel-tabset")) {
-                break;
-              }
-              panelTabsetEl = panelTabsetEl.parentElement;
-            }
-
-            if (panelTabsetEl) {
-              const prevSib = panelTabsetEl.previousElementSibling;
-              if (
-                prevSib &&
-                prevSib.classList.contains("tabset-margin-container")
-              ) {
-                const childNodes = prevSib.querySelectorAll(
-                  ".tabset-margin-content"
-                );
-                for (const childEl of childNodes) {
-                  if (childEl.classList.contains(visibleCls)) {
-                    childEl.classList.remove("collapse");
-                  } else {
-                    childEl.classList.add("collapse");
-                  }
-                }
-              }
-            }
-          }
-
+        tabEl.addEventListener("shown.bs.tab", function (_event) {
           layoutMarginEls();
         });
     }
@@ -2232,9 +2148,6 @@ window.document.addEventListener("DOMContentLoaded", function (_event) {
   };
   let localReaderMode = null;
 
-  const tocOpenDepthStr = tocEl?.getAttribute("data-toc-expanded");
-  const tocOpenDepth = tocOpenDepthStr ? Number(tocOpenDepthStr) : 1;
-
   // Walk the TOC and collapse/expand nodes
   // Nodes are expanded if:
   // - they are top level
@@ -2260,13 +2173,7 @@ window.document.addEventListener("DOMContentLoaded", function (_event) {
 
     // Process the collapse state if this is an UL
     if (el.tagName === "UL") {
-      if (tocOpenDepth === -1 && depth > 1) {
-        el.classList.add("collapse");
-      } else if (
-        depth <= tocOpenDepth ||
-        hasActiveChild ||
-        prevSiblingIsActiveLink(el)
-      ) {
+      if (depth === 1 || hasActiveChild || prevSiblingIsActiveLink(el)) {
         el.classList.remove("collapse");
       } else {
         el.classList.add("collapse");
@@ -4582,81 +4489,6 @@ vertical-align: -.125em;
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./docker.html" class="sidebar-item-text sidebar-link">How to set up docker</a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./simple_template1.html" class="sidebar-item-text sidebar-link">Assignment 1</a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./simple_template2.html" class="sidebar-item-text sidebar-link">Assignment 2</a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./simple_template3.html" class="sidebar-item-text sidebar-link">Assignment 3</a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./simple_template4.html" class="sidebar-item-text sidebar-link">Assignment 4</a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./simple_template5.html" class="sidebar-item-text sidebar-link">Assignment 5</a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./simple_template6.html" class="sidebar-item-text sidebar-link">Assignment 6</a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./template1.html" class="sidebar-item-text sidebar-link">Assignment 1</a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./template2.html" class="sidebar-item-text sidebar-link">Assignment 2</a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./template3.html" class="sidebar-item-text sidebar-link">Assignment 3</a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./template4.html" class="sidebar-item-text sidebar-link">Assignment 4</a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./template5.html" class="sidebar-item-text sidebar-link">Assignment 5</a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./template6.html" class="sidebar-item-text sidebar-link">Assignment 6</a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./template7.html" class="sidebar-item-text sidebar-link">Assignment 7</a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./template8.html" class="sidebar-item-text sidebar-link">Assignment 8</a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./template9.html" class="sidebar-item-text sidebar-link">Assignment 9</a>
   </div>
 </li>
     </ul>
