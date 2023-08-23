@@ -273,9 +273,9 @@ plot(
 The below data is **only for the tests**:
 ``` {r}
 set.seed(4711)
-no_samples = 1000
-p0 = rbeta(no_samples, 5, 95)
-p1 = rbeta(no_samples, 10, 90)
+ndraws = 1000
+p0 = rbeta(ndraws, 5, 95)
+p1 = rbeta(ndraws, 10, 90)
 
 ```
 
@@ -319,16 +319,16 @@ posterior_odds_ratio_interval <- function(p0, p1, prob = 0.95) {
 
 The `posterior` package's random variable datatype `rvar` is a 
 ["sample-based representation of random variables"](https://mc-stan.org/posterior/articles/rvar.html#:~:text=sample%2Dbased%20representation%20of%20random%20variables)
-which makes handling of random samples such as the ones contained in the above variables `p0` and `p1` easier. 
-[By default, it prints as the mean and standard deviation of the samples](https://mc-stan.org/posterior/articles/rvar.html#:~:text=The%20default%20display%20of%20an%20rvar%20shows%20the%20mean%20and%20standard%20deviation%20of%20each%20element%20of%20the%20array.), **such that `rvar(p0)` prints as `r rvar(p0)` and `rvar(p1)` prints as `r rvar(p1)`**. 
+which makes handling of random sample (of draws) such as the ones contained in the above variables `p0` and `p1` easier. 
+[By default, it prints as the mean and standard deviation of the draws](https://mc-stan.org/posterior/articles/rvar.html#:~:text=The%20default%20display%20of%20an%20rvar%20shows%20the%20mean%20and%20standard%20deviation%20of%20each%20element%20of%20the%20array.), **such that `rvar(p0)` prints as `r rvar(p0)` and `rvar(p1)` prints as `r rvar(p1)`**. 
 
 The datatype is ["designed to [...] be able to be used inside `data.frame()`s and `tibble()`s, and to be used with distribution visualizations in the ggdist package."](https://mc-stan.org/posterior/articles/rvar.html#:~:text=designed%20to%20interoperate%20with%20vectorized%20distributions%20in%20the%20distributional%20package%2C%20to%20be%20able%20to%20be%20used%20inside%20data.frame()s%20and%20tibble()s%2C%20and%20to%20be%20used%20with%20distribution%20visualizations%20in%20the%20ggdist%20package.)
-The code below sets up an [R `data.frame()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/data.frame) with the samples in `p0` and `p1` wrapped in an `rvar`, and uses that data frame to visualize the samples using [`ggdist`](https://mjskay.github.io/ggdist/index.html), an R package building on [`ggplot2`](https://ggplot2.tidyverse.org/) and ["designed for both frequentist and Bayesian uncertainty visualization"](https://mjskay.github.io/ggdist/index.html#:~:text=designed%20for%20both%20frequentist%20and%20Bayesian%20uncertainty%20visualization). 
+The code below sets up an [R `data.frame()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/data.frame) with the draws in `p0` and `p1` wrapped in an `rvar`, and uses that data frame to visualize the draws using [`ggdist`](https://mjskay.github.io/ggdist/index.html), an R package building on [`ggplot2`](https://ggplot2.tidyverse.org/) and ["designed for both frequentist and Bayesian uncertainty visualization"](https://mjskay.github.io/ggdist/index.html#:~:text=designed%20for%20both%20frequentist%20and%20Bayesian%20uncertainty%20visualization). 
 
 The below plot, @fig-showcase-probabilities uses `ggdist`'s [`stat_dotsinterval()`](https://mjskay.github.io/ggdist/articles/dotsinterval.html), which by default visualizes  
 
 * [an `rvar`'s median and central 66% and 95% intervals](https://mjskay.github.io/ggdist/reference/stat_dotsinterval.html#:~:text=point_interval%20%3D%20%22median_qi%22%2C%0A%20%20.width%20%3D%20c(0.66%2C%200.95)%2C) using a black dot and lines of varying thicknesses as when using `ggdist`'s [`stat_pointinterval()`](https://mjskay.github.io/ggdist/reference/stat_pointinterval.html#examples) and
-* an `rvar`'s samples using grey dots as when using `ggdist`'s [`stat_dots()`](https://mjskay.github.io/ggdist/reference/stat_dots.html#examples):
+* an `rvar`'s draws using grey dots as when using `ggdist`'s [`stat_dots()`](https://mjskay.github.io/ggdist/reference/stat_dots.html#examples):
 
 ```{r}
 #| label: fig-showcase-probabilities
@@ -350,7 +350,7 @@ ggplot(data.frame(
 has no great interpretation, or 
 * the odds ratios needed in task 3.b).
 
-Below, in @fig-showcase-odds-ratios, we compute the odds ratios using the `rvar`s and visualize its median, central intervals and samples, as above in @fig-showcase-probabilities: 
+Below, in @fig-showcase-odds-ratios, we compute the odds ratios using the `rvar`s and visualize its median, central intervals and draws, as above in @fig-showcase-probabilities: 
 ```{r}
 #| label: fig-showcase-odds-ratios
 #| fig-cap: Odds ratios of the two patient groups.
@@ -359,7 +359,7 @@ ggplot(data.frame(
     rv=c(rodds_ratio)
 )) +
     aes(xdist=rv) + 
-    labs(x="odds ratio", y="relative amount of samples") + 
+    labs(x="odds ratio", y="relative amount of draws") + 
     stat_dotsinterval()
 ```
 

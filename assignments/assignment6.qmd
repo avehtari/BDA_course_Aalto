@@ -29,7 +29,8 @@ execute:
 
 **The maximum amount of points from this assignment is 6.**
 
-We have prepared a **[quarto template](template6.html)** to help you get started. 
+We have prepared a **[quarto template specific for this
+assignment](template6.html)** to help you get started.
 
 ::: {.gsu}
 We recommend you use the [docker container](docker.html).
@@ -39,11 +40,8 @@ We recommend you use the [docker container](docker.html).
 ::: {.hint}             
 **Reading instructions:** 
 
-Chapter 10 and 11 in BDA3, see [**the reading
-instructions for Chapter
-10**](https://avehtari.github.io/BDA_course_Aalto/chapter_notes/BDA_notes_ch10.pdf)
-and [**the reading instructions for Chapter
-11**](https://avehtari.github.io/BDA_course_Aalto/chapter_notes/BDA_notes_ch11.pdf).
+- [**The reading instructions for BDA3 Chapter 10**](../BDA3_notes.html#ch10).
+- [**The reading instructions for BDA3 Chapter 11**](../BDA3_notes.html#ch11).
 
 **Grading instructions:** 
 
@@ -56,7 +54,7 @@ in the collapsible **Rubric** blocks.
 See the [Stan
 demos](https://avehtari.github.io/BDA_course_Aalto/demos.html) on how to
 use Stan in R (or Python).
-[[jupyter.cs.aalto.fi](https://jupyter.cs.aalto.fi) has working R and
+[JupyterHub](https://jupyter.cs.aalto.fi) has working R and
 CmdStanR/RStan environment and is probably the easiest way to use Stan.
 The Aalto Ubuntu desktops also have the necessary libraries installed.]{.aalto}
 To install Stan on your laptop, run 'install.packages(\"cmdstanr\",
@@ -64,7 +62,7 @@ repos = c(\"https://mc-stan.org/r-packages/\", getOption(\"repos\")))'
 in R. If you encounter problems, see additional answers in
 [**FAQ**](https://avehtari.github.io/BDA_course_Aalto/FAQ.html). [If you
 don't succeed in short amount of time, it is probably easier to use
-[jupyter.cs.aalto.fi](https://jupyter.cs.aalto.fi).]{.aalto}
+[JupyterHub](https://jupyter.cs.aalto.fi).]{.aalto}
 
  In your laptop, install package `cmdstanr`. Installation
 instructions on Linux, Mac and Windows can be found at
@@ -88,11 +86,12 @@ writing a working Stan model.
 **For posterior statistics of interest, only
 report digits for which the Monte Carlo standard error (MCSE) is zero.**
 
-*Example:* If you estimate $E(\mu)=1.234$ with MCSE($E(\mu)$) = 0.01,
-you should report $E(\mu)=1.2$.
+*Example:* If you estimate $E(\mu) \approx 1.234$ with MCSE($E(\mu)$)
+= 0.01, then the true expectation is likely to be between $1.204$ and
+$1.264$, it makes sense to report $E(\mu) \approx 1.2$.  :::
 
-See lecture video 4.1, [the chapter
-notes](https://avehtari.github.io/BDA_course_Aalto/chapter_notes/BDA_notes_ch10.pdf),
+See Lecture video 4.1, [the chapter
+notes](../BDA3_notes.html#ch10),
 and [a case
 study](https://avehtari.github.io/casestudies/Digits/digits.html) for
 more information.
@@ -105,6 +104,8 @@ more information.
 ::: {.callout-tip collapse=true}
  
 ## Setup 
+
+JupyterHub has all the needed packages pre-installed.
 
 The following installs and loads the `aaltobda` package:
 ```{r}
@@ -171,10 +172,11 @@ if(!cmdstan_installed()){
 
 
 # Stan warm-up: linear model of BDA retention with Stan (2 points)
+
 From 2018 to 2022, we have been keeping track of assignment submissions for the BDA course given the number of submissions for the 1st assignment. We will fit a simple linear model to answer two questions of interest:
 
 - What is the trend of student retention as measured by assignment submissions?
-- Given the submission rates for assignments 1-8, how many students will complete the final 9th assignment (and potentially pass the course)?
+- Given the submission rates for assignments 1--8, how many students will complete the final 9th assignment (and potentially pass the course)?
 
 The author has given you the broken Stan code below, which they intend to encode the following linear model:
 $$
@@ -191,7 +193,7 @@ p(y_\mathrm{pred.}|x_\mathrm{pred.},\alpha,\beta,\sigma) = p_\mathrm{normal}(y_\
 $$
 as the predictive distribution for a new observation $y_\mathrm{pred.}$ at a given new covariate value $x_\mathrm{pred.}$.
 
-You can download the [broken stan file from github](https://raw.githubusercontent.com/avehtari/BDA_course_Aalto/gh-pages/assignments/additional_files/assignment6_linear_model.stan).
+You can download [the broken stan file from github](https://raw.githubusercontent.com/avehtari/BDA_course_Aalto/gh-pages/assignments/additional_files/assignment6_linear_model.stan).
 
 ```{.stan}
 data { #<1>
@@ -248,7 +250,7 @@ generated quantities { #<5>
 ::: {.hint}
 **Note**: 
 
-A linear model is actually **not** a good model to use for this type of data, but we will use it here to illustrate the first step in building up to more appropriate, complicated models.
+A normal linear model is actually **not** the best model to use for this type of data, but we will use it here to illustrate the first step in building up to more appropriate, complicated models.
 :::
 
 ::: {.subtask}
@@ -265,7 +267,7 @@ You may find some of the mistakes in the code using Stan syntax checker. If you 
 
 
 <!-- ### Interpret the results -->
-The author runs the corrected Stan file using the following R code and plots the returned MCMC samples. Read through the code below to understand what is being plotted.
+The author runs the corrected Stan file using the following R code and plots the returned MCMC sample. Read through the code below to understand what is being plotted.
 
 
 :::: {.content-hidden when-format="pdf"}
