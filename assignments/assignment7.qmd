@@ -2,45 +2,39 @@
 title: "Assignment 7"
 subtitle: "Hierarchical model in Stan"
 author: "Aki Vehtari et al."
-format:
+format: 
   html:
     toc: true
     code-tools: true
     code-line-numbers: true
     standalone: true
     self-contained: true
-    embed-resources: true
+    embed-resources: true  
     number-sections: true
     mainfont: Georgia, serif
-    #fontsize: 12pt
     page-layout: article
 reference-location: margin
-citation-location: margin
+citation-location: margin 
 comments:
   hypothesis: true
 editor: source
 filters:
-  - assignments.lua
-  - include-code-files.lua
-execute:
-  daemon: 999999
+  - assignments.lua 
+  - include-code-files.lua 
 ---
 
 # General information
 
 **The maximum amount of points from this assignment is 9.**
 
-We have prepared a **[quarto template specific for this
-assignment](template7.html)** to help you get started.
+We have prepared a **quarto template specific to this assignment ([html](template7.html), [qmd](template7.qmd), [pdf](template7.pdf))** to help you get started. 
 
-:::{.gsu}
-We recommend you use the [docker container](docker.html). 
-**Unfortunately, you will have to update the docker container, which however should be easy. 
-See the new instructions at the [end of the above link](docker.html#updating-docker).**
+
+:::{.aalto}
+We recommend you use [jupyter.cs.aalto.fi](https://jupyter.cs.aalto.fi) or the [docker container](docker.html).
 :::
 
-
-:::{.hint}
+:::{.hint}             
 **Reading instructions**:
 
 - [**The reading instructions for BDA3 Chapter 5**](../BDA3_notes.html#ch5).
@@ -58,8 +52,8 @@ See the new instructions at the [end of the above link](docker.html#updating-doc
 
 :::: {.content-hidden when-format="pdf"}
 ::: {.callout-tip collapse=true}
-
-## Setup
+ 
+## Setup 
 The following loads several needed packages:
 
 ```{r}
@@ -142,7 +136,7 @@ Adjust this range for a 12-day old chick and choose a mean $\mu_0$ for the weakl
 * Does the chosen prior mean meet the following common sense criteria?
   * The range is always above **...** and below **...**.
 * Is the justification based on some sort of logic, even if you may disagree?
-::::
+:::: 
 
 :::{.subtask}
 Choosing the standard deviation of a prior requires a little more caution; overconfident (i.e. narrow) priors can have a strong effect on your results,
@@ -196,7 +190,6 @@ Consult a trustworthy source on the weight range of farm chickens, e.g. books, a
 
 ::::{.subrubric}
 ### Weight range by reference
-
 * Does the reference range meet the following common sense criteria?
   * The range is always above **...** and below **...**.
 * Is there a citation? If an adjustment was made, was it justified by logic, even if you disagree?
@@ -213,7 +206,7 @@ Based on this reference range, what will you choose for the mean of our weakly i
   * The range is always above **...** and below **...**.
 ::::
 
-Next we choose the standard deviation of the prior. We could use the same technique as before, but we'll walk you through another common approach. Assume that $99.7\%$ of all 12-day old chicks fall into the reference range you found. Under our assumption of a Normal distribution, this range will encompass values between $\mu \pm 3\sigma$.
+Next we choose the standard deviation of the prior. We could use the same technique as before, but we'll walk you through another common approach. Assume that $99.7\%$ of all 12-day old chicks fall into the reference range you found. Under our assumption of a Normal distribution, this range will encompass values between $\mu \pm 3\sigma$. 
 
 :::{.subtask}
 Assuming symmetry, use the mean you chose and either the upper or lower bound $b$ of your reference range to solve the correct version of the following equations to find your associated choice of $\sigma$: (show your work)
@@ -226,7 +219,7 @@ Assuming symmetry, use the mean you chose and either the upper or lower bound $b
 ### Prior standard deviation by intuition
 
 * Does the calculated $\sigma$ value meet the following common sense criteria?
-  - The value is above **...** and below **...**.
+  * The value is above **...** and below **...**.
 * Did they show their work?
 ::::
 
@@ -243,7 +236,7 @@ Write down in mathematical form the final prior you found using this prior defin
 
 ## Non-normal priors
 
-The previous steps all assumed we could use a prior which is Normally distributed, but this may not always be the correct assumption to make.
+The previous steps all assumed we could use a prior which is Normally distributed, but this may not always be the correct assumption to make. 
 
 :::{.subtask}
 Under what mathematical/statistical circumstances would a Normal distributed prior not make sense? List at least one circumstance.  Are there values that the Normal distribution can take on which would not make sense for some types of variables?
@@ -260,7 +253,7 @@ Consider the nature of any variable you are trying to define a prior over.
 ::::
 
 ## Modeling diet effects on chicken weight
-
+    
 In addition to chick weights, the data also contains a categorical variable indicating which diet the chick received. In the data file, each column contains the measurements for a single chick at a given point of time.
 
 In addition to the existing diets, we are interested in the quality of another box of feed (the fifth diet), which a farmer happened to find yesterday at a dark corner of his warehouse. To read in the data, and to have a peek at the first 6 rows, just use:
@@ -303,6 +296,7 @@ $$
 
 
 
+
 :::{.subtask}
 Describe the models with mathematical notation (as is done for the separate model above). Also describe in words the difference between the model and the other models.
 :::
@@ -335,9 +329,6 @@ When sampling from the posterior of the hierarchical model, you will very likely
 
 
 
-
-
-
 ::::{.subrubric}
 ### All models
 
@@ -356,6 +347,8 @@ Use the provided code in the template to
 plot the **posterior distribution of the mean of the weight measurements of the fourth diet** and comment on the possible differences you observe
 between the models.
 :::
+
+
 
 ::::{.subrubric}
 * Is there a comparison plotted for the posteriors of the mean of diet 4? Does it look something like the model solution plot?
@@ -382,6 +375,8 @@ plot the **predictive distribution for another weight measurement from a chick h
 between the models.
 :::
 
+
+
 ::::{.subrubric}
 
 * Is there a comparison plotted for the predictive distributions of the weight of a chick with diet 4? Does it look something like the model solution plot?
@@ -407,6 +402,8 @@ Use the provided code in the template to
 plot the **posterior distribution of the mean of the weight measurements of a new fifth diet** and comment on the possible differences you observe
 between the models.
 :::
+
+
 
 ::::{.subrubric}
 * Is there a comparison plotted for the posterior distributions of the mean weight with a new diet? Does it look something like the model solution plot?
@@ -500,6 +497,7 @@ Replace `normal(0,1)` in the `brm` call in the template with the expressions you
 
 
 
+
 ::: {.subrubric}
 * Is the `brms` code shown and do the priors agree with the priors specified above?
 :::
@@ -507,6 +505,7 @@ Replace `normal(0,1)` in the `brm` call in the template with the expressions you
 :::{.subtask}
 Report the **posterior expectation for the mean weight of diet 4 $\mu_4$ with a 90% credible interval**, using the code block in the template. How does it compare with your results from the first task?
 :::
+
 
 
 ::: {.subrubric}
@@ -519,6 +518,7 @@ Report the **posterior expectation for the mean weight of diet 4 $\mu_4$ with a 
 :::{.subtask}
 Use the code in the template to make a **scatter plot of the group standard deviation parameter $\tau$ and group specific mean parameter**. 
 :::
+
 
 
 ::: {.subrubric}

@@ -2,27 +2,25 @@
 title: "Assignment 7"
 subtitle: "Hierarchical model in Stan"
 author: anonymous # <-- hand in anonymously
-format:
+format: 
   html:
     toc: true
     code-tools: true
     code-line-numbers: true
     standalone: true
     self-contained: true
-    embed-resources: true
+    embed-resources: true  
     number-sections: true
     mainfont: Georgia, serif
-    # linkcolor: "#212529"
-    fontsize: 1.2em
     page-layout: article
-  pdf:
-    # documentclass: article
+  pdf:  
+    # documentclass: article 
     geometry:
     - left=1cm,top=1cm,bottom=1cm,right=7cm
     number-sections: true
     code-annotations: none
 reference-location: margin
-citation-location: margin
+citation-location: margin 
 comments:
   hypothesis: true
 editor: source
@@ -31,7 +29,7 @@ editor: source
 
 # General information
 
-This is the template for [assignment 7](assignment7.html). You can download the [separate model with bad priors](https://raw.githubusercontent.com/avehtari/BDA_course_Aalto/gh-pages/assignments/additional_files/assignment7/chickens_separate.stan) and the [qmd-file](https://raw.githubusercontent.com/avehtari/BDA_course_Aalto/gh-pages/assignments/template7.qmd) or copy the code from this rendered document after clicking on `</> Code` in the top right corner.
+This is the template for [assignment 7](assignment7.html). You can download the [separate model with bad priors](./additional_files/assignment7/chickens_separate.stan) and the [qmd-file](./template7.qmd) or copy the code from this rendered document after clicking on `</> Code` in the top right corner.
 
 **Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.** 
 
@@ -39,8 +37,8 @@ This is the template for [assignment 7](assignment7.html). You can download the 
 
 :::: {.content-hidden when-format="pdf"}
 ::: {.callout-warning collapse=false}
-
-## Setup
+ 
+## Setup 
 
 
 *This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*
@@ -82,26 +80,36 @@ register_knitr_engine(override = FALSE)
 
 
 ## Choosing a weakly informative prior by intuition
+
 ### (a)
+
 
 ### (b)
 
+
 ### (c)
 
+
 ### (d)
+
 
 ### (e)
 
 ## Choosing a weakly informative prior using external references
+
 ### (f)
+
 
 ### (g)
 
+
 ### (h)
+
 
 ### (i)
 
 ## Non-normal priors
+
 ### (j)
 
 ## Modeling diet effects on chicken weight
@@ -161,11 +169,14 @@ Quick model convergence check (as in assignment 6):
 fit_separate$cmdstan_diagnose()
 ```
 
+
 :::
 ::::
 
 
+
 ### (k)
+
 
 ### (l)
 
@@ -187,7 +198,7 @@ include draws from your model posterior into the figures.**
     
 
 
-
+    
 ```{r}
 #| label: draws for pooled and hierarchical
 #| code-summary: Sampling from the posteriors given the pooled and hierarhical models
@@ -250,6 +261,7 @@ diet_means <- sapply(
 ::::
 
 
+
 ### (m)
 
 
@@ -271,8 +283,8 @@ ggplot(posterior_mean_diet_4, aes(x = mean_diet_4, y = model_name)) +
 ```
 
 
-### (n)
 
+### (n)
 
 
 ```{r}
@@ -291,6 +303,7 @@ ggplot(predicted_weight_diet_4, aes(x = predicted_weight, y = model_name)) +
     y = "Model"
   )
 ```
+
 
 
 ### (o)
@@ -316,9 +329,11 @@ ggplot(posterior_mean_diet_5, aes(x = mean_diet_5, y = model_name)) +
 ```
 
 
+
 ### (p)
 
 # Hierarchical model with BRMS (3p)
+
 ### (a)
 
 
@@ -331,6 +346,7 @@ bayesplot::mcmc_scatter(x = fit_hierarchical$draws(variables = c("mean_diet[4]",
   labs(x = expression(mean_diet[4]), y = expression(sd_diets)) +
   ylim(c(0,NA))
 ```
+
 
 
 ### (b)
@@ -347,7 +363,7 @@ bayesplot::mcmc_scatter(x = fit_hierarchical$draws(variables = c("mean_diet[4]",
     
 
 
-
+    
 ```{r}
 #| label: fit brms model
 brms_fit = brm(
@@ -371,11 +387,12 @@ brms_fit = brm(
 
 
 
-Because `brms` is a bit chatty, suppress its output in the PDF using the block above, but copy the code you executed into the code block below, which doesn't execute:
+Because `brms` is a bit chatty, suppress its output in the PDF using the block above, but copy the code you executed into the code block below, which doesn't execute
 ```{r}
 #| eval: false
 # Copy the code you used to create the brms model and run the sampling
 ```
+
 
 
 ### (c)
@@ -388,14 +405,12 @@ mu_4 = posterior_epred(brms_fit, newdata = data.frame(Diet=4))
 
 # Compute the mean, and quantiles. Remember to round your answers accordingly.
 # ...
-
 ```
+
 
 
 ### (d)
 
-
-### Scatterplot for non-centered parametrization
 
 Due the non-centered parametrization, we need to transform compute the $\mu_d$ term as the sum of the population intercept and the group specific deviation from the intercept. You can choose which diet to plot by modifying the `d` integer in `r_Diet[d,Intercept]`.
 ```{r}
@@ -412,6 +427,7 @@ bayesplot::mcmc_scatter(draws,
   ylab(expression(sd_diets))
 
 ```
+
 
 
 ### (e)

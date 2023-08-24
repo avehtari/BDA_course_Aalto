@@ -11,7 +11,6 @@ format:
     embed-resources: true  
     number-sections: true
     mainfont: Georgia, serif
-    #fontsize: 12pt
     page-layout: article
 reference-location: margin
 citation-location: margin 
@@ -21,21 +20,18 @@ editor: source
 filters:
   - assignments.lua 
   - include-code-files.lua 
-execute:
-  daemon: 999999 
 ---
 
 # General information
 
 **The maximum amount of points from this assignment is 6.**
 
-We have prepared a **[quarto template specific for this
-assignment](template6.html)** to help you get started.
+We have prepared a **quarto template specific to this assignment ([html](template6.html), [qmd](template6.qmd), [pdf](template6.pdf))** to help you get started. 
 
-::: {.gsu}
-We recommend you use the [docker container](docker.html).
+
+::: {.aalto}
+We recommend you use [jupyter.cs.aalto.fi](https://jupyter.cs.aalto.fi) or the [docker container](docker.html).
 :::
-
 
 ::: {.hint}             
 **Reading instructions:** 
@@ -43,59 +39,12 @@ We recommend you use the [docker container](docker.html).
 - [**The reading instructions for BDA3 Chapter 10**](../BDA3_notes.html#ch10).
 - [**The reading instructions for BDA3 Chapter 11**](../BDA3_notes.html#ch11).
 
-**Grading instructions:** 
+{{< include grading_instructions.md >}}
 
-The grading will be done in peergrade. 
-All grading questions and evaluations for this assignment are contained within this document
-in the collapsible **Rubric** blocks. 
-
-**Installing and using `CmdStanR`:** 
-
-See the [Stan
-demos](https://avehtari.github.io/BDA_course_Aalto/demos.html) on how to
-use Stan in R (or Python).
-[JupyterHub](https://jupyter.cs.aalto.fi) has working R and
-CmdStanR/RStan environment and is probably the easiest way to use Stan.
-The Aalto Ubuntu desktops also have the necessary libraries installed.]{.aalto}
-To install Stan on your laptop, run 'install.packages(\"cmdstanr\",
-repos = c(\"https://mc-stan.org/r-packages/\", getOption(\"repos\")))'
-in R. If you encounter problems, see additional answers in
-[**FAQ**](https://avehtari.github.io/BDA_course_Aalto/FAQ.html). [If you
-don't succeed in short amount of time, it is probably easier to use
-[JupyterHub](https://jupyter.cs.aalto.fi).]{.aalto}
-
- In your laptop, install package `cmdstanr`. Installation
-instructions on Linux, Mac and Windows can be found at
-<https://mc-stan.org/cmdstanr/>. Additional useful packages are `loo`,
-`bayesplot` and `posterior` (but you don't need these in this
-assignment). For Python users, `PyStan`, `CmdStanPy`, and `ArviZ`
-packages are useful.
-
-Stan manual can be found at <https://mc-stan.org/users/documentation/>.
-From this website, you can also find a lot of other useful material
-about Stan.
-
-If you edit files ending `.stan` in RStudio, you can click "Check" in
-the editor toolbar to make syntax check. This can significantly speed-up
-writing a working Stan model.
+{{< include cmdstanr.md >}}
 :::
 
-::: {.callout-important}
-# Reporting accuracy
-
-**For posterior statistics of interest, only
-report digits for which the Monte Carlo standard error (MCSE) is zero.**
-
-*Example:* If you estimate $E(\mu) \approx 1.234$ with MCSE($E(\mu)$)
-= 0.01, then the true expectation is likely to be between $1.204$ and
-$1.264$, it makes sense to report $E(\mu) \approx 1.2$.  :::
-
-See Lecture video 4.1, [the chapter
-notes](../BDA3_notes.html#ch10),
-and [a case
-study](https://avehtari.github.io/casestudies/Digits/digits.html) for
-more information.
-:::
+{{< include reporting_accuracy.md >}}
 
 {{< include general_info.md >}}
 
@@ -193,7 +142,7 @@ p(y_\mathrm{pred.}|x_\mathrm{pred.},\alpha,\beta,\sigma) = p_\mathrm{normal}(y_\
 $$
 as the predictive distribution for a new observation $y_\mathrm{pred.}$ at a given new covariate value $x_\mathrm{pred.}$.
 
-You can download [the broken stan file from github](https://raw.githubusercontent.com/avehtari/BDA_course_Aalto/gh-pages/assignments/additional_files/assignment6_linear_model.stan).
+You can download [the broken stan file from github](./additional_files/assignment6_linear_model.stan).
 
 ```{.stan}
 data { #<1>
@@ -315,7 +264,7 @@ retention_model = cmdstan_model("./additional_files/assignment6_linear_model.sta
 # This "out <- capture.output(...)" construction suppresses output from cmdstanr
 # See also https://github.com/stan-dev/cmdstanr/issues/646
 out <- capture.output(
-    # Sampling from the posterior	 happens here:
+    # Sampling from the posterior distribution happens here:
     fit <- retention_model$sample(data=model_data, refresh=0, show_messages=FALSE)
 )
 ```
@@ -382,9 +331,9 @@ ggplot() +
 :::: {.content-hidden when-format="pdf"}
 ::: {.callout-tip collapse=true}
 
-## Quick check for model convergence
+## Quick check for sampling convergence
 
-If your model is correctly implemented, sampling should have been succesful.
+If your model is correctly implemented, sampling from the posterior distribution should have been successful.
 You can check whether Stan thinks that sampling succeeded by inspecting the output of the below command,
 which you should be able to interpret with a little help from the [CmdStan User's Guide](https://mc-stan.org/docs/cmdstan-guide/diagnose.html).
 ```{r}
@@ -497,13 +446,14 @@ To develop the course and provide feedback to Stan developers, we
 collect information on which Stan setup you used and whether you had
 any problems in setting it up or using it. Please report,
 
--   Operating system (Linux, Mac, Windows) ?
+-   Operating system (Linux, Mac, Windows) [or jupyter.cs.aalto.fi]{.aalto}?
 
 -   Programming environment used: R or Python?
 
 -   Interface used: RStan, CmdStanR, PyStan, or CmdStanPy?
 
--   Did you have installation or compilation problems? 
+-   Did you have installation or compilation problems? [Did you try first installing locally, but switched to
+    jupyter.cs.aalto.fi?]{.aalto}
 
 -   In addition of these you can write what other things you found
     out difficult (or even frustrating) when making this assignment
