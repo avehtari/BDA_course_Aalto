@@ -11,8 +11,6 @@ format:
     embed-resources: true  
     number-sections: true
     mainfont: Georgia, serif
-    linkcolor: "#212529"
-    fontsize: 1.2em
     page-layout: article
   pdf:  
     # documentclass: article 
@@ -29,24 +27,8 @@ editor: source
 
 
 # General information
-::: {.callout-important}
-# Reporting accuracy
 
-**For posterior statistics of interest, only
-report digits for which the Monte Carlo standard error (MCSE) is zero.**
-
-*Example:* If you estimate $E(\mu)=1.234$ with MCSE($E(\mu)$) = 0.01,
-you should report $E(\mu)=1.2$.
-
-See lecture video 4.1, [the chapter
-notes](https://avehtari.github.io/BDA_course_Aalto/chapter_notes/BDA_notes_ch10.pdf),
-and [a case
-study](https://avehtari.github.io/casestudies/Digits/digits.html) for
-more information.
-:::
-
-
-This is the template for [assignment 6](assignment6.html). You can download the [broken stan-file](https://raw.githubusercontent.com/avehtari/BDA_course_Aalto/gh-pages/assignments/additional_files/assignment6_linear_model.stan) and the [qmd-file](https://raw.githubusercontent.com/avehtari/BDA_course_Aalto/gh-pages/assignments/template6.qmd) or copy the code from this rendered document after clicking on `</> Code` in the top right corner.
+This is the template for [assignment 6](assignment6.html). You can download the [broken stan-file](./additional_files/assignment6_linear_model.stan) and the [qmd-file](./template6.qmd) or copy the code from this rendered document after clicking on `</> Code` in the top right corner.
 
 **Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.** 
 
@@ -63,6 +45,8 @@ This is the template for [assignment 6](assignment6.html). You can download the 
     
 
 
+
+JupyterHub has all the needed packages pre-installed.
 
 The following installs and loads the `aaltobda` package:
 ```{r}
@@ -129,7 +113,8 @@ if(!cmdstan_installed()){
 
 
 # Stan warm-up: linear model of BDA retention with Stan (2 points)
-## (b)
+
+### (b)
 
 
 **Write your answers/code here!**
@@ -139,7 +124,7 @@ if(!cmdstan_installed()){
 :::: {.content-hidden when-format="pdf"}
 ::: {.callout-warning collapse=false}
 
-## Model fitting
+## Data preparation and sampling from the posterior
 
 
 *This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*
@@ -179,12 +164,12 @@ model_data = list(N=length(assignment),
                  no_predictions=no_assignments,
                  x_predictions=x_predictions)
 ```
-**Model fitting happens here**:
+**Sampling from the posterior distribution happens here**:
 ```{r}
 #| warning: false 
 # This reads the file at the specified path and tries to compile it. 
 # If it fails, an error is thrown.
-retention_model = cmdstan_model("./assignment6_linear_model.stan")
+retention_model = cmdstan_model("./additional_files/assignment6_linear_model.stan")
 # This "out <- capture.output(...)" construction suppresses output from cmdstanr
 # See also https://github.com/stan-dev/cmdstanr/issues/646
 out <- capture.output(
@@ -257,7 +242,7 @@ ggplot() +
 :::: {.content-hidden when-format="pdf"}
 ::: {.callout-warning collapse=false}
 
-## Quick check for model convergence
+## Quick check for sampling convergence
 
 
 *This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*
@@ -266,7 +251,7 @@ ggplot() +
 
 
 
-If your model is correctly implemented, sampling from the posterior should have been successful.
+If your model is correctly implemented, sampling from the posterior distribution should have been successful.
 You can check whether Stan thinks that sampling succeeded by inspecting the output of the below command,
 which you should be able to interpret with a little help from the [CmdStan User's Guide](https://mc-stan.org/docs/cmdstan-guide/diagnose.html).
 ```{r}
@@ -277,14 +262,16 @@ fit$cmdstan_diagnose()
 ::::
 
 
-## (c)
+
+### (c)
 
 
 **Write your answers/code here!**
 
 
 # Generalized linear model: Bioassay with Stan (4 points) 
-## (d)
+
+### (d)
 
 
 **Write your answers/code here!**
@@ -293,19 +280,22 @@ data("bioassay")
 ```
 
 
-## (e)
+
+### (e)
 
 
 **Write your answers/code here!**
 
 
-## (f)
+
+### (f)
 
 
 **Write your answers/code here!**
 
 
-## (g)
+
+### (g)
 
 
 **Write your answers/code here!**
