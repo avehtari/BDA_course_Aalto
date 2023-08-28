@@ -3,40 +3,6 @@ title: "Bayesian Data Analysis course - FAQ"
 date: "Page updated: `r format.Date(file.mtime('FAQ.Rmd'),'%Y-%m-%d')`"
 ---
 
-## How to access the course material in Github
-
-Instead of trying to download each file separately via the Github interface, it is recommended to use one of these options:
-
- - The best way is to clone the repository using git, and use pull to get the latest updates.
-   - If you want to learn to use git, start by installing a [git client](https://www.google.com/search?q=git+clients&oq=git+client). There are plenty of good git tutorials online.
- - If you don't want to learn to use git, download a the repository as a zip file. Click the green button "Code" at the main page of the repository and choose "Download ZIP" ([direct link](https://github.com/avehtari/BDA_course_Aalto/archive/master.zip)). Remember to download again during the course to get the latest updates.
-
-## R packages used in demos
-
-Aalto JupyterHub has all the R packages used in demos pre-installed. If you install R on your own computer, you can install all the packages used by the main demos with
-```
-install.packages(c(("MASS", "bayesplot", "brms", "cmdstanr ", "dplyr", "gganimate", "ggdist", "ggforce", "ggplot2", "grid", "gridExtra", "latex2exp", "loo", "plyr", "posterior", "purrr", "rprojroot", "tidyr")))
-```
-
-## Installing `aaltobda` package
-
-The course has its own R package aaltobda with data and functionality
-to simplify coding. To install the package just run the following
-(upgrade=”never” skips question about updating other packages):
-
-1. `install.packages("remotes")`
-2. `remotes::install_github("avehtari/BDA_course_Aalto", subdir = "rpackage", upgrade="never")`
-
-If during the course there is announcement that `aaltobda` has been
-updated (e.g. some error has been fixed), you can get the latest
-version by repeating the second step above.
-
-## Problems installing R packages on Windows ?
-
-Getting the setup needed for the course working on Windows might involve a bit more effort than on Linux and Mac. Consequently, **we recommend using either Linux or MacOS, or using R remotely**.
-Moreover, `Stan`, the probabilistic programming language which we will use later on during the course requires a C++ compiler toolchain which is not available by default in Windows (blame Microsoft).
-However, if you want to use Windows and have a problem getting the setup working, below are two options to consider:
-
 ## How to use R and RStudio remotely
 
 ### Option 1: Using R and RStudio via JupyterHub {#jupyterhub}
@@ -69,65 +35,6 @@ Instead of installing RStudio on your computer, you can use it in your web brows
 * Enter your aalto username (aalto email works too) and password in the respective fields.
 * Select `Ubuntu 20.04`
 * Click Activities, start typing `RStudio` in the search bar, and click `RStudio`.
-
-## Error related to LC_CTYPE while installing `aaltobda` r-package.
-
-When installing the `aaltobda` package, you may encounter an error like this:
-
-
-```{r eval=FALSE}
-Error: (converted from warning) Setting LC_CTYPE failed, using "C"
-Execution halted
-Error: Failed to install 'aaltobda' from GitHub:
- (converted from warning) installation of package '/var/folders/g6/bdv4dr4s6qq4zyxw2nzy26kr0000gn/T//Rtmp3uYwuD/file121f355845a3/aaltobda_0.1.tar.gz' had non-zero exit status
-```
-
-**Solution:**
-See the following StackOverflow solution. ([link](https://stackoverflow.com/a/3909546))
-
-## Installing `knitr`
-
-If you just installed RStudio and R, chances are you don't have `knitr` installed, the package responsible for rendering your notebook to pdf.
-
-**Solution:**
-```{r eval=FALSE}
-install.packages("knitr")
-```
-You can also install packages from RStudio menu `Tools->Install Packages`.
-
-## If `knitr` is installed but the pdf won't compile
-
-In this case it is possible that you don't have LaTeX installed, which is the package that runs the engine to process the text and render the pdf itself.
-
-**Solution:**
-Tinytex is the bare minimum Latex core that you need to install in order to run the pdf compiler. If you want to go further and download a full distribution of Latex, look at TeX Live for Linux and MacTeX for Mac OS.
-
-```{r eval=FALSE}
-install.packages("tinytex")
-tinytex::install_tinytex()
-```
-
-## How to install the latest version of `CmdStanR` or `RStan`
-
-* Make sure you have installed R version 4.* or newer. If you don't, install a newer version using instructions from [https://www.r-project.org/](https://www.r-project.org/)
-* At the moment `CmdStanR` is faster in use, and thus we recommend using `CmdStanR` instead of `RStan`, but both can be used for the assignments.
-* [`CmdStanR`](https://mc-stan.org/cmdstanr/) is a lightweight interface to Stan for R users (see `CmdStanPy` for Python).
-* `CmdStanR` avoids some installation problems as it doesn't require matching C++ tools for `R` and `RStan`
-* Install `RStan` along with the necessary C++ compiler toolchain as described [here](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started)
-
-Instead of RStan, you can also use new `CmdStanR` which maybe easier to install.
-
-## Workarounds for current Rstan Windows issues
-
-* [A list of the current RStan Windows problems and and known temporary workarounds](https://discourse.mc-stan.org/t/workarounds-for-current-rstan-windows-issues/17389)
-
-## What is `tidyr` or `tidyverse` that is used in the R demos? What does `%>%` mean?
-
-* [Tidyverse](https://www.tidyverse.org/) is a collection of R packages designed for data science. The packages "share an underlying design philosophy, grammar, and data structures".
-* A clear characteristic that distinguishes tidyverse from the base R is the [pipe operator](https://style.tidyverse.org/pipes.html) `%>%`
-* Recent R versions have a new built-in pipe operator `|>`, which in most cases can replace `%>%`, and there are some differences only in more advanced use cases.
-* In this course you do not need to use tidyverse. However, some packages belonging to tidyverse, such as `ggplot2`, can be useful for visualizing results in the reports.
-
 
 ## How to access the BDA R (and Python) demos on CS JupyterHub
 * Go to `jupyter.cs.aalto.fi` on your favorite web-browser. ![](https://zenodo.org/record/4010716/files/1.png)
@@ -168,21 +75,99 @@ This should open the file in the window.
 * You should see the output of the code in the bottom right corner.
 ![](https://zenodo.org/record/4010716/files/13.png)
 
+## How to use R and RStudio on your own computer
 
-## I missed some deadline or wasn't able to do some part of the course
+### How to access the course material in Github
 
-- I missed the deadline to register for the course in Sisu. Can I join the course?
-    - Yes, just register in MyCourses.
-- I missed the deadline for the assignment. Can you accept my late submission?
-    - If you miss the deadline during the few first rounds due technical problems, but you send the pdf to one of the TAs few minutes after the deadline it can accepted once. As the recommended submission time is before 4pm on Friday, you have in general 56 hours extra hours for submission and several few minute late submissions is not likely just due to the technical problems.
-- I was not able to do one of the assignments because [some personal problem]. Can I do some extra work?
-    - Things happen and you don't need to tell the course staff your personal reasons (especially you shouldn't tell any health issue details). Everyone gets a second change in period III. In period III there is just one submission deadline, but otherwise the procedure is the same (ie. you need to return all the assignments). If you submitted the project work in autumn you don't need to re-submit it if you re-submit assignments.
-- I missed the deadline to register project group. Can I still register?
-    - Yes. Those who registered early are allowed to choose the presentation slots first.
-- My group member a) disappeared, b) doesn't do anything, c) is annoying. Can I continue with the project alone.
-    - First we hope you can resolve the issue, but if nothing works, then you can continue the project work alone.
-- I was not able a) to do the project or b) to give a presentation because [some personal problem]. Can a) I submit it later, b) present later.
-    - Things happen and you don't need to tell the course staff your personal reasons (especially you shouldn't tell any health issue details). Everyone gets a second change in period III. In period III there is second project submission deadline and presentation slots. If you are happy with your assignment score, you don't need to re-submit assignments if you submit the project work in period III.
+Instead of trying to download each file separately via the Github interface, it is recommended to use one of these options:
+
+ - The best way is to clone the repository using git, and use pull to get the latest updates.
+   - If you want to learn to use git, start by installing a [git client](https://www.google.com/search?q=git+clients&oq=git+client). There are plenty of good git tutorials online.
+ - If you don't want to learn to use git, download a the repository as a zip file. Click the green button "Code" at the main page of the repository and choose "Download ZIP" ([direct link](https://github.com/avehtari/BDA_course_Aalto/archive/master.zip)). Remember to download again during the course to get the latest updates.
+
+### R packages used in demos
+
+Aalto JupyterHub has all the R packages used in demos pre-installed. If you install R on your own computer, you can install all the packages used by the main demos with
+```
+install.packages(c(("MASS", "bayesplot", "brms", "cmdstanr ", "dplyr", "gganimate", "ggdist", "ggforce", "ggplot2", "grid", "gridExtra", "latex2exp", "loo", "plyr", "posterior", "purrr", "rprojroot", "tidyr")))
+```
+
+### Installing `aaltobda` package
+
+The course has its own R package `aaltobda` with data and
+functionality to simplify coding. `aaltobda` has been pre-installed in
+Aalto JupyterHub. To install the package to your own computer just run the following
+(upgrade=”never” skips question about updating other packages):
+
+1. `install.packages("remotes")`
+2. `remotes::install_github("avehtari/BDA_course_Aalto", subdir = "rpackage", upgrade="never")`
+
+If during the course there is announcement that `aaltobda` has been
+updated (e.g. some error has been fixed), you can get the latest
+version by repeating the second step above.
+
+### Error related to LC_CTYPE while installing `aaltobda` r-package.
+
+When installing the `aaltobda` package, you may encounter an error like this:
+
+
+```{r eval=FALSE}
+Error: (converted from warning) Setting LC_CTYPE failed, using "C"
+Execution halted
+Error: Failed to install 'aaltobda' from GitHub:
+ (converted from warning) installation of package '/var/folders/g6/bdv4dr4s6qq4zyxw2nzy26kr0000gn/T//Rtmp3uYwuD/file121f355845a3/aaltobda_0.1.tar.gz' had non-zero exit status
+```
+
+**Solution:**
+See the following StackOverflow solution. ([link](https://stackoverflow.com/a/3909546))
+
+### Problems installing R packages on Windows ?
+
+Getting the setup needed for the course working on Windows might involve a bit more effort than on Linux and Mac. Consequently, **we recommend using either Linux or MacOS, or using R remotely**.
+Moreover, `Stan`, the probabilistic programming language which we will use later on during the course requires a C++ compiler toolchain which is not available by default in Windows (blame Microsoft).
+However, if you want to use Windows and have a problem getting the setup working, below are two options to consider:
+
+### Installing `knitr`
+
+If you just installed RStudio and R, chances are you don't have `knitr` installed, the package responsible for rendering your notebook to pdf.
+
+**Solution:**
+```{r eval=FALSE}
+install.packages("knitr")
+```
+You can also install packages from RStudio menu `Tools->Install Packages`.
+
+### If `knitr` is installed but the pdf won't compile
+
+In this case it is possible that you don't have LaTeX installed, which is the package that runs the engine to process the text and render the pdf itself.
+
+**Solution:**
+Tinytex is the bare minimum Latex core that you need to install in order to run the pdf compiler. If you want to go further and download a full distribution of Latex, look at TeX Live for Linux and MacTeX for Mac OS.
+
+```{r eval=FALSE}
+install.packages("tinytex")
+tinytex::install_tinytex()
+```
+### How to install the latest version of `CmdStanR` or `RStan`
+
+* Make sure you have installed R version 4.* or newer. If you don't, install a newer version using instructions from [https://www.r-project.org/](https://www.r-project.org/)
+* At the moment `CmdStanR` is faster in use, and thus we recommend using `CmdStanR` instead of `RStan`, but both can be used for the assignments.
+* [`CmdStanR`](https://mc-stan.org/cmdstanr/) is a lightweight interface to Stan for R users (see `CmdStanPy` for Python).
+* `CmdStanR` avoids some installation problems as it doesn't require matching C++ tools for `R` and `RStan`
+* Install `RStan` along with the necessary C++ compiler toolchain as described [here](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started)
+
+Instead of RStan, you can also use new `CmdStanR` which maybe easier to install.
+
+### Workarounds for current Rstan Windows issues
+
+* [A list of the current RStan Windows problems and and known temporary workarounds](https://discourse.mc-stan.org/t/workarounds-for-current-rstan-windows-issues/17389)
+
+## What is `tidyr` or `tidyverse` that is used in the R demos? What does `%>%` mean?
+
+* [Tidyverse](https://www.tidyverse.org/) is a collection of R packages designed for data science. The packages "share an underlying design philosophy, grammar, and data structures".
+* A clear characteristic that distinguishes tidyverse from the base R is the [pipe operator](https://style.tidyverse.org/pipes.html) `%>%`
+* Recent R versions have a new built-in pipe operator `|>`, which in most cases can replace `%>%`, and there are some differences only in more advanced use cases.
+* In this course you do not need to use tidyverse. However, some packages belonging to tidyverse, such as `ggplot2`, can be useful for visualizing results in the reports.
 
 ## M1 Macs with Python and Stan
 
@@ -212,3 +197,30 @@ python3 -m pip install dist/*.whl
 ```
 python3 -m pip install pystan
 ```
+
+## I missed some deadline or wasn't able to do some part of the course
+
+- I missed the deadline to register for the course in Sisu. Can I join the course?
+    - Yes, just register in MyCourses.
+- I missed the deadline for the assignment. Can you accept my late submission?
+    - If you miss the deadline during the few first rounds due technical problems, but you send the pdf to one of the TAs few minutes after the deadline it can accepted once. As the recommended submission time is before 4pm on Friday, you have in general 56 hours extra hours for submission and several few minute late submissions is not likely just due to the technical problems.
+- I was not able to do one of the assignments because [some personal problem]. Can I do some extra work?
+    - Things happen and you don't need to tell the course staff your personal reasons (especially you shouldn't tell any health issue details). Everyone gets a second change in period III. In period III there is just one submission deadline, but otherwise the procedure is the same (ie. you need to return all the assignments). If you submitted the project work in autumn you don't need to re-submit it if you re-submit assignments.
+- I missed the deadline to register project group. Can I still register?
+    - Yes. Those who registered early are allowed to choose the presentation slots first.
+- My group member a) disappeared, b) doesn't do anything, c) is annoying. Can I continue with the project alone.
+    - First we hope you can resolve the issue, but if nothing works, then you can continue the project work alone.
+- I was not able a) to do the project or b) to give a presentation because [some personal problem]. Can a) I submit it later, b) present later.
+    - Things happen and you don't need to tell the course staff your personal reasons (especially you shouldn't tell any health issue details). Everyone gets a second change in period III. In period III there is second project submission deadline and presentation slots. If you are happy with your assignment score, you don't need to re-submit assignments if you submit the project work in period III.
+
+## Recommended courses after Bayesian Data Analysis
+
+Here are some great Aalto courses that are using Bayesian inference
+
+- [CS-E4820 - Machine Learning: Advanced Probabilistic Methods](https://mycourses.aalto.fi/course/info.php?id=40717) (common probabilistic models in machine learning, such as sparse Bayesian linear models, Gaussian mixture models and factor analysis models, variational inference)
+- [ELEC-E8106 - Bayesian Filtering and Smoothing](https://mycourses.aalto.fi/course/info.php?id=39443) (dynamical systems, time series, tracking)
+- [CS-E4895 - Gaussian Processes](https://mycourses.aalto.fi/course/info.php?id=40732)
+- [CS-E5795 - Computational Methods in Stochastics](https://mycourses.aalto.fi/course/info.php?id=40704) (more about MC, MCMC, HMC)
+- [MS-E1654 - Computational Inverse Problems](https://mycourses.aalto.fi/course/info.php?id=40592)
+- Bayesian workflow course (spring 2024, we'll advertise later in BDA Zulip)
+- Self study or reading circle: O'Hagan & Forster, Bayesian Inference (any time, contact Aki Vehtari)
