@@ -7,7 +7,7 @@ report digits that are not completely random based on the Monte Carlo standard e
 
 *Example:* If you estimate $E(\mu) \approx 1.234$ with MCSE($E(\mu)$)
 = 0.01, then the true expectation is likely to be between $1.204$ and
-$1.264$, it makes sense to report $E(\mu) \approx 1.2$.  :::
+$1.264$, it makes sense to report $E(\mu) \approx 1.2$.
 
 See Lecture video 4.1, [the chapter
 notes](../BDA3_notes.html#ch10),
