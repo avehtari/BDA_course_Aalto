@@ -9,6 +9,7 @@ if [ -n "${rmdfiles}" ]; then while read -r filename; do   echo "$filename"; Rsc
 # if [ -n "${qmdfiles}" ]; then while read -r filename; do   echo "$filename"; quarto render $filename;   done <<< "$qmdfiles"; fi
 diff_assignments=$(git diff --name-only HEAD^ | grep '^assignments/')
 if [ -n "${diff_assignments}" ]; then
+  zip -r templates.zip template*.qmd additional_files
   echo "Rendering assignments using quarto"
   cd assignments
   quarto install tinytex > /dev/null
