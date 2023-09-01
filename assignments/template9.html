@@ -498,23 +498,23 @@ A simple GP model
 <span id="cb31-3"><a href="#cb31-3"></a>  <span class="at">data =</span> ChickWeight,</span>
 <span id="cb31-4"><a href="#cb31-4"></a>  <span class="at">family =</span> <span class="st">"lognormal"</span>,</span>
 <span id="cb31-5"><a href="#cb31-5"></a>  <span class="at">file=</span><span class="st">"additional_files/assignment9/gp_chicken_fit"</span></span>
-<span id="cb31-6"><a href="#cb31-6"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>Error: The directory 'additional_files/assignment9' does not exist. Please choose an existing directory where the model can be saved after fitting.</code></pre>
+<span id="cb31-6"><a href="#cb31-6"></a>)</span>
+<span id="cb31-7"><a href="#cb31-7"></a>brms<span class="sc">::</span><span class="fu">pp_check</span>(fit, <span class="at">type =</span> <span class="st">"intervals_grouped"</span>, <span class="at">group =</span> <span class="st">"Diet"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Using all posterior draws for ppc type 'intervals_grouped' by default.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>brms<span class="sc">::</span><span class="fu">pp_check</span>(fit, <span class="at">type =</span> <span class="st">"intervals_grouped"</span>, <span class="at">group =</span> <span class="st">"Diet"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>Error in brms::pp_check(fit, type = "intervals_grouped", group = "Diet"): object 'fit' not found</code></pre>
+<div class="cell-output-display">
+<p><img src="template9_files/figure-html/fit-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="co"># Useful r functions: </span></span>
-<span id="cb35-2"><a href="#cb35-2"></a><span class="co">#   rep(..., each=...), cbind, colMeans, </span></span>
-<span id="cb35-3"><a href="#cb35-3"></a><span class="co">#   posterior_predict(..., newdata=..., allow_new_levels=TRUE, sample_new_levels="gaussian")</span></span>
-<span id="cb35-4"><a href="#cb35-4"></a><span class="co">#   ggplot, geom_line, aes(..., group=..., color=...)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="co"># Useful r functions: </span></span>
+<span id="cb33-2"><a href="#cb33-2"></a><span class="co">#   rep(..., each=...), cbind, colMeans, </span></span>
+<span id="cb33-3"><a href="#cb33-3"></a><span class="co">#   posterior_predict(..., newdata=..., allow_new_levels=TRUE, sample_new_levels="gaussian")</span></span>
+<span id="cb33-4"><a href="#cb33-4"></a><span class="co">#   ggplot, geom_line, aes(..., group=..., color=...)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-warning callout-captioned">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="true" aria-label="Toggle callout">
@@ -530,23 +530,23 @@ Chickenwise probability of escape function
 <div class="callout-body-container callout-body">
 <p><em>This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.</em> <strong>Make sure that this does not get displayed in the PDF!</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>bump <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">loc=</span><span class="dv">0</span>, <span class="at">scale=</span><span class="dv">1</span>){</span>
-<span id="cb36-2"><a href="#cb36-2"></a>  xi <span class="ot">=</span> (x <span class="sc">-</span> loc) <span class="sc">/</span> scale</span>
-<span id="cb36-3"><a href="#cb36-3"></a>  <span class="fu">ifelse</span>(<span class="fu">abs</span>(xi) <span class="sc">&lt;</span> <span class="dv">1</span>, <span class="fu">exp</span>(<span class="sc">-</span><span class="dv">1</span><span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>xi<span class="sc">^</span><span class="dv">2</span>)), <span class="fl">0.</span>)</span>
-<span id="cb36-4"><a href="#cb36-4"></a>}</span>
-<span id="cb36-5"><a href="#cb36-5"></a>daily_probability_of_escape <span class="ot">&lt;-</span> <span class="cf">function</span>(day, weight){</span>
-<span id="cb36-6"><a href="#cb36-6"></a>  <span class="co"># Expects a day and a weight and computes the daily probability of escape </span></span>
-<span id="cb36-7"><a href="#cb36-7"></a>  <span class="fu">bump</span>(day, <span class="dv">30</span>, <span class="dv">10</span>) <span class="sc">*</span> (<span class="fl">1e-2</span> <span class="sc">+</span> <span class="fu">bump</span>(weight, <span class="dv">200</span>, <span class="dv">150</span>)<span class="sc">+</span><span class="fu">bump</span>(weight, <span class="dv">700</span>, <span class="dv">150</span>))</span>
-<span id="cb36-8"><a href="#cb36-8"></a>}</span>
-<span id="cb36-9"><a href="#cb36-9"></a>chickenwise_probability_of_escape <span class="ot">&lt;-</span> <span class="cf">function</span>(weights){</span>
-<span id="cb36-10"><a href="#cb36-10"></a>  <span class="co"># Expects a vector of daily weights from day 1 to N and computes the probability of </span></span>
-<span id="cb36-11"><a href="#cb36-11"></a>  <span class="co"># escape at the end of the time series</span></span>
-<span id="cb36-12"><a href="#cb36-12"></a>  prob_of_failure <span class="ot">=</span> <span class="dv">1</span></span>
-<span id="cb36-13"><a href="#cb36-13"></a>  <span class="cf">for</span>(day <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(weights)){</span>
-<span id="cb36-14"><a href="#cb36-14"></a>    prob_of_failure <span class="ot">=</span> prob_of_failure <span class="sc">*</span> (<span class="dv">1</span><span class="sc">-</span><span class="fu">daily_probability_of_escape</span>(day, weights[day]))</span>
-<span id="cb36-15"><a href="#cb36-15"></a>  }</span>
-<span id="cb36-16"><a href="#cb36-16"></a>  <span class="fu">return</span>(<span class="dv">1</span> <span class="sc">-</span> prob_of_failure)</span>
-<span id="cb36-17"><a href="#cb36-17"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>bump <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">loc=</span><span class="dv">0</span>, <span class="at">scale=</span><span class="dv">1</span>){</span>
+<span id="cb34-2"><a href="#cb34-2"></a>  xi <span class="ot">=</span> (x <span class="sc">-</span> loc) <span class="sc">/</span> scale</span>
+<span id="cb34-3"><a href="#cb34-3"></a>  <span class="fu">ifelse</span>(<span class="fu">abs</span>(xi) <span class="sc">&lt;</span> <span class="dv">1</span>, <span class="fu">exp</span>(<span class="sc">-</span><span class="dv">1</span><span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>xi<span class="sc">^</span><span class="dv">2</span>)), <span class="fl">0.</span>)</span>
+<span id="cb34-4"><a href="#cb34-4"></a>}</span>
+<span id="cb34-5"><a href="#cb34-5"></a>daily_probability_of_escape <span class="ot">&lt;-</span> <span class="cf">function</span>(day, weight){</span>
+<span id="cb34-6"><a href="#cb34-6"></a>  <span class="co"># Expects a day and a weight and computes the daily probability of escape </span></span>
+<span id="cb34-7"><a href="#cb34-7"></a>  <span class="fu">bump</span>(day, <span class="dv">30</span>, <span class="dv">10</span>) <span class="sc">*</span> (<span class="fl">1e-2</span> <span class="sc">+</span> <span class="fu">bump</span>(weight, <span class="dv">200</span>, <span class="dv">150</span>)<span class="sc">+</span><span class="fu">bump</span>(weight, <span class="dv">700</span>, <span class="dv">150</span>))</span>
+<span id="cb34-8"><a href="#cb34-8"></a>}</span>
+<span id="cb34-9"><a href="#cb34-9"></a>chickenwise_probability_of_escape <span class="ot">&lt;-</span> <span class="cf">function</span>(weights){</span>
+<span id="cb34-10"><a href="#cb34-10"></a>  <span class="co"># Expects a vector of daily weights from day 1 to N and computes the probability of </span></span>
+<span id="cb34-11"><a href="#cb34-11"></a>  <span class="co"># escape at the end of the time series</span></span>
+<span id="cb34-12"><a href="#cb34-12"></a>  prob_of_failure <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb34-13"><a href="#cb34-13"></a>  <span class="cf">for</span>(day <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(weights)){</span>
+<span id="cb34-14"><a href="#cb34-14"></a>    prob_of_failure <span class="ot">=</span> prob_of_failure <span class="sc">*</span> (<span class="dv">1</span><span class="sc">-</span><span class="fu">daily_probability_of_escape</span>(day, weights[day]))</span>
+<span id="cb34-15"><a href="#cb34-15"></a>  }</span>
+<span id="cb34-16"><a href="#cb34-16"></a>  <span class="fu">return</span>(<span class="dv">1</span> <span class="sc">-</span> prob_of_failure)</span>
+<span id="cb34-17"><a href="#cb34-17"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -555,16 +555,16 @@ Chickenwise probability of escape function
 <section id="b" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="b"><span class="header-section-number">2.2</span> (b)</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a><span class="co"># Useful r functions: chickenwise_probability_of_escape (see above)</span></span>
-<span id="cb37-2"><a href="#cb37-2"></a><span class="co"># rep(..., each=...), apply, </span></span>
-<span id="cb37-3"><a href="#cb37-3"></a><span class="co"># ggplot, stat_dotsinterval</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="co"># Useful r functions: chickenwise_probability_of_escape (see above)</span></span>
+<span id="cb35-2"><a href="#cb35-2"></a><span class="co"># rep(..., each=...), apply, </span></span>
+<span id="cb35-3"><a href="#cb35-3"></a><span class="co"># ggplot, stat_dotsinterval</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="c" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="c"><span class="header-section-number">2.3</span> (c)</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a><span class="co"># Useful r functions: chickenwise_probability_of_escape (see above)</span></span>
-<span id="cb38-2"><a href="#cb38-2"></a><span class="co"># apply, aggregate, </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a><span class="co"># Useful r functions: chickenwise_probability_of_escape (see above)</span></span>
+<span id="cb36-2"><a href="#cb36-2"></a><span class="co"># apply, aggregate, </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
@@ -853,172 +853,172 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   <div class="nav-page nav-page-next">
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb39" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb39-1"><a href="#cb39-1"></a><span class="co">---</span></span>
-<span id="cb39-2"><a href="#cb39-2"></a><span class="an">title:</span><span class="co"> "Assignment 9"</span></span>
-<span id="cb39-3"><a href="#cb39-3"></a><span class="an">subtitle:</span><span class="co"> "Decision analysis"</span></span>
-<span id="cb39-4"><a href="#cb39-4"></a><span class="an">author:</span><span class="co"> anonymous # &lt;-- hand in anonymously</span></span>
-<span id="cb39-5"><a href="#cb39-5"></a><span class="an">format:</span></span>
-<span id="cb39-6"><a href="#cb39-6"></a><span class="co">  html:</span></span>
-<span id="cb39-7"><a href="#cb39-7"></a><span class="co">    toc: true</span></span>
-<span id="cb39-8"><a href="#cb39-8"></a><span class="co">    code-tools: true</span></span>
-<span id="cb39-9"><a href="#cb39-9"></a><span class="co">    code-line-numbers: true</span></span>
-<span id="cb39-10"><a href="#cb39-10"></a><span class="co">    number-sections: true</span></span>
-<span id="cb39-11"><a href="#cb39-11"></a><span class="co">    mainfont: Georgia, serif</span></span>
-<span id="cb39-12"><a href="#cb39-12"></a><span class="co">    page-layout: article</span></span>
-<span id="cb39-13"><a href="#cb39-13"></a><span class="co">  pdf:  </span></span>
-<span id="cb39-14"><a href="#cb39-14"></a><span class="co">    geometry:</span></span>
-<span id="cb39-15"><a href="#cb39-15"></a><span class="co">    - left=1cm,top=1cm,bottom=1cm,right=7cm</span></span>
-<span id="cb39-16"><a href="#cb39-16"></a><span class="co">    number-sections: true</span></span>
-<span id="cb39-17"><a href="#cb39-17"></a><span class="co">    code-annotations: none</span></span>
-<span id="cb39-18"><a href="#cb39-18"></a><span class="an">editor:</span><span class="co"> source</span></span>
-<span id="cb39-19"><a href="#cb39-19"></a><span class="co">---</span></span>
-<span id="cb39-20"><a href="#cb39-20"></a></span>
-<span id="cb39-21"><a href="#cb39-21"></a></span>
-<span id="cb39-22"><a href="#cb39-22"></a><span class="fu"># General information</span></span>
-<span id="cb39-23"><a href="#cb39-23"></a></span>
-<span id="cb39-24"><a href="#cb39-24"></a>This is the template for <span class="co">[</span><span class="ot">assignment 9</span><span class="co">](assignment9.html)</span>. You can download the <span class="co">[</span><span class="ot">qmd-file</span><span class="co">](./template9.qmd)</span> or copy the code from this rendered document after clicking on <span class="in">`&lt;/&gt; Code`</span> in the top right corner.</span>
-<span id="cb39-25"><a href="#cb39-25"></a></span>
-<span id="cb39-26"><a href="#cb39-26"></a>**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.** </span>
-<span id="cb39-27"><a href="#cb39-27"></a></span>
-<span id="cb39-28"><a href="#cb39-28"></a></span>
-<span id="cb39-29"><a href="#cb39-29"></a></span>
-<span id="cb39-30"><a href="#cb39-30"></a>:::: {.content-hidden when-format="pdf"}</span>
-<span id="cb39-31"><a href="#cb39-31"></a>::: {.callout-warning collapse=false}</span>
-<span id="cb39-32"><a href="#cb39-32"></a> </span>
-<span id="cb39-33"><a href="#cb39-33"></a><span class="fu">## Setup</span></span>
-<span id="cb39-34"><a href="#cb39-34"></a></span>
-<span id="cb39-35"><a href="#cb39-35"></a></span>
-<span id="cb39-36"><a href="#cb39-36"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
-<span id="cb39-37"><a href="#cb39-37"></a>**Make sure that this does not get displayed in the PDF!**</span>
-<span id="cb39-38"><a href="#cb39-38"></a>    </span>
-<span id="cb39-39"><a href="#cb39-39"></a></span>
-<span id="cb39-40"><a href="#cb39-40"></a></span>
-<span id="cb39-41"><a href="#cb39-41"></a></span>
-<span id="cb39-42"><a href="#cb39-42"></a>The following loads several needed packages:</span>
-<span id="cb39-43"><a href="#cb39-43"></a></span>
-<span id="cb39-46"><a href="#cb39-46"></a><span class="in">```{r}</span></span>
-<span id="cb39-47"><a href="#cb39-47"></a><span class="co">#| label: imports</span></span>
-<span id="cb39-48"><a href="#cb39-48"></a><span class="fu">library</span>(bayesplot)</span>
-<span id="cb39-49"><a href="#cb39-49"></a><span class="fu">library</span>(cmdstanr)</span>
-<span id="cb39-50"><a href="#cb39-50"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb39-51"><a href="#cb39-51"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb39-52"><a href="#cb39-52"></a><span class="fu">library</span>(ggdist) <span class="co"># for stat_dotsinterval</span></span>
-<span id="cb39-53"><a href="#cb39-53"></a><span class="fu">library</span>(posterior)</span>
-<span id="cb39-54"><a href="#cb39-54"></a><span class="fu">library</span>(brms)</span>
-<span id="cb39-55"><a href="#cb39-55"></a><span class="co"># Globally specfiy cmdstan backend for brms</span></span>
-<span id="cb39-56"><a href="#cb39-56"></a><span class="fu">options</span>(<span class="at">brms.backend=</span><span class="st">"cmdstanr"</span>)</span>
-<span id="cb39-57"><a href="#cb39-57"></a><span class="co"># Tell brms to cache results if possible</span></span>
-<span id="cb39-58"><a href="#cb39-58"></a><span class="fu">options</span>(<span class="at">brms.file_refit=</span><span class="st">"on_change"</span>)</span>
-<span id="cb39-59"><a href="#cb39-59"></a></span>
-<span id="cb39-60"><a href="#cb39-60"></a><span class="co"># Set more readable themes with bigger font for plotting packages</span></span>
-<span id="cb39-61"><a href="#cb39-61"></a>ggplot2<span class="sc">::</span><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
-<span id="cb39-62"><a href="#cb39-62"></a>bayesplot<span class="sc">::</span><span class="fu">bayesplot_theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
-<span id="cb39-63"><a href="#cb39-63"></a><span class="in">```</span></span>
-<span id="cb39-64"><a href="#cb39-64"></a></span>
-<span id="cb39-65"><a href="#cb39-65"></a>:::</span>
-<span id="cb39-66"><a href="#cb39-66"></a>::::</span>
-<span id="cb39-67"><a href="#cb39-67"></a></span>
-<span id="cb39-68"><a href="#cb39-68"></a></span>
-<span id="cb39-69"><a href="#cb39-69"></a><span class="fu"># Escaping from the chicken coop</span></span>
-<span id="cb39-70"><a href="#cb39-70"></a></span>
-<span id="cb39-71"><a href="#cb39-71"></a><span class="fu">## (a)</span></span>
-<span id="cb39-72"><a href="#cb39-72"></a></span>
-<span id="cb39-73"><a href="#cb39-73"></a></span>
-<span id="cb39-74"><a href="#cb39-74"></a>:::: {.content-hidden when-format="pdf"}</span>
-<span id="cb39-75"><a href="#cb39-75"></a>::: {.callout-warning collapse=false}</span>
-<span id="cb39-76"><a href="#cb39-76"></a> </span>
-<span id="cb39-77"><a href="#cb39-77"></a><span class="fu">### A simple GP model</span></span>
-<span id="cb39-78"><a href="#cb39-78"></a></span>
-<span id="cb39-79"><a href="#cb39-79"></a></span>
-<span id="cb39-80"><a href="#cb39-80"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
-<span id="cb39-81"><a href="#cb39-81"></a>**Make sure that this does not get displayed in the PDF!**</span>
-<span id="cb39-82"><a href="#cb39-82"></a>    </span>
-<span id="cb39-83"><a href="#cb39-83"></a></span>
-<span id="cb39-84"><a href="#cb39-84"></a></span>
-<span id="cb39-85"><a href="#cb39-85"></a></span>
-<span id="cb39-86"><a href="#cb39-86"></a>The below fits a GP model to the chicken growth curves. It may take a few minutes to fit, but you </span>
-<span id="cb39-87"><a href="#cb39-87"></a>can also <span class="co">[</span><span class="ot">download the fit `.rds`-file</span><span class="co">](./additional_files/assignment9/gp_chicken_fit.rds)</span> and work with that fit object. </span>
-<span id="cb39-88"><a href="#cb39-88"></a></span>
-<span id="cb39-89"><a href="#cb39-89"></a><span class="in">```{r fit}</span></span>
-<span id="cb39-90"><a href="#cb39-90"></a></span>
-<span id="cb39-91"><a href="#cb39-91"></a>fit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
-<span id="cb39-92"><a href="#cb39-92"></a>  weight <span class="sc">~</span> <span class="fu">gp</span>(Time) <span class="sc">+</span> (<span class="dv">0</span><span class="sc">+</span>Time<span class="sc">|</span>Diet) <span class="sc">+</span> (<span class="dv">0</span><span class="sc">+</span>Time<span class="sc">|</span>Chick),</span>
-<span id="cb39-93"><a href="#cb39-93"></a>  <span class="at">data =</span> ChickWeight,</span>
-<span id="cb39-94"><a href="#cb39-94"></a>  <span class="at">family =</span> <span class="st">"lognormal"</span>,</span>
-<span id="cb39-95"><a href="#cb39-95"></a>  <span class="at">file=</span><span class="st">"additional_files/assignment9/gp_chicken_fit"</span></span>
-<span id="cb39-96"><a href="#cb39-96"></a>)</span>
-<span id="cb39-97"><a href="#cb39-97"></a>brms<span class="sc">::</span><span class="fu">pp_check</span>(fit, <span class="at">type =</span> <span class="st">"intervals_grouped"</span>, <span class="at">group =</span> <span class="st">"Diet"</span>)</span>
-<span id="cb39-98"><a href="#cb39-98"></a><span class="in">```</span></span>
-<span id="cb39-99"><a href="#cb39-99"></a></span>
-<span id="cb39-100"><a href="#cb39-100"></a>:::</span>
-<span id="cb39-101"><a href="#cb39-101"></a>::::</span>
-<span id="cb39-102"><a href="#cb39-102"></a></span>
-<span id="cb39-103"><a href="#cb39-103"></a></span>
-<span id="cb39-104"><a href="#cb39-104"></a></span>
-<span id="cb39-107"><a href="#cb39-107"></a><span class="in">```{r}</span></span>
-<span id="cb39-108"><a href="#cb39-108"></a><span class="co"># Useful r functions: </span></span>
-<span id="cb39-109"><a href="#cb39-109"></a><span class="co">#   rep(..., each=...), cbind, colMeans, </span></span>
-<span id="cb39-110"><a href="#cb39-110"></a><span class="co">#   posterior_predict(..., newdata=..., allow_new_levels=TRUE, sample_new_levels="gaussian")</span></span>
-<span id="cb39-111"><a href="#cb39-111"></a><span class="co">#   ggplot, geom_line, aes(..., group=..., color=...)</span></span>
-<span id="cb39-112"><a href="#cb39-112"></a><span class="in">```</span></span>
-<span id="cb39-113"><a href="#cb39-113"></a></span>
-<span id="cb39-114"><a href="#cb39-114"></a></span>
-<span id="cb39-115"><a href="#cb39-115"></a></span>
-<span id="cb39-116"><a href="#cb39-116"></a>:::: {.content-hidden when-format="pdf"}</span>
-<span id="cb39-117"><a href="#cb39-117"></a>::: {.callout-warning collapse=false}</span>
-<span id="cb39-118"><a href="#cb39-118"></a></span>
-<span id="cb39-119"><a href="#cb39-119"></a><span class="fu">###  Chickenwise probability of escape function</span></span>
-<span id="cb39-120"><a href="#cb39-120"></a></span>
-<span id="cb39-121"><a href="#cb39-121"></a></span>
-<span id="cb39-122"><a href="#cb39-122"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
-<span id="cb39-123"><a href="#cb39-123"></a>**Make sure that this does not get displayed in the PDF!**</span>
-<span id="cb39-124"><a href="#cb39-124"></a>    </span>
-<span id="cb39-125"><a href="#cb39-125"></a></span>
-<span id="cb39-126"><a href="#cb39-126"></a></span>
-<span id="cb39-127"><a href="#cb39-127"></a></span>
-<span id="cb39-130"><a href="#cb39-130"></a><span class="in">```{r}</span></span>
-<span id="cb39-131"><a href="#cb39-131"></a>bump <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">loc=</span><span class="dv">0</span>, <span class="at">scale=</span><span class="dv">1</span>){</span>
-<span id="cb39-132"><a href="#cb39-132"></a>  xi <span class="ot">=</span> (x <span class="sc">-</span> loc) <span class="sc">/</span> scale</span>
-<span id="cb39-133"><a href="#cb39-133"></a>  <span class="fu">ifelse</span>(<span class="fu">abs</span>(xi) <span class="sc">&lt;</span> <span class="dv">1</span>, <span class="fu">exp</span>(<span class="sc">-</span><span class="dv">1</span><span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>xi<span class="sc">^</span><span class="dv">2</span>)), <span class="fl">0.</span>)</span>
-<span id="cb39-134"><a href="#cb39-134"></a>}</span>
-<span id="cb39-135"><a href="#cb39-135"></a>daily_probability_of_escape <span class="ot">&lt;-</span> <span class="cf">function</span>(day, weight){</span>
-<span id="cb39-136"><a href="#cb39-136"></a>  <span class="co"># Expects a day and a weight and computes the daily probability of escape </span></span>
-<span id="cb39-137"><a href="#cb39-137"></a>  <span class="fu">bump</span>(day, <span class="dv">30</span>, <span class="dv">10</span>) <span class="sc">*</span> (<span class="fl">1e-2</span> <span class="sc">+</span> <span class="fu">bump</span>(weight, <span class="dv">200</span>, <span class="dv">150</span>)<span class="sc">+</span><span class="fu">bump</span>(weight, <span class="dv">700</span>, <span class="dv">150</span>))</span>
-<span id="cb39-138"><a href="#cb39-138"></a>}</span>
-<span id="cb39-139"><a href="#cb39-139"></a>chickenwise_probability_of_escape <span class="ot">&lt;-</span> <span class="cf">function</span>(weights){</span>
-<span id="cb39-140"><a href="#cb39-140"></a>  <span class="co"># Expects a vector of daily weights from day 1 to N and computes the probability of </span></span>
-<span id="cb39-141"><a href="#cb39-141"></a>  <span class="co"># escape at the end of the time series</span></span>
-<span id="cb39-142"><a href="#cb39-142"></a>  prob_of_failure <span class="ot">=</span> <span class="dv">1</span></span>
-<span id="cb39-143"><a href="#cb39-143"></a>  <span class="cf">for</span>(day <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(weights)){</span>
-<span id="cb39-144"><a href="#cb39-144"></a>    prob_of_failure <span class="ot">=</span> prob_of_failure <span class="sc">*</span> (<span class="dv">1</span><span class="sc">-</span><span class="fu">daily_probability_of_escape</span>(day, weights[day]))</span>
-<span id="cb39-145"><a href="#cb39-145"></a>  }</span>
-<span id="cb39-146"><a href="#cb39-146"></a>  <span class="fu">return</span>(<span class="dv">1</span> <span class="sc">-</span> prob_of_failure)</span>
-<span id="cb39-147"><a href="#cb39-147"></a>}</span>
-<span id="cb39-148"><a href="#cb39-148"></a><span class="in">```</span></span>
-<span id="cb39-149"><a href="#cb39-149"></a></span>
-<span id="cb39-150"><a href="#cb39-150"></a>:::</span>
-<span id="cb39-151"><a href="#cb39-151"></a>::::</span>
-<span id="cb39-152"><a href="#cb39-152"></a></span>
-<span id="cb39-153"><a href="#cb39-153"></a></span>
-<span id="cb39-154"><a href="#cb39-154"></a></span>
-<span id="cb39-155"><a href="#cb39-155"></a><span class="fu">## (b)</span></span>
-<span id="cb39-156"><a href="#cb39-156"></a></span>
-<span id="cb39-157"><a href="#cb39-157"></a></span>
-<span id="cb39-160"><a href="#cb39-160"></a><span class="in">```{r}</span></span>
-<span id="cb39-161"><a href="#cb39-161"></a><span class="co"># Useful r functions: chickenwise_probability_of_escape (see above)</span></span>
-<span id="cb39-162"><a href="#cb39-162"></a><span class="co"># rep(..., each=...), apply, </span></span>
-<span id="cb39-163"><a href="#cb39-163"></a><span class="co"># ggplot, stat_dotsinterval</span></span>
-<span id="cb39-164"><a href="#cb39-164"></a><span class="in">```</span></span>
-<span id="cb39-165"><a href="#cb39-165"></a></span>
-<span id="cb39-166"><a href="#cb39-166"></a></span>
-<span id="cb39-167"><a href="#cb39-167"></a></span>
-<span id="cb39-168"><a href="#cb39-168"></a><span class="fu">## (c)</span></span>
-<span id="cb39-169"><a href="#cb39-169"></a></span>
-<span id="cb39-170"><a href="#cb39-170"></a></span>
-<span id="cb39-173"><a href="#cb39-173"></a><span class="in">```{r}</span></span>
-<span id="cb39-174"><a href="#cb39-174"></a><span class="co"># Useful r functions: chickenwise_probability_of_escape (see above)</span></span>
-<span id="cb39-175"><a href="#cb39-175"></a><span class="co"># apply, aggregate, </span></span>
-<span id="cb39-176"><a href="#cb39-176"></a><span class="in">```</span></span>
+<div class="sourceCode" id="cb37" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb37-1"><a href="#cb37-1"></a><span class="co">---</span></span>
+<span id="cb37-2"><a href="#cb37-2"></a><span class="an">title:</span><span class="co"> "Assignment 9"</span></span>
+<span id="cb37-3"><a href="#cb37-3"></a><span class="an">subtitle:</span><span class="co"> "Decision analysis"</span></span>
+<span id="cb37-4"><a href="#cb37-4"></a><span class="an">author:</span><span class="co"> anonymous # &lt;-- hand in anonymously</span></span>
+<span id="cb37-5"><a href="#cb37-5"></a><span class="an">format:</span></span>
+<span id="cb37-6"><a href="#cb37-6"></a><span class="co">  html:</span></span>
+<span id="cb37-7"><a href="#cb37-7"></a><span class="co">    toc: true</span></span>
+<span id="cb37-8"><a href="#cb37-8"></a><span class="co">    code-tools: true</span></span>
+<span id="cb37-9"><a href="#cb37-9"></a><span class="co">    code-line-numbers: true</span></span>
+<span id="cb37-10"><a href="#cb37-10"></a><span class="co">    number-sections: true</span></span>
+<span id="cb37-11"><a href="#cb37-11"></a><span class="co">    mainfont: Georgia, serif</span></span>
+<span id="cb37-12"><a href="#cb37-12"></a><span class="co">    page-layout: article</span></span>
+<span id="cb37-13"><a href="#cb37-13"></a><span class="co">  pdf:  </span></span>
+<span id="cb37-14"><a href="#cb37-14"></a><span class="co">    geometry:</span></span>
+<span id="cb37-15"><a href="#cb37-15"></a><span class="co">    - left=1cm,top=1cm,bottom=1cm,right=7cm</span></span>
+<span id="cb37-16"><a href="#cb37-16"></a><span class="co">    number-sections: true</span></span>
+<span id="cb37-17"><a href="#cb37-17"></a><span class="co">    code-annotations: none</span></span>
+<span id="cb37-18"><a href="#cb37-18"></a><span class="an">editor:</span><span class="co"> source</span></span>
+<span id="cb37-19"><a href="#cb37-19"></a><span class="co">---</span></span>
+<span id="cb37-20"><a href="#cb37-20"></a></span>
+<span id="cb37-21"><a href="#cb37-21"></a></span>
+<span id="cb37-22"><a href="#cb37-22"></a><span class="fu"># General information</span></span>
+<span id="cb37-23"><a href="#cb37-23"></a></span>
+<span id="cb37-24"><a href="#cb37-24"></a>This is the template for <span class="co">[</span><span class="ot">assignment 9</span><span class="co">](assignment9.html)</span>. You can download the <span class="co">[</span><span class="ot">qmd-file</span><span class="co">](./template9.qmd)</span> or copy the code from this rendered document after clicking on <span class="in">`&lt;/&gt; Code`</span> in the top right corner.</span>
+<span id="cb37-25"><a href="#cb37-25"></a></span>
+<span id="cb37-26"><a href="#cb37-26"></a>**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.** </span>
+<span id="cb37-27"><a href="#cb37-27"></a></span>
+<span id="cb37-28"><a href="#cb37-28"></a></span>
+<span id="cb37-29"><a href="#cb37-29"></a></span>
+<span id="cb37-30"><a href="#cb37-30"></a>:::: {.content-hidden when-format="pdf"}</span>
+<span id="cb37-31"><a href="#cb37-31"></a>::: {.callout-warning collapse=false}</span>
+<span id="cb37-32"><a href="#cb37-32"></a> </span>
+<span id="cb37-33"><a href="#cb37-33"></a><span class="fu">## Setup</span></span>
+<span id="cb37-34"><a href="#cb37-34"></a></span>
+<span id="cb37-35"><a href="#cb37-35"></a></span>
+<span id="cb37-36"><a href="#cb37-36"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
+<span id="cb37-37"><a href="#cb37-37"></a>**Make sure that this does not get displayed in the PDF!**</span>
+<span id="cb37-38"><a href="#cb37-38"></a>    </span>
+<span id="cb37-39"><a href="#cb37-39"></a></span>
+<span id="cb37-40"><a href="#cb37-40"></a></span>
+<span id="cb37-41"><a href="#cb37-41"></a></span>
+<span id="cb37-42"><a href="#cb37-42"></a>The following loads several needed packages:</span>
+<span id="cb37-43"><a href="#cb37-43"></a></span>
+<span id="cb37-46"><a href="#cb37-46"></a><span class="in">```{r}</span></span>
+<span id="cb37-47"><a href="#cb37-47"></a><span class="co">#| label: imports</span></span>
+<span id="cb37-48"><a href="#cb37-48"></a><span class="fu">library</span>(bayesplot)</span>
+<span id="cb37-49"><a href="#cb37-49"></a><span class="fu">library</span>(cmdstanr)</span>
+<span id="cb37-50"><a href="#cb37-50"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb37-51"><a href="#cb37-51"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb37-52"><a href="#cb37-52"></a><span class="fu">library</span>(ggdist) <span class="co"># for stat_dotsinterval</span></span>
+<span id="cb37-53"><a href="#cb37-53"></a><span class="fu">library</span>(posterior)</span>
+<span id="cb37-54"><a href="#cb37-54"></a><span class="fu">library</span>(brms)</span>
+<span id="cb37-55"><a href="#cb37-55"></a><span class="co"># Globally specfiy cmdstan backend for brms</span></span>
+<span id="cb37-56"><a href="#cb37-56"></a><span class="fu">options</span>(<span class="at">brms.backend=</span><span class="st">"cmdstanr"</span>)</span>
+<span id="cb37-57"><a href="#cb37-57"></a><span class="co"># Tell brms to cache results if possible</span></span>
+<span id="cb37-58"><a href="#cb37-58"></a><span class="fu">options</span>(<span class="at">brms.file_refit=</span><span class="st">"on_change"</span>)</span>
+<span id="cb37-59"><a href="#cb37-59"></a></span>
+<span id="cb37-60"><a href="#cb37-60"></a><span class="co"># Set more readable themes with bigger font for plotting packages</span></span>
+<span id="cb37-61"><a href="#cb37-61"></a>ggplot2<span class="sc">::</span><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
+<span id="cb37-62"><a href="#cb37-62"></a>bayesplot<span class="sc">::</span><span class="fu">bayesplot_theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
+<span id="cb37-63"><a href="#cb37-63"></a><span class="in">```</span></span>
+<span id="cb37-64"><a href="#cb37-64"></a></span>
+<span id="cb37-65"><a href="#cb37-65"></a>:::</span>
+<span id="cb37-66"><a href="#cb37-66"></a>::::</span>
+<span id="cb37-67"><a href="#cb37-67"></a></span>
+<span id="cb37-68"><a href="#cb37-68"></a></span>
+<span id="cb37-69"><a href="#cb37-69"></a><span class="fu"># Escaping from the chicken coop</span></span>
+<span id="cb37-70"><a href="#cb37-70"></a></span>
+<span id="cb37-71"><a href="#cb37-71"></a><span class="fu">## (a)</span></span>
+<span id="cb37-72"><a href="#cb37-72"></a></span>
+<span id="cb37-73"><a href="#cb37-73"></a></span>
+<span id="cb37-74"><a href="#cb37-74"></a>:::: {.content-hidden when-format="pdf"}</span>
+<span id="cb37-75"><a href="#cb37-75"></a>::: {.callout-warning collapse=false}</span>
+<span id="cb37-76"><a href="#cb37-76"></a> </span>
+<span id="cb37-77"><a href="#cb37-77"></a><span class="fu">### A simple GP model</span></span>
+<span id="cb37-78"><a href="#cb37-78"></a></span>
+<span id="cb37-79"><a href="#cb37-79"></a></span>
+<span id="cb37-80"><a href="#cb37-80"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
+<span id="cb37-81"><a href="#cb37-81"></a>**Make sure that this does not get displayed in the PDF!**</span>
+<span id="cb37-82"><a href="#cb37-82"></a>    </span>
+<span id="cb37-83"><a href="#cb37-83"></a></span>
+<span id="cb37-84"><a href="#cb37-84"></a></span>
+<span id="cb37-85"><a href="#cb37-85"></a></span>
+<span id="cb37-86"><a href="#cb37-86"></a>The below fits a GP model to the chicken growth curves. It may take a few minutes to fit, but you </span>
+<span id="cb37-87"><a href="#cb37-87"></a>can also <span class="co">[</span><span class="ot">download the fit `.rds`-file</span><span class="co">](./additional_files/assignment9/gp_chicken_fit.rds)</span> and work with that fit object. </span>
+<span id="cb37-88"><a href="#cb37-88"></a></span>
+<span id="cb37-89"><a href="#cb37-89"></a><span class="in">```{r fit}</span></span>
+<span id="cb37-90"><a href="#cb37-90"></a></span>
+<span id="cb37-91"><a href="#cb37-91"></a>fit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
+<span id="cb37-92"><a href="#cb37-92"></a>  weight <span class="sc">~</span> <span class="fu">gp</span>(Time) <span class="sc">+</span> (<span class="dv">0</span><span class="sc">+</span>Time<span class="sc">|</span>Diet) <span class="sc">+</span> (<span class="dv">0</span><span class="sc">+</span>Time<span class="sc">|</span>Chick),</span>
+<span id="cb37-93"><a href="#cb37-93"></a>  <span class="at">data =</span> ChickWeight,</span>
+<span id="cb37-94"><a href="#cb37-94"></a>  <span class="at">family =</span> <span class="st">"lognormal"</span>,</span>
+<span id="cb37-95"><a href="#cb37-95"></a>  <span class="at">file=</span><span class="st">"additional_files/assignment9/gp_chicken_fit"</span></span>
+<span id="cb37-96"><a href="#cb37-96"></a>)</span>
+<span id="cb37-97"><a href="#cb37-97"></a>brms<span class="sc">::</span><span class="fu">pp_check</span>(fit, <span class="at">type =</span> <span class="st">"intervals_grouped"</span>, <span class="at">group =</span> <span class="st">"Diet"</span>)</span>
+<span id="cb37-98"><a href="#cb37-98"></a><span class="in">```</span></span>
+<span id="cb37-99"><a href="#cb37-99"></a></span>
+<span id="cb37-100"><a href="#cb37-100"></a>:::</span>
+<span id="cb37-101"><a href="#cb37-101"></a>::::</span>
+<span id="cb37-102"><a href="#cb37-102"></a></span>
+<span id="cb37-103"><a href="#cb37-103"></a></span>
+<span id="cb37-104"><a href="#cb37-104"></a></span>
+<span id="cb37-107"><a href="#cb37-107"></a><span class="in">```{r}</span></span>
+<span id="cb37-108"><a href="#cb37-108"></a><span class="co"># Useful r functions: </span></span>
+<span id="cb37-109"><a href="#cb37-109"></a><span class="co">#   rep(..., each=...), cbind, colMeans, </span></span>
+<span id="cb37-110"><a href="#cb37-110"></a><span class="co">#   posterior_predict(..., newdata=..., allow_new_levels=TRUE, sample_new_levels="gaussian")</span></span>
+<span id="cb37-111"><a href="#cb37-111"></a><span class="co">#   ggplot, geom_line, aes(..., group=..., color=...)</span></span>
+<span id="cb37-112"><a href="#cb37-112"></a><span class="in">```</span></span>
+<span id="cb37-113"><a href="#cb37-113"></a></span>
+<span id="cb37-114"><a href="#cb37-114"></a></span>
+<span id="cb37-115"><a href="#cb37-115"></a></span>
+<span id="cb37-116"><a href="#cb37-116"></a>:::: {.content-hidden when-format="pdf"}</span>
+<span id="cb37-117"><a href="#cb37-117"></a>::: {.callout-warning collapse=false}</span>
+<span id="cb37-118"><a href="#cb37-118"></a></span>
+<span id="cb37-119"><a href="#cb37-119"></a><span class="fu">###  Chickenwise probability of escape function</span></span>
+<span id="cb37-120"><a href="#cb37-120"></a></span>
+<span id="cb37-121"><a href="#cb37-121"></a></span>
+<span id="cb37-122"><a href="#cb37-122"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
+<span id="cb37-123"><a href="#cb37-123"></a>**Make sure that this does not get displayed in the PDF!**</span>
+<span id="cb37-124"><a href="#cb37-124"></a>    </span>
+<span id="cb37-125"><a href="#cb37-125"></a></span>
+<span id="cb37-126"><a href="#cb37-126"></a></span>
+<span id="cb37-127"><a href="#cb37-127"></a></span>
+<span id="cb37-130"><a href="#cb37-130"></a><span class="in">```{r}</span></span>
+<span id="cb37-131"><a href="#cb37-131"></a>bump <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">loc=</span><span class="dv">0</span>, <span class="at">scale=</span><span class="dv">1</span>){</span>
+<span id="cb37-132"><a href="#cb37-132"></a>  xi <span class="ot">=</span> (x <span class="sc">-</span> loc) <span class="sc">/</span> scale</span>
+<span id="cb37-133"><a href="#cb37-133"></a>  <span class="fu">ifelse</span>(<span class="fu">abs</span>(xi) <span class="sc">&lt;</span> <span class="dv">1</span>, <span class="fu">exp</span>(<span class="sc">-</span><span class="dv">1</span><span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>xi<span class="sc">^</span><span class="dv">2</span>)), <span class="fl">0.</span>)</span>
+<span id="cb37-134"><a href="#cb37-134"></a>}</span>
+<span id="cb37-135"><a href="#cb37-135"></a>daily_probability_of_escape <span class="ot">&lt;-</span> <span class="cf">function</span>(day, weight){</span>
+<span id="cb37-136"><a href="#cb37-136"></a>  <span class="co"># Expects a day and a weight and computes the daily probability of escape </span></span>
+<span id="cb37-137"><a href="#cb37-137"></a>  <span class="fu">bump</span>(day, <span class="dv">30</span>, <span class="dv">10</span>) <span class="sc">*</span> (<span class="fl">1e-2</span> <span class="sc">+</span> <span class="fu">bump</span>(weight, <span class="dv">200</span>, <span class="dv">150</span>)<span class="sc">+</span><span class="fu">bump</span>(weight, <span class="dv">700</span>, <span class="dv">150</span>))</span>
+<span id="cb37-138"><a href="#cb37-138"></a>}</span>
+<span id="cb37-139"><a href="#cb37-139"></a>chickenwise_probability_of_escape <span class="ot">&lt;-</span> <span class="cf">function</span>(weights){</span>
+<span id="cb37-140"><a href="#cb37-140"></a>  <span class="co"># Expects a vector of daily weights from day 1 to N and computes the probability of </span></span>
+<span id="cb37-141"><a href="#cb37-141"></a>  <span class="co"># escape at the end of the time series</span></span>
+<span id="cb37-142"><a href="#cb37-142"></a>  prob_of_failure <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb37-143"><a href="#cb37-143"></a>  <span class="cf">for</span>(day <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(weights)){</span>
+<span id="cb37-144"><a href="#cb37-144"></a>    prob_of_failure <span class="ot">=</span> prob_of_failure <span class="sc">*</span> (<span class="dv">1</span><span class="sc">-</span><span class="fu">daily_probability_of_escape</span>(day, weights[day]))</span>
+<span id="cb37-145"><a href="#cb37-145"></a>  }</span>
+<span id="cb37-146"><a href="#cb37-146"></a>  <span class="fu">return</span>(<span class="dv">1</span> <span class="sc">-</span> prob_of_failure)</span>
+<span id="cb37-147"><a href="#cb37-147"></a>}</span>
+<span id="cb37-148"><a href="#cb37-148"></a><span class="in">```</span></span>
+<span id="cb37-149"><a href="#cb37-149"></a></span>
+<span id="cb37-150"><a href="#cb37-150"></a>:::</span>
+<span id="cb37-151"><a href="#cb37-151"></a>::::</span>
+<span id="cb37-152"><a href="#cb37-152"></a></span>
+<span id="cb37-153"><a href="#cb37-153"></a></span>
+<span id="cb37-154"><a href="#cb37-154"></a></span>
+<span id="cb37-155"><a href="#cb37-155"></a><span class="fu">## (b)</span></span>
+<span id="cb37-156"><a href="#cb37-156"></a></span>
+<span id="cb37-157"><a href="#cb37-157"></a></span>
+<span id="cb37-160"><a href="#cb37-160"></a><span class="in">```{r}</span></span>
+<span id="cb37-161"><a href="#cb37-161"></a><span class="co"># Useful r functions: chickenwise_probability_of_escape (see above)</span></span>
+<span id="cb37-162"><a href="#cb37-162"></a><span class="co"># rep(..., each=...), apply, </span></span>
+<span id="cb37-163"><a href="#cb37-163"></a><span class="co"># ggplot, stat_dotsinterval</span></span>
+<span id="cb37-164"><a href="#cb37-164"></a><span class="in">```</span></span>
+<span id="cb37-165"><a href="#cb37-165"></a></span>
+<span id="cb37-166"><a href="#cb37-166"></a></span>
+<span id="cb37-167"><a href="#cb37-167"></a></span>
+<span id="cb37-168"><a href="#cb37-168"></a><span class="fu">## (c)</span></span>
+<span id="cb37-169"><a href="#cb37-169"></a></span>
+<span id="cb37-170"><a href="#cb37-170"></a></span>
+<span id="cb37-173"><a href="#cb37-173"></a><span class="in">```{r}</span></span>
+<span id="cb37-174"><a href="#cb37-174"></a><span class="co"># Useful r functions: chickenwise_probability_of_escape (see above)</span></span>
+<span id="cb37-175"><a href="#cb37-175"></a><span class="co"># apply, aggregate, </span></span>
+<span id="cb37-176"><a href="#cb37-176"></a><span class="in">```</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
