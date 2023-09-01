@@ -1,4 +1,4 @@
-OUTPUT_DIR="${1:-"assignment_templates"}"
+OUTPUT_DIR="${1:-"templates"}"
 mkdir -p $OUTPUT_DIR
 cd $OUTPUT_DIR
 wget https://avehtari.github.io/BDA_course_Aalto/assignments/templates.zip
