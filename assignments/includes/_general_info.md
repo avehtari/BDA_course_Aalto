@@ -4,7 +4,7 @@
 - The recommended tool in this course is R (with the IDE RStudio).
 - Instead of installing R and RStudio on you own computer, see [**how
   to use R and RStudio remotely**](https://avehtari.github.io/BDA_course_Aalto/FAQ.html#How_to_use_R_and_RStudio_remotely).
-- If you want to install R and RStudio locally, 
+- If you want to install R and RStudio locally,
   download [R and RStudio](https://posit.co/download/rstudio-desktop/).
 - There are tons of tutorials, videos and introductions to R and
   RStudio online. You can find some initial hints from [**RStudio
@@ -65,10 +65,11 @@ remotes::install_github("avehtari/BDA_course_Aalto", subdir = "rpackage", upgrad
 :::
 
 
-        
-::: {.rubric weight=7.5}    
 
-* Can you open the PDF and it's not blank nor nonsense?     
-* Is the report anonymous?    
-     
-:::      
+::: {.rubric weight=7.5}
+
+* Can you open the PDF and it's not blank nor nonsense?
+If the pdf is blank, nonsense, or something like only a copy of the questions, 1) report it as problematic in Peergrade-interface to get another report to review, and 2) send a message to TAs.
+* Is the report anonymous?
+
+:::
