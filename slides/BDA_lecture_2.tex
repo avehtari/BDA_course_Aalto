@@ -28,20 +28,25 @@
   % \setbeamertemplate{footline}[frame number]
 }
 
- \definecolor{navyblue}{rgb}{0,0,0.5}
-% \definecolor{lightgray}{rgb}{0.95,0.95,0.95}
-% \definecolor{section}{rgb}{0,0.2549,0.6784}
-% \definecolor{list1}{rgb}{0,0.2549,0.6784}
-\renewcommand{\emph}[1]{\textcolor{navyblue}{#1}}
-
-% \graphicspath{./pics}
-
 \pdfinfo{            
   /Title      (BDA, Lecture 2) 
   /Author     (Aki Vehtari) % 
   /Keywords   (Bayesian data analysis)
 }
 
+% Use tikz
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+
+\newenvironment{list1}{
+  \begin{list}{$\color{list1}\bullet$}{\itemsep=6pt}}{
+  \end{list}}
+\newenvironment{list2}{
+  \begin{list}{-}{\baselineskip=15pt}}{
+  \end{list}}
+\newenvironment{list3}{
+  \begin{list}{$\cdot$}{\baselineskip=15pt}}{
+  \end{list}}
 
 \DeclareMathOperator{\E}{E}
 \DeclareMathOperator{\Var}{Var}
@@ -64,19 +69,57 @@
 \def\euro{{\footnotesize \EUR\, }}
 \DeclareMathOperator{\rep}{\mathrm{rep}}
 
+\definecolor{navyblue}{rgb}{0,0,0.5}
+\definecolor{darkgreen}{rgb}{0,0.3922,0}
+\definecolor{matblue}{rgb}{0,0.447,0.741}    
+\definecolor{matred}{rgb}{0.85,0.325,0.098}
+\definecolor{matyellow}{rgb}{0.929,0.694,0.125}
+\definecolor{matpurple}{rgb}{0.494,0.184,0.556}
+\definecolor{matgreen}{rgb}{0.466,0.674,0.188}
+\definecolor{matcyan}{rgb}{0.301,0.745,0.933}
+\definecolor{matdarkred}{rgb}{0.635,0.078,0.184}
+
+\newcommand{\nred}{{\color{matred}\#red}}
+\newcommand{\nyellow}{{\color{matyellow}\#yellow}}
+\newcommand{\red}{{\color{matred}\#red}}
+\newcommand{\yellow}{{\color{matyellow}\#yellow}}
+
+\hypersetup{pdfstartview={FitV}}
+\date{}
 
 \title[]{Bayesian data analysis}
 \subtitle{}
 
 \author{Aki Vehtari}
 
-\institute[  Aalto]{}
+\institute[Aalto University]{}
 
 \begin{document} 
 
- \begin{frame}
 
-   \frametitle{Outline of the chapter 2}
+ \begin{frame}{Outline of Lecture 2}
+
+   \begin{itemize}
+   \item Binomial model is the simplest model
+     \begin{itemize}
+     \item useful to introduce observaion model, likelihood,
+       posterior, prior, integration, posterior summaries
+     \item very commonly used as a building block
+     \item examples:
+       \begin{itemize}
+       \item coin tossing
+       \item chips from bag
+       \item covid tests and vaccines
+       \item classification / logistic regression
+       \end{itemize}
+     \end{itemize}
+   \end{itemize}
+   
+ \end{frame}
+
+\begin{frame}
+
+   \frametitle{Outline of Chapter 2}
 
   \begin{itemize}
 \item 2.1 Binomial model (repeated experiment with binary outcome)
@@ -95,27 +138,6 @@
 \end{itemize}
 
 \end{frame}
-
- \begin{frame}{Outline of the lecture 2}
-
-   \begin{itemize}
-   \item Binomial model is the simplest model
-     \begin{itemize}
-     \item useful to discuss likelihood, posterior, prior,
-       integration, posterior summaries
-     \item very commonly used as a building block
-     \item examples:
-       \begin{itemize}
-       \item coin tossing
-       \item chips from bag
-       \item covid tests and vaccines
-       \item classification / logistic regression
-       \end{itemize}
-     \end{itemize}
-   \end{itemize}
-   
- \end{frame}
- %%%% 
 
 %only in video
 \begin{frame}{Binomial: known $\theta$}
@@ -170,7 +192,7 @@
 \end{center}
 \end{frame}
 
-\begin{frame}{Binomial: known $\theta$}
+\begin{frame}{Binomial: \only<1>{known $\theta$}\only<2-3>{what if $y=6$?}}
 
   \begin{itemize}
   \item {\color{blue}Observation model} (function of {\color{red} $y$}, discrete)
@@ -193,7 +215,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Binomial: unknown $\theta$}
+  \frametitle{Binomial: unknown $\theta$ and $y=6$}
 
   \begin{itemize}
   \item {\color{blue}Likelihood} (function of {\color{red}$\theta$}, continuous)
@@ -208,7 +230,7 @@
 {\hspace{-12mm}\scriptsize $p(y=6|n=10,{\color{red}\theta})$:\, 0.00\, 0.00\, 0.01\,\, 0.04\, 0.11\, \textbf{0.21}\, 0.25\, 0.20\, 0.09\, \textbf{0.01}\,\, 0.00}}
     \only<2>{\includegraphics[width=9cm]{lbinom10b.pdf}\\
       \vspace{-0.6\baselineskip}
-{\hspace{-14mm}\scriptsize we can compute the value for any ${\color{red}\theta}$, but in practice can evaluate only finite times}}
+{\hspace{-14mm}\scriptsize we can compute the value for any ${\color{red}\theta}$, but in practice can compute only for finite values}}
     \only<3>{\includegraphics[width=9cm]{lbinom10c.pdf}\\
       \vspace{-0.6\baselineskip}
       \only<3>{\hspace{-14mm}\scriptsize $\,$ with sufficient many evaluations, linearly interpolated plot looks smooth}}
@@ -221,20 +243,30 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Binomial: unknown $\theta$}
+  \frametitle{Binomial posterior}
 
+  
+  
   \begin{itemize}
+  \item Joint distribution $p(\theta, y |  n)$
+    \begin{itemize}
+    \item Observation model as a function of ${\color{red}y}$:
+      $p({\color{red}y}| \theta,n) \propto p(\theta, {\color{red}y} |  n)$
+    \item Likelihood as a function of ${\color{red}\theta}$:
+      $p(y| {\color{red}\theta},n) \propto p({\color{red}\theta}, y | n)$
+    \end{itemize}
+    \pause
   \item {\color{blue}Posterior} with Bayes rule (function of ${\color{red}\theta}$, continuous)
     \begin{equation*}
       p({\color{red}\theta}|y,n)=\frac{p(y|{\color{red}\theta},n)p({\color{red}\theta}|n)}{p(y|n)}
     \end{equation*}
     \pause
     where $p(y|n)=\int p(y|{\color{red}\theta},n)p({\color{red}\theta}|n) d{\color{red}\theta}$
-  \item<3-> Start with uniform prior
+  \item<4-> Start with uniform prior
     \begin{align*}
       p({\color{red}\theta}|n)=p({\color{red}\theta}|M)=1,\, \text{when}\,\, 0\leq{\color{red}\theta}\leq 1
     \end{align*}
-  \item<4-> Then
+  \item<5-> Then
     \begin{align*}
       p({\color{red}\theta}|y,n)&=\frac{p(y|{\color{red}\theta},n)}{p(y|n)} 
       =\frac{\binom{n}{y} {\color{red}\theta}^y(1-{\color{red}\theta})^{n-y}}{\int_0^1
@@ -292,7 +324,7 @@
 \begin{frame}{Binomial: unknown $\theta$}
 
   \begin{itemize}
-  \item Posterior is
+  \item {\color{blue}Posterior} is
     \begin{align*}
       p(\theta|y,n) = \frac{\Gamma(n+2)}{\Gamma(y+1)\Gamma(n-y+1)}\theta^y(1-\theta)^{n-y},
     \end{align*}
@@ -362,31 +394,6 @@
 \end{frame}
 
 %%%% predictive distribution
-\begin{frame}
-  \frametitle{Binomial: unknown $\theta$}
-
-  Sometimes conditioning on the model $M$ is explicitly shown
-  
-  \begin{itemize}
-  \item {\color{blue}Posterior} with Bayes rule (function of $\theta$, continuous)
-    \begin{equation*}
-      p(\theta|y,n,M)=\frac{p(y|\theta,n,M)p(\theta|n,M)}{p(y|n,M)}
-    \end{equation*}
-    where $p(y|n,M)=\int p(y|\theta,n,M)p(\theta|n,M) d\theta$
-    \vspace{0.5\baselineskip}
-    \uncover<2->{\begin{itemize}
-    \item makes it more clear that likelihood and prior are both part
-      of the model
-    \item makes it more clear that there is no absolute probability
-      for $p(y|n)$, but it depends on the model $M$
-    \item in case of two models, we can evaluate marginal likelihoods
-      $p(y|n,M_1)$ and $p(y|n,M_2)$ (more in Ch 7)
-    \item<3-> usually dropped to make the notation more concise
-    \end{itemize}}
-  \end{itemize}
-
-\end{frame}
-
 \begin{frame}{Predictive distribution -- Effect of integration}
 
   \begin{itemize}
@@ -436,6 +443,24 @@
   \end{itemize}
 \end{frame}
 
+\begin{frame}{Left handedness}
+
+  \begin{itemize}
+  \item If we would like to provide scissors for all students, how
+    many left handed scissors we would need?
+    \begin{itemize}
+    \item related to consumer behavior analysis and A/B testing
+    \end{itemize}
+  \item {\color{red} Posterior predictive} distribution for several
+    future trials is Beta-Binomial
+    \pause
+    \item Demo: \url{https://huggingface.co/spaces/Madhav/Handedness}
+  \end{itemize}
+  
+\end{frame}
+
+%%% handedness demo
+
 \begin{frame}{Justification for uniform prior}
 
   \begin{itemize}
@@ -470,8 +495,7 @@
 
 \end{frame}
 
-\begin{frame}
-{Conjugate prior}
+\begin{frame}{Conjugate prior}
 
   \begin{itemize}
   \item Prior and posterior have the same form
@@ -490,8 +514,7 @@
   
 \end{frame}
 
-\begin{frame}
-{Beta prior for Binomial model}
+\begin{frame}{Beta prior for Binomial model}
 
   \begin{itemize}
   \item Prior \vskip -1.5\baselineskip
@@ -511,22 +534,25 @@
       &\uncover<3->{ = \text{Beta}(\theta|\alpha+y,\beta+n-y)}
     \end{align*}
     \vskip -2mm
-  \item<4-> $(\alpha-1)$ and $(\beta-1)$ can considered to be number of prior observations
+  \item<4-> $(\alpha-1)$ and $(\beta-1)$ can be considered to be the
+    number of prior observations
   \item<4-> Uniform prior when $\alpha=1$ and $\beta=1$ 
+  \item<5-> Left handedness weakly informative prior with 95\%
+    probability mass in interval $[5,20]$ with $\alpha=8$ and
+    $\beta=60$
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Placenta previa}
+% \begin{frame}{Placenta previa}
 
-  \begin{itemize}
-  \item Beta prior centered on population average 0.485
-  \end{itemize}
-  \only<1>{\includegraphics[width=11cm,trim=0 190 0 0,clip]{figs/demo2_2.pdf}}
-  \only<2>{\includegraphics[width=11cm,trim=0 135 0 0,clip]{figs/demo2_2.pdf}}
-  \only<3>{\includegraphics[width=11cm,trim=0 60 0 0,clip]{figs/demo2_2.pdf}}
-  {\includegraphics[width=11cm,trim=0 0 0 250,clip]{figs/demo2_2.pdf}}
-\end{frame}
-% We next consider an informative prior.  As discussed in Section \ref{beauty1}, the percentage of girl births is remarkably stable at about 48.8\% girls, rarely varying by more than 0.5\% from this rate.
+%   \begin{itemize}
+%   \item Beta prior centered on population average 0.485
+%   \end{itemize}
+%   \only<1>{\includegraphics[width=11cm,trim=0 190 0 0,clip]{figs/demo2_2.pdf}}
+%   \only<2>{\includegraphics[width=11cm,trim=0 135 0 0,clip]{figs/demo2_2.pdf}}
+%   \only<3>{\includegraphics[width=11cm,trim=0 60 0 0,clip]{figs/demo2_2.pdf}}
+%   {\includegraphics[width=11cm,trim=0 0 0 250,clip]{figs/demo2_2.pdf}}
+% \end{frame}
 
 \begin{frame}{Benefits of integration and prior}
 
@@ -536,6 +562,12 @@
   \includegraphics[width=7.8cm]{dbbeta10a.pdf}\\
   \uncover<2>{\includegraphics[width=7.8cm]{dbbeta10b.pdf}}
   \end{center}
+
+\end{frame}
+
+\begin{frame}{Left handedness}
+
+  Continued
 
 \end{frame}
 
@@ -570,8 +602,9 @@
 
 \end{frame}
 
-\begin{frame}
-{Noninformative prior, proper and improper prior}
+% 2022: 43:30
+
+\begin{frame}{Noninformative prior, proper and improper prior}
 
   \begin{itemize}
   \item Vague, flat, diffuse, or noninformative
@@ -628,8 +661,7 @@
   
 % \end{frame}
 
-\begin{frame}
-{Weakly informative priors}
+\begin{frame}{Weakly informative priors}
 
   \begin{itemize}
   \item Weakly informative priors produce computationally better
@@ -655,55 +687,94 @@
 
 \end{frame}
 
-\begin{frame}
-{Example of informative prior}
-  
-  \begin{itemize}
-  \item The percentage of girl births is remarkably stable at about
-    48.8\% girls, rarely varying by more than 0.5\% from this rate
-  \only<2-3>{\item There was a study on the percentage of girl births among
-    parents in attractiveness categories 1--5 (assessed by
-    interviewers in a face-to-face survey)}
-  \end{itemize}
-  \begin{center}
-  \only<3>{\includegraphics[width=9cm]{sexratio_bayes_1.pdf}}
-  \only<4>{\includegraphics[width=9cm]{sexratio_bayes_2.pdf}}
-  \end{center}
-\end{frame}
+%%% handedness prior
+\begin{frame}{Informative prior for left handedness}
 
-\begin{frame}
-{Example of weakly informative prior}
-  
   \begin{itemize}
-  \item Gabry et al (2019). Visualization in Bayesian workflow.
-    \only<1>{
+  \item Papadatou-Pastou et al. (2020). Human handedness: A meta-analysis.
+    Psychological Bulletin, 146(6), 481–524. \url{https://doi.org/10.1037/bul0000229}
     \begin{itemize}
-    \item Estimation of human exposure to air pollution from
-      particulate matter measuring less than 2.5 microns in diameter
-      (PM$_{2.5}$)
-  \item A recent report estimated that PM$_{2.5}$ is responsible for three
-    million deaths worldwide each year (Shaddick et al, 2017)
+    \item totaling 2\,396\,170 individuals
+    \item varies between 9.3\% and 18.1\%, depending on how handedness is measured
+    \item varies between countries and in time
+    \end{itemize}
   \end{itemize}
-  }
-  \end{itemize}
-  \begin{center}
-  \only<2>{\includegraphics[width=10cm]{map-data.png}\\Satellite estimates and ground monitor locations}
-  \only<3>{\includegraphics[width=6.5cm]{plot2_bigger.png}}
-  \end{center}
+  \only<2>{\includegraphics[width=9cm,trim=1300 550 0 240,clip]{figs/left_handed_infographic.png}\\}
+  \only<3>{\includegraphics[width=9cm,trim=0 600 1400 240,clip]{figs/left_handed_infographic.png}\\}
+  \only<2-3>{\tiny Fig from \url{https://www.reddit.com/r/dataisbeautiful/comments/s9x1ya/history_of_lefthandedness_oc/}}
+  
 \end{frame}
 
-\begin{frame}
-{Example of weakly informative prior}
+\begin{frame}{Benefits of integration and prior}
 
-  \begin{center}
-    \only<1>{\includegraphics[width=11cm]{pm25_pp1a.pdf}}
-    \only<2>{\includegraphics[width=11cm]{pm25_pp1b.pdf}}
-    \only<3>{\includegraphics[width=11cm]{pm25_pp2.pdf}}
-\end{center}
+  \begin{itemize}
+  \item Left handed simulation with 30 left handeded and 300 total
+  \end{itemize}
+  
+  \only<1>{\hspace{-1cm}\includegraphics[width=11.5cm]{figs/lefthand_simulation_phat.pdf}}
+  \only<2>{\hspace{-1cm}\includegraphics[width=11.5cm]{figs/lefthand_simulation_yhat.pdf}}
+
 \end{frame}
 
-\begin{frame}
-{Effect of incorrect priors?}
+\begin{frame}{Benefits of integration and prior}
+
+  \begin{itemize}
+  \item Left handed simulation with 30 left handeded and 300 total
+    \begin{itemize}
+    \item repeated 10\,000 times
+    \item average log predictive density for 30 left handeded in total
+    \end{itemize}
+  \end{itemize}
+  
+  \hspace{-1cm}\includegraphics[width=11.5cm]{figs/lefthand_simulation_logscore.pdf}
+
+\end{frame}
+
+% \begin{frame}{Example of informative prior}
+  
+%   \begin{itemize}
+%   \item The percentage of girl births is remarkably stable at about
+%     48.8\% girls, rarely varying by more than 0.5\% from this rate
+%   \only<2-3>{\item There was a study on the percentage of girl births among
+%     parents in attractiveness categories 1--5 (assessed by
+%     interviewers in a face-to-face survey)}
+%   \end{itemize}
+%   \begin{center}
+%   \only<3>{\includegraphics[width=9cm]{sexratio_bayes_1.pdf}}
+%   \only<4>{\includegraphics[width=9cm]{sexratio_bayes_2.pdf}}
+%   \end{center}
+% \end{frame}
+
+% \begin{frame}{Example of weakly informative prior}
+  
+%   \begin{itemize}
+%   \item Gabry et al (2019). Visualization in Bayesian workflow.
+%     \only<1>{
+%     \begin{itemize}
+%     \item Estimation of human exposure to air pollution from
+%       particulate matter measuring less than 2.5 microns in diameter
+%       (PM$_{2.5}$)
+%   \item A recent report estimated that PM$_{2.5}$ is responsible for three
+%     million deaths worldwide each year (Shaddick et al, 2017)
+%   \end{itemize}
+%   }
+%   \end{itemize}
+%   \begin{center}
+%   \only<2>{\includegraphics[width=10cm]{map-data.png}\\Satellite estimates and ground monitor locations}
+%   \only<3>{\includegraphics[width=6.5cm]{plot2_bigger.png}}
+%   \end{center}
+% \end{frame}
+
+% \begin{frame}{Example of weakly informative prior}
+
+%   \begin{center}
+%     \only<1>{\includegraphics[width=11cm]{pm25_pp1a.pdf}}
+%     \only<2>{\includegraphics[width=11cm]{pm25_pp1b.pdf}}
+%     \only<3>{\includegraphics[width=11cm]{pm25_pp2.pdf}}
+% \end{center}
+% \end{frame}
+
+\begin{frame}{Effect of incorrect priors?}
   
   \begin{itemize}
   \item Introduce bias, but often still produce smaller estimation
@@ -724,6 +795,30 @@
 \end{frame}
 
 %skip rest in video
+\begin{frame}
+  \frametitle{Binomial: unknown $\theta$}
+
+  Sometimes conditioning on the model $M$ is explicitly shown
+  
+  \begin{itemize}
+  \item {\color{blue}Posterior} with Bayes rule (function of $\theta$, continuous)
+    \begin{equation*}
+      p(\theta|y,n,M)=\frac{p(y|\theta,n,M)p(\theta|n,M)}{p(y|n,M)}
+    \end{equation*}
+    where $p(y|n,M)=\int p(y|\theta,n,M)p(\theta|n,M) d\theta$
+    \vspace{0.5\baselineskip}
+    \uncover<2->{\begin{itemize}
+    \item makes it more clear that likelihood and prior are both part
+      of the model
+    \item makes it more clear that there is no absolute probability
+      for $p(y|n)$, but it depends on the model $M$
+    \item in case of two models, we can evaluate marginal likelihoods
+      $p(y|n,M_1)$ and $p(y|n,M_2)$ (more in Ch 7)
+    \item<3-> usually dropped to make the notation more concise
+    \end{itemize}}
+  \end{itemize}
+
+\end{frame}
 
 \begin{frame}{Sufficient statistics*}
 
@@ -803,8 +898,7 @@ blue-green algae levels.
   \end{center}
 \end{frame}
 
-\begin{frame}
-{Reasons to use Normal distribution}
+\begin{frame}{Reasons to use Normal distribution}
 
   \begin{itemize}
   \item Normal distribution often justified based on central limit theorem
@@ -815,8 +909,7 @@ blue-green algae levels.
 
 %%skip in video
 
-\begin{frame}
-{Central limit theorem*}
+\begin{frame}{Central limit theorem*}
 
   \begin{itemize}
   \item De Moivre, Laplace, Gauss, Chebysev, Liapounov, Markov, et al.
@@ -853,13 +946,13 @@ blue-green algae levels.
   \begin{itemize}
   \item Assume $\sigma^2$ known
     \begin{align*}
-      &\text{Likelihood} & p(y|\theta) & \propto
-      \exp\left(-\frac{1}{2\sigma^2}(y-\theta)^2\right)\\ \\
-      &\text{Prior} & p(\theta) & \propto
-      \exp\left(-\frac{1}{2\tau_0^2}(\theta-\mu_0)^2\right)\\ \\
+      &\text{Likelihood} & p(y|{\color{red}\theta}) & \propto
+      \exp\left(-\frac{1}{2\sigma^2}(y-{\color{red}\theta})^2\right)\\ \\
+      &\text{Prior} & p({\color{red}\theta}) & \propto
+      \exp\left(-\frac{1}{2\tau_0^2}({\color{red}\theta}-\mu_0)^2\right)\\ \\
       & & \uncover<2->{\exp(a)\exp(b)} & \uncover<2->{= \exp(a+b)} \\ \\
       &\uncover<3->{ \text{Posterior}}&
-      \uncover<3->{p(\theta|y)& \propto \exp\left(-\frac{1}{2}\left[ \frac{(y-\theta)^2}{\sigma^2}+\frac{(\theta-\mu_0)^2}{\tau_0^2} \right]\right)}
+      \uncover<3->{p({\color{red}\theta}|y)& \propto \exp\left(-\frac{1}{2}\left[ \frac{(y-{\color{red}\theta})^2}{\sigma^2}+\frac{({\color{red}\theta}-\mu_0)^2}{\tau_0^2} \right]\right)}
     \end{align*}
   \end{itemize}
 
@@ -870,17 +963,17 @@ blue-green algae levels.
  \begin{frame}{Normal distribution - conjugate prior for $\theta$}
 
   \begin{itemize}
-  \item Posterior (see ex 2.14a)
+  \item Posterior (highly recommended to do BDA 3 Ex 2.14a)
     \vskip -5mm
     \begin{align*}
       & &
-      p(\theta|y)&\propto \exp\left(-\frac{1}{2}\left[
-          \frac{(y-\theta)^2}{\sigma^2}+\frac{(\theta-\mu_0)^2}{\tau_0^2} \right]\right) \\ 
-      & & & \propto \exp \left(-\frac{1}{2\tau_1^2}(\theta-\mu_1)^2
+      p({\color{red}\theta}|y)&\propto \exp\left(-\frac{1}{2}\left[
+          \frac{(y-{\color{red}\theta})^2}{\sigma^2}+\frac{({\color{red}\theta}-\mu_0)^2}{\tau_0^2} \right]\right) \\ 
+      & & & \propto \exp \left(-\frac{1}{2\tau_1^2}({\color{red}\theta}-\mu_1)^2
       \right)
     \end{align*}
     \begin{equation*}
-      \theta|y \sim \N(\mu_1,\tau_1^2), \quad
+      {\color{red}\theta}|y \sim \N(\mu_1,\tau_1^2), \quad
       \text{where} \quad
       \mu_1=\frac{\frac{1}{\tau_0^2}\mu_0+\frac{1}{\sigma^2}y}{\frac{1}{\tau_0^2}+\frac{1}{\sigma^2}} \quad  \text{and}  \quad \frac{1}{\tau_1^2} = \frac{1}{\tau_0^2}+\frac{1}{\sigma^2}
     \end{equation*}
@@ -910,13 +1003,12 @@ blue-green algae levels.
 
 \end{frame}
 
-\begin{frame}
-{Normal distribution - conjugate prior for $\theta$}
+\begin{frame}{Normal distribution - conjugate prior for $\theta$}
 
   \begin{itemize}
   \item Several observations $y=(y_1,\ldots,y_n)$
     \begin{align*}
-      p(\theta|y) = \N(\theta|\mu_n,\tau_n^2)
+      p({\color{red}\theta}|y) = \N({\color{red}\theta}|\mu_n,\tau_n^2)
     \end{align*}
     \vskip -6mm
     \begin{align*}
@@ -929,7 +1021,7 @@ blue-green algae levels.
     \item If $\tau_0\rightarrow\infty$ when $n$ fixed\\
       or if $n\rightarrow\infty$ when $\tau_0$ fixed
       \begin{equation*}
-        p(\theta|y) \approx \N(\theta|\bar{y},\sigma^2/n)
+        p({\color{red}\theta}|y) \approx \N({\color{red}\theta}|\bar{y},\sigma^2/n)
       \end{equation*}
   \end{itemize}
 
@@ -963,7 +1055,7 @@ blue-green algae levels.
      \end{itemize}
    \item<2-> The mean can be also a function of covariates
      \begin{itemize}
-     \item normal linear regression
+     \item e.g. normal linear regression
      \end{itemize}
    \end{itemize}
  \end{frame}
