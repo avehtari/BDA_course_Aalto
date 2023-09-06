@@ -15,15 +15,15 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: macOS-latest, r: 'release'}
-          - {os: macOS-latest, r: 'oldrel'}
-          - {os: macOS-latest, r: '3.6'}
-          - {os: windows-latest, r: 'release'}
-          - {os: windows-latest, r: 'oldrel'}
-          - {os: windows-latest, r: '3.6'}
+          - { os: macOS-latest, r: 'release' }
+          - { os: macOS-latest, r: 'oldrel' }
+          - { os: macOS-latest, r: '3.6' }
+          - { os: windows-latest, r: 'release' }
+          - { os: windows-latest, r: 'oldrel' }
+          - { os: windows-latest, r: '3.6' }
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: r-lib/actions/setup-r@v2
         with:
@@ -65,7 +65,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: actions/download-artifact@v3
         with:
@@ -101,3 +101,12 @@ jobs:
         uses: EndBug/add-and-commit@v9
         with:
           add: 'src bin'
+
+      - name: GitHub Pages action
+        uses: peaceiris/actions-gh-pages@v3.6.1
+        if: github.ref == 'refs/heads/master'
+        with:
+          github_token: ${{ secrets.GH_ACTION }}
+          publish_branch: gh-pages
+          keep_files: true
+          publish_dir: .
