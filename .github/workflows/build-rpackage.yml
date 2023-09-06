@@ -60,3 +60,35 @@ jobs:
         with:
           name: aaltobda-${{ matrix.config.os }}-${{ matrix.config.r }}
           path: ./build
+
+  run-cmdstan-tests:
+    name: Commit and push built packages
+    needs: build-rpackage-binaries
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/download-artifact@v3
+        with:
+          path: binaries
+
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: binaries
+
+      # - uses: r-lib/actions/setup-r@v2
+      #   with:
+      #     r-version: ${{ matrix.config.r }}
+
+      # - uses: r-lib/actions/setup-r-dependencies@v2
+      #   with:
+      #     cache-version: 2
+      #     extra-packages: any::remotes
+      #     working-directory: rpackage
+
+      # - name: Install drat
+      #   run: |
+      #     remotes::install_github("eddelbuettel/drat")
+      #   shell: Rscript {0}
+
