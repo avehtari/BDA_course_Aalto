@@ -1,0 +1,62 @@
+name: Built aaltobda binaries
+
+on:
+  push:
+    branches: pkgbuild-test
+  #paths:
+  #  - 'rpackage/**'
+
+jobs:
+  build-rpackage-binaries:
+    runs-on: ${{ matrix.config.os }}
+
+    name: Build aaltobda ${{ matrix.config.os }} (${{ matrix.config.r }})
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {os: macOS-latest, r: 'release'}
+          - {os: macOS-latest, r: 'oldrel'}
+          - {os: macOS-latest, r: '3.6'}
+          - {os: windows-latest, r: 'release'}
+          - {os: windows-latest, r: 'oldrel'}
+          - {os: windows-latest, r: '3.6'}
+          - {os: ubuntu-latest, r: 'release'}
+          - {os: ubuntu-latest, r: 'oldrel'}
+          - {os: ubuntu-latest, r: '3.6'}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: ${{ matrix.config.r }}
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          cache-version: 2
+          extra-packages: any::pkgbuild
+          working-directory: rpackage
+
+      - name: Build binary packages
+        run: |
+          dir.create("build/${{ matrix.config.os }}_${{ matrix.config.r }}",
+                      recursive = TRUE)
+          pkgbuild::build(
+            "./rpackage",
+            dest_path = "build/${{ matrix.config.os }}_${{ matrix.config.r }}",
+            binary = TRUE)
+        shell: Rscript {0}
+
+      - name: Build source package
+        if: matrix.config.os == 'ubuntu-latest' && matrix.config.r == 'release'
+        run: |
+          pkgbuild::build("./rpackage", dest_path = "build", binary = FALSE)
+        shell: Rscript {0}
+
+      - name: Stash builds sources
+        uses: actions/upload-artifact@master
+        with:
+          name: aaltobda-${{ matrix.config.os }}-${{ matrix.config.r }}
+          path: ./build
