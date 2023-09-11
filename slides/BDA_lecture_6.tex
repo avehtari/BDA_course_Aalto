@@ -185,6 +185,23 @@
 
 \begin{frame}{Hamiltonian Monte Carlo}
 
+  \begin{itemize}
+  \item<+-> Originally for quantum-chromo-dynamic simulation (Duane et
+    al., 1987)
+  \item<+-> Radford Neal started using for Bayesian neural networks in 1990's
+  \item<+-> More recent variants are robust wrt the algorithm parameters
+  \item<+-> The performance scales well with the number of dimensions
+  \item<+-> The most popular MCMC algorithm in probabilistic programming
+    frameworks (Stan, PyMC, TFP, Pyro, etc.)
+  \item<+-> Also used as the a high-fidelity reference in Approximate
+    Inference in Bayesian Deep Learning competition
+    \url{https://izmailovpavel.github.io/neurips_bdl_competition/}
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Hamiltonian Monte Carlo}
+
   \vspace{-0.5\baselineskip}
   \begin{itemize}
   \item Uses log density (negative log density is called energy)
@@ -211,10 +228,19 @@
 \begin{frame}{Hamiltonian Monte Carlo / No-U-Turn sampling}
 
   \begin{itemize}
-  \item[1.] HMC basics (static HMC)
-  \item[2.] HMC + leapfrog discretization + Metropolis (static HMC)
-  \item[3.] NUTS + slice sampling + Metropolis (dynamic HMC)
-  \item[4.] NUTS + multinomial (dynamic HMC)
+  \item<+->[1.] HMC basics (static HMC)
+  \item<+->[2.] HMC + leapfrog discretization + Metropolis (static HMC)
+    \begin{itemize}
+    \item Duane et al. (1987)
+    \end{itemize}
+  \item<+->[3.] NUTS + slice sampling + Metropolis (dynamic HMC)
+    \begin{itemize}
+    \item Hoffman \& Gelman et al. (2014)
+    \end{itemize}
+  \item<+->[4.] NUTS + multinomial (dynamic HMC)
+    \begin{itemize}
+    \item Betancourt (2018)
+    \end{itemize}
   \end{itemize}
 
 \end{frame}
@@ -222,15 +248,15 @@
 \begin{frame}{Hamiltonian Monte Carlo}
 
   \begin{itemize}
-  \item Previously
+  \item Related methods
     \begin{itemize}
-    \item<+-> Factorizing: sample from\\
-      1) $p(\sigma^2)$,\\
-      2) $p(\mu \mid \sigma^2)$
-    \item<+-> Gibbs: sample from\\
-      1) $p(\sigma^2 \mid \mu)$,\\
-      2) $p(\mu \mid \sigma^2)$
-    \item<+-> Metropolis: jointly $p(\mu,\sigma)$\\
+    \item<+-> Factorizing $p(\theta_1,\theta_2)=p(\theta_1 \mid \theta_2)p(\theta_2)$: sample from\\
+      1) $p(\theta_2)$,\\
+      2) $p(\theta_1 \mid \theta_2)$
+    % \item<+-> Gibbs: sample from\\
+    %   1) $p(\theta_2 \mid \theta_1)$,\\
+    %   2) $p(\theta_1 \mid \theta_2)$
+    \item<+-> Metropolis: jointly $p(\theta_1,\theta_2)$\\
       jump distribution is a combination of proposal distribution and
       point mass at the previous value
     \end{itemize}
@@ -581,6 +607,34 @@
 
 \end{frame}
 
+\begin{frame}{Some other HMC and gradient based variants}
+
+  \begin{itemize}
+  \item ChEES-HMC (Hoffman et al., 2021)
+    \begin{itemize}
+    \item a GPU friendly adapted but fixed simulation length
+    \item static after adaptation
+    \end{itemize}
+  \item MEADS (Hoffman \& Sountsov, 2022)
+    \begin{itemize}
+    \item a GPU friendly multi-chain adaptation for generalized HMC (Horowitz, 1991) in
+      which the momentum is partially updated frequently
+    \item instead of simulation length, need to choose the partial
+      update rate
+    \end{itemize}
+  \item MALT (Riou-Durand and Vogrinc, 2022; Riou-Durand et al., 2022)
+    \begin{itemize}
+    \item a GPU friendly method realted to GHMC
+    \item but avoids momentum flips after rejection
+    \end{itemize}
+  % \item Apogee to Apogee Path Sampler (AAPS, Sherlock et al., 2021)
+  %   \begin{itemize}
+  %   \item a dynamic HMC
+  %   \end{itemize}
+  \end{itemize}
+  
+\end{frame}
+
 \begin{frame}{Probabilistic programming language}
   
   \begin{itemize}
@@ -621,12 +675,12 @@
      \begin{itemize}
      \item autodiff to compute gradients of the log density
      \end{itemize}
-   \item<2-> More than 100K users in social, biological, and
+   \item<2-> More than 200K users in social, biological, and
      physical sciences, medicine, engineering, and business
      
    \item<3-> Several full time developers, 40+ developers, more than 100 contributors
-   \item<4-> R, Python, Julia, Scala, Stata, Matlab, command line interfaces
-    \item<4-> More than 140 R packages using Stan
+   \item<4-> R, Python, Julia, Scala, Stata, command line interfaces
+    \item<4-> More than 200 R packages using Stan
    \end{itemize}
   \vfill
   \begin{center}
@@ -1134,7 +1188,7 @@ model {
 \end{frame} 
 
 \begin{frame}[fragile]
-  \frametitle{Student-t linear model}
+  \frametitle{Student-$t$ linear model}
   {\small
   \begin{lstlisting}[language=Stan]
 ...
