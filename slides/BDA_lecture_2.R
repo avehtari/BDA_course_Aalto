@@ -186,3 +186,109 @@ ppost <- ggplot(guessdf, aes(group = id, x = x, y = density)) +
     stat_function(fun = dnorm, n = 101, args = list(mean = popmu, sd = popsd),
                   color = "red")
 ppost
+
+
+#' Benefits of integration and prior in the long run
+library(khroma)
+library(latex2exp)
+library(directlabels)
+
+#' Generate a single simulated data set for left handedness
+set.seed(5710)
+ntot=300
+nleft=30
+y=sample(c(rep(0,ntot-nleft),rep(1,nleft)), replace=FALSE, size=ntot)
+#' Informative prior based on Wikipedia
+a=8;b=60;
+
+#' Parameter point estimates given from 1 to ntot observations
+phat_ml=cumsum(y)/(1:ntot)
+phat_bayes=(cumsum(y)+1)/((1:ntot)+2)
+phat_bayes_prior=(cumsum(y)+a)/((1:ntot)+a+b)
+
+#' Guess for the total number of left handed after 1 to ntot observations
+yhat_ml=cumsum(y)+round(phat_ml*seq(ntot-1,0,by=-1))
+yhat_bayes=cumsum(y)+round(phat_bayes*seq(ntot-1,0,by=-1))
+yhat_bayes_prior=cumsum(y)+round(phat_bayes_prior*seq(ntot-1,0,by=-1))
+
+#' Create a long format data frame for plotting
+df<-data.frame(n=1:ntot,
+               phat_ml, phat_bayes, phat_bayes_prior,
+               yhat_ml, yhat_bayes, yhat_bayes_prior) |>
+  pivot_longer(cols = matches("^[py]hat"),
+               names_to = c(".value", "method"),
+               names_pattern = "^(.*?)_(.*?)$") |>
+  mutate(method = factor(method, levels = c("ml", "bayes", "bayes_prior"),
+                         labels = c("MaxLik", "Bayes + unif.p.", "Bayes + info.p.")))
+
+#' Plot parameter point estimates given from 1 to ntot observations
+df |>
+  ggplot(aes(x=n,y=phat,color=method)) +
+  geom_line(size=1)+
+  geom_hline(yintercept=p, linetype='dashed')+
+  ylab(TeX("$\\hat{\\theta}$"))+
+  theme(legend.position="none")+
+  geom_dl(aes(label = method), method = list(dl.trans(x=x-0.2),cex=1.15,"first.points"))+
+  scale_x_continuous(expand = expansion(mult = c(0.24, 0.02)))+
+  scale_color_vibrant(name = "Estimate")+
+  xlab("Number of observations")
+
+ggsave('lefthand_simulation_phat.pdf',width=8,height=4)
+  
+#' Plot guess for the number of left handed after 1 to ntot observations
+df |>
+  ggplot(aes(x=n,y=yhat,color=method)) +
+  geom_line(size=1)+
+  geom_hline(yintercept=nleft, linetype='dashed')+
+  ylab(TeX("$\\hat{y}$"))+
+  theme(legend.position="none")+
+  geom_dl(aes(label = method), method = list(dl.trans(x=x-0.2),cex=1.15,".points"))+
+  scale_x_continuous(expand = expansion(mult = c(0.24, 0.02)))+
+  scale_y_continuous(breaks=c(0,30,60,90))+
+  scale_color_vibrant(name = "Estimate")+
+  xlab("Number of observations")
+
+ggsave('lefthand_simulation_yhat.pdf',width=8,height=4)
+
+
+#' Repeat the simulation 10 000 times
+#' Compute log score for predictive distributions
+#' Log-score is log of the probability given the predictive distribution and the true nleft
+ls_ml = ls_bayes = ls_bayes_prior = matrix(nrow=10000,ncol=ntot)
+for (i in 1:10000) {
+  y=sample(c(rep(0,ntot-nleft),rep(1,nleft)), replace=FALSE, size=ntot)
+  phat_ml=cumsum(y)/(1:ntot)
+  ls_ml[i,1:ntot]=(dbinom(x=nleft-cumsum(y),size=seq(299,0,by=-1),prob=phat_ml,log=TRUE))
+  ls_bayes[i,1:ntot]=(dbbinom(x=nleft-cumsum(y),size=seq(299,0,by=-1),cumsum(y)+1,cumsum(1-y)+1,log=TRUE))
+  ls_bayes_prior[i,1:ntot]=(dbbinom(x=nleft-cumsum(y),size=seq(299,0,by=-1),cumsum(y)+a,cumsum(1-y)+b,log=TRUE))
+}
+
+#' Compute the mean log score for each method
+s_ml=colMeans(es_ml);
+s_bayes=colMeans(es_bayes)
+s_bayes_prior=colMeans(es_bayes_prior)
+#' Include uniform predictive distribution as the reference
+s_uniform = log(1/seq(300,1,by=-1))
+
+#' Create a long format data frame for plotting
+dfs<-data.frame(n=1:ntot,
+               s_ml, s_bayes, s_bayes_prior, s_uniform) |>
+  pivot_longer(cols = matches("^s"),
+               names_to = c(".value", "method"),
+               names_pattern = "^(.*?)_(.*?)$") |>
+  mutate(method = factor(method, levels = c("ml", "bayes", "bayes_prior", "uniform"),
+                         labels = c("MaxLik", "Bayes + unif.p.", "Bayes + info.p.", "Unif.p.")))
+
+#' Plot probability of correct guess after 1 to ntot observations
+dfs |>
+  ggplot(aes(x=n,y=s,color=method)) +
+  geom_line(aes(group=method),size=1)+
+  ylab("Expected predictive log score")+
+  scale_color_vibrant()+
+  theme(legend.position="none")+
+  geom_dl(aes(label = method), method = list(dl.trans(x=x-0.2,y=log(exp(y)+0.3)),"first.points",cex=1.15))+
+  scale_x_continuous(expand = expansion(mult = c(0.24, 0.02)))+
+  scale_y_continuous(expand = expansion(mult = c(0.08, 0)))+
+  xlab("Number of observations")
+
+ggsave('lefthand_simulation_logscore.pdf',width=8,height=4)
