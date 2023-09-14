@@ -3,9 +3,12 @@
 
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage{times}
+\usepackage{newtxtext} % times
+%\usepackage[scaled=.95]{cabin} % sans serif
 \usepackage{amsmath}
 \usepackage[varqu,varl]{inconsolata} % typewriter
+\usepackage[varg]{newtxmath}
+\usefonttheme[onlymath]{serif} % beamer font theme
 \usepackage{microtype}
 \usepackage{url}
 \urlstyle{same}
@@ -59,6 +62,7 @@
 \DeclareMathOperator{\Negbin}{Neg-bin}
 \DeclareMathOperator{\Poisson}{Poisson}
 \DeclareMathOperator{\Beta}{Beta}
+\DeclareMathOperator{\BetaBinomial}{Beta-Binomial}
 \DeclareMathOperator{\logit}{logit}
 \DeclareMathOperator{\N}{N}
 \DeclareMathOperator{\normal}{normal}
@@ -443,15 +447,41 @@
 \begin{frame}{Left handedness}
 
   \begin{itemize}
-  \item If we would like to provide scissors for all students, how
+  \item<+-> If we would like to provide scissors for all students, how
     many left handed scissors we would need?
     \begin{itemize}
     \item related to consumer behavior analysis and A/B testing
+  \end{itemize}
+\end{itemize}  
+
+\end{frame}
+
+\begin{frame}{Left handedness}
+
+  \vspace{-0.5\baselineskip}
+  \begin{itemize}
+  \item<+-> What we know and don't know
+    \begin{itemize}
+    \item $N=L+R$ is the total number of students in the lecture hall,
+      $N$ is known in the beginning
+    \item<+-> $L$ and $R$ are the number of left and right handed students, not known before we start asking
+    \item<+-> $n=l+r$ is the number of students we have asked
+    \item<+-> $l$ and $r$ are the numbers of left and right handed students from the students we asked
+    \item<+-> we also know that $l \leq L \leq (N-r)$ and $r \leq R \leq (N-l)$
     \end{itemize}
-  \item {\color{red} Posterior predictive} distribution for several
-    future trials is Beta-Binomial
-    \pause
-  \item Demo: \url{https://huggingface.co/spaces/Madhav/Handedness}
+  \item<+-> After observing $n$ students with $l$ left handed, what we
+    know about $L$?
+    \begin{itemize}
+    \item We define $L=l+\tilde{l}$, where $\tilde{l}$ is the
+      unobserved number of left handed students among those who we did
+      not yet ask
+    \end{itemize}
+  \item<+-> {\color{blue} Posterior} distribution for
+    $\theta$ is $\Beta(\alpha+l, \beta+r)$
+  \item<+-> {\color{red} Posterior predictive} distribution for
+    $\tilde{l}$ is\\
+    $\BetaBinomial(\tilde{l} | N-n, \alpha+l, \beta+r)=\int_0^1\Bin(\tilde{l} | N-n, \theta)\Beta(\theta | \alpha+l, \beta+r)d\theta$
+  \item<+-> {\small Demo: \url{https://huggingface.co/spaces/Madhav/Handedness}}
   \end{itemize}
   
 \end{frame}

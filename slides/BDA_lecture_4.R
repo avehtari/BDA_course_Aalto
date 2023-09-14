@@ -283,7 +283,7 @@ wrn <- wr/sum(wr)
 
 #' Create a plot of the target and proposal distributions
 df1 <- data.frame(x, q, g) %>% gather(grp, p, -x)
-labsis <- c('q(theta)', 'g(theta|y)', 'Draws from g(theta|y)')
+labsis <- c('q(theta|y)', 'g(theta)', 'Draws from g(theta)')
 
 distr <- ggplot(data = df1) +
     geom_line(aes(x, p,  linetype = grp, color = grp)) +
