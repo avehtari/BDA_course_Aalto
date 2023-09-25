@@ -196,7 +196,7 @@
 
   \vspace{-1.5\baselineskip}
    \begin{align*}
-     E_{\color{blue} p(\theta|y)}[f(\theta)] & = \int f(\theta) {\color{blue} p(\theta|y)} d\theta,\\
+     E_{\color{blue} p(\theta|y)}[h(\theta)] & = \int h(\theta) {\color{blue} p(\theta|y)} d\theta,\\
      \text{where} \quad
      {\color{blue} p(\theta|y)} & = \frac{\color{darkgreen}p(y|\theta)p(\theta)}{\color{red} \int p(y|\theta)p(\theta) d\theta}
    \end{align*}
@@ -209,15 +209,15 @@
    \vspace{-0.5\baselineskip}
     \item<4-> Grid (equal spacing) evaluation with self-normalization
       \begin{align*}
-        E_{\color{blue} p(\theta|y)}[f(\theta)] \approx
-        \frac{\sum_{s=1}^S \left[f(\theta^{(s)}){\color{darkgreen}q(\theta^{(s)}|y)}\right]}{\sum_{s=1}^S{\color{darkgreen}q(\theta^{(s)}|y)}}
+        E_{\color{blue} p(\theta|y)}[h(\theta)] \approx
+        \frac{\sum_{s=1}^S \left[h(\theta^{(s)}){\color{darkgreen}q(\theta^{(s)}|y)}\right]}{\sum_{s=1}^S{\color{darkgreen}q(\theta^{(s)}|y)}}
       \end{align*}
     \item<5-> Monte Carlo methods which can sample from
       ${\color{blue}p(\theta^{(s)}|y)}$ using only
       ${\color{darkgreen}q(\theta^{(s)}|y)}$ {\color{gray}(each draw has weight 1/S)}
          \vspace{-0.5\baselineskip}
       \begin{align*}
-        E_{\color{blue} p(\theta|y)}[f(\theta)] \approx \frac{1}{S} \sum_{s=1}^S f(\theta^{(s)})
+        E_{\color{blue} p(\theta|y)}[h(\theta)] \approx \frac{1}{S} \sum_{s=1}^S h(\theta^{(s)})
       \end{align*}
     \end{itemize}
    
@@ -228,7 +228,7 @@
   {\Large\color{navyblue} It's all about expectations}
 
    \begin{align*}
-   E_{\theta}[f(\theta)] = \int f(\theta) p(\theta|y) d\theta
+   E_{\theta}[h(\theta)] = \int h(\theta) p(\theta|y) d\theta
    \end{align*}
 
   \begin{itemize}
@@ -404,6 +404,8 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
       \pause
     \item $\sigma_\theta/\sqrt{S}$ is called Monte Carlo standard
       error (MCSE)
+      \pause
+      \item In practice, $\sigma_{\theta}$ will be estimated by $ \sqrt{1/(1-S)\sum_{s = 1}^S (\theta^{(s)} - \E(\theta))^2}$
     \end{itemize}
 \end{itemize}
 
@@ -469,13 +471,13 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
     \item $I(\cdot)$ is binomially distributed as $p(\theta \in A)$
         \begin{itemize}
         \item use beta CDF, or normal approximation
-        \item[$\rightarrow$] $\var(I(\cdot)) =  p(1-p)$  (Appendix A, p. 579)
+        \item[$\rightarrow$] $\var(I(\cdot)) =  p(1-p)S$  (Appendix A, p. 579)
         \item[$\rightarrow$] standard deviation of $p$ is $\sqrt{p(1-p)/S}$
         \end{itemize}
         \pause
       \item if $S=100$ and we observe $\frac{1}{S}\sum_l I(\theta^{(s)} \in A)=0.05$,\\ then $\sqrt{p(1-p)/S} \approx 0.02$\\
         i.e. accuracy is about $4\%$ units\\
-        or from quantiles of beta distribution the range is $(0.02,0.11)$
+        or from quantiles of beta distribution the range is $(0.02,0.1)$
         \pause
       \item $S=2000$ draws needed for $1\%$ unit accuracy
     \end{itemize}
@@ -751,7 +753,7 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
      \vspace{-1\baselineskip}
      \only<2->{
    \begin{eqnarray*}
-      \E[f(\theta)] \approx \frac{\sum_s w_s f(\theta^{(s)})}{\sum_s
+      \E[h(\theta)] \approx \frac{\sum_s w_s h(\theta^{(s)})}{\sum_s
       w_s}, \qquad \text{where} \quad 
       w_s =  \frac{q(\theta^{(s)})}{g(\theta^{(s)})} \qquad
    \end{eqnarray*}
@@ -807,7 +809,7 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
   \begin{itemize}
   \item<+-> Using the weighted draws is good
     \begin{align*}
-      \E[f(\theta)] \approx \frac{\sum_s w_s f(\theta^{(s)})}{\sum_s w_s}
+      \E[h(\theta)] \approx \frac{\sum_s w_s h(\theta^{(s)})}{\sum_s w_s}
     \end{align*}
   \item<+-> But it can be convenient to obtain draws with equal weights
     \begin{itemize}
