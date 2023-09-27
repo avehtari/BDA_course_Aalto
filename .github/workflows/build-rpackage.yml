@@ -59,7 +59,7 @@ jobs:
 
   update-package-repo:
     env:
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_PAT: ${{ secrets.GH_ACTION }}
     name: Commit and push built packages
     needs: build-rpackage-binaries
     runs-on: ubuntu-latest
@@ -95,12 +95,15 @@ jobs:
           drat::insertPackages(new_pkgs, repodir=".")
         shell: Rscript {0}
 
-      - name: Commit any updates
+      - name: Setup Git config
         env:
           GITHUB_TOKEN: ${{ secrets.GH_ACTION }}
-        uses: EndBug/add-and-commit@v9
-        with:
-          add: 'src bin'
+        shell: bash
+        run: |
+          git config --global --add safe.directory /work
+          git config --global user.name "avehtari"
+          git config --global user.email "aki.vehtari@aalto.fi"
+          git checkout master
 
       - name: GitHub Pages action
         uses: peaceiris/actions-gh-pages@v3.6.1
