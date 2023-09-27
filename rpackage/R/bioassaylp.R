@@ -1,3 +1,17 @@
+#' Implementation of log(1 / (1 + exp(-x))) robust to over- and under-flow
+#' @param x numeric input
+#' @export
+log_inv_logit <- function(x) {
+  ifelse(x < 0, x - log1p(exp(x)), -log1p(exp(-x)))
+}
+
+#' Implementation of log(1 - 1 / (1 + exp(-x))) robust to over- and under-flow
+#' @param x numeric input
+#' @export
+log1m_inv_logit <- function(x) {
+  ifelse(x > 0, -x - log1p(exp(-x)), -log1p(exp(x)))
+}
+
 #' Unnormalized log-posterior for bioassay, assuming uniform prior
 #' @param alpha intercept parameter in the dose-response model (vector or single number)
 #' @param beta slope parameter in the dose-response model (vector or single number)
@@ -13,14 +27,6 @@ bioassaylp <- function(alpha, beta, x, y, n) {
   checkmate::assertIntegerish(n, len = 4, lower = 1)
 
   t <- alpha + outer(beta,x)
-  et <- exp(t)
-  z <- et/(1 + et)
-
-  # ensure that log(z) and log(1-z) are computable
-  eps <- 1e-12
-  z <- pmin(z, 1 - eps)
-  z <- pmax(z, eps)
-  lp <- rowSums(t(t(log(z)) * y) + t(t(log(1 - z)) * (n - y)))
+  lp <- rowSums(t(t(log_inv_logit(t)) * y) + t(t(log1m_inv_logit(t)) * (n - y)))
   return(lp)
 }
-

@@ -82,7 +82,7 @@
 #'   \item{temp.august}{Average temperature in August}
 #'   \item{temp.summer}{Average temperature in July--August}
 #' }
-"kilpisjarvi"
+"kilpisjarvi2022"
 
 #' @title windshieldy1
 #' @description windshieldy1 data set. The data represents a sample of
