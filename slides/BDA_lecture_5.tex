@@ -93,8 +93,29 @@
 \institute[Aalto]{}
 
 \begin{document}
-
 %http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/
+
+\begin{frame}{Markov chain Monte Carlo (MCMC)}
+
+  \begin{itemize}
+  \item<+-> MCMC focus the posterior density evaluations to the part
+    of the parameter space where the most of the posterior mass is
+  \item<+-> This lecture introduces two simplest MCMC algorithms Gibbs
+    and Metropolis
+    \begin{itemize}
+    \item these help to understand the basic idea
+    \item in your assignment you implement Metropolis algorithm
+    \end{itemize}
+  \item<+-> Next week introduces more elaborate and complex MCMC algorithm
+    \begin{itemize}
+    \item after that in your assignments and projects, you will use
+      ready made efficient implementation
+    \end{itemize}
+  \item<+-> This lecture introduces also necessary diagnostics to
+    check whether MCMC results are useful
+  \end{itemize}
+  
+\end{frame}
 
 \begin{frame}{Chapter 11}
 
@@ -110,7 +131,7 @@
     \begin{itemize}
     \item effective sample size (ESS / $\Seff$)
     \end{itemize}
-  \item 11.6 Example: hierarchical normal model (quick glance)
+  \item {\color{gray}11.6 Example: hierarchical normal model (quick glance)}
   \end{itemize}
 \end{frame}
 
@@ -1230,6 +1251,31 @@
    
 \end{frame}
 
+\begin{frame}{Diagnostic tools}
+
+  For this week's assignment:
+  \begin{itemize}
+  \item<+-> $\widehat{R}$, ESS, mean, MCSE of mean in R
+    \begin{itemize}
+    \item \texttt{library(posterior)}
+    \item \texttt{summarise\_draws(th, basic\_rhat, basic\_ess)}
+    \item \texttt{summarise\_draws(th, mean, mean\_mcse)}
+    \item see demo11\_5 for the examples how to use these
+    \end{itemize}
+  \item<+-> trace, autocorrelation, density, scatter plots in R
+    \begin{itemize}
+    \item \texttt{library(bayesplot)}
+    \item \texttt{mcmc\_trace(th)}, \texttt{mcmc\_acf(th)}, \texttt{mcmc\_areas(th)}, ...
+    \item see demo11\_5 for the examples for more bayesplot examples
+    \end{itemize}
+  \item<+-> Python
+    \begin{itemize}
+    \item see ArviZ package
+    \end{itemize}
+  \end{itemize}
+  
+\end{frame}
+
 \begin{frame}{Problematic distributions}
 
   \begin{itemize}
@@ -1291,6 +1337,39 @@
    \end{itemize}
    
  \end{frame}
+
+ \begin{frame}
+   
+   {\Large\color{navyblue} MCMC summary}
+
+   \begin{itemize}
+   \item<+-> Construct a Markov chain which has desired stationary distribution
+     \begin{itemize}
+     \item most of the density evaluations will be made where most of
+       posterior mass is, which helps to scale in higher dimensions
+     \item better Markov chains are more efficient per density
+       evaluation
+     \end{itemize}
+   \item<+-> MCMC estimate is biased towards the initial value
+     \begin{itemize}
+     \item this bias can be non-negligible especially for short chains
+     \item the bias can be reduced by discarding the initial part of the chain
+     \item convergence diagnostics help to decide when the bias can be expected to be negligible
+     \end{itemize}
+   \item<+-> MCMC draws are correlated in time, but CLT holds
+     \begin{itemize}
+     \item effective sample size estimates help to decide how many
+       correlated draws are needed
+     \end{itemize}
+   \item<+-> Probabilistic programming frameworks
+     \begin{itemize}
+     \item provide efficient MCMC algorithms that work well without
+       manual tuning for many posterior distributions (more next week)
+   \end{itemize}
+ \end{itemize}
+   
+ \end{frame}
+
 
 \end{document}
 
