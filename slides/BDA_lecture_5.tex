@@ -191,10 +191,8 @@
     \item Rejection sampling works mostly in 1D (truncation is a special case)
     \item Importance sampling is reliable only in special cases
     \end{itemize}
-    \only<2>{\includegraphics[width=8cm]{norm1d_2.pdf}}
-    \only<3>{\includegraphics[width=8cm]{norm1d_7.pdf}}
-    \only<4>{\includegraphics[width=8cm]{bioassay_grid3_2.pdf}}
-  \item<5-> What to do in high dimensions?
+    \only<2>{\includegraphics[width=8cm]{bioassay_grid3_2.pdf}}
+  \item<3-> What to do in high dimensions?
     \begin{itemize}
     \item Markov chain Monte Carlo (Ch 11-12)
     \item Laplace, Variational*, EP* (Ch 4,13*)
@@ -237,7 +235,9 @@
 \begin{frame}{Markov chain}
 
   \begin{itemize}
-  \item Example of a simple Markov chain
+  \item<+-> Example of a simple Markov chain
+  \item<+-> Given known transition probabilities, we can simulate
+    Markov process and count how often each state is visited
   \end{itemize}
 
 \end{frame}  
@@ -245,6 +245,7 @@
   
 \begin{frame}{Markov chain Monte Carlo (MCMC)}
 
+  \vspace{-0.5\baselineskip}
   \begin{itemize}
   \item Produce draws $\theta^{(t)}$, given $\theta^{(t-1)}$, from a
     Markov chain, which has been constructed so that its equilibrium
@@ -254,7 +255,7 @@
     \item<2->[+] combine sequence of easier Monte Carlo draws to form a Markov chain
     \item<3->[+] chain goes where most of the posterior mass is
     \item<3->[+] asymptotically chain spends the $\alpha$\% of time where
-      $\alpha$\% posterior mass is
+      $\alpha$\% posterior mass is\only<3>{\\\includegraphics[width=6.5cm]{Gibbs1.pdf}}
     \item<4->[+] central limit theorem holds for expectations 
     \item<5->[-] draws are dependent
     \item<5->[-] construction of efficient Markov chains is not always
@@ -296,7 +297,8 @@
     \item e.g. normal distribution, sample alternating from\\
       $p(\mu \mid \sigma^2, y)$ and $p(\sigma^2 \mid \mu, y)$\\
       \vspace{0.2\baselineskip}
-    \item<2-> 1D is easy even if no conjugate prior and analytic posterior
+      \only<2->{\includegraphics[width=6cm]{fake3_joint2.pdf}}
+    \item<3-> 1D is easy even if no conjugate prior and analytic posterior
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -502,7 +504,7 @@
     \item<4->[-] the unconditional probability density of a transition from ${\color{red} \theta_b}$ to ${\color{blue} \theta_a}$ is
       \vspace{-0.5\baselineskip}
       \begin{eqnarray*}
-        p(\theta^{t}={\color{blue} \theta_a},\theta^{t-1}={\color{red} \theta_b}) & = &
+        p(\theta^{t-1}={\color{red} \theta_b}, \theta^{t}={\color{blue} \theta_a}) & = &
         p({\color{red} \theta_b} \mid y)J_t({\color{blue} \theta_a} \mid {\color{red} \theta_b})\left(\frac{p({\color{blue} \theta_a} \mid y)}{p({\color{red} \theta_b} \mid y)}\right)\\
         \pause &  = &  p({\color{blue} \theta_a} \mid y)J_t({\color{blue} \theta_a} \mid {\color{red} \theta_b}),
       \end{eqnarray*}
@@ -510,8 +512,8 @@
       which is the same as the probability of transition from ${\color{blue} \theta_a}$ to ${\color{red} \theta_b}$,
       since we have required that $J_t(\cdot \mid \cdot)$ is symmetric}
       \pause
-    \item<6->[-] since their joint distribution is symmetric, $\theta^t$ and
-      $\theta^{t-1}$ have the same marginal distributions, and so
+    \item<6->[-] since their joint distribution is symmetric, $\theta^{t-1}$ and $\theta^t$
+       have the same marginal distributions, and so
       $p(\theta \mid y)$ is the stationary distribution of the Markov chain of $\theta$
     \end{itemize}
   \end{itemize}
@@ -1263,6 +1265,15 @@
    \end{minipage}
    }
    
+\end{frame}
+
+\begin{frame}{Monte Carlo stanard error (MCSE)}
+
+  \begin{itemize}
+  \item MCSE is obtained as discussed in lecture 4, but replacing the
+    sample size $S$ with the effective sample size $\ESS$.
+  \end{itemize}
+  
 \end{frame}
 
 \begin{frame}{Diagnostic tools}
