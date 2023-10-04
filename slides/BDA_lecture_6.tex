@@ -98,7 +98,29 @@
 
 \begin{document}
 
-\begin{frame}{Chapter 12}
+\begin{frame}{Hamiltonian Monte Carlo and Stan}
+
+  \begin{itemize}
+  \item<+-> Hamiltonian Monte Carlo uses gradient information and dynamic
+    simulation to reduce random-walk and increase acceptance rate
+    \begin{itemize}
+    \item the performance scales well with the number of dimensions
+    \item this lecture introduces the basic HMC and No-U-Turn-Sampler
+      based dynamic HMC
+    \item other useful variants have been developed recently
+    \end{itemize}
+  \item<+-> Stan is the most popular probabilistic programming framework
+    \begin{itemize}
+    \item many recent probprog frameworks use dynamic HMC samplers
+    \item this lecture introduces Stan language and main features
+    \item later you can also use higher level packages built on top of
+      Stan
+    \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{BDA Chapter 12}
 
   \begin{itemize}
   \item {\color{gray} 12.1 Efficient Gibbs samplers (not part of the course)}
@@ -117,7 +139,7 @@
     Monnahan, Thorson, and Branch (2016)
     Faster estimation of Bayesian models in ecology using Hamiltonian
     Monte Carlo. \url{https://dx.doi.org/10.1111/2041-210X.12681}
-  \item A review of why HMC works:\\
+  \item A technical review of why HMC works:\\
     Neal (2012). MCMC using Hamiltonian
     dynamics. \url{https://arxiv.org/abs/1206.1901}
   \item The No-U-Turn Sampler:\\
@@ -352,7 +374,7 @@
   \begin{itemize}
   \item Leapfrog discretization
     \begin{itemize}
-    \item due to the dicretization error the simulation steps away
+    \item due to the discretization error the simulation steps away
       from the constant contour
     \end{itemize}
   \item<2-> Metropolis step with
@@ -597,7 +619,7 @@
 
 \end{frame}
 
-\begin{frame}{Some other HMC and gradient based variants}
+\begin{frame}{Some other recent HMC and gradient based variants}
 
   \begin{itemize}
   \item ChEES-HMC (Hoffman et al., 2021)
@@ -614,7 +636,7 @@
     \end{itemize}
   \item MALT (Riou-Durand and Vogrinc, 2022; Riou-Durand et al., 2022)
     \begin{itemize}
-    \item a GPU friendly method realted to GHMC
+    \item a GPU friendly method related to GHMC
     \item but avoids momentum flips after rejection
     \end{itemize}
   % \item Apogee to Apogee Path Sampler (AAPS, Sherlock et al., 2021)
@@ -802,7 +824,7 @@ model {
 
     \vspace{-0.5\baselineskip}
     \begin{itemize}
-    \item<2-> {\tt target} is the log posterior density
+    \item<2-> {\tt target} is the log posterior density (Lecture 4 discussed log)
     \item<3-> {\tt \_lpdf} for continuous, {\tt \_lpmf} for discrete distributions (discrete for the left hand side of {\tt |})
     \item<4-> for Stan sampler there is no difference between prior and likelihood, all that matters is the final {\tt target}
     \item<5-> you can write in Stan language any program to compute the
@@ -1126,7 +1148,7 @@ data {
 
   \begin{itemize}
   \item difference between {\small\tt vector[N] x}\, and\, {\small\tt array[N] real x}
-  \item<2-> no integer vectors: {\small\tt array[N] int x}
+  \item<2-> only integer arrays: {\small\tt array[N] int x}
   \end{itemize}
 \end{frame}
 
@@ -1275,7 +1297,7 @@ transformed data {
   \frametitle{RStanARM}
 
   \begin{itemize}
-  \item RStanARM provides simplified model description with
+  \item \texttt{RStanARM} provides simplified model description with
     pre-compiled models
     \begin{itemize}
     \item no need to wait for compilation
@@ -1307,7 +1329,7 @@ fit_bin2 <- stan_glm(y/N ~ grp2, family = binomial(), data = d_bin2,
   \frametitle{RStanARM}
 
   \begin{itemize}
-  \item RStanARM provides simplified model description with
+  \item \texttt{RStanARM} provides simplified model description with
     pre-compiled models
     \begin{itemize}
     \item no need to wait for compilation
@@ -1343,12 +1365,12 @@ fit_bin2 <- stan_glm(y/N ~ grp2, family = binomial(), data = d_bin2,
 
 
 \begin{frame}[fragile]
-  \frametitle{BRMS}
+  \frametitle{brms}
 
   \begin{itemize}
-  \item BRMS provides simplified model description
+  \item \texttt{brms} provides simplified model description
     \begin{itemize}
-    \item a larger set of models than RStanARM, but still restricted
+    \item a larger set of models than \texttt{RStanARM}, but still restricted
     \item need to wait for the compilation
     \end{itemize}
   \end{itemize}
@@ -1361,7 +1383,7 @@ fit_bin2 <- brm(y/N ~ grp2, family = binomial(), data = d_bin2,
 
 fit_lin_t <- brm(temp ~ year, data = d_lin, family = student())
 \end{lstlisting}
-    }
+  }
     
 \end{frame} 
 
@@ -1413,7 +1435,7 @@ functions {
     // and max(y)/sigma > -1/k
     int N;
     N <- dims(y)[1];
-    if (fabs(k) > 1e-15)
+    if (abs(k) > 1e-15)
       return -(1+1/k)*sum(log1pv(y*k/sigma)) -N*log(sigma);
     else
       return -sum(y/sigma) -N*log(sigma); // limit k->0
@@ -1422,7 +1444,7 @@ functions {
     // generalised Pareto log ccdf with mu=0
     // should check and give error if k<0 
     // and max(y)/sigma < -1/k
-    if (fabs(k) > 1e-15)
+    if (abs(k) > 1e-15)
       return exp((-1/k)*log1pv(y/sigma*k));
     else
       return exp(-y/sigma); // limit k->0
@@ -1432,50 +1454,42 @@ functions {
 }
 \end{frame} 
 
-
-
-\begin{frame}{Other packages}
-
-  \begin{itemize}
-  \item R
-    \begin{itemize}
-    \item posterior --- posterior handling and diagnostics
-    \item shinystan --- interactive diagnostics
-    \item bayesplot --- visualization and model checking\\ (see model checking in Ch 6)
-    \item tideybayes and ggdist -- more visualization
-    \item loo --- cross-validation model assessment and comparison (see Ch 7)
-    \item projpred --- projection predictive variable selection
-    \item priorsense --- prior and likelihood sensitivity diagnostics
-    \end{itemize}
-    \vspace{\baselineskip}
-  \item Python
-    \begin{itemize}
-    \item ArviZ --- visualization, and model checking and assessment (see Ch 6 and 7)
-    \end{itemize}
-  \end{itemize}
-
-\end{frame} 
-
 \begin{frame}{Different interfaces}
 
   \begin{itemize}
-  \item CmdStanR / CmdStanPy
+  \item \texttt{CmdStanR} / \texttt{CmdStanPy}
     \begin{itemize}
-    \item Lightweight interface on top of commandline program CmdStan
-    \item Lacks some features that are not needed in this course, but
-      is usually easier to install
+    \item Interface on top of command-line program CmdStan
     \end{itemize}
-  \item RStan / PyStan
+  \item \texttt{RStan} / \texttt{PyStan}
     \begin{itemize}
     \item C++ functions of Stan are called directly from R / Python
     \item Higher integration between R/Python and Stan, but maybe more
       difficult to install due to more requirements of compatible C++
       compilers and libraries
     \end{itemize}
-  \item More recent useful R packages
+  \end{itemize}
+
+\end{frame} 
+
+\begin{frame}{Other packages}
+
+  \begin{itemize}
+  \item R
     \begin{itemize}
-    \item posterior: for handling posterior draws, convergence diagnostics, and summaries
-    \item tidybayes + ggdist: pretty plots
+    \item \texttt{posterior} --- posterior handling and diagnostics\\ (Lecture 5)
+    \item \texttt{shinystan} --- interactive diagnostics
+    \item \texttt{bayesplot} --- visualization and model checking\\ (Lectures 5 and 8)
+    \item \texttt{tidybayes} and \texttt{ggdist} -- more posterior and prediction visualization
+    \item \texttt{loo} --- cross-validation model assessment and comparison\\ (Lecture 9)
+    \item \texttt{projpred} --- projection predictive variable selection\\ (Lecture 12)
+    \item \texttt{priorsense} --- prior and likelihood sensitivity
+      diagnostics\\ (can be useful in project)
+    \end{itemize}
+    \vspace{\baselineskip}
+  \item Python
+    \begin{itemize}
+    \item \texttt{ArviZ} --- visualization, and model checking and assessment
     \end{itemize}
   \end{itemize}
 
