@@ -675,6 +675,14 @@
     \end{itemize}
   \item Many frameworks
     Stan, PyMC, Pyro (Uber), TFP (Google), Turing.jl, JAGS, ELFI, ...
+    \begin{itemize}
+    \item Short review of the landscape:\\
+      {\small Štrumbelj et al. (2023). Past, Present, and Future of
+        Software for Bayesian Inference. \textit{Statistical Science},
+        accepted for publication. Preprint
+        \url{http://www.stat.columbia.edu/~gelman/research/published/Bayesian_software_review-8.pdf}}.
+      
+    \end{itemize}
   \end{itemize}
   
 \end{frame}
@@ -687,7 +695,7 @@
      \begin{itemize}
      \item autodiff to compute gradients of the log density
      \end{itemize}
-   \item<2-> More than 200K users in social, biological, and
+   \item<2-> Most popular, with more than 200K users in social, biological, and
      physical sciences, medicine, engineering, and business
      
    \item<3-> Several full time developers, 40+ developers, more than 100 contributors
@@ -715,12 +723,15 @@
 
 \begin{frame}[fragile]
   \frametitle{Binomial model - Stan code}
+
+  {Domain-specific language} for constructing models
+  \\~
   
   {\small\color{gray}
 {\only<1>{\color{black}}
   \begin{lstlisting}[language=Stan]
 data {
-  int<lower=0> N;     // number of experiments
+  int<lower=0> N;         // number of experiments
   int<lower=0,upper=N> y; // number of successes
 }
 \end{lstlisting}}
@@ -733,8 +744,8 @@ parameters {
 {\only<3>{\color{black}}
 \begin{lstlisting}[language=Stan]
 model {
-  theta ~ beta(1,1);     //prior
-  y ~ binomial(N,theta); // observation model
+  theta ~ beta(1,1);      // prior
+  y ~ binomial(N,theta);  // observation model / likelihood
 }
 \end{lstlisting}
 }}
@@ -746,7 +757,7 @@ model {
   {\small
   \begin{lstlisting}[language=Stan]
 data {
-  int<lower=0> N;     // number of experiments
+  int<lower=0> N;         // number of experiments
   int<lower=0,upper=N> y; // number of successes
 }
 \end{lstlisting}}
@@ -769,7 +780,7 @@ data {
   {\small
 \begin{lstlisting}[language=Stan]
 parameters {
-  real<lower=0,upper=1> theta;
+  real<lower=0,upper=1> theta; // parameter of the binomial
 }
 \end{lstlisting}}
 
@@ -792,7 +803,7 @@ parameters {
 \begin{lstlisting}[language=Stan]
 model {
   theta ~ beta(1,1);     // prior
-  y ~ binomial(N,theta); // likelihood
+  y ~ binomial(N,theta); // observation model / likelihood
 }
 \end{lstlisting}}
 
@@ -805,7 +816,7 @@ model {
 \begin{lstlisting}[language=Stan]
 model {
   theta ~ beta(1,1);     // prior
-  y ~ binomial(N,theta); // likelihood
+  y ~ binomial(N,theta); // observation model / likelihood
 }
 \end{lstlisting}}
 
@@ -869,7 +880,8 @@ model {
     \begin{itemize}
     \item this makes the sampling for complex models and bigger data faster
     \item also makes Stan models easily portable, you can use your own
-      favorite interface
+      favorite interface and scripting language for manipulating data
+      and inference results (e.g. R, Python, Julia, Stata, ...)
     \end{itemize}
   \end{itemize}
 
@@ -1035,32 +1047,55 @@ Total execution time: 0.2 seconds.
   
   {\small
 \begin{lstlisting}[]
+options(posterior.num_args=list(sigfig=2))
 fit_bin2$summary()
 \end{lstlisting}
   }
 
   {\tiny
 \begin{lstlisting}
-  variable      mean   median     sd    mad       q5      q95  rhat ess_bulk  ess_tail
-1 lp__      -253.    -253.    1.0    0.74   -255.    -253.      1.0    1751.     2231.
-2 theta1       0.059    0.059 0.0093 0.0093    0.045    0.075   1.0    3189.     2657.
-3 theta2       0.034    0.033 0.0069 0.0067    0.023    0.046   1.0    3229.     2163.
-4 oddsratio    0.57     0.55  0.16   0.15      0.35     0.87    1.0    2998.     2685.
+  variable    mean  median     sd    mad      q5     q95  rhat ess_bulk ess_tail
+1 lp__     -2.5e+2 -2.5e+2 1.0    0.74   -2.6e+2 -2.5e+2   1.0    1751.    2231.
+2 theta1    5.9e-2  5.9e-2 0.0093 0.0093  4.5e-2  7.5e-2   1.0    3189.    2657.
+3 theta2    3.4e-2  3.3e-2 0.0069 0.0067  2.3e-2  4.6e-2   1.0    3229.    2163.
+4 oddsratio 5.7e-1  5.5e-1 0.16   0.15    3.5e-1  8.7e-1   1.0    2998.    2685.
 \end{lstlisting}
   }
 
   \begin{itemize}
   \item<2-> {\tt lp\_\_} is the log density, ie, same as {\tt target}
   \end{itemize}
-  
+
 \end{frame}
 
 \begin{frame}[fragile]
-  \frametitle{Difference between proportions}
+  \frametitle{HMC specific diagnostics}
+  
+  {\small
+\begin{lstlisting}[]
+fit_bin2$diagnostic_summary(diagnostics = c("divergences",
+                                            "treedepth"))
+\end{lstlisting}
+  }
+
+  {\scriptsize
+\begin{lstlisting}
+$num_divergent
+[1] 0 0 0 0
+
+$num_max_treedepth
+[1] 0 0 0 0
+\end{lstlisting}
+  }
+
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Difference between proportions (bayesplot)}
   
   {\small
 \begin{lstlisting}
-draws <- fit_bin2$draws()
+draws <- fit_bin2$draws(format = "df")
 mcmc_hist(draws, pars = 'oddsratio') +
   geom_vline(xintercept = 1) +
   scale_x_continuous(breaks = c(seq(0.25,1.5,by=0.25)))
@@ -1072,23 +1107,154 @@ mcmc_hist(draws, pars = 'oddsratio') +
 \end{center}
 \end{frame}
 
+\begin{frame}[fragile]
+  \frametitle{Difference between proportions (ggplot2)}
 
-% \begin{frame}[fragile]
-%   \frametitle{HMC specific diagnostics}
-  
-%   {\scriptsize
-% \begin{lstlisting}
-% check_treedepth(fit_bin2)
-% check_energy(fit_bin2)
-% check_div(fit_bin2)
+  \vspace{-0.5\baselineskip}
+  {\small
+\begin{lstlisting}
+draws <- fit_bin2$draws(format = "df")
+draws |> ggplot(aes(x=oddsratio)) +
+  geom_histogram() +
+  geom_vline(xintercept = 1) +
+  scale_x_continuous(breaks = c(seq(0.25,1.5,by=0.25)))
+\end{lstlisting}
+  }
 
-% [1] "0 of 4000 iterations saturated the maximum tree depth of 10 (0%)"
-% [1] "0 of 4000 iterations ended with a divergence (0%)"
-% \end{lstlisting}
-%   }
+  \begin{center}
+  \includegraphics[width=9cm]{betablockoddsratio_ggplot.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Difference between proportions (ggdist dot plot)}
   
-% \end{frame}
+  \vspace{-0.5\baselineskip}
+  {\small
+\begin{lstlisting}
+draws <- fit_bin2$draws(format = "df")
+draws |> ggplot(aes(x=oddsratio)) +
+  geom_dotsinterval() +
+  geom_vline(xintercept = 1) +
+  scale_x_continuous(breaks = c(seq(0.25,1.5,by=0.25)))
+\end{lstlisting}
+  }
+
+  \begin{center}
+  \includegraphics[width=9cm]{betablockoddsratio_dots.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Difference between proportions (probability and MCSE)}
+
+  Probability (and corresponding MCSE) that oddsratio<1
+  \\~
   
+{\small
+\begin{lstlisting}
+> draws |>
+    mutate_variables(p_oddsratio_lt_1 =
+                     as.numeric(oddsratio<1)) |>
+    subset_draws("p_oddsratio_lt_1") |>
+    summarise_draws(prob=mean, MCSE=mcse_mean)
+
+  variable            prob    MCSE
+  p_oddsratio_lt_1    0.99  0.0023
+\end{lstlisting}
+  }
+
+\end{frame}
+
+\begin{frame}[fragile]{posterior object formats}
+
+  Default is \texttt{draws\_array}
+  
+{\footnotesize
+\begin{lstlisting}
+> fit_bin2$draws()
+# A draws_array: 1000 iterations, 4 chains, and 4 variables
+, , variable = lp__
+
+         chain
+iteration    1    2    3    4
+        1 -253 -253 -254 -253
+        2 -253 -253 -255 -252
+        3 -254 -252 -254 -253
+        4 -255 -253 -254 -254
+        5 -253 -253 -253 -253
+
+, , variable = theta1
+
+         chain
+iteration     1     2     3     4
+        1 0.054 0.052 0.045 0.049
+        2 0.062 0.060 0.070 0.058
+...
+\end{lstlisting}
+  }
+
+\end{frame}
+
+\begin{frame}[fragile]{posterior object formats}
+
+  \texttt{draws\_df} looks prettier and works with \texttt{ggplot()}
+  
+{\footnotesize
+\begin{lstlisting}
+> fit_bin2$draws(format ="df")
+# A draws_df: 1000 iterations, 4 chains, and 4 variables
+   lp__ theta1 theta2 oddsratio
+1  -253  0.054  0.033      0.59
+2  -253  0.062  0.035      0.55
+3  -254  0.047  0.026      0.54
+4  -255  0.049  0.049      0.99
+5  -253  0.068  0.035      0.50
+6  -253  0.056  0.027      0.47
+7  -253  0.071  0.031      0.43
+8  -253  0.049  0.036      0.72
+9  -253  0.049  0.036      0.72
+10 -253  0.063  0.026      0.39
+# ... with 3990 more draws
+# ... hidden reserved variables {'.chain', '.iteration', '.draw'}
+\end{lstlisting}
+  }
+
+\end{frame}
+
+\begin{frame}[fragile]{posterior object formats}
+
+ \vspace{-0.8\baselineskip}
+  \texttt{draws\_rvar} makes it easy to compute derived quantities
+  
+{\footnotesize
+\begin{lstlisting}[literate = {±}{{$\pm$}}1]
+> as_draws_rvars(fit_bin2$draws())
+# A draws_rvars: 1000 iterations, 4 chains, and 4 variables
+$lp__: rvar<1000,4>[1] mean ± sd:
+[1] -253 ± 1 
+
+$theta1: rvar<1000,4>[1] mean ± sd:
+[1] 0.059 ± 0.0093 
+
+$theta2: rvar<1000,4>[1] mean ± sd:
+[1] 0.034 ± 0.0069 
+
+$oddsratio: rvar<1000,4>[1] mean ± sd:
+[1] 0.57 ± 0.16
+
+> with(draws, (theta2/(1-theta2))/(theta1/(1-theta1)))
+rvar<1000,4>[1] mean ± sd:
+[1] 0.5689 ± 0.1577 
+
+> draws$oddsratio<1
+rvar<1000,4>[1] mean ± sd:
+[1] 0.9865 ± 0.1154 
+\end{lstlisting}
+  }
+
+\end{frame}
+
 \begin{frame}{Shinystan}
 
   \begin{itemize}
@@ -1270,6 +1436,8 @@ See https://mc-stan.org/misc/warnings for details.
 
 \begin{frame}[fragile]
   \frametitle{Linear regression model in Stan}
+
+Center the data inside the model code
   
   {\scriptsize
 \begin{lstlisting}[language=Stan]
@@ -1291,7 +1459,42 @@ transformed data {
   }
 \end{frame}
 
-%XXXX add better posterior draws
+\begin{frame}[fragile]
+  \frametitle{Kilpisjärvi summer temperature}
+  
+  Posterior draws of alpha and beta when data is centered
+  
+  \begin{center}
+    \includegraphics[width=10cm]{kilpis_lin_std_mcmc_scatter.pdf}
+  \end{center}
+
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Kilpisjärvi summer temperature}
+
+Without centering  
+{\scriptsize
+\begin{lstlisting}
+> fit_lin$summary(variables=c("alpha","beta"),
+                  default_convergence_measures())
+  variable    rhat ess_bulk ess_tail
+  alpha        1.0     919.     897.
+  beta         1.0     919.     895.
+\end{lstlisting}
+  }
+
+With centering  
+{\scriptsize
+\begin{lstlisting}
+> fit_lin_std$summary(variables=c("alpha","beta"),
+                      default_convergence_measures())
+  variable    rhat ess_bulk ess_tail
+  alpha        1.0    3872.    2616.
+  beta         1.0    3770.    2396.
+\end{lstlisting}
+  }
+\end{frame}
 
 \begin{frame}[fragile]
   \frametitle{RStanARM}
@@ -1370,8 +1573,8 @@ fit_bin2 <- stan_glm(y/N ~ grp2, family = binomial(), data = d_bin2,
   \begin{itemize}
   \item \texttt{brms} provides simplified model description
     \begin{itemize}
-    \item a larger set of models than \texttt{RStanARM}, but still restricted
-    \item need to wait for the compilation
+    \item[+] a larger set of models than \texttt{RStanARM}, but still restricted
+    \item[-] need to wait for the compilation
     \end{itemize}
   \end{itemize}
 
@@ -1425,7 +1628,7 @@ generated quantities {
 \end{frame} 
 
 \begin{frame}[fragile]
-  \frametitle{Functions}
+  \frametitle{User defined functions}
   {\footnotesize
   \begin{lstlisting}[language=Stan]
 functions {
@@ -1477,14 +1680,14 @@ functions {
   \begin{itemize}
   \item R
     \begin{itemize}
-    \item \texttt{posterior} --- posterior handling and diagnostics\\ (Lecture 5)
+    \item \texttt{posterior} --- posterior handling and diagnostics\\ (Lecture 5 and 6)
     \item \texttt{shinystan} --- interactive diagnostics
-    \item \texttt{bayesplot} --- visualization and model checking\\ (Lectures 5 and 8)
-    \item \texttt{tidybayes} and \texttt{ggdist} -- more posterior and prediction visualization
+    \item \texttt{bayesplot} --- visualization and model checking\\ (Lectures 5, 6, and 8)
+    \item \texttt{tidybayes} and \texttt{ggdist} -- more posterior and prediction visualization (Lecture 6)
     \item \texttt{loo} --- cross-validation model assessment and comparison\\ (Lecture 9)
     \item \texttt{projpred} --- projection predictive variable selection\\ (Lecture 12)
     \item \texttt{priorsense} --- prior and likelihood sensitivity
-      diagnostics\\ (can be useful in project)
+      diagnostics\\ (Lecture 12)
     \end{itemize}
     \vspace{\baselineskip}
   \item Python
