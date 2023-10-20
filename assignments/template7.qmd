@@ -19,6 +19,17 @@ editor: source
 ---
 
 
+
+
+:::{.callout-warning}
+
+Currently, rendering on github is broken, such that the rendered template at [https://avehtari.github.io/BDA_course_Aalto/assignments/template7.html](https://avehtari.github.io/BDA_course_Aalto/assignments/template7.html)
+looks weird. Rendering should however work on Aalto's JupyterLab, but we will also try to fix rendering on github ASAP.
+
+:::
+
+
+
 # General information
 
 This is the template for [assignment 7](assignment7.html). You can download the [separate model with bad priors](./additional_files/assignment7/chickens_separate.stan) and the [qmd-file](https://avehtari.github.io/BDA_course_Aalto/assignments/template7.qmd) or copy the code from this rendered document after clicking on `</> Code` in the top right corner.
@@ -344,20 +355,11 @@ bayesplot::mcmc_scatter(x = fit_hierarchical$draws(variables = c("mean_diet[4]",
 ## (b)
 
 
-:::: {.content-hidden when-format="pdf"}
-::: {.callout-warning collapse=false}
-
-### Create a brms model and sample from the posterior
-
-
-*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*
-**Make sure that this does not get displayed in the PDF!**
-    
-
-
+**Create a brms model and sample from the posterior**
     
 ```{r}
 #| label: fit brms model
+#| output: false
 brms_fit = brm(
   weight ~ 1 + (1 | Diet),
   data=Chick12,
@@ -372,17 +374,6 @@ brms_fit = brm(
   backend = "cmdstanr",
   save_pars = save_pars(manual = c("z_1[1,4]"))
 )
-```
-
-:::
-::::
-
-
-
-Because `brms` is a bit chatty, suppress its output in the PDF using the block above, but copy the code you executed into the code block below, which doesn't execute
-```{r}
-#| eval: false
-# Copy the code you used to create the brms model and run the sampling
 ```
 
 
