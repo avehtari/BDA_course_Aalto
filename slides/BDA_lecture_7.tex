@@ -129,9 +129,9 @@
   \begin{itemize}
 \item 5.1 Lead-in to hierarchical models
 \item 5.2 Exchangeability (useful concept)
-\item 5.3 Bayesian analysis of hierarchical models (but we use Stan for computation)
-\item 5.4 Hierarchical normal model (but we use Stan for computation)
-\item 5.5 Example: parallel experiments in eight schools (uses hierarchical normal model, part of assignment, but we use Stan for computation)
+\item {\color{gray}5.3 Bayesian analysis of hierarchical models (we use Stan/brms for computation)}
+\item {\color{gray}5.4 Hierarchical normal model (we use Stan/brms for computation)}
+\item 5.5 Example: parallel experiments in eight schools (useful discussion on benefits of hierarchical model)
 \item {\color{gray}5.6 Meta-analysis (can be skipped)}
 \item 5.7 Weakly informative priors for hierarchical variance parameters
 \end{itemize}
@@ -357,179 +357,615 @@
   
 \end{frame}
 
-
-\begin{frame}{Hierarchical normal model: factory}
+\begin{frame}{Diet effect on chicken weights (at age 12 days)}
 
   \begin{itemize}
-  \item Factory has 6 machines which quality is evaluated
-  \item Assume hierarchical model
+  \item A typical treatment effect analysis
+  \item Models
     \begin{itemize}
-    \item each machine has its own (average) quality $\theta_j$ and
-      common variance $\sigma^2$
+    \item a separate model, in which each diet is modeled individually
+    \item a pooled model, in which all measurements are combined and there is no distinction between diets
+    \item a hierarchical model
     \end{itemize}
-\begin{minipage}[b]{4cm}
-\begin{xy}
-\xygraph{
-  []              !O{y_{ij}}
- ([u][l(0.75)]   !V{\theta_j}      !P{y_{ij}}
- ([u][l(0.33)] !V{\mu_P}      !P{\theta_j},
-   [u][r(0.33)] !V{\sigma_P^2} !P{\theta_j}),
-  [u][r(1.75)]   !V{\sigma^2}   !P{y_{ij}},
-  [r(0.45)]*{i},
-  [r(0.9)]*{j},
-[l(3)]*{y_{ij} \mid \theta_j \sim \N(\theta_j,\sigma^2)},
-[u][l(3)]*{\theta_j \mid \mu_P,\sigma_P^2 \sim \N(\mu_P,\sigma_P^2)},
-)
-!B{y_{ij}}{i}{}
-!B{\theta_j}{j}{++}
- }
-\end{xy}
-    \end{minipage}
-  \item Can be used to predict the future quality produced by each
-    machine and quality produced by a new similar machine
-%  \item Gibbs sampling exercise later
   \end{itemize}
-\end{frame}
-
-\begin{frame}{Hierarchical normal model: factory}
-
-  \begin{itemize}
-  \item Factory has 6 machines which quality is evaluated
-  \item Assume hierarchical model
-    \begin{itemize}
-    \item each machine has its own (average) quality $\theta_j$ and
-      own variance $\sigma_j^2$
-    \end{itemize}
-\hspace{-1cm}~\begin{minipage}[b]{4cm}
-      \begin{xy}
-        \xygraph{
-          []              !O{y_{ij}}
-          ([u][l(0.75)]   !V{\theta_j}      !P{y_{ij}}
-          ([u][l(0.33)] !V{\mu_P}      !P{\theta_j},
-          [u][r(0.33)] !V{\sigma_P^2} !P{\theta_j}),
-          [u][r(0.75)]   !V{\sigma_j^2}   !P{y_{ij}}
-          ([u][l(0.33)] !V{\sigma_0^2}      !P{\sigma_j^2},
-          [u][r(0.33)] !V{\nu_0} !P{\sigma_j^2}),
-          [r(0.45)]*{i},
-          [r(0.9)]*{j},
-          [l(3.0)]*{y_{ij} \mid \theta_j \sim \N(\theta_j,\sigma_j^2)},
-          [u][l(3.0)]*{\theta_j \mid \mu_P,\sigma_P^2 \sim \N(\mu_P,\sigma_P^2)},
-          [u][r(3.25)]*{\sigma_j^2 \mid \sigma_0^2,\nu_0 \sim \Invchi2(\sigma_0^2,\nu_0)}
-          )
-          !B{y_{ij}}{i}{}
-          !B{\theta_j}{j}{++}
-        }
-      \end{xy}
-    \end{minipage}
-  \item Can be used to predict the future quality produced by each
-    machine and quality produced by a new similar machine
-%  \item Extra points for the Gibbs sampling exercise later
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Hierarchical normal model: 8 schools}
-
-  \begin{itemize}
-  \item Example: SAT coaching effectiveness
-    \begin{itemize}
-    \item in USA commonly used Scholastic Aptitude Test (SAT) is
-      designed so that short term practice should not improve the
-      results significantly
-    \item schools have anyway coaching courses
-    \item test the effectiveness of the coaching courses 
-    \end{itemize}
-    \pause
-  \item SAT
-    \begin{itemize}
-    \item standardized multiple choice test
-    \item mean about 500 and standard deviation about 100
-    \item most scores between 200 and 800
-    \item different topics, e.g., V=Verbal, M=Mathematics
-    \item pre-test PSAT
-    \end{itemize}
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Hierarchical normal model: 8 schools}
-
-  \begin{itemize}
-  \item Effectiveness of the SAT coaching
-    \begin{itemize}
-    \item students had made pre-tests PSAT-M and
-      PSAT-V
-    \item part of students were coached
-    \item linear regression was used to estimate the coaching effect
-      $y_j$ for the school $j$ (could be denoted with $\bar{y}_{.j}$,
-      too) and variances $\sigma_j^2$
-    \item $y_j$ approximately normally distributed, with variances
-      assumed to be known based on about 30 students per school
-    \item data is group means and variances (not personal results)
-    \end{itemize}
-    \pause
-  \item Data:
-    {\small
-    \begin{tabular}[t]{r | r r r r r r r r}
-      School & A & B & C & D & E & F & G & H \\
-      $y_j$ & 28 & 8 & -3 & 7 & -1 & 1 & 18 & 12 \\
-      $\sigma_j$ & 15 & 10 & 16 & 11 & 9 & 22 & 20 & 28
-    \end{tabular}}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Hierarchical normal model for group means}
-
-  \begin{itemize}
-  \item $J$ experiments, unknown $\theta_j$ and known $\sigma^2$
-    \begin{equation*}
-      y_{ij} \mid \theta_j \sim \N(\theta_j,\sigma^2), \quad
-      i=1,\ldots,n_j; \quad j=1,\ldots,J
-    \end{equation*}
-    \vspace{-6mm}
-  \item Group $j$ sample mean and sample variance
-    \begin{eqnarray*}
-      \bar{y}_{.j} & = & \frac{1}{n_j}\sum_{i=1}^{n_j}y_{ij}\\
-      \sigma_j^2 & = & \frac{\sigma^2}{n_j}
-    \end{eqnarray*}
-    \vspace{-6mm}
-    \pause
-  \item Use model
-    \begin{eqnarray*}
-      \bar{y}_{.j} \mid \theta_j \sim \N(\theta_j,\sigma_j^2)
-    \end{eqnarray*}
-     this model can be generalized so that, $\sigma_j^2$ can be
-    different from each other for other reasons than $n_j$
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Hierarchical normal model for group means}
-
-    \begin{minipage}[b]{4cm}
-      \begin{xy}
-        \xygraph{
-          []              !O{\bar{y}_{.j}}
-          ([u][l(0.5)]   !V{\theta_j}      !P{\bar{y}_{.j}}
-          ([u][l(0.33)] !V{\mu}      !P{\theta_j},
-          [u][r(0.33)] !V{\tau} !P{\theta_j}),
-          [u][r(0.5)]   !O{\sigma_j^2}   !P{\bar{y}_{.j}},
-  [r(1.0)]*{j},
-  [l(3.0)]*{\bar{y}_{.j} \mid \theta_j \sim \N(\theta_j,\sigma^2_j)},
-  [u][l(3.0)]*{\theta_j \mid \mu,\tau \sim \N(\mu,\tau^2)}
-  )
-  !B{\theta_j}{j}{++}
-}
-\end{xy}
-\end{minipage}
-\end{frame}
-
-\begin{frame}{Hierarchical normal model: 8 schools}
-
-  \only<1-3>{\includegraphics[width=8.3cm]{8schools_separate.pdf}\\}
-  \only<2-3>{\includegraphics[width=8.3cm]{8schools_pooled.pdf}\\}
-  \only<3>{\includegraphics[width=8.3cm]{8schools_hier.pdf}}
-  \only<4-6>{\includegraphics[width=5.5cm]{8schools_tau.pdf}\\}
-  \only<5-6>{\includegraphics[width=5.5cm]{8schools_condmu.pdf}\\}
-  \only<6>{\includegraphics[width=5.5cm]{8schools_condsd.pdf}}
   
+\end{frame}
+
+\begin{frame}[fragile]{Stan vs brms}
+
+  \vspace{-0.5\baselineskip}
+{\footnotesize
+\begin{lstlisting}[language=Stan]
+model {
+  // Priors
+  for (diet in 1:N_diets) {
+    mean_diet[diet] ~ normal(0, 10);
+    sd_diet[diet] ~ exponential(1);
+  }
+
+  // Observation model / likelihood
+  for (obs in 1:N_observations) {
+    weight[obs] ~ normal(mean_diet[diet_idx[obs]],
+                         sd_diet[diet_idx[obs]]);
+  }
+}
+\end{lstlisting}}
+
+\end{frame}
+
+\begin{frame}[fragile]{Stan vs brms}
+
+  \vspace{-0.5\baselineskip}
+{\footnotesize
+\begin{lstlisting}[language=Stan]
+model {
+  // Priors
+  for (diet in 1:N_diets) {
+    mean_diet[diet] ~ normal(0, 10);
+    sd_diet[diet] ~ exponential(1);
+  }
+
+  // Observation model / likelihood
+  for (obs in 1:N_observations) {
+    weight[obs] ~ normal(mean_diet[diet_idx[obs]],
+                         sd_diet[diet_idx[obs]]);
+  }
+  // Best practice would be to write the likelihood
+  // without the for loop as
+  // weight ~ normal(mean_diet[diet_idx],
+  //                 sd_diet[diet_idx]);
+}
+\end{lstlisting}}
+
+\end{frame}
+
+\begin{frame}[fragile]{Stan vs brms}
+
+  \vspace{-0.5\baselineskip}
+{\footnotesize
+\begin{lstlisting}[language=Stan]
+model {
+  // Priors
+  for (diet in 1:N_diets) {
+    mean_diet[diet] ~ normal(0, 10);
+    sd_diet[diet] ~ exponential(1);
+  }
+
+  // Observation model / likelihood
+  for (obs in 1:N_observations) {
+    weight[obs] ~ normal(mean_diet[diet_idx[obs]],
+                         sd_diet[diet_idx[obs]]);
+  }
+}
+\end{lstlisting}}
+{\footnotesize
+\begin{lstlisting}
+brm(weight ~ 1 + (1 | Diet), 
+\end{lstlisting}}
+
+\end{frame}
+
+\begin{frame}[fragile]{Stan vs brms}
+
+{\footnotesize
+\begin{lstlisting}[language=Stan]
+model {
+  // Priors
+  for (diet in 1:N_diets) {
+    mean_diet[diet] ~ normal(0, 10);
+    sd_diet[diet] ~ exponential(1);
+  }
+
+  // Observation model / likelihood
+  for (obs in 1:N_observations) {
+    weight[obs] ~ normal(mean_diet[diet_idx[obs]],
+                         sd_diet[diet_idx[obs]]);
+  }
+}
+\end{lstlisting}}
+{\footnotesize
+\begin{lstlisting}
+brm(weight ~ 1 + (1 | Diet), data=Chick12,
+    prior=c(prior(normal(0,1), class="Intercept"), # p(mu_0)
+            prior(normal(0,1), class="sigma"),     # p(sigma)
+            prior(normal(0,1), class="sd"))        # p(tau)
+\end{lstlisting}}
+
+\end{frame}
+
+% \begin{frame}{Hierarchical normal model: factory}
+
+%   \begin{itemize}
+%   \item Factory has 6 machines which quality is evaluated
+%   \item Assume hierarchical model
+%     \begin{itemize}
+%     \item each machine has its own (average) quality $\theta_j$ and
+%       common variance $\sigma^2$
+%     \end{itemize}
+% \begin{minipage}[b]{4cm}
+% \begin{xy}
+% \xygraph{
+%   []              !O{y_{ij}}
+%  ([u][l(0.75)]   !V{\theta_j}      !P{y_{ij}}
+%  ([u][l(0.33)] !V{\mu_P}      !P{\theta_j},
+%    [u][r(0.33)] !V{\sigma_P^2} !P{\theta_j}),
+%   [u][r(1.75)]   !V{\sigma^2}   !P{y_{ij}},
+%   [r(0.45)]*{i},
+%   [r(0.9)]*{j},
+% [l(3)]*{y_{ij} \mid \theta_j \sim \N(\theta_j,\sigma^2)},
+% [u][l(3)]*{\theta_j \mid \mu_P,\sigma_P^2 \sim \N(\mu_P,\sigma_P^2)},
+% )
+% !B{y_{ij}}{i}{}
+% !B{\theta_j}{j}{++}
+%  }
+% \end{xy}
+%     \end{minipage}
+%   \item Can be used to predict the future quality produced by each
+%     machine and quality produced by a new similar machine
+% %  \item Gibbs sampling exercise later
+%   \end{itemize}
+% \end{frame}
+
+% \begin{frame}{Hierarchical normal model: factory}
+
+%   \begin{itemize}
+%   \item Factory has 6 machines which quality is evaluated
+%   \item Assume hierarchical model
+%     \begin{itemize}
+%     \item each machine has its own (average) quality $\theta_j$ and
+%       own variance $\sigma_j^2$
+%     \end{itemize}
+% \hspace{-1cm}~\begin{minipage}[b]{4cm}
+%       \begin{xy}
+%         \xygraph{
+%           []              !O{y_{ij}}
+%           ([u][l(0.75)]   !V{\theta_j}      !P{y_{ij}}
+%           ([u][l(0.33)] !V{\mu_P}      !P{\theta_j},
+%           [u][r(0.33)] !V{\sigma_P^2} !P{\theta_j}),
+%           [u][r(0.75)]   !V{\sigma_j^2}   !P{y_{ij}}
+%           ([u][l(0.33)] !V{\sigma_0^2}      !P{\sigma_j^2},
+%           [u][r(0.33)] !V{\nu_0} !P{\sigma_j^2}),
+%           [r(0.45)]*{i},
+%           [r(0.9)]*{j},
+%           [l(3.0)]*{y_{ij} \mid \theta_j \sim \N(\theta_j,\sigma_j^2)},
+%           [u][l(3.0)]*{\theta_j \mid \mu_P,\sigma_P^2 \sim \N(\mu_P,\sigma_P^2)},
+%           [u][r(3.25)]*{\sigma_j^2 \mid \sigma_0^2,\nu_0 \sim \Invchi2(\sigma_0^2,\nu_0)}
+%           )
+%           !B{y_{ij}}{i}{}
+%           !B{\theta_j}{j}{++}
+%         }
+%       \end{xy}
+%     \end{minipage}
+%   \item Can be used to predict the future quality produced by each
+%     machine and quality produced by a new similar machine
+% %  \item Extra points for the Gibbs sampling exercise later
+%   \end{itemize}
+% \end{frame}
+
+% \begin{frame}{Hierarchical normal model: 8 schools}
+
+%   \begin{itemize}
+%   \item Example: SAT coaching effectiveness
+%     \begin{itemize}
+%     \item in USA commonly used Scholastic Aptitude Test (SAT) is
+%       designed so that short term practice should not improve the
+%       results significantly
+%     \item schools have anyway coaching courses
+%     \item test the effectiveness of the coaching courses 
+%     \end{itemize}
+%     \pause
+%   \item SAT
+%     \begin{itemize}
+%     \item standardized multiple choice test
+%     \item mean about 500 and standard deviation about 100
+%     \item most scores between 200 and 800
+%     \item different topics, e.g., V=Verbal, M=Mathematics
+%     \item pre-test PSAT
+%     \end{itemize}
+% \end{itemize}
+% \end{frame}
+
+% \begin{frame}{Hierarchical normal model: 8 schools}
+
+%   \begin{itemize}
+%   \item Effectiveness of the SAT coaching
+%     \begin{itemize}
+%     \item students had made pre-tests PSAT-M and
+%       PSAT-V
+%     \item part of students were coached
+%     \item linear regression was used to estimate the coaching effect
+%       $y_j$ for the school $j$ (could be denoted with $\bar{y}_{.j}$,
+%       too) and variances $\sigma_j^2$
+%     \item $y_j$ approximately normally distributed, with variances
+%       assumed to be known based on about 30 students per school
+%     \item data is group means and variances (not personal results)
+%     \end{itemize}
+%     \pause
+%   \item Data:
+%     {\small
+%     \begin{tabular}[t]{r | r r r r r r r r}
+%       School & A & B & C & D & E & F & G & H \\
+%       $y_j$ & 28 & 8 & -3 & 7 & -1 & 1 & 18 & 12 \\
+%       $\sigma_j$ & 15 & 10 & 16 & 11 & 9 & 22 & 20 & 28
+%     \end{tabular}}
+%   \end{itemize}
+% \end{frame}
+
+% \begin{frame}{Hierarchical normal model for group means}
+
+%   \begin{itemize}
+%   \item $J$ experiments, unknown $\theta_j$ and known $\sigma^2$
+%     \begin{equation*}
+%       y_{ij} \mid \theta_j \sim \N(\theta_j,\sigma^2), \quad
+%       i=1,\ldots,n_j; \quad j=1,\ldots,J
+%     \end{equation*}
+%     \vspace{-6mm}
+%   \item Group $j$ sample mean and sample variance
+%     \begin{eqnarray*}
+%       \bar{y}_{.j} & = & \frac{1}{n_j}\sum_{i=1}^{n_j}y_{ij}\\
+%       \sigma_j^2 & = & \frac{\sigma^2}{n_j}
+%     \end{eqnarray*}
+%     \vspace{-6mm}
+%     \pause
+%   \item Use model
+%     \begin{eqnarray*}
+%       \bar{y}_{.j} \mid \theta_j \sim \N(\theta_j,\sigma_j^2)
+%     \end{eqnarray*}
+%      this model can be generalized so that, $\sigma_j^2$ can be
+%     different from each other for other reasons than $n_j$
+%   \end{itemize}
+% \end{frame}
+
+% \begin{frame}{Hierarchical normal model for group means}
+
+%     \begin{minipage}[b]{4cm}
+%       \begin{xy}
+%         \xygraph{
+%           []              !O{\bar{y}_{.j}}
+%           ([u][l(0.5)]   !V{\theta_j}      !P{\bar{y}_{.j}}
+%           ([u][l(0.33)] !V{\mu}      !P{\theta_j},
+%           [u][r(0.33)] !V{\tau} !P{\theta_j}),
+%           [u][r(0.5)]   !O{\sigma_j^2}   !P{\bar{y}_{.j}},
+%   [r(1.0)]*{j},
+%   [l(3.0)]*{\bar{y}_{.j} \mid \theta_j \sim \N(\theta_j,\sigma^2_j)},
+%   [u][l(3.0)]*{\theta_j \mid \mu,\tau \sim \N(\mu,\tau^2)}
+%   )
+%   !B{\theta_j}{j}{++}
+% }
+% \end{xy}
+% \end{minipage}
+% \end{frame}
+
+% \begin{frame}{Hierarchical normal model: 8 schools}
+
+%   \only<1-3>{\includegraphics[width=8.3cm]{8schools_separate.pdf}\\}
+%   \only<2-3>{\includegraphics[width=8.3cm]{8schools_pooled.pdf}\\}
+%   \only<3>{\includegraphics[width=8.3cm]{8schools_hier.pdf}}
+%   \only<4-6>{\includegraphics[width=5.5cm]{8schools_tau.pdf}\\}
+%   \only<5-6>{\includegraphics[width=5.5cm]{8schools_condmu.pdf}\\}
+%   \only<6>{\includegraphics[width=5.5cm]{8schools_condsd.pdf}}
+  
+% \end{frame}
+
+\begin{frame}{Paper helicopters}
+
+  \includegraphics[width=11cm]{figs/helicopter_results.pdf}
+  
+\end{frame}
+
+\begin{frame}{Paper helicopters: flight time}
+
+  Separate model vs. hierarchical model
+  
+  \includegraphics[width=11cm]{figs/helicopter_separate_hier_time.pdf}
+  
+\end{frame}
+
+\begin{frame}{Paper helicopters: stability}
+
+  Separate model vs. hierarchical model
+  
+  \includegraphics[width=11cm]{figs/helicopter_separate_hier_stable.pdf}
+  
+\end{frame}
+
+\begin{frame}[fragile]{Paper helicopters: brms}
+
+  Flight time
+
+{\small
+\begin{lstlisting}
+flight_time ~ s(wing_length) + s(wing_length, by = nclips)
+\end{lstlisting}}
+  
+\end{frame}
+
+\begin{frame}[fragile]{Paper helicopters: brms}
+
+  Flight time
+
+{\small
+\begin{lstlisting}
+flight_time ~ s(wing_length) + s(wing_length, by = nclips)
+\end{lstlisting}}
+
+Stability
+  
+{\small
+\begin{lstlisting}
+stable_flight ~ s(wing_length) + s(wing_length, by = nclips),
+family = bernoulli()
+\end{lstlisting}}
+  
+\end{frame}
+
+\begin{frame}{Student retention}
+
+  Was year 2022 better than earlier year?
+  
+  \includegraphics[width=11cm]{figs/student_retention_data.pdf}
+  
+\end{frame}
+
+\begin{frame}{Student retention \only<1-2>{separate model}\only<3-4>{separate vs hierarchical model}}
+
+  \vspace{-0.75\baselineskip}
+  \includegraphics[width=6.8cm]{figs/student_retention_9_binom.pdf}
+  \only<2>{\\\includegraphics[width=6.5cm]{figs/student_retention_9_binom_comp.pdf}}
+  \only<3-4>{\\\includegraphics[width=6.8cm]{figs/student_retention_9_binom_hier.pdf}}
+  \only<4>{\\\vspace{-0.5\baselineskip}
+      \scriptsize \texttt{nstudents | trials(nstudents1) $\sim$ 1 + (1 | year), family=binomial()}}
+
+\end{frame}
+
+\begin{frame}{Student retention latent spline model}
+
+  \vspace{-0.5\baselineskip}
+  \hspace{-5mm}\includegraphics[height=3.6cm]{student_retention_sbinom_linpreds.pdf}
+  \only<1>{\\\vspace{-0.5\baselineskip}
+      \scriptsize \texttt{nstudents | trials(nstudents1) $\sim$ s(assignment, k=4) + (assignment | year), family=binomial()}}
+  \only<2->{\\\hspace{-5mm}\includegraphics[height=3.7cm]{figs/student_retention_sbinom_hier.pdf}}
+  \only<3->{\includegraphics[height=3.4cm]{figs/student_retention_sbinom_hier_comp.pdf}}
+
+\end{frame}
+
+\begin{frame}{Student retention latent spline model, year 2023?}
+
+  \vspace{-0.5\baselineskip}
+  \hspace{-8mm}\includegraphics[height=3.5cm]{student_retention_sbinom_linpreds_2.pdf}
+  \only<2->{\\\hspace{-5mm}\includegraphics[height=3.7cm]{figs/student_retention_sbinom_hier_2.pdf}}
+
+\end{frame}
+
+\begin{frame}{Student retention latent spline model, year 2023?}
+
+  \vspace{-0.5\baselineskip}
+  \hspace{-8mm}\includegraphics[height=3.5cm]{student_retention_sbinom_linpreds_3.pdf}
+  {\\\hspace{-5mm}\includegraphics[height=3.7cm]{figs/student_retention_sbinom_hier_3.pdf}}
+  \only<2->{\includegraphics[height=3.4cm]{figs/student_retention_sbinom_hier_comp_3.pdf}}
+
+\end{frame}
+
+% student_retention_sbinom_hier.pdf
+% student_retention_sbinom_hier_comp.pdf
+
+% student_retention_sbinom_hier_2.pdf
+% student_retention_sbinom_hier_3.pdf
+% student_retention_sbinom_hier_comp_3.pdf
+
+% student_retention_sbinom_linpreds.pdf
+% student_retention_sbinom_linpreds_2.pdf
+% student_retention_sbinom_linpreds_3.pdf
+
+\begin{frame}[fragile]{Centered vs non-centered parameterization}
+
+\vspace{-0.5\baselineskip}
+HMC divergences are more likely when using hierarchical models
+
+\end{frame}
+
+\begin{frame}[fragile]{Centered vs non-centered parameterization}
+
+\vspace{-0.5\baselineskip}
+Hierarchical model code from the course demos
+
+{\footnotesize
+\begin{lstlisting}[language=Stan]
+data {
+  int<lower=0> N; // number of observations
+  int<lower=0> K; // number of groups
+  array[N] int<lower=1, upper=K> x; // discrete group indicators
+  vector[N] y; // real valued observations
+}
+\end{lstlisting}}
+\end{frame}
+
+\begin{frame}[fragile]{Centered vs non-centered parameterization}
+
+\vspace{-0.5\baselineskip}
+Hierarchical model code from the course demos
+
+{\footnotesize
+\begin{lstlisting}[language=Stan]
+data {
+  int<lower=0> N; // number of observations
+  int<lower=0> K; // number of groups
+  array[N] int<lower=1, upper=K> x; // discrete group indicators
+  vector[N] y; // real valued observations
+}
+\end{lstlisting}}
+{\footnotesize
+\begin{lstlisting}[language=Stan]
+parameters {
+  real mu0; // prior mean
+  real<lower=0> sigma0; // prior std constrained to be positive
+  vector[K] mu; // group means
+  real<lower=0> sigma; // common std constrained to be positive
+}
+\end{lstlisting}}
+\end{frame}
+
+\begin{frame}[fragile]{Centered parameterization}
+
+\vspace{-0.5\baselineskip}
+Hierarchical model code from the course demos
+
+{\footnotesize
+\begin{lstlisting}[language=Stan]
+data {
+  int<lower=0> N; // number of observations
+  int<lower=0> K; // number of groups
+  array[N] int<lower=1, upper=K> x; // discrete group indicators
+  vector[N] y; // real valued observations
+}
+\end{lstlisting}}
+{\footnotesize
+\begin{lstlisting}[language=Stan]
+parameters {
+  real mu0; // prior mean
+  real<lower=0> sigma0; // prior std constrained to be positive
+  vector[K] mu; // group means
+  real<lower=0> sigma; // common std constrained to be positive
+}
+\end{lstlisting}}
+{\footnotesize
+\begin{lstlisting}[language=Stan]
+model {
+  mu0 ~ normal(10, 10);     // weakly informative prior
+  sigma0 ~ normal(0, 10);   // weakly informative prior
+  mu ~ normal(mu0, sigma0); // population prior with unknown parameters
+  sigma ~ lognormal(0, .5); // weakly informative prior
+  y ~ normal(mu[x], sigma); // observation model / likelihood
+}
+\end{lstlisting}}
+\end{frame}
+
+\begin{frame}[fragile]{Centered parameterization}
+
+  First data with many observations per group: 3 summer months with
+  each having 71 observations.
+
+  \only<2>{A few divergences that are not clustered.}
+  \only<3>{And decreasing step size a little helps.}
+
+  \only<2->{\includegraphics[width=5cm]{figs/kilpis_hier_cp_easy_1.pdf}}
+  \only<3>{\includegraphics[width=5cm]{figs/kilpis_hier_cp_easy_2.pdf}}
+  
+\end{frame}
+
+\begin{frame}[fragile]{Centered parameterization}
+
+  Second data with a few observations per group: 71 years with
+  each having 3 observations.
+
+  \only<2>{Many divergences that are clustered.}
+  \only<3>{And decreasing step size doesn't remove the problem.}
+
+  \only<2->{\includegraphics[width=5cm]{figs/kilpis_hier_cp_hard_1.pdf}}
+  \only<3>{\includegraphics[width=5cm]{figs/kilpis_hier_cp_hard_2.pdf}}
+  
+\end{frame}
+
+\begin{frame}[fragile]{Non-centered parameterization}
+
+\vspace{-0.5\baselineskip}
+Transformation
+
+{\footnotesize
+\begin{lstlisting}[language=Stan]
+parameters {
+  real mu0; // prior mean
+  real<lower=0> sigma0; // prior std constrained to be positive
+  vector[K] z; // latent variable
+  real<lower=0> sigma; // common std constrained to be positive
+}
+\end{lstlisting}}
+{\footnotesize
+\begin{lstlisting}[language=Stan]
+transformed parameters {
+  vector[K] mu = mu0 + sigma0 * z; // group means
+}
+\end{lstlisting}}
+{\footnotesize
+\begin{lstlisting}[language=Stan]
+model {
+  mu0 ~ normal(10, 10);     // weakly informative prior
+  sigma0 ~ normal(0, 10);   // weakly informative prior
+  z ~ normal(0, 1);         // unit normal
+  sigma ~ lognormal(0, .5); // weakly informative prior
+  y ~ normal(mu[x], sigma); // observation model / likelihood
+}
+\end{lstlisting}}
+
+\end{frame}
+
+\begin{frame}[fragile]{Non-centered parameterization}
+
+  Second data with a few observations per group: 71 years with
+  each having 3 observations.
+
+  \only<2>{A few divergences that are not clustered.}
+  \only<3>{And decreasing step size a little helps.}
+  \only<4>{Because we're actually sampling \texttt{z} and not \texttt{mu}}
+
+  \only<2->{\includegraphics[width=5cm]{figs/kilpis_hier_ncp_hard_1.pdf}}
+  \only<3>{\includegraphics[width=5cm]{figs/kilpis_hier_ncp_hard_2.pdf}}
+  \only<4>{\includegraphics[width=5cm]{figs/kilpis_hier_ncp_hard_z_2.pdf}}
+  
+\end{frame}
+
+\begin{frame}[fragile]{Non-centered parameterization}
+
+  No free lunch
+
+  \begin{itemize}
+  \item non-centered parameterization is good when likelihood is weak
+  \item non-centered parameterization is bad when likelihood is strong
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}[fragile]{Non-centered parameterization}
+
+  First data with many observations per group: 3 summer months with
+  each having 71 observations.
+
+  \only<2>{Many divergences that are not clustered.}
+  \only<3>{But decreasing step size a lot helps.}
+  \only<4>{Now the posterior for \texttt{z} is problematic.}
+
+  \only<2->{\includegraphics[width=5cm]{figs/kilpis_hier_ncp_easy_1.pdf}}
+  \only<3>{\includegraphics[width=5cm]{figs/kilpis_hier_ncp_easy_2.pdf}}
+  \only<4>{\includegraphics[width=5cm]{figs/kilpis_hier_ncp_easy_z_1.pdf}}
+  
+\end{frame}
+
+\begin{frame}[fragile]{Centered vs. non-centered parameterization}
+
+  \vspace{-1\baselineskip}
+  \hspace{15mm} Strong likelihood \hspace{14mm} Weak likelihood\\
+  \hspace{10mm}{\includegraphics[width=4cm]{figs/kilpis_hier_cp_easy_2.pdf}}
+  {\includegraphics[width=4cm]{figs/kilpis_hier_cp_hard_1.pdf}}\\
+  \hspace{10mm}{\includegraphics[width=4cm]{figs/kilpis_hier_ncp_easy_1.pdf}}
+  {\includegraphics[width=4cm]{figs/kilpis_hier_ncp_hard_2.pdf}}\\
+  \vspace{-80mm}\rotatebox{90}{Non-centered param. \hspace{8mm} Centered param. }
+  
+\end{frame}
+
+\begin{frame}[fragile]{brms and rstanarm}
+
+  \begin{itemize}
+  \item brms and rstanarm use non-centered parameterization
+    \begin{itemize}
+    \item as hierarchical models and Bayesian inference is most useful
+      when likelihood is weak
+    \end{itemize}
+  \item There can be need for both centered and non-centered
+    parameterization in the same model
+    \begin{itemize}
+    \item automation not easy, but research goes on
+    \end{itemize}
+  \end{itemize}
 \end{frame}
 
 \begin{frame}{Exchangeability}
@@ -691,44 +1127,11 @@
    {\Large\color{navyblue} Exchangeability}
 
    \begin{itemize}
-   \item See more examples in the BDA\_notes\_ch5.pdf
+   \item See more examples in the BDA3 notes - Exchangeability vs. independence
    \end{itemize}
 
  \end{frame}
 
-\begin{frame}{Hierarchical linear model}
-
-  \centering
-  {\includegraphics[width=7.5cm]{plot2_bigger.png}}
-
-\end{frame}
-
-\begin{frame}{Hierarchical models and smooths}
-
-  \only<1>{\hspace*{-2.5cm}\includegraphics[width=16cm]{rstan_downloads_forecast.pdf}}
-  \only<2>{\hspace*{-.5cm}\includegraphics[width=11.25cm]{rstan_downloads_components.pdf}}
-  
-\end{frame}
-
-\begin{frame}{Hierarchical models and Bayesian deep learning}
-
-  \begin{itemize}
-  \item Prior scale on each weight layer is a hyperparameter
-    \begin{itemize}
-    \item connections between priors and drop-out / stochastic optimization
-    \item connections between posterior draws and big networks / ensembles
-    \end{itemize}
-  \end{itemize}
-  
-\end{frame}
-
-\begin{frame}{Hierarchical models and smooths}
-
-  \only<1>{\hspace*{-2.5cm}\includegraphics[width=16cm]{rstan_downloads_forecast.pdf}}
-  \only<2>{\hspace*{-.5cm}\includegraphics[width=11.25cm]{rstan_downloads_components.pdf}}
-  
-\end{frame}
-  
 \end{document}
 
 %%% Local Variables: 
