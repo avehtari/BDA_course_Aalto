@@ -1,15 +1,15 @@
 ---
 title: "Assignment 5"
 author: anonymous # <-- hand in anonymously
-format: 
+format:
   html:
     toc: true
     code-tools: true
-    code-line-numbers: true  
+    code-line-numbers: true
     number-sections: true
     mainfont: Georgia, serif
     page-layout: article
-  pdf:  
+  pdf:
     geometry:
     - left=1cm,top=1cm,bottom=1cm,right=7cm
     number-sections: true
@@ -22,37 +22,36 @@ editor: source
 
 :::: {.content-hidden when-format="pdf"}
 ::: {.callout-warning collapse=false}
- 
-## Setup 
+
+## Setup
 
 
 *This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*
 **Make sure that this does not get displayed in the PDF!**
-    
+
 
 
 
 This is the template for [assignment 5](assignment5.html). You can download the [qmd-file](https://avehtari.github.io/BDA_course_Aalto/assignments/template5.qmd) or copy the code from this rendered document after clicking on `</> Code` in the top right corner.
 
-**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.** 
+**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.**
 
 The following will set-up [`markmyassignment`](https://github.com/MansMeg/markmyassignment) to check your functions at the end of the notebook:
- 
-```{r} 
+
+```{r}
 if(!require(markmyassignment)){
     install.packages("markmyassignment")
     library(markmyassignment)
 }
 assignment_path = paste("https://github.com/avehtari/BDA_course_Aalto/",
 "blob/master/assignments/tests/assignment5.yml", sep="")
-set_assignment(assignment_path)    
-```       
+set_assignment(assignment_path)
+```
 
 The following installs and loads the `aaltobda` package:
 ```{r}
 if(!require(aaltobda)){
-    install.packages("remotes")
-    remotes::install_github("avehtari/BDA_course_Aalto", subdir = "rpackage", upgrade="never")
+    install.packages("aaltobda", repos = c("https://avehtari.github.io/BDA_course_Aalto/", getOption("repos")))
     library(aaltobda)
 }
 ```
@@ -112,19 +111,19 @@ density_ratio <- function(alpha_propose, alpha_previous, beta_propose, beta_prev
     # beta_propose = 20.04, beta_previous = 24.76,
     # x = bioassay$x, y = bioassay$y, n = bioassay$n
     0.7661784
-    
+
 }
 # Then implement a function called `metropolis_bioassay()` which
 # implements the Metropolis algorithm using the `density_ratio()`:
 metropolis_bioassay <- function(alpha_initial, beta_initial, alpha_sigma, beta_sigma, no_draws, x, y, n){
     # Do computation here, and return as below.
-    # Below are "wrong" values (unlikely to actually occur) 
+    # Below are "wrong" values (unlikely to actually occur)
     # in the "correct" format (such that they work with the plotting functions further down).
     data.frame(
-        alpha=c(alpha_initial, alpha_initial+alpha_sigma, alpha_initial-alpha_sigma), 
+        alpha=c(alpha_initial, alpha_initial+alpha_sigma, alpha_initial-alpha_sigma),
         beta=c(beta_initial, beta_initial+beta_sigma, beta_initial-beta_sigma)
     )
-    
+
 }
 df = metropolis_bioassay(0, 0, 1, 1, 1000, bioassay$x, bioassay$y, bioassay$n)
 ```
@@ -177,15 +176,14 @@ mcmc_scatter(df, pars=c("alpha", "beta"))
 
 *This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*
 **Make sure that this does not get displayed in the PDF!**
-    
+
 
 
 The following will check the functions for which `markmyassignment` has been set up:
- 
-```{r}  
-mark_my_assignment()    
-```      
+
+```{r}
+mark_my_assignment()
+```
 
 :::
 ::::
-

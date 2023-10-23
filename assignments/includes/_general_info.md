@@ -20,8 +20,7 @@
   To install the package on your own system, run
   the following code (upgrade=\"never\" skips question about updating other packages):
 ```{.r}
-install.packages("remotes")
-remotes::install_github("avehtari/BDA_course_Aalto", subdir = "rpackage", upgrade="never")
+install.packages("aaltobda", repos = c("https://avehtari.github.io/BDA_course_Aalto/", getOption("repos")))
 ```
 -   Many of the exercises can be checked automatically using the R
     package `markmyassignment` (pre-installed in JupyterHub).
