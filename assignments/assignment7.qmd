@@ -93,9 +93,9 @@ In the absence of additional information, we will assume that chick weights at 1
 $$
 w\sim\mathcal N (\mu,\sigma).
 $$
-Our task will be to define weakly informative priors for the parameters of the mean, $\mu$, and standard deviation, $\sigma$.
+Our task will be to define weakly informative priors for the parameters of the mean $\mu$.
 
-Here, $\mu$ represents the population or "true" mean chick weight at 12 days, and $\sigma$ represents the standard-deviation of the current weights $w$ around that population mean. For this exercise, we will be specifying a normal prior for $\mu$:
+Here, $\mu$ represents the population mean chick weight at 12 days and $\sigma$ represents the standard-deviation of the chick weights $w$ around that population mean. For this exercise, we will be specifying a normal prior for $\mu$:
 
 $$
 \mu\sim\mathcal N (\mu_0,\sigma_0).
@@ -107,14 +107,34 @@ We can do this by our own intuitive prior knowledge (if such intuition exists), 
 
 In modeling, weakly informed priors are quite subjective, which means that justification for prior choice can be considered more important than the specific choice itself. For the subtasks below, you will not be graded on the accuracy or precision of your numbers, but on your justification of them. The numerical choices you make should make sense and be understandable to an external reviewer of your work (even if they may not agree with your choices).
 
-:::{.subtask letter=a}
-Based on your own past experience and estimation skills, what would you guess is a typical weight range of a fully grown chicken in grams? For example, would it make sense if a chicken weighed 1 million grams? 0.005 grams? What about a chicken that weighed more than you? More than a car? Note that is not important to have a very precise or accurate guess here, the key goal is simply to identify the range of plausible (or at least possible) values.
 
-Justify your choice with 1-3 sentences.
+
+::::: {.content-hidden when-format="pdf"}
+:::: {.callout-tip collapse=true}
+
+
+:::{.callout-important}
+
+There have been minor changes to this part of the assignment, rubric and template wording.
+
+:::
+
+
+::::
+:::::
+
+
+
+:::{.subtask letter=a}
+Based on your own past experience and estimation skills, what would you guess is a typical weight range of a fully grown chicken in grams? Justify your choice with 1-3 sentences.
+:::
+
+:::{.hint}
+Would it make sense if a chicken weighed 1 million grams? 0.005 grams? What about a chicken that weighed more than you? More than a car? Note that is not important to have a very precise or accurate guess here, the key goal is simply to identify the range of plausible (or at least possible) values.
 :::
 
 ::::{.subrubric}
-### Weight range by intuition
+### Fully grown chicken weight range by intuition
 
 * Does the chosen range meet the following common sense criteria?
   * The range is always above **...** and below **...**.
@@ -126,21 +146,22 @@ Adjust this range for a 12-day old chick and choose a mean $\mu_0$ for the weakl
 :::
 
 ::::{.subrubric}
-### Prior mean by intuition
+### 12-day old chick weight range by intuition
 
-* Does the chosen prior mean meet the following common sense criteria?
-  * The range is always above **...** and below **...**.
+* The range is always above **...** and below **...**.
 * Is the justification based on some sort of logic, even if you may disagree?
 :::: 
 
-:::{.subtask}
 Choosing the standard deviation of a prior requires a little more caution; overconfident (i.e. narrow) priors can have a strong effect on your results,
 whereas less confident priors are more easily overcome with observed data.
-Given that overconfidence is a common human bias, a good intuition-based standard deviation should focus on eliminating the impossible values, rather than including the most likely values. Using this constraint, choose a lower and/or upper bound for the weight of any 12-day old chick. Justify your choice with 1-3 sentences.
+Given that overconfidence is a common human bias, a good intuition-based standard deviation should focus on eliminating the impossible values, rather than including the most likely values. 
+
+:::{.subtask}
+Using the above  constraint, choose a conservative lower and upper bound for the weight of any 12-day old chick. Justify your choice with 1-3 sentences.
 :::
 
 :::{.hint}
-Depending on your choice of range above for a "typical" chick, this range excluding the impossible values is likely to be wider.
+Depending on your choice of range above for a "typical" chick, this range excluding the impossible values should be wider.
 :::
 
 ::::{.subrubric}
@@ -151,8 +172,11 @@ Depending on your choice of range above for a "typical" chick, this range exclud
 * Is the justification based on some sort of logic, even if you may disagree?
 ::::
 
+A common technique to find a weakly informative prior is to have a standard deviation which is an order of magnitude (a factor of 10) larger than a plausible standard deviation of the data. 
+
 :::{.subtask}
-A common technique recommended in [Prior Choice Recommendations Wiki](https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations) considers standardized data, and is that a weakly informed prior should have a standard deviation of an order of magnitude larger than the data. What is your standard deviation? Under this recommendation, what $\sigma$ should you use for your prior?
+What do you think is a plausible standard deviation of the weight of 12 days-old chicks, based on your range stated above? 
+Under the above recommendation, what standard deviation $\sigma$ should you use for your prior?
 :::
 
 ::::{.subrubric}
@@ -160,9 +184,9 @@ A common technique recommended in [Prior Choice Recommendations Wiki](https://gi
 
 * Do the two standard deviations meet the following common sense criteria?
   - Both values are **...**
-  - The prior $\sigma$ is 10 times larger than **...**
-* Given the choice of mean from above, the prior's range defined by $\mu \pm \sigma$ overlaps with **...**.
+* Given the choice of mean from above, the prior's range defined by $\mu \pm 2\sigma$ includes **...**.
 ::::
+
 
 :::{.subtask}
 Write down in mathematical form the final prior you found using this prior definition technique.
@@ -211,7 +235,7 @@ Assuming symmetry, use the mean you chose and either the upper or lower bound $b
 :::
 
 ::::{.subrubric}
-### Prior standard deviation by intuition
+### Prior standard deviation by reference
 
 * Does the calculated $\sigma$ value meet the following common sense criteria?
   * The value is above **...** and below **...**.
@@ -280,8 +304,8 @@ The provided Stan code below is given as an example of a separate model. Note th
 $$
 \begin{aligned}
     w_{ij} &\sim N(\mu_j,\sigma_j)\\
-    \mu_{j} &\sim N(0,1)\\
-    \sigma_{j} &\sim \exp(1)
+    \mu_{j} &\sim N(0,10) \text{ (you need to adjust this)}\\
+    \sigma_{j} &\sim \mathrm{exponential}(.02) \text{ (you can use this prior)}
 \end{aligned}
 $$
 
@@ -447,9 +471,26 @@ See the example Stan codes in the demo [Bayesian data analysis - CmdStanR demos:
 
 # Hierarchical model with BRMS (3p)
 
+
+
+::::: {.content-hidden when-format="pdf"}
+:::: {.callout-tip collapse=true}
+
+
+:::{.callout-important}
+
+There have been and will come minor changes to this part of the assignment, rubric and template wording.
+
+:::
+
+
+::::
+:::::
+
+
 The goal of this task is to discuss an alternative parameterisation of hierarchical models and introduce the `brms`-package.
 
-[`brms`](https://paul-buerkner.github.io/brms/) is a high-level interface for Stan providing tools to create a wide range of Bayesian models, including hierarchical ones. In the previous section, you might have noted that with the hierarchical implementation of the model there may be divergent transitions during the sampling from the posterior. This is related to the [Neal's funnel](https://mc-stan.org/docs/stan-users-guide/reparameterisation.html), where the sampling algorithm would need to change the step size in order to effectively sample the posterior. One trick to improve sampling is to use an alternative parameterisation for the model. This parameterisation is called the non-centered parameterisation (@eq-non-centered) and often it can help with the divergent transitions. In short,In short,
+[`brms`](https://paul-buerkner.github.io/brms/) is a high-level interface for Stan providing tools to create a wide range of Bayesian models, including hierarchical ones. In the previous section, you might have noted that with the hierarchical implementation of the model there may be divergent transitions during the sampling from the posterior. This is related to the [Neal's funnel](https://mc-stan.org/docs/stan-users-guide/reparameterisation.html), where the sampling algorithm would need to change the step size in order to effectively sample the posterior. One trick to improve sampling is to use an alternative parameterisation for the model. This parameterisation is called the non-centered parameterisation (@eq-non-centered) and often it can help with the divergent transitions. In short,
 we sample parameters from a distribution with an easier geometry for the sample to explore efficiently and then transform those values to the joint distribution of interest.
 $$
 \begin{aligned}
