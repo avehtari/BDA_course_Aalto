@@ -529,18 +529,22 @@ Attaching package: 'brms'</code></pre>
 <h1 data-number="2"><span class="header-section-number">2</span> Hierarchical Model: Chicken Data with Stan (6p)</h1>
 <section id="choosing-a-weakly-informative-prior-by-intuition" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="choosing-a-weakly-informative-prior-by-intuition"><span class="header-section-number">2.1</span> Choosing a weakly informative prior by intuition</h2>
-<div class="callout callout-style-default callout-warning callout-captioned">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout callout-style-default callout-caution callout-captioned">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-caption-container flex-fill">
-Warning
+A word of caution on eliciting the priors below
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse show">
+<div id="callout-3" class="callout-3-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
+<p>Please note that in the below, we intend to set a prior on <span class="math inline">\(\mu\)</span> (the <em>mean</em> chick weight), but the intuition we ilicit is based on the weight of <em>individual</em> chicks. We do so to help create intuition about what the mean could be, however, it would be theoretically more accurate to ilicit priors about <em>mean</em> chick weights.</p>
+</div>
+</div>
+</div>
 <div class="callout callout-style-default callout-important callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -551,10 +555,7 @@ Important
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>There have been minor changes to this part of the assignment, rubric and template wording.</p>
-</div>
-</div>
-</div>
+<p>We have made changes to the assignment text and some of the rubrics to make it clearer.</p>
 </div>
 </div>
 </section>
@@ -846,18 +847,6 @@ Data preparation and sampling from the posterior
 </section>
 <section id="hierarchical-model-with-brms-3p" class="level1" data-number="3">
 <h1 data-number="3"><span class="header-section-number">3</span> Hierarchical model with BRMS (3p)</h1>
-<div class="callout callout-style-default callout-warning callout-captioned">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="true" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-caption-container flex-fill">
-Warning
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-10" class="callout-10-contents callout-collapse collapse show">
-<div class="callout-body-container callout-body">
 <div class="callout callout-style-default callout-important callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -868,10 +857,7 @@ Important
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>There have been and will come minor changes to this part of the assignment, rubric and template wording.</p>
-</div>
-</div>
-</div>
+<p>We have made changes to the assignment text and some of the rubrics to make it clearer.</p>
 </div>
 </div>
 <section id="a-1" class="level2" data-number="3.1">
@@ -897,12 +883,15 @@ Important
 <span id="cb65-4"><a href="#cb65-4"></a>  <span class="at">prior=</span><span class="fu">c</span>(</span>
 <span id="cb65-5"><a href="#cb65-5"></a>    <span class="co"># REPLACE WITH YOUR PRIOR DERIVED in 2)</span></span>
 <span id="cb65-6"><a href="#cb65-6"></a>    <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>,<span class="dv">10</span>), <span class="at">class=</span><span class="st">"Intercept"</span>), </span>
-<span id="cb65-7"><a href="#cb65-7"></a>  ),</span>
-<span id="cb65-8"><a href="#cb65-8"></a>  <span class="at">backend =</span> <span class="st">"cmdstanr"</span>,</span>
-<span id="cb65-9"><a href="#cb65-9"></a>  <span class="at">save_pars =</span> <span class="fu">save_pars</span>(<span class="at">manual =</span> <span class="fu">c</span>(<span class="st">"z_1[1,4]"</span>))</span>
-<span id="cb65-10"><a href="#cb65-10"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb65-7"><a href="#cb65-7"></a>    <span class="co"># YOU CAN LEAVE THE BELOW PRIORS</span></span>
+<span id="cb65-8"><a href="#cb65-8"></a>    <span class="fu">prior</span>(<span class="fu">exponential</span>(.<span class="dv">02</span>), <span class="at">class=</span><span class="st">"sd"</span>), </span>
+<span id="cb65-9"><a href="#cb65-9"></a>    <span class="fu">prior</span>(<span class="fu">exponential</span>(.<span class="dv">02</span>), <span class="at">class=</span><span class="st">"sigma"</span>), </span>
+<span id="cb65-10"><a href="#cb65-10"></a>  ),</span>
+<span id="cb65-11"><a href="#cb65-11"></a>  <span class="at">backend =</span> <span class="st">"cmdstanr"</span>,</span>
+<span id="cb65-12"><a href="#cb65-12"></a>  <span class="at">save_pars =</span> <span class="fu">save_pars</span>(<span class="at">manual =</span> <span class="fu">c</span>(<span class="st">"z_1[1,4]"</span>))</span>
+<span id="cb65-13"><a href="#cb65-13"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
-<pre><code>Error in c(prior(normal(0, 10), class = "Intercept"), ): argument 2 is empty</code></pre>
+<pre><code>Error in c(prior(normal(0, 10), class = "Intercept"), prior(exponential(0.02), : argument 4 is empty</code></pre>
 </div>
 </div>
 </section>
@@ -1315,365 +1304,353 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb74-85"><a href="#cb74-85"></a></span>
 <span id="cb74-86"><a href="#cb74-86"></a></span>
 <span id="cb74-87"><a href="#cb74-87"></a><span class="fu">## Choosing a weakly informative prior by intuition</span></span>
-<span id="cb74-88"><a href="#cb74-88"></a></span>
-<span id="cb74-89"><a href="#cb74-89"></a>::::: {.content-hidden when-format="pdf"}</span>
-<span id="cb74-90"><a href="#cb74-90"></a>:::: {.callout-warning collapse=false}</span>
-<span id="cb74-91"><a href="#cb74-91"></a></span>
+<span id="cb74-88"><a href="#cb74-88"></a>::: {.callout-caution collapse="false"}</span>
+<span id="cb74-89"><a href="#cb74-89"></a><span class="fu">## A word of caution on eliciting the priors below</span></span>
+<span id="cb74-90"><a href="#cb74-90"></a>Please note that in the below, we intend to set a prior on $\mu$ (the *mean* chick weight), but the intuition we ilicit is based on the weight of *individual* chicks. We do so to help create intuition about what the mean could be, however, it would be theoretically more accurate to ilicit priors about *mean* chick weights. </span>
+<span id="cb74-91"><a href="#cb74-91"></a>:::</span>
 <span id="cb74-92"><a href="#cb74-92"></a></span>
 <span id="cb74-93"><a href="#cb74-93"></a>:::{.callout-important}</span>
 <span id="cb74-94"><a href="#cb74-94"></a></span>
-<span id="cb74-95"><a href="#cb74-95"></a>There have been minor changes to this part of the assignment, rubric and template wording.</span>
+<span id="cb74-95"><a href="#cb74-95"></a>We have made changes to the assignment text and some of the rubrics to make it clearer.</span>
 <span id="cb74-96"><a href="#cb74-96"></a></span>
 <span id="cb74-97"><a href="#cb74-97"></a>:::</span>
 <span id="cb74-98"><a href="#cb74-98"></a></span>
 <span id="cb74-99"><a href="#cb74-99"></a></span>
-<span id="cb74-100"><a href="#cb74-100"></a>::::</span>
-<span id="cb74-101"><a href="#cb74-101"></a>:::::</span>
+<span id="cb74-100"><a href="#cb74-100"></a><span class="fu">## (a)</span></span>
+<span id="cb74-101"><a href="#cb74-101"></a></span>
 <span id="cb74-102"><a href="#cb74-102"></a></span>
-<span id="cb74-103"><a href="#cb74-103"></a></span>
+<span id="cb74-103"><a href="#cb74-103"></a><span class="fu">## (b)</span></span>
 <span id="cb74-104"><a href="#cb74-104"></a></span>
-<span id="cb74-105"><a href="#cb74-105"></a><span class="fu">## (a)</span></span>
-<span id="cb74-106"><a href="#cb74-106"></a></span>
+<span id="cb74-105"><a href="#cb74-105"></a></span>
+<span id="cb74-106"><a href="#cb74-106"></a><span class="fu">## (c)</span></span>
 <span id="cb74-107"><a href="#cb74-107"></a></span>
-<span id="cb74-108"><a href="#cb74-108"></a><span class="fu">## (b)</span></span>
-<span id="cb74-109"><a href="#cb74-109"></a></span>
+<span id="cb74-108"><a href="#cb74-108"></a></span>
+<span id="cb74-109"><a href="#cb74-109"></a><span class="fu">## (d)</span></span>
 <span id="cb74-110"><a href="#cb74-110"></a></span>
-<span id="cb74-111"><a href="#cb74-111"></a><span class="fu">## (c)</span></span>
-<span id="cb74-112"><a href="#cb74-112"></a></span>
+<span id="cb74-111"><a href="#cb74-111"></a></span>
+<span id="cb74-112"><a href="#cb74-112"></a><span class="fu">## (e)</span></span>
 <span id="cb74-113"><a href="#cb74-113"></a></span>
-<span id="cb74-114"><a href="#cb74-114"></a><span class="fu">## (d)</span></span>
+<span id="cb74-114"><a href="#cb74-114"></a><span class="fu">## Choosing a weakly informative prior using external references</span></span>
 <span id="cb74-115"><a href="#cb74-115"></a></span>
-<span id="cb74-116"><a href="#cb74-116"></a></span>
-<span id="cb74-117"><a href="#cb74-117"></a><span class="fu">## (e)</span></span>
+<span id="cb74-116"><a href="#cb74-116"></a><span class="fu">## (f)</span></span>
+<span id="cb74-117"><a href="#cb74-117"></a></span>
 <span id="cb74-118"><a href="#cb74-118"></a></span>
-<span id="cb74-119"><a href="#cb74-119"></a><span class="fu">## Choosing a weakly informative prior using external references</span></span>
+<span id="cb74-119"><a href="#cb74-119"></a><span class="fu">## (g)</span></span>
 <span id="cb74-120"><a href="#cb74-120"></a></span>
-<span id="cb74-121"><a href="#cb74-121"></a><span class="fu">## (f)</span></span>
-<span id="cb74-122"><a href="#cb74-122"></a></span>
+<span id="cb74-121"><a href="#cb74-121"></a></span>
+<span id="cb74-122"><a href="#cb74-122"></a><span class="fu">## (h)</span></span>
 <span id="cb74-123"><a href="#cb74-123"></a></span>
-<span id="cb74-124"><a href="#cb74-124"></a><span class="fu">## (g)</span></span>
-<span id="cb74-125"><a href="#cb74-125"></a></span>
+<span id="cb74-124"><a href="#cb74-124"></a></span>
+<span id="cb74-125"><a href="#cb74-125"></a><span class="fu">## (i)</span></span>
 <span id="cb74-126"><a href="#cb74-126"></a></span>
-<span id="cb74-127"><a href="#cb74-127"></a><span class="fu">## (h)</span></span>
+<span id="cb74-127"><a href="#cb74-127"></a><span class="fu">## Non-normal priors</span></span>
 <span id="cb74-128"><a href="#cb74-128"></a></span>
-<span id="cb74-129"><a href="#cb74-129"></a></span>
-<span id="cb74-130"><a href="#cb74-130"></a><span class="fu">## (i)</span></span>
-<span id="cb74-131"><a href="#cb74-131"></a></span>
-<span id="cb74-132"><a href="#cb74-132"></a><span class="fu">## Non-normal priors</span></span>
-<span id="cb74-133"><a href="#cb74-133"></a></span>
-<span id="cb74-134"><a href="#cb74-134"></a><span class="fu">## (j)</span></span>
-<span id="cb74-135"><a href="#cb74-135"></a></span>
-<span id="cb74-136"><a href="#cb74-136"></a><span class="fu">## Modeling diet effects on chicken weight</span></span>
-<span id="cb74-137"><a href="#cb74-137"></a>::::{.callout-important collapse=true}</span>
-<span id="cb74-138"><a href="#cb74-138"></a><span class="fu"># Data inside, don't peek before you have set your priors!</span></span>
-<span id="cb74-139"><a href="#cb74-139"></a>:::{.callout-important collapse=true}</span>
-<span id="cb74-140"><a href="#cb74-140"></a><span class="fu"># Have you set your priors?</span></span>
-<span id="cb74-143"><a href="#cb74-143"></a><span class="in">```{r}</span></span>
-<span id="cb74-144"><a href="#cb74-144"></a><span class="co">#| message: false</span></span>
-<span id="cb74-145"><a href="#cb74-145"></a><span class="fu">data</span>(<span class="st">"ChickWeight"</span>)</span>
-<span id="cb74-146"><a href="#cb74-146"></a></span>
-<span id="cb74-147"><a href="#cb74-147"></a>Chick12 <span class="ot">&lt;-</span> ChickWeight <span class="sc">|&gt;</span> <span class="fu">filter</span>(Time <span class="sc">==</span> <span class="dv">12</span>)</span>
+<span id="cb74-129"><a href="#cb74-129"></a><span class="fu">## (j)</span></span>
+<span id="cb74-130"><a href="#cb74-130"></a></span>
+<span id="cb74-131"><a href="#cb74-131"></a><span class="fu">## Modeling diet effects on chicken weight</span></span>
+<span id="cb74-132"><a href="#cb74-132"></a>::::{.callout-important collapse=true}</span>
+<span id="cb74-133"><a href="#cb74-133"></a><span class="fu"># Data inside, don't peek before you have set your priors!</span></span>
+<span id="cb74-134"><a href="#cb74-134"></a>:::{.callout-important collapse=true}</span>
+<span id="cb74-135"><a href="#cb74-135"></a><span class="fu"># Have you set your priors?</span></span>
+<span id="cb74-138"><a href="#cb74-138"></a><span class="in">```{r}</span></span>
+<span id="cb74-139"><a href="#cb74-139"></a><span class="co">#| message: false</span></span>
+<span id="cb74-140"><a href="#cb74-140"></a><span class="fu">data</span>(<span class="st">"ChickWeight"</span>)</span>
+<span id="cb74-141"><a href="#cb74-141"></a></span>
+<span id="cb74-142"><a href="#cb74-142"></a>Chick12 <span class="ot">&lt;-</span> ChickWeight <span class="sc">|&gt;</span> <span class="fu">filter</span>(Time <span class="sc">==</span> <span class="dv">12</span>)</span>
+<span id="cb74-143"><a href="#cb74-143"></a></span>
+<span id="cb74-144"><a href="#cb74-144"></a><span class="fu">head</span>(Chick12)</span>
+<span id="cb74-145"><a href="#cb74-145"></a><span class="in">```</span></span>
+<span id="cb74-146"><a href="#cb74-146"></a>:::</span>
+<span id="cb74-147"><a href="#cb74-147"></a>::::</span>
 <span id="cb74-148"><a href="#cb74-148"></a></span>
-<span id="cb74-149"><a href="#cb74-149"></a><span class="fu">head</span>(Chick12)</span>
-<span id="cb74-150"><a href="#cb74-150"></a><span class="in">```</span></span>
-<span id="cb74-151"><a href="#cb74-151"></a>:::</span>
-<span id="cb74-152"><a href="#cb74-152"></a>::::</span>
-<span id="cb74-153"><a href="#cb74-153"></a></span>
+<span id="cb74-149"><a href="#cb74-149"></a></span>
+<span id="cb74-150"><a href="#cb74-150"></a>:::: {.content-hidden when-format="pdf"}</span>
+<span id="cb74-151"><a href="#cb74-151"></a>::: {.callout-warning collapse=false}</span>
+<span id="cb74-152"><a href="#cb74-152"></a></span>
+<span id="cb74-153"><a href="#cb74-153"></a><span class="fu">## Sample from the posterior</span></span>
 <span id="cb74-154"><a href="#cb74-154"></a></span>
-<span id="cb74-155"><a href="#cb74-155"></a>:::: {.content-hidden when-format="pdf"}</span>
-<span id="cb74-156"><a href="#cb74-156"></a>::: {.callout-warning collapse=false}</span>
-<span id="cb74-157"><a href="#cb74-157"></a></span>
-<span id="cb74-158"><a href="#cb74-158"></a><span class="fu">## Sample from the posterior</span></span>
+<span id="cb74-155"><a href="#cb74-155"></a></span>
+<span id="cb74-156"><a href="#cb74-156"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
+<span id="cb74-157"><a href="#cb74-157"></a>**Make sure that this does not get displayed in the PDF!**</span>
+<span id="cb74-158"><a href="#cb74-158"></a>    </span>
 <span id="cb74-159"><a href="#cb74-159"></a></span>
 <span id="cb74-160"><a href="#cb74-160"></a></span>
-<span id="cb74-161"><a href="#cb74-161"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
-<span id="cb74-162"><a href="#cb74-162"></a>**Make sure that this does not get displayed in the PDF!**</span>
-<span id="cb74-163"><a href="#cb74-163"></a>    </span>
-<span id="cb74-164"><a href="#cb74-164"></a></span>
-<span id="cb74-165"><a href="#cb74-165"></a></span>
-<span id="cb74-166"><a href="#cb74-166"></a></span>
-<span id="cb74-167"><a href="#cb74-167"></a>To sample from the posterior using Stan, use:</span>
-<span id="cb74-168"><a href="#cb74-168"></a></span>
-<span id="cb74-171"><a href="#cb74-171"></a><span class="in">```{r}</span></span>
-<span id="cb74-172"><a href="#cb74-172"></a><span class="co">#| label: format data for Stan</span></span>
-<span id="cb74-173"><a href="#cb74-173"></a>stan_data <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb74-174"><a href="#cb74-174"></a>  <span class="at">N_observations =</span> <span class="fu">nrow</span>(Chick12),</span>
-<span id="cb74-175"><a href="#cb74-175"></a>  <span class="at">N_diets =</span> <span class="fu">length</span>(<span class="fu">unique</span>(Chick12<span class="sc">$</span>Diet)),</span>
-<span id="cb74-176"><a href="#cb74-176"></a>  <span class="at">diet_idx =</span> Chick12<span class="sc">$</span>Diet,</span>
-<span id="cb74-177"><a href="#cb74-177"></a>  <span class="at">weight =</span> Chick12<span class="sc">$</span>weight</span>
-<span id="cb74-178"><a href="#cb74-178"></a>)</span>
-<span id="cb74-179"><a href="#cb74-179"></a></span>
-<span id="cb74-180"><a href="#cb74-180"></a>model_separate <span class="ot">&lt;-</span> <span class="fu">cmdstan_model</span>(<span class="at">stan_file =</span> <span class="st">"additional_files/assignment7/chickens_separate.stan"</span>)</span>
-<span id="cb74-181"><a href="#cb74-181"></a></span>
-<span id="cb74-182"><a href="#cb74-182"></a><span class="co"># Sampling from the posterior distribution happens here:</span></span>
-<span id="cb74-183"><a href="#cb74-183"></a>fit_separate <span class="ot">&lt;-</span> model_separate<span class="sc">$</span><span class="fu">sample</span>(<span class="at">data =</span> stan_data, <span class="at">refresh=</span><span class="dv">0</span>,</span>
-<span id="cb74-184"><a href="#cb74-184"></a>                                      <span class="at">show_messages=</span><span class="cn">FALSE</span>,</span>
-<span id="cb74-185"><a href="#cb74-185"></a>                                      <span class="at">show_exceptions=</span><span class="cn">FALSE</span>)</span>
-<span id="cb74-186"><a href="#cb74-186"></a><span class="in">```</span></span>
-<span id="cb74-187"><a href="#cb74-187"></a>Fit objects returned by the <span class="in">`sample()`</span> method, by default print a summary of the posterior draws.</span>
-<span id="cb74-188"><a href="#cb74-188"></a>These are **NOT** the results you would expect to turn in your report. You will need to change the priors in the code for the separate model.</span>
-<span id="cb74-191"><a href="#cb74-191"></a><span class="in">```{r}</span></span>
-<span id="cb74-192"><a href="#cb74-192"></a>fit_separate</span>
-<span id="cb74-193"><a href="#cb74-193"></a><span class="in">```</span></span>
-<span id="cb74-194"><a href="#cb74-194"></a>Quick model convergence check (as in assignment 6):</span>
-<span id="cb74-197"><a href="#cb74-197"></a><span class="in">```{r}</span></span>
-<span id="cb74-198"><a href="#cb74-198"></a>fit_separate<span class="sc">$</span><span class="fu">cmdstan_diagnose</span>()</span>
-<span id="cb74-199"><a href="#cb74-199"></a><span class="in">```</span></span>
+<span id="cb74-161"><a href="#cb74-161"></a></span>
+<span id="cb74-162"><a href="#cb74-162"></a>To sample from the posterior using Stan, use:</span>
+<span id="cb74-163"><a href="#cb74-163"></a></span>
+<span id="cb74-166"><a href="#cb74-166"></a><span class="in">```{r}</span></span>
+<span id="cb74-167"><a href="#cb74-167"></a><span class="co">#| label: format data for Stan</span></span>
+<span id="cb74-168"><a href="#cb74-168"></a>stan_data <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb74-169"><a href="#cb74-169"></a>  <span class="at">N_observations =</span> <span class="fu">nrow</span>(Chick12),</span>
+<span id="cb74-170"><a href="#cb74-170"></a>  <span class="at">N_diets =</span> <span class="fu">length</span>(<span class="fu">unique</span>(Chick12<span class="sc">$</span>Diet)),</span>
+<span id="cb74-171"><a href="#cb74-171"></a>  <span class="at">diet_idx =</span> Chick12<span class="sc">$</span>Diet,</span>
+<span id="cb74-172"><a href="#cb74-172"></a>  <span class="at">weight =</span> Chick12<span class="sc">$</span>weight</span>
+<span id="cb74-173"><a href="#cb74-173"></a>)</span>
+<span id="cb74-174"><a href="#cb74-174"></a></span>
+<span id="cb74-175"><a href="#cb74-175"></a>model_separate <span class="ot">&lt;-</span> <span class="fu">cmdstan_model</span>(<span class="at">stan_file =</span> <span class="st">"additional_files/assignment7/chickens_separate.stan"</span>)</span>
+<span id="cb74-176"><a href="#cb74-176"></a></span>
+<span id="cb74-177"><a href="#cb74-177"></a><span class="co"># Sampling from the posterior distribution happens here:</span></span>
+<span id="cb74-178"><a href="#cb74-178"></a>fit_separate <span class="ot">&lt;-</span> model_separate<span class="sc">$</span><span class="fu">sample</span>(<span class="at">data =</span> stan_data, <span class="at">refresh=</span><span class="dv">0</span>,</span>
+<span id="cb74-179"><a href="#cb74-179"></a>                                      <span class="at">show_messages=</span><span class="cn">FALSE</span>,</span>
+<span id="cb74-180"><a href="#cb74-180"></a>                                      <span class="at">show_exceptions=</span><span class="cn">FALSE</span>)</span>
+<span id="cb74-181"><a href="#cb74-181"></a><span class="in">```</span></span>
+<span id="cb74-182"><a href="#cb74-182"></a>Fit objects returned by the <span class="in">`sample()`</span> method, by default print a summary of the posterior draws.</span>
+<span id="cb74-183"><a href="#cb74-183"></a>These are **NOT** the results you would expect to turn in your report. You will need to change the priors in the code for the separate model.</span>
+<span id="cb74-186"><a href="#cb74-186"></a><span class="in">```{r}</span></span>
+<span id="cb74-187"><a href="#cb74-187"></a>fit_separate</span>
+<span id="cb74-188"><a href="#cb74-188"></a><span class="in">```</span></span>
+<span id="cb74-189"><a href="#cb74-189"></a>Quick model convergence check (as in assignment 6):</span>
+<span id="cb74-192"><a href="#cb74-192"></a><span class="in">```{r}</span></span>
+<span id="cb74-193"><a href="#cb74-193"></a>fit_separate<span class="sc">$</span><span class="fu">cmdstan_diagnose</span>()</span>
+<span id="cb74-194"><a href="#cb74-194"></a><span class="in">```</span></span>
+<span id="cb74-195"><a href="#cb74-195"></a></span>
+<span id="cb74-196"><a href="#cb74-196"></a></span>
+<span id="cb74-197"><a href="#cb74-197"></a>:::</span>
+<span id="cb74-198"><a href="#cb74-198"></a>::::</span>
+<span id="cb74-199"><a href="#cb74-199"></a></span>
 <span id="cb74-200"><a href="#cb74-200"></a></span>
 <span id="cb74-201"><a href="#cb74-201"></a></span>
-<span id="cb74-202"><a href="#cb74-202"></a>:::</span>
-<span id="cb74-203"><a href="#cb74-203"></a>::::</span>
+<span id="cb74-202"><a href="#cb74-202"></a><span class="fu">## (k)</span></span>
+<span id="cb74-203"><a href="#cb74-203"></a></span>
 <span id="cb74-204"><a href="#cb74-204"></a></span>
-<span id="cb74-205"><a href="#cb74-205"></a></span>
+<span id="cb74-205"><a href="#cb74-205"></a><span class="fu">## (l)</span></span>
 <span id="cb74-206"><a href="#cb74-206"></a></span>
-<span id="cb74-207"><a href="#cb74-207"></a><span class="fu">## (k)</span></span>
-<span id="cb74-208"><a href="#cb74-208"></a></span>
-<span id="cb74-209"><a href="#cb74-209"></a></span>
-<span id="cb74-210"><a href="#cb74-210"></a><span class="fu">## (l)</span></span>
+<span id="cb74-207"><a href="#cb74-207"></a></span>
+<span id="cb74-208"><a href="#cb74-208"></a>**For the figures below, we use the earlier draws for the separate model with bad priors.</span>
+<span id="cb74-209"><a href="#cb74-209"></a>When you have implemented the pooled and hierarchical models, edit the code below to</span>
+<span id="cb74-210"><a href="#cb74-210"></a>include draws from your model posterior into the figures.**</span>
 <span id="cb74-211"><a href="#cb74-211"></a></span>
 <span id="cb74-212"><a href="#cb74-212"></a></span>
-<span id="cb74-213"><a href="#cb74-213"></a>**For the figures below, we use the earlier draws for the separate model with bad priors.</span>
-<span id="cb74-214"><a href="#cb74-214"></a>When you have implemented the pooled and hierarchical models, edit the code below to</span>
-<span id="cb74-215"><a href="#cb74-215"></a>include draws from your model posterior into the figures.**</span>
+<span id="cb74-213"><a href="#cb74-213"></a></span>
+<span id="cb74-214"><a href="#cb74-214"></a>:::: {.content-hidden when-format="pdf"}</span>
+<span id="cb74-215"><a href="#cb74-215"></a>::: {.callout-warning collapse=false}</span>
 <span id="cb74-216"><a href="#cb74-216"></a></span>
-<span id="cb74-217"><a href="#cb74-217"></a></span>
+<span id="cb74-217"><a href="#cb74-217"></a><span class="fu">### Data preparation and sampling from the posterior</span></span>
 <span id="cb74-218"><a href="#cb74-218"></a></span>
-<span id="cb74-219"><a href="#cb74-219"></a>:::: {.content-hidden when-format="pdf"}</span>
-<span id="cb74-220"><a href="#cb74-220"></a>::: {.callout-warning collapse=false}</span>
-<span id="cb74-221"><a href="#cb74-221"></a></span>
-<span id="cb74-222"><a href="#cb74-222"></a><span class="fu">### Data preparation and sampling from the posterior</span></span>
+<span id="cb74-219"><a href="#cb74-219"></a></span>
+<span id="cb74-220"><a href="#cb74-220"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
+<span id="cb74-221"><a href="#cb74-221"></a>**Make sure that this does not get displayed in the PDF!**</span>
+<span id="cb74-222"><a href="#cb74-222"></a>    </span>
 <span id="cb74-223"><a href="#cb74-223"></a></span>
 <span id="cb74-224"><a href="#cb74-224"></a></span>
-<span id="cb74-225"><a href="#cb74-225"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
-<span id="cb74-226"><a href="#cb74-226"></a>**Make sure that this does not get displayed in the PDF!**</span>
-<span id="cb74-227"><a href="#cb74-227"></a>    </span>
-<span id="cb74-228"><a href="#cb74-228"></a></span>
-<span id="cb74-229"><a href="#cb74-229"></a></span>
-<span id="cb74-230"><a href="#cb74-230"></a><span class="in">    </span></span>
-<span id="cb74-233"><a href="#cb74-233"></a><span class="in">```{r}</span></span>
-<span id="cb74-234"><a href="#cb74-234"></a><span class="co">#| label: draws for pooled and hierarchical</span></span>
-<span id="cb74-235"><a href="#cb74-235"></a><span class="co">#| code-summary: Sampling from the posteriors given the pooled and hierarhical models</span></span>
-<span id="cb74-236"><a href="#cb74-236"></a></span>
-<span id="cb74-237"><a href="#cb74-237"></a>fit_pooled <span class="ot">&lt;-</span> fit_separate</span>
-<span id="cb74-238"><a href="#cb74-238"></a>fit_hierarchical <span class="ot">&lt;-</span> fit_separate</span>
-<span id="cb74-239"><a href="#cb74-239"></a></span>
-<span id="cb74-240"><a href="#cb74-240"></a></span>
-<span id="cb74-241"><a href="#cb74-241"></a><span class="in">```</span></span>
-<span id="cb74-242"><a href="#cb74-242"></a></span>
-<span id="cb74-243"><a href="#cb74-243"></a>Below, we collect the corresponding posterior draws from the three models into a shared</span>
-<span id="cb74-244"><a href="#cb74-244"></a>data frame using the <span class="in">`extract_variable`</span> function. This makes plotting the posterior</span>
-<span id="cb74-245"><a href="#cb74-245"></a>in a single plot easier.</span>
-<span id="cb74-248"><a href="#cb74-248"></a><span class="in">```{r}</span></span>
-<span id="cb74-249"><a href="#cb74-249"></a><span class="co">#| label: prepare data for plots</span></span>
-<span id="cb74-250"><a href="#cb74-250"></a><span class="co">#| code-summary: Prepare data for plots</span></span>
-<span id="cb74-251"><a href="#cb74-251"></a></span>
-<span id="cb74-252"><a href="#cb74-252"></a><span class="co"># Expect the same number of posterior draws from each model.</span></span>
-<span id="cb74-253"><a href="#cb74-253"></a>ndraws <span class="ot">&lt;-</span> <span class="fu">nrow</span>(fit_hierarchical<span class="sc">$</span><span class="fu">sampler_diagnostics</span>(<span class="at">format =</span> <span class="st">"matrix"</span>))</span>
-<span id="cb74-254"><a href="#cb74-254"></a></span>
-<span id="cb74-255"><a href="#cb74-255"></a><span class="co"># Collect posterior draws and the model used to a data frame.</span></span>
-<span id="cb74-256"><a href="#cb74-256"></a>mean_diet_4_separate <span class="ot">=</span> <span class="fu">extract_variable</span>(fit_separate, <span class="st">"mean_diet[4]"</span>)</span>
-<span id="cb74-257"><a href="#cb74-257"></a>mean_diet_4_pooled <span class="ot">=</span> <span class="fu">extract_variable</span>(fit_pooled, <span class="st">"mean_diet[4]"</span>)</span>
-<span id="cb74-258"><a href="#cb74-258"></a>mean_diet_4_hierarchical <span class="ot">=</span> <span class="fu">extract_variable</span>(fit_hierarchical, <span class="st">"mean_diet[4]"</span>)</span>
-<span id="cb74-259"><a href="#cb74-259"></a>posterior_mean_diet_4 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb74-260"><a href="#cb74-260"></a>  <span class="at">model_name =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Separate"</span>, <span class="st">"Pooled"</span>, <span class="st">"Hierarchical"</span>),</span>
-<span id="cb74-261"><a href="#cb74-261"></a>              <span class="at">each =</span> ndraws),</span>
-<span id="cb74-262"><a href="#cb74-262"></a>  <span class="at">mean_diet_4 =</span> <span class="fu">c</span>(</span>
-<span id="cb74-263"><a href="#cb74-263"></a>   mean_diet_4_separate, mean_diet_4_pooled, mean_diet_4_hierarchical</span>
-<span id="cb74-264"><a href="#cb74-264"></a>  ))</span>
-<span id="cb74-265"><a href="#cb74-265"></a></span>
-<span id="cb74-266"><a href="#cb74-266"></a>predicted_weight_diet_4 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb74-267"><a href="#cb74-267"></a>  <span class="at">model_name =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Separate"</span>, <span class="st">"Pooled"</span>, <span class="st">"Hierarchical"</span>),</span>
-<span id="cb74-268"><a href="#cb74-268"></a>              <span class="at">each =</span> ndraws),</span>
-<span id="cb74-269"><a href="#cb74-269"></a>  <span class="at">predicted_weight =</span> <span class="fu">c</span>(</span>
-<span id="cb74-270"><a href="#cb74-270"></a>   <span class="fu">extract_variable</span>(fit_separate, <span class="st">"weight_pred"</span>),</span>
-<span id="cb74-271"><a href="#cb74-271"></a>   <span class="fu">extract_variable</span>(fit_pooled, <span class="st">"weight_pred"</span>),</span>
-<span id="cb74-272"><a href="#cb74-272"></a>   <span class="fu">extract_variable</span>(fit_hierarchical, <span class="st">"weight_pred"</span>)</span>
-<span id="cb74-273"><a href="#cb74-273"></a>  ))</span>
-<span id="cb74-274"><a href="#cb74-274"></a></span>
-<span id="cb74-275"><a href="#cb74-275"></a><span class="co"># Collect posterior draws and the model used to a long data frame.</span></span>
-<span id="cb74-276"><a href="#cb74-276"></a>posterior_mean_diet_5 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb74-277"><a href="#cb74-277"></a>  <span class="at">model_name =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Separate"</span>, <span class="st">"Pooled"</span>, <span class="st">"Hierarchical"</span>),</span>
-<span id="cb74-278"><a href="#cb74-278"></a>    <span class="at">each =</span> ndraws</span>
-<span id="cb74-279"><a href="#cb74-279"></a>  ),</span>
-<span id="cb74-280"><a href="#cb74-280"></a>  <span class="at">mean_diet_5 =</span> <span class="fu">c</span>(</span>
-<span id="cb74-281"><a href="#cb74-281"></a>    <span class="fu">extract_variable</span>(fit_separate, <span class="st">"mean_five"</span>),</span>
-<span id="cb74-282"><a href="#cb74-282"></a>    <span class="fu">extract_variable</span>(fit_pooled, <span class="st">"mean_five"</span>),</span>
-<span id="cb74-283"><a href="#cb74-283"></a>    <span class="fu">extract_variable</span>(fit_hierarchical, <span class="st">"mean_five"</span>)</span>
-<span id="cb74-284"><a href="#cb74-284"></a>  )</span>
+<span id="cb74-225"><a href="#cb74-225"></a><span class="in">    </span></span>
+<span id="cb74-228"><a href="#cb74-228"></a><span class="in">```{r}</span></span>
+<span id="cb74-229"><a href="#cb74-229"></a><span class="co">#| label: draws for pooled and hierarchical</span></span>
+<span id="cb74-230"><a href="#cb74-230"></a><span class="co">#| code-summary: Sampling from the posteriors given the pooled and hierarhical models</span></span>
+<span id="cb74-231"><a href="#cb74-231"></a></span>
+<span id="cb74-232"><a href="#cb74-232"></a>fit_pooled <span class="ot">&lt;-</span> fit_separate</span>
+<span id="cb74-233"><a href="#cb74-233"></a>fit_hierarchical <span class="ot">&lt;-</span> fit_separate</span>
+<span id="cb74-234"><a href="#cb74-234"></a></span>
+<span id="cb74-235"><a href="#cb74-235"></a></span>
+<span id="cb74-236"><a href="#cb74-236"></a><span class="in">```</span></span>
+<span id="cb74-237"><a href="#cb74-237"></a></span>
+<span id="cb74-238"><a href="#cb74-238"></a>Below, we collect the corresponding posterior draws from the three models into a shared</span>
+<span id="cb74-239"><a href="#cb74-239"></a>data frame using the <span class="in">`extract_variable`</span> function. This makes plotting the posterior</span>
+<span id="cb74-240"><a href="#cb74-240"></a>in a single plot easier.</span>
+<span id="cb74-243"><a href="#cb74-243"></a><span class="in">```{r}</span></span>
+<span id="cb74-244"><a href="#cb74-244"></a><span class="co">#| label: prepare data for plots</span></span>
+<span id="cb74-245"><a href="#cb74-245"></a><span class="co">#| code-summary: Prepare data for plots</span></span>
+<span id="cb74-246"><a href="#cb74-246"></a></span>
+<span id="cb74-247"><a href="#cb74-247"></a><span class="co"># Expect the same number of posterior draws from each model.</span></span>
+<span id="cb74-248"><a href="#cb74-248"></a>ndraws <span class="ot">&lt;-</span> <span class="fu">nrow</span>(fit_hierarchical<span class="sc">$</span><span class="fu">sampler_diagnostics</span>(<span class="at">format =</span> <span class="st">"matrix"</span>))</span>
+<span id="cb74-249"><a href="#cb74-249"></a></span>
+<span id="cb74-250"><a href="#cb74-250"></a><span class="co"># Collect posterior draws and the model used to a data frame.</span></span>
+<span id="cb74-251"><a href="#cb74-251"></a>mean_diet_4_separate <span class="ot">=</span> <span class="fu">extract_variable</span>(fit_separate, <span class="st">"mean_diet[4]"</span>)</span>
+<span id="cb74-252"><a href="#cb74-252"></a>mean_diet_4_pooled <span class="ot">=</span> <span class="fu">extract_variable</span>(fit_pooled, <span class="st">"mean_diet[4]"</span>)</span>
+<span id="cb74-253"><a href="#cb74-253"></a>mean_diet_4_hierarchical <span class="ot">=</span> <span class="fu">extract_variable</span>(fit_hierarchical, <span class="st">"mean_diet[4]"</span>)</span>
+<span id="cb74-254"><a href="#cb74-254"></a>posterior_mean_diet_4 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb74-255"><a href="#cb74-255"></a>  <span class="at">model_name =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Separate"</span>, <span class="st">"Pooled"</span>, <span class="st">"Hierarchical"</span>),</span>
+<span id="cb74-256"><a href="#cb74-256"></a>              <span class="at">each =</span> ndraws),</span>
+<span id="cb74-257"><a href="#cb74-257"></a>  <span class="at">mean_diet_4 =</span> <span class="fu">c</span>(</span>
+<span id="cb74-258"><a href="#cb74-258"></a>   mean_diet_4_separate, mean_diet_4_pooled, mean_diet_4_hierarchical</span>
+<span id="cb74-259"><a href="#cb74-259"></a>  ))</span>
+<span id="cb74-260"><a href="#cb74-260"></a></span>
+<span id="cb74-261"><a href="#cb74-261"></a>predicted_weight_diet_4 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb74-262"><a href="#cb74-262"></a>  <span class="at">model_name =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Separate"</span>, <span class="st">"Pooled"</span>, <span class="st">"Hierarchical"</span>),</span>
+<span id="cb74-263"><a href="#cb74-263"></a>              <span class="at">each =</span> ndraws),</span>
+<span id="cb74-264"><a href="#cb74-264"></a>  <span class="at">predicted_weight =</span> <span class="fu">c</span>(</span>
+<span id="cb74-265"><a href="#cb74-265"></a>   <span class="fu">extract_variable</span>(fit_separate, <span class="st">"weight_pred"</span>),</span>
+<span id="cb74-266"><a href="#cb74-266"></a>   <span class="fu">extract_variable</span>(fit_pooled, <span class="st">"weight_pred"</span>),</span>
+<span id="cb74-267"><a href="#cb74-267"></a>   <span class="fu">extract_variable</span>(fit_hierarchical, <span class="st">"weight_pred"</span>)</span>
+<span id="cb74-268"><a href="#cb74-268"></a>  ))</span>
+<span id="cb74-269"><a href="#cb74-269"></a></span>
+<span id="cb74-270"><a href="#cb74-270"></a><span class="co"># Collect posterior draws and the model used to a long data frame.</span></span>
+<span id="cb74-271"><a href="#cb74-271"></a>posterior_mean_diet_5 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb74-272"><a href="#cb74-272"></a>  <span class="at">model_name =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Separate"</span>, <span class="st">"Pooled"</span>, <span class="st">"Hierarchical"</span>),</span>
+<span id="cb74-273"><a href="#cb74-273"></a>    <span class="at">each =</span> ndraws</span>
+<span id="cb74-274"><a href="#cb74-274"></a>  ),</span>
+<span id="cb74-275"><a href="#cb74-275"></a>  <span class="at">mean_diet_5 =</span> <span class="fu">c</span>(</span>
+<span id="cb74-276"><a href="#cb74-276"></a>    <span class="fu">extract_variable</span>(fit_separate, <span class="st">"mean_five"</span>),</span>
+<span id="cb74-277"><a href="#cb74-277"></a>    <span class="fu">extract_variable</span>(fit_pooled, <span class="st">"mean_five"</span>),</span>
+<span id="cb74-278"><a href="#cb74-278"></a>    <span class="fu">extract_variable</span>(fit_hierarchical, <span class="st">"mean_five"</span>)</span>
+<span id="cb74-279"><a href="#cb74-279"></a>  )</span>
+<span id="cb74-280"><a href="#cb74-280"></a>)</span>
+<span id="cb74-281"><a href="#cb74-281"></a></span>
+<span id="cb74-282"><a href="#cb74-282"></a><span class="co"># Mean observed weight per diet, these help to compare the posteriors to data.</span></span>
+<span id="cb74-283"><a href="#cb74-283"></a>diet_means <span class="ot">&lt;-</span> <span class="fu">sapply</span>(</span>
+<span id="cb74-284"><a href="#cb74-284"></a>  <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="cf">function</span>(diet) <span class="fu">mean</span>(Chick12[Chick12<span class="sc">$</span>Diet <span class="sc">==</span> diet, <span class="st">"weight"</span>])</span>
 <span id="cb74-285"><a href="#cb74-285"></a>)</span>
-<span id="cb74-286"><a href="#cb74-286"></a></span>
-<span id="cb74-287"><a href="#cb74-287"></a><span class="co"># Mean observed weight per diet, these help to compare the posteriors to data.</span></span>
-<span id="cb74-288"><a href="#cb74-288"></a>diet_means <span class="ot">&lt;-</span> <span class="fu">sapply</span>(</span>
-<span id="cb74-289"><a href="#cb74-289"></a>  <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="cf">function</span>(diet) <span class="fu">mean</span>(Chick12[Chick12<span class="sc">$</span>Diet <span class="sc">==</span> diet, <span class="st">"weight"</span>])</span>
-<span id="cb74-290"><a href="#cb74-290"></a>)</span>
-<span id="cb74-291"><a href="#cb74-291"></a><span class="in">```</span></span>
+<span id="cb74-286"><a href="#cb74-286"></a><span class="in">```</span></span>
+<span id="cb74-287"><a href="#cb74-287"></a></span>
+<span id="cb74-288"><a href="#cb74-288"></a>:::</span>
+<span id="cb74-289"><a href="#cb74-289"></a>::::</span>
+<span id="cb74-290"><a href="#cb74-290"></a></span>
+<span id="cb74-291"><a href="#cb74-291"></a></span>
 <span id="cb74-292"><a href="#cb74-292"></a></span>
-<span id="cb74-293"><a href="#cb74-293"></a>:::</span>
-<span id="cb74-294"><a href="#cb74-294"></a>::::</span>
+<span id="cb74-293"><a href="#cb74-293"></a><span class="fu">## (m)</span></span>
+<span id="cb74-294"><a href="#cb74-294"></a></span>
 <span id="cb74-295"><a href="#cb74-295"></a></span>
-<span id="cb74-296"><a href="#cb74-296"></a></span>
-<span id="cb74-297"><a href="#cb74-297"></a></span>
-<span id="cb74-298"><a href="#cb74-298"></a><span class="fu">## (m)</span></span>
-<span id="cb74-299"><a href="#cb74-299"></a></span>
-<span id="cb74-300"><a href="#cb74-300"></a></span>
-<span id="cb74-303"><a href="#cb74-303"></a><span class="in">```{r}</span></span>
-<span id="cb74-304"><a href="#cb74-304"></a><span class="co">#| label: figure - posterior of mean 4</span></span>
-<span id="cb74-305"><a href="#cb74-305"></a><span class="co">#| fig-cap: Posterior distribution of the mean weight of chicks consuming diet 4.</span></span>
-<span id="cb74-306"><a href="#cb74-306"></a><span class="fu">ggplot</span>(posterior_mean_diet_4, <span class="fu">aes</span>(<span class="at">x =</span> mean_diet_4, <span class="at">y =</span> model_name)) <span class="sc">+</span></span>
-<span id="cb74-307"><a href="#cb74-307"></a>  <span class="fu">stat_dotsinterval</span>(<span class="at">quantiles =</span> <span class="dv">100</span>, <span class="at">scale =</span> .<span class="dv">9</span>) <span class="sc">+</span></span>
-<span id="cb74-308"><a href="#cb74-308"></a>  <span class="fu">vline_at</span>(diet_means[<span class="dv">4</span>], <span class="at">size =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
-<span id="cb74-309"><a href="#cb74-309"></a>  <span class="co"># Annotate the vline from above.</span></span>
-<span id="cb74-310"><a href="#cb74-310"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">label =</span> <span class="st">"Observation mean"</span>, <span class="at">x =</span> diet_means[<span class="dv">4</span>] <span class="sc">-</span> <span class="dv">5</span>, <span class="at">y =</span> .<span class="dv">7</span>,</span>
-<span id="cb74-311"><a href="#cb74-311"></a>           <span class="at">hjust =</span> <span class="st">"right"</span>, <span class="at">size =</span> <span class="dv">6</span>) <span class="sc">+</span></span>
-<span id="cb74-312"><a href="#cb74-312"></a>  <span class="co"># Add title and axis labels. One line to make everything so much more clear!</span></span>
-<span id="cb74-313"><a href="#cb74-313"></a>  <span class="fu">labs</span>(</span>
-<span id="cb74-314"><a href="#cb74-314"></a>    <span class="at">title =</span> <span class="st">"Mean of diet 4"</span>,</span>
-<span id="cb74-315"><a href="#cb74-315"></a>    <span class="at">x =</span> <span class="st">"Weight (g)"</span>,</span>
-<span id="cb74-316"><a href="#cb74-316"></a>    <span class="at">y =</span> <span class="st">"Model"</span></span>
-<span id="cb74-317"><a href="#cb74-317"></a>  )</span>
-<span id="cb74-318"><a href="#cb74-318"></a><span class="in">```</span></span>
+<span id="cb74-298"><a href="#cb74-298"></a><span class="in">```{r}</span></span>
+<span id="cb74-299"><a href="#cb74-299"></a><span class="co">#| label: figure - posterior of mean 4</span></span>
+<span id="cb74-300"><a href="#cb74-300"></a><span class="co">#| fig-cap: Posterior distribution of the mean weight of chicks consuming diet 4.</span></span>
+<span id="cb74-301"><a href="#cb74-301"></a><span class="fu">ggplot</span>(posterior_mean_diet_4, <span class="fu">aes</span>(<span class="at">x =</span> mean_diet_4, <span class="at">y =</span> model_name)) <span class="sc">+</span></span>
+<span id="cb74-302"><a href="#cb74-302"></a>  <span class="fu">stat_dotsinterval</span>(<span class="at">quantiles =</span> <span class="dv">100</span>, <span class="at">scale =</span> .<span class="dv">9</span>) <span class="sc">+</span></span>
+<span id="cb74-303"><a href="#cb74-303"></a>  <span class="fu">vline_at</span>(diet_means[<span class="dv">4</span>], <span class="at">size =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb74-304"><a href="#cb74-304"></a>  <span class="co"># Annotate the vline from above.</span></span>
+<span id="cb74-305"><a href="#cb74-305"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">label =</span> <span class="st">"Observation mean"</span>, <span class="at">x =</span> diet_means[<span class="dv">4</span>] <span class="sc">-</span> <span class="dv">5</span>, <span class="at">y =</span> .<span class="dv">7</span>,</span>
+<span id="cb74-306"><a href="#cb74-306"></a>           <span class="at">hjust =</span> <span class="st">"right"</span>, <span class="at">size =</span> <span class="dv">6</span>) <span class="sc">+</span></span>
+<span id="cb74-307"><a href="#cb74-307"></a>  <span class="co"># Add title and axis labels. One line to make everything so much more clear!</span></span>
+<span id="cb74-308"><a href="#cb74-308"></a>  <span class="fu">labs</span>(</span>
+<span id="cb74-309"><a href="#cb74-309"></a>    <span class="at">title =</span> <span class="st">"Mean of diet 4"</span>,</span>
+<span id="cb74-310"><a href="#cb74-310"></a>    <span class="at">x =</span> <span class="st">"Weight (g)"</span>,</span>
+<span id="cb74-311"><a href="#cb74-311"></a>    <span class="at">y =</span> <span class="st">"Model"</span></span>
+<span id="cb74-312"><a href="#cb74-312"></a>  )</span>
+<span id="cb74-313"><a href="#cb74-313"></a><span class="in">```</span></span>
+<span id="cb74-314"><a href="#cb74-314"></a></span>
+<span id="cb74-315"><a href="#cb74-315"></a></span>
+<span id="cb74-316"><a href="#cb74-316"></a></span>
+<span id="cb74-317"><a href="#cb74-317"></a><span class="fu">## (n)</span></span>
+<span id="cb74-318"><a href="#cb74-318"></a></span>
 <span id="cb74-319"><a href="#cb74-319"></a></span>
-<span id="cb74-320"><a href="#cb74-320"></a></span>
-<span id="cb74-321"><a href="#cb74-321"></a></span>
-<span id="cb74-322"><a href="#cb74-322"></a><span class="fu">## (n)</span></span>
-<span id="cb74-323"><a href="#cb74-323"></a></span>
-<span id="cb74-324"><a href="#cb74-324"></a></span>
-<span id="cb74-327"><a href="#cb74-327"></a><span class="in">```{r}</span></span>
-<span id="cb74-328"><a href="#cb74-328"></a><span class="co">#| label: figure - predicted weight of for diet 4</span></span>
-<span id="cb74-329"><a href="#cb74-329"></a><span class="co">#| fig-cap: The (posterior) predictive distribution of the weigth of a chick consuming diet 4.</span></span>
-<span id="cb74-330"><a href="#cb74-330"></a><span class="fu">ggplot</span>(predicted_weight_diet_4, <span class="fu">aes</span>(<span class="at">x =</span> predicted_weight, <span class="at">y =</span> model_name)) <span class="sc">+</span></span>
-<span id="cb74-331"><a href="#cb74-331"></a>  <span class="fu">stat_dotsinterval</span>(<span class="at">quantiles =</span> <span class="dv">100</span>, <span class="at">scale =</span> .<span class="dv">9</span>) <span class="sc">+</span></span>
-<span id="cb74-332"><a href="#cb74-332"></a>  <span class="fu">vline_at</span>(diet_means[<span class="dv">4</span>], <span class="at">size =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
-<span id="cb74-333"><a href="#cb74-333"></a>  <span class="co"># Annotate the vline from above.</span></span>
-<span id="cb74-334"><a href="#cb74-334"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">label =</span> <span class="st">"Observation mean"</span>, <span class="at">x =</span> diet_means[<span class="dv">4</span>] <span class="sc">-</span> <span class="dv">5</span>, <span class="at">y =</span> .<span class="dv">7</span>,</span>
-<span id="cb74-335"><a href="#cb74-335"></a>           <span class="at">hjust =</span> <span class="st">"right"</span>, <span class="at">size =</span> <span class="dv">6</span>) <span class="sc">+</span></span>
-<span id="cb74-336"><a href="#cb74-336"></a>  <span class="co"># Add title and axis labels. One line to make everything so much more clear!</span></span>
-<span id="cb74-337"><a href="#cb74-337"></a>  <span class="fu">labs</span>(</span>
-<span id="cb74-338"><a href="#cb74-338"></a>    <span class="at">title =</span> <span class="st">"Weigth of a chick with diet 4"</span>,</span>
-<span id="cb74-339"><a href="#cb74-339"></a>    <span class="at">x =</span> <span class="st">"Weight (g)"</span>,</span>
-<span id="cb74-340"><a href="#cb74-340"></a>    <span class="at">y =</span> <span class="st">"Model"</span></span>
-<span id="cb74-341"><a href="#cb74-341"></a>  )</span>
-<span id="cb74-342"><a href="#cb74-342"></a><span class="in">```</span></span>
+<span id="cb74-322"><a href="#cb74-322"></a><span class="in">```{r}</span></span>
+<span id="cb74-323"><a href="#cb74-323"></a><span class="co">#| label: figure - predicted weight of for diet 4</span></span>
+<span id="cb74-324"><a href="#cb74-324"></a><span class="co">#| fig-cap: The (posterior) predictive distribution of the weigth of a chick consuming diet 4.</span></span>
+<span id="cb74-325"><a href="#cb74-325"></a><span class="fu">ggplot</span>(predicted_weight_diet_4, <span class="fu">aes</span>(<span class="at">x =</span> predicted_weight, <span class="at">y =</span> model_name)) <span class="sc">+</span></span>
+<span id="cb74-326"><a href="#cb74-326"></a>  <span class="fu">stat_dotsinterval</span>(<span class="at">quantiles =</span> <span class="dv">100</span>, <span class="at">scale =</span> .<span class="dv">9</span>) <span class="sc">+</span></span>
+<span id="cb74-327"><a href="#cb74-327"></a>  <span class="fu">vline_at</span>(diet_means[<span class="dv">4</span>], <span class="at">size =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb74-328"><a href="#cb74-328"></a>  <span class="co"># Annotate the vline from above.</span></span>
+<span id="cb74-329"><a href="#cb74-329"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">label =</span> <span class="st">"Observation mean"</span>, <span class="at">x =</span> diet_means[<span class="dv">4</span>] <span class="sc">-</span> <span class="dv">5</span>, <span class="at">y =</span> .<span class="dv">7</span>,</span>
+<span id="cb74-330"><a href="#cb74-330"></a>           <span class="at">hjust =</span> <span class="st">"right"</span>, <span class="at">size =</span> <span class="dv">6</span>) <span class="sc">+</span></span>
+<span id="cb74-331"><a href="#cb74-331"></a>  <span class="co"># Add title and axis labels. One line to make everything so much more clear!</span></span>
+<span id="cb74-332"><a href="#cb74-332"></a>  <span class="fu">labs</span>(</span>
+<span id="cb74-333"><a href="#cb74-333"></a>    <span class="at">title =</span> <span class="st">"Weigth of a chick with diet 4"</span>,</span>
+<span id="cb74-334"><a href="#cb74-334"></a>    <span class="at">x =</span> <span class="st">"Weight (g)"</span>,</span>
+<span id="cb74-335"><a href="#cb74-335"></a>    <span class="at">y =</span> <span class="st">"Model"</span></span>
+<span id="cb74-336"><a href="#cb74-336"></a>  )</span>
+<span id="cb74-337"><a href="#cb74-337"></a><span class="in">```</span></span>
+<span id="cb74-338"><a href="#cb74-338"></a></span>
+<span id="cb74-339"><a href="#cb74-339"></a></span>
+<span id="cb74-340"><a href="#cb74-340"></a></span>
+<span id="cb74-341"><a href="#cb74-341"></a><span class="fu">## (o)</span></span>
+<span id="cb74-342"><a href="#cb74-342"></a></span>
 <span id="cb74-343"><a href="#cb74-343"></a></span>
-<span id="cb74-344"><a href="#cb74-344"></a></span>
-<span id="cb74-345"><a href="#cb74-345"></a></span>
-<span id="cb74-346"><a href="#cb74-346"></a><span class="fu">## (o)</span></span>
-<span id="cb74-347"><a href="#cb74-347"></a></span>
-<span id="cb74-348"><a href="#cb74-348"></a></span>
-<span id="cb74-351"><a href="#cb74-351"></a><span class="in">```{r}</span></span>
-<span id="cb74-352"><a href="#cb74-352"></a><span class="co">#| label: figure - posterior of mean 5</span></span>
-<span id="cb74-353"><a href="#cb74-353"></a><span class="co">#| fig-cap: Posterior distribution of the mean weight of chicks consuming the new diet 5 not seen before.</span></span>
-<span id="cb74-354"><a href="#cb74-354"></a></span>
-<span id="cb74-355"><a href="#cb74-355"></a><span class="fu">ggplot</span>(posterior_mean_diet_5, <span class="fu">aes</span>(<span class="at">x =</span> mean_diet_5, <span class="at">y =</span> model_name)) <span class="sc">+</span></span>
-<span id="cb74-356"><a href="#cb74-356"></a>  <span class="co"># Draw the mean of each diet from the data as a dashed vertical line.</span></span>
-<span id="cb74-357"><a href="#cb74-357"></a>  <span class="fu">vline_at</span>(diet_means, <span class="at">size =</span> .<span class="dv">5</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
-<span id="cb74-358"><a href="#cb74-358"></a>  <span class="co"># dotsinterval gives mean, 50%, and 90% intervals + dotsplot with each dot</span></span>
-<span id="cb74-359"><a href="#cb74-359"></a>  <span class="co"># representing 1% of data (quantiles = 100).</span></span>
-<span id="cb74-360"><a href="#cb74-360"></a>  <span class="fu">stat_dotsinterval</span>(<span class="at">quantiles =</span> <span class="dv">100</span>, <span class="at">scale =</span> .<span class="dv">9</span>) <span class="sc">+</span></span>
-<span id="cb74-361"><a href="#cb74-361"></a>  <span class="co"># Annotate the vline from above.</span></span>
-<span id="cb74-362"><a href="#cb74-362"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>, <span class="at">label =</span> <span class="st">"Means of observed diets"</span>, <span class="at">y =</span> .<span class="dv">7</span>, <span class="at">x =</span> <span class="dv">100</span>,</span>
-<span id="cb74-363"><a href="#cb74-363"></a>           <span class="at">hjust =</span> <span class="st">"right"</span>, <span class="at">size =</span> <span class="dv">5</span>, <span class="at">family =</span> <span class="st">"sans"</span>) <span class="sc">+</span></span>
-<span id="cb74-364"><a href="#cb74-364"></a>  <span class="co"># Add title and axis labels. One line to make everything so much more clear!</span></span>
-<span id="cb74-365"><a href="#cb74-365"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Mean of a new diet"</span>,</span>
-<span id="cb74-366"><a href="#cb74-366"></a>       <span class="at">x =</span> <span class="st">"Weight (g)"</span>,</span>
-<span id="cb74-367"><a href="#cb74-367"></a>       <span class="at">y =</span> <span class="st">"Model"</span>)</span>
-<span id="cb74-368"><a href="#cb74-368"></a><span class="in">```</span></span>
-<span id="cb74-369"><a href="#cb74-369"></a></span>
-<span id="cb74-370"><a href="#cb74-370"></a></span>
+<span id="cb74-346"><a href="#cb74-346"></a><span class="in">```{r}</span></span>
+<span id="cb74-347"><a href="#cb74-347"></a><span class="co">#| label: figure - posterior of mean 5</span></span>
+<span id="cb74-348"><a href="#cb74-348"></a><span class="co">#| fig-cap: Posterior distribution of the mean weight of chicks consuming the new diet 5 not seen before.</span></span>
+<span id="cb74-349"><a href="#cb74-349"></a></span>
+<span id="cb74-350"><a href="#cb74-350"></a><span class="fu">ggplot</span>(posterior_mean_diet_5, <span class="fu">aes</span>(<span class="at">x =</span> mean_diet_5, <span class="at">y =</span> model_name)) <span class="sc">+</span></span>
+<span id="cb74-351"><a href="#cb74-351"></a>  <span class="co"># Draw the mean of each diet from the data as a dashed vertical line.</span></span>
+<span id="cb74-352"><a href="#cb74-352"></a>  <span class="fu">vline_at</span>(diet_means, <span class="at">size =</span> .<span class="dv">5</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb74-353"><a href="#cb74-353"></a>  <span class="co"># dotsinterval gives mean, 50%, and 90% intervals + dotsplot with each dot</span></span>
+<span id="cb74-354"><a href="#cb74-354"></a>  <span class="co"># representing 1% of data (quantiles = 100).</span></span>
+<span id="cb74-355"><a href="#cb74-355"></a>  <span class="fu">stat_dotsinterval</span>(<span class="at">quantiles =</span> <span class="dv">100</span>, <span class="at">scale =</span> .<span class="dv">9</span>) <span class="sc">+</span></span>
+<span id="cb74-356"><a href="#cb74-356"></a>  <span class="co"># Annotate the vline from above.</span></span>
+<span id="cb74-357"><a href="#cb74-357"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>, <span class="at">label =</span> <span class="st">"Means of observed diets"</span>, <span class="at">y =</span> .<span class="dv">7</span>, <span class="at">x =</span> <span class="dv">100</span>,</span>
+<span id="cb74-358"><a href="#cb74-358"></a>           <span class="at">hjust =</span> <span class="st">"right"</span>, <span class="at">size =</span> <span class="dv">5</span>, <span class="at">family =</span> <span class="st">"sans"</span>) <span class="sc">+</span></span>
+<span id="cb74-359"><a href="#cb74-359"></a>  <span class="co"># Add title and axis labels. One line to make everything so much more clear!</span></span>
+<span id="cb74-360"><a href="#cb74-360"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Mean of a new diet"</span>,</span>
+<span id="cb74-361"><a href="#cb74-361"></a>       <span class="at">x =</span> <span class="st">"Weight (g)"</span>,</span>
+<span id="cb74-362"><a href="#cb74-362"></a>       <span class="at">y =</span> <span class="st">"Model"</span>)</span>
+<span id="cb74-363"><a href="#cb74-363"></a><span class="in">```</span></span>
+<span id="cb74-364"><a href="#cb74-364"></a></span>
+<span id="cb74-365"><a href="#cb74-365"></a></span>
+<span id="cb74-366"><a href="#cb74-366"></a></span>
+<span id="cb74-367"><a href="#cb74-367"></a><span class="fu">## (p)</span></span>
+<span id="cb74-368"><a href="#cb74-368"></a></span>
+<span id="cb74-369"><a href="#cb74-369"></a><span class="fu"># Hierarchical model with BRMS (3p)</span></span>
+<span id="cb74-370"><a href="#cb74-370"></a>:::{.callout-important}</span>
 <span id="cb74-371"><a href="#cb74-371"></a></span>
-<span id="cb74-372"><a href="#cb74-372"></a><span class="fu">## (p)</span></span>
+<span id="cb74-372"><a href="#cb74-372"></a>We have made changes to the assignment text and some of the rubrics to make it clearer.</span>
 <span id="cb74-373"><a href="#cb74-373"></a></span>
-<span id="cb74-374"><a href="#cb74-374"></a><span class="fu"># Hierarchical model with BRMS (3p)</span></span>
+<span id="cb74-374"><a href="#cb74-374"></a>:::</span>
 <span id="cb74-375"><a href="#cb74-375"></a></span>
-<span id="cb74-376"><a href="#cb74-376"></a>::::: {.content-hidden when-format="pdf"}</span>
-<span id="cb74-377"><a href="#cb74-377"></a>:::: {.callout-warning collapse=false}</span>
+<span id="cb74-376"><a href="#cb74-376"></a></span>
+<span id="cb74-377"><a href="#cb74-377"></a><span class="fu">## (a)</span></span>
 <span id="cb74-378"><a href="#cb74-378"></a></span>
 <span id="cb74-379"><a href="#cb74-379"></a></span>
-<span id="cb74-380"><a href="#cb74-380"></a>:::{.callout-important}</span>
-<span id="cb74-381"><a href="#cb74-381"></a></span>
-<span id="cb74-382"><a href="#cb74-382"></a>There have been and will come minor changes to this part of the assignment, rubric and template wording.</span>
-<span id="cb74-383"><a href="#cb74-383"></a></span>
-<span id="cb74-384"><a href="#cb74-384"></a>:::</span>
-<span id="cb74-385"><a href="#cb74-385"></a></span>
-<span id="cb74-386"><a href="#cb74-386"></a></span>
-<span id="cb74-387"><a href="#cb74-387"></a>::::</span>
-<span id="cb74-388"><a href="#cb74-388"></a>:::::</span>
-<span id="cb74-389"><a href="#cb74-389"></a></span>
-<span id="cb74-390"><a href="#cb74-390"></a></span>
+<span id="cb74-382"><a href="#cb74-382"></a><span class="in">```{r}</span></span>
+<span id="cb74-383"><a href="#cb74-383"></a><span class="co">#| label: plot scatter centered parameterisation</span></span>
+<span id="cb74-384"><a href="#cb74-384"></a></span>
+<span id="cb74-385"><a href="#cb74-385"></a>bayesplot<span class="sc">::</span><span class="fu">mcmc_scatter</span>(<span class="at">x =</span> fit_hierarchical<span class="sc">$</span><span class="fu">draws</span>(<span class="at">variables =</span> <span class="fu">c</span>(<span class="st">"mean_diet[4]"</span>, <span class="st">"sd_diets"</span>)),</span>
+<span id="cb74-386"><a href="#cb74-386"></a>                        <span class="at">np =</span> <span class="fu">nuts_params</span>(fit_hierarchical)) <span class="sc">+</span></span>
+<span id="cb74-387"><a href="#cb74-387"></a>  <span class="fu">scale_y_log10</span>() <span class="sc">+</span></span>
+<span id="cb74-388"><a href="#cb74-388"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(mean_diet[<span class="dv">4</span>]), <span class="at">y =</span> <span class="fu">expression</span>(sd_diets)) <span class="sc">+</span></span>
+<span id="cb74-389"><a href="#cb74-389"></a>  <span class="fu">ylim</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="cn">NA</span>))</span>
+<span id="cb74-390"><a href="#cb74-390"></a><span class="in">```</span></span>
 <span id="cb74-391"><a href="#cb74-391"></a></span>
-<span id="cb74-392"><a href="#cb74-392"></a><span class="fu">## (a)</span></span>
+<span id="cb74-392"><a href="#cb74-392"></a></span>
 <span id="cb74-393"><a href="#cb74-393"></a></span>
-<span id="cb74-394"><a href="#cb74-394"></a></span>
-<span id="cb74-397"><a href="#cb74-397"></a><span class="in">```{r}</span></span>
-<span id="cb74-398"><a href="#cb74-398"></a><span class="co">#| label: plot scatter centered parameterisation</span></span>
-<span id="cb74-399"><a href="#cb74-399"></a></span>
-<span id="cb74-400"><a href="#cb74-400"></a>bayesplot<span class="sc">::</span><span class="fu">mcmc_scatter</span>(<span class="at">x =</span> fit_hierarchical<span class="sc">$</span><span class="fu">draws</span>(<span class="at">variables =</span> <span class="fu">c</span>(<span class="st">"mean_diet[4]"</span>, <span class="st">"sd_diets"</span>)),</span>
-<span id="cb74-401"><a href="#cb74-401"></a>                        <span class="at">np =</span> <span class="fu">nuts_params</span>(fit_hierarchical)) <span class="sc">+</span></span>
-<span id="cb74-402"><a href="#cb74-402"></a>  <span class="fu">scale_y_log10</span>() <span class="sc">+</span></span>
-<span id="cb74-403"><a href="#cb74-403"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(mean_diet[<span class="dv">4</span>]), <span class="at">y =</span> <span class="fu">expression</span>(sd_diets)) <span class="sc">+</span></span>
-<span id="cb74-404"><a href="#cb74-404"></a>  <span class="fu">ylim</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="cn">NA</span>))</span>
-<span id="cb74-405"><a href="#cb74-405"></a><span class="in">```</span></span>
-<span id="cb74-406"><a href="#cb74-406"></a></span>
-<span id="cb74-407"><a href="#cb74-407"></a></span>
-<span id="cb74-408"><a href="#cb74-408"></a></span>
-<span id="cb74-409"><a href="#cb74-409"></a><span class="fu">## (b)</span></span>
-<span id="cb74-410"><a href="#cb74-410"></a></span>
-<span id="cb74-411"><a href="#cb74-411"></a></span>
-<span id="cb74-412"><a href="#cb74-412"></a>**Create a brms model and sample from the posterior**</span>
-<span id="cb74-413"><a href="#cb74-413"></a>    </span>
-<span id="cb74-416"><a href="#cb74-416"></a><span class="in">```{r}</span></span>
-<span id="cb74-417"><a href="#cb74-417"></a><span class="co">#| label: fit brms model</span></span>
-<span id="cb74-418"><a href="#cb74-418"></a><span class="co">#| output: false</span></span>
-<span id="cb74-419"><a href="#cb74-419"></a>brms_fit <span class="ot">=</span> <span class="fu">brm</span>(</span>
-<span id="cb74-420"><a href="#cb74-420"></a>  weight <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> Diet),</span>
-<span id="cb74-421"><a href="#cb74-421"></a>  <span class="at">data=</span>Chick12,</span>
-<span id="cb74-422"><a href="#cb74-422"></a>  <span class="at">prior=</span><span class="fu">c</span>(</span>
-<span id="cb74-423"><a href="#cb74-423"></a>    <span class="co"># REPLACE WITH YOUR PRIOR DERIVED in 2)</span></span>
-<span id="cb74-424"><a href="#cb74-424"></a>    <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>,<span class="dv">10</span>), <span class="at">class=</span><span class="st">"Intercept"</span>), </span>
-<span id="cb74-425"><a href="#cb74-425"></a>  ),</span>
-<span id="cb74-426"><a href="#cb74-426"></a>  <span class="at">backend =</span> <span class="st">"cmdstanr"</span>,</span>
-<span id="cb74-427"><a href="#cb74-427"></a>  <span class="at">save_pars =</span> <span class="fu">save_pars</span>(<span class="at">manual =</span> <span class="fu">c</span>(<span class="st">"z_1[1,4]"</span>))</span>
-<span id="cb74-428"><a href="#cb74-428"></a>)</span>
-<span id="cb74-429"><a href="#cb74-429"></a><span class="in">```</span></span>
+<span id="cb74-394"><a href="#cb74-394"></a><span class="fu">## (b)</span></span>
+<span id="cb74-395"><a href="#cb74-395"></a></span>
+<span id="cb74-396"><a href="#cb74-396"></a></span>
+<span id="cb74-397"><a href="#cb74-397"></a>**Create a brms model and sample from the posterior**</span>
+<span id="cb74-398"><a href="#cb74-398"></a>    </span>
+<span id="cb74-401"><a href="#cb74-401"></a><span class="in">```{r}</span></span>
+<span id="cb74-402"><a href="#cb74-402"></a><span class="co">#| label: fit brms model</span></span>
+<span id="cb74-403"><a href="#cb74-403"></a><span class="co">#| output: false</span></span>
+<span id="cb74-404"><a href="#cb74-404"></a>brms_fit <span class="ot">=</span> <span class="fu">brm</span>(</span>
+<span id="cb74-405"><a href="#cb74-405"></a>  weight <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> Diet),</span>
+<span id="cb74-406"><a href="#cb74-406"></a>  <span class="at">data=</span>Chick12,</span>
+<span id="cb74-407"><a href="#cb74-407"></a>  <span class="at">prior=</span><span class="fu">c</span>(</span>
+<span id="cb74-408"><a href="#cb74-408"></a>    <span class="co"># REPLACE WITH YOUR PRIOR DERIVED in 2)</span></span>
+<span id="cb74-409"><a href="#cb74-409"></a>    <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>,<span class="dv">10</span>), <span class="at">class=</span><span class="st">"Intercept"</span>), </span>
+<span id="cb74-410"><a href="#cb74-410"></a>    <span class="co"># YOU CAN LEAVE THE BELOW PRIORS</span></span>
+<span id="cb74-411"><a href="#cb74-411"></a>    <span class="fu">prior</span>(<span class="fu">exponential</span>(.<span class="dv">02</span>), <span class="at">class=</span><span class="st">"sd"</span>), </span>
+<span id="cb74-412"><a href="#cb74-412"></a>    <span class="fu">prior</span>(<span class="fu">exponential</span>(.<span class="dv">02</span>), <span class="at">class=</span><span class="st">"sigma"</span>), </span>
+<span id="cb74-413"><a href="#cb74-413"></a>  ),</span>
+<span id="cb74-414"><a href="#cb74-414"></a>  <span class="at">backend =</span> <span class="st">"cmdstanr"</span>,</span>
+<span id="cb74-415"><a href="#cb74-415"></a>  <span class="at">save_pars =</span> <span class="fu">save_pars</span>(<span class="at">manual =</span> <span class="fu">c</span>(<span class="st">"z_1[1,4]"</span>))</span>
+<span id="cb74-416"><a href="#cb74-416"></a>)</span>
+<span id="cb74-417"><a href="#cb74-417"></a><span class="in">```</span></span>
+<span id="cb74-418"><a href="#cb74-418"></a></span>
+<span id="cb74-419"><a href="#cb74-419"></a></span>
+<span id="cb74-420"><a href="#cb74-420"></a></span>
+<span id="cb74-421"><a href="#cb74-421"></a><span class="fu">## (c)</span></span>
+<span id="cb74-422"><a href="#cb74-422"></a></span>
+<span id="cb74-423"><a href="#cb74-423"></a></span>
+<span id="cb74-426"><a href="#cb74-426"></a><span class="in">```{r}</span></span>
+<span id="cb74-427"><a href="#cb74-427"></a><span class="co">#| label: transformed posterior draws from brms</span></span>
+<span id="cb74-428"><a href="#cb74-428"></a><span class="co"># Draws for mu_4</span></span>
+<span id="cb74-429"><a href="#cb74-429"></a>mu_4 <span class="ot">=</span> <span class="fu">posterior_epred</span>(brms_fit, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">Diet=</span><span class="dv">4</span>))</span>
 <span id="cb74-430"><a href="#cb74-430"></a></span>
-<span id="cb74-431"><a href="#cb74-431"></a></span>
-<span id="cb74-432"><a href="#cb74-432"></a></span>
-<span id="cb74-433"><a href="#cb74-433"></a><span class="fu">## (c)</span></span>
+<span id="cb74-431"><a href="#cb74-431"></a><span class="co"># Compute the mean, and quantiles. Remember to round your answers accordingly.</span></span>
+<span id="cb74-432"><a href="#cb74-432"></a><span class="co"># ...</span></span>
+<span id="cb74-433"><a href="#cb74-433"></a><span class="in">```</span></span>
 <span id="cb74-434"><a href="#cb74-434"></a></span>
 <span id="cb74-435"><a href="#cb74-435"></a></span>
-<span id="cb74-438"><a href="#cb74-438"></a><span class="in">```{r}</span></span>
-<span id="cb74-439"><a href="#cb74-439"></a><span class="co">#| label: transformed posterior draws from brms</span></span>
-<span id="cb74-440"><a href="#cb74-440"></a><span class="co"># Draws for mu_4</span></span>
-<span id="cb74-441"><a href="#cb74-441"></a>mu_4 <span class="ot">=</span> <span class="fu">posterior_epred</span>(brms_fit, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">Diet=</span><span class="dv">4</span>))</span>
-<span id="cb74-442"><a href="#cb74-442"></a></span>
-<span id="cb74-443"><a href="#cb74-443"></a><span class="co"># Compute the mean, and quantiles. Remember to round your answers accordingly.</span></span>
-<span id="cb74-444"><a href="#cb74-444"></a><span class="co"># ...</span></span>
-<span id="cb74-445"><a href="#cb74-445"></a><span class="in">```</span></span>
-<span id="cb74-446"><a href="#cb74-446"></a></span>
-<span id="cb74-447"><a href="#cb74-447"></a></span>
+<span id="cb74-436"><a href="#cb74-436"></a></span>
+<span id="cb74-437"><a href="#cb74-437"></a><span class="fu">## (d)</span></span>
+<span id="cb74-438"><a href="#cb74-438"></a></span>
+<span id="cb74-439"><a href="#cb74-439"></a></span>
+<span id="cb74-440"><a href="#cb74-440"></a>Due the non-centered parametrization, we need to transform compute the $\mu_d$ term as the sum of the population intercept and the group specific deviation from the intercept. You can choose which diet to plot by modifying the <span class="in">`d`</span> integer in <span class="in">`r_Diet[d,Intercept]`</span>.</span>
+<span id="cb74-443"><a href="#cb74-443"></a><span class="in">```{r}</span></span>
+<span id="cb74-444"><a href="#cb74-444"></a><span class="co">#| label: plot scatter non-centered parameterisation</span></span>
+<span id="cb74-445"><a href="#cb74-445"></a></span>
+<span id="cb74-446"><a href="#cb74-446"></a>draws <span class="ot">=</span> <span class="fu">as_draws_df</span>(brms_fit) <span class="sc">|&gt;</span></span>
+<span id="cb74-447"><a href="#cb74-447"></a>  posterior<span class="sc">::</span><span class="fu">mutate_variables</span>(<span class="at">mean_diet_4 =</span> <span class="st">`</span><span class="at">r_Diet[4,Intercept]</span><span class="st">`</span> <span class="sc">+</span> b_Intercept)</span>
 <span id="cb74-448"><a href="#cb74-448"></a></span>
-<span id="cb74-449"><a href="#cb74-449"></a><span class="fu">## (d)</span></span>
-<span id="cb74-450"><a href="#cb74-450"></a></span>
-<span id="cb74-451"><a href="#cb74-451"></a></span>
-<span id="cb74-452"><a href="#cb74-452"></a>Due the non-centered parametrization, we need to transform compute the $\mu_d$ term as the sum of the population intercept and the group specific deviation from the intercept. You can choose which diet to plot by modifying the <span class="in">`d`</span> integer in <span class="in">`r_Diet[d,Intercept]`</span>.</span>
-<span id="cb74-455"><a href="#cb74-455"></a><span class="in">```{r}</span></span>
-<span id="cb74-456"><a href="#cb74-456"></a><span class="co">#| label: plot scatter non-centered parameterisation</span></span>
+<span id="cb74-449"><a href="#cb74-449"></a>bayesplot<span class="sc">::</span><span class="fu">mcmc_scatter</span>(draws,</span>
+<span id="cb74-450"><a href="#cb74-450"></a>                        <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">"mean_diet_4"</span>, <span class="st">"sd_Diet__Intercept"</span>),</span>
+<span id="cb74-451"><a href="#cb74-451"></a>                        <span class="at">np =</span> <span class="fu">nuts_params</span>(brms_fit)) <span class="sc">+</span></span>
+<span id="cb74-452"><a href="#cb74-452"></a>  <span class="fu">scale_y_log10</span>() <span class="sc">+</span></span>
+<span id="cb74-453"><a href="#cb74-453"></a>  <span class="fu">xlab</span>(<span class="fu">expression</span>(mean_diet[<span class="dv">4</span>])) <span class="sc">+</span></span>
+<span id="cb74-454"><a href="#cb74-454"></a>  <span class="fu">ylab</span>(<span class="fu">expression</span>(sd_diets))</span>
+<span id="cb74-455"><a href="#cb74-455"></a></span>
+<span id="cb74-456"><a href="#cb74-456"></a><span class="in">```</span></span>
 <span id="cb74-457"><a href="#cb74-457"></a></span>
-<span id="cb74-458"><a href="#cb74-458"></a>draws <span class="ot">=</span> <span class="fu">as_draws_df</span>(brms_fit) <span class="sc">|&gt;</span></span>
-<span id="cb74-459"><a href="#cb74-459"></a>  posterior<span class="sc">::</span><span class="fu">mutate_variables</span>(<span class="at">mean_diet_4 =</span> <span class="st">`</span><span class="at">r_Diet[4,Intercept]</span><span class="st">`</span> <span class="sc">+</span> b_Intercept)</span>
-<span id="cb74-460"><a href="#cb74-460"></a></span>
-<span id="cb74-461"><a href="#cb74-461"></a>bayesplot<span class="sc">::</span><span class="fu">mcmc_scatter</span>(draws,</span>
-<span id="cb74-462"><a href="#cb74-462"></a>                        <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">"mean_diet_4"</span>, <span class="st">"sd_Diet__Intercept"</span>),</span>
-<span id="cb74-463"><a href="#cb74-463"></a>                        <span class="at">np =</span> <span class="fu">nuts_params</span>(brms_fit)) <span class="sc">+</span></span>
-<span id="cb74-464"><a href="#cb74-464"></a>  <span class="fu">scale_y_log10</span>() <span class="sc">+</span></span>
-<span id="cb74-465"><a href="#cb74-465"></a>  <span class="fu">xlab</span>(<span class="fu">expression</span>(mean_diet[<span class="dv">4</span>])) <span class="sc">+</span></span>
-<span id="cb74-466"><a href="#cb74-466"></a>  <span class="fu">ylab</span>(<span class="fu">expression</span>(sd_diets))</span>
-<span id="cb74-467"><a href="#cb74-467"></a></span>
-<span id="cb74-468"><a href="#cb74-468"></a><span class="in">```</span></span>
-<span id="cb74-469"><a href="#cb74-469"></a></span>
-<span id="cb74-470"><a href="#cb74-470"></a></span>
-<span id="cb74-471"><a href="#cb74-471"></a></span>
-<span id="cb74-472"><a href="#cb74-472"></a><span class="fu">## (e)</span></span>
+<span id="cb74-458"><a href="#cb74-458"></a></span>
+<span id="cb74-459"><a href="#cb74-459"></a></span>
+<span id="cb74-460"><a href="#cb74-460"></a><span class="fu">## (e)</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
