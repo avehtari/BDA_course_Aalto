@@ -1,24 +1,16 @@
 \documentclass[t]{beamer}
 %\documentclass[finnish,english,handout]{beamer}
 
-% Uncomment if want to show notes
-% \setbeameroption{show notes}
-
-\mode<presentation>
-{
-  % \usetheme{Warsaw}
-}
-\setbeamertemplate{itemize items}[circle]
-\setbeamercolor{frametitle}{bg=white,fg=navyblue}
-
-
-% \usepackage[pdftex]{graphicx}
-%\usepackage[T1]{fontenc}
+\usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage{times}
+\usepackage{newtxtext} % times
+%\usepackage[scaled=.95]{cabin} % sans serif
+\usepackage{amsmath}
+\usepackage[varqu,varl]{inconsolata} % typewriter
+\usepackage[varg]{newtxmath}
+\usefonttheme[onlymath]{serif} % beamer font theme
 \usepackage{microtype}
 \usepackage{epic,epsfig}
-%\usepackage{subfigure,float}
 \usepackage{amsmath,amsfonts,amssymb}
 \usepackage{inputenc}
 \usepackage{afterpage}
@@ -32,16 +24,27 @@
 \usepackage{lstbayes}
 \usepackage[all,poly,ps,color]{xy}
 \usepackage{eurosym}
-
 \usepackage{natbib}
 \bibliographystyle{apalike}
 
-% \definecolor{hutblue}{rgb}{0,0.2549,0.6784}
-% \definecolor{midnightblue}{rgb}{0.0977,0.0977,0.4375}
-% \definecolor{hutsilver}{rgb}{0.4863,0.4784,0.4784}
-% \definecolor{lightgray}{rgb}{0.95,0.95,0.95}
-% \definecolor{section}{rgb}{0,0.2549,0.6784}
-% \definecolor{list1}{rgb}{0,0.2549,0.6784}
+\mode<presentation>
+{
+  \setbeamercovered{invisible}
+  \setbeamertemplate{itemize items}[circle]
+  \setbeamercolor{frametitle}{bg=white,fg=navyblue}
+  \setbeamertemplate{navigation symbols}{}
+  \setbeamertemplate{headline}[default]{}
+  \setbeamertemplate{footline}[split]
+  % \setbeamertemplate{headline}[text line]{\insertsection}
+  % \setbeamertemplate{footline}[frame number]
+}
+
+\pdfinfo{            
+  /Title      (BDA, Lecture 8) 
+  /Author     (Aki Vehtari) % 
+  /Keywords   (Bayesian data analysis)
+}
+
 \definecolor{forestgreen}{rgb}{0.1333,0.5451,0.1333}
 \definecolor{navyblue}{rgb}{0,0,0.5}
 \renewcommand{\emph}[1]{\textcolor{navyblue}{#1}}
@@ -61,23 +64,10 @@
 
 \graphicspath{{./figs/}}
 
-\pdfinfo{
-  /Title      (Bayesian data analysis, ch 6)
-  /Author     (Aki Vehtari) %
-  /Keywords   (Bayesian probability theory, Bayesian inference, Bayesian data analysis)
-}
-
-
 \parindent=0pt
 \parskip=8pt
 \tolerance=9000
 \abovedisplayshortskip=2pt
-
-\setbeamertemplate{navigation symbols}{}
-\setbeamertemplate{headline}[default]{}
-\setbeamertemplate{headline}[text line]{\insertsection}
-\setbeamertemplate{footline}[frame number]
-
 
 \def\o{{\mathbf o}}
 \def\t{{\mathbf \theta}}
@@ -112,18 +102,6 @@
 % \DeclareMathOperator{\Pr}{Pr}
 \def\euro{{\footnotesize \EUR\, }}
 \DeclareMathOperator{\rep}{\mathrm{rep}}
-
-% \def\dashxy(#1){%
-%   /xydash{[#1] 0 setdash}def}
-% \def\grayxy(#1){%
-%   /xycolor{#1 setgray}def}
-% \newgraphescape{D}[1]{!{\ar @*{[!\dashxy(2 2)]} "#1"}}
-% \newgraphescape{P}[1]{!{\ar "#1"}}
-% \newgraphescape{F}[1]{!{*+=<2em>[F=]{#1}="#1"}}
-% \newgraphescape{O}[1]{!{*+=<2em>[F]{#1}="#1"}}
-% \newgraphescape{V}[1]{!{*+=<2em>[o][F]{#1}="#1"}}
-% \newgraphescape{B}[3]{!{{ "#1"*+#3\frm{} }.{ "#2"*+#3\frm{} } *+[F:!\grayxy(0.75)]\frm{}}}
-
 
 \title[]{Bayesian data analysis}
 \subtitle{}
@@ -184,10 +162,25 @@
 
 \end{frame}
 
+\begin{frame}
+  
+  {\large\color{navyblue} Simon Newcomb's light of speed experiment in 1882}
+
+  {\small
+  Newcomb measured ($n=66$) the time required for light to travel from
+  his laboratory on the Potomac River to a mirror at the base of the
+  Washington Monument and back, a total distance of 7422 meters.}
+  % \begin{center}
+  %   \vspace{-0.5\baselineskip}
+  %   {\includegraphics[width=7.5cm]{newcomb_data.pdf}}
+  % \end{center}
+
+\end{frame}
+
 \begin{frame}{Posterior predictive checking -- example}
 
   \begin{itemize}
-  \item<1-> Newcomb's speed of light measurements
+  \item<1-> Newcomb's speed of light measurements 
     \begin{itemize}
     \item model $y\sim\normal(\mu,\sigma)$ with prior $(\mu,\log\sigma)\propto 1$
     \end{itemize}
@@ -303,6 +296,36 @@
 
 \end{frame}
 
+\begin{frame}{Posterior predictive checking}
+
+  \begin{itemize}
+    \only<1->{\color{gray}}
+  \item<1-> \textit{Posterior predictive $p$-value}
+    \begin{eqnarray*}
+      p & = & \Pr(T(y^{\rep},\theta)\geq T(y,\theta)|y)\\
+      & = & \int\int
+      I_{T(y^{\rep},\theta)\geq T(y,\theta)}p(y^{\rep}|\theta)p(\theta|y)dy^{\rep}d\theta
+    \end{eqnarray*}
+    where $I$ is an indicator function
+    \begin{itemize}
+    \item<1-> \only<1->{\color{gray}} having $(y^{\rep\,(s)},\theta^{(s)})$ from the posterior predictive
+      distribution, easy to compute
+      \begin{equation*}
+        T(y^{\rep (s)},\theta^{(s)})\geq T(y,\theta^{(s)}), \quad s=1,\ldots,S
+      \end{equation*}
+    \end{itemize}
+    \vspace{-1.5\baselineskip}
+  \item<1-> Posterior predictive $p$-value (ppp-value) estimates whether
+    difference between the model and data could arise by chance
+  \item<1-> \color{black} Not commonly used, as
+    \begin{itemize}
+    \item not calibrated in case of non-ancillary statistic
+    \item the distribution of test statistic has more information
+    \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
 \begin{frame}{Posterior predictive checking -- bayesplot}
 
   \vspace{-1\baselineskip}
@@ -339,88 +362,59 @@
 
 \end{frame}
 
-\begin{frame}{Posterior predictive checking}
 
-  \begin{itemize}
-    \only<4->{\color{gray}}
-  \item<1-> \textit{Posterior predictive $p$-value}
-    \begin{eqnarray*}
-      p & = & \Pr(T(y^{\rep},\theta)\geq T(y,\theta)|y)\\
-      & = & \int\int
-      I_{T(y^{\rep},\theta)\geq T(y,\theta)}p(y^{\rep}|\theta)p(\theta|y)dy^{\rep}d\theta
-    \end{eqnarray*}
-    where $I$ is an indicator function
-    \begin{itemize}
-    \item<2-> \only<4->{\color{gray}} having $(y^{\rep\,(s)},\theta^{(s)})$ from the posterior predictive
-      distribution, easy to compute
-      \begin{equation*}
-        T(y^{\rep (s)},\theta^{(s)})\geq T(y,\theta^{(s)}), \quad s=1,\ldots,S
-      \end{equation*}
-    \end{itemize}
-    \vspace{-1.5\baselineskip}
-  \item<3-> Posterior predictive $p$-value (ppp-value) estimates whether
-    difference between the model and data could arise by chance
-  \item<4-> \color{black} Not commonly used, as
-    \begin{itemize}
-    \item the distribution of test statistic has more information
-    \item not calibrated in case of non-ancillary statistic
-    \end{itemize}
-  \end{itemize}
+% \begin{frame}{Posterior predictive checking -- example}
 
-\end{frame}
+%   \begin{itemize}
+%   \item In general it is often better to improve the model than remove
+%     data
+%   \item There can be cases where after the first model fit, it is
+%     clear that some data are clearly incorrectly measured, but there
+%     has to be really strong justifications for dropping out
+%     observations
+%   \item<2-> Let's assume that in Newcomb experiment, the two observations
+%     with negative values are clearly incorrect and let's refit by
+%     removing them
+%   \end{itemize}
 
-\begin{frame}{Posterior predictive checking -- example}
-
-  \begin{itemize}
-  \item In general it is often better to improve the model than remove
-    data
-  \item There can be cases where after the first model fit, it is
-    clear that some data are clearly incorrectly measured, but there
-    has to be really strong justifications for dropping out
-    observations
-  \item<2-> Let's assume that in Newcomb experiment, the two observations
-    with negative values are clearly incorrect and let's refit by
-    removing them
-  \end{itemize}
-
-\end{frame}
+% \end{frame}
 
   
-\begin{frame}{Posterior predictive checking (good fit)}
+% \begin{frame}{Posterior predictive checking (good fit)}
 
-  \vspace{-1\baselineskip}
-  \texttt{ppc\_hist(y2, y2rep[1:8,])}
+%   \vspace{-1\baselineskip}
+%   \texttt{ppc\_hist(y2, y2rep[1:8,])}
   
-  \includegraphics[height=8cm]{Newcomb_ppc_hist_nooutliers.pdf}
+%   \includegraphics[height=8cm]{Newcomb_ppc_hist_nooutliers.pdf}
 
-\end{frame}
+% \end{frame}
 
-\begin{frame}{Posterior predictive checking (good fit)}
+% \begin{frame}{Posterior predictive checking (good fit)}
 
-  \vspace{-1\baselineskip}
-  \texttt{ppc\_dens\_overlay(y2, y2rep[1:100,])}
+%   \vspace{-1\baselineskip}
+%   \texttt{ppc\_dens\_overlay(y2, y2rep[1:100,])}
   
-  \includegraphics[height=8cm]{Newcomb_ppc_dens_overlay_nooutliers.pdf}
+%   \includegraphics[height=8cm]{Newcomb_ppc_dens_overlay_nooutliers.pdf}
 
-\end{frame}
+% \end{frame}
 
-\begin{frame}{Posterior predictive checking (good fit)}
+% \begin{frame}{Posterior predictive checking (good fit)}
 
-  \vspace{-1\baselineskip}
-  \texttt{ppc\_ecdf\_overlay(y2, y2rep[1:100,])}
+%   \vspace{-1\baselineskip}
+%   \texttt{ppc\_ecdf\_overlay(y2, y2rep[1:100,])}
   
-  \includegraphics[height=8cm]{Newcomb_ppc_ecdf_overlay_nooutliers.pdf}
+%   \includegraphics[height=8cm]{Newcomb_ppc_ecdf_overlay_nooutliers.pdf}
 
-\end{frame}
+% \end{frame}
 
-\begin{frame}{Posterior predictive checking (good fit)}
+% \begin{frame}{Posterior predictive checking (good fit)}
 
-  \vspace{-1\baselineskip}
-  \texttt{ppc\_stat2d(y2, y2rep, stat=c("min","max"))}
+%   \vspace{-1\baselineskip}
+%   \texttt{ppc\_stat2d(y2, y2rep, stat=c("min","max"))}
   
-  \includegraphics[height=8cm]{Newcomb_ppc_stat2d_minmax_nooutliers.pdf}
+%   \includegraphics[height=8cm]{Newcomb_ppc_stat2d_minmax_nooutliers.pdf}
 
-\end{frame}
+% \end{frame}
 
 % \begin{frame}
 
@@ -442,49 +436,49 @@
 
 % \end{frame}
 
-\begin{frame}{Marginal and CV predictive checking}
+% \begin{frame}{Marginal and CV predictive checking}
 
-  \begin{itemize}
-  \item Consider marginal predictive distributions $p(\tilde{y}_i|y)$
-    and each observation separately
-    \begin{itemize}
-    \item marginal posterior p-values
-      \begin{align*}
-        p_i = \mbox{Pr}(T(y_i^{\rep}) \leq T(y_i) | y)
-      \end{align*}
-      if $T(y_i)=y_i$
-      \begin{align*}
-        p_i = \mbox{Pr}(y_i^{\rep} \leq y_i | y)
-      \end{align*}
-    \end{itemize}
-  \item<2-> if $Pr(\tilde{y}_i|y)$ well calibrated, distribution of $p_i$
-    would be uniform between 0 and 1
-    \begin{itemize}
-    \item holds better for cross-validation predictive tests
-      (cross-validation BDA3 Ch 7) 
-    \end{itemize}
-  \end{itemize}
+%   \begin{itemize}
+%   \item Consider marginal predictive distributions $p(\tilde{y}_i|y)$
+%     and each observation separately
+%     \begin{itemize}
+%     \item marginal posterior p-values
+%       \begin{align*}
+%         p_i = \mbox{Pr}(T(y_i^{\rep}) \leq T(y_i) | y)
+%       \end{align*}
+%       if $T(y_i)=y_i$
+%       \begin{align*}
+%         p_i = \mbox{Pr}(y_i^{\rep} \leq y_i | y)
+%       \end{align*}
+%     \end{itemize}
+%   \item<2-> if $Pr(\tilde{y}_i|y)$ well calibrated, distribution of $p_i$
+%     would be uniform between 0 and 1
+%     \begin{itemize}
+%     \item holds better for cross-validation predictive tests
+%       (cross-validation BDA3 Ch 7) 
+%     \end{itemize}
+%   \end{itemize}
 
-\end{frame}
+% \end{frame}
 
-\begin{frame}{Marginal predictive checking (good fit)}
+% \begin{frame}{Marginal predictive checking (good fit)}
 
-  \vspace{-0.5\baselineskip}
-  \begin{itemize}
-  \item Marginal tail area or Probability integral transform (PIT)
-    \begin{align*}
-      p_i = p(y_i^{\rep} \leq y_i | y)
-    \end{align*}
-  \item if $p(\tilde{y}_i|y)$ is well calibrated, distribution of $p_i$'s
-    would be uniform between 0 and 1
-  \end{itemize}
-  \vspace{-1\baselineskip}
-  \only<2>{\includegraphics[width=9.5cm]{Newcomb_PIT_hist.pdf}}
-  \only<3>{\includegraphics[width=9.5cm]{Newcomb_PIT_ecdf.pdf}}
-  \only<4>{\includegraphics[width=9.5cm]{Newcomb_PIT_ecdf_nooutliers.pdf}}
+%   \vspace{-0.5\baselineskip}
+%   \begin{itemize}
+%   \item Marginal tail area or Probability integral transform (PIT)
+%     \begin{align*}
+%       p_i = p(y_i^{\rep} \leq y_i | y)
+%     \end{align*}
+%   \item if $p(\tilde{y}_i|y)$ is well calibrated, distribution of $p_i$'s
+%     would be uniform between 0 and 1
+%   \end{itemize}
+%   \vspace{-1\baselineskip}
+%   \only<2>{\includegraphics[width=9.5cm]{Newcomb_PIT_hist.pdf}}
+%   \only<3>{\includegraphics[width=9.5cm]{Newcomb_PIT_ecdf.pdf}}
+%   \only<4>{\includegraphics[width=9.5cm]{Newcomb_PIT_ecdf_nooutliers.pdf}}
 
 
-\end{frame}
+% \end{frame}
 
 \begin{frame}{Example: Exposure to air pollution}
 
@@ -608,38 +602,6 @@
 
 \end{frame}
 
-\begin{frame}{Example: Exposure to air pollution}
-
-
-  LOO predictive checking -- LOO-PIT
-
-\includegraphics[width=\textwidth]{ppc_loo_pit_corrected_pm25.png}
-
-% \begin{figure}
-% \centering
-% \begin{subfigure}{0.31\textwidth}
-% \includegraphics[width=\textwidth]{ppc_loo_pit_overlay1.png}
-% \caption{Model 1}
-% \end{subfigure}
-% ~
-% \begin{subfigure}{0.31\textwidth}
-% \includegraphics[width=\textwidth]{ppc_loo_pit_overlay2.png}
-% \caption{Model 2}
-% \end{subfigure}
-% ~
-% \begin{subfigure}{0.31\textwidth}
-% \includegraphics[width=\textwidth]{ppc_loo_pit_overlay3.png}
-% \caption{Model 3}
-% \end{subfigure}
-% \end{figure}
-
-% \vspace{2\baselineskip}
-% {\scriptsize EDIT 2020: These plots use boundary corrected KDE which is a better
-% choice than the non-boundary corrected KDE used in the plots in the
-% paper and the 2019 lecture.}
-
-\end{frame}
-
 \begin{frame}{Positive target}
   
     \includegraphics[width=11cm]{mesquite_ppc.pdf}\\
@@ -649,21 +611,155 @@
 
 \end{frame}
 
-\begin{frame}{PPC for binary target}
+\begin{frame}[fragile]{Student retention}
 
-  \vspace{-0.75\baselineskip}
-  Diabetes prediction with logistic regression -
-  \href{https://avehtari.github.io/modelselection/diabetes.html}{diabetes demo}
+  Latent hierarchical linear + spline
+
+{\footnotesize
+\begin{lstlisting}
+nstudents | trials(nstudents1) ~ (assignment | year) +
+  s(assignment, k=4), family=binomial()
+\end{lstlisting}}
+
+  Latent functions + posterior uncertainty
+  \includegraphics[height=3.6cm]{student_retention_sbinom_linpreds.pdf}
   
-     \only<1>{\vspace{-.6\baselineskip}\includegraphics[width=8.5cm]{diabetes_corrplot.pdf}}
-     \only<2>{PPC with binning for binary data\\ \includegraphics[width=11cm]{diabetes_calibration_binned.pdf}}
-     % \only<3>{PPC with non-linear regression for binary data\\ \includegraphics[width=11cm]{diabetes_calibration_regression.pdf}}
-     \only<3>{PPC with monotonic regression for binary data\\ \includegraphics[width=11cm]{diabetes_reliabilitydiag.pdf}}
+\end{frame}
+
+\begin{frame}[fragile]{Student retention}
+
+1. Latent hierarchical linear model
+{\footnotesize
+\begin{lstlisting}
+nstudents | trials(nstudents1) ~ (assignment | year),
+  family=binomial()
+\end{lstlisting}}
+
+2. Latent hierarchical linear model + spline
+{\footnotesize
+\begin{lstlisting}
+nstudents | trials(nstudents1) ~ (assignment | year) +
+  s(assignment, k=4), family=binomial()
+\end{lstlisting}}
+  
+\end{frame}
+
+\begin{frame}[fragile]{Student retention -- Posterior predictive distributions}
+\framesubtitle{with \texttt{tidybayes}}
+  
+\vspace{-0.75\baselineskip}  
+Latent hierarchical linear model\\  
+  \hspace{-7mm}
+  \begin{minipage}[t][3.6cm][t]{1.0\linewidth}
+    \includegraphics[height=3.6cm]{student_retention_lbinom_preds.pdf}
+  \end{minipage}
+  
+\vspace{-0.25\baselineskip}  
+Latent hierarchical linear model + spline\\  
+  \hspace{-7mm}
+  \begin{minipage}[t][3.6cm][t]{1.0\linewidth}
+  \includegraphics[height=3.6cm]{student_retention_sbinom_preds.pdf}
+  \end{minipage}  
 
 \end{frame}
 
+\begin{frame}[fragile]{Student retention -- Marginal PPC}
+\framesubtitle{\texttt{pp\_check(fit, ndraws=100)}}
+
+  
+\vspace{-0.75\baselineskip}  
+Latent hierarchical linear model\\  
+  \begin{minipage}[t][3.6cm][t]{1.0\linewidth}
+    \includegraphics[height=3.6cm]{student_retention_lbinom_ppc_dens_overlay.pdf}
+  \end{minipage}
+  
+\vspace{-0.5\baselineskip}  
+Latent hierarchical linear model + spline\\  
+  \begin{minipage}[t][3.6cm][t]{1.0\linewidth}
+    \includegraphics[height=3.6cm]{student_retention_sbinom_ppc_dens_overlay.pdf}
+  \end{minipage}  
+
+\end{frame}
+
+\begin{frame}[fragile]{Student retention -- Posterior predictive intervals}
+\framesubtitle{\texttt{pp\_check(fit, type = "intervals\_grouped", group="year")}}
+
+\vspace{-0.8\baselineskip}  
+Latent hierarchical linear model\\  
+  \hspace{-7mm}
+  \begin{minipage}[t][3.6cm][t]{1.0\linewidth}
+    \includegraphics[height=3.6cm]{student_retention_lbinom_ppc_intervals_grouped.pdf}
+  \end{minipage}
+  
+\vspace{-0.5\baselineskip}  
+Latent hierarchical linear model + spline\\  
+  \hspace{-7mm}
+  \begin{minipage}[t][3.6cm][t]{1.0\linewidth}
+    \includegraphics[height=3.6cm]{student_retention_sbinom_ppc_intervals_grouped.pdf}
+  \end{minipage}  
+
+\end{frame}
+
+\begin{frame}[fragile]{Student retention -- Posterior predictive ribbon}
+\framesubtitle{\texttt{pp\_check(fit, type = "ribbon\_grouped", group="year")}}
+
+\vspace{-0.8\baselineskip}  
+Latent hierarchical linear model\\  
+  \hspace{-7mm}
+  \begin{minipage}[t][3.6cm][t]{1.0\linewidth}
+    \includegraphics[height=3.6cm]{student_retention_lbinom_ppc_ribbon_grouped.pdf}
+  \end{minipage}
+  
+\vspace{-0.5\baselineskip}  
+Latent hierarchical linear model + spline\\  
+  \hspace{-7mm}
+  \begin{minipage}[t][3.6cm][t]{1.0\linewidth}
+    \includegraphics[height=3.6cm]{student_retention_sbinom_ppc_ribbon_grouped.pdf}
+  \end{minipage}  
+
+\end{frame}
+
+% \begin{frame}{PPC for binary target}
+
+%   \vspace{-0.75\baselineskip}
+%   Diabetes prediction with logistic regression -
+%   \href{https://avehtari.github.io/modelselection/diabetes.html}{diabetes demo}
+  
+%      \only<1>{\vspace{-.6\baselineskip}\includegraphics[width=8.5cm]{diabetes_corrplot.pdf}}
+%      \only<2>{PPC with binning for binary data\\ \includegraphics[width=11cm]{diabetes_calibration_binned.pdf}}
+%      % \only<3>{PPC with non-linear regression for binary data\\ \includegraphics[width=11cm]{diabetes_calibration_regression.pdf}}
+%      \only<3>{PPC with monotonic regression for binary data\\ \includegraphics[width=11cm]{diabetes_reliabilitydiag.pdf}}
+
+% \end{frame}
+
+\begin{frame}[fragile]{PPC for binary target -- Helicopters}
+
+  \vspace{-0.6\baselineskip}
+{\scriptsize
+\begin{lstlisting}
+stable_flight ~ s(wing_length) + s(wing_length, by = nclips),
+family = bernoulli()
+\end{lstlisting}}
+  \vspace{-0.5\baselineskip}
+  \includegraphics[height=3.6cm]{helicopter_hier_stable.pdf}
+  \vspace{-0.1\baselineskip}
+  \only<2>{\texttt{pp\_check(fit, ndraws=20)}\\
+    \includegraphics[height=3.6cm]{helicopter_hier_stable_ppc_dens_overlay.pdf}}
+  \only<3>{\texttt{pp\_check(fit, type="bars")}\\
+    \includegraphics[height=3.6cm]{helicopter_hier_stable_ppc_bars.pdf}}
+  \only<4>{\texttt{pp\_check(fit, type="bars\_grouped")}\\
+    \includegraphics[height=3.6cm]{helicopter_hier_stable_ppc_bars_grouped.pdf}}
+  \only<5>{with \texttt{caret::calibration()}\\
+    \includegraphics[height=3.6cm]{helicopter_hier_stable_calibration.pdf}}
+  \only<6>{with \texttt{reliabilitydiag::reliabilitydiag()}\\
+    \includegraphics[height=3.6cm]{helicopter_hier_stable_reliabilitydiag.pdf}}
+  
+\end{frame}
+
+
+  
 \begin{frame}[fragile]
-  \frametitle{Posterior predictive checking}
+  \frametitle{Posterior predictive checking -- Stan code}
 
   \vspace{-0.2\parskip}
   \begin{itemize}
@@ -766,7 +862,9 @@ generated quantities {
   \begin{itemize}
   \item How much different choices in model structure and priors affect the results
     \begin{itemize}
-      \item<2-> test different models and priors
+    \item<2-> test different models and priors\\
+      \texttt{priorsense} and \texttt{adjustr} packages use importance
+      sampling for faster prior sensitivity analysis
       \item<3-> alternatively combine different models to one model
         \begin{itemize}
         \item e.g. hierarchical model instead of separate and pooled

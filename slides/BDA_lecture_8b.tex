@@ -1,56 +1,49 @@
 \documentclass[english,t]{beamer}
 %\documentclass[handout,english]{beamer}
 
-\mode<presentation>
-{
-  % \usetheme{Copenhagen}
-  % oder ...
-  
-%  \setbeamercovered{transparent}
-  % oder auch nicht
-}
-
-%\usepackage[pdftex]{graphicx}
-\graphicspath{{/home/ave/doc/images/}{}{../teranaloppu/}{../metodi/}{../slides/Hartikainen/}{../gphealth/}{../2008_09_RSS2008/}{../gphealth/}{../jyvaskyla2009/}{../nbbc2009/}{../gphealth/hippics/}{../euroheis2010/}{../pubgensens2011/}{../reykjavik2013/}{../liverpool2013/}{../../gpstuff/doc/}{./images/}{../aalto_stochastic/}{figs/}{../Stancon2018Helsinki/figs/}{../../paper/cvapprox/}{../gppa2017/}{../valencia2017/}{../../paper/combine_predictive_distribution/tex/}{../venice2018/figs/}{./figs/}}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage{times}
-\usepackage{amsmath,amsfonts,amssymb}
-%\usepackage{euscript}
+\usepackage{newtxtext} % times
+%\usepackage[scaled=.95]{cabin} % sans serif
+\usepackage{amsmath}
+\usepackage[varqu,varl]{inconsolata} % typewriter
+\usepackage[varg]{newtxmath}
+\usefonttheme[onlymath]{serif} % beamer font theme
+\usepackage{microtype}
 \usepackage{afterpage}
-%\usepackage{picinpar}
-%\usepackage{array,longtable}
 \usepackage{url}
 \urlstyle{same}
-%\usepackage{eufrak}
-\usepackage{amsbsy}
-\usepackage{eucal}
+%\usepackage{amsbsy}
+%\usepackage{eucal}
 \usepackage{rotating}
-\usepackage{bm}
+%\usepackage{bm}
 \usepackage{pdfpages}
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
 \usepackage{booktabs}
 \usepackage{listings}
 \usepackage{lstbayes}
-\usepackage{microtype}
+\graphicspath{{/home/ave/doc/images/}{}{../teranaloppu/}{../metodi/}{../slides/Hartikainen/}{../gphealth/}{../2008_09_RSS2008/}{../gphealth/}{../jyvaskyla2009/}{../nbbc2009/}{../gphealth/hippics/}{../euroheis2010/}{../pubgensens2011/}{../reykjavik2013/}{../liverpool2013/}{../../gpstuff/doc/}{./images/}{../aalto_stochastic/}{figs/}{../Stancon2018Helsinki/figs/}{../../paper/cvapprox/}{../gppa2017/}{../valencia2017/}{../../paper/combine_predictive_distribution/tex/}{../venice2018/figs/}{./figs/}}
 
 \usepackage{natbib}
 \bibliographystyle{apalike}
 
-\hypersetup{%
-  bookmarksopen=true,
-  bookmarksnumbered=true,
-  pdftitle={Stan},
-  pdfsubject={Bayesian data analysis},
-  pdfauthor={Aki Vehtari},
-  pdfkeywords={},
-  pdfstartview={FitH -32768},
-  colorlinks=true,
-  linkcolor=navyblue,
-  citecolor=navyblue,
-  filecolor=navyblue,
-  urlcolor=navyblue
+\mode<presentation>
+{
+  \setbeamercovered{invisible}
+  \setbeamertemplate{itemize items}[circle]
+  \setbeamercolor{frametitle}{bg=white,fg=navyblue}
+  \setbeamertemplate{navigation symbols}{}
+  \setbeamertemplate{headline}[default]{}
+  \setbeamertemplate{footline}[split]
+  % \setbeamertemplate{headline}[text line]{\insertsection}
+  % \setbeamertemplate{footline}[frame number]
+}
+
+\pdfinfo{            
+  /Title      (BDA, Lecture 9) 
+  /Author     (Aki Vehtari) % 
+  /Keywords   (Bayesian data analysis)
 }
 
 %%%%%%%%%%%%%%%%%%% for tikz figures %%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -152,10 +145,6 @@
 \newcommand{\code}[1]{{\normalfont\texttt{#1}}}
 
 % \DeclareMathOperator{\E}{E}
-% \DeclareMathOperator{\VAR}{Var}
-% \DeclareMathOperator{\COV}{Cov}
-% \DeclareMathOperator{\Prob}{P}
-% \DeclareMathOperator{\E}{E}
 \DeclareMathOperator{\Var}{Var}
 \DeclareMathOperator{\var}{var}
 \DeclareMathOperator{\cov}{cov}
@@ -190,20 +179,12 @@
 \definecolor{list1}{rgb}{0,0.2549,0.6784}
 \renewcommand{\emph}[1]{\textcolor{navyblue}{#1}}
 
-%\graphicspath{./pics}
-
-\pdfinfo{
-  /Title      (Bayesian data analysis ch7)
-  /Author     (Aki Vehtari) %
-  /Keywords   (Bayesian probability theory, Bayesian inference, Bayesian data analysis)
-}
 
 \parindent=0pt
 \parskip=8pt
 \tolerance=9000
 \abovedisplayshortskip=0pt
 
-%\renewcommand{\itemsep}{0pt}
 % Lists
 \newenvironment{list1}{
    \begin{list}{$\color{list1}\bullet$}{\itemsep=6pt}}{
@@ -217,12 +198,6 @@
 \newenvironment{list3}{
   \begin{list}{$\cdot$}{\baselineskip=15pt}}{
   \end{list}}
-
-\setbeamertemplate{navigation symbols}{}
-\setbeamertemplate{headline}[default]{}
-\setbeamertemplate{headline}[text line]{\insertsection}
-\setbeamertemplate{footline}[frame number]
-
 
 \title[]{Bayesian data analysis}
 \subtitle{}
@@ -248,6 +223,8 @@
        model evaluation using leave-one-out cross-validation and
        WAIC. Statistics and Computing. 27(5):1413–1432.
        \href{http://arxiv.org/abs/1507.04544}{arXiv preprint}.
+     \item See also \url{https://users.aalto.fi/~ave/modelselection/CV-FAQ.html}
+
      \end{list2}
    \item 7.3 Model comparison based on predictive performance
    \item 7.4 Model comparison using Bayes factors
@@ -257,36 +234,54 @@
 
 \end{frame}
 
-\begin{frame}{Model assessment, selection and inference after selection}
+% \begin{frame}{Model assessment, selection and inference after selection}
 
-   \begin{list1}
-   \item Extra material at \url{https://avehtari.github.io/modelselection/}
-     \begin{list2}
-       \item Videos, Slides, Notebooks, References
-       % \item The most relevant for the course is the first part of the
-       %   talk ``Model assessment, comparison and selection at Master
-       %   class in Bayesian statistics, CIRM, Marseille''
-     \end{list2}
-       \item CV-FAQ \url{https://avehtari.github.io/modelselection/CV-FAQ.html}
-   \end{list1}
+%    \begin{list1}
+%    \item Extra material at \url{https://users.aalto.fi/~ave/modelselection/}
+%      \begin{list2}
+%        % \item Videos, Slides, Notebooks, References
+%        % \item The most relevant for the course is the first part of the
+%        %   talk ``Model assessment, comparison and selection at Master
+%        %   class in Bayesian statistics, CIRM, Marseille''
+%      \end{list2}
+%    \end{list1}
 
-\end{frame}
+% \end{frame}
  
 \begin{frame}{Predicting concrete quality}
 
-  \begin{center}
-    \includegraphics[width=5cm]{slump1b.eps}
-  \end{center}
-  
+  \only<1>{
+      \hspace{-6mm}
+    \begin{minipage}[c]{0.475\linewidth}
+    \includegraphics[height=3.7cm,trim=200 0 254 0,clip]{45396382385_3aa7f81768_k_ccby.jpg}
+    \end{minipage}
+    \begin{minipage}[c]{0.8cm}
+      \centering
+      \hspace{3mm}$\rightarrow$\hspace{-1.5mm}
+    \end{minipage}
+    \begin{minipage}[c]{0.475\linewidth}
+    \includegraphics[height=3.7cm]{ConcreteBridge.jpg}
+    \end{minipage}
+    }
+  % \begin{center}
+  %   \includegraphics[width=5cm]{slump1b.eps}
+  % \end{center}
+
+    \begin{itemize}
+    \item How accurate the model is?
+    \item Is it better than predicting with random guess?
+    \item Is it possible that the model has overfitted?
+    \item Is model B better than model A? (next week)
+    \end{itemize}
 \end{frame}
 
-\begin{frame}{Predicting cancer recurrence}
+% \begin{frame}{Predicting cancer recurrence}
 
-  \begin{center}
-    \includegraphics[width=11.5cm]{gistrisk.png}
-  \end{center}
+%   \begin{center}
+%     \includegraphics[width=11.5cm]{gistrisk.png}
+%   \end{center}
   
-\end{frame}
+% \end{frame}
 
 \begin{frame}{Predictive performance}
 
@@ -339,20 +334,14 @@
 \end{frame}
 
 \begin{frame}{}{Outline}
-  
+
+  Today
   \begin{list1}
   \item What is cross-validation
     {\color{gray}
   \begin{list2}
     \item Leave-one-out cross-validation (elpd\_loo, p\_loo)
     \item Uncertainty in LOO (SE)
-    \end{list2}
-    }
-  \item When is cross-validation applicable?
-    {\color{gray}
-    \begin{list2}
-    \item data generating mechanisms and prediction tasks
-    \item leave-many-out cross-validation
     \end{list2}
     }
   \item Fast cross-validation
@@ -362,9 +351,20 @@
     \item K-fold cross-validation
     \end{list2}
     }
-  \item {\footnotesize Related methods (WAIC, *IC, BF)}
+  \item When is cross-validation applicable?
+    {\color{gray}
+    \begin{list2}
+    \item data generating mechanisms and prediction tasks
+    \item leave-many-out cross-validation
+    \end{list2}
+    }
+  \end{list1}
+Next week
+  \begin{list1}
   \item Model comparison and selection (elpd\_diff, se)
-  \item Model averaging with Bayesian stacking
+  \item {\footnotesize Related methods (WAIC, *IC, BF)}
+  \item Model averaging
+  \item Potential overfitting in model selection
   % \item<2-> Part 2: Projective Inference in High-dimensional Problems:
   %   Prediction and Feature Selection
   \end{list1}
@@ -471,26 +471,10 @@ elpd_diff        se
   {\includegraphics[width=10cm]{fake8loolpds.pdf}}
   \\ \vspace{-0.5\baselineskip}
   {\color{blue} $\mbox{elpd\_loo} = \sum_{i=1}^{20} \log p(y_i \mid x_i,x_{-i},y_{-i}) \approx -29.5$\\ \vspace{0.2\baselineskip}}
-  {\color{blue} $\mbox{SE} = \mbox{sd}(\log p(y_i \mid x_i,x_{-i},y_{-i}))\cdot \sqrt{20} \approx 3.3$}
+  {\color{blue} $\mbox{SE} = \sd(\log p(y_i \mid x_i,x_{-i},y_{-i}))\cdot \sqrt{20} \approx 3.3$}
   {~\\~\\~\\ \color{black} \footnotesize see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)} and \href{http://dx.doi.org/10.1214/12-SS102}{Vehtari \& Ojanen (2012)} for more}
   
 \end{frame}
-
-\begin{frame}{}
-
-  \only<1>{\includegraphics[width=10cm]{fakedfixed.pdf}}
-  \only<2->{\includegraphics[width=10cm]{fakedrandom.pdf}}
-  \\ \vspace{-0.5\baselineskip}
-  {\color{blue} $\mbox{elpd\_loo} = \sum_{i=1}^{20} \log p(y_i \mid x_i,x_{-i},y_{-i}) \approx -29.5$\\ \vspace{0.2\baselineskip}}
-  {\color{blue} $\mbox{SE} = \mbox{sd}(\log p(y_i \mid x_i,x_{-i},y_{-i}))\cdot \sqrt{20} \approx 3.3$\\}
-  \vspace{0.5\baselineskip}
-  \only<1>{LOO is ok for fixed / designed $x$. SE is uncertainty about $y \mid x$.\\ \vspace{0.2\baselineskip}}
-  \only<2->{LOO is ok for random $x$. SE is uncertainty about $y \mid x$ and $x$.\\ \vspace{0.2\baselineskip}}
-  \onslide<3>{Covariate shift can be handled with importance weighting or modelling}
-  \onslide<1->{\\\vspace{\baselineskip} \small see \href{http://dx.doi.org/10.1214/12-SS102}{Vehtari \& Ojanen (2012)} and \href{https://avehtari.github.io/modelselection/CV-FAQ.html}{CV-FAQ}}
-  
-\end{frame}
-
 \begin{frame}[fragile]
   \frametitle{{\tt loo} package}
 
@@ -520,66 +504,190 @@ See help('pareto-k-diagnostic') for details.
 }
 \end{frame}
 
-\begin{frame}{Interpolation vs extrapolation}
+\begin{frame}[fragile]{Helicopter flight time -- elpd}
 
-  \only<1>{\includegraphics[width=10cm]{lake1data.pdf}}
-  \only<2>{\includegraphics[width=10cm]{lake1gp.pdf}}
-  \only<3->{\includegraphics[width=10cm]{lake1gpptest.pdf}}
-  \\
-  \only<4>{Extrapolation is more difficult}
-  
+{\small
+\begin{lstlisting}
+Computed from 4000 by 145 log-likelihood matrix
+
+         Estimate   SE
+elpd_loo    -52.9 10.1
+p_loo         9.0  1.3
+looic       105.8 20.1
+------
+Monte Carlo SE of elpd_loo is 0.1.
+
+All Pareto k estimates are good (k < 0.5).
+See help('pareto-k-diagnostic') for details.
+\end{lstlisting}}
+
 \end{frame}
 
-\begin{frame}{Cross-validation for time series?}
+\begin{frame}[fragile]{Helicopter flight time -- $R^2$}
 
-  \includegraphics[width=10cm]{lake2data.pdf}
+{\small
+\begin{lstlisting}
+> bayes_R2(fit) |> round(digits=2)
+   Estimate Est.Error Q2.5 Q97.5
+R2     0.41      0.05 0.31   0.5
 
-  
-  {Can LOO or other cross-validation be used with time series?}
-  
+> loo_R2(fit) |> round(digits=2)
+   Estimate Est.Error Q2.5 Q97.5
+R2     0.36      0.07 0.22  0.48
+\end{lstlisting}}
+
 \end{frame}
 
-\begin{frame}{Cross-validation for time series}
+\begin{frame}[fragile]{Student retention -- $R^2$}
 
-  \only<1>{\includegraphics[width=10cm]{lake3loo.pdf}}
-  \only<2>{\includegraphics[width=10cm]{lake3stepahead.pdf}}
-  \only<3>{\includegraphics[width=10cm]{lake3tenstepahead.pdf}}
-  \only<4>{\includegraphics[width=10cm]{lake3stepaheadblock.pdf}}
-  \\
-  \only<1>{Leave-one-out cross-validation is ok for assessing conditional model}
-  \only<2>{Leave-future-out cross-validation is better for predicting future}
-  \only<3>{$m$-step-ahead cross-validation is better for predicting further future}
-  \only<4>{$m$-step-ahead leave-a-block-out cross-validation}
-  
+{\small
+\begin{lstlisting}
+> bayes_R2(fit6)|>round(digits=2)
+   Estimate Est.Error Q2.5 Q97.5
+R2     0.98         0 0.97  0.98
+
+> loo_R2(fit6) |> round(digits=2)
+   Estimate Est.Error Q2.5 Q97.5
+R2     0.97      0.01 0.95  0.98
+\end{lstlisting}}
+
 \end{frame}
 
-\begin{frame}{Cross-validation for hierarchical data}
+\begin{frame}[fragile]{Student retention}
+%\framesubtitle{\texttt{pp\_check(fit, type = "intervals\_grouped", group="year")}}
 
-  \only<1>{\includegraphics[width=10cm]{rats1data.pdf}}
-  \only<2>{\includegraphics[width=10cm]{rats1loo.pdf}}
-  \only<3>{\includegraphics[width=10cm]{rats1step.pdf}}
-  \only<4>{\includegraphics[width=10cm]{rats1onetime.pdf}}
-  \only<5>{\includegraphics[width=10cm]{rats1onerat.pdf}}
-  \only<6>{\includegraphics[width=10cm]{rats1init.pdf}}
-  \\
-  \only<1>{Can LOO or other cross-validation be used with hierarchical data?}
-  \only<2->{Yes!}
+\vspace{-0.8\baselineskip}  
+Posterior predictive intervals\\  
+  \hspace{-7mm}
+  \begin{minipage}[t][3.6cm][t]{1.0\linewidth}
+    \includegraphics[height=3.6cm]{student_retention_sbinom_ppc_intervals.pdf}
+  \end{minipage}
   
+\vspace{-0.5\baselineskip}  
+LOO predictive intervals\\  
+  \hspace{-7mm}
+  \begin{minipage}[t][3.6cm][t]{1.0\linewidth}
+    \includegraphics[height=3.6cm]{student_retention_sbinom_ppc_loo_intervals.pdf}
+  \end{minipage}  
+
 \end{frame}
 
-\begin{frame}{}
+\begin{frame}[fragile]{Student retention -- $R^2$}
 
-{\Large\color{navyblue} Summary of data generating mechanisms and prediction tasks}
+Latent hierarchical linear vs. latent hierarchical linear + spline
+  
+{\small
+\begin{lstlisting}
+> loo_R2(fit4) |> round(digits=2)
+   Estimate Est.Error Q2.5 Q97.5
+R2     0.92      0.02 0.88  0.95
+
+> loo_R2(fit6) |> round(digits=2)
+   Estimate Est.Error Q2.5 Q97.5
+R2     0.97      0.01 0.95  0.98
+\end{lstlisting}}
+
+\end{frame}
+
+%XXX
+\begin{frame}{LOO-PIT predictive checking}
+
+  \vspace{-0.5\baselineskip}
+  \includegraphics[width=9cm,trim=0 0 0 30,clip]{fake7.pdf}
+  
+  \vspace{-0.5\baselineskip}
+  \begin{itemize}
+  \item LOO probability integral transform (LOO-PIT)
+    \begin{align*}
+      p_i = p(y_i^{\rep} \leq y_i | y_{-i})
+    \end{align*}
+  \item If $p(\tilde{y}_i|y_{-i})$ is well calibrated, distribution of $p_i$'s
+    would be uniform between 0 and 1
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Student retention -- LOO-PIT checking}
+\framesubtitle{\texttt{pp\_check(fit, type = "loo\_pit\_qq", ndraws=4000)}}
+
+\vspace{-0.5\baselineskip}  
+Latent hierarchical linear -- LOO predictive intervals\\  
+  \hspace{-7mm}
+  \begin{minipage}[t][3.6cm][t]{1.0\linewidth}
+    \includegraphics[height=3.6cm]{student_retention_lbinom_ppc_loo_intervals.pdf}
+  \end{minipage}  
+
+\vspace{-0.5\baselineskip}  
+LOO-PIT check\\  
+  \hspace{-7mm}
+  \begin{minipage}[t][3.6cm][t]{1.0\linewidth}
+    \includegraphics[height=3.6cm]{student_retention_lbinom_ppc_loo_pit_qq.pdf}
+  \end{minipage}  
+
+\end{frame}
+
+\begin{frame}[fragile]{Student retention -- LOO-PIT checking}
+\framesubtitle{\texttt{pp\_check(fit, type = "loo\_pit\_qq", ndraws=4000)}}
+
+\vspace{-0.5\baselineskip}  
+Latent hierarchical linear + spline -- LOO predictive intervals/\\  
+  \hspace{-7mm}
+  \begin{minipage}[t][3.6cm][t]{1.0\linewidth}
+    \includegraphics[height=3.6cm]{student_retention_sbinom_ppc_loo_intervals.pdf}
+  \end{minipage}  
+
+\vspace{-0.5\baselineskip}  
+LOO-PIT check\\  
+  \hspace{-7mm}
+  \begin{minipage}[t][3.6cm][t]{1.0\linewidth}
+    \includegraphics[height=3.6cm]{student_retention_sbinom_ppc_loo_pit_qq.pdf}
+  \end{minipage}  
+
+\end{frame}
+
+% \begin{frame}{Example: Exposure to air pollution}
+
+%   LOO predictive checking -- LOO-PIT
+
+% \includegraphics[width=\textwidth]{ppc_loo_pit_corrected_pm25.png}
+
+% % \begin{figure}
+% % \centering
+% % \begin{subfigure}{0.31\textwidth}
+% % \includegraphics[width=\textwidth]{ppc_loo_pit_overlay1.png}
+% % \caption{Model 1}
+% % \end{subfigure}
+% % ~
+% % \begin{subfigure}{0.31\textwidth}
+% % \includegraphics[width=\textwidth]{ppc_loo_pit_overlay2.png}
+% % \caption{Model 2}
+% % \end{subfigure}
+% % ~
+% % \begin{subfigure}{0.31\textwidth}
+% % \includegraphics[width=\textwidth]{ppc_loo_pit_overlay3.png}
+% % \caption{Model 3}
+% % \end{subfigure}
+% % \end{figure}
+
+% % \vspace{2\baselineskip}
+% % {\scriptsize EDIT 2020: These plots use boundary corrected KDE which is a better
+% % choice than the non-boundary corrected KDE used in the plots in the
+% % paper and the 2019 lecture.}
+
+% \end{frame}
+
+\begin{frame}{Brute-force LOO}
 
 \begin{list1}
-\item You have to make some assumptions on data generating mechanism
-\item Use the knowledge of the prediction task if available
-\item Cross-validation can be used to analyse different parts, even if
-  there is no clear prediction task
+\item Re-run MCMC $n$ times to sample from $p(\theta \mid x_{-i},y_{-i})$
+  \begin{itemize}
+  \item can take a lot of time
+  \item<2-> or high parallelization\\
+    Cooper, Vehtari, Forbes, Kennedy, and Simpson (2023). Bayesian
+    cross-validation by parallel Markov chain Monte
+    Carlo. \href{http://arxiv.org/abs/2310.07002}{arXiv:2310.07002}.
+  \end{itemize}
 \end{list1}
-
- \vspace{7.5\baselineskip}
-{ \small see \href{http://dx.doi.org/10.1214/12-SS102}{Vehtari \& Ojanen (2012)} and \href{https://avehtari.github.io/modelselection/CV-FAQ.html}{CV-FAQ}}
 
 \end{frame}
 
@@ -645,6 +753,7 @@ See help('pareto-k-diagnostic') for details.
 
 \begin{frame}{Pareto smoothed importance sampling LOO}
 
+  \vspace{-0.7\baselineskip}
   \begin{list1}
   \item ${\color{navyblue}p(y_i \mid x_i,x_{-i}, y_{-i})} = \int p(y_i \mid x_i,\theta){\color{blue} p(\theta \mid x_{-i}, y_{-i})} d\theta$
   \item Proposal $p(\theta \mid x,y)$ and target ${\color{blue} p(\theta \mid x_{-i}, y_{-i})}$
@@ -687,7 +796,7 @@ See help('pareto-k-diagnostic') for details.
 \end{frame}
 
 \begin{frame}{}
-
+%XXX fiix figures
   \only<1>{\includegraphics[width=10cm]{fakepsisweights.pdf}}
   \only<2->{\includegraphics[width=10cm]{fakepsisweights4000.pdf}}
   \\
@@ -703,6 +812,13 @@ See help('pareto-k-diagnostic') for details.
 
 \begin{frame}[fragile]
 
+  \begin{itemize}
+  \item Pareto-$\hat{k}$ for each leave-one-out fold indicates
+    reliability of the PSIS-LOO approximation
+  % \item High Pareto-$\hat{k}$ may also indicate model
+  %   mis-specification, but can occur also in case of perfectly
+  %   specified model
+  \end{itemize}
   \includegraphics[width=10cm]{fakepks.pdf}
 
 \end{frame}
@@ -833,13 +949,14 @@ generated quantities {
   \frametitle{loo()}
 
   \begin{list1}
-  \item RStan (\texttt{log\_lik} in gen. quantities), RStanARM, brms\\
+  \item<+-> RStan (\texttt{log\_lik} in gen. quantities)\\
     \texttt{loo(fit)}
-  \item<2-> CmdStanR (eventually will work as others)\\
-    \texttt{loocmd <- function(fit, ...) \{}\\
-    \texttt{  loo(fit\$draws("log\_lik"), r\_eff=relative\_eff(fit\$draws("log\_lik"))), ...}\\
-    \texttt{\}}\\
-    \texttt{loocmd(fit)}
+  \item<+-> CmdStanR (\texttt{log\_lik} in gen. quantities)\\
+    \texttt{fit\$loo()}
+  \item<+-> RStanARM, brms\\
+    \texttt{loo(fit)}
+  \item<+-> brms alternative\\
+    \texttt{fit <- add\_criterion(fit, 'loo')}
   \end{list1}
   
 \end{frame}
@@ -856,10 +973,106 @@ generated quantities {
   \item<+-> \texttt{rstanarm::loo(..., k\_threshold = 0.7)}\\
     \texttt{brms::loo(..., k\_threshold = 0.7)}\\
     runs MCMC for the folds with $\hat{k}$ above the threshold
-  \item<+-> Use K-fold-CV (more about this soon)
+  \item<+-> Integrated LOO (for some models)\\
+    See \url{https://users.aalto.fi/~ave/modelselection/roaches.html}
+  \item<+-> Use K-fold-CV (more about this later)\\
+    \texttt{rstanarm::kfold(..., K=10)}\\
+    \texttt{brms::kfold(..., K=10)}\\
+    RStan/CmdStanR vignette \url{http://mc-stan.org/loo/articles/loo2-elpd.html}
   \end{list1}
   
 \end{frame}
+
+\begin{frame}{Assumptions about the future observations}
+
+  \vspace{-\baselineskip}
+  \only<1>{\includegraphics[width=9cm]{fakedfixed.pdf}}
+  \only<2->{\includegraphics[width=9cm]{fakedrandom.pdf}}
+  \\ \vspace{-0.5\baselineskip}
+  {\color{blue} $\mbox{elpd\_loo} = \sum_{i=1}^{20} \log p(y_i \mid x_i,x_{-i},y_{-i}) \approx -29.5$\\ \vspace{0.2\baselineskip}}
+  {\color{blue} $\mbox{SE} = \sd(\log p(y_i \mid x_i,x_{-i},y_{-i}))\cdot \sqrt{20} \approx 3.3$\\}
+  \vspace{0.5\baselineskip}
+  \only<1>{LOO is ok for fixed / designed $x$. SE is uncertainty about $y \mid x$.\\ \vspace{0.2\baselineskip}}
+  \only<2->{LOO is ok for random $x$. SE is uncertainty about $y \mid x$ and $x$.\\ \vspace{0.2\baselineskip}}
+  \onslide<3>{Covariate shift can be handled with importance weighting or modelling}
+  \onslide<1->{\\\vspace{\baselineskip} \small see \href{http://dx.doi.org/10.1214/12-SS102}{Vehtari \& Ojanen (2012)} and \href{https://users.aalto.fi/~ave/modelselection/CV-FAQ.html}{CV-FAQ}}
+  
+\end{frame}
+
+\begin{frame}{Interpolation vs extrapolation}
+
+  \only<1>{\includegraphics[width=9cm]{lake1data.pdf}}
+  \only<2>{\includegraphics[width=9cm]{lake1gp.pdf}}
+  \only<3->{\includegraphics[width=9cm]{lake1gpptest.pdf}}
+  \\
+  \only<4>{Extrapolation is more difficult}
+  
+\end{frame}
+
+\begin{frame}{Cross-validation for time series?}
+
+  \includegraphics[width=9cm]{lake2data.pdf}
+
+  
+  {Can LOO or other cross-validation be used with time series?}
+  
+\end{frame}
+
+\begin{frame}{Cross-validation for time series}
+
+  \only<1>{\includegraphics[width=9cm]{lake3loo.pdf}}
+  \only<2>{\includegraphics[width=9cm]{lake3stepahead.pdf}}
+  \only<3>{\includegraphics[width=9cm]{lake3tenstepahead.pdf}}
+  \only<4>{\includegraphics[width=9cm]{lake3stepaheadblock.pdf}}
+  \\
+  \only<1>{Leave-one-out cross-validation is ok for assessing conditional model}
+  \only<2>{Leave-future-out (LFO) cross-validation is better for predicting future}
+  \only<3>{$m$-step-ahead cross-validation is better for predicting further future}
+  \only<4>{$m$-step-ahead leave-a-block-out cross-validation}
+  
+\end{frame}
+
+\begin{frame}{Cross-validation for hierarchical data}
+
+  \only<1>{\includegraphics[width=9cm]{rats1data.pdf}}
+  \only<2>{\includegraphics[width=9cm]{rats1loo.pdf}}
+  \only<3>{\includegraphics[width=9cm]{rats1step.pdf}}
+  \only<4>{\includegraphics[width=9cm]{rats1onetime.pdf}}
+  \only<5>{\includegraphics[width=9cm]{rats1onerat.pdf}}
+  \only<6>{\includegraphics[width=9cm]{rats1init.pdf}}
+  \\
+  \only<1>{Can LOO or other cross-validation be used with hierarchical data?}
+  \only<2->{Yes!}
+  
+\end{frame}
+
+\begin{frame}{}
+
+{\Large\color{navyblue} Summary of data generating mechanisms and prediction tasks}
+
+\begin{list1}
+\item You have to make some assumptions on data generating mechanism
+\item Use the knowledge of the prediction task if available
+\item Cross-validation can be used to analyse different parts, even if
+  there is no clear prediction task
+\end{list1}
+
+\vspace{7.5\baselineskip}
+{ \small see \href{http://dx.doi.org/10.1214/12-SS102}{Vehtari \& Ojanen (2012)} and \href{https://users.aalto.fi/~ave/modelselection/CV-FAQ.html}{CV-FAQ}}
+
+\end{frame}
+
+% \begin{frame}{LFO-CV}
+
+%   \only<1>{\includegraphics[width=9cm]{lake4data.pdf}}
+%   \only<2>{\includegraphics[width=9cm]{lake4pred.pdf}}
+%   \only<3>{\includegraphics[width=9cm]{lake4psisrefits.pdf}}
+
+%   \vspace{2\baselineskip}
+%   \only<3> {\small \url{mc-stan.org/loo/articles/loo2-lfo.html}}
+
+  
+% \end{frame}
 
 \begin{frame}{Pareto smoothed importance sampling CV variants}
 
@@ -868,9 +1081,8 @@ generated quantities {
   \begin{list2}
   \item leave-one-group out is challenging for PSIS-LOO\\ \vspace{0.2\baselineskip}
     
-  \item {\small see Merkel, Furr and Rabe-Hesketh
-      (2018) for an approach using quadrature integration}
-  \item Stan demo of the challenges and integrated LOO at \url{https://avehtari.github.io/modelselection/roaches.html}
+  \item Stan demo of the challenges and integrated LOO at \url{https://users.aalto.fi/~ave/modelselection/roaches.html}
+  \item {\small see also Merkel, Furr and Rabe-Hesketh (2018)}
   \end{list2}
   \item<2-> PSIS-LOO for non-factorized models
     \begin{list2}
@@ -885,17 +1097,6 @@ generated quantities {
 
 \end{frame}
 
-\begin{frame}{LFO-CV}
-
-  \only<1>{\includegraphics[width=10cm]{lake4data.pdf}}
-  \only<2>{\includegraphics[width=10cm]{lake4pred.pdf}}
-  \only<3>{\includegraphics[width=10cm]{lake4psisrefits.pdf}}
-
-  \vspace{2\baselineskip}
-  \only<3> {\small \url{mc-stan.org/loo/articles/loo2-lfo.html}}
-
-  
-\end{frame}
 
 \begin{frame}{K-fold cross-validation}
 
@@ -945,75 +1146,60 @@ generated quantities {
   
 \end{frame}
 
-
-\begin{frame}{WAIC vs PSIS-LOO}
-
-\begin{list1}
-  \item<2-> WAIC has same assumptions as LOO
-  \item<3-> PSIS-LOO is more accurate 
-  \item<4-> PSIS-LOO has much better diagnostics
-  \item<5-> LOO makes the prediction assumption more clear,\\ which
-    helps if K-fold-CV is needed instead
-  \item<6-> Multiplying by -2 doesn't give any benefit\\ (Watanabe
-    didn't multiply by -2)
-\end{list1}
-
-\vspace{6\baselineskip}
-{\small see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)}}
-\end{frame}
-
-\begin{frame}{*IC}
-
-\begin{list1}
-  \item AIC uses maximum likelihood estimate for prediction
-  \item DIC uses posterior mean for prediction
-  \item BIC is an approximation for marginal likelihood
-  \item TIC, NIC, RIC, PIC, BPIC, QIC, AICc, ...
-\end{list1}
-
-\end{frame}
-
-\begin{frame}{Marginal likelihood / Bayes factor}
-
-\vspace{-0.3\baselineskip}
-\begin{list1}
-\item Like leave-future-out 1-step-ahead cross-validation but starting with 0 observations\\
-  \onslide<3->{- which makes it very sensitive to prior}
-  \onslide<4->{and \\- unstable in case of misspecified
-    models}\uncover<5->{ also asymptotically}
-\end{list1}
-\vspace{-0.5\baselineskip}
-  \onslide<2->{\includegraphics[width=9.4cm]{lake3bf.pdf}}
-
-\end{frame}
-
 \begin{frame}{Cross-validation for model assessment}
 
 \begin{list1}
 \item CV is good for model assessment when application specific utility/cost functions are used
   \begin{list2}
-  \item e.g. 90\% absolute error
+  \item e.g. in concrete quality prediction reported that the absolute
+    error is smaller than X with 90\% probability
   \end{list2}
 \item<2-> Also useful in model checking in similar way as posterior
   predictive checking (PPC)
   \begin{list2}
-  \item model misspecification diagnostics\\ (e.g. Pareto-$k$ and p\_loo)
   \item checking calibration of leave-one-out predictive posteriors
     (ppc\_loo\_pit in bayesplot)
+  \item model misspecification diagnostics\\ (e.g. Pareto-$k$ and p\_loo)
   \end{list2}
-  {\small see demos \url{avehtari.github.io/modelselection/}}
+  {\small see demos \url{https://users.aalto.fi/~ave/casestudies.html}}
 \end{list1}
 
 \end{frame}
 
-\begin{frame}{Radon example}
+\begin{frame}{High Pareto-$\hat{k}$ values}
 
-   PSIS-LOO diagnostics
-   \includegraphics[width=.8\textwidth]{radon1k.pdf}
+\begin{list1}
+\item<+-> High Pareto-$\hat{k}$ value indicates the target distribution
+  (LOO posterior) is very different from the proposal distribution
+  (full data posterior)
+\item<+-> This can be caused by
+  \begin{itemize}
+  \item well specified, but very flexible model
+    \begin{itemize}
+    \item e.g. hierarchical model with one parameter per observation
+    \item indicated by large \texttt{p} and \texttt{p\_loo} (e.g. \texttt{N/5 < p,p\_loo < p})
+    \item moment matching or integrated LOO may help
+    \end{itemize}
+  \item<+-> misspecified model / outliers
+    \begin{itemize}
+    \item indicated by \texttt{p\_loo {<}< p}, or \texttt{p\_loo > p}
+    \item improve model, check data
+    \end{itemize}
+  \end{itemize}
+\item<+-> See more in \href{https://users.aalto.fi/~ave/modelselection/CV-FAQ.html}{CV-FAQ}
 
-{\small see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)}}
+\end{list1}
+
+\end{frame}
+
+% \begin{frame}{Radon example}
+
+%    PSIS-LOO diagnostics
+%    \includegraphics[width=.8\textwidth]{radon1k.pdf}
+
+% {\small see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)}}
    
- \end{frame}
+%  \end{frame}
 
 
 \begin{frame}{Sometimes cross-validation is not needed}
@@ -1021,7 +1207,7 @@ generated quantities {
 \vspace{-0.5\baselineskip}
 
   \begin{list1}
-  \item<2-> Posterior predictive checking is often sufficient\\
+  \item Posterior predictive checking is often sufficient\\
     \vspace{0.5\baselineskip}
     \includegraphics[width=11cm]{mesquite_ppc.pdf}\\
   \vspace{-0.1\baselineskip} {Predicting the yields of mesquite bushes.\\
@@ -1031,14 +1217,28 @@ generated quantities {
 \end{list1}
 {\footnotesize
   \begin{list2}
-  \item<3-> BDA3, Chapter 6
+  \item<2-> BDA3, Chapter 6
   \vspace{-0.6\parskip}
-  \item<3-> Gabry, Simpson, Vehtari, Betancourt, Gelman
+  \item<2-> Gabry, Simpson, Vehtari, Betancourt, Gelman
     (2019). Visualization in Bayesian workflow. JRSS A, \url{https://doi.org/10.1111/rssa.12378}
   \vspace{-0.6\parskip}
-  \item<3-> \url{mc-stan.org/bayesplot/articles/graphical-ppcs.html}
+  \item<2-> \url{mc-stan.org/bayesplot/articles/graphical-ppcs.html}
    \end{list2}}
 \end{frame}
+
+\begin{frame}{Model comparison and selection}
+
+  Next lecture
+
+  \begin{list1}
+  \item Model comparison and selection (elpd\_diff, se)
+  \item {\footnotesize Related methods (WAIC, *IC, BF)}
+  \item Model averaging
+  \item Potential overfitting in model selection
+\end{list1}
+
+\end{frame}
+\end{document}
 
 % \begin{frame}{Sometimes cross-validation is not needed}
 
@@ -1335,7 +1535,7 @@ Clear difference (which was also obvious in posterior predictive checks)
 \item<+-> In nested case, often easier and
   more accurate to analyse posterior distribution of more complex
   model directly \\
-  {\small \url{avehtari.github.io/modelselection/betablockers.html}}
+  {\small \url{users.aalto.fi/~ave/modelselection/betablockers.html}}
   \begin{list2}
   \item instead of comparing\\
     \vspace{0.2\baselineskip}
@@ -1434,7 +1634,7 @@ Clear difference (which was also obvious in posterior predictive checks)
 
     \pause
     {\small
-      see also \href{https://avehtari.github.io/modelselection/collinear.html}{Collinear demo}
+      see also \href{https://users.aalto.fi/~ave/modelselection/collinear.html}{Collinear demo}
     }
 
 \end{frame}
@@ -1445,10 +1645,10 @@ Clear difference (which was also obvious in posterior predictive checks)
   \item<2-> Continuous expansion including all models?
     \begin{list2}
     \item and then analyse the posterior distribution directly\\
-        {\small \url{avehtari.github.io/modelselection/betablockers.html}}
+        {\small \url{users.aalto.fi/~ave/modelselection/betablockers.html}}
       \item sparse priors like regularized horseshoe prior instead of variable selection\\
-        {\small video, refs and demos at
-          \url{avehtari.github.io/modelselection/}}
+        % {\small video, refs and demos at
+        %   \url{avehtari.github.io/casestudies/}}
     \end{list2}
   \item<3-> Model averaging with BMA or Bayesian stacking?\\
     {\small \url{mc-stan.org/loo/articles/loo2-example.html}}
@@ -1495,6 +1695,47 @@ Clear difference (which was also obvious in posterior predictive checks)
     \end{list2}
   \item<3-> Overfitting in selection process is not unique for cross-validation
   \end{list1}
+\end{frame}
+
+\begin{frame}{WAIC vs PSIS-LOO}
+
+\begin{list1}
+  \item<2-> WAIC has same assumptions as LOO
+  \item<3-> PSIS-LOO is more accurate 
+  \item<4-> PSIS-LOO has much better diagnostics
+  \item<5-> LOO makes the prediction assumption more clear,\\ which
+    helps if K-fold-CV is needed instead
+  \item<6-> Multiplying by -2 doesn't give any benefit\\ (Watanabe
+    didn't multiply by -2)
+\end{list1}
+
+\vspace{6\baselineskip}
+{\small see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)}}
+\end{frame}
+
+\begin{frame}{*IC}
+
+\begin{list1}
+  \item AIC uses maximum likelihood estimate for prediction
+  \item DIC uses posterior mean for prediction
+  \item BIC is an approximation for marginal likelihood
+  \item TIC, NIC, RIC, PIC, BPIC, QIC, AICc, ...
+\end{list1}
+
+\end{frame}
+
+\begin{frame}{Marginal likelihood / Bayes factor}
+
+\vspace{-0.3\baselineskip}
+\begin{list1}
+\item Like leave-future-out 1-step-ahead cross-validation but starting with 0 observations\\
+  \onslide<3->{- which makes it very sensitive to prior}
+  \onslide<4->{and \\- unstable in case of misspecified
+    models}\uncover<5->{ also asymptotically}
+\end{list1}
+\vspace{-0.5\baselineskip}
+  \onslide<2->{\includegraphics[width=9.4cm]{lake3bf.pdf}}
+
 \end{frame}
 
 \begin{frame}{Selection induced bias and overfitting}
