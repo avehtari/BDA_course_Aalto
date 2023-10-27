@@ -19,7 +19,7 @@ model {
 
   for (diet in 1:N_diets) {
     mean_diet[diet] ~ normal(0, 10);
-    sd_diet[diet] ~ exponential(1);
+    sd_diet[diet] ~ exponential(.02);
   }
 
   // Likelihood

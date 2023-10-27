@@ -81,40 +81,55 @@ register_knitr_engine(override = FALSE)
 
 # Hierarchical Model: Chicken Data with Stan (6p)
 
-**Do not look at the secret dataset until you have defined your priors.**
+**Do not look at the secret dataset until you have defined your priors in section 2.1.**
 
 A secret dataset, included in base `r`, contains weight measurements from 50 chicks from their birth until the age of 21 days. For this task, we are interested in modeling the weight of a chick at the age of 12 days.
 
 ## Choosing a weakly informative prior by intuition
 
-To prepare you for your projects, we will first guide you through two possible processes for choosing a weakly informative prior. It is important that your priors are not informed by data, so ideally, *you should not have looked at the dataset yet*.
+We will first guide you through two processes for choosing *weakly* informative priors which you can use in your projects as well (though, if expert knowledge is present, we encourage to use that though instead). Many definitions of *weak* exist, but for our purposes, we intend to set priors in this assignment which don't overwhelm the likelihood contributions to the posterior while still exerting some amount of regularisation.
 
 In the absence of additional information, we will assume that chick weights at 12 days of age ($w$) follow a normal distribution:
 $$
 w\sim\mathcal N (\mu,\sigma).
 $$
-Our task will be to define weakly informative priors for the parameters of the mean, $\mu$, and standard deviation, $\sigma$.
+Our task will be to define weakly informative priors for the mean $\mu$ given observation model standard deviation, $\sigma$ (a prior distribution for $\sigma$ will be set in after section 2).
 
-Here, $\mu$ represents the population or "true" mean chick weight at 12 days, and $\sigma$ represents the standard-deviation of the current weights $w$ around that population mean. For this exercise, we will be specifying a normal prior for $\mu$:
+Here, $\mu$ represents the population mean chick weight at 12 days and $\sigma$ represents the standard-deviation of the chick weights $w$ around that population mean. For this exercise, we will be specifying a normal prior for $\mu$:
 
 $$
 \mu\sim\mathcal N (\mu_0,\sigma_0).
 $$
 
-In the above, $\mu_0$ represents our prior knowledge of what we believe the population weight to be and $\sigma_0$ represents our level of certainty in this belief. To specify a weakly-informative prior for $\mu$ we need to select values of $\mu_0$ and $\sigma_0$ that imply the range of plausible values that $\mu$ could take.
+$\mu_0$ represents our prior knowledge of what we believe the population weight to be and $\sigma_0$ represents our level of certainty in this belief. To specify a weakly-informative prior for $\mu$ we need to select values of $\mu_0$ and $\sigma_0$ that imply the range of plausible values that $\mu$ could take.
 
 We can do this by our own intuitive prior knowledge (if such intuition exists), or by searching for external references.
 
-In modeling, weakly informed priors are quite subjective, which means that justification for prior choice can be considered more important than the specific choice itself. For the subtasks below, you will not be graded on the accuracy or precision of your numbers, but on your justification of them. The numerical choices you make should make sense and be understandable to an external reviewer of your work (even if they may not agree with your choices).
+Despite the name, weakly informed priors can be quite subjective ([see for more theoretical discussion here](http://www.stat.columbia.edu/~gelman/research/published/entropy-19-00555-v2.pdf)), such that some justification is always needed. For the subtasks below, you will not be graded on the accuracy or precision of your numbers, but on your justification of them. The numerical choices you make should make sense and be understandable to an external reviewer of your work (even if they may not agree with your choices).
+
+
+::: {.callout-caution collapse="false"}
+## A word of caution on eliciting the priors below
+Please note that in the below, we intend to set a prior on $\mu$ (the *mean* chick weight), but the intuition we ilicit is based on the weight of *individual* chicks. We do so to help create intuition about what the mean could be, however, it would be theoretically more accurate to ilicit priors about *mean* chick weights. 
+:::
+
+:::{.callout-important}
+
+We have made changes to the assignment text and some of the rubrics to make it clearer.
+
+:::
+
 
 :::{.subtask letter=a}
-Based on your own past experience and estimation skills, what would you guess is a typical weight range of a fully grown chicken in grams? For example, would it make sense if a chicken weighed 1 million grams? 0.005 grams? What about a chicken that weighed more than you? More than a car? Note that is not important to have a very precise or accurate guess here, the key goal is simply to identify the range of plausible (or at least possible) values.
+Based on your own past experience and estimation skills, what would you guess is a typical weight range of a fully grown chicken in grams? Justify your choice with 1-3 sentences.
+:::
 
-Justify your choice with 1-3 sentences.
+:::{.hint}
+Would it make sense if a chicken weighed 1 million grams? 0.005 grams? What about a chicken that weighed more than you? More than a car? Note that is not important to have a very precise or accurate guess here, the key goal is simply to identify the range of plausible (or at least possible) values.
 :::
 
 ::::{.subrubric}
-### Weight range by intuition
+### Fully grown chicken weight range by intuition
 
 * Does the chosen range meet the following common sense criteria?
   * The range is always above **...** and below **...**.
@@ -126,21 +141,22 @@ Adjust this range for a 12-day old chick and choose a mean $\mu_0$ for the weakl
 :::
 
 ::::{.subrubric}
-### Prior mean by intuition
+### 12-day old chick weight range by intuition
 
-* Does the chosen prior mean meet the following common sense criteria?
-  * The range is always above **...** and below **...**.
+* The range is always above **...** and below **...**.
 * Is the justification based on some sort of logic, even if you may disagree?
 :::: 
 
-:::{.subtask}
-Choosing the standard deviation of a prior requires a little more caution; overconfident (i.e. narrow) priors can have a strong effect on your results,
+Choosing the prior standard deviation for $\mu$ requires a little more caution; overconfident (i.e. narrow) priors can have a strong effect on your results,
 whereas less confident priors are more easily overcome with observed data.
-Given that overconfidence is a common human bias, a good intuition-based standard deviation should focus on eliminating the impossible values, rather than including the most likely values. Using this constraint, choose a lower and/or upper bound for the weight of any 12-day old chick. Justify your choice with 1-3 sentences.
+Given that overconfidence is a common human bias, a good intuition-based standard deviation should focus on eliminating the impossible values, rather than including the most likely values. 
+
+:::{.subtask}
+Choose a conservative lower and upper bound for the weight of any 12-day old chick, with the goal to exclude impossible values. Justify your choice with 1-3 sentences.
 :::
 
 :::{.hint}
-Depending on your choice of range above for a "typical" chick, this range excluding the impossible values is likely to be wider.
+Depending on your choice of range above for a "typical" chick, this range excluding the impossible values should be wider.
 :::
 
 ::::{.subrubric}
@@ -151,8 +167,11 @@ Depending on your choice of range above for a "typical" chick, this range exclud
 * Is the justification based on some sort of logic, even if you may disagree?
 ::::
 
+A common technique to find a weakly informative prior is to have a standard deviation which is an order of magnitude (a factor of 10) larger than a plausible standard deviation of the data.
+
 :::{.subtask}
-A common technique recommended in [Prior Choice Recommendations Wiki](https://github.com/stan-dev/stan/wiki/Prior-Choice-Recommendations) considers standardized data, and is that a weakly informed prior should have a standard deviation of an order of magnitude larger than the data. What is your standard deviation? Under this recommendation, what $\sigma$ should you use for your prior?
+What do you think is a plausible standard deviation $\sigma_\text{plausible}$ of the weight of 12 days-old chicks, based on your ranges stated above? 
+Under the above recommendation, what standard deviation $\sigma_0$ should you use for your prior for the mean weight $\mu$?
 :::
 
 ::::{.subrubric}
@@ -160,19 +179,19 @@ A common technique recommended in [Prior Choice Recommendations Wiki](https://gi
 
 * Do the two standard deviations meet the following common sense criteria?
   - Both values are **...**
-  - The prior $\sigma$ is 10 times larger than **...**
-* Given the choice of mean from above, the prior's range defined by $\mu \pm \sigma$ overlaps with **...**.
+* Given the choice of mean from above, the interval $(\mu_0 - 3\sigma_0, \mu_0 + 3\sigma_0)$ includes **...**.
 ::::
 
+
 :::{.subtask}
-Write down in mathematical form the final prior you found using this prior definition technique.
+Write down in mathematical form the final prior for the mean weight $\mu$ you found using this prior definition technique.
 :::
 
 ::::{.subrubric}
 ### Prior by intuition
 
 * Does the final prior exist in mathematical notation?
-* Does the prior reflect the choices made above (i.e. $\mu, \sigma$)?
+* Does the prior reflect the choices made above (i.e. $\mu_0, \sigma_0$)?
 ::::
 
 ## Choosing a weakly informative prior using external references
@@ -201,40 +220,40 @@ Based on this reference range, what will you choose for the mean of our weakly i
   * The range is always above **...** and below **...**.
 ::::
 
-Next we choose the standard deviation of the prior. We could use the same technique as before, but we'll walk you through another common approach. Assume that $99.7\%$ of all 12-day old chicks fall into the reference range you found. Under our assumption of a Normal distribution, this range will encompass values between $\mu \pm 3\sigma$. 
+Next we choose the standard deviation of the prior. We could use the same technique as before, but we'll walk you through another common approach. Assume that $99.7\%$ of all 12-day old chicks fall into the reference range you found. Under our assumption of a normal distribution, this range will encompass values between $\mu_0 \pm 3\sigma_0$. 
 
 :::{.subtask}
-Assuming symmetry, use the mean you chose and either the upper or lower bound $b$ of your reference range to solve the correct version of the following equations to find your associated choice of $\sigma$: (show your work)
+Assuming symmetry, use the mean you chose and either the upper or lower bound $b$ of your reference range to solve the correct version of the following equations to find your associated choice of $\sigma_0$: (show your work)
 
-- For upper bound $b$: $Pr(\mu + 3\sigma < b) \approx 0.997$, solving for $\sigma$.
-- For lower bound $b$: $Pr(\mu - 3\sigma > b) \approx 0.997$, solving for $\sigma$.
+- For upper bound $b_u$: $Pr(\mu_0 + 3\sigma_0 < b_u) \approx 0.997$, solving for $\sigma_0$.
+- For lower bound $b_l$: $Pr(\mu_0 - 3\sigma_0 > b_l) \approx 0.997$, solving for $\sigma_0$.
 :::
 
 ::::{.subrubric}
-### Prior standard deviation by intuition
+### Prior standard deviation by reference
 
-* Does the calculated $\sigma$ value meet the following common sense criteria?
+* Does the calculated $\sigma_0$ value meet the following common sense criteria?
   * The value is above **...** and below **...**.
 * Did they show their work?
 ::::
 
 :::{.subtask}
-Write down in mathematical form the final prior you found using this prior definition technique.
+Write down in mathematical form the final prior for the mean weight $\mu$ you found using this prior definition technique.
 :::
 
 ::::{.subrubric}
 ### Prior by reference
 
 * Does the final prior exist in mathematical notation?
-* Does the prior reflect the choices made above (i.e. $\mu, \sigma$)?
+* Does the prior reflect the choices made above (i.e. $\mu_0, \sigma_0$)?
 ::::
 
 ## Non-normal priors
 
-The previous steps all assumed we could use a prior which is Normally distributed, but this may not always be the correct assumption to make. 
+The previous steps all assumed we could use a prior which is normally distributed, but this may not always be the correct assumption to make. 
 
 :::{.subtask}
-Under what mathematical/statistical circumstances would a Normal distributed prior not make sense? List at least one circumstance.  Are there values that the Normal distribution can take on which would not make sense for some types of variables?
+Under what mathematical/statistical circumstances would a normal distributed prior not make sense? List at least one circumstance.  Are there values that the normal distribution can take on which would not make sense for some types of variables?
 :::
 
 :::{.hint}
@@ -274,16 +293,42 @@ In the following analysis, we will model the **weight of a chick at the age of 1
 -   a pooled model, in which all measurements are combined and there is no distinction between diets
 -   a hierarchical model, which has a hierarchical structure as described in [BDA3](https://users.aalto.fi/~ave/BDA3.pdf) Section 11.6
 
-As in the model described in the book, use the same measurement standard deviation $\sigma$ for all the groups in the hierarchical model. In the separate model, however, use separate measurement standard deviation $\sigma_d$ for each diet $d$. You should use weakly informative priors for all your models, preferably one of the ones you already defined (and justified) in the previous/above section.
+As in the model described in the book, use the same weight standard deviation $\sigma$ for all the groups in the hierarchical model. In the separate model, however, use separate weight standard deviation $\sigma_d$ for each diet $d$. You should use weakly informative priors for all your models.
 
-The provided Stan code below is given as an example of a separate model. Note that the author has left a comment expressing uncertainty about their prior choices. This separate model can be summarized mathematically as:
+The provided Stan code below is given as an example of a separate model. Note that the author has left a comment expressing uncertainty about their prior choices. This separate model can be summarized mathematically as
 $$
 \begin{aligned}
-    w_{ij} &\sim N(\mu_j,\sigma_j)\\
-    \mu_{j} &\sim N(0,1)\\
-    \sigma_{j} &\sim \exp(1)
+    \mu_{d} &\sim \pi(\mu_d)&&\text{(diet-wise mean weight),}\\
+    \sigma_d &\sim \pi(\sigma_d)&&\text{(diet-wise standard deviation of diet-wise chicken weights)},\\
+    w_{i,d} &\sim N(\mu_d,\sigma_d)&&\text{(diet-wise chicken weights)}\\
+\end{aligned}
+$$ {#eq-separate}
+
+with priors 
+
+$$
+\begin{aligned}
+    \mu_{d} &\sim N(0,10)&&\text{(adjust this) and}\\
+    \sigma_d &\sim\mathrm{exponential}(.02)&&\text{(you can keep this).}
+\end{aligned}
+$$ {#eq-separate-priors}
+
+For the separate and the pooled models, use one of the weakly informative priors you have derived in 2.1) or 2.2) for the diet-wise mean weights 
+$$\mu_d\sim \pi(\mu_d)=N(\mu_0,\sigma_0).$$
+For the hierarchical model, remember that the parameters in the priors for the diet-wise mean weights itself have to be parameters with their own prior distributions, in our case 
+$$
+\begin{aligned}
+\mu_d &\sim N(\mu,\tau)&&\text{(diet-wise mean weights)},\\
+\mu &\sim \pi(\mu)&&\text{(mean of prior for diet-wise mean weights) and}\\
+\tau &\sim \pi(\tau)&&\text{(standard deviation of prior for diet-wise mean weights).}
 \end{aligned}
 $$
+
+Use the prior you have used for the diet-wise mean weights $\mu_d$ in the separate and pooled models for the prior on the mean of the prior for the diet-wise mean weights 
+$$\mu \sim \pi(\mu) = N(\mu_0,\sigma_0)$$
+in the hierarchical model and use 
+$$\tau \sim \pi(\tau) = \mathrm{exponential}(.02)$$ 
+for the prior on the standard deviation of the prior for the diet-wise mean weights.
 
 ```{.stan include="additional_files/assignment7/chickens_separate.stan"}
 ```
@@ -447,23 +492,33 @@ See the example Stan codes in the demo [Bayesian data analysis - CmdStanR demos:
 
 # Hierarchical model with BRMS (3p)
 
+
+:::{.callout-important}
+
+We have made changes to the assignment text and some of the rubrics to make it clearer.
+
+:::
+
 The goal of this task is to discuss an alternative parameterisation of hierarchical models and introduce the `brms`-package.
 
-[`brms`](https://paul-buerkner.github.io/brms/) is a high-level interface for Stan providing tools to create a wide range of Bayesian models, including hierarchical ones. In the previous section, you might have noted that with the hierarchical implementation of the model there may be divergent transitions during the sampling from the posterior. This is related to the [Neal's funnel](https://mc-stan.org/docs/stan-users-guide/reparameterisation.html), where the sampling algorithm would need to change the step size in order to effectively sample the posterior. One trick to improve sampling is to use an alternative parameterisation for the model. This parameterisation is called the non-centered parameterisation (@eq-non-centered) and often it can help with the divergent transitions. In short,In short,
-we sample parameters from a distribution with an easier geometry for the sample to explore efficiently and then transform those values to the joint distribution of interest.
+[`brms`](https://paul-buerkner.github.io/brms/) is a high-level interface for Stan providing tools to create a wide range of Bayesian models, including hierarchical ones. In the previous section, you might have noted that with the hierarchical implementation of the model there may be divergent transitions during the sampling from the posterior. This is related to [Neal's funnel](https://mc-stan.org/docs/stan-users-guide/reparameterisation.html), where the sampling algorithm would need to change the step size in order to effectively sample the posterior. One trick to improve sampling is to use an alternative parameterisation for the model. This parameterisation is called the non-centered parameterisation (@eq-non-centered) and often it can help with the divergent transitions. 
+
+In short, we sample parameters from a distribution with a potentially easier geometry for the sampler to explore efficiently and then transform those values to the joint distribution of interest.
+
+The noncentered parameterisation for the hierarchical model using the diet-wise helper parameter $z_d$ becomes
+
 $$
 \begin{aligned}
-w_{i, d} &\sim \operatorname{normal}(\mu, \sigma) \\
-\sigma &\sim \pi(\sigma) \\
-\mu &= \mu_0 + z_d \tau \\
-z_d &\sim \operatorname{normal}(0, 1) \\
-\mu_0 &\sim \pi(\mu_0) \\
-\tau &\sim \pi(\tau) \\
+z_d &\sim \operatorname{normal}(0, 1)&&\text{(diet-wise helper parameter)},\\
+\mu_d &= \mu + z_d \tau&&\text{(diet-wise mean weight)},\\
+\mu &\sim \pi(\mu)&&\text{(mean of prior for diet-wise mean weights),}\\
+\tau &\sim \pi(\tau)&&\text{(standard deviation of prior for diet-wise mean weights),}\\
+\sigma &\sim \pi(\sigma)&&\text{(standard deviation of diet-wise chicken weights) and},\\
+w_{i, d} &\sim \operatorname{normal}(\mu_d, \sigma)&&\text{(chicken weights)}.\\
 \end{aligned}
 $$ {#eq-non-centered}
 
-The hierarchical models made with `brms` use the non-centered parameterisation. 
-Your tasks are the following:
+The hierarchical models made with `brms` use this non-centered parameterisation. Your tasks are the following:
 
 :::{.subtask letter=a}
 Use the function in the template to make a scatter plot of the posterior draws given the hierarchical model of the population level standard deviation parameter $\tau$ and the mean parameter of the fourth diet, $\mu_4$. The possible divergent transitions are highlighted in red. In the report show the plot and comment if there are any divergent transitions.
@@ -472,20 +527,23 @@ Use the function in the template to make a scatter plot of the posterior draws g
 
 
 :::{.subrubric}
-* Is there a scatter plot of $\tau$ and $\mu_4$ and some comments provided in the report?
+* Is there a scatter plot of $\sigma_0$ and $\mu_4$ and some comments provided in the report?
   - No scatter plot or comments
   - The scatter plot is included, and divergent transitions are visible, but not commented on.
   - The scatter plot and comments on the divergences are included.
 :::
 
-To sample from the posterior given the same model using `brms`, in the template set the weakly informative priors for the hierarchical model you used in the previous task. `brms` has an internal convention to name model parameters, but the parameter names from @eq-non-centered map into `brms` names with the following logic:
+To sample from the posterior given the same model using `brms`, in the template set the weakly informative priors for the hierarchical model you used in the previous task. `brms` has an internal convention to name model parameters and the parameter names from @eq-non-centered map into `brms` names with the following logic:
 
- - $\mu_0$ corresponds to `class="Intercept"`
- - $\sigma$ corresponds to `class="sigma"`
- - $\tau$ corresponds to `class="sd"`.
+ - $\mu$ corresponds to `class="Intercept"`
+ - $\tau$ corresponds to `class="sd"`,
+ - $\sigma$ corresponds to `class="sigma"`.
+ 
 
 :::{.subtask}
-Replace `normal(0,1)` in the `brm` call in the template with the expressions you had for the priors in your hierarchical Stan model. Then, run the code chunk to sample from the posterior of the hierarchical model using `brms`.
+Replace `normal(0,10)` in the `brm` call in the template with your prior for the population mean 
+$$\mu \sim \pi(\mu) = N(\mu_0,\sigma_0)$$ 
+you have derived in 2). Then, run the code chunk to sample from the posterior of the hierarchical model using `brms`.
 :::
 
 

@@ -83,6 +83,17 @@ register_knitr_engine(override = FALSE)
 
 
 ## Choosing a weakly informative prior by intuition
+::: {.callout-caution collapse="false"}
+## A word of caution on eliciting the priors below
+Please note that in the below, we intend to set a prior on $\mu$ (the *mean* chick weight), but the intuition we ilicit is based on the weight of *individual* chicks. We do so to help create intuition about what the mean could be, however, it would be theoretically more accurate to ilicit priors about *mean* chick weights. 
+:::
+
+:::{.callout-important}
+
+We have made changes to the assignment text and some of the rubrics to make it clearer.
+
+:::
+
 
 ## (a)
 
@@ -336,6 +347,12 @@ ggplot(posterior_mean_diet_5, aes(x = mean_diet_5, y = model_name)) +
 ## (p)
 
 # Hierarchical model with BRMS (3p)
+:::{.callout-important}
+
+We have made changes to the assignment text and some of the rubrics to make it clearer.
+
+:::
+
 
 ## (a)
 
@@ -364,12 +381,11 @@ brms_fit = brm(
   weight ~ 1 + (1 | Diet),
   data=Chick12,
   prior=c(
-    # REPLACE WITH YOUR PRIOR FOR THE INTERCEPT
-    prior(normal(0,1), class="Intercept"), # prior for mu_0
-    # REPLACE WITH YOUR PRIOR FOR SIGMA
-    prior(normal(0,1), class="sigma"),     # prior for sigma
-    # REPLACE WITH YOUR PRIOR FOR SD
-    prior(normal(0,1), class="sd")         # prior for tau
+    # REPLACE WITH YOUR PRIOR DERIVED in 2)
+    prior(normal(0,10), class="Intercept"), 
+    # YOU CAN LEAVE THE BELOW PRIORS
+    prior(exponential(.02), class="sd"), 
+    prior(exponential(.02), class="sigma"), 
   ),
   backend = "cmdstanr",
   save_pars = save_pars(manual = c("z_1[1,4]"))
