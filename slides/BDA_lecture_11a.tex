@@ -1,1024 +1,909 @@
 \documentclass[t]{beamer}
 %\documentclass[finnish,english,handout]{beamer}
 
-% Uncomment if want to show notes
-% \setbeameroption{show notes}
-
-\mode<presentation>
-{
-  % \usetheme{Copenhagen}
-  % oder ...
-  
-  %\setbeamercovered{transparent}
-  % oder auch nicht
-}
-\setbeamertemplate{itemize items}[circle]
-\setbeamercolor{frametitle}{bg=white,fg=navyblue}
-
-
 \usepackage[T1]{fontenc}
-\usepackage[latin1]{inputenc}
-\usepackage{times}
-\usepackage{epic,epsfig}
-\usepackage{subfigure,float}
-\usepackage{amsmath,amsfonts,amssymb}
-\usepackage{inputenc}
+\usepackage[utf8]{inputenc}
+\usepackage{newtxtext} % times
+%\usepackage[scaled=.95]{cabin} % sans serif
+\usepackage{amsmath}
+\usepackage[varqu,varl]{inconsolata} % typewriter
+\usepackage[varg]{newtxmath}
+\usefonttheme[onlymath]{serif} % beamer font theme
+\usepackage{microtype}
 \usepackage{afterpage}
 \usepackage{url}
 \urlstyle{same}
-\usepackage{amsbsy}
-\usepackage{eucal}
+% \usepackage{amsbsy}
+% \usepackage{eucal}
 \usepackage{rotating}
 \usepackage{listings}
 \usepackage{lstbayes}
 \usepackage[all,poly,ps,color]{xy}
 \usepackage{eurosym}
-\usepackage{microtype}
 
 \usepackage{natbib}
 \bibliographystyle{apalike}
 
-\hypersetup{%
-  bookmarksopen=true,
-  bookmarksnumbered=true,
-  pdftitle={Stan},
-  pdfsubject={Bayesian data analysis},
-  pdfauthor={Aki Vehtari},
-  pdfkeywords={},
-  pdfstartview={FitH -32768},
-  colorlinks=true,
-  linkcolor=navyblue,
-  citecolor=navyblue,
-  filecolor=navyblue,
-  urlcolor=navyblue
+\mode<presentation>
+{
+  \setbeamercovered{invisible}
+  \setbeamertemplate{itemize items}[circle]
+  \setbeamercolor{frametitle}{bg=white,fg=navyblue}
+  \setbeamertemplate{navigation symbols}{}
+  \setbeamertemplate{headline}[default]{}
+  \setbeamertemplate{footline}[split]
+  % \setbeamertemplate{headline}[text line]{\insertsection}
+  % \setbeamertemplate{footline}[frame number]
 }
-
-% \definecolor{hutblue}{rgb}{0,0.2549,0.6784}
-% \definecolor{midnightblue}{rgb}{0.0977,0.0977,0.4375}
-% \definecolor{hutsilver}{rgb}{0.4863,0.4784,0.4784}
-% \definecolor{lightgray}{rgb}{0.95,0.95,0.95}
-% \definecolor{section}{rgb}{0,0.2549,0.6784}
-% \definecolor{list1}{rgb}{0,0.2549,0.6784}
-\definecolor{forestgreen}{rgb}{0.1333,0.5451,0.1333}
-\definecolor{navyblue}{rgb}{0,0,0.5}
-\renewcommand{\emph}[1]{\textcolor{navyblue}{#1}}
-
-\graphicspath{{./figs/}}
 
 \pdfinfo{            
-  /Title      (Bayesian data analysis 4)
+  /Title      (BDA, Lecture 11) 
   /Author     (Aki Vehtari) % 
-  /Keywords   (Bayesian probability theory, Bayesian inference, Bayesian data analysis)
+  /Keywords   (Bayesian data analysis)
+}
+% \documentclass[english,t]{beamer}
+% %\documentclass[handout,english,t]{beamer}
+
+% \mode<presentation>
+% {
+%   \usetheme{Copenhagen}
+%   % oder ...
+  
+% %  \setbeamercovered{transparent}
+%   % oder auch nicht
+% }
+
+% %\usepackage[pdftex]{graphicx}
+\graphicspath{{/home/ave/doc/images/}{}{../teranaloppu/}{../metodi/}{../slides/Hartikainen/}{../gphealth/}{../2008_09_RSS2008/}{../gphealth/}{../jyvaskyla2009/}{../nbbc2009/}{../gphealth/hippics/}{../euroheis2010/}{../pubgensens2011/}{../reykjavik2013/}{../liverpool2013/}{../../gpstuff/doc/}{./images/}{../aalto_stochastic/}{figs/}{fig/}{../venice2018/figs/}{../venice2018/fig/}}
+
+%%%%%%%%%%%%%%%%%%% for tikz figures %%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{ifthen}
+\usepackage{tikz,pgfplots}
+\usetikzlibrary{matrix}
+\usetikzlibrary{calc}
+\newlength{\figurewidth}
+\newlength{\figureheight}
+
+
+\def\figpdfdir{./figs/} % directory for pdf-figures
+\def\figtikzdir{./tikz/} % directory for tikz-figures 
+
+% this is replacement for the \input command used in the figure-environment which
+% takes into account whether pdf is forced
+\newcommand{\minput}[2][]{
+\ifthenelse{\equal{#1}{pdf}}
+	{ \includegraphics{\figpdfdir #2} }
+	{ \tikzset{external/remake next} \tikzsetnextfilename{#2} \input{\figtikzdir #2} }
 }
 
+% for externalization
+\usetikzlibrary{external}
+\tikzexternalize[prefix=\figpdfdir] 
+\tikzset{external/system call={lualatex
+	\tikzexternalcheckshellescape -halt-on-error -interaction=batchmode
+	-jobname "\image" "\texsource"}}
+    
+%%%%%%%%%%%%%%%%%%% for hiding figures %%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{color}
+\newcommand{\hide}[5][white]{
+	% usage: \hhide[color]{vspace,hspace,height,width}
+	% note: all measures are relative units measured in \textwidth
+	%\begin{minipage}{0.99\textwidth}
+	\vspace{#2\textwidth}
+	\hspace{#3\textwidth}
+	\textcolor{#1}{  \rule{#5\textwidth}{#4\textwidth}  }
+	% \end{minipage}
+      }
+      
+\DeclareMathOperator{\Kfu}{\mathbf{K}_{f,u}}
+\DeclareMathOperator{\Kuf}{\mathbf{K}_{u,f}}
+\DeclareMathOperator{\Kff}{\mathbf{K}_{f,f}}
+\DeclareMathOperator{\iKff}{\mathbf{K}_{f,f}^{-1}}
+\DeclareMathOperator{\Kfa}{\mathbf{K}_{f,\tilde{f}}}
+\DeclareMathOperator{\Kaf}{\mathbf{K}_{\tilde{f},f}}
+\DeclareMathOperator{\Kaa}{\mathbf{K}_{\tilde{f},\tilde{f}}}
+\DeclareMathOperator{\Kuu}{\mathbf{K}_{u,u}}
+\DeclareMathOperator{\iKuu}{\mathbf{K}_{u,u}^{-1}}
+\DeclareMathOperator{\Kau}{\mathbf{K}_{\tilde{f},u}}
+\DeclareMathOperator{\Kua}{\mathbf{K}_{u,\tilde{f}}}
+\DeclareMathOperator{\Qff}{\mathbf{Q}_{f,f}}
+\DeclareMathOperator{\Qaa}{\mathbf{Q}_{\tilde{f},\tilde{f}}}
+\DeclareMathOperator{\Qfa}{\mathbf{Q}_{f,\tilde{f}}}
+\DeclareMathOperator{\Qaf}{\mathbf{Q}_{\tilde{f},f}}
+\DeclareMathOperator{\x}{\mathbf{x}}
+\DeclareMathOperator{\f}{\mathbf{f}}
+\DeclareMathOperator{\y}{\mathbf{y}}
+\DeclareMathOperator{\h}{\mathbf{h}}
+\DeclareMathOperator{\uu}{\mathbf{u}}
+\DeclareMathOperator{\LL}{\mathbf{\Lambda}}
+\DeclareMathOperator{\bb}{\mathbf{b}}
+\DeclareMathOperator{\E}{\mathrm{E}}
+\def\WAIC{\mathrm{WAIC}}
 
-\parindent=0pt
-\parskip=8pt
-\tolerance=9000
-\abovedisplayshortskip=0pt
+\newcommand{\kin}{k^{\rm in}}
+\newcommand{\kout}{k^{\rm out}}
+\newcommand{\gi}{{R_0}}
+\newcommand{\eff}{{E_{\rm max}}}
+\newcommand{\HN}{{\rm N^+}}
+\newcommand{\lN}{{\rm LN}}
+\newcommand{\Rss}{R^{\rm ss}}
+\newcommand{\invlogit}{\mbox{logit}^{-1}}
 
-\setbeamertemplate{navigation symbols}{}
-\setbeamertemplate{headline}[default]{}
-\setbeamertemplate{headline}[text line]{\insertsection}
-\setbeamertemplate{footline}[frame number]
+% \DeclareMathOperator{\Poisson}{Poisson}
+\DeclareMathOperator{\Chi}{Chi}
+\DeclareMathOperator{\GP}{\mathcal{GP}}
+%\DeclareMathOperator{\N}{N}
+\DeclareMathOperator{\KL}{KL}
 
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\newcommand{\mb}{\mathbf}
+\newcommand{\pkg}[1]{{\fontseries{b}\selectfont #1}}
+\newcommand{\proglang}{}
+\newcommand{\email}[1]{\href{mailto:#1}{\normalfont\texttt{#1}}}
+\newcommand{\doi}[1]{\href{http://dx.doi.org/#1}{\normalfont\texttt{doi:#1}}}
+\newcommand{\code}[1]{{\normalfont\texttt{#1}}}
 
-\def\o{{\mathbf o}}
-\def\t{{\mathbf \theta}}
-\def\w{{\mathbf w}}
-\def\x{{\mathbf x}}
-\def\y{{\mathbf y}}
-\def\z{{\mathbf z}}
-
-\DeclareMathOperator{\E}{E}
+% \DeclareMathOperator{\E}{E}
+% \DeclareMathOperator{\VAR}{Var}
+% \DeclareMathOperator{\COV}{Cov}
+% \DeclareMathOperator{\Prob}{P}
+% \DeclareMathOperator{\E}{E}
 \DeclareMathOperator{\Var}{Var}
 \DeclareMathOperator{\var}{var}
+\DeclareMathOperator{\cov}{cov}
+\DeclareMathOperator{\logistic}{logistic}
+\DeclareMathOperator{\softmax}{softmax}
+\DeclareMathOperator{\Multinomial}{Multinomial}
 \DeclareMathOperator{\Sd}{Sd}
 \DeclareMathOperator{\sd}{sd}
-\DeclareMathOperator{\Gammad}{Gamma}
-\DeclareMathOperator{\Invgamma}{Inv-gamma}
 \DeclareMathOperator{\Bin}{Bin}
-\DeclareMathOperator{\Negbin}{Neg-bin}
 \DeclareMathOperator{\Poisson}{Poisson}
 \DeclareMathOperator{\Beta}{Beta}
 \DeclareMathOperator{\logit}{logit}
 \DeclareMathOperator{\N}{N}
 \DeclareMathOperator{\U}{U}
 \DeclareMathOperator{\BF}{BF}
-\DeclareMathOperator{\Invchi2}{Inv-\chi^2}
-\DeclareMathOperator{\NInvchi2}{N-Inv-\chi^2}
-\DeclareMathOperator{\InvWishart}{Inv-Wishart}
-\DeclareMathOperator{\tr}{tr}
-% \DeclareMathOperator{\Pr}{Pr}
+%\DeclareMathOperator{\Pr}{Pr}
 \def\euro{{\footnotesize \EUR\, }}
 \DeclareMathOperator{\rep}{\mathrm{rep}}
 
+\definecolor{set11}{HTML}{E41A1C}
+\definecolor{set12}{HTML}{377EB8}
+\definecolor{set13}{HTML}{4DAF4A}
+\definecolor{forestgreen}{rgb}{0.1333,0.5451,0.1333}
+\definecolor{hutblue}{rgb}{0,0.2549,0.6784}
+\definecolor{midnightblue}{rgb}{0.0977,0.0977,0.4375}
+\definecolor{navyblue}{rgb}{0,0,0.5}
+\definecolor{hutsilver}{rgb}{0.4863,0.4784,0.4784}
+\definecolor{lightgray}{rgb}{0.95,0.95,0.95}
+\definecolor{section}{rgb}{0,0.2549,0.6784}
+\definecolor{list1}{rgb}{0,0.2549,0.6784}
+%\renewcommand{\emph}[1]{\textcolor{navyblue}{#1}}
+%\renewcommand{\emph}[1]{\textcolor{navyblue}{#1}}
+
+%\graphicspath{./pics}
+
+\parindent=0pt
+\parskip=8pt
+\tolerance=9000
+\abovedisplayshortskip=0pt
+
+%\renewcommand{\itemsep}{0pt}
+% Lists
+\newenvironment{list1}{
+   \begin{list}{$\color{list1}\bullet$}{\itemsep=6pt}}{
+  \end{list}}
+\newenvironment{list1s}{
+  \begin{list}{$\includegraphics[width=5pt]{logo.eps}$}{\itemsep=6pt}}{
+  \end{list}}
+\newenvironment{list2}{
+  \begin{list}{-}{\baselineskip=12pt\itemsep=2pt}}{
+  \end{list}}
+\newenvironment{list3}{
+  \begin{list}{$\cdot$}{\baselineskip=15pt}}{
+  \end{list}}
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{headline}[default]
+%\setbeamertemplate{headline}[text line]{\insertshorttitle\insertshortsubtitle}
+%\setbeamertemplate{footline}[frame number]
+%\setbeamertemplate{footline}[default]
+\setbeamertemplate{footline}[split]
+%\setbeamertemplate{footline}[text line]{\insertshorttitle\insertshortsubtitle}
 
 
-\title[]{Bayesian data analysis}
-\subtitle{}
-
-\author{Aki Vehtari}
-
-\institute[Aalto]{}
+\title[]{\LARGE{Use of reference models in model selection}}
 
 
-\begin{document} 
+\author[Aki.Vehtari@aalto.fi -- @avehtari]{Aki Vehtari \\ 
+  \small{\texttt{Aki.Vehtari@aalto.fi}}}  %\inst{1}
 
-\begin{frame}{Chapter 4}
+\institute[Department of Computer Science\\
+Aalto University] % (optional, aber oft nÃ¶tig)
+{Department of Computer Science\\
+Aalto University}
+% \institute[Department of Computer Science\\
+% Aalto University] % (optional, aber oft nÃ¶tig)
+% {\includegraphics[height=3cm,clip]{Aalto_EN_Science_13_CMYK-COATED_3.pdf}\\
+%\vspace{-8mm}
+%(former Helsinki University of Technology)
+%\\
+%~
+%\\
+%Department of Biomedical Engineering and Computational Science (BECS)
+%}
+ 
+\date[]{}
 
-  \begin{itemize}
-  \item 4.1 Normal approximation (Laplace's method)
-  \item 4.2 Large-sample theory
-  \item 4.3 Counter examples
-    \begin{itemize}
-    \item includes examples of difficult posteriors for MCMC, too
-    \end{itemize}
-  \item {\color{gray} 4.4 Frequency evaluation*}
-  \item {\color{gray} 4.5 Other statistical methods*}
-  \end{itemize}
+%\beamerdefaultoverlayspecification{<+->}
 
-\end{frame}
+\begin{document}
 
-\begin{frame}{Normal approximation (Laplace approximation)}
+%  \begin{frame}[plain]
+%    \titlepage
+%  \end{frame}
 
-  \begin{itemize}
-  \item Often posterior converges to normal distribution when
-    $n\rightarrow \infty$
-    \begin{itemize}
-    \item bounded, non-singular, the number of parameters don't grow with $n$
-  %   \end{itemize}
-  % \item If posterior is unimodal and close to symmetric
-  %   \begin{itemize}
-    \item we can then approximate $p(\theta|y)$ with normal distribution
-    % \only<1-3>{\begin{align*}
-    %   p(\theta|y)&\approx \frac{1}{\sqrt{2\pi}\sigma_\theta}\exp\left(-\frac{1}{2\sigma_\theta^2}(\theta-\hat{\theta})^2\right)
-    % \end{align*}}
-  \item<2> Laplace used this (before Gauss) to approximate the
-    posterior of binomial model to infer ratio of girls and boys born
-  % \item<3> A strict proof by LeCam in 1950's
-  \end{itemize}
-\end{itemize}
-\vspace{-3\baselineskip}
-\uncover<3->{\hspace{-5mm}\includegraphics[width=11cm]{bioassay_norm.pdf}}
-
-\end{frame}
-
-\begin{frame}{Taylor series}
+% \begin{frame}[c]
   
-  \begin{itemize}
-    \item We can approximate $p(\theta|y)$ with normal distribution
-    \begin{align*}
-      p(\theta|y)&\approx \frac{1}{\sqrt{2\pi}\sigma_\theta}\exp\left(-\frac{1}{2\sigma_\theta^2}(\theta-\hat{\theta})^2\right)
-    \end{align*}
-      \begin{itemize}
-      \item i.e. log posterior $\log p(\theta|y)$ can be
-        approximated with a quadratic function
-      \end{itemize}
-    \begin{align*}
-      \log p(\theta|y)& \approx \alpha(\theta-\hat{\theta})^2 + C
-    \end{align*}
-  \item<2-> Corresponds to Taylor series expansion around $\theta=\hat{\theta}$
-    \begin{equation*}
-      f(\theta)=f(\hat{\theta}) {\only<3->{\color{gray}}+ f'(\hat{\theta})(\theta-\hat{\theta})} + \frac{f''(\hat{\theta})}{2!}(\theta-\hat{\theta})^2 {\only<4->{\color{gray}} +\frac{f^{(3)}(\hat{\theta})}{3!}(\theta-\hat{\theta})^3+\ldots}
-    \end{equation*}
-    \begin{itemize}
-    \item<3-> if $\hat{\theta}$ is at mode, then $f'(\hat{\theta})=0$
-    \item<4-> often when $n \rightarrow \infty$, $\frac{f^{(3)}(\hat{\theta})}{3!}(\theta-\hat{\theta})^3+\ldots$ is small
-    \end{itemize}
-  \end{itemize}
-  
-\end{frame}
 
-\begin{frame}{Multivariate Taylor series}
-  
-  \begin{itemize}
-    \item Multivariate series expansion
-      \begin{equation*}
-        f(\theta)= f(\hat{\theta}) {\color{gray} + \frac{d f(\theta')}{d \theta'}_{\theta'=\hat{\theta}}(\theta-\hat{\theta})}
-        + \frac{1}{2!}(\theta-\hat{\theta})^T  \frac{d^2 f(\theta')}{d \theta'^2}_{\theta'=\hat{\theta}} (\theta-\hat{\theta}) {\color{gray} + \ldots}
-          % \sum_{j=0}^\infty\left\{\frac{1}{j!}\left[\sum_{k=1}^n(x_k-a_k)\frac{\partial}{\partial x_k'}\right]^j
-          % f(x_1',\ldots,x_n')\right\}_{x_1'=a_1,\ldots,x_n'=a_n}
-      \end{equation*}~
-  \end{itemize}
-  
-\end{frame}
 
-% \note{Onko joku joka ei muista Taylorin sarjakehitelmää?
-% Nimetty 1700-luvulla elännen Taylorin mukaan
-
-%PIIRTELE TAULULLE}
-
-\begin{frame}{Normal approximation}
-
-    \begin{itemize}
-      \only<1-2>{
-  \item Taylor series expansion of the log posterior around the posterior mode
-    $\hat{\theta}$
-    \begin{equation*}
-      \log p(\theta|y) = \log p(\hat{\theta}|y) +
-      \frac{1}{2}(\theta-\hat{\theta})^T\left[\frac{d^2}{d\theta^2}\log p(\theta'|y) \right]_{\theta'=\hat{\theta}} (\theta-\hat{\theta})+\ldots
-    \end{equation*}
-    }
-  \item<2-> Multivariate normal $\propto\left|\Sigma\right|^{-1/2} \exp\left(-\frac{1}{2}(\theta-\hat{\theta}^T)\Sigma^{-1}(\theta-\hat{\theta})\right)$
-  \end{itemize}
-  \vspace{-0.5\baselineskip}
-  \only<3>{
-    \includegraphics[width=11cm]{cond_excat_norm.pdf}}
-  \only<4>{
-    \includegraphics[width=11cm]{cond_excat_norm_log.pdf}}
-
-\end{frame}
-
-\begin{frame}{Normal approximation}
-
-  \begin{itemize}
-  % \item Taylor series expansion of the log posterior around the posterior mode
-  %   $\hat{\theta}$
-  %   \begin{equation*}
-  %     \log p(\theta|y) = \log p(\hat{\theta}|y) +
-  %     \frac{1}{2}(\theta-\hat{\theta})^T\left[\frac{d^2}{d\theta^2}\log p(\theta'|y) \right]_{\theta'=\hat{\theta}} (\theta-\hat{\theta})+\ldots
-  %   \end{equation*}
-  % \item Multivariate normal $\propto\left|\Sigma\right|^{-1/2} \exp\left(-\frac{1}{2}(\theta-\hat{\theta}^T)\Sigma^{-1}(\theta-\hat{\theta})\right)$
-
-  \item Normal approximation 
-    \begin{equation*}
-      p(\theta|y) \approx \N(\hat{\theta},[I(\hat{\theta})]^{-1})
-    \end{equation*}
-    where $I(\theta)$ is called {\em observed information}
-    \begin{equation*}
-      I(\theta) = - \frac{d^2}{d\theta^2}\log p(\theta|y)
-    \end{equation*}
-    \uncover<2->{Hessian $H(\theta)=-I(\theta)$}
-  \end{itemize}
-
-\end{frame}
-
-\begin{frame}{Normal approximation}
-
-  \begin{itemize}
-  \item $I(\theta)$ is called {\em observed information}
-    \begin{equation*}
-      I(\theta) = - \frac{d^2}{d\theta^2}\log p(\theta|y)
-    \end{equation*}
-    \begin{itemize}
-    \item $I(\hat{\theta})$ is the second derivatives at the mode and
-      thus describes the curvature at the mode
-    \item if the mode is inside the parameter space, $I(\hat{\theta})$
-      is positive
-    \item if $\theta$ is a vector, then $I(\theta)$ is a matrix
-%    \item Käytetään myös nimitystä {\em Hessian} $H(\theta)$
-  \end{itemize}
-\end{itemize}
-
-\end{frame}
-
-\begin{frame}{Normal approximation}
-
-    \begin{itemize}
-    \item BDA3 Ch 4 has an example where it is easy to compute first
-      and second derivatives and there is easy analytic solution to
-      find where the first derivatives are zero
-    \end{itemize}
+%   \begin{center}
+%     {\Large\color{navyblue}\bf Use of Reference Models in Model Selection}\\ \vspace{1\baselineskip}
     
-\end{frame}
+% {\color{set12}    \Large{Aki Vehtari\\\vspace{0.25\baselineskip}
+%       \large Aalto University\\
+%     Finnish Center for Artificial Intelligence}}\\ \vspace{0.5\baselineskip}
+%     \large{based on several papers (refs in the end) with\\ \vspace{0.2\baselineskip}
+%       Juho Piironen, Markus Paasiniemi, Federico Pavone (University of
+%       Bocconi)}, Paul-Christian BÃ¼rkner, Homayun Afrabandpey, Tomi
+%     Peltola, Samuel Kaski, Alejandro Catalina, Donald R. Williams (UC
+%     Davis), Philippe Rast (UC Davis), Ojanen
+
+% \end{center}
+% \end{frame}
+
+\begin{frame}{Variable selection with projpred}
+
+  \begin{itemize}
+  \item<+-> In your project it is sufficient to compare 2--3 models
+  \item<+-> ...but if you are interested in variable selection, then the
+    number of potential models is $2^p$, where $p$ is the number of
+    variables
+  \item<+-> ...in such case I recommended to use \texttt{brms} + \texttt{projpred}
+  \item<+-> \texttt{projpred} avoids the overfit in model selection
+  \end{itemize}
   
-\begin{frame}{Normal approximation -- example}
-
-  \begin{itemize}
-    \item Normal distribution, unknown mean and variance
-      \begin{itemize}
-        \item uniform prior $(\mu,\log\sigma)$
-        \item normal approximation for the posterior of $(\mu,\log\sigma)$
-      \end{itemize}
-      \begin{eqnarray*}
-        \log
-        p(\mu,\log\sigma|y)=& \mathrm{constant}-n\log\sigma- \\
-        & \frac{1}{2\sigma^2}[(n-1)s^2 + n(\bar{y}-\mu)^2]
-      \end{eqnarray*}
-      \pause
-      first derivatives
-      \begin{eqnarray*}
-        \frac{d}{d\mu}\log p(\mu,\log\sigma|y) & = & \frac{n(\bar{y}-\mu)}{\sigma^2},\\
-        \pause
-        \frac{d}{d(\log\sigma)}\log p(\mu,\log\sigma|y) &
-         = &  -n + \frac{(n-1)s^2+n(\bar{y}-\mu)^2}{\sigma^2},
-      \end{eqnarray*}
-      \pause
-      from which it is easy to compute the mode
-      \begin{eqnarray*}
-        (\hat{\mu},\log\hat{\sigma})=\left(\bar{y},\frac{1}{2}\log\left(\frac{n-1}{n}s^2\right)\right)
-      \end{eqnarray*}
-  \end{itemize}
-
 \end{frame}
 
-% \note{tässä parametrisoidaan malli $\log\sigma$:n avulla\\
-% muistanette varmaankin, että priorina uniformi priori $\log\sigma$:lle
-% vastaa $1/\sigma$ prioria sigmalle, joka voidaan
-% muuttujanvaihdoksella helposti todeta
 
-% \begin{align*}
-%   p(\log\sigma)&=|J|p(\sigma)=\frac{d \sigma}{d\log\sigma} \frac{1}{\sigma}=\sigma \frac{1}{\sigma}=1
-% \end{align*}
-
-% \begin{align*}
-%   \frac{d}{d\mu}(\bar{y}-\mu)^2=-2(\bar{y}-\mu)
-% \end{align*}
-
-% \begin{align*}
-%   \frac{d}{d\log\sigma}\sigma^{-2}=\frac{d}{d\log\sigma}\exp(\log\sigma)^{-2}=-2\exp(\log\sigma)^{-3}(\log\sigma)=-2\exp(\log\sigma)^{-2}=-2 \sigma^{-2}
-% \end{align*}
-%  % LASKE muuttujanvaihdos valmiiksi!
-% }
-
-\begin{frame}{Normal approximation -- example}
+\begin{frame}{Use of reference models in model selection}
 
   \begin{itemize}
-    \item Normal distribution, unknown mean and variance\\
-      first derivatives
-      \begin{eqnarray*}
-        \frac{d}{d\mu}\log p(\mu,\log\sigma|y) & = & \frac{n(\bar{y}-\mu)}{\sigma^2},\\
-        \frac{d}{d(\log\sigma)}\log p(\mu,\log\sigma|y) & = & -n + \frac{(n-1)s^2+n(\bar{y}-\mu)^2}{\sigma^2}
-      \end{eqnarray*}
-      \pause
-      second derivatives
-      \begin{eqnarray*}
-        \frac{d^2}{d\mu^2}\log p(\mu,\log\sigma|y) & = & -\frac{n}{\sigma^2},\\
-        \pause \frac{d^2}{d\mu d(\log\sigma)}\log p(\mu,\log\sigma|y) & 
-        = & -2n\frac{\bar{y}-\mu}{\sigma^2},\\
-        \pause \frac{d^2}{d(\log\sigma)^2}\log p(\mu,\log\sigma|y) & 
-        = & -\frac{2}{\sigma^2}((n-1)s^2+n(\bar{y}-\mu)^2)
-      \end{eqnarray*}
+  \item Background
+  \item First example
+  \item Bayesian and decision theoretical justification
+  \item More examples
+  % \item Going forward
   \end{itemize}
-
+  
 \end{frame}
 
-\begin{frame}{Normal approximation -- example}
+\begin{frame}{Not a novel idea}
 
   \begin{itemize}
-    \item Normal distribution, unknown mean and variance\\
-      second derivatives
-      \begin{eqnarray*}
-        \frac{d^2}{d\mu^2}\log p(\mu,\log\sigma|y) & = & -\frac{n}{\sigma^2},\\
-        \frac{d^2}{d\mu(\log\sigma)}\log p(\mu,\log\sigma|y) & = & -2n\frac{\bar{y}-\mu}{\sigma^2},\\
-        \frac{d^2}{d(\log\sigma)^2}\log p(\mu,\log\sigma|y) & = & -\frac{2}{\sigma^2}((n-1)s^2+n(\bar{y}-\mu)^2)
-      \end{eqnarray*}
-      matrix of the second derivatives at $(\hat{\mu},\log\hat{\sigma})$
-      \begin{eqnarray*}
-        \begin{pmatrix}
-          -n/\hat{\sigma}^2 & 0 \\
-          0 & -2n
-        \end{pmatrix}
-      \end{eqnarray*}
-  \end{itemize}
-
-\end{frame}
-
-\begin{frame}{Normal approximation -- example}
-
-  \begin{itemize}
-    \item Normal distribution, unknown mean and variance\\
-      posterior mode
-      \begin{eqnarray*}
-        (\hat{\mu},\log\hat{\sigma})=\left(\bar{y},\frac{1}{2}\log\left(\frac{n-1}{n}s^2\right)\right)
-      \end{eqnarray*}
-      matrix of the second derivatives at $(\hat{\mu},\log\hat{\sigma})$
-      \begin{eqnarray*}
-        \begin{pmatrix}
-          -n/\hat{\sigma}^2 & 0 \\
-          0 & -2n
-        \end{pmatrix}
-      \end{eqnarray*}
-      normal approximation
-      \begin{equation*}
-        p(\mu,\log\sigma|y) \approx \N\left(
-          \begin{pmatrix}
-            \mu \\ \log\sigma
-          \end{pmatrix}
-          \Bigg|
-          \begin{pmatrix}
-            \bar{y} \\ \log\hat{\sigma}
-          \end{pmatrix},
-        \begin{pmatrix}
-          \hat{\sigma}^2/n & 0 \\
-          0 & 1/(2n)
-        \end{pmatrix}
-        \right)
-      \end{equation*}
-  \end{itemize}
-
-\end{frame}
-
-\begin{frame}[fragile]
-  \frametitle{Normal approximation -- numerically}
-
-  \begin{itemize}
-  \item Normal approximation can be computed numerically
+  \item<+-> Lindley (1968): \textit{The choice of variables in multiple regression}
     \begin{itemize}
-    \item iterative optimization to find a mode (may use gradients)
-    \item autodiff or finite-difference for gradients and Hessian
-    \item<2> e.g. in R, demo4\_1.R:
-    {\scriptsize
-\begin{lstlisting}[]
-bioassayfun <- function(w, df) {
-  z <- w[1] + w[2]*df$x
-  -sum(df$y*(z) - df$n*log1p(exp(z)))
+      % \vspace{-1\baselineskip}
+    \item Bayesian and decision theoretical justification, but
+      simplified model and computation
+    \end{itemize}
+  \item<+-> Goutis \& Robert (1998): \textit{Model choice in generalised
+      linear models: a Bayesian approach via Kullback-Leibler
+      projections}
+    \begin{itemize}
+    \item one key part for practical computation
+    \end{itemize}
+  \item<+-> Related approaches
+    \begin{itemize}
+    \item gold standard,
+     preconditioning,
+     teacher and student,
+     distilling,
+     $\ldots$
+    \end{itemize}
+  \item<+-> Motivation in these
+    \begin{itemize}
+    \item measurement cost in covariates
+    \item running cost of predictive model
+    \item easier explanation / learn from the model
+\end{itemize}
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Example: Simulated regression}
+
+\vspace{-1.5\baselineskip}
+  
+\begin{minipage}[t]{0.3\linewidth}
+\begin{equation*}
+  \only<2->{\color{gray}}
+\begin{alignedat}{1}
+  f &  \sim \N(0,1),  \\
+  y \mid f &\sim \N(f, 1) 
+\end{alignedat}
+\end{equation*}
+\end{minipage}
+\uncover<2->{
+  \begin{minipage}[t]{0.4\linewidth}
+\begin{equation*}
+\begin{alignedat}{2}
+  x_j \mid f &\sim \N(\sqrt{\rho}f,\, 1-\rho), \qquad && j = 1,\dots,150 \,, \\
+  x_j \mid f &\sim \N(0, 1), && j = 151,\dots, 500 \,.
+\end{alignedat}
+\end{equation*}
+\end{minipage}
+\vspace{-0.7\baselineskip}
 }
 
-theta0 <- c(0,0)
-optimres <- optim(w0, bioassayfun, gr=NULL, df1, hessian=T)
-thetahat <- optimres$par
-Sigma <- solve(optimres$hessian)
-\end{lstlisting}
-      }
-    \end{itemize}
-  \end{itemize}
+\center
+\only<1>{\includegraphics[width=8cm]{fy.pdf}}\only<2>{~}\only<3>{\includegraphics[width=8cm]{fx1.pdf}}\only<4>{\includegraphics[width=8cm]{fx151.pdf}}\only<5>{\includegraphics[width=8cm]{fx2.pdf}}\only<6>{\includegraphics[width=8cm]{fx152.pdf}}\only<7>{\includegraphics[width=8cm]{fx3.pdf}}\only<8>{\includegraphics[width=8cm]{fx153.pdf}}\only<9>{\includegraphics[width=8cm]{fx4.pdf}}\only<10>{\includegraphics[width=8cm]{fx154.pdf}}
+
+% \begin{itemize}
+% \item<2-> $y$ are noisy observations about latent $f$ \pause
+% \item<3-> First $p_\text{rel}=150$ features are correlated with $\rho$ and predictive about $y$ \pause
+% \item<4-> Remaining $350$ features are irrelevant random noise
+% \end{itemize}
+% \uncover<5>{Generate one data set $\{ x^{(i)}, y^{(i)}\}^n_{i=1}$ with $n=30$ and $\rho=0.5$ and assess the feature relevances}
+
 \end{frame}
 
-\begin{frame}{Normal approximation -- numerically}
+\begin{frame}{Example: Individual correlations}
 
-  \begin{itemize}
-  \item Normal approximation can be computed numerically
-    \begin{itemize}
-    \item iterative optimization to find a mode (may use gradients)
-    \item autodiff or finite-difference for gradients and Hessian
-    \end{itemize}
-  \item RStanARM has an option {\small\tt algorithm='optimizing'}
-    \uncover<2->{
-    \begin{itemize}
-    \item uses L-BFGS quasi-Newton optimization algorithm for finding the mode
-    \item uses autodiff for gradients
-    \item uses finite differences of gradients to compute Hessian
-      \begin{itemize}
-      \item<3-> second order autodiff in progress
-      \end{itemize}
-    \end{itemize}
-    }
-  \end{itemize}
+\vspace{-1.5\baselineskip}
+  
+\begin{minipage}[t]{0.3\linewidth}
+\begin{equation*}
+\begin{alignedat}{1}
+  f &  \sim \N(0,1),  \\
+  y \mid f &\sim \N(f, 1) 
+\end{alignedat}
+\end{equation*}
+\end{minipage}
+  \begin{minipage}[t]{0.4\linewidth}
+\begin{equation*}
+\begin{alignedat}{2}
+  x_j \mid f &\sim \N(\sqrt{\rho}f,\, 1-\rho), \qquad && j = 1,\dots,150 \,, \\
+  x_j \mid f &\sim \N(0, 1), && j = 151,\dots, 500 \,.
+\end{alignedat}
+\end{equation*}
+\end{minipage}
+\vspace{-0.2\baselineskip}
+
+\center
+\only<1-2>{Correlation for $x_j,y$\\}
+\only<3>{Correlation for $x_j,f$\\}
+\only<4>{Correlation for $x_j,f_*$ ($f_*$ = PCA + linear regression)\\}
+\vspace{-0.5\baselineskip}
+\only<1>{\includegraphics[width=8cm]{Ry_ordered.pdf}}\only<2>{\includegraphics[width=8cm]{Ry.pdf}}\only<3>{\includegraphics[width=8cm]{Rf.pdf}}\only<4>{\includegraphics[width=8cm]{Rfs.pdf}}
+
+% \begin{itemize}
+% \item<2-> $y$ are noisy observations about latent $f$ \pause
+% \item<3-> First $p_\text{rel}=150$ features are correlated with $\rho$ and predictive about $y$ \pause
+% \item<4-> Remaining $350$ features are irrelevant random noise
+% \end{itemize}
+% \uncover<5>{Generate one data set $\{ x^{(i)}, y^{(i)}\}^n_{i=1}$ with $n=30$ and $\rho=0.5$ and assess the feature relevances}
+
 \end{frame}
 
-\begin{frame}{Normal approximation}
+% \begin{frame}{}
 
-  \begin{itemize}
-  \item Optimization and computation of Hessian requires usually much
-    less density evaluations than MCMC
-  \item<2-> In some cases accuracy is sufficient
-  \item<3-> In some cases accuracy for a conditional distribution is
-    sufficient (Ch 13)
-    \begin{itemize}
-    \item e.g. Gaussian latent variable models, such as Gaussian
-      processes (Ch 21) and Gaussian Markov random fields
-    \item Rasmussen \& Williams: Gaussian Processes for Machine Learning
-    \item CS-E4895 - Gaussian Processes (starting 27th February)
-    %   \begin{itemize}
-    %   \item CS-E4070 - Special Course in Machine Learning and Data
-    %     Science: Gaussian processes - theory and applications
-    % \end{itemize}
-    \end{itemize}
-  \item<4-> Accuracy can be improved by importance sampling (Ch 10)
-  \end{itemize}
-\end{frame}
+%   {\Large\color{navyblue} Individual variable relevances}
 
-\begin{frame}{Example: Importance sampling in Bioassay}
+%   $n=30$, $p=500$, $p_\text{rel}=150$, $\rho=0.5$.
 
-   \vspace{-.5\baselineskip}
-   \makebox[12cm][t]{
-     \hspace{-0.9cm}
-     \begin{minipage}[t][12cm][t]{12cm}
-       \begin{center}
-        \makebox[0cm][t]{\hspace{-0.5cm}\rotatebox{90}{\hspace{1cm}Grid}}
-        \includegraphics[width=3.4cm]{bioassayis1d.pdf}
-      \includegraphics[width=3.4cm]{bioassayis1s.pdf}
-      \includegraphics[width=3.4cm]{bioassayis1h.pdf}\\
-      \only<2->{
-        \makebox[0cm][t]{\hspace{-0.5cm}\rotatebox{90}{\hspace{1cm}Normal}}
-      \includegraphics[width=3.4cm]{bioassayis2d.pdf}
-      \includegraphics[width=3.4cm]{bioassayis2s.pdf}
-      \includegraphics[width=3.4cm]{bioassayis2h.pdf}\\}
-    \only<3>{But the normal approximation is not that good here:\\ Grid sd(LD50) $\approx$ 0.1, Normal sd(LD50) $\approx$ .75!}
-      \only<4->{
-        \makebox[0cm][t]{\hspace{-0.5cm}\rotatebox{90}{\hspace{1cm}IS}}
-      \includegraphics[width=3.4cm]{bioassayis3d.pdf}
-      \includegraphics[width=3.4cm]{bioassayis3s.pdf}
-      \includegraphics[width=3.4cm]{bioassayis3h.pdf}\\}
-    \only<5->{Grid sd(LD50) $\approx$ 0.1, IS sd(LD50) $\approx$ 0.1}
-    \end{center}
-     \end{minipage}  
-   }
+%   \includegraphics[width=5.5cm]{toy_corr1.pdf}\\
+%   \vspace{-0.2cm}
+%   \hspace{0.5cm} {\color{set12} irrelevant $x_j$}, {\color{set11} relevant $x_j$}\\
+%   \vspace{0.2cm}
+%   \hspace{0.5cm} Sample correlation with $y$\\
+  
+% \end{frame}
+
+\begin{frame}{\only<1>{Knowing the latent values would help}\only<2>{Estimating the latent values with a reference}\uncover<2->{ model helps}}
+
+  \hspace{-0.4cm}
+  \includegraphics[width=5.5cm]{toy_corr2.pdf}
+  \uncover<2->{\includegraphics[width=5.5cm]{toy_corr3.pdf}}\\
+  \vspace{-0.2cm}
+  \hspace{0.5cm} {\color{set12} irrelevant $x_j$}, {\color{set11} relevant $x_j$}\\
+  \vspace{0.2cm}
+  A) Sample correlation with $y$ vs. sample correlation with $f$\\
+  \uncover<2->{B) Sample correlation with $y$ vs. sample correlation with $f_*$\\
+  % $f_* = $ linear regression fit with 3 supervised principal components}
+  $f_* = $ linear regression fit with 3 principal components}
   
 \end{frame}
 
-\begin{frame}{Normal approximation}
+\begin{frame}{Bayesian justification}
   
   \begin{itemize}
-  \item<1-> Accuracy can be improved by importance sampling
-  \item<1-> Pareto-$k$ diagnostic of importance sampling weights can be
-    used for diagnostic
+  \item  Theory says to integrate over all the uncertainties
     \begin{itemize}
-    \item in Bioassay example $k=0.57$, which is ok
+    \item build a rich model
+    \item make model checking etc.
+    \item this model can be the reference model
     \end{itemize}
-  \item<2-> RStanARM has an option {\small\tt algorithm='optimizing'}
+  \item<2-> Consider model selection as decision problem
+  \item<3-> Replace full posterior {\color{set11} $p(\theta \mid D)$} with
+    some constrained {\color{set12} $q(\theta)$} so that the {\color{set13} \emph{predictive
+      distribution}} changes as little as possible
+  \item<4-> Example constraints
     \begin{itemize}
-    \item since version 2.19.2 (2019-10-03)
-      \begin{itemize}
-      \item[+] Pareto-$k$ diagnostic
-      \item[+] importance resampling (IR)
-      \end{itemize}
+    \item {\color{set12} $q(\theta)$} can have only point mass at some $\theta_0$ \\
+      $\Rightarrow$ ``Optimal point estimates''
+    \item<5-> Some covariates must have exactly zero regression coefficient \\
+      $\Rightarrow$ ``Which covariates can be discarded''
+    \item<6-> Much simpler model \\
+      $\Rightarrow$ ``Easier explanation''
     \end{itemize}
-  \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Logistic regression with two covariates}
+
+  \vspace{\baselineskip}
+  
+  \begin{overlayarea}{\textwidth}{0.7\textwidth}
+    \begin{minipage}{0.99\textwidth}
+      \begin{center}
+        \only<1>{ \minput{proj_posterior} }%
+        \only<2>{ \minput{proj_b1b2_single} }%
+        \only<3>{ \minput{proj_b2_single} }%
+        \only<4>{ \minput{proj_b1_single} }%
+        \only<5>{ \minput{proj_b2_dbd} }%
+        \only<6>{ \minput{proj_b1_dbd} }%
+      \end{center}
+    \end{minipage}
+    \begin{minipage}{0.99\textwidth}
+      \only<1>{Full posterior for $\beta_1$ and $\beta_2$ and contours of predicted class probability}
+      \only<2>{Projected point estimates for $\beta_1$ and $\beta_2$}
+      \only<3>{Projected point estimates, constraint $\beta_1 = 0$}
+      \only<4>{Projected point estimates, constraint $\beta_2 = 0$}
+      \only<5>{Draw-by-draw projection, constraint $\beta_1 = 0$}
+      \only<6>{Draw-by-draw projection, constraint $\beta_2 = 0$}
+    \end{minipage}
+  \end{overlayarea}
 \end{frame}
 
 
-\begin{frame}{Other distributional approximations}
+\begin{frame}{Predictive projection}
 
+
+  \begin{itemize}
+  \item Replace full posterior {\color{set11} $p(\theta \mid D)$} with
+    some constrained {\color{set12} $q(\theta)$} so that the {\color{set13} \emph{predictive
+      distribution}} changes as little as possible
+  \item<2-> As the full posterior {\color{set11} $p(\theta \mid D)$} is projected to {\color{set12} $q(\theta)$}
     \begin{itemize}
-    \item<+-> Higher order derivatives at the mode can be used
-    \item<+-> Split-normal and split-$t$ by Geweke (1989) use additional
-      scaling along different principal axes
-    \item<+-> Other distributions can be used (e.g. $t$-distribution)
-    \item<+-> Instead of mode and Hessian at mode, e.g.
-      \begin{itemize}
-      \item variational inference (Ch 13)
+    \item the prior is also projected and there is no need to define
+      priors for submodels separately
+    \item<3-> even if we constrain some coefficients to be $0$, the
+      predictive inference is conditoned on the information related
+      features contributed to the reference model
+    \item<4-> solves the problem of how to do the inference after the
+      model selection
+    \end{itemize}
+  \end{itemize}
+
+  
+\end{frame}
+
+\frame{
+
+  {\Large\color{navyblue} Projective selection}
+
+\begin{itemize}
+	\item How to select a feature combination? \pause
+	\item For a given model size, choose feature combination with minimal projective loss \pause
+	\item Search heuristics, e.g. 
+	\begin{itemize}
+        \item Monte Carlo search
+        \item Forward search
+        \item $L_1$-penalization (as in Lasso)
+	\end{itemize} \pause 
+      \item Use cross-validation to select the appropriate model size
         \begin{itemize}
-        \item CS-E4820 - Machine Learning: Advanced Probabilistic Methods
-        \item CS-E4895 - Gaussian Processes
-        \item Stan has the ADVI algorithm, and soon Pathfinder algorithm
-        \item instead of normal, methods with flexible flow transformations
+        \item need to cross-validate over the search paths
         \end{itemize}
-      \item expectation propagation  (Ch 13)
-      \item speed of these is usually between optimization and MCMC
-      \end{itemize}
-    \end{itemize}
-
-\end{frame}
-
-\begin{frame}{Distributional approximations}
-
-    \vspace{-\baselineskip}
-{\small {\color{blue} Exact}, {\color{red} Normal at mode}, {\color{forestgreen} Normal with variational inference}}
-    
-  \makebox[12cm][t]{
-    \hspace{-.7cm}
-\begin{minipage}[t]{12cm}
-  \includegraphics[width=12cm]{cond_excat_normfr2.pdf}\\
-   \includegraphics[width=12cm]{cond_excat_normfr3.pdf}
- \end{minipage}
+      \end{itemize} 
 }
 
-    \vspace{-.5\baselineskip}
-\uncover<2->{\footnotesize
-  Grid sd(LD50) $\approx$ 0.090,\\
-  Normal sd(LD50) $\approx$ .75,
-  Normal + IR sd(LD50) $\approx$ 0.096 (Pareto-$k$ = 0.57)\\}
-\uncover<3->{\footnotesize
-  VI sd(LD50) $\approx$ 0.13,
-  VI + IR sd(LD50) $\approx$ 0.095 (Pareto-$k$ = 0.17)
+
+\frame{
+
+  {\Large\color{navyblue} Projective selection vs. Lasso}
+
+Same simulated regression data as before, \\
+$n=50$, $p=500$, $p_\text{rel} = 150$, $\rho=0.5$
+
+\vspace{0.5em}
+
+  \makebox[12.1cm][t]{
+    \hspace{-0.5cm}
+  \begin{minipage}{0.99\textwidth}
+      \only<1>{\includegraphics[width=5.5cm]{vslasso1rmse.pdf}}
+      \only<2>{\includegraphics[width=5.5cm]{vslasso2rmse.pdf}}
+      \only<3->{\includegraphics[width=5.5cm]{vslasso3rmse.pdf}}
+      \uncover<4>{\includegraphics[width=5.5cm]{vslasso3mlpd.pdf}}
+  \end{minipage}
   }
-
-\end{frame}
-
-\begin{frame}{Variational inference}
-
-  \begin{itemize}
-  \item<+-> Variational inference includes a large number of methods
-  \item<+-> For a restricted set of models, possible to derive
-    deterministic algorithms
-    \begin{itemize}
-    \item can be fast and can be relatively accurate
-    \end{itemize}
-  \item<+-> Using stochastic (Monte Carlo) estimation of the
-    divergence, possible to derive generic black box algorithms
-    \begin{itemize}
-    \item<+-> possible to use use also mini-batching
-    \item<+-> can be fast and provide better predictive distribution than
-      Laplace approximation if the posterior is far from normal
-    \item<+-> in general, unlikely to achieve accuracy of HMC with the
-      same computation cost
-    \item<+-> with increasing number of posterior dimensions, the
-      obtained approximation gets worse {\small
-      (\href{https://papers.nips.cc/paper/2020/hash/7cac11e2f46ed46c339ec3d569853759-Abstract.html}{Dhaka,
-        Catalina, Andersen, Magnusson, Huggins, and Vehtari, 2020})}
-  \item<+-> with increasing number of posterior dimensions, the
-    stochastic divergence estimate gets worse and flows have problems,
-    too {\small
-      (\href{https://proceedings.neurips.cc/paper/2021/hash/404dcc91b2aeaa7caa47487d1483e48a-Abstract.html}{Dhaka,
-        Catalina, Andersen, Welandawe, Huggins, and Vehtari, 2021})}
-    \end{itemize}
-  \end{itemize}
-
-\end{frame}
-
-\begin{frame}{Large sample theory}
   
-  \begin{itemize}
-  \item Asymptotic normality
-    \begin{itemize}
-    \item<+-> as $n$ the number of observations $y_i$ increases the
-      posterior converges to normal distribution
-    \item<+-> can be shown by showing that
-      \begin{itemize}
-      \item eventually likelihood dominates the prior
-      \item the higher order terms in Taylor series increase slower
-        than the second order term
-      \end{itemize}
-    \item<+-> see counter examples
-    \end{itemize}
-\end{itemize}
-\end{frame}
+}
 
-\begin{frame}{Large sample theory}
-  
-  \begin{itemize}
-  \item Assume "true" underlying data distribution $f(y)$
-    \begin{itemize}
-    \item observations $y_1,\ldots,y_n$ are independent samples from
-      the joint distribution $f(y)$
-    \item "true" data distribution $f(y)$ is not always well defined
-    \item in the following we proceed as if there were true underlying data distribution
-    \item for the theory the exact form of $f(y)$ is not important as
-      long at it has certain regularity conditions
-    \end{itemize}
-  \end{itemize}
+% \frame{
 
-\end{frame}
-
-\begin{frame}{Large sample theory}
-  
-  \begin{itemize}
-  % \item Asymptoottinen normaalius
-  %   \begin{itemize}
-  %   \item jakaumasta $f(y)$ saatujen havaintojen $y_i$ määrän $n$ kasvaessa
-  %     parametrivektorin posteriorijakauma lähestyy normaalijakaumaa
-  %   \end{itemize}
-  %   \pause
-  \item Consistency
-    \begin{itemize}
-    \item if true distribution is included in the parametric family,
-      so that $f(y)=p(y|\theta_0)$ for some $\theta_0$, then posterior
-      converges to a point $\theta_0$, when $n\rightarrow\infty$
-    \item<2-> a point doesn't have uncertainty 
-    \item<3-> the same result as for maximum likelihood estimate
-    \end{itemize}
-  \item<4-> If true distribution is not included in the parametric family,
-    then there is no true $\theta_0$
-    \begin{itemize}
-    \item true $\theta_0$ is replaced with $\theta_0$ which minimizes
-      the Kullback-Leibler divergence from $f(y)$ to $p(y_i|\theta_0)$
-        % \begin{align*}
-        %   H(\theta_0)=\int f(y_i) \log\left(\frac{f(y_i)}{p(y_i|\theta_0)}\right)dy_i
-        % \end{align*}
-%      \item<5-> this point doesn't have uncertainty, but it's a wrong point!
-      \item<5-> the same result as for maximum likelihood estimate
-    \end{itemize}
-\end{itemize}
-
-\end{frame}
-
-\begin{frame}{Large sample theory -- counter examples}
-  
-  \begin{itemize}
-    \item Under- and non-identifiability
-      \begin{itemize}
-      \item a model is under-identifiable, if the model has parameters or parameter combinations for which there is no information in the data
-      \item then there is no single point $\theta_0$ where
-        posterior would converge
-      \item<2-> e.g. if the model is
-        \begin{align*}
-          y \sim \N(a+b+cx, \sigma)
-        \end{align*}
-        \begin{itemize}
-          \vspace{-\baselineskip}
-        \item<3-> posterior would converge to a line with prior
-          determining the density along the line
-        \end{itemize}
-      \item<4-> e.g. if we never observe $u$ and $v$ at the same time and the model is
-        \begin{equation*}
-          \begin{pmatrix}
-            u \\ v
-          \end{pmatrix}
-          \sim
-          \N\left(
-            \begin{pmatrix}
-              0\\0
-            \end{pmatrix},
-            \begin{pmatrix}
-              1 & \rho \\ \rho & 1
-            \end{pmatrix}
-            \right)
-        \end{equation*}
-        then correlation $\rho$ is non-identifiable
-        \begin{itemize}
-        \item<5-> e.g. $u$ and $v$ could be length and weight of
-          a student; if only one of them is measured for each student,
-          then $\rho$ is non-identifiable
-      \end{itemize}
-      \end{itemize}
-      \item<6-> Problem also for other inference methods like MCMC
-  \end{itemize}
-
-\end{frame}
-
-% \note{ongelma voidaan poistaa havaitsemalla ongelma, jos näitä
-% parametreja oikeasti tarvitsee estimoida hankitaan tarpeelliset havainnot}
-
-\begin{frame}{Asymptotic identifiability vs finite data case}
-
-  \begin{itemize}
-  \item If we randomly would measure both height and weight,
-    asymptotically the correlation $\rho$ would be identifiable
-  \item<2-> But a finite data from this data generating process may
-    lack the joint height and weight observations, and thus the the
-    finite data likelihood doesn't have information about $\rho$
-  \item<3-> If the likelihood is weakly informative for some
-    parameters, priors and integration are more important
-  \end{itemize}
-  
-\end{frame}
-
-\begin{frame}{Large sample theory -- counter examples}
-  
-  \begin{itemize}
-    % \item Does not always hold when $n\rightarrow\infty$
-    \item If the number of parameter increases as the number of
-      observation increases
-      \begin{itemize}
-      \item in some models number of parameters depends on the number
-        of observations
-        \item e.g. time series models $y_t \sim
-          \N(\theta_t,\sigma^2)$ and $\theta_t$ has prior in time
-        \item posterior of $\theta_t$ does not converge to a point, if
-          additional observations do not bring enough information
-      \end{itemize}
-  \end{itemize}
-
-\end{frame}
-
-\begin{frame}{Large sample theory -- counter examples}
-  
-  \begin{itemize}
-    % \item Does not always hold when $n\rightarrow\infty$
-    \item Aliasing (\emph{valetoisto} in Finnish)
-      \begin{itemize}
-      \item special case of under-identifiability where likelihood
-        repeats in separate points
-      \item e.g. mixture of normals
-        \begin{equation*}
-          p(y_i|\mu_1,\mu_2,\sigma_1^2,\sigma_2^2,\lambda)=\lambda\N(\mu_1,\sigma_1^2)+(1-\lambda)\N(\mu_2,\sigma_2^2)
-        \end{equation*}
-        \uncover<2->{
-        if $(\mu_1,\mu_2)$ are switched, $(\sigma_1^2,\sigma_2^2)$ are
-        switched and replace $\lambda$ with $(1-\lambda)$, model is
-        equivalent; posterior would usually have two modes which are
-        mirror images of each other and the posterior does not
-        converge to a single point}
-    \end{itemize}
-  \item<3-> For MCMC makes the convergence diagnostics more difficult,
-    as it is difficult to identify aliasing from other multimodality
-\end{itemize}
-
-\end{frame}
-
-\begin{frame}{Large sample theory -- counter examples}
-  
-  \begin{itemize}
-    % \item Does not always hold when $n\rightarrow\infty$
-    \item Unbounded (\emph{rajoittamaton} in Finnish) likelihood
-      \begin{itemize}
-      \item if likelihood is unbounded it is possible that there is no
-        mode in the posterior
-      \item<2-> e.g. previous normal mixture model; assume $\lambda$ to be
-        known (and not $0$ or $1$); if we set $\mu_1=y_i$ for any $i$
-        and $\sigma_1^2\rightarrow 0$, then likelihood
-        $\rightarrow\infty$
-      \item<3-> if prior for $\sigma_1^2$ does not go to zero when
-        $\sigma_1^2\rightarrow 0$, then the posterior is unbounded
-      \item<4-> when $n\rightarrow\infty$ the number of likelihood
-        modes increases
-      \end{itemize}
-    \item<5-> Problem for any inference method including MCMC
-      \begin{itemize}
-      \item can be avoided with good priors
-      \item<6->  a prior close to a prior allowing unbounded
-        posterior may produce almost unbounded posterior
-      \end{itemize}
-  \end{itemize}
-
-\end{frame}
-
-% \note{esim. uniformi priori ei hyvä
-
-% esim. $1/\sigma^2$ priori ei hyvä
-
-% esim. $\Invchi2$-jakauma sopivilla parametreilla mahdollinen}
-
-\begin{frame}{Large sample theory -- counter examples}
-  
-  \begin{itemize}
-    % \item Does not always hold when $n\rightarrow\infty$
-  \item Improper posterior
-    \begin{itemize}
-    \item asymptotic results assume that probability sums to 1
-    \item e.g. Binomial model, with $\Beta(0,0)$ prior and observation $y=n$
-      \begin{itemize}
-      \item posterior $p(\theta|n,0)=\theta^{n-1}(1-\theta)^{-1}$
-      \item when $\theta\rightarrow 1$, then
-        $p(\theta|n,0)\rightarrow \infty$
-      \end{itemize}
-    \end{itemize}
-  \item<2-> Problem for any inference method including MCMC
-    \begin{itemize}
-    \item can be avoided with proper priors
-    \item<3-> a prior close to a improper prior may produce
-      almost improper posterior
-    \end{itemize}
-  \end{itemize}
-
-\end{frame}
-
-% \note{myös sellainen ei-aito priori käy, joka tuottaa aidon posteriorin
-
-% Muistakaa, että $\Beta(1,1)$ vastaa uniformiprioria ja
-% $\Beta(\frac{1}{2},\frac{1}{2})$ Jeffereysin prioria, joten
-% $\Beta(0,0)$ on vielä väljempi priori ja onkin ei-aito
-
-% posteriori $\Beta(\theta|n,0)=\theta^{n-1}(1-\theta)-1$\\
-% $\Beta(1|n,0)=1^{n-1}0^{-1} = 1/0 = \infty$
+%   {\Large\color{navyblue} Real data benchmarks}\\
+%   $n = 54...102$, $p=1536...22283$, Bayes SPC as the reference
+% \begin{overlayarea}{\textwidth}{0.7\textwidth}
+% \vspace{-0.5em}
+% 	\begin{minipage}{0.99\textwidth}
+% 	\begin{center}
+%           \minput[pdf]{realdata}
+% 	\end{center}
+% 	% hidings
+% 	\only<1>{ \hide[white]{-0.5}{-0.02}{0.42}{1.05} }%
+% 	\only<2>{ \hide[white]{-0.3}{-0.02}{0.22}{1.05} }%
+% 	\only<3>{ \hide[white]{-0.07}{-0.02}{0.01}{1.05} }%
+	
+% 	\end{minipage}
+% 	%\begin{minipage}{0.99\textwidth}
+% 	%\end{minipage}
+	
+% \end{overlayarea}
 % }
 
-\begin{frame}{Large sample theory -- counter examples}
+% \frame{
+
+%   {\Large\color{navyblue} Computation time}
+
+%   \begin{table}%
+%     \small
+% \vspace{-0.2cm}
+% \centering
+% \abovetopsep=2pt
+% \begin{tabular}{ lccrrrr }
+% \toprule
+% Data set & $n$ & $p$ & \multicolumn{4}{c}{Computation time} \\
+% \cmidrule(r){4-7}
+%  & & & Bayes SPC & Projection & Lasso1 & Lasso2 \\ 
+% \midrule
+% Ovarian & 54 & 1536 & 30.4 & 3.6 & 1.3 & 0.2  \\
+% Colon & 62 & 2000 & 31.0 & 4.0 & 1.6 & 0.3  \\
+% Prostate & 102 & 5966 & 49.4 & 7.6 & 5.0 & 0.8\\
+% Leukemia & 72 & 7129 & 47.0 & 6.3 & 5.6 & 0.7  \\
+% Glioma & 85 & 22283 & 95.8 & 14.2 & 15.6 & 2.6 \\
+% \bottomrule
+% \end{tabular}
+% \caption{{\it Computation times:} Average computation time (in seconds) over five repeated runs. In all cases the time contains the cross-validation of the tuning parameters and/or the model size. The first result for Lasso is computed using our software ({\tt projpred}) whereas the second result (and that of ridge) is computed using the R-package {\tt glmnet} which is more highly optimized. }
+% \label{tab:computation_times}
+% \end{table}
+% }
+
+% \begin{frame}
   
-  \begin{itemize}
-    % \item Does not always hold when $n\rightarrow\infty$
-    \item Prior distribution does not include the convergence point
-      \begin{itemize}
-      \item if in discrete case $p(\theta_0)=0$ or in continuous case
-        $p(\theta)=0$ in the neighborhood of $\theta_0$, then the
-        convergence results based on the dominance of the likelihood
-        do not hold 
-      \end{itemize}
-    \item<2-> Should have a positive prior probability/density where needed
-\end{itemize}
+%   {\Large\color{navyblue} More results}\\
+
+%   {\footnotesize
+%   \begin{itemize}
+%   \item More results projpred vs. Lasso and elastic net:\\
+%     Piironen, Paasiniemi, Vehtari (2018). Projective Inference in
+%     High-dimensional Problems: Prediction and Feature Selection.
+%     \href{https://arxiv.org/abs/arXiv:1810.02406}{arXiv:1810.02406}
+%   \item<2-> More results projpred vs. marginal posterior probabilities:\\
+%     Piironen and Vehtari (2017). Comparison of Bayesian predictive
+%     methods for model selection. Statistics and Computing,
+%     27(3):711-735.
+%     \href{https://dx.doi.org/10.1007/s11222-016-9649-y}{doi:10.1007/s11222-016-9649-y}.
+%   \item<3-> projpred for Gaussian graphical models:\\
+%     Williams, Piironen, Vehtari, Rast (2018). Bayesian estimation of Gaussian graphical models with projection predictive selection. \href{https://arxiv.org/abs/1801.05725}{arXiv:1801.05725}
+%   \item<4-> More results for Bayes SPC:\\
+%     Piironen and Vehtari (2018). Iterative supervised principal components. 21st AISTATS, PMLR 84:106-114. \href{http://proceedings.mlr.press/v84/piironen18a.html}{Online}.
+%   \item<5-> Several case studies for small to moderate dimensional ($p=4 \ldots 100$) small data:\\
+%     Vehtari (2018). Model assesment, selection and inference after
+%     selection. \url{https://avehtari.github.io/modelselection/}
+%   \end{itemize}
+%   }
+% \end{frame}
+
+\begin{frame}{Bodyfat: small $p$ example of projection predictive}
+  
+  Predict bodyfat percentage. The reference value is obtained by
+  immersing person in water. $n=251$.
+
+  \pause
+  \vspace{-0.7\baselineskip}
+  \includegraphics[width=7.7cm]{bodyfat_corr.pdf}
 
 \end{frame}
 
-\begin{frame}{Large sample theory -- counter examples}
+\begin{frame}{Bodyfat}
+
+  Marginal posteriors of coefficients
   
+  \includegraphics[width=11cm]{bodyfat_mcmc_areas.pdf}
+
+\end{frame}
+
+\begin{frame}{Bodyfat}
+
+  Bivariate marginal of weight and height
+  
+  \includegraphics[width=7.5cm]{bodyfat_mcmc_scatter.pdf}
+
+\end{frame}
+
+\begin{frame}{Bodyfat}
+
+  The predictive performance of the full and submodels
+  
+  \includegraphics[width=11cm]{bodyfat_varsel_plot.pdf}
+
+\end{frame}
+
+\begin{frame}{Bodyfat}
+
+  Marginals of the reference and projected posterior
+
+  % TODO: side by side comaprison to original marginals
+  \vspace{\baselineskip}
+  
+  \begin{minipage}[t]{1\linewidth}
+    \hspace{-1cm}
+    \includegraphics[width=6.5cm]{bodyfat_mcmc_areas.pdf}
+  \includegraphics[width=6.5cm]{bodyfat_proj_mcmc_areas.pdf}
+\end{minipage}
+\end{frame}
+
+\begin{frame}{Predictive performance vs. selected variables}
+
   \begin{itemize}
-    % \item Does not always hold when $n\rightarrow\infty$
-    \item Convergence point at the edge of the parameter space
-      \begin{itemize}
-      \item if $\theta_0$ is on the edge of the parameter space,
-        Taylor series expansion has to be truncated, and normal
-        approximation does not necessarily hold
-        \item<2-> e.g. $y_i\sim\N(\theta,1)$ with a restriction $\theta\geq
-          0$ and assume that $\theta_0=0$
-          \begin{itemize}
-          \item posterior of $\theta$ is left truncated normal
-            distribution with $\mu=\bar{y}$
-        \item in the limit $n\rightarrow\infty$ posterior is half
-          normal distribution \pause
-        \end{itemize}
-      \end{itemize}
-    \item Can be easy or difficult for MCMC
+  \item<+-> The initial aim: find the minimal set of variables
+    providing similar predictive performance as the reference model
+  \item<+-> Some keep asking can it find the true variables
+    \begin{itemize}
+    \item<3-> What do you mean by true variables?
+    \end{itemize}
   \end{itemize}
 
+  \uncover<3>{
+      \vspace{-0.5\baselineskip}
+    \begin{minipage}[t]{1\linewidth}
+      \hspace{-1cm}
+  \vspace{-.88\baselineskip}
+  \includegraphics[width=6cm]{bodyfat_corr.pdf}\includegraphics[width=6.5cm]{bodyfat_proj_mcmc_areas.pdf}
+    \end{minipage}
+}
+
 \end{frame}
 
-% \begin{frame}{Large sample theory -- counter examples}
+% \begin{frame}{Example: Individual correlations}
+
+% \vspace{-1.5\baselineskip}
   
+% \begin{minipage}[t]{0.3\linewidth}
+% \begin{equation*}
+% \begin{alignedat}{1}
+%   f &  \sim \N(0,1),  \\
+%   y \mid f &\sim \N(f, 1) 
+% \end{alignedat}
+% \end{equation*}
+% \end{minipage}
+%   \begin{minipage}[t]{0.4\linewidth}
+% \begin{equation*}
+% \begin{alignedat}{2}
+%   x_j \mid f &\sim \N(\sqrt{\rho}f,\, 1-\rho), \qquad && j = 1,\dots,150 \,, \\
+%   x_j \mid f &\sim \N(0, 1), && j = 151,\dots, 500 \,.
+% \end{alignedat}
+% \end{equation*}
+% \end{minipage}
+% \vspace{-0.2\baselineskip}
+
+% \center
+% {Correlation for $x_j,f_*$ ($f_*$ = PCA + linear regression)\\}
+% \vspace{-0.5\baselineskip}
+% \only<1>{\includegraphics[width=8cm]{Rfs.pdf}}\only<2>{\includegraphics[width=8cm]{Rfs1.pdf}}\only<3>{\includegraphics[width=8cm]{Rfs2.pdf}}
+
+% \end{frame}
+
+\begin{frame}{Variability under data perturbation}
+
+   Comparing projection predictive variable selection (projpred)
+    and stepwise maximum likelihood over bootstrapped datasets
+
+  \vspace{-0.5\baselineskip}
+  \begin{minipage}[t]{1\linewidth}
+      \hspace{-1cm}
+      \includegraphics[width=12.5cm]{inc_prob.pdf}
+    \end{minipage}
+    \pause
+  \begin{minipage}[t]{1\linewidth}
+      \hspace{-0.9cm}
+      \includegraphics[width=12.5cm]{bodyfat_table.png}
+    \end{minipage}
+
+  \end{frame}
+
+  \begin{frame}{Variability under data perturbation}
+
+   Comparing projection predictive variable selection (projpred)
+    and stepwise maximum likelihood over bootstrapped datasets
+
+  
+  \vspace{-0.5\baselineskip}
+  \begin{minipage}[t]{1\linewidth}
+      \hspace{-1cm}
+      \includegraphics[width=12.5cm]{inc_prob.pdf}
+    \end{minipage}
+  
+    \begin{itemize}
+      \vspace{-1\baselineskip}
+    \item<1-> Reduced variability, but in case of noisy finite data,
+      there will be some variability under data perturbation
+    \item<2-> projpred uses
+      \begin{itemize}
+      \item Bayesian inference for the reference
+      \item \only<2>{The reference model}\only<3->{{\color{set13}The reference model}}
+      \item Projection for submodel inference
+      \end{itemize}
+    \end{itemize}
+
+  \end{frame}
+
+% \begin{frame}{Predictive performance vs. selected variables}
+
 %   \begin{itemize}
-%   \item Tails of the distribution
+%   \item projpred has very good predictive performance and small false
+%     discovery rate {\color{gray}(with simulated data with known truth)}
+%   \item Other variable selection methods (e.g. steplm) can be improved
+%     just by replacing the data with the predictions from the reference
+%     model
+%   \end{itemize}
+
+%   \pause
+% \vspace{1\baselineskip}
+  
+%   \begin{minipage}[t]{1\linewidth}
+%       \hspace{-.9cm}
+% \includegraphics[width=12.5cm]{rmse_vs_fdr_parallel.pdf}
+% \end{minipage}  
+
+% \end{frame}
+
+% \begin{frame}{Complete variable selection}
+
+%   \begin{itemize}
+%   \item projpred can be used iteratively to search for all variables
+%     with some predictive relevance
+%   \item More challenging problem, where specialized algorithms seem to
+%     perform better
 %     \begin{itemize}
-%     \item normal approximation may be accurate for the most of the
-%       posterior mass, but still be inaccurate for the tails
-%     \item e.g. parameter which is constrained to be positive; given a
-%       finite $n$, normal approximation assumes non-zero probability
-%       for negative values
+%     \item reference model helps to improve other methods, too
 %     \end{itemize}
-%   % \item Monte Carlo has different kind of problems with the tails
 %   \end{itemize}
   
 % \end{frame}
 
-\begin{frame}{Frequency evaluations}
+% \begin{frame}{Networks as a bunch of linear models}
+  
+%   \begin{center}
+%     \includegraphics[width=8.5cm]{ceu.pdf}
+%   \end{center}
+%     {\footnotesize CEU genetic network. BGL: Bayesian glasso; GL: glasso;
+%       TIGER: tuning insensitive graph estimation and regression; BMA:
+%       Bayesian model averaging; MAP: Maximum a posteriori; Projection:
+%       projection predictive selection.}
 
-    \begin{itemize}
-    \item Bayesian theory has epistemic and aleatory probabilities
-    \item Frequency evaluations focus on frequency properties given
-      aleatoric repetition of an observation and modeling
-      \begin{itemize}
-      \item It is useful to examine these for Bayesian inference, too
-      % \item<2-> Consistency
-      \item<2-> Asymptotic unbiasedness
-        \begin{itemize}
-        \item not that important in Bayesian inference, small and
-          decreasing error more important
-        \end{itemize}
-      \item<3-> Asymptotic efficiency
-        \begin{itemize}
-        \item no other point estimate with smaller squared error
-        \item useful also in Bayesian inference, but should consider
-          which utility/loss is important
-        \end{itemize}
-      \item<4-> Calibration
-        \begin{itemize}
-        \item $\alpha\%$-posterior interval has the true value in
-          $\alpha\%$ cases
-        \item $\alpha\%$-predictive interval has the true future values
-          in $\alpha\%$ cases
-        \item approximate calibration with shorter intervals for
-          likely true values more important than exact calibration
-          with very bad intervals for all possible values.
-        \end{itemize}
-      \end{itemize}
-    \end{itemize}
-    
+%       % \item Williams, Piironen, Vehtari, Rast (2018). Bayesian estimation of Gaussian graphical models with projection predictive selection. \href{https://arxiv.org/abs/1801.05725}{arXiv:1801.05725}\\
 
+% \end{frame}
+
+\begin{frame}{Multilevel regerssion and GAMMs}
+  
+
+  \begin{itemize}
+  \item \texttt{projpred} supports also hierarchical models in \texttt{brms}\\
+  {\footnotesize  Catalina, BÃ¼rkner, and Vehtari (2022). Projection predictive inference for generalized linear and additive multilevel models. \textit{Proceedings of the 24th International Conference on Artificial Intelligence and Statistics (AISTATS), PMLR} 151:4446â€“4461. \url{https://proceedings.mlr.press/v151/catalina22a.html}}
+  \end{itemize}
+  
 \end{frame}
 
-\begin{frame}
+\begin{frame}{Scaling}
 
-  {\Large\color{navyblue} Frequentist statistics}
-  
   \begin{itemize}
-  \item Frequentist statistics accepts only aleatory probabilities
+  \item So far the biggest number of variables we've tested is 22K
     \begin{itemize}
-    \item Estimates are based on data
-    \item Uncertainty of estimates are based on all possible data
-      sets which could have been generated by the data generating
-      mechanism
-      \begin{itemize}
-      \item<2-> inference is based also on data we did not observe
-      \end{itemize}
-    \end{itemize}
-  \item<3-> Estimates are derived to fulfill frequency properties
-    \begin{itemize}
-    \item Maximum likelihood (often) fulfills asymptotic frequency
-      properties
-    \item Common finite data desiderata are 1) unbiasedness, 2)
-      minimum variance, 3) calibration of confidence interval
+    \item 96s for creating a reference model
+    \item 14s for projection predictive variable selection
     \end{itemize}
   \end{itemize}
-
-\end{frame}
-
-\begin{frame}
-
-  {\Large\color{navyblue} Frequentist statistics}
   
-  \begin{itemize}
-  \item Estimates are derived to fulfill frequency properties
-    \begin{itemize}
-    \item Maximum likelihood fulfills just asymptotic frequency
-      properties
-    \item Common desiderata are 1) unbiasedness, 2) minimum
-      variance, 3) calibration of confidence interval
-    \end{itemize}
-  \item Requirement of unbiasedness may lead to higher variance or
-    silly estimates
-    \begin{itemize}
-    \item unbiased estimate for strictly positive parameter can be
-      negative
-    \end{itemize}
-  \item<2-> Confidence interval is defined to have true value inside the
-    interval in $\alpha\%$ cases of repeated data generation from the
-    data generating mechanism
-    \begin{itemize}
-    % \item doesn't say how likely the true value is inside the interval
-    %   given the observed data
-    \item doesn't need be useful to have perfect calibration
-    \end{itemize}
-  \end{itemize}
+\end{frame}
+
+% \begin{frame}{In machine learning (example)}
+
+%   \vspace{-0.3\baselineskip}
+%   \begin{itemize}
+%   \item BART integrates over the uncertainty producing many trees
+%   \item CART makes just one tree which is easier to analyse
+%   \item Projecting BART to CART gets benefits of both
+%   \end{itemize}
+
+%   \pause
+%   \center
+%   \vspace{-0.8\baselineskip}
+%   \includegraphics[width=7.5cm]{CART_BART.png}
+
+% \end{frame}
+
+% \begin{frame}{Take-home messages}
+
+% \begin{itemize}
+% \item Good reference model filters out noise, making it easier to
+%   search for simpler models
+%   \begin{itemize}
+%   \item Applicable for many algorithms and models
+%   \end{itemize}
+% \item Reference model + projection improve model selection
+%   \begin{itemize}
+%   \item Bayesian decision theoretical justification
+%   \item Excellent tradeoff between accuracy and model complexity
+%   \item Excellent FDR in minimal set selection
+%   \item Can be useful also for identifying all the relevant features
+%   \end{itemize}
+% \end{itemize}
+
+% \end{frame}
+
+\begin{frame}{Intro paper and brms and rstanarm + projpred examples}
+
+\begin{itemize}
+\item {\footnotesize McLatchie, RÃ¶gnvaldsson, Weber, and Aki Vehtari (2023). Robust and efficient projection predictive inference. \url{https://arxiv.org/abs/2306.15581}}
+\item \url{https://mc-stan.org/projpred/articles/projpred.html}
+\item \url{https://users.aalto.fi/~ave/casestudies.html}
+\item Fast and often sufficient if $n\gg p$\\
+  {\footnotesize \texttt{varsel <- cv\_varsel(fit, method='forward', cv\_method='loo', validate\_search=FALSE)}}
+\item Slower but needed if not $n\gg p$\\
+  {\footnotesize \texttt{varsel <- cv\_varsel(fit, method='forward', cv\_method='kfold, K=10, validate\_search=TRUE)}}
+\item If $p$ is very big\\
+  {\footnotesize \texttt{varsel <- cv\_varsel(fit, method='L1, cv\_method='kfold, K=5, validate\_search=TRUE)}}
+\end{itemize}
 
 \end{frame}
 
-\begin{frame}
-
-  {\Large\color{navyblue} Frequentist vs Bayes vs others}
+% \begin{frame}{References}
+% \vspace{-0.5\baselineskip}
   
-  \begin{itemize}
-  \item There is a great amount of very useful frequentist statistics
-    \begin{itemize}
-    \item also for simple models and lot's of data there is not much
-      difference
-    \end{itemize}
-  \item<2-> Bayesian inference
-    \begin{itemize}
-    \item easier for complex, e.g. hierarchical, models
-    \item easier when model changes
-    \item a consistent way to add prior information
-    \end{itemize}
-  \item<3-> A lot of machine learning is not pure frequentist or
-    Bayesian
-  \end{itemize}
-
-\end{frame}
-
+%   \scriptsize
+  
+% \begin{itemize}
+% \item[-] Piironen, Paasiniemi, and Vehtari (2020). Projective inference in high-dimensional problems: prediction and feature selection. \textit{Electronic Journal of Statistics}, 14(1):2155-2197. \url{https://doi.org/10.1214/20-EJS1711}
+% \item[-] Pavone, Piironen, BÃ¼rkner, and Vehtari (2020). Using reference models in variable selection. arXiv preprint arXiv:2004.13118. \url{https://arxiv.org/abs/2004.13118}
+% \item[-] Piironen and Vehtari (2016). Projection predictive input variable selection for Gaussian process models. \textit{2016 IEEE 26th International Workshop on Machine Learning for Signal Processing (MLSP)}, doi:10.1109/MLSP.2016.7738829. \url{https://dx.doi.org/10.1109/MLSP.2016.7738829}
+% \item[-] Piironen and Vehtari (2017). Comparison of Bayesian predictive methods for model selection. \textit{Statistics and Computing}, 27(3):711-735. doi:10.1007/s11222-016-9649-y. \url{https://link.springer.com/article/10.1007/s11222-016-9649-y}
+% \item[-] Afrabandpey, Peltola, Piironen, Vehtari, and Kaski (2019). Making Bayesian predictive models interpretable: A decision theoretic approach. \textit{arXiv preprint arXiv:1910.09358} \url{https://arxiv.org/abs/1910.09358}
+% \item[-] Williams, Piironen, Vehtari, and Rast (2018). Bayesian estimation of Gaussian graphical models with projection predictive selection. \textit{arXiv preprint arXiv:1801.05725}. \url{https://arxiv.org/abs/1801.05725}
+% \item[-] Piironen, Paasiniemi, Catalina and Vehtari (2020). projpred:
+%   Projection Predictive Feature
+%   Selection. \url{https://mc-stan.org/projpred}
+% \end{itemize}
+% \end{frame}
 
 \end{document}
 
 %%% Local Variables: 
-%%% TeX-PDF-mode: t
+%%% mode: latex
 %%% TeX-master: t
-%%% End: 
+%%% End:
