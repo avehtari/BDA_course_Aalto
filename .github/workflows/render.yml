@@ -4,16 +4,14 @@ on:
       - render-replace
     # paths: ['**.Rmd']
 
-
-
-name: Render and Publish
+name: Render and Publish Website
 
 permissions:
   contents: write
   pages: write
 
 jobs:
-  render-rmarkdown:
+  render-website:
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
@@ -21,26 +19,29 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up R
-        uses: r-lib/actions/setup-r@v2
-
-      - uses: r-lib/actions/setup-pandoc@v2
-
-      - name: Install Rmarkdown
-        run: install.packages("rmarkdown")
-        shell: Rscript {0}
-
-      - name: Render Rmarkdown Website
-        run: rmarkdown::render_site()
-        shell: Rscript {0}
+      - name: Set up Pandoc
+        uses: r-lib/actions/setup-pandoc@v2
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
         with:
-          # To install LaTeX to build PDF book
           tinytex: true
 
-      - name: Render Assignments
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+
+      - name: Install R dependencies
+        uses: r-lib/actions/setup-renv@v2
+
+      # _site.yml file configured to render website to the _site folder,
+      # which is the expected location for the Quarto publish step
+      - name: Render Main Rmarkdown Website
+        run: rmarkdown::render_site()
+        shell: Rscript {0}
+
+      # Assignments _quarto.yml file configured to render website to the
+      # _site/assignments folder
+      - name: Render Assignments Quarto Sub-website
         uses: quarto-dev/quarto-actions/render@v2
         with:
           path: assignments
