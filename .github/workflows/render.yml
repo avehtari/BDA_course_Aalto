@@ -17,10 +17,8 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-
-      - name: Set up Pandoc
-        uses: r-lib/actions/setup-pandoc@v2
+          fetch-depth: 1
+          token: ${{ secrets.GH_ACTION}}
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
@@ -31,28 +29,13 @@ jobs:
         uses: r-lib/actions/setup-r@v2
         with:
           use-public-rspm: true
-          extra-repositories: 'https://stan-dev.r-universe.dev https://avehtari.r-universe.dev'
 
       - name: Install R dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          packages: any::rmarkdown, any::sessioninfo, any::tidyr, any::cmdstanr, any::aaltobda
+          packages: any::tidyr
 
-      - name: Render Main Rmarkdown Website
-        run: rmarkdown::render_site()
-        shell: Rscript {0}
-
-      # TODO(Andrew): This should be handled in the source repo and simply checked out here
-      - name: Render Assignments Quarto Sub-website
-        uses: quarto-dev/quarto-actions/render@v2
+      - name: Render and Publish Website
+        uses: quarto-dev/quarto-actions/publish@v2
         with:
-          path: assignments
-
-      - name: GitHub Pages action
-        uses: peaceiris/actions-gh-pages@v3.6.1
-        if: github.ref == 'refs/heads/master'
-        with:
-          github_token: ${{ secrets.GH_ACTION}}
-          publish_branch: gh-pages
-          keep_files: true
-          publish_dir: .
+          target: gh-pages
