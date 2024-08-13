@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.211">
+<meta name="generator" content="quarto-1.5.56">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="anonymous">
 
-<title>Bayesian Data Analysis - Assignment 8</title>
+<title>Assignment 8 – Bayesian Data Analysis</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -18,11 +18,12 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -33,7 +34,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -47,43 +48,13 @@ pre.numberSource code > span > a:first-child::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
-    color: #aaaaaa;
   }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
 div.sourceCode
   {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -111,7 +82,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -120,8 +97,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 
@@ -134,12 +113,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./template1.html">Templates</a></li><li class="breadcrumb-item"><a href="./template8.html">Assignment 8</a></li></ol></nav>
-      <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./template1.html">Templates</a></li><li class="breadcrumb-item"><a href="./template8.html">Assignment 8</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
@@ -149,7 +128,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Bayesian Data Analysis</a> 
@@ -164,20 +143,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">General instructions</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">General instructions</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment_instructions.html" class="sidebar-item-text sidebar-link">Assignment instructions</a>
+  <a href="./assignment_instructions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment instructions</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./docker.html" class="sidebar-item-text sidebar-link">How to set up docker</a>
+  <a href="./docker.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">How to set up docker</span></a>
   </div>
 </li>
       </ul>
@@ -185,55 +167,65 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Assignments</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Assignments</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment1.html" class="sidebar-item-text sidebar-link">Assignment 1</a>
+  <a href="./assignment1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 1</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment2.html" class="sidebar-item-text sidebar-link">Assignment 2</a>
+  <a href="./assignment2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 2</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment3.html" class="sidebar-item-text sidebar-link">Assignment 3</a>
+  <a href="./assignment3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 3</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment4.html" class="sidebar-item-text sidebar-link">Assignment 4</a>
+  <a href="./assignment4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 4</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment5.html" class="sidebar-item-text sidebar-link">Assignment 5</a>
+  <a href="./assignment5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 5</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment6.html" class="sidebar-item-text sidebar-link">Assignment 6</a>
+  <a href="./assignment6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 6</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment7.html" class="sidebar-item-text sidebar-link">Assignment 7</a>
+  <a href="./assignment7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 7</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment8.html" class="sidebar-item-text sidebar-link">Assignment 8</a>
+  <a href="./assignment8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 8</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment9.html" class="sidebar-item-text sidebar-link">Assignment 9</a>
+  <a href="./assignment9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 9</span></a>
   </div>
 </li>
       </ul>
@@ -241,55 +233,65 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Templates</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Templates</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template1.html" class="sidebar-item-text sidebar-link">Assignment 1</a>
+  <a href="./template1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 1</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template2.html" class="sidebar-item-text sidebar-link">Assignment 2</a>
+  <a href="./template2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 2</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template3.html" class="sidebar-item-text sidebar-link">Assignment 3</a>
+  <a href="./template3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 3</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template4.html" class="sidebar-item-text sidebar-link">Assignment 4</a>
+  <a href="./template4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 4</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template5.html" class="sidebar-item-text sidebar-link">Assignment 5</a>
+  <a href="./template5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 5</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template6.html" class="sidebar-item-text sidebar-link">Assignment 6</a>
+  <a href="./template6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 6</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template7.html" class="sidebar-item-text sidebar-link">Assignment 7</a>
+  <a href="./template7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 7</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template8.html" class="sidebar-item-text sidebar-link active">Assignment 8</a>
+  <a href="./template8.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Assignment 8</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template9.html" class="sidebar-item-text sidebar-link">Assignment 9</a>
+  <a href="./template9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 9</span></a>
   </div>
 </li>
       </ul>
@@ -297,34 +299,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </ul>
     </div>
 </nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#general-information" id="toc-general-information" class="nav-link active" data-scroll-target="#general-information"><span class="toc-section-number">1</span>  General information</a></li>
-  <li><a href="#a-hierarchical-model-for-chicken-weight-time-series" id="toc-a-hierarchical-model-for-chicken-weight-time-series" class="nav-link" data-scroll-target="#a-hierarchical-model-for-chicken-weight-time-series"><span class="toc-section-number">2</span>  A hierarchical model for chicken weight time series</a>
+  <li><a href="#general-information" id="toc-general-information" class="nav-link active" data-scroll-target="#general-information"><span class="header-section-number">1</span> General information</a></li>
+  <li><a href="#a-hierarchical-model-for-chicken-weight-time-series" id="toc-a-hierarchical-model-for-chicken-weight-time-series" class="nav-link" data-scroll-target="#a-hierarchical-model-for-chicken-weight-time-series"><span class="header-section-number">2</span> A hierarchical model for chicken weight time series</a>
   <ul class="collapse">
-  <li><a href="#exploratory-data-analysis" id="toc-exploratory-data-analysis" class="nav-link" data-scroll-target="#exploratory-data-analysis"><span class="toc-section-number">2.1</span>  Exploratory data analysis</a></li>
-  <li><a href="#a" id="toc-a" class="nav-link" data-scroll-target="#a"><span class="toc-section-number">2.2</span>  (a)</a></li>
-  <li><a href="#b" id="toc-b" class="nav-link" data-scroll-target="#b"><span class="toc-section-number">2.3</span>  (b)</a></li>
-  <li><a href="#linear-regression" id="toc-linear-regression" class="nav-link" data-scroll-target="#linear-regression"><span class="toc-section-number">2.4</span>  Linear regression</a></li>
-  <li><a href="#c" id="toc-c" class="nav-link" data-scroll-target="#c"><span class="toc-section-number">2.5</span>  (c)</a></li>
-  <li><a href="#d" id="toc-d" class="nav-link" data-scroll-target="#d"><span class="toc-section-number">2.6</span>  (d)</a></li>
-  <li><a href="#e" id="toc-e" class="nav-link" data-scroll-target="#e"><span class="toc-section-number">2.7</span>  (e)</a></li>
-  <li><a href="#log-normal-linear-regression" id="toc-log-normal-linear-regression" class="nav-link" data-scroll-target="#log-normal-linear-regression"><span class="toc-section-number">2.8</span>  Log-normal linear regression</a></li>
-  <li><a href="#f" id="toc-f" class="nav-link" data-scroll-target="#f"><span class="toc-section-number">2.9</span>  (f)</a></li>
-  <li><a href="#hierarchical-log-normal-linear-regression" id="toc-hierarchical-log-normal-linear-regression" class="nav-link" data-scroll-target="#hierarchical-log-normal-linear-regression"><span class="toc-section-number">2.10</span>  Hierarchical log-normal linear regression</a></li>
-  <li><a href="#g" id="toc-g" class="nav-link" data-scroll-target="#g"><span class="toc-section-number">2.11</span>  (g)</a></li>
-  <li><a href="#h" id="toc-h" class="nav-link" data-scroll-target="#h"><span class="toc-section-number">2.12</span>  (h)</a></li>
-  <li><a href="#model-comparison-using-the-elpd" id="toc-model-comparison-using-the-elpd" class="nav-link" data-scroll-target="#model-comparison-using-the-elpd"><span class="toc-section-number">2.13</span>  Model comparison using the ELPD</a></li>
-  <li><a href="#i" id="toc-i" class="nav-link" data-scroll-target="#i"><span class="toc-section-number">2.14</span>  (i)</a></li>
-  <li><a href="#j" id="toc-j" class="nav-link" data-scroll-target="#j"><span class="toc-section-number">2.15</span>  (j)</a></li>
-  <li><a href="#k" id="toc-k" class="nav-link" data-scroll-target="#k"><span class="toc-section-number">2.16</span>  (k)</a></li>
-  <li><a href="#model-comparison-using-the-rmse" id="toc-model-comparison-using-the-rmse" class="nav-link" data-scroll-target="#model-comparison-using-the-rmse"><span class="toc-section-number">2.17</span>  Model comparison using the RMSE</a></li>
-  <li><a href="#l" id="toc-l" class="nav-link" data-scroll-target="#l"><span class="toc-section-number">2.18</span>  (l)</a></li>
+  <li><a href="#exploratory-data-analysis" id="toc-exploratory-data-analysis" class="nav-link" data-scroll-target="#exploratory-data-analysis"><span class="header-section-number">2.1</span> Exploratory data analysis</a></li>
+  <li><a href="#a" id="toc-a" class="nav-link" data-scroll-target="#a"><span class="header-section-number">2.2</span> (a)</a></li>
+  <li><a href="#b" id="toc-b" class="nav-link" data-scroll-target="#b"><span class="header-section-number">2.3</span> (b)</a></li>
+  <li><a href="#linear-regression" id="toc-linear-regression" class="nav-link" data-scroll-target="#linear-regression"><span class="header-section-number">2.4</span> Linear regression</a></li>
+  <li><a href="#c" id="toc-c" class="nav-link" data-scroll-target="#c"><span class="header-section-number">2.5</span> (c)</a></li>
+  <li><a href="#d" id="toc-d" class="nav-link" data-scroll-target="#d"><span class="header-section-number">2.6</span> (d)</a></li>
+  <li><a href="#e" id="toc-e" class="nav-link" data-scroll-target="#e"><span class="header-section-number">2.7</span> (e)</a></li>
+  <li><a href="#log-normal-linear-regression" id="toc-log-normal-linear-regression" class="nav-link" data-scroll-target="#log-normal-linear-regression"><span class="header-section-number">2.8</span> Log-normal linear regression</a></li>
+  <li><a href="#f" id="toc-f" class="nav-link" data-scroll-target="#f"><span class="header-section-number">2.9</span> (f)</a></li>
+  <li><a href="#hierarchical-log-normal-linear-regression" id="toc-hierarchical-log-normal-linear-regression" class="nav-link" data-scroll-target="#hierarchical-log-normal-linear-regression"><span class="header-section-number">2.10</span> Hierarchical log-normal linear regression</a></li>
+  <li><a href="#g" id="toc-g" class="nav-link" data-scroll-target="#g"><span class="header-section-number">2.11</span> (g)</a></li>
+  <li><a href="#h" id="toc-h" class="nav-link" data-scroll-target="#h"><span class="header-section-number">2.12</span> (h)</a></li>
+  <li><a href="#model-comparison-using-the-elpd" id="toc-model-comparison-using-the-elpd" class="nav-link" data-scroll-target="#model-comparison-using-the-elpd"><span class="header-section-number">2.13</span> Model comparison using the ELPD</a></li>
+  <li><a href="#i" id="toc-i" class="nav-link" data-scroll-target="#i"><span class="header-section-number">2.14</span> (i)</a></li>
+  <li><a href="#j" id="toc-j" class="nav-link" data-scroll-target="#j"><span class="header-section-number">2.15</span> (j)</a></li>
+  <li><a href="#k" id="toc-k" class="nav-link" data-scroll-target="#k"><span class="header-section-number">2.16</span> (k)</a></li>
+  <li><a href="#model-comparison-using-the-rmse" id="toc-model-comparison-using-the-rmse" class="nav-link" data-scroll-target="#model-comparison-using-the-rmse"><span class="header-section-number">2.17</span> Model comparison using the RMSE</a></li>
+  <li><a href="#l" id="toc-l" class="nav-link" data-scroll-target="#l"><span class="header-section-number">2.18</span> (l)</a></li>
   </ul></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="template8.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
@@ -332,7 +334,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./template1.html">Templates</a></li><li class="breadcrumb-item"><a href="./template8.html">Assignment 8</a></li></ol></nav>
 <div class="quarto-title">
 <div class="quarto-title-block"><div><h1 class="title">Assignment 8</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 <p class="subtitle lead">LOO-CV model comparison</p>
@@ -354,18 +356,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </div>
   
 
+
 </header>
+
 
 <section id="general-information" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> General information</h1>
 <p>This is the template for <a href="assignment8.html">assignment 8</a>. You can download the <a href="https://avehtari.github.io/BDA_course_Aalto/assignments/template8.qmd">qmd-file</a> or copy the code from this rendered document after clicking on <code>&lt;/&gt; Code</code> in the top right corner.</p>
 <p><strong>Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.</strong></p>
-<div class="callout callout-style-default callout-warning callout-captioned">
+<div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Setup
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -375,116 +379,21 @@ Setup
 <p><em>This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.</em> <strong>Make sure that this does not get displayed in the PDF!</strong></p>
 <p>The following loads several needed packages:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(bayesplot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>This is bayesplot version 1.10.0</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>- Online documentation and vignettes at mc-stan.org/bayesplot</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>- bayesplot theme set to bayesplot::theme_default()</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>   * Does _not_ affect other ggplot2 plots</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>   * See ?bayesplot_theme_set for details on theme setting</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">library</span>(cmdstanr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>This is cmdstanr version 0.5.3</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>- CmdStanR documentation and vignettes: mc-stan.org/cmdstanr</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>- CmdStan path: /root/.cmdstan/cmdstan-2.31.0</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>- CmdStan version: 2.31.0</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-A newer version of CmdStan is available. See ?install_cmdstan() to install it.
-To disable this check set option or environment variable CMDSTANR_NO_VER_CHECK=TRUE.</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'dplyr'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:stats':
-
-    filter, lag</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:base':
-
-    intersect, setdiff, setequal, union</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb17-2"><a href="#cb17-2"></a><span class="fu">library</span>(ggdist) <span class="co"># for stat_dotsinterval</span></span>
-<span id="cb17-3"><a href="#cb17-3"></a><span class="fu">library</span>(posterior)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>This is posterior version 1.4.0</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'posterior'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:bayesplot':
-
-    rhat</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:stats':
-
-    mad, sd, var</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:base':
-
-    %in%, match</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">library</span>(brms)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: Rcpp</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading 'brms' package (version 2.19.0). Useful instructions
-can be found by typing help('brms'). A more detailed introduction
-to the package is available through vignette('brms_overview').</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'brms'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:ggdist':
-
-    dstudent_t, pstudent_t, qstudent_t, rstudent_t</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:bayesplot':
-
-    rhat</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:stats':
-
-    ar</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="co"># Globally specfiy cmdstan backend for brms</span></span>
-<span id="cb30-2"><a href="#cb30-2"></a><span class="fu">options</span>(<span class="at">brms.backend=</span><span class="st">"cmdstanr"</span>)</span>
-<span id="cb30-3"><a href="#cb30-3"></a><span class="co"># Tell brms to cache results if possible</span></span>
-<span id="cb30-4"><a href="#cb30-4"></a><span class="fu">options</span>(<span class="at">brms.file_refit=</span><span class="st">"on_change"</span>)</span>
-<span id="cb30-5"><a href="#cb30-5"></a></span>
-<span id="cb30-6"><a href="#cb30-6"></a><span class="co"># Set more readable themes with bigger font for plotting packages</span></span>
-<span id="cb30-7"><a href="#cb30-7"></a>ggplot2<span class="sc">::</span><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
-<span id="cb30-8"><a href="#cb30-8"></a>bayesplot<span class="sc">::</span><span class="fu">bayesplot_theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(bayesplot)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">library</span>(cmdstanr)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="fu">library</span>(ggdist) <span class="co"># for stat_dotsinterval</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="fu">library</span>(posterior)</span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="fu">library</span>(brms)</span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="co"># Globally specfiy cmdstan backend for brms</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="fu">options</span>(<span class="at">brms.backend=</span><span class="st">"cmdstanr"</span>)</span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="co"># Tell brms to cache results if possible</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="fu">options</span>(<span class="at">brms.file_refit=</span><span class="st">"on_change"</span>)</span>
+<span id="cb1-12"><a href="#cb1-12"></a></span>
+<span id="cb1-13"><a href="#cb1-13"></a><span class="co"># Set more readable themes with bigger font for plotting packages</span></span>
+<span id="cb1-14"><a href="#cb1-14"></a>ggplot2<span class="sc">::</span><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
+<span id="cb1-15"><a href="#cb1-15"></a>bayesplot<span class="sc">::</span><span class="fu">bayesplot_theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -498,13 +407,13 @@ Attaching package: 'brms'</code></pre>
 <section id="a" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="a"><span class="header-section-number">2.2</span> (a)</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="co"># Useful functions: ggplot, aes(x=...), geom_histogram</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># Useful functions: ggplot, aes(x=...), geom_histogram</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="b" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="b"><span class="header-section-number">2.3</span> (b)</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="co"># Useful functions: ggplot, aes(x=...,y=...,group=...,color=...), geom_line</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># Useful functions: ggplot, aes(x=...,y=...,group=...,color=...), geom_line</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="linear-regression" class="level2" data-number="2.4">
@@ -514,37 +423,37 @@ Attaching package: 'brms'</code></pre>
 <h2 data-number="2.5" class="anchored" data-anchor-id="c"><span class="header-section-number">2.5</span> (c)</h2>
 <p>In <code>brms</code>, a regression can be specified as below, see also <a href="#m">below (#m)</a> or <a href="template7.html#b-1">the last template</a>. Fill in the appropriate variables, data, and likelihood family. Specify the priors, then run the model (by removing <code>#| eval: false</code> below).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>priors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb33-2"><a href="#cb33-2"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="sc">&lt;</span>value<span class="sc">&gt;</span>), <span class="at">coef =</span> <span class="st">"Time"</span>),</span>
-<span id="cb33-3"><a href="#cb33-3"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="sc">&lt;</span>value<span class="sc">&gt;</span>), <span class="at">coef =</span> <span class="st">"Diet2"</span>),</span>
-<span id="cb33-4"><a href="#cb33-4"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="sc">&lt;</span>value<span class="sc">&gt;</span>), <span class="at">coef =</span> <span class="st">"Diet3"</span>),</span>
-<span id="cb33-5"><a href="#cb33-5"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="sc">&lt;</span>value<span class="sc">&gt;</span>), <span class="at">coef =</span> <span class="st">"Diet4"</span>)</span>
-<span id="cb33-6"><a href="#cb33-6"></a>)</span>
-<span id="cb33-7"><a href="#cb33-7"></a></span>
-<span id="cb33-8"><a href="#cb33-8"></a>f1 <span class="ot">&lt;-</span> brms<span class="sc">::</span><span class="fu">brm</span>(</span>
-<span id="cb33-9"><a href="#cb33-9"></a>  <span class="co"># This specifies the formula</span></span>
-<span id="cb33-10"><a href="#cb33-10"></a>  <span class="sc">&lt;</span>OUTCOME<span class="sc">&gt;</span> <span class="er">~</span> <span class="dv">1</span> <span class="sc">+</span> <span class="er">&lt;</span>PREDICTOR<span class="sc">&gt;</span> <span class="sc">+</span> <span class="er">&lt;</span>PREDICTOR<span class="sc">&gt;</span>,</span>
-<span id="cb33-11"><a href="#cb33-11"></a>  <span class="co"># This specifies the dataset</span></span>
-<span id="cb33-12"><a href="#cb33-12"></a>  <span class="at">data =</span> <span class="sc">&lt;</span>data<span class="sc">&gt;</span>,</span>
-<span id="cb33-13"><a href="#cb33-13"></a>  <span class="co"># This specifies the observation model family</span></span>
-<span id="cb33-14"><a href="#cb33-14"></a>  <span class="at">family =</span> <span class="sc">&lt;</span>observation_family<span class="sc">&gt;</span>,</span>
-<span id="cb33-15"><a href="#cb33-15"></a>  <span class="co"># This passes the priors specified above to brms</span></span>
-<span id="cb33-16"><a href="#cb33-16"></a>  <span class="at">prior =</span> priors,</span>
-<span id="cb33-17"><a href="#cb33-17"></a>  <span class="co"># This causes brms to cache the results</span></span>
-<span id="cb33-18"><a href="#cb33-18"></a>  <span class="at">file =</span> <span class="st">"additional_files/assignment8/f1"</span></span>
-<span id="cb33-19"><a href="#cb33-19"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>priors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb4-2"><a href="#cb4-2"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="sc">&lt;</span>value<span class="sc">&gt;</span>), <span class="at">coef =</span> <span class="st">"Time"</span>),</span>
+<span id="cb4-3"><a href="#cb4-3"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="sc">&lt;</span>value<span class="sc">&gt;</span>), <span class="at">coef =</span> <span class="st">"Diet2"</span>),</span>
+<span id="cb4-4"><a href="#cb4-4"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="sc">&lt;</span>value<span class="sc">&gt;</span>), <span class="at">coef =</span> <span class="st">"Diet3"</span>),</span>
+<span id="cb4-5"><a href="#cb4-5"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="sc">&lt;</span>value<span class="sc">&gt;</span>), <span class="at">coef =</span> <span class="st">"Diet4"</span>)</span>
+<span id="cb4-6"><a href="#cb4-6"></a>)</span>
+<span id="cb4-7"><a href="#cb4-7"></a></span>
+<span id="cb4-8"><a href="#cb4-8"></a>f1 <span class="ot">&lt;-</span> brms<span class="sc">::</span><span class="fu">brm</span>(</span>
+<span id="cb4-9"><a href="#cb4-9"></a>  <span class="co"># This specifies the formula</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a>  <span class="sc">&lt;</span>OUTCOME<span class="sc">&gt;</span> <span class="er">~</span> <span class="dv">1</span> <span class="sc">+</span> <span class="er">&lt;</span>PREDICTOR<span class="sc">&gt;</span> <span class="sc">+</span> <span class="er">&lt;</span>PREDICTOR<span class="sc">&gt;</span>,</span>
+<span id="cb4-11"><a href="#cb4-11"></a>  <span class="co"># This specifies the dataset</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a>  <span class="at">data =</span> <span class="sc">&lt;</span>data<span class="sc">&gt;</span>,</span>
+<span id="cb4-13"><a href="#cb4-13"></a>  <span class="co"># This specifies the observation model family</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a>  <span class="at">family =</span> <span class="sc">&lt;</span>observation_family<span class="sc">&gt;</span>,</span>
+<span id="cb4-15"><a href="#cb4-15"></a>  <span class="co"># This passes the priors specified above to brms</span></span>
+<span id="cb4-16"><a href="#cb4-16"></a>  <span class="at">prior =</span> priors,</span>
+<span id="cb4-17"><a href="#cb4-17"></a>  <span class="co"># This causes brms to cache the results</span></span>
+<span id="cb4-18"><a href="#cb4-18"></a>  <span class="at">file =</span> <span class="st">"additional_files/assignment8/f1"</span></span>
+<span id="cb4-19"><a href="#cb4-19"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="d" class="level2" data-number="2.6">
 <h2 data-number="2.6" class="anchored" data-anchor-id="d"><span class="header-section-number">2.6</span> (d)</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a><span class="co"># Useful functions: brms::pp_check</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Useful functions: brms::pp_check</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="e" class="level2" data-number="2.7">
 <h2 data-number="2.7" class="anchored" data-anchor-id="e"><span class="header-section-number">2.7</span> (e)</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="co"># Useful functions: brms::pp_check(..., type = ..., group=...)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Useful functions: brms::pp_check(..., type = ..., group=...)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="log-normal-linear-regression" class="level2" data-number="2.8">
@@ -553,12 +462,12 @@ Attaching package: 'brms'</code></pre>
 <section id="f" class="level2" data-number="2.9">
 <h2 data-number="2.9" class="anchored" data-anchor-id="f"><span class="header-section-number">2.9</span> (f)</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>log_priors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb36-2"><a href="#cb36-2"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="fu">log</span>(<span class="dv">3</span>)), <span class="at">coef =</span> <span class="st">"Time"</span>),</span>
-<span id="cb36-3"><a href="#cb36-3"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="fu">log</span>(<span class="dv">5</span>)), <span class="at">coef =</span> <span class="st">"Diet2"</span>),</span>
-<span id="cb36-4"><a href="#cb36-4"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="fu">log</span>(<span class="dv">5</span>)), <span class="at">coef =</span> <span class="st">"Diet3"</span>),</span>
-<span id="cb36-5"><a href="#cb36-5"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="fu">log</span>(<span class="dv">5</span>)), <span class="at">coef =</span> <span class="st">"Diet4"</span>)</span>
-<span id="cb36-6"><a href="#cb36-6"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>log_priors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb7-2"><a href="#cb7-2"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="fu">log</span>(<span class="dv">3</span>)), <span class="at">coef =</span> <span class="st">"Time"</span>),</span>
+<span id="cb7-3"><a href="#cb7-3"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="fu">log</span>(<span class="dv">5</span>)), <span class="at">coef =</span> <span class="st">"Diet2"</span>),</span>
+<span id="cb7-4"><a href="#cb7-4"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="fu">log</span>(<span class="dv">5</span>)), <span class="at">coef =</span> <span class="st">"Diet3"</span>),</span>
+<span id="cb7-5"><a href="#cb7-5"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="fu">log</span>(<span class="dv">5</span>)), <span class="at">coef =</span> <span class="st">"Diet4"</span>)</span>
+<span id="cb7-6"><a href="#cb7-6"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="hierarchical-log-normal-linear-regression" class="level2" data-number="2.10">
@@ -576,23 +485,23 @@ Attaching package: 'brms'</code></pre>
 <section id="i" class="level2" data-number="2.14">
 <h2 data-number="2.14" class="anchored" data-anchor-id="i"><span class="header-section-number">2.14</span> (i)</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a><span class="co"># Useful functions: loo, loo_compare</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># Useful functions: loo, loo_compare</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="j" class="level2" data-number="2.15">
 <h2 data-number="2.15" class="anchored" data-anchor-id="j"><span class="header-section-number">2.15</span> (j)</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a><span class="co"># Useful functions: plot(loo(...), label_points = TRUE)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># Useful functions: plot(loo(...), label_points = TRUE)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="k" class="level2" data-number="2.16">
 <h2 data-number="2.16" class="anchored" data-anchor-id="k"><span class="header-section-number">2.16</span> (k)</h2>
-<div class="callout callout-style-default callout-warning callout-captioned">
+<div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Creating a dummy example plot
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -602,19 +511,19 @@ Creating a dummy example plot
 <p><em>This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.</em> <strong>Make sure that this does not get displayed in the PDF!</strong></p>
 <p>Creating a dummy fit just to be able to generate an example plot below. Generate a similar plot for your hierarchical model.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a><span class="co"># The brms-formula (weights ~ ...) below is not one that you should be using in your models!</span></span>
-<span id="cb39-2"><a href="#cb39-2"></a>dummy_fit <span class="ot">&lt;-</span> brms<span class="sc">::</span><span class="fu">brm</span>(</span>
-<span id="cb39-3"><a href="#cb39-3"></a>  weight <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> Time <span class="sc">+</span> Chick,</span>
-<span id="cb39-4"><a href="#cb39-4"></a>  <span class="at">data =</span> ChickWeight,</span>
-<span id="cb39-5"><a href="#cb39-5"></a>  <span class="at">file=</span><span class="st">"additional_files/assignment8/dummy_fit"</span></span>
-<span id="cb39-6"><a href="#cb39-6"></a>)</span>
-<span id="cb39-7"><a href="#cb39-7"></a><span class="co"># Adjust the chicken_idxs variable to select appropriate chickens</span></span>
-<span id="cb39-8"><a href="#cb39-8"></a>chicken_idxs <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">11</span>,<span class="dv">43</span>)</span>
-<span id="cb39-9"><a href="#cb39-9"></a><span class="co"># Create this plot for your hierarchical model for selected chickens</span></span>
-<span id="cb39-10"><a href="#cb39-10"></a>brms<span class="sc">::</span><span class="fu">pp_check</span>(</span>
-<span id="cb39-11"><a href="#cb39-11"></a>  dummy_fit, <span class="at">type =</span> <span class="st">"intervals_grouped"</span>, <span class="at">group =</span> <span class="st">"Chick"</span>, </span>
-<span id="cb39-12"><a href="#cb39-12"></a>  <span class="at">newdata=</span>ChickWeight <span class="sc">|&gt;</span> <span class="fu">filter</span>(Chick <span class="sc">%in%</span> chicken_idxs)</span>
-<span id="cb39-13"><a href="#cb39-13"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># The brms-formula (weights ~ ...) below is not one that you should be using in your models!</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a>dummy_fit <span class="ot">&lt;-</span> brms<span class="sc">::</span><span class="fu">brm</span>(</span>
+<span id="cb10-3"><a href="#cb10-3"></a>  weight <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> Time <span class="sc">+</span> Chick,</span>
+<span id="cb10-4"><a href="#cb10-4"></a>  <span class="at">data =</span> ChickWeight,</span>
+<span id="cb10-5"><a href="#cb10-5"></a>  <span class="at">file=</span><span class="st">"additional_files/assignment8/dummy_fit"</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a>)</span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="co"># Adjust the chicken_idxs variable to select appropriate chickens</span></span>
+<span id="cb10-8"><a href="#cb10-8"></a>chicken_idxs <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">11</span>,<span class="dv">43</span>)</span>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="co"># Create this plot for your hierarchical model for selected chickens</span></span>
+<span id="cb10-10"><a href="#cb10-10"></a>brms<span class="sc">::</span><span class="fu">pp_check</span>(</span>
+<span id="cb10-11"><a href="#cb10-11"></a>  dummy_fit, <span class="at">type =</span> <span class="st">"intervals_grouped"</span>, <span class="at">group =</span> <span class="st">"Chick"</span>, </span>
+<span id="cb10-12"><a href="#cb10-12"></a>  <span class="at">newdata=</span>ChickWeight <span class="sc">|&gt;</span> <span class="fu">filter</span>(Chick <span class="sc">%in%</span> chicken_idxs)</span>
+<span id="cb10-13"><a href="#cb10-13"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -625,12 +534,12 @@ Creating a dummy example plot
 </section>
 <section id="l" class="level2" data-number="2.18">
 <h2 data-number="2.18" class="anchored" data-anchor-id="l"><span class="header-section-number">2.18</span> (l)</h2>
-<div class="callout callout-style-default callout-warning callout-captioned">
+<div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 <code>rmse</code> function implementation
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -640,17 +549,17 @@ Creating a dummy example plot
 <p><em>This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.</em> <strong>Make sure that this does not get displayed in the PDF!</strong></p>
 <p>The below function takes a brms fit object and computes either the <a href="https://en.wikipedia.org/wiki/Root-mean-square_deviation">root-mean-square error (RMSE)</a> or the PSIS-LOO-RMSE, i.e.&nbsp;the RMSE using LOO-CV estimated using PSIS-LOO.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a><span class="co"># Compute RMSE or LOO-RMSE</span></span>
-<span id="cb40-2"><a href="#cb40-2"></a>rmse <span class="ot">&lt;-</span> <span class="cf">function</span>(fit, <span class="at">use_loo=</span><span class="cn">FALSE</span>){</span>
-<span id="cb40-3"><a href="#cb40-3"></a>  mean_y_pred <span class="ot">&lt;-</span> <span class="cf">if</span>(use_loo){</span>
-<span id="cb40-4"><a href="#cb40-4"></a>    brms<span class="sc">::</span><span class="fu">loo_predict</span>(fit)</span>
-<span id="cb40-5"><a href="#cb40-5"></a>  }<span class="cf">else</span>{</span>
-<span id="cb40-6"><a href="#cb40-6"></a>    <span class="fu">colMeans</span>(brms<span class="sc">::</span><span class="fu">posterior_predict</span>(fit)) </span>
-<span id="cb40-7"><a href="#cb40-7"></a>  }</span>
-<span id="cb40-8"><a href="#cb40-8"></a>  <span class="fu">sqrt</span>(<span class="fu">mean</span>(</span>
-<span id="cb40-9"><a href="#cb40-9"></a>    (mean_y_pred <span class="sc">-</span> brms<span class="sc">::</span><span class="fu">get_y</span>(fit))<span class="sc">^</span><span class="dv">2</span></span>
-<span id="cb40-10"><a href="#cb40-10"></a>  ))</span>
-<span id="cb40-11"><a href="#cb40-11"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># Compute RMSE or LOO-RMSE</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a>rmse <span class="ot">&lt;-</span> <span class="cf">function</span>(fit, <span class="at">use_loo=</span><span class="cn">FALSE</span>){</span>
+<span id="cb11-3"><a href="#cb11-3"></a>  mean_y_pred <span class="ot">&lt;-</span> <span class="cf">if</span>(use_loo){</span>
+<span id="cb11-4"><a href="#cb11-4"></a>    brms<span class="sc">::</span><span class="fu">loo_predict</span>(fit)</span>
+<span id="cb11-5"><a href="#cb11-5"></a>  }<span class="cf">else</span>{</span>
+<span id="cb11-6"><a href="#cb11-6"></a>    <span class="fu">colMeans</span>(brms<span class="sc">::</span><span class="fu">posterior_predict</span>(fit)) </span>
+<span id="cb11-7"><a href="#cb11-7"></a>  }</span>
+<span id="cb11-8"><a href="#cb11-8"></a>  <span class="fu">sqrt</span>(<span class="fu">mean</span>(</span>
+<span id="cb11-9"><a href="#cb11-9"></a>    (mean_y_pred <span class="sc">-</span> brms<span class="sc">::</span><span class="fu">get_y</span>(fit))<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb11-10"><a href="#cb11-10"></a>  ))</span>
+<span id="cb11-11"><a href="#cb11-11"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -690,12 +599,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
     }
-  });
-  clipboard.on('success', function(e) {
+    return false;
+  }
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -727,7 +639,29 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
   const viewSource = window.document.getElementById('quarto-view-source') ||
                      window.document.getElementById('quarto-code-tools-source');
   if (viewSource) {
@@ -779,10 +713,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   if (showAllCode) {
     showAllCode.addEventListener("click", toggleCodeHandler(true));
   }
-  function tippyHover(el, contentFn) {
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -792,8 +743,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -805,7 +765,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -849,6 +932,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -874,6 +958,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -935,273 +1045,274 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./template7.html" class="pagination-link">
+      <a href="./template7.html" class="pagination-link" aria-label="Assignment 7">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Assignment 7</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./template9.html" class="pagination-link">
+      <a href="./template9.html" class="pagination-link" aria-label="Assignment 9">
         <span class="nav-page-text">Assignment 9</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb41" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb41-1"><a href="#cb41-1"></a><span class="co">---</span></span>
-<span id="cb41-2"><a href="#cb41-2"></a><span class="an">title:</span><span class="co"> "Assignment 8"</span></span>
-<span id="cb41-3"><a href="#cb41-3"></a><span class="an">subtitle:</span><span class="co"> "LOO-CV model comparison"</span></span>
-<span id="cb41-4"><a href="#cb41-4"></a><span class="an">author:</span><span class="co"> anonymous # &lt;-- hand in anonymously</span></span>
-<span id="cb41-5"><a href="#cb41-5"></a><span class="an">format:</span></span>
-<span id="cb41-6"><a href="#cb41-6"></a><span class="co">  html:</span></span>
-<span id="cb41-7"><a href="#cb41-7"></a><span class="co">    toc: true</span></span>
-<span id="cb41-8"><a href="#cb41-8"></a><span class="co">    code-tools: true</span></span>
-<span id="cb41-9"><a href="#cb41-9"></a><span class="co">    code-line-numbers: true</span></span>
-<span id="cb41-10"><a href="#cb41-10"></a><span class="co">    number-sections: true</span></span>
-<span id="cb41-11"><a href="#cb41-11"></a><span class="co">    mainfont: Georgia, serif</span></span>
-<span id="cb41-12"><a href="#cb41-12"></a><span class="co">    page-layout: article</span></span>
-<span id="cb41-13"><a href="#cb41-13"></a><span class="co">  pdf:  </span></span>
-<span id="cb41-14"><a href="#cb41-14"></a><span class="co">    geometry:</span></span>
-<span id="cb41-15"><a href="#cb41-15"></a><span class="co">    - left=1cm,top=1cm,bottom=1cm,right=7cm</span></span>
-<span id="cb41-16"><a href="#cb41-16"></a><span class="co">    number-sections: true</span></span>
-<span id="cb41-17"><a href="#cb41-17"></a><span class="co">    code-annotations: none</span></span>
-<span id="cb41-18"><a href="#cb41-18"></a><span class="an">editor:</span><span class="co"> source</span></span>
-<span id="cb41-19"><a href="#cb41-19"></a><span class="co">---</span></span>
-<span id="cb41-20"><a href="#cb41-20"></a></span>
-<span id="cb41-21"><a href="#cb41-21"></a></span>
-<span id="cb41-22"><a href="#cb41-22"></a><span class="fu"># General information</span></span>
-<span id="cb41-23"><a href="#cb41-23"></a></span>
-<span id="cb41-24"><a href="#cb41-24"></a>This is the template for <span class="co">[</span><span class="ot">assignment 8</span><span class="co">](assignment8.html)</span>. You can download the <span class="co">[</span><span class="ot">qmd-file</span><span class="co">](https://avehtari.github.io/BDA_course_Aalto/assignments/template8.qmd)</span> or copy the code from this rendered document after clicking on <span class="in">`&lt;/&gt; Code`</span> in the top right corner.</span>
-<span id="cb41-25"><a href="#cb41-25"></a></span>
-<span id="cb41-26"><a href="#cb41-26"></a>**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.** </span>
-<span id="cb41-27"><a href="#cb41-27"></a></span>
-<span id="cb41-28"><a href="#cb41-28"></a></span>
-<span id="cb41-29"><a href="#cb41-29"></a></span>
-<span id="cb41-30"><a href="#cb41-30"></a>:::: {.content-hidden when-format="pdf"}</span>
-<span id="cb41-31"><a href="#cb41-31"></a>::: {.callout-warning collapse=false}</span>
-<span id="cb41-32"><a href="#cb41-32"></a> </span>
-<span id="cb41-33"><a href="#cb41-33"></a><span class="fu">## Setup</span></span>
-<span id="cb41-34"><a href="#cb41-34"></a></span>
-<span id="cb41-35"><a href="#cb41-35"></a></span>
-<span id="cb41-36"><a href="#cb41-36"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
-<span id="cb41-37"><a href="#cb41-37"></a>**Make sure that this does not get displayed in the PDF!**</span>
-<span id="cb41-38"><a href="#cb41-38"></a>    </span>
-<span id="cb41-39"><a href="#cb41-39"></a></span>
-<span id="cb41-40"><a href="#cb41-40"></a></span>
-<span id="cb41-41"><a href="#cb41-41"></a></span>
-<span id="cb41-42"><a href="#cb41-42"></a>The following loads several needed packages:</span>
-<span id="cb41-43"><a href="#cb41-43"></a></span>
-<span id="cb41-46"><a href="#cb41-46"></a><span class="in">```{r}</span></span>
-<span id="cb41-47"><a href="#cb41-47"></a><span class="co">#| label: imports</span></span>
-<span id="cb41-48"><a href="#cb41-48"></a><span class="fu">library</span>(bayesplot)</span>
-<span id="cb41-49"><a href="#cb41-49"></a><span class="fu">library</span>(cmdstanr)</span>
-<span id="cb41-50"><a href="#cb41-50"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb41-51"><a href="#cb41-51"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb41-52"><a href="#cb41-52"></a><span class="fu">library</span>(ggdist) <span class="co"># for stat_dotsinterval</span></span>
-<span id="cb41-53"><a href="#cb41-53"></a><span class="fu">library</span>(posterior)</span>
-<span id="cb41-54"><a href="#cb41-54"></a><span class="fu">library</span>(brms)</span>
-<span id="cb41-55"><a href="#cb41-55"></a><span class="co"># Globally specfiy cmdstan backend for brms</span></span>
-<span id="cb41-56"><a href="#cb41-56"></a><span class="fu">options</span>(<span class="at">brms.backend=</span><span class="st">"cmdstanr"</span>)</span>
-<span id="cb41-57"><a href="#cb41-57"></a><span class="co"># Tell brms to cache results if possible</span></span>
-<span id="cb41-58"><a href="#cb41-58"></a><span class="fu">options</span>(<span class="at">brms.file_refit=</span><span class="st">"on_change"</span>)</span>
-<span id="cb41-59"><a href="#cb41-59"></a></span>
-<span id="cb41-60"><a href="#cb41-60"></a><span class="co"># Set more readable themes with bigger font for plotting packages</span></span>
-<span id="cb41-61"><a href="#cb41-61"></a>ggplot2<span class="sc">::</span><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
-<span id="cb41-62"><a href="#cb41-62"></a>bayesplot<span class="sc">::</span><span class="fu">bayesplot_theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
-<span id="cb41-63"><a href="#cb41-63"></a><span class="in">```</span></span>
-<span id="cb41-64"><a href="#cb41-64"></a></span>
-<span id="cb41-65"><a href="#cb41-65"></a>:::</span>
-<span id="cb41-66"><a href="#cb41-66"></a>::::</span>
-<span id="cb41-67"><a href="#cb41-67"></a></span>
-<span id="cb41-68"><a href="#cb41-68"></a></span>
-<span id="cb41-69"><a href="#cb41-69"></a><span class="fu"># A hierarchical model for chicken weight time series</span></span>
-<span id="cb41-70"><a href="#cb41-70"></a></span>
-<span id="cb41-71"><a href="#cb41-71"></a></span>
-<span id="cb41-72"><a href="#cb41-72"></a><span class="fu">## Exploratory data analysis</span></span>
-<span id="cb41-73"><a href="#cb41-73"></a></span>
-<span id="cb41-74"><a href="#cb41-74"></a><span class="fu">## (a)</span></span>
-<span id="cb41-75"><a href="#cb41-75"></a></span>
-<span id="cb41-76"><a href="#cb41-76"></a></span>
-<span id="cb41-79"><a href="#cb41-79"></a><span class="in">```{r}</span></span>
-<span id="cb41-80"><a href="#cb41-80"></a><span class="co"># Useful functions: ggplot, aes(x=...), geom_histogram</span></span>
-<span id="cb41-81"><a href="#cb41-81"></a><span class="in">```</span></span>
-<span id="cb41-82"><a href="#cb41-82"></a></span>
-<span id="cb41-83"><a href="#cb41-83"></a></span>
-<span id="cb41-84"><a href="#cb41-84"></a></span>
-<span id="cb41-85"><a href="#cb41-85"></a><span class="fu">## (b)</span></span>
-<span id="cb41-86"><a href="#cb41-86"></a></span>
-<span id="cb41-87"><a href="#cb41-87"></a></span>
-<span id="cb41-90"><a href="#cb41-90"></a><span class="in">```{r}</span></span>
-<span id="cb41-91"><a href="#cb41-91"></a><span class="co"># Useful functions: ggplot, aes(x=...,y=...,group=...,color=...), geom_line</span></span>
-<span id="cb41-92"><a href="#cb41-92"></a><span class="in">```</span></span>
-<span id="cb41-93"><a href="#cb41-93"></a></span>
-<span id="cb41-94"><a href="#cb41-94"></a></span>
-<span id="cb41-95"><a href="#cb41-95"></a><span class="fu">## Linear regression</span></span>
-<span id="cb41-96"><a href="#cb41-96"></a></span>
-<span id="cb41-97"><a href="#cb41-97"></a><span class="fu">## (c)</span></span>
-<span id="cb41-98"><a href="#cb41-98"></a></span>
-<span id="cb41-99"><a href="#cb41-99"></a></span>
-<span id="cb41-100"><a href="#cb41-100"></a>In <span class="in">`brms`</span>, a regression can be specified as below, see also <span class="co">[</span><span class="ot">below (#m)</span><span class="co">](#m)</span> or <span class="co">[</span><span class="ot">the last template</span><span class="co">](template7.html#b-1)</span>. Fill in the appropriate variables,</span>
-<span id="cb41-101"><a href="#cb41-101"></a>data, and likelihood family. Specify the priors, then run the model (by removing <span class="in">`#| eval: false`</span> below).</span>
-<span id="cb41-102"><a href="#cb41-102"></a></span>
-<span id="cb41-105"><a href="#cb41-105"></a><span class="in">```{r}</span></span>
-<span id="cb41-106"><a href="#cb41-106"></a><span class="co">#| eval: false</span></span>
-<span id="cb41-107"><a href="#cb41-107"></a>priors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb41-108"><a href="#cb41-108"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="sc">&lt;</span>value<span class="sc">&gt;</span>), <span class="at">coef =</span> <span class="st">"Time"</span>),</span>
-<span id="cb41-109"><a href="#cb41-109"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="sc">&lt;</span>value<span class="sc">&gt;</span>), <span class="at">coef =</span> <span class="st">"Diet2"</span>),</span>
-<span id="cb41-110"><a href="#cb41-110"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="sc">&lt;</span>value<span class="sc">&gt;</span>), <span class="at">coef =</span> <span class="st">"Diet3"</span>),</span>
-<span id="cb41-111"><a href="#cb41-111"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="sc">&lt;</span>value<span class="sc">&gt;</span>), <span class="at">coef =</span> <span class="st">"Diet4"</span>)</span>
-<span id="cb41-112"><a href="#cb41-112"></a>)</span>
-<span id="cb41-113"><a href="#cb41-113"></a></span>
-<span id="cb41-114"><a href="#cb41-114"></a>f1 <span class="ot">&lt;-</span> brms<span class="sc">::</span><span class="fu">brm</span>(</span>
-<span id="cb41-115"><a href="#cb41-115"></a>  <span class="co"># This specifies the formula</span></span>
-<span id="cb41-116"><a href="#cb41-116"></a>  <span class="sc">&lt;</span>OUTCOME<span class="sc">&gt;</span> <span class="er">~</span> <span class="dv">1</span> <span class="sc">+</span> <span class="er">&lt;</span>PREDICTOR<span class="sc">&gt;</span> <span class="sc">+</span> <span class="er">&lt;</span>PREDICTOR<span class="sc">&gt;</span>,</span>
-<span id="cb41-117"><a href="#cb41-117"></a>  <span class="co"># This specifies the dataset</span></span>
-<span id="cb41-118"><a href="#cb41-118"></a>  <span class="at">data =</span> <span class="sc">&lt;</span>data<span class="sc">&gt;</span>,</span>
-<span id="cb41-119"><a href="#cb41-119"></a>  <span class="co"># This specifies the observation model family</span></span>
-<span id="cb41-120"><a href="#cb41-120"></a>  <span class="at">family =</span> <span class="sc">&lt;</span>observation_family<span class="sc">&gt;</span>,</span>
-<span id="cb41-121"><a href="#cb41-121"></a>  <span class="co"># This passes the priors specified above to brms</span></span>
-<span id="cb41-122"><a href="#cb41-122"></a>  <span class="at">prior =</span> priors,</span>
-<span id="cb41-123"><a href="#cb41-123"></a>  <span class="co"># This causes brms to cache the results</span></span>
-<span id="cb41-124"><a href="#cb41-124"></a>  <span class="at">file =</span> <span class="st">"additional_files/assignment8/f1"</span></span>
-<span id="cb41-125"><a href="#cb41-125"></a>)</span>
-<span id="cb41-126"><a href="#cb41-126"></a><span class="in">```</span></span>
-<span id="cb41-127"><a href="#cb41-127"></a></span>
-<span id="cb41-128"><a href="#cb41-128"></a></span>
-<span id="cb41-129"><a href="#cb41-129"></a></span>
-<span id="cb41-130"><a href="#cb41-130"></a><span class="fu">## (d)</span></span>
-<span id="cb41-131"><a href="#cb41-131"></a></span>
-<span id="cb41-132"><a href="#cb41-132"></a></span>
-<span id="cb41-135"><a href="#cb41-135"></a><span class="in">```{r}</span></span>
-<span id="cb41-136"><a href="#cb41-136"></a><span class="co"># Useful functions: brms::pp_check</span></span>
-<span id="cb41-137"><a href="#cb41-137"></a><span class="in">```</span></span>
-<span id="cb41-138"><a href="#cb41-138"></a></span>
-<span id="cb41-139"><a href="#cb41-139"></a></span>
-<span id="cb41-140"><a href="#cb41-140"></a></span>
-<span id="cb41-141"><a href="#cb41-141"></a><span class="fu">## (e)</span></span>
-<span id="cb41-142"><a href="#cb41-142"></a></span>
-<span id="cb41-143"><a href="#cb41-143"></a></span>
-<span id="cb41-146"><a href="#cb41-146"></a><span class="in">```{r}</span></span>
-<span id="cb41-147"><a href="#cb41-147"></a><span class="co"># Useful functions: brms::pp_check(..., type = ..., group=...)</span></span>
-<span id="cb41-148"><a href="#cb41-148"></a><span class="in">```</span></span>
-<span id="cb41-149"><a href="#cb41-149"></a></span>
-<span id="cb41-150"><a href="#cb41-150"></a></span>
-<span id="cb41-151"><a href="#cb41-151"></a><span class="fu">## Log-normal linear regression</span></span>
-<span id="cb41-152"><a href="#cb41-152"></a></span>
-<span id="cb41-153"><a href="#cb41-153"></a><span class="fu">## (f)</span></span>
-<span id="cb41-154"><a href="#cb41-154"></a></span>
-<span id="cb41-155"><a href="#cb41-155"></a></span>
-<span id="cb41-158"><a href="#cb41-158"></a><span class="in">```{r}</span></span>
-<span id="cb41-159"><a href="#cb41-159"></a>log_priors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb41-160"><a href="#cb41-160"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="fu">log</span>(<span class="dv">3</span>)), <span class="at">coef =</span> <span class="st">"Time"</span>),</span>
-<span id="cb41-161"><a href="#cb41-161"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="fu">log</span>(<span class="dv">5</span>)), <span class="at">coef =</span> <span class="st">"Diet2"</span>),</span>
-<span id="cb41-162"><a href="#cb41-162"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="fu">log</span>(<span class="dv">5</span>)), <span class="at">coef =</span> <span class="st">"Diet3"</span>),</span>
-<span id="cb41-163"><a href="#cb41-163"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="fu">log</span>(<span class="dv">5</span>)), <span class="at">coef =</span> <span class="st">"Diet4"</span>)</span>
-<span id="cb41-164"><a href="#cb41-164"></a>)</span>
-<span id="cb41-165"><a href="#cb41-165"></a><span class="in">```</span></span>
-<span id="cb41-166"><a href="#cb41-166"></a></span>
-<span id="cb41-167"><a href="#cb41-167"></a></span>
-<span id="cb41-168"><a href="#cb41-168"></a><span class="fu">## Hierarchical log-normal linear regression</span></span>
-<span id="cb41-169"><a href="#cb41-169"></a></span>
-<span id="cb41-170"><a href="#cb41-170"></a><span class="fu">## (g)</span></span>
-<span id="cb41-171"><a href="#cb41-171"></a></span>
-<span id="cb41-172"><a href="#cb41-172"></a></span>
-<span id="cb41-173"><a href="#cb41-173"></a><span class="fu">## (h)</span></span>
-<span id="cb41-174"><a href="#cb41-174"></a></span>
-<span id="cb41-175"><a href="#cb41-175"></a><span class="fu">## Model comparison using the ELPD</span></span>
-<span id="cb41-176"><a href="#cb41-176"></a></span>
-<span id="cb41-177"><a href="#cb41-177"></a><span class="fu">## (i)</span></span>
-<span id="cb41-178"><a href="#cb41-178"></a></span>
-<span id="cb41-179"><a href="#cb41-179"></a></span>
-<span id="cb41-182"><a href="#cb41-182"></a><span class="in">```{r}</span></span>
-<span id="cb41-183"><a href="#cb41-183"></a><span class="co"># Useful functions: loo, loo_compare</span></span>
-<span id="cb41-184"><a href="#cb41-184"></a><span class="in">```</span></span>
-<span id="cb41-185"><a href="#cb41-185"></a></span>
-<span id="cb41-186"><a href="#cb41-186"></a></span>
-<span id="cb41-187"><a href="#cb41-187"></a></span>
-<span id="cb41-188"><a href="#cb41-188"></a><span class="fu">## (j)</span></span>
-<span id="cb41-189"><a href="#cb41-189"></a></span>
-<span id="cb41-190"><a href="#cb41-190"></a></span>
-<span id="cb41-193"><a href="#cb41-193"></a><span class="in">```{r}</span></span>
-<span id="cb41-194"><a href="#cb41-194"></a><span class="co"># Useful functions: plot(loo(...), label_points = TRUE)</span></span>
-<span id="cb41-195"><a href="#cb41-195"></a><span class="in">```</span></span>
-<span id="cb41-196"><a href="#cb41-196"></a></span>
-<span id="cb41-197"><a href="#cb41-197"></a></span>
-<span id="cb41-198"><a href="#cb41-198"></a></span>
-<span id="cb41-199"><a href="#cb41-199"></a><span class="fu">## (k)</span></span>
-<span id="cb41-200"><a href="#cb41-200"></a></span>
-<span id="cb41-201"><a href="#cb41-201"></a></span>
-<span id="cb41-202"><a href="#cb41-202"></a>:::: {.content-hidden when-format="pdf"}</span>
-<span id="cb41-203"><a href="#cb41-203"></a>::: {.callout-warning collapse=false}</span>
-<span id="cb41-204"><a href="#cb41-204"></a></span>
-<span id="cb41-205"><a href="#cb41-205"></a><span class="fu">## Creating a dummy example plot </span></span>
-<span id="cb41-206"><a href="#cb41-206"></a></span>
-<span id="cb41-207"><a href="#cb41-207"></a></span>
-<span id="cb41-208"><a href="#cb41-208"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
-<span id="cb41-209"><a href="#cb41-209"></a>**Make sure that this does not get displayed in the PDF!**</span>
-<span id="cb41-210"><a href="#cb41-210"></a>    </span>
-<span id="cb41-211"><a href="#cb41-211"></a></span>
-<span id="cb41-212"><a href="#cb41-212"></a></span>
-<span id="cb41-213"><a href="#cb41-213"></a></span>
-<span id="cb41-214"><a href="#cb41-214"></a>Creating a dummy fit just to be able to generate an example plot below. </span>
-<span id="cb41-215"><a href="#cb41-215"></a>Generate a similar plot for your hierarchical model.</span>
-<span id="cb41-216"><a href="#cb41-216"></a></span>
-<span id="cb41-219"><a href="#cb41-219"></a><span class="in">```{r}</span></span>
-<span id="cb41-220"><a href="#cb41-220"></a><span class="co">#| output: false</span></span>
-<span id="cb41-221"><a href="#cb41-221"></a></span>
-<span id="cb41-222"><a href="#cb41-222"></a><span class="co"># The brms-formula (weights ~ ...) below is not one that you should be using in your models!</span></span>
-<span id="cb41-223"><a href="#cb41-223"></a>dummy_fit <span class="ot">&lt;-</span> brms<span class="sc">::</span><span class="fu">brm</span>(</span>
-<span id="cb41-224"><a href="#cb41-224"></a>  weight <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> Time <span class="sc">+</span> Chick,</span>
-<span id="cb41-225"><a href="#cb41-225"></a>  <span class="at">data =</span> ChickWeight,</span>
-<span id="cb41-226"><a href="#cb41-226"></a>  <span class="at">file=</span><span class="st">"additional_files/assignment8/dummy_fit"</span></span>
-<span id="cb41-227"><a href="#cb41-227"></a>)</span>
-<span id="cb41-228"><a href="#cb41-228"></a><span class="co"># Adjust the chicken_idxs variable to select appropriate chickens</span></span>
-<span id="cb41-229"><a href="#cb41-229"></a>chicken_idxs <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">11</span>,<span class="dv">43</span>)</span>
-<span id="cb41-230"><a href="#cb41-230"></a><span class="co"># Create this plot for your hierarchical model for selected chickens</span></span>
-<span id="cb41-231"><a href="#cb41-231"></a>brms<span class="sc">::</span><span class="fu">pp_check</span>(</span>
-<span id="cb41-232"><a href="#cb41-232"></a>  dummy_fit, <span class="at">type =</span> <span class="st">"intervals_grouped"</span>, <span class="at">group =</span> <span class="st">"Chick"</span>, </span>
-<span id="cb41-233"><a href="#cb41-233"></a>  <span class="at">newdata=</span>ChickWeight <span class="sc">|&gt;</span> <span class="fu">filter</span>(Chick <span class="sc">%in%</span> chicken_idxs)</span>
-<span id="cb41-234"><a href="#cb41-234"></a>)</span>
-<span id="cb41-235"><a href="#cb41-235"></a><span class="in">```</span></span>
-<span id="cb41-236"><a href="#cb41-236"></a></span>
-<span id="cb41-237"><a href="#cb41-237"></a>:::</span>
-<span id="cb41-238"><a href="#cb41-238"></a>::::</span>
-<span id="cb41-239"><a href="#cb41-239"></a></span>
-<span id="cb41-240"><a href="#cb41-240"></a></span>
-<span id="cb41-241"><a href="#cb41-241"></a><span class="fu">## Model comparison using the RMSE</span></span>
-<span id="cb41-242"><a href="#cb41-242"></a></span>
-<span id="cb41-243"><a href="#cb41-243"></a><span class="fu">## (l)</span></span>
-<span id="cb41-244"><a href="#cb41-244"></a></span>
-<span id="cb41-245"><a href="#cb41-245"></a></span>
-<span id="cb41-246"><a href="#cb41-246"></a>:::: {.content-hidden when-format="pdf"}</span>
-<span id="cb41-247"><a href="#cb41-247"></a>::: {.callout-warning collapse=false}</span>
-<span id="cb41-248"><a href="#cb41-248"></a></span>
-<span id="cb41-249"><a href="#cb41-249"></a><span class="fu">## `rmse` function implementation</span></span>
-<span id="cb41-250"><a href="#cb41-250"></a></span>
-<span id="cb41-251"><a href="#cb41-251"></a></span>
-<span id="cb41-252"><a href="#cb41-252"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
-<span id="cb41-253"><a href="#cb41-253"></a>**Make sure that this does not get displayed in the PDF!**</span>
-<span id="cb41-254"><a href="#cb41-254"></a>    </span>
-<span id="cb41-255"><a href="#cb41-255"></a></span>
-<span id="cb41-256"><a href="#cb41-256"></a></span>
-<span id="cb41-257"><a href="#cb41-257"></a></span>
-<span id="cb41-258"><a href="#cb41-258"></a>The below function takes a brms fit object and computes either the <span class="co">[</span><span class="ot">root-mean-square error (RMSE)</span><span class="co">](https://en.wikipedia.org/wiki/Root-mean-square_deviation)</span> or the PSIS-LOO-RMSE, i.e. the RMSE using LOO-CV estimated using PSIS-LOO.</span>
-<span id="cb41-261"><a href="#cb41-261"></a><span class="in">```{r}</span></span>
-<span id="cb41-262"><a href="#cb41-262"></a><span class="co"># Compute RMSE or LOO-RMSE</span></span>
-<span id="cb41-263"><a href="#cb41-263"></a>rmse <span class="ot">&lt;-</span> <span class="cf">function</span>(fit, <span class="at">use_loo=</span><span class="cn">FALSE</span>){</span>
-<span id="cb41-264"><a href="#cb41-264"></a>  mean_y_pred <span class="ot">&lt;-</span> <span class="cf">if</span>(use_loo){</span>
-<span id="cb41-265"><a href="#cb41-265"></a>    brms<span class="sc">::</span><span class="fu">loo_predict</span>(fit)</span>
-<span id="cb41-266"><a href="#cb41-266"></a>  }<span class="cf">else</span>{</span>
-<span id="cb41-267"><a href="#cb41-267"></a>    <span class="fu">colMeans</span>(brms<span class="sc">::</span><span class="fu">posterior_predict</span>(fit)) </span>
-<span id="cb41-268"><a href="#cb41-268"></a>  }</span>
-<span id="cb41-269"><a href="#cb41-269"></a>  <span class="fu">sqrt</span>(<span class="fu">mean</span>(</span>
-<span id="cb41-270"><a href="#cb41-270"></a>    (mean_y_pred <span class="sc">-</span> brms<span class="sc">::</span><span class="fu">get_y</span>(fit))<span class="sc">^</span><span class="dv">2</span></span>
-<span id="cb41-271"><a href="#cb41-271"></a>  ))</span>
-<span id="cb41-272"><a href="#cb41-272"></a>}</span>
-<span id="cb41-273"><a href="#cb41-273"></a><span class="in">```</span></span>
-<span id="cb41-274"><a href="#cb41-274"></a></span>
-<span id="cb41-275"><a href="#cb41-275"></a>:::</span>
-<span id="cb41-276"><a href="#cb41-276"></a>::::</span>
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb12" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb12-1"><a href="#cb12-1"></a><span class="co">---</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="an">title:</span><span class="co"> "Assignment 8"</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="an">subtitle:</span><span class="co"> "LOO-CV model comparison"</span></span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="an">author:</span><span class="co"> anonymous # &lt;-- hand in anonymously</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="an">format:</span></span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="co">  html:</span></span>
+<span id="cb12-7"><a href="#cb12-7"></a><span class="co">    toc: true</span></span>
+<span id="cb12-8"><a href="#cb12-8"></a><span class="co">    code-tools: true</span></span>
+<span id="cb12-9"><a href="#cb12-9"></a><span class="co">    code-line-numbers: true</span></span>
+<span id="cb12-10"><a href="#cb12-10"></a><span class="co">    number-sections: true</span></span>
+<span id="cb12-11"><a href="#cb12-11"></a><span class="co">    mainfont: Georgia, serif</span></span>
+<span id="cb12-12"><a href="#cb12-12"></a><span class="co">    page-layout: article</span></span>
+<span id="cb12-13"><a href="#cb12-13"></a><span class="co">  pdf:  </span></span>
+<span id="cb12-14"><a href="#cb12-14"></a><span class="co">    geometry:</span></span>
+<span id="cb12-15"><a href="#cb12-15"></a><span class="co">    - left=1cm,top=1cm,bottom=1cm,right=7cm</span></span>
+<span id="cb12-16"><a href="#cb12-16"></a><span class="co">    number-sections: true</span></span>
+<span id="cb12-17"><a href="#cb12-17"></a><span class="co">    code-annotations: none</span></span>
+<span id="cb12-18"><a href="#cb12-18"></a><span class="an">editor:</span><span class="co"> source</span></span>
+<span id="cb12-19"><a href="#cb12-19"></a><span class="co">---</span></span>
+<span id="cb12-20"><a href="#cb12-20"></a></span>
+<span id="cb12-21"><a href="#cb12-21"></a></span>
+<span id="cb12-22"><a href="#cb12-22"></a><span class="fu"># General information</span></span>
+<span id="cb12-23"><a href="#cb12-23"></a></span>
+<span id="cb12-24"><a href="#cb12-24"></a>This is the template for <span class="co">[</span><span class="ot">assignment 8</span><span class="co">](assignment8.html)</span>. You can download the <span class="co">[</span><span class="ot">qmd-file</span><span class="co">](https://avehtari.github.io/BDA_course_Aalto/assignments/template8.qmd)</span> or copy the code from this rendered document after clicking on <span class="in">`&lt;/&gt; Code`</span> in the top right corner.</span>
+<span id="cb12-25"><a href="#cb12-25"></a></span>
+<span id="cb12-26"><a href="#cb12-26"></a>**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.** </span>
+<span id="cb12-27"><a href="#cb12-27"></a></span>
+<span id="cb12-28"><a href="#cb12-28"></a></span>
+<span id="cb12-29"><a href="#cb12-29"></a></span>
+<span id="cb12-30"><a href="#cb12-30"></a>:::: {.content-hidden when-format="pdf"}</span>
+<span id="cb12-31"><a href="#cb12-31"></a>::: {.callout-warning collapse=false}</span>
+<span id="cb12-32"><a href="#cb12-32"></a> </span>
+<span id="cb12-33"><a href="#cb12-33"></a><span class="fu">## Setup</span></span>
+<span id="cb12-34"><a href="#cb12-34"></a></span>
+<span id="cb12-35"><a href="#cb12-35"></a></span>
+<span id="cb12-36"><a href="#cb12-36"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
+<span id="cb12-37"><a href="#cb12-37"></a>**Make sure that this does not get displayed in the PDF!**</span>
+<span id="cb12-38"><a href="#cb12-38"></a>    </span>
+<span id="cb12-39"><a href="#cb12-39"></a></span>
+<span id="cb12-40"><a href="#cb12-40"></a></span>
+<span id="cb12-41"><a href="#cb12-41"></a></span>
+<span id="cb12-42"><a href="#cb12-42"></a>The following loads several needed packages:</span>
+<span id="cb12-43"><a href="#cb12-43"></a></span>
+<span id="cb12-46"><a href="#cb12-46"></a><span class="in">```{r}</span></span>
+<span id="cb12-47"><a href="#cb12-47"></a><span class="co">#| label: imports</span></span>
+<span id="cb12-48"><a href="#cb12-48"></a><span class="fu">library</span>(bayesplot)</span>
+<span id="cb12-49"><a href="#cb12-49"></a><span class="fu">library</span>(cmdstanr)</span>
+<span id="cb12-50"><a href="#cb12-50"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb12-51"><a href="#cb12-51"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb12-52"><a href="#cb12-52"></a><span class="fu">library</span>(ggdist) <span class="co"># for stat_dotsinterval</span></span>
+<span id="cb12-53"><a href="#cb12-53"></a><span class="fu">library</span>(posterior)</span>
+<span id="cb12-54"><a href="#cb12-54"></a><span class="fu">library</span>(brms)</span>
+<span id="cb12-55"><a href="#cb12-55"></a><span class="co"># Globally specfiy cmdstan backend for brms</span></span>
+<span id="cb12-56"><a href="#cb12-56"></a><span class="fu">options</span>(<span class="at">brms.backend=</span><span class="st">"cmdstanr"</span>)</span>
+<span id="cb12-57"><a href="#cb12-57"></a><span class="co"># Tell brms to cache results if possible</span></span>
+<span id="cb12-58"><a href="#cb12-58"></a><span class="fu">options</span>(<span class="at">brms.file_refit=</span><span class="st">"on_change"</span>)</span>
+<span id="cb12-59"><a href="#cb12-59"></a></span>
+<span id="cb12-60"><a href="#cb12-60"></a><span class="co"># Set more readable themes with bigger font for plotting packages</span></span>
+<span id="cb12-61"><a href="#cb12-61"></a>ggplot2<span class="sc">::</span><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
+<span id="cb12-62"><a href="#cb12-62"></a>bayesplot<span class="sc">::</span><span class="fu">bayesplot_theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
+<span id="cb12-63"><a href="#cb12-63"></a><span class="in">```</span></span>
+<span id="cb12-64"><a href="#cb12-64"></a></span>
+<span id="cb12-65"><a href="#cb12-65"></a>:::</span>
+<span id="cb12-66"><a href="#cb12-66"></a>::::</span>
+<span id="cb12-67"><a href="#cb12-67"></a></span>
+<span id="cb12-68"><a href="#cb12-68"></a></span>
+<span id="cb12-69"><a href="#cb12-69"></a><span class="fu"># A hierarchical model for chicken weight time series</span></span>
+<span id="cb12-70"><a href="#cb12-70"></a></span>
+<span id="cb12-71"><a href="#cb12-71"></a></span>
+<span id="cb12-72"><a href="#cb12-72"></a><span class="fu">## Exploratory data analysis</span></span>
+<span id="cb12-73"><a href="#cb12-73"></a></span>
+<span id="cb12-74"><a href="#cb12-74"></a><span class="fu">## (a)</span></span>
+<span id="cb12-75"><a href="#cb12-75"></a></span>
+<span id="cb12-76"><a href="#cb12-76"></a></span>
+<span id="cb12-79"><a href="#cb12-79"></a><span class="in">```{r}</span></span>
+<span id="cb12-80"><a href="#cb12-80"></a><span class="co"># Useful functions: ggplot, aes(x=...), geom_histogram</span></span>
+<span id="cb12-81"><a href="#cb12-81"></a><span class="in">```</span></span>
+<span id="cb12-82"><a href="#cb12-82"></a></span>
+<span id="cb12-83"><a href="#cb12-83"></a></span>
+<span id="cb12-84"><a href="#cb12-84"></a></span>
+<span id="cb12-85"><a href="#cb12-85"></a><span class="fu">## (b)</span></span>
+<span id="cb12-86"><a href="#cb12-86"></a></span>
+<span id="cb12-87"><a href="#cb12-87"></a></span>
+<span id="cb12-90"><a href="#cb12-90"></a><span class="in">```{r}</span></span>
+<span id="cb12-91"><a href="#cb12-91"></a><span class="co"># Useful functions: ggplot, aes(x=...,y=...,group=...,color=...), geom_line</span></span>
+<span id="cb12-92"><a href="#cb12-92"></a><span class="in">```</span></span>
+<span id="cb12-93"><a href="#cb12-93"></a></span>
+<span id="cb12-94"><a href="#cb12-94"></a></span>
+<span id="cb12-95"><a href="#cb12-95"></a><span class="fu">## Linear regression</span></span>
+<span id="cb12-96"><a href="#cb12-96"></a></span>
+<span id="cb12-97"><a href="#cb12-97"></a><span class="fu">## (c)</span></span>
+<span id="cb12-98"><a href="#cb12-98"></a></span>
+<span id="cb12-99"><a href="#cb12-99"></a></span>
+<span id="cb12-100"><a href="#cb12-100"></a>In <span class="in">`brms`</span>, a regression can be specified as below, see also <span class="co">[</span><span class="ot">below (#m)</span><span class="co">](#m)</span> or <span class="co">[</span><span class="ot">the last template</span><span class="co">](template7.html#b-1)</span>. Fill in the appropriate variables,</span>
+<span id="cb12-101"><a href="#cb12-101"></a>data, and likelihood family. Specify the priors, then run the model (by removing <span class="in">`#| eval: false`</span> below).</span>
+<span id="cb12-102"><a href="#cb12-102"></a></span>
+<span id="cb12-105"><a href="#cb12-105"></a><span class="in">```{r}</span></span>
+<span id="cb12-106"><a href="#cb12-106"></a><span class="co">#| eval: false</span></span>
+<span id="cb12-107"><a href="#cb12-107"></a>priors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb12-108"><a href="#cb12-108"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="sc">&lt;</span>value<span class="sc">&gt;</span>), <span class="at">coef =</span> <span class="st">"Time"</span>),</span>
+<span id="cb12-109"><a href="#cb12-109"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="sc">&lt;</span>value<span class="sc">&gt;</span>), <span class="at">coef =</span> <span class="st">"Diet2"</span>),</span>
+<span id="cb12-110"><a href="#cb12-110"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="sc">&lt;</span>value<span class="sc">&gt;</span>), <span class="at">coef =</span> <span class="st">"Diet3"</span>),</span>
+<span id="cb12-111"><a href="#cb12-111"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="sc">&lt;</span>value<span class="sc">&gt;</span>), <span class="at">coef =</span> <span class="st">"Diet4"</span>)</span>
+<span id="cb12-112"><a href="#cb12-112"></a>)</span>
+<span id="cb12-113"><a href="#cb12-113"></a></span>
+<span id="cb12-114"><a href="#cb12-114"></a>f1 <span class="ot">&lt;-</span> brms<span class="sc">::</span><span class="fu">brm</span>(</span>
+<span id="cb12-115"><a href="#cb12-115"></a>  <span class="co"># This specifies the formula</span></span>
+<span id="cb12-116"><a href="#cb12-116"></a>  <span class="sc">&lt;</span>OUTCOME<span class="sc">&gt;</span> <span class="er">~</span> <span class="dv">1</span> <span class="sc">+</span> <span class="er">&lt;</span>PREDICTOR<span class="sc">&gt;</span> <span class="sc">+</span> <span class="er">&lt;</span>PREDICTOR<span class="sc">&gt;</span>,</span>
+<span id="cb12-117"><a href="#cb12-117"></a>  <span class="co"># This specifies the dataset</span></span>
+<span id="cb12-118"><a href="#cb12-118"></a>  <span class="at">data =</span> <span class="sc">&lt;</span>data<span class="sc">&gt;</span>,</span>
+<span id="cb12-119"><a href="#cb12-119"></a>  <span class="co"># This specifies the observation model family</span></span>
+<span id="cb12-120"><a href="#cb12-120"></a>  <span class="at">family =</span> <span class="sc">&lt;</span>observation_family<span class="sc">&gt;</span>,</span>
+<span id="cb12-121"><a href="#cb12-121"></a>  <span class="co"># This passes the priors specified above to brms</span></span>
+<span id="cb12-122"><a href="#cb12-122"></a>  <span class="at">prior =</span> priors,</span>
+<span id="cb12-123"><a href="#cb12-123"></a>  <span class="co"># This causes brms to cache the results</span></span>
+<span id="cb12-124"><a href="#cb12-124"></a>  <span class="at">file =</span> <span class="st">"additional_files/assignment8/f1"</span></span>
+<span id="cb12-125"><a href="#cb12-125"></a>)</span>
+<span id="cb12-126"><a href="#cb12-126"></a><span class="in">```</span></span>
+<span id="cb12-127"><a href="#cb12-127"></a></span>
+<span id="cb12-128"><a href="#cb12-128"></a></span>
+<span id="cb12-129"><a href="#cb12-129"></a></span>
+<span id="cb12-130"><a href="#cb12-130"></a><span class="fu">## (d)</span></span>
+<span id="cb12-131"><a href="#cb12-131"></a></span>
+<span id="cb12-132"><a href="#cb12-132"></a></span>
+<span id="cb12-135"><a href="#cb12-135"></a><span class="in">```{r}</span></span>
+<span id="cb12-136"><a href="#cb12-136"></a><span class="co"># Useful functions: brms::pp_check</span></span>
+<span id="cb12-137"><a href="#cb12-137"></a><span class="in">```</span></span>
+<span id="cb12-138"><a href="#cb12-138"></a></span>
+<span id="cb12-139"><a href="#cb12-139"></a></span>
+<span id="cb12-140"><a href="#cb12-140"></a></span>
+<span id="cb12-141"><a href="#cb12-141"></a><span class="fu">## (e)</span></span>
+<span id="cb12-142"><a href="#cb12-142"></a></span>
+<span id="cb12-143"><a href="#cb12-143"></a></span>
+<span id="cb12-146"><a href="#cb12-146"></a><span class="in">```{r}</span></span>
+<span id="cb12-147"><a href="#cb12-147"></a><span class="co"># Useful functions: brms::pp_check(..., type = ..., group=...)</span></span>
+<span id="cb12-148"><a href="#cb12-148"></a><span class="in">```</span></span>
+<span id="cb12-149"><a href="#cb12-149"></a></span>
+<span id="cb12-150"><a href="#cb12-150"></a></span>
+<span id="cb12-151"><a href="#cb12-151"></a><span class="fu">## Log-normal linear regression</span></span>
+<span id="cb12-152"><a href="#cb12-152"></a></span>
+<span id="cb12-153"><a href="#cb12-153"></a><span class="fu">## (f)</span></span>
+<span id="cb12-154"><a href="#cb12-154"></a></span>
+<span id="cb12-155"><a href="#cb12-155"></a></span>
+<span id="cb12-158"><a href="#cb12-158"></a><span class="in">```{r}</span></span>
+<span id="cb12-159"><a href="#cb12-159"></a>log_priors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb12-160"><a href="#cb12-160"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="fu">log</span>(<span class="dv">3</span>)), <span class="at">coef =</span> <span class="st">"Time"</span>),</span>
+<span id="cb12-161"><a href="#cb12-161"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="fu">log</span>(<span class="dv">5</span>)), <span class="at">coef =</span> <span class="st">"Diet2"</span>),</span>
+<span id="cb12-162"><a href="#cb12-162"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="fu">log</span>(<span class="dv">5</span>)), <span class="at">coef =</span> <span class="st">"Diet3"</span>),</span>
+<span id="cb12-163"><a href="#cb12-163"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="fu">log</span>(<span class="dv">5</span>)), <span class="at">coef =</span> <span class="st">"Diet4"</span>)</span>
+<span id="cb12-164"><a href="#cb12-164"></a>)</span>
+<span id="cb12-165"><a href="#cb12-165"></a><span class="in">```</span></span>
+<span id="cb12-166"><a href="#cb12-166"></a></span>
+<span id="cb12-167"><a href="#cb12-167"></a></span>
+<span id="cb12-168"><a href="#cb12-168"></a><span class="fu">## Hierarchical log-normal linear regression</span></span>
+<span id="cb12-169"><a href="#cb12-169"></a></span>
+<span id="cb12-170"><a href="#cb12-170"></a><span class="fu">## (g)</span></span>
+<span id="cb12-171"><a href="#cb12-171"></a></span>
+<span id="cb12-172"><a href="#cb12-172"></a></span>
+<span id="cb12-173"><a href="#cb12-173"></a><span class="fu">## (h)</span></span>
+<span id="cb12-174"><a href="#cb12-174"></a></span>
+<span id="cb12-175"><a href="#cb12-175"></a><span class="fu">## Model comparison using the ELPD</span></span>
+<span id="cb12-176"><a href="#cb12-176"></a></span>
+<span id="cb12-177"><a href="#cb12-177"></a><span class="fu">## (i)</span></span>
+<span id="cb12-178"><a href="#cb12-178"></a></span>
+<span id="cb12-179"><a href="#cb12-179"></a></span>
+<span id="cb12-182"><a href="#cb12-182"></a><span class="in">```{r}</span></span>
+<span id="cb12-183"><a href="#cb12-183"></a><span class="co"># Useful functions: loo, loo_compare</span></span>
+<span id="cb12-184"><a href="#cb12-184"></a><span class="in">```</span></span>
+<span id="cb12-185"><a href="#cb12-185"></a></span>
+<span id="cb12-186"><a href="#cb12-186"></a></span>
+<span id="cb12-187"><a href="#cb12-187"></a></span>
+<span id="cb12-188"><a href="#cb12-188"></a><span class="fu">## (j)</span></span>
+<span id="cb12-189"><a href="#cb12-189"></a></span>
+<span id="cb12-190"><a href="#cb12-190"></a></span>
+<span id="cb12-193"><a href="#cb12-193"></a><span class="in">```{r}</span></span>
+<span id="cb12-194"><a href="#cb12-194"></a><span class="co"># Useful functions: plot(loo(...), label_points = TRUE)</span></span>
+<span id="cb12-195"><a href="#cb12-195"></a><span class="in">```</span></span>
+<span id="cb12-196"><a href="#cb12-196"></a></span>
+<span id="cb12-197"><a href="#cb12-197"></a></span>
+<span id="cb12-198"><a href="#cb12-198"></a></span>
+<span id="cb12-199"><a href="#cb12-199"></a><span class="fu">## (k)</span></span>
+<span id="cb12-200"><a href="#cb12-200"></a></span>
+<span id="cb12-201"><a href="#cb12-201"></a></span>
+<span id="cb12-202"><a href="#cb12-202"></a>:::: {.content-hidden when-format="pdf"}</span>
+<span id="cb12-203"><a href="#cb12-203"></a>::: {.callout-warning collapse=false}</span>
+<span id="cb12-204"><a href="#cb12-204"></a></span>
+<span id="cb12-205"><a href="#cb12-205"></a><span class="fu">## Creating a dummy example plot </span></span>
+<span id="cb12-206"><a href="#cb12-206"></a></span>
+<span id="cb12-207"><a href="#cb12-207"></a></span>
+<span id="cb12-208"><a href="#cb12-208"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
+<span id="cb12-209"><a href="#cb12-209"></a>**Make sure that this does not get displayed in the PDF!**</span>
+<span id="cb12-210"><a href="#cb12-210"></a>    </span>
+<span id="cb12-211"><a href="#cb12-211"></a></span>
+<span id="cb12-212"><a href="#cb12-212"></a></span>
+<span id="cb12-213"><a href="#cb12-213"></a></span>
+<span id="cb12-214"><a href="#cb12-214"></a>Creating a dummy fit just to be able to generate an example plot below. </span>
+<span id="cb12-215"><a href="#cb12-215"></a>Generate a similar plot for your hierarchical model.</span>
+<span id="cb12-216"><a href="#cb12-216"></a></span>
+<span id="cb12-219"><a href="#cb12-219"></a><span class="in">```{r}</span></span>
+<span id="cb12-220"><a href="#cb12-220"></a><span class="co">#| output: false</span></span>
+<span id="cb12-221"><a href="#cb12-221"></a></span>
+<span id="cb12-222"><a href="#cb12-222"></a><span class="co"># The brms-formula (weights ~ ...) below is not one that you should be using in your models!</span></span>
+<span id="cb12-223"><a href="#cb12-223"></a>dummy_fit <span class="ot">&lt;-</span> brms<span class="sc">::</span><span class="fu">brm</span>(</span>
+<span id="cb12-224"><a href="#cb12-224"></a>  weight <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> Time <span class="sc">+</span> Chick,</span>
+<span id="cb12-225"><a href="#cb12-225"></a>  <span class="at">data =</span> ChickWeight,</span>
+<span id="cb12-226"><a href="#cb12-226"></a>  <span class="at">file=</span><span class="st">"additional_files/assignment8/dummy_fit"</span></span>
+<span id="cb12-227"><a href="#cb12-227"></a>)</span>
+<span id="cb12-228"><a href="#cb12-228"></a><span class="co"># Adjust the chicken_idxs variable to select appropriate chickens</span></span>
+<span id="cb12-229"><a href="#cb12-229"></a>chicken_idxs <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">11</span>,<span class="dv">43</span>)</span>
+<span id="cb12-230"><a href="#cb12-230"></a><span class="co"># Create this plot for your hierarchical model for selected chickens</span></span>
+<span id="cb12-231"><a href="#cb12-231"></a>brms<span class="sc">::</span><span class="fu">pp_check</span>(</span>
+<span id="cb12-232"><a href="#cb12-232"></a>  dummy_fit, <span class="at">type =</span> <span class="st">"intervals_grouped"</span>, <span class="at">group =</span> <span class="st">"Chick"</span>, </span>
+<span id="cb12-233"><a href="#cb12-233"></a>  <span class="at">newdata=</span>ChickWeight <span class="sc">|&gt;</span> <span class="fu">filter</span>(Chick <span class="sc">%in%</span> chicken_idxs)</span>
+<span id="cb12-234"><a href="#cb12-234"></a>)</span>
+<span id="cb12-235"><a href="#cb12-235"></a><span class="in">```</span></span>
+<span id="cb12-236"><a href="#cb12-236"></a></span>
+<span id="cb12-237"><a href="#cb12-237"></a>:::</span>
+<span id="cb12-238"><a href="#cb12-238"></a>::::</span>
+<span id="cb12-239"><a href="#cb12-239"></a></span>
+<span id="cb12-240"><a href="#cb12-240"></a></span>
+<span id="cb12-241"><a href="#cb12-241"></a><span class="fu">## Model comparison using the RMSE</span></span>
+<span id="cb12-242"><a href="#cb12-242"></a></span>
+<span id="cb12-243"><a href="#cb12-243"></a><span class="fu">## (l)</span></span>
+<span id="cb12-244"><a href="#cb12-244"></a></span>
+<span id="cb12-245"><a href="#cb12-245"></a></span>
+<span id="cb12-246"><a href="#cb12-246"></a>:::: {.content-hidden when-format="pdf"}</span>
+<span id="cb12-247"><a href="#cb12-247"></a>::: {.callout-warning collapse=false}</span>
+<span id="cb12-248"><a href="#cb12-248"></a></span>
+<span id="cb12-249"><a href="#cb12-249"></a><span class="fu">## `rmse` function implementation</span></span>
+<span id="cb12-250"><a href="#cb12-250"></a></span>
+<span id="cb12-251"><a href="#cb12-251"></a></span>
+<span id="cb12-252"><a href="#cb12-252"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
+<span id="cb12-253"><a href="#cb12-253"></a>**Make sure that this does not get displayed in the PDF!**</span>
+<span id="cb12-254"><a href="#cb12-254"></a>    </span>
+<span id="cb12-255"><a href="#cb12-255"></a></span>
+<span id="cb12-256"><a href="#cb12-256"></a></span>
+<span id="cb12-257"><a href="#cb12-257"></a></span>
+<span id="cb12-258"><a href="#cb12-258"></a>The below function takes a brms fit object and computes either the <span class="co">[</span><span class="ot">root-mean-square error (RMSE)</span><span class="co">](https://en.wikipedia.org/wiki/Root-mean-square_deviation)</span> or the PSIS-LOO-RMSE, i.e. the RMSE using LOO-CV estimated using PSIS-LOO.</span>
+<span id="cb12-261"><a href="#cb12-261"></a><span class="in">```{r}</span></span>
+<span id="cb12-262"><a href="#cb12-262"></a><span class="co"># Compute RMSE or LOO-RMSE</span></span>
+<span id="cb12-263"><a href="#cb12-263"></a>rmse <span class="ot">&lt;-</span> <span class="cf">function</span>(fit, <span class="at">use_loo=</span><span class="cn">FALSE</span>){</span>
+<span id="cb12-264"><a href="#cb12-264"></a>  mean_y_pred <span class="ot">&lt;-</span> <span class="cf">if</span>(use_loo){</span>
+<span id="cb12-265"><a href="#cb12-265"></a>    brms<span class="sc">::</span><span class="fu">loo_predict</span>(fit)</span>
+<span id="cb12-266"><a href="#cb12-266"></a>  }<span class="cf">else</span>{</span>
+<span id="cb12-267"><a href="#cb12-267"></a>    <span class="fu">colMeans</span>(brms<span class="sc">::</span><span class="fu">posterior_predict</span>(fit)) </span>
+<span id="cb12-268"><a href="#cb12-268"></a>  }</span>
+<span id="cb12-269"><a href="#cb12-269"></a>  <span class="fu">sqrt</span>(<span class="fu">mean</span>(</span>
+<span id="cb12-270"><a href="#cb12-270"></a>    (mean_y_pred <span class="sc">-</span> brms<span class="sc">::</span><span class="fu">get_y</span>(fit))<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb12-271"><a href="#cb12-271"></a>  ))</span>
+<span id="cb12-272"><a href="#cb12-272"></a>}</span>
+<span id="cb12-273"><a href="#cb12-273"></a><span class="in">```</span></span>
+<span id="cb12-274"><a href="#cb12-274"></a></span>
+<span id="cb12-275"><a href="#cb12-275"></a>:::</span>
+<span id="cb12-276"><a href="#cb12-276"></a>::::</span>
+</code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
+
 
 
 

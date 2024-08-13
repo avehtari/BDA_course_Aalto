@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.211">
+<meta name="generator" content="quarto-1.5.56">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aki Vehtari et al.">
 
-<title>Bayesian Data Analysis - Assignment 8</title>
+<title>Assignment 8 – Bayesian Data Analysis</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -18,11 +18,12 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -33,7 +34,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -47,43 +48,13 @@ pre.numberSource code > span > a:first-child::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
-    color: #aaaaaa;
   }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
 div.sourceCode
   {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -111,7 +82,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -120,12 +97,42 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -135,12 +142,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./assignment1.html">Assignments</a></li><li class="breadcrumb-item"><a href="./assignment8.html">Assignment 8</a></li></ol></nav>
-      <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./assignment1.html">Assignments</a></li><li class="breadcrumb-item"><a href="./assignment8.html">Assignment 8</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
@@ -150,7 +157,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Bayesian Data Analysis</a> 
@@ -165,20 +172,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">General instructions</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">General instructions</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment_instructions.html" class="sidebar-item-text sidebar-link">Assignment instructions</a>
+  <a href="./assignment_instructions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment instructions</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./docker.html" class="sidebar-item-text sidebar-link">How to set up docker</a>
+  <a href="./docker.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">How to set up docker</span></a>
   </div>
 </li>
       </ul>
@@ -186,55 +196,65 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Assignments</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Assignments</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment1.html" class="sidebar-item-text sidebar-link">Assignment 1</a>
+  <a href="./assignment1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 1</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment2.html" class="sidebar-item-text sidebar-link">Assignment 2</a>
+  <a href="./assignment2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 2</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment3.html" class="sidebar-item-text sidebar-link">Assignment 3</a>
+  <a href="./assignment3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 3</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment4.html" class="sidebar-item-text sidebar-link">Assignment 4</a>
+  <a href="./assignment4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 4</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment5.html" class="sidebar-item-text sidebar-link">Assignment 5</a>
+  <a href="./assignment5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 5</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment6.html" class="sidebar-item-text sidebar-link">Assignment 6</a>
+  <a href="./assignment6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 6</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment7.html" class="sidebar-item-text sidebar-link">Assignment 7</a>
+  <a href="./assignment7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 7</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment8.html" class="sidebar-item-text sidebar-link active">Assignment 8</a>
+  <a href="./assignment8.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Assignment 8</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment9.html" class="sidebar-item-text sidebar-link">Assignment 9</a>
+  <a href="./assignment9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 9</span></a>
   </div>
 </li>
       </ul>
@@ -242,55 +262,65 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Templates</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Templates</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template1.html" class="sidebar-item-text sidebar-link">Assignment 1</a>
+  <a href="./template1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 1</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template2.html" class="sidebar-item-text sidebar-link">Assignment 2</a>
+  <a href="./template2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 2</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template3.html" class="sidebar-item-text sidebar-link">Assignment 3</a>
+  <a href="./template3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 3</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template4.html" class="sidebar-item-text sidebar-link">Assignment 4</a>
+  <a href="./template4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 4</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template5.html" class="sidebar-item-text sidebar-link">Assignment 5</a>
+  <a href="./template5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 5</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template6.html" class="sidebar-item-text sidebar-link">Assignment 6</a>
+  <a href="./template6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 6</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template7.html" class="sidebar-item-text sidebar-link">Assignment 7</a>
+  <a href="./template7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 7</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template8.html" class="sidebar-item-text sidebar-link">Assignment 8</a>
+  <a href="./template8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 8</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template9.html" class="sidebar-item-text sidebar-link">Assignment 9</a>
+  <a href="./template9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 9</span></a>
   </div>
 </li>
       </ul>
@@ -298,31 +328,31 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </ul>
     </div>
 </nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#general-information" id="toc-general-information" class="nav-link active" data-scroll-target="#general-information"><span class="toc-section-number">1</span>  General information</a></li>
-  <li><a href="#a-hierarchical-model-for-chicken-weight-time-series" id="toc-a-hierarchical-model-for-chicken-weight-time-series" class="nav-link" data-scroll-target="#a-hierarchical-model-for-chicken-weight-time-series"><span class="toc-section-number">2</span>  A hierarchical model for chicken weight time series</a>
+  <li><a href="#general-information" id="toc-general-information" class="nav-link active" data-scroll-target="#general-information"><span class="header-section-number">1</span> General information</a></li>
+  <li><a href="#a-hierarchical-model-for-chicken-weight-time-series" id="toc-a-hierarchical-model-for-chicken-weight-time-series" class="nav-link" data-scroll-target="#a-hierarchical-model-for-chicken-weight-time-series"><span class="header-section-number">2</span> A hierarchical model for chicken weight time series</a>
   <ul class="collapse">
-  <li><a href="#exploratory-data-analysis" id="toc-exploratory-data-analysis" class="nav-link" data-scroll-target="#exploratory-data-analysis"><span class="toc-section-number">2.1</span>  Exploratory data analysis</a></li>
-  <li><a href="#linear-regression" id="toc-linear-regression" class="nav-link" data-scroll-target="#linear-regression"><span class="toc-section-number">2.2</span>  Linear regression</a></li>
-  <li><a href="#log-normal-linear-regression" id="toc-log-normal-linear-regression" class="nav-link" data-scroll-target="#log-normal-linear-regression"><span class="toc-section-number">2.3</span>  Log-normal linear regression</a></li>
-  <li><a href="#hierarchical-log-normal-linear-regression" id="toc-hierarchical-log-normal-linear-regression" class="nav-link" data-scroll-target="#hierarchical-log-normal-linear-regression"><span class="toc-section-number">2.4</span>  Hierarchical log-normal linear regression</a></li>
-  <li><a href="#model-comparison-using-the-elpd" id="toc-model-comparison-using-the-elpd" class="nav-link" data-scroll-target="#model-comparison-using-the-elpd"><span class="toc-section-number">2.5</span>  Model comparison using the ELPD</a></li>
-  <li><a href="#model-comparison-using-the-rmse" id="toc-model-comparison-using-the-rmse" class="nav-link" data-scroll-target="#model-comparison-using-the-rmse"><span class="toc-section-number">2.6</span>  Model comparison using the RMSE</a></li>
+  <li><a href="#exploratory-data-analysis" id="toc-exploratory-data-analysis" class="nav-link" data-scroll-target="#exploratory-data-analysis"><span class="header-section-number">2.1</span> Exploratory data analysis</a></li>
+  <li><a href="#linear-regression" id="toc-linear-regression" class="nav-link" data-scroll-target="#linear-regression"><span class="header-section-number">2.2</span> Linear regression</a></li>
+  <li><a href="#log-normal-linear-regression" id="toc-log-normal-linear-regression" class="nav-link" data-scroll-target="#log-normal-linear-regression"><span class="header-section-number">2.3</span> Log-normal linear regression</a></li>
+  <li><a href="#hierarchical-log-normal-linear-regression" id="toc-hierarchical-log-normal-linear-regression" class="nav-link" data-scroll-target="#hierarchical-log-normal-linear-regression"><span class="header-section-number">2.4</span> Hierarchical log-normal linear regression</a></li>
+  <li><a href="#model-comparison-using-the-elpd" id="toc-model-comparison-using-the-elpd" class="nav-link" data-scroll-target="#model-comparison-using-the-elpd"><span class="header-section-number">2.5</span> Model comparison using the ELPD</a></li>
+  <li><a href="#model-comparison-using-the-rmse" id="toc-model-comparison-using-the-rmse" class="nav-link" data-scroll-target="#model-comparison-using-the-rmse"><span class="header-section-number">2.6</span> Model comparison using the RMSE</a></li>
   </ul></li>
-  <li><a href="#overall-quality-of-the-report" id="toc-overall-quality-of-the-report" class="nav-link" data-scroll-target="#overall-quality-of-the-report"><span class="toc-section-number">3</span>  Overall quality of the report</a></li>
+  <li><a href="#overall-quality-of-the-report" id="toc-overall-quality-of-the-report" class="nav-link" data-scroll-target="#overall-quality-of-the-report"><span class="header-section-number">3</span> Overall quality of the report</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./assignment1.html">Assignments</a></li><li class="breadcrumb-item"><a href="./assignment8.html">Assignment 8</a></li></ol></nav>
 <div class="quarto-title">
 <div class="quarto-title-block"><div><h1 class="title">Assignment 8</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 <p class="subtitle lead">LOO-CV model comparison</p>
@@ -344,7 +374,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </div>
   
 
+
 </header>
+
 
 <section id="general-information" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> General information</h1>
@@ -353,12 +385,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="aalto">
 <p>We recommend you use <a href="https://jupyter.cs.aalto.fi">jupyter.cs.aalto.fi</a> or the <a href="docker.html">docker container</a>.</p>
 </div>
-<div class="callout callout-style-default callout-tip callout-captioned">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Tip
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -385,12 +417,12 @@ Tip
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-important callout-captioned">
+<div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Reporting accuracy
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -403,12 +435,12 @@ Reporting accuracy
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-tip callout-captioned">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Further information
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -443,12 +475,12 @@ Further information
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note no-icon callout-captioned">
+<div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Rubric S1: General information - 7.5/100 points
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -472,26 +504,13 @@ Is the report anonymous?</li>
 <p>In the first part of this assignment, you will explore the dataset <code>ChickWeight</code>. In particular, you will see what information is recorded in the dataset, and how you can use visualisation to learn more about the dataset. More information can be found on the corresponding page of the <a href="https://www.rdocumentation.org/packages/datasets/versions/3.6.2/topics/ChickWeight">R documentation</a>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">head</span>(ChickWeight, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>   weight Time Chick Diet
-1      42    0     1    1
-2      51    2     1    1
-3      59    4     1    1
-4      64    6     1    1
-5      76    8     1    1
-6      93   10     1    1
-7     106   12     1    1
-8     125   14     1    1
-9     149   16     1    1
-10    171   18     1    1</code></pre>
 </div>
-</div>
-<div class="callout callout-style-default callout-warning no-icon callout-captioned">
+<div class="callout callout-style-default callout-warning no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Subtask 2.a)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -502,12 +521,12 @@ Subtask 2.a)
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note no-icon callout-captioned">
+<div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Subrubric 2.a)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -523,12 +542,12 @@ Has it been stated that the data is <strong>…</strong>?</li>
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-warning no-icon callout-captioned">
+<div class="callout callout-style-default callout-warning no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Subtask 2.b)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -539,12 +558,12 @@ Subtask 2.b)
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note no-icon callout-captioned">
+<div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Subrubric 2.b)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -562,12 +581,12 @@ Does the plot look correct and is it readable?</li>
 <section id="linear-regression" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="linear-regression"><span class="header-section-number">2.2</span> Linear regression</h2>
 <p>In this section, you will build a model that predicts the weight of a chicken over time and depending on the diet. After sampling from the posteriors, you will use posterior predictive checks to see how well the predictions match the observations. Then you will adjust the model by adding more complexity, and check again.</p>
-<div class="callout callout-style-default callout-warning no-icon callout-captioned">
+<div class="callout callout-style-default callout-warning no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Subtask 2.c)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -578,12 +597,12 @@ Subtask 2.c)
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-tip callout-captioned">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Tip
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -595,12 +614,12 @@ Tip
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note no-icon callout-captioned">
+<div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Subrubric 2.c)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -619,12 +638,12 @@ Are the prior standard deviations around <strong>…</strong>?</li>
 </div>
 </div>
 <p>Next, you can use the <code>bayesplot</code> package to check the posterior predictions in relation to the observed data using the <a href="https://mc-stan.org/bayesplot/reference/pp_check.html"><code>pp_check</code> function</a>. The function plots the <span class="math inline">\(y\)</span> values, which are the observed data, and the <span class="math inline">\(y_\text{rep}\)</span> values, which are replicated data sets from the posterior predictive distribution.</p>
-<div class="callout callout-style-default callout-warning no-icon callout-captioned">
+<div class="callout callout-style-default callout-warning no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Subtask 2.d)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -639,12 +658,12 @@ Subtask 2.d)
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note no-icon callout-captioned">
+<div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Subrubric 2.d)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -663,12 +682,12 @@ Has it been recognized that the observed and predicted data <strong>…</strong>
 </div>
 </div>
 <p>The default density plot is not always informative, but <code>bayesplot</code> has different settings that can be used to create plots more appropriate for specific data.</p>
-<div class="callout callout-style-default callout-warning no-icon callout-captioned">
+<div class="callout callout-style-default callout-warning no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Subtask 2.e)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -679,12 +698,12 @@ Subtask 2.e)
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note no-icon callout-captioned">
+<div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Subrubric 2.e)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -705,12 +724,12 @@ Is there at least one reasonable way to improve the model, e.g.&nbsp;<strong>…
 <h2 data-number="2.3" class="anchored" data-anchor-id="log-normal-linear-regression"><span class="header-section-number">2.3</span> Log-normal linear regression</h2>
 <p>Based on the identified issues from the posterior predictive check, the model can be improved. It is advisable to change only one or a few things about a model at once. At this stage, focus on changing the observation model family to better account for the observed data.</p>
 <p>One option is to use the lognormal observation model, which only allows positive values. In <code>brms</code> you can change the observation model family to this by setting the argument <code>family = "lognormal"</code>. Note that when using the log-normal observation model, the regression coefficients represent the change in the log weight of a chicken. The priors have been adjusted accordingly in the template.</p>
-<div class="callout callout-style-default callout-warning no-icon callout-captioned">
+<div class="callout callout-style-default callout-warning no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Subtask 2.f)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -721,12 +740,12 @@ Subtask 2.f)
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-tip callout-captioned">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Tip
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -737,12 +756,12 @@ Tip
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note no-icon callout-captioned">
+<div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Subrubric 2.f)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -763,12 +782,12 @@ Has it been recognized that the fit to data is <strong>…</strong>?</li>
 <h2 data-number="2.4" class="anchored" data-anchor-id="hierarchical-log-normal-linear-regression"><span class="header-section-number">2.4</span> Hierarchical log-normal linear regression</h2>
 <p>The model can further be improved by directly considering potential differences in growth rate for individual chicken. Some chickens may innately grow faster than others, and this difference can be included by including both population and group level effects in to the model.</p>
 <p>To include a group effect in <code>brms</code>, the code <code>+ (predictor|group)</code> can be added to the model formula. In this case, the predictor is <code>Time</code> and the group is <code>Chick</code>.</p>
-<div class="callout callout-style-default callout-warning no-icon callout-captioned">
+<div class="callout callout-style-default callout-warning no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Subtask 2.g)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -779,12 +798,12 @@ Subtask 2.g)
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note no-icon callout-captioned">
+<div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Subrubric 2.g)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -800,12 +819,12 @@ Has it been recognized that the fit to data is <strong>…</strong>?</li>
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-warning no-icon callout-captioned">
+<div class="callout callout-style-default callout-warning no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-21-contents" aria-controls="callout-21" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Subtask 2.h)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -816,12 +835,12 @@ Subtask 2.h)
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note no-icon callout-captioned">
+<div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-22-contents" aria-controls="callout-22" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Subrubric 2.h)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -840,12 +859,12 @@ Has there been a potentially brief discussion of the standard convergence criter
 <h2 data-number="2.5" class="anchored" data-anchor-id="model-comparison-using-the-elpd"><span class="header-section-number">2.5</span> Model comparison using the ELPD</h2>
 <p>There are many ways of comparing models<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. Commonly, we evaluate point predictions, such as the mean of the predictive distribution<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, or accuracy of the whole posterior predictive. Whether we prioritise point or density predictive accuracy may serve different purposes and lead to different outcomes for model choice <a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. It is common, however, to report predictive accuracy via log-scores and point-predictive accuracy via root-mean-squared-error based on the empirical average of the predictive distribution. To cross-validate both metrics on left out observations without need to sample from each leave-one-out posterior, we use Pareto-smoothed importance sampling as discussed in the course materials (see Lecture 9).</p>
 <p>We start comparing models based on the log-score. Use <code>loo::loo()</code> and <code>loo::loo_compare()</code> to quantify the differences in predictive performance.</p>
-<div class="callout callout-style-default callout-warning no-icon callout-captioned">
+<div class="callout callout-style-default callout-warning no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-23-contents" aria-controls="callout-23" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Subtask 2.i)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -860,12 +879,12 @@ Subtask 2.i)
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note no-icon callout-captioned">
+<div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-24-contents" aria-controls="callout-24" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Subrubric 2.i)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -881,12 +900,12 @@ Has it been recognized that the best model is <strong>…</strong> and that the 
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-warning no-icon callout-captioned">
+<div class="callout callout-style-default callout-warning no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-25-contents" aria-controls="callout-25" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Subtask 2.j)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -897,12 +916,12 @@ Subtask 2.j)
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-tip callout-captioned">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-26-contents" aria-controls="callout-26" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Tip
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -913,12 +932,12 @@ Tip
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note no-icon callout-captioned">
+<div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-27-contents" aria-controls="callout-27" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Subrubric 2.j)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -934,12 +953,12 @@ Has it been explained why the <span class="math inline">\(\hat{k}\)</span> value
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-warning no-icon callout-captioned">
+<div class="callout callout-style-default callout-warning no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-28-contents" aria-controls="callout-28" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Subtask 2.k)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -955,12 +974,12 @@ Subtask 2.k)
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note no-icon callout-captioned">
+<div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-29-contents" aria-controls="callout-29" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Subrubric 2.k)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -979,12 +998,12 @@ Has it been recognized that the chickens with high <span class="math inline">\(\
 </section>
 <section id="model-comparison-using-the-rmse" class="level2" data-number="2.6">
 <h2 data-number="2.6" class="anchored" data-anchor-id="model-comparison-using-the-rmse"><span class="header-section-number">2.6</span> Model comparison using the RMSE</h2>
-<div class="callout callout-style-default callout-warning no-icon callout-captioned">
+<div class="callout callout-style-default callout-warning no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-30-contents" aria-controls="callout-30" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Subtask 2.l)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -995,12 +1014,12 @@ Subtask 2.l)
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note no-icon callout-captioned">
+<div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-31-contents" aria-controls="callout-31" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Subrubric 2.l)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -1020,12 +1039,12 @@ Has it been recognized that the RMSE is <strong>…</strong> than the LOO-RMSE b
 </section>
 <section id="overall-quality-of-the-report" class="level1" data-number="3">
 <h1 data-number="3"><span class="header-section-number">3</span> Overall quality of the report</h1>
-<div class="callout callout-style-default callout-note no-icon callout-captioned">
+<div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-32-contents" aria-controls="callout-32" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Rubric S3: Overall quality of the report - 7.5/100 points
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -1097,12 +1116,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
     }
-  });
-  clipboard.on('success', function(e) {
+    return false;
+  }
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -1134,7 +1156,29 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
   const viewSource = window.document.getElementById('quarto-view-source') ||
                      window.document.getElementById('quarto-code-tools-source');
   if (viewSource) {
@@ -1186,10 +1230,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   if (showAllCode) {
     showAllCode.addEventListener("click", toggleCodeHandler(true));
   }
-  function tippyHover(el, contentFn) {
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1199,8 +1260,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1212,7 +1282,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1256,6 +1449,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1281,6 +1475,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1342,298 +1562,299 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./assignment7.html" class="pagination-link">
+      <a href="./assignment7.html" class="pagination-link" aria-label="Assignment 7">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Assignment 7</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./assignment9.html" class="pagination-link">
+      <a href="./assignment9.html" class="pagination-link" aria-label="Assignment 9">
         <span class="nav-page-text">Assignment 9</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb4" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">---</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="an">title:</span><span class="co"> "Assignment 8"</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="an">subtitle:</span><span class="co"> "LOO-CV model comparison"</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="an">author:</span><span class="co"> "Aki Vehtari et al."</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a><span class="an">format:</span></span>
-<span id="cb4-6"><a href="#cb4-6"></a><span class="co">  html:</span></span>
-<span id="cb4-7"><a href="#cb4-7"></a><span class="co">    toc: true</span></span>
-<span id="cb4-8"><a href="#cb4-8"></a><span class="co">    code-tools: true</span></span>
-<span id="cb4-9"><a href="#cb4-9"></a><span class="co">    code-line-numbers: true</span></span>
-<span id="cb4-10"><a href="#cb4-10"></a><span class="co">    number-sections: true</span></span>
-<span id="cb4-11"><a href="#cb4-11"></a><span class="co">    mainfont: Georgia, serif</span></span>
-<span id="cb4-12"><a href="#cb4-12"></a><span class="co">    page-layout: article</span></span>
-<span id="cb4-13"><a href="#cb4-13"></a><span class="an">editor:</span><span class="co"> source</span></span>
-<span id="cb4-14"><a href="#cb4-14"></a><span class="an">filters:</span></span>
-<span id="cb4-15"><a href="#cb4-15"></a><span class="co">  - includes/assignments.lua </span></span>
-<span id="cb4-16"><a href="#cb4-16"></a><span class="co">  - includes/include-code-files.lua </span></span>
-<span id="cb4-17"><a href="#cb4-17"></a><span class="co">---</span></span>
-<span id="cb4-18"><a href="#cb4-18"></a></span>
-<span id="cb4-19"><a href="#cb4-19"></a><span class="fu"># General information</span></span>
-<span id="cb4-20"><a href="#cb4-20"></a></span>
-<span id="cb4-21"><a href="#cb4-21"></a>**The maximum amount of points from this assignment is 6.**</span>
-<span id="cb4-22"><a href="#cb4-22"></a></span>
-<span id="cb4-23"><a href="#cb4-23"></a>We have prepared a **quarto template specific to this assignment ([html](template8.html), [qmd](https://avehtari.github.io/BDA_course_Aalto/assignments/template8.qmd), [pdf](template8.pdf))** to help you get started. </span>
-<span id="cb4-24"><a href="#cb4-24"></a></span>
-<span id="cb4-25"><a href="#cb4-25"></a></span>
-<span id="cb4-26"><a href="#cb4-26"></a>:::{.aalto}</span>
-<span id="cb4-27"><a href="#cb4-27"></a>We recommend you use <span class="co">[</span><span class="ot">jupyter.cs.aalto.fi</span><span class="co">](https://jupyter.cs.aalto.fi)</span> or the <span class="co">[</span><span class="ot">docker container</span><span class="co">](docker.html)</span>.</span>
-<span id="cb4-28"><a href="#cb4-28"></a>:::</span>
-<span id="cb4-29"><a href="#cb4-29"></a></span>
-<span id="cb4-30"><a href="#cb4-30"></a></span>
-<span id="cb4-31"><a href="#cb4-31"></a>:::{.hint}</span>
-<span id="cb4-32"><a href="#cb4-32"></a>**Reading instructions**:</span>
-<span id="cb4-33"><a href="#cb4-33"></a></span>
-<span id="cb4-34"><a href="#cb4-34"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**The reading instructions for BDA3 Chapter 6**</span><span class="co">](../BDA3_notes.html#ch6)</span> (posterior predictive checking).</span>
-<span id="cb4-35"><a href="#cb4-35"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**The reading instructions for BDA3 Chapter 7**</span><span class="co">](../BDA3_notes.html#ch7)</span> (predictive performance).</span>
-<span id="cb4-36"><a href="#cb4-36"></a><span class="ss">- </span>The <span class="co">[</span><span class="ot">‘loo‘ package vignette on the basics of LOO</span><span class="co">](https://mc-stan.org/loo/articles/loo2-with-rstan.html)</span></span>
-<span id="cb4-37"><a href="#cb4-37"></a>shows an example of how to modify Stan code and use the package with Stan models.</span>
-<span id="cb4-38"><a href="#cb4-38"></a><span class="ss">- </span>Also read</span>
-<span id="cb4-39"><a href="#cb4-39"></a>about PSIS-LOO in the <span class="co">[</span><span class="ot">PSIS-LOO paper</span><span class="co">](https://link.springer.com/article/10.1007/s11222-016-9696-4)</span>.</span>
-<span id="cb4-40"><a href="#cb4-40"></a><span class="ss">- </span><span class="co">[</span><span class="ot">CV-FAQ</span><span class="co">](https://avehtari.github.io/modelselection/CV-FAQ.html)</span> includes a lot of informative answers to frequent questions and misconceptions.</span>
-<span id="cb4-41"><a href="#cb4-41"></a></span>
-<span id="cb4-42"><a href="#cb4-42"></a>{{&lt; include includes/_grading_instructions.md &gt;}}</span>
-<span id="cb4-43"><a href="#cb4-43"></a></span>
-<span id="cb4-44"><a href="#cb4-44"></a>{{&lt; include includes/_cmdstanr.md &gt;}}</span>
-<span id="cb4-45"><a href="#cb4-45"></a>:::</span>
-<span id="cb4-46"><a href="#cb4-46"></a></span>
-<span id="cb4-47"><a href="#cb4-47"></a>{{&lt; include includes/_reporting_accuracy.md &gt;}}</span>
-<span id="cb4-48"><a href="#cb4-48"></a></span>
-<span id="cb4-49"><a href="#cb4-49"></a>{{&lt; include includes/_general_info.md &gt;}}</span>
-<span id="cb4-50"><a href="#cb4-50"></a></span>
-<span id="cb4-51"><a href="#cb4-51"></a></span>
-<span id="cb4-52"><a href="#cb4-52"></a></span>
-<span id="cb4-53"><a href="#cb4-53"></a></span>
-<span id="cb4-54"><a href="#cb4-54"></a><span class="fu"># A hierarchical model for chicken weight time series</span></span>
-<span id="cb4-55"><a href="#cb4-55"></a></span>
-<span id="cb4-56"><a href="#cb4-56"></a><span class="fu">## Exploratory data analysis</span></span>
-<span id="cb4-57"><a href="#cb4-57"></a></span>
-<span id="cb4-58"><a href="#cb4-58"></a>In the first part of this assignment, you will explore the dataset <span class="in">`ChickWeight`</span>. In particular, you will see what information is recorded in the dataset, and how you can use visualisation to learn more about the dataset. More information can be found on the corresponding page of the <span class="co">[</span><span class="ot">R documentation</span><span class="co">](https://www.rdocumentation.org/packages/datasets/versions/3.6.2/topics/ChickWeight)</span>.</span>
-<span id="cb4-59"><a href="#cb4-59"></a></span>
-<span id="cb4-62"><a href="#cb4-62"></a><span class="in">```{r}</span></span>
-<span id="cb4-63"><a href="#cb4-63"></a><span class="fu">head</span>(ChickWeight, <span class="dv">10</span>)</span>
-<span id="cb4-64"><a href="#cb4-64"></a><span class="in">```</span></span>
-<span id="cb4-65"><a href="#cb4-65"></a></span>
-<span id="cb4-66"><a href="#cb4-66"></a>:::{.subtask letter=a}</span>
-<span id="cb4-67"><a href="#cb4-67"></a>Create a histogram to explore the range of chicken weights. </span>
-<span id="cb4-68"><a href="#cb4-68"></a>Describe what you see in the plot. What is the qualitative range of the data?</span>
-<span id="cb4-69"><a href="#cb4-69"></a>:::</span>
-<span id="cb4-70"><a href="#cb4-70"></a></span>
-<span id="cb4-71"><a href="#cb4-71"></a></span>
-<span id="cb4-72"><a href="#cb4-72"></a></span>
-<span id="cb4-73"><a href="#cb4-73"></a>:::{.subrubric}</span>
-<span id="cb4-74"><a href="#cb4-74"></a><span class="ss">* </span>Does the plot look correct and is it readable?</span>
-<span id="cb4-75"><a href="#cb4-75"></a><span class="ss">* </span>Has it been stated that the data is **...**?</span>
-<span id="cb4-76"><a href="#cb4-76"></a>:::</span>
-<span id="cb4-77"><a href="#cb4-77"></a></span>
-<span id="cb4-78"><a href="#cb4-78"></a>:::{.subtask}</span>
-<span id="cb4-79"><a href="#cb4-79"></a>Plot the weight of each chicken over time in a line plot. Add colours based on the diet.</span>
-<span id="cb4-80"><a href="#cb4-80"></a>Describe what you see in the plot. </span>
-<span id="cb4-81"><a href="#cb4-81"></a>:::</span>
-<span id="cb4-82"><a href="#cb4-82"></a></span>
-<span id="cb4-83"><a href="#cb4-83"></a>:::{.subrubric}</span>
-<span id="cb4-84"><a href="#cb4-84"></a><span class="ss">* </span>Does the plot look correct and is it readable?</span>
-<span id="cb4-85"><a href="#cb4-85"></a>:::</span>
-<span id="cb4-86"><a href="#cb4-86"></a></span>
-<span id="cb4-87"><a href="#cb4-87"></a><span class="fu">## Linear regression</span></span>
-<span id="cb4-88"><a href="#cb4-88"></a></span>
-<span id="cb4-89"><a href="#cb4-89"></a>In this section, you will build a model that predicts the weight of a</span>
-<span id="cb4-90"><a href="#cb4-90"></a>chicken over time and depending on the diet. After sampling from the posteriors, you</span>
-<span id="cb4-91"><a href="#cb4-91"></a>will use posterior predictive checks to see how well the predictions</span>
-<span id="cb4-92"><a href="#cb4-92"></a>match the observations. Then you will adjust the model by adding more</span>
-<span id="cb4-93"><a href="#cb4-93"></a>complexity, and check again.</span>
-<span id="cb4-94"><a href="#cb4-94"></a></span>
-<span id="cb4-95"><a href="#cb4-95"></a>::: {.subtask}</span>
-<span id="cb4-96"><a href="#cb4-96"></a>Using <span class="in">`brms`</span>, implement a pooled linear regression with a normal</span>
-<span id="cb4-97"><a href="#cb4-97"></a>model and <span class="in">`weight`</span> as the predicted</span>
-<span id="cb4-98"><a href="#cb4-98"></a>variable using <span class="in">`Diet`</span> and <span class="in">`Time`</span> as predictors. Try to use weakly informative priors.</span>
-<span id="cb4-99"><a href="#cb4-99"></a>:::</span>
-<span id="cb4-100"><a href="#cb4-100"></a>::: {.hint}</span>
-<span id="cb4-101"><a href="#cb4-101"></a>For the prior on <span class="in">`Time`</span>, consider how much the weight of a chicken (in grams) could possibly</span>
-<span id="cb4-102"><a href="#cb4-102"></a>change each day. For the priors on the effects of different diets,</span>
-<span id="cb4-103"><a href="#cb4-103"></a>consider how much average weight difference would be possible between</span>
-<span id="cb4-104"><a href="#cb4-104"></a>diets.</span>
-<span id="cb4-105"><a href="#cb4-105"></a></span>
-<span id="cb4-106"><a href="#cb4-106"></a>Note that as <span class="in">`Diet`</span> is a categorical variable, the priors need to be</span>
-<span id="cb4-107"><a href="#cb4-107"></a>specified for each category (apart from <span class="in">`Diet1`</span> which is taken to be</span>
-<span id="cb4-108"><a href="#cb4-108"></a>the baseline).</span>
-<span id="cb4-109"><a href="#cb4-109"></a>:::</span>
-<span id="cb4-110"><a href="#cb4-110"></a></span>
-<span id="cb4-111"><a href="#cb4-111"></a></span>
-<span id="cb4-112"><a href="#cb4-112"></a></span>
-<span id="cb4-113"><a href="#cb4-113"></a>:::{.subrubric}</span>
-<span id="cb4-114"><a href="#cb4-114"></a><span class="ss">* </span>Is the brms-formula **...**?</span>
-<span id="cb4-115"><a href="#cb4-115"></a><span class="ss">* </span>Is the family **...**?</span>
-<span id="cb4-116"><a href="#cb4-116"></a><span class="ss">* </span>Are the prior standard deviations around **...**?</span>
-<span id="cb4-117"><a href="#cb4-117"></a>:::</span>
-<span id="cb4-118"><a href="#cb4-118"></a></span>
-<span id="cb4-119"><a href="#cb4-119"></a></span>
-<span id="cb4-120"><a href="#cb4-120"></a>Next, you can use the <span class="in">`bayesplot`</span> package to check the posterior</span>
-<span id="cb4-121"><a href="#cb4-121"></a>predictions in relation to the observed data using the <span class="co">[</span><span class="ot">`pp_check` function</span><span class="co">](https://mc-stan.org/bayesplot/reference/pp_check.html)</span>. </span>
-<span id="cb4-122"><a href="#cb4-122"></a>The function plots the $y$ values, which are the observed data, </span>
-<span id="cb4-123"><a href="#cb4-123"></a>and the $y_\text{rep}$ values, which are replicated data sets from the</span>
-<span id="cb4-124"><a href="#cb4-124"></a>posterior predictive distribution.</span>
-<span id="cb4-125"><a href="#cb4-125"></a></span>
-<span id="cb4-126"><a href="#cb4-126"></a>:::{.subtask}</span>
-<span id="cb4-127"><a href="#cb4-127"></a>Perform the posterior predictive check with the default arguments.</span>
-<span id="cb4-128"><a href="#cb4-128"></a>What do you observe? Based on the plot, do the posterior predictions</span>
-<span id="cb4-129"><a href="#cb4-129"></a>encapsulate the main features of the observed data? Point out any</span>
-<span id="cb4-130"><a href="#cb4-130"></a>major differences between the predictions and the observed data.</span>
-<span id="cb4-131"><a href="#cb4-131"></a>Answer the following questions:</span>
-<span id="cb4-132"><a href="#cb4-132"></a></span>
-<span id="cb4-133"><a href="#cb4-133"></a><span class="ss">* </span>Are there qualitative differences between the observed data and the predicted data?</span>
-<span id="cb4-134"><a href="#cb4-134"></a><span class="ss">* </span>Do the observed data seem quantitatively similar?</span>
-<span id="cb4-135"><a href="#cb4-135"></a>:::</span>
-<span id="cb4-136"><a href="#cb4-136"></a></span>
-<span id="cb4-137"><a href="#cb4-137"></a>:::{.subrubric}</span>
-<span id="cb4-138"><a href="#cb4-138"></a><span class="ss">* </span>Does the plot look correct and is it readable?</span>
-<span id="cb4-139"><a href="#cb4-139"></a><span class="ss">* </span>Has it been recognized that the predicted data include **...**?</span>
-<span id="cb4-140"><a href="#cb4-140"></a><span class="ss">* </span>Has it been recognized that the observed and predicted data **...**?</span>
-<span id="cb4-141"><a href="#cb4-141"></a>:::</span>
-<span id="cb4-142"><a href="#cb4-142"></a></span>
-<span id="cb4-143"><a href="#cb4-143"></a>The default density plot is not always informative, but <span class="in">`bayesplot`</span></span>
-<span id="cb4-144"><a href="#cb4-144"></a>has different settings that can be used to create plots more</span>
-<span id="cb4-145"><a href="#cb4-145"></a>appropriate for specific data.</span>
-<span id="cb4-146"><a href="#cb4-146"></a></span>
-<span id="cb4-147"><a href="#cb4-147"></a>:::{.subtask}</span>
-<span id="cb4-148"><a href="#cb4-148"></a>Create another plot with grouping to the PPC plot using the arguments</span>
-<span id="cb4-149"><a href="#cb4-149"></a><span class="in">`type = "intervals_grouped"`</span> and <span class="in">`group = "Diet"`</span>.</span>
-<span id="cb4-150"><a href="#cb4-150"></a>What do you observe? Point out any major differences</span>
-<span id="cb4-151"><a href="#cb4-151"></a>between the predictions and the observed data.</span>
-<span id="cb4-152"><a href="#cb4-152"></a>Based on your visualisations, how could the model be improved?</span>
-<span id="cb4-153"><a href="#cb4-153"></a>:::</span>
-<span id="cb4-154"><a href="#cb4-154"></a></span>
-<span id="cb4-155"><a href="#cb4-155"></a>:::{.subrubric}</span>
-<span id="cb4-156"><a href="#cb4-156"></a><span class="ss">* </span>Does the plot look correct and is it readable?</span>
-<span id="cb4-157"><a href="#cb4-157"></a><span class="ss">* </span>Is there at least one reasonable way to improve the model, e.g. **...**?</span>
-<span id="cb4-158"><a href="#cb4-158"></a>:::</span>
-<span id="cb4-159"><a href="#cb4-159"></a></span>
-<span id="cb4-160"><a href="#cb4-160"></a><span class="fu">## Log-normal linear regression</span></span>
-<span id="cb4-161"><a href="#cb4-161"></a></span>
-<span id="cb4-162"><a href="#cb4-162"></a>Based on the identified issues from the posterior predictive check,</span>
-<span id="cb4-163"><a href="#cb4-163"></a>the model can be improved. It is advisable to change only one or a few</span>
-<span id="cb4-164"><a href="#cb4-164"></a>things about a model at once. At this stage, focus on changing the</span>
-<span id="cb4-165"><a href="#cb4-165"></a>observation model family to better account for the observed data.</span>
-<span id="cb4-166"><a href="#cb4-166"></a></span>
-<span id="cb4-167"><a href="#cb4-167"></a>One option is to use the lognormal observation model, which only allows</span>
-<span id="cb4-168"><a href="#cb4-168"></a>positive values. In <span class="in">`brms`</span> you can change the observation model family</span>
-<span id="cb4-169"><a href="#cb4-169"></a>to this by setting the argument <span class="in">`family = "lognormal"`</span>.</span>
-<span id="cb4-170"><a href="#cb4-170"></a>Note that when using the log-normal observation model, the regression</span>
-<span id="cb4-171"><a href="#cb4-171"></a>coefficients represent the change in the log weight of a chicken. The</span>
-<span id="cb4-172"><a href="#cb4-172"></a>priors have been adjusted accordingly in the template.</span>
-<span id="cb4-173"><a href="#cb4-173"></a></span>
-<span id="cb4-174"><a href="#cb4-174"></a>::: {.subtask}</span>
-<span id="cb4-175"><a href="#cb4-175"></a>Adjust the model, sample from the posterior and create the same two posterior predictive</span>
-<span id="cb4-176"><a href="#cb4-176"></a>check plots. Comment on your observations. Does the new model better</span>
-<span id="cb4-177"><a href="#cb4-177"></a>capture some aspects of the data?</span>
-<span id="cb4-178"><a href="#cb4-178"></a>:::</span>
-<span id="cb4-179"><a href="#cb4-179"></a>::: {.hint}</span>
-<span id="cb4-180"><a href="#cb4-180"></a>:::</span>
-<span id="cb4-181"><a href="#cb4-181"></a></span>
-<span id="cb4-182"><a href="#cb4-182"></a>:::{.subrubric}</span>
-<span id="cb4-183"><a href="#cb4-183"></a><span class="ss">* </span>Do the plots look correct and are they readable?</span>
-<span id="cb4-184"><a href="#cb4-184"></a><span class="ss">* </span>Has it been recognized that the fit to data is **...**?</span>
-<span id="cb4-185"><a href="#cb4-185"></a>:::</span>
-<span id="cb4-186"><a href="#cb4-186"></a></span>
-<span id="cb4-187"><a href="#cb4-187"></a><span class="fu">## Hierarchical log-normal linear regression</span></span>
-<span id="cb4-188"><a href="#cb4-188"></a></span>
-<span id="cb4-189"><a href="#cb4-189"></a>The model can further be improved by directly considering potential</span>
-<span id="cb4-190"><a href="#cb4-190"></a>differences in growth rate for individual chicken. Some chickens may</span>
-<span id="cb4-191"><a href="#cb4-191"></a>innately grow faster than others, and this difference can be included</span>
-<span id="cb4-192"><a href="#cb4-192"></a>by including both population and group level effects in to the model.</span>
-<span id="cb4-193"><a href="#cb4-193"></a></span>
-<span id="cb4-194"><a href="#cb4-194"></a>To include a group effect in <span class="in">`brms`</span>, the code `+</span>
-<span id="cb4-195"><a href="#cb4-195"></a>(predictor|group)` can be added to the model formula. In this case,</span>
-<span id="cb4-196"><a href="#cb4-196"></a>the predictor is <span class="in">`Time`</span> and the group is <span class="in">`Chick`</span>.</span>
-<span id="cb4-197"><a href="#cb4-197"></a></span>
-<span id="cb4-198"><a href="#cb4-198"></a>::: {.subtask}</span>
-<span id="cb4-199"><a href="#cb4-199"></a>Create the same two plots as for the previous models. Comment on what</span>
-<span id="cb4-200"><a href="#cb4-200"></a>you see. Do the predictions seem to better capture the observed data?</span>
-<span id="cb4-201"><a href="#cb4-201"></a>Are there remaining discrepancies between the predictions and observed</span>
-<span id="cb4-202"><a href="#cb4-202"></a>data that could be addressed?</span>
-<span id="cb4-203"><a href="#cb4-203"></a>:::</span>
-<span id="cb4-204"><a href="#cb4-204"></a></span>
-<span id="cb4-205"><a href="#cb4-205"></a>:::{.subrubric}</span>
-<span id="cb4-206"><a href="#cb4-206"></a><span class="ss">* </span>Do the plots look correct and are they readable?</span>
-<span id="cb4-207"><a href="#cb4-207"></a><span class="ss">* </span>Has it been recognized that the fit to data is **...**?</span>
-<span id="cb4-208"><a href="#cb4-208"></a>:::</span>
-<span id="cb4-209"><a href="#cb4-209"></a></span>
-<span id="cb4-210"><a href="#cb4-210"></a>:::{.subtask}</span>
-<span id="cb4-211"><a href="#cb4-211"></a>Have you encountered any convergence issues in the above models? Report and comment.</span>
-<span id="cb4-212"><a href="#cb4-212"></a>:::</span>
-<span id="cb4-213"><a href="#cb4-213"></a>:::{.subrubric}</span>
-<span id="cb4-214"><a href="#cb4-214"></a><span class="ss">* </span>Has there been a potentially brief discussion of the standard convergence criteria (Rhat, ESS, divergent transitions) for all models?</span>
-<span id="cb4-215"><a href="#cb4-215"></a>:::</span>
-<span id="cb4-216"><a href="#cb4-216"></a></span>
-<span id="cb4-217"><a href="#cb4-217"></a><span class="fu">## Model comparison using the ELPD</span></span>
-<span id="cb4-218"><a href="#cb4-218"></a></span>
-<span id="cb4-219"><a href="#cb4-219"></a>There are many ways of comparing models<span class="ot">[^footnote1]</span>. Commonly, we evaluate point predictions, such as the mean of the predictive distribution<span class="ot">[^footnote2]</span>, or accuracy of the whole posterior predictive. Whether we prioritise point or density predictive accuracy may serve different purposes and lead to different outcomes for model choice <span class="ot">[^footnote3]</span>. It is common, however, to report predictive accuracy via log-scores and point-predictive accuracy via root-mean-squared-error based on the empirical average of the predictive distribution. To cross-validate both metrics on left out observations without need to sample from each leave-one-out posterior, we use Pareto-smoothed importance sampling as discussed in the course materials (see Lecture 9). </span>
-<span id="cb4-220"><a href="#cb4-220"></a></span>
-<span id="cb4-221"><a href="#cb4-221"></a>We start comparing models based on the log-score. Use <span class="in">`loo::loo()`</span> and <span class="in">`loo::loo_compare()`</span> to quantify the differences in predictive performance.</span>
-<span id="cb4-222"><a href="#cb4-222"></a></span>
-<span id="cb4-223"><a href="#cb4-223"></a><span class="ot">[^footnote1]: </span>In principle, when comparing models based on accuracy in predictions or parameter estimation (if true parameter values are available to you, as e.g. in simulation studies), we want to use so called strictly proper scoring rules that will always indicate when a "better" model is better and the score reaches its uniquely defined best value at the "true" model, if it is also well defined. See <span class="co">[</span><span class="ot">**Gneiting and Raftery, (2007)**</span><span class="co">](https://www.tandfonline.com/doi/abs/10.1198/016214506000001437)</span> for and in depth treatment of this topic.</span>
-<span id="cb4-224"><a href="#cb4-224"></a></span>
-<span id="cb4-225"><a href="#cb4-225"></a><span class="ot">[^footnote2]: </span>NOT predictions based on the mean of the posterior parameters, but first generating the predictive distribution and then computing an average.</span>
-<span id="cb4-226"><a href="#cb4-226"></a></span>
-<span id="cb4-227"><a href="#cb4-227"></a><span class="ot">[^footnote3]: </span>For instance, a unimodal and bimodal predictive density may have the same expected value, but very different areas of high posterior density and therefore very different log-scores.</span>
-<span id="cb4-228"><a href="#cb4-228"></a></span>
-<span id="cb4-229"><a href="#cb4-229"></a>:::{.subtask}</span>
-<span id="cb4-230"><a href="#cb4-230"></a>Answer the following questions using <span class="in">`loo`</span>/<span class="in">`loo_compare`</span>:</span>
-<span id="cb4-231"><a href="#cb4-231"></a></span>
-<span id="cb4-232"><a href="#cb4-232"></a><span class="ss">* </span>Which model has the best predictive performance? </span>
-<span id="cb4-233"><a href="#cb4-233"></a><span class="ss">* </span>Does the uncertainty influence the decision of which model is best?</span>
-<span id="cb4-234"><a href="#cb4-234"></a>:::</span>
-<span id="cb4-235"><a href="#cb4-235"></a></span>
-<span id="cb4-236"><a href="#cb4-236"></a>:::{.subrubric}</span>
-<span id="cb4-237"><a href="#cb4-237"></a><span class="ss">* </span>Do the results look correct and have they been presented in a readable way? They should be roughly **...**.</span>
-<span id="cb4-238"><a href="#cb4-238"></a><span class="ss">* </span>Has it been recognized that the best model is **...** and that the uncertainty is **...**?</span>
-<span id="cb4-239"><a href="#cb4-239"></a>:::</span>
-<span id="cb4-240"><a href="#cb4-240"></a>:::{.subtask}</span>
-<span id="cb4-241"><a href="#cb4-241"></a>Assess whether the approximation to the LOO-CV distributions are reliable.</span>
-<span id="cb4-242"><a href="#cb4-242"></a>Consult the $\hat{k}$ statistic which informs on the reliability of PSIS computation in PSIS-LOO. </span>
-<span id="cb4-243"><a href="#cb4-243"></a>Plot the $\hat{k}$ values for each model against the data point ID and discuss.</span>
-<span id="cb4-244"><a href="#cb4-244"></a>Are they as expected?</span>
-<span id="cb4-245"><a href="#cb4-245"></a>:::</span>
-<span id="cb4-246"><a href="#cb4-246"></a>:::{.hint}</span>
-<span id="cb4-247"><a href="#cb4-247"></a>For hierarchical models, it may be more important to think about how well the individual group is predicted and how many observations there are in a group compared to the number of parameters estimated. Also check out <span class="co">[</span><span class="ot">CV-FAQ on high Pareto-$\hat{k}$ values</span><span class="co">]</span>(https://avehtari.github.io/modelselection/CV-FAQ.html#17_What_to_do_if_I_have_high_Pareto_(hat{k})%E2%80%99s).</span>
-<span id="cb4-248"><a href="#cb4-248"></a>:::</span>
-<span id="cb4-249"><a href="#cb4-249"></a></span>
-<span id="cb4-250"><a href="#cb4-250"></a>:::{.subrubric}</span>
-<span id="cb4-251"><a href="#cb4-251"></a><span class="ss">* </span>Do the plots look correct and are they readable?</span>
-<span id="cb4-252"><a href="#cb4-252"></a><span class="ss">* </span>Has it been explained why the $\hat{k}$ values are highest for the **...**? **...**.</span>
-<span id="cb4-253"><a href="#cb4-253"></a>:::</span>
-<span id="cb4-254"><a href="#cb4-254"></a>:::{.subtask}</span>
-<span id="cb4-255"><a href="#cb4-255"></a>Perform a PPC for the hierarchical model for </span>
-<span id="cb4-256"><a href="#cb4-256"></a></span>
-<span id="cb4-257"><a href="#cb4-257"></a><span class="ss">* </span>a few of the chickens with the highest $\hat{k}$ values and</span>
-<span id="cb4-258"><a href="#cb4-258"></a><span class="ss">* </span>a few of the chickens with the lowest $\hat{k}$ values</span>
-<span id="cb4-259"><a href="#cb4-259"></a></span>
-<span id="cb4-260"><a href="#cb4-260"></a>using the code in the template. What do you observe?</span>
-<span id="cb4-261"><a href="#cb4-261"></a>:::</span>
-<span id="cb4-262"><a href="#cb4-262"></a></span>
-<span id="cb4-263"><a href="#cb4-263"></a>:::{.subrubric}</span>
-<span id="cb4-264"><a href="#cb4-264"></a><span class="ss">* </span>Does the plot look correct and is it readable?</span>
-<span id="cb4-265"><a href="#cb4-265"></a><span class="ss">* </span>Has it been recognized that the chickens with high $\hat{k}$ values **...**?</span>
-<span id="cb4-266"><a href="#cb4-266"></a>:::</span>
-<span id="cb4-267"><a href="#cb4-267"></a></span>
-<span id="cb4-268"><a href="#cb4-268"></a><span class="fu">## Model comparison using the RMSE</span></span>
-<span id="cb4-269"><a href="#cb4-269"></a></span>
-<span id="cb4-270"><a href="#cb4-270"></a>:::{.subtask}</span>
-<span id="cb4-271"><a href="#cb4-271"></a>Use the function in the template to compare the RMSE and the LOO-RMSE for the three models.</span>
-<span id="cb4-272"><a href="#cb4-272"></a>Explain the difference between the RMSE and the LOO-RMSE in 1--3 sentences. Is one generally lower than the other? Why?</span>
-<span id="cb4-273"><a href="#cb4-273"></a>:::</span>
-<span id="cb4-274"><a href="#cb4-274"></a></span>
-<span id="cb4-275"><a href="#cb4-275"></a>:::{.subrubric}</span>
-<span id="cb4-276"><a href="#cb4-276"></a><span class="ss">* </span>Do the results look correct and have they been presented in a readable way? They should be roughly: **...**.</span>
-<span id="cb4-277"><a href="#cb4-277"></a><span class="ss">* </span>Has it been recognized that the RMSE is **...** than the LOO-RMSE because **...**?</span>
-<span id="cb4-278"><a href="#cb4-278"></a>:::</span>
-<span id="cb4-279"><a href="#cb4-279"></a></span>
-<span id="cb4-280"><a href="#cb4-280"></a>{{&lt; include includes/_overall_quality.md &gt;}}</span>
-<span id="cb4-281"><a href="#cb4-281"></a>  </span>
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1"></a><span class="co">---</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="an">title:</span><span class="co"> "Assignment 8"</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="an">subtitle:</span><span class="co"> "LOO-CV model comparison"</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="an">author:</span><span class="co"> "Aki Vehtari et al."</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="an">format:</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="co">  html:</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="co">    toc: true</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="co">    code-tools: true</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="co">    code-line-numbers: true</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="co">    number-sections: true</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="co">    mainfont: Georgia, serif</span></span>
+<span id="cb3-12"><a href="#cb3-12"></a><span class="co">    page-layout: article</span></span>
+<span id="cb3-13"><a href="#cb3-13"></a><span class="an">editor:</span><span class="co"> source</span></span>
+<span id="cb3-14"><a href="#cb3-14"></a><span class="an">filters:</span></span>
+<span id="cb3-15"><a href="#cb3-15"></a><span class="co">  - includes/assignments.lua </span></span>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="co">  - includes/include-code-files.lua </span></span>
+<span id="cb3-17"><a href="#cb3-17"></a><span class="co">---</span></span>
+<span id="cb3-18"><a href="#cb3-18"></a></span>
+<span id="cb3-19"><a href="#cb3-19"></a><span class="fu"># General information</span></span>
+<span id="cb3-20"><a href="#cb3-20"></a></span>
+<span id="cb3-21"><a href="#cb3-21"></a>**The maximum amount of points from this assignment is 6.**</span>
+<span id="cb3-22"><a href="#cb3-22"></a></span>
+<span id="cb3-23"><a href="#cb3-23"></a>We have prepared a **quarto template specific to this assignment ([html](template8.html), [qmd](https://avehtari.github.io/BDA_course_Aalto/assignments/template8.qmd), [pdf](template8.pdf))** to help you get started. </span>
+<span id="cb3-24"><a href="#cb3-24"></a></span>
+<span id="cb3-25"><a href="#cb3-25"></a></span>
+<span id="cb3-26"><a href="#cb3-26"></a>:::{.aalto}</span>
+<span id="cb3-27"><a href="#cb3-27"></a>We recommend you use <span class="co">[</span><span class="ot">jupyter.cs.aalto.fi</span><span class="co">](https://jupyter.cs.aalto.fi)</span> or the <span class="co">[</span><span class="ot">docker container</span><span class="co">](docker.html)</span>.</span>
+<span id="cb3-28"><a href="#cb3-28"></a>:::</span>
+<span id="cb3-29"><a href="#cb3-29"></a></span>
+<span id="cb3-30"><a href="#cb3-30"></a></span>
+<span id="cb3-31"><a href="#cb3-31"></a>:::{.hint}</span>
+<span id="cb3-32"><a href="#cb3-32"></a>**Reading instructions**:</span>
+<span id="cb3-33"><a href="#cb3-33"></a></span>
+<span id="cb3-34"><a href="#cb3-34"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**The reading instructions for BDA3 Chapter 6**</span><span class="co">](../BDA3_notes.html#ch6)</span> (posterior predictive checking).</span>
+<span id="cb3-35"><a href="#cb3-35"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**The reading instructions for BDA3 Chapter 7**</span><span class="co">](../BDA3_notes.html#ch7)</span> (predictive performance).</span>
+<span id="cb3-36"><a href="#cb3-36"></a><span class="ss">- </span>The <span class="co">[</span><span class="ot">‘loo‘ package vignette on the basics of LOO</span><span class="co">](https://mc-stan.org/loo/articles/loo2-with-rstan.html)</span></span>
+<span id="cb3-37"><a href="#cb3-37"></a>shows an example of how to modify Stan code and use the package with Stan models.</span>
+<span id="cb3-38"><a href="#cb3-38"></a><span class="ss">- </span>Also read</span>
+<span id="cb3-39"><a href="#cb3-39"></a>about PSIS-LOO in the <span class="co">[</span><span class="ot">PSIS-LOO paper</span><span class="co">](https://link.springer.com/article/10.1007/s11222-016-9696-4)</span>.</span>
+<span id="cb3-40"><a href="#cb3-40"></a><span class="ss">- </span><span class="co">[</span><span class="ot">CV-FAQ</span><span class="co">](https://avehtari.github.io/modelselection/CV-FAQ.html)</span> includes a lot of informative answers to frequent questions and misconceptions.</span>
+<span id="cb3-41"><a href="#cb3-41"></a></span>
+<span id="cb3-42"><a href="#cb3-42"></a>{{&lt; include includes/_grading_instructions.md &gt;}}</span>
+<span id="cb3-43"><a href="#cb3-43"></a></span>
+<span id="cb3-44"><a href="#cb3-44"></a>{{&lt; include includes/_cmdstanr.md &gt;}}</span>
+<span id="cb3-45"><a href="#cb3-45"></a>:::</span>
+<span id="cb3-46"><a href="#cb3-46"></a></span>
+<span id="cb3-47"><a href="#cb3-47"></a>{{&lt; include includes/_reporting_accuracy.md &gt;}}</span>
+<span id="cb3-48"><a href="#cb3-48"></a></span>
+<span id="cb3-49"><a href="#cb3-49"></a>{{&lt; include includes/_general_info.md &gt;}}</span>
+<span id="cb3-50"><a href="#cb3-50"></a></span>
+<span id="cb3-51"><a href="#cb3-51"></a></span>
+<span id="cb3-52"><a href="#cb3-52"></a></span>
+<span id="cb3-53"><a href="#cb3-53"></a></span>
+<span id="cb3-54"><a href="#cb3-54"></a><span class="fu"># A hierarchical model for chicken weight time series</span></span>
+<span id="cb3-55"><a href="#cb3-55"></a></span>
+<span id="cb3-56"><a href="#cb3-56"></a><span class="fu">## Exploratory data analysis</span></span>
+<span id="cb3-57"><a href="#cb3-57"></a></span>
+<span id="cb3-58"><a href="#cb3-58"></a>In the first part of this assignment, you will explore the dataset <span class="in">`ChickWeight`</span>. In particular, you will see what information is recorded in the dataset, and how you can use visualisation to learn more about the dataset. More information can be found on the corresponding page of the <span class="co">[</span><span class="ot">R documentation</span><span class="co">](https://www.rdocumentation.org/packages/datasets/versions/3.6.2/topics/ChickWeight)</span>.</span>
+<span id="cb3-59"><a href="#cb3-59"></a></span>
+<span id="cb3-62"><a href="#cb3-62"></a><span class="in">```{r}</span></span>
+<span id="cb3-63"><a href="#cb3-63"></a><span class="fu">head</span>(ChickWeight, <span class="dv">10</span>)</span>
+<span id="cb3-64"><a href="#cb3-64"></a><span class="in">```</span></span>
+<span id="cb3-65"><a href="#cb3-65"></a></span>
+<span id="cb3-66"><a href="#cb3-66"></a>:::{.subtask letter=a}</span>
+<span id="cb3-67"><a href="#cb3-67"></a>Create a histogram to explore the range of chicken weights. </span>
+<span id="cb3-68"><a href="#cb3-68"></a>Describe what you see in the plot. What is the qualitative range of the data?</span>
+<span id="cb3-69"><a href="#cb3-69"></a>:::</span>
+<span id="cb3-70"><a href="#cb3-70"></a></span>
+<span id="cb3-71"><a href="#cb3-71"></a></span>
+<span id="cb3-72"><a href="#cb3-72"></a></span>
+<span id="cb3-73"><a href="#cb3-73"></a>:::{.subrubric}</span>
+<span id="cb3-74"><a href="#cb3-74"></a><span class="ss">* </span>Does the plot look correct and is it readable?</span>
+<span id="cb3-75"><a href="#cb3-75"></a><span class="ss">* </span>Has it been stated that the data is **...**?</span>
+<span id="cb3-76"><a href="#cb3-76"></a>:::</span>
+<span id="cb3-77"><a href="#cb3-77"></a></span>
+<span id="cb3-78"><a href="#cb3-78"></a>:::{.subtask}</span>
+<span id="cb3-79"><a href="#cb3-79"></a>Plot the weight of each chicken over time in a line plot. Add colours based on the diet.</span>
+<span id="cb3-80"><a href="#cb3-80"></a>Describe what you see in the plot. </span>
+<span id="cb3-81"><a href="#cb3-81"></a>:::</span>
+<span id="cb3-82"><a href="#cb3-82"></a></span>
+<span id="cb3-83"><a href="#cb3-83"></a>:::{.subrubric}</span>
+<span id="cb3-84"><a href="#cb3-84"></a><span class="ss">* </span>Does the plot look correct and is it readable?</span>
+<span id="cb3-85"><a href="#cb3-85"></a>:::</span>
+<span id="cb3-86"><a href="#cb3-86"></a></span>
+<span id="cb3-87"><a href="#cb3-87"></a><span class="fu">## Linear regression</span></span>
+<span id="cb3-88"><a href="#cb3-88"></a></span>
+<span id="cb3-89"><a href="#cb3-89"></a>In this section, you will build a model that predicts the weight of a</span>
+<span id="cb3-90"><a href="#cb3-90"></a>chicken over time and depending on the diet. After sampling from the posteriors, you</span>
+<span id="cb3-91"><a href="#cb3-91"></a>will use posterior predictive checks to see how well the predictions</span>
+<span id="cb3-92"><a href="#cb3-92"></a>match the observations. Then you will adjust the model by adding more</span>
+<span id="cb3-93"><a href="#cb3-93"></a>complexity, and check again.</span>
+<span id="cb3-94"><a href="#cb3-94"></a></span>
+<span id="cb3-95"><a href="#cb3-95"></a>::: {.subtask}</span>
+<span id="cb3-96"><a href="#cb3-96"></a>Using <span class="in">`brms`</span>, implement a pooled linear regression with a normal</span>
+<span id="cb3-97"><a href="#cb3-97"></a>model and <span class="in">`weight`</span> as the predicted</span>
+<span id="cb3-98"><a href="#cb3-98"></a>variable using <span class="in">`Diet`</span> and <span class="in">`Time`</span> as predictors. Try to use weakly informative priors.</span>
+<span id="cb3-99"><a href="#cb3-99"></a>:::</span>
+<span id="cb3-100"><a href="#cb3-100"></a>::: {.hint}</span>
+<span id="cb3-101"><a href="#cb3-101"></a>For the prior on <span class="in">`Time`</span>, consider how much the weight of a chicken (in grams) could possibly</span>
+<span id="cb3-102"><a href="#cb3-102"></a>change each day. For the priors on the effects of different diets,</span>
+<span id="cb3-103"><a href="#cb3-103"></a>consider how much average weight difference would be possible between</span>
+<span id="cb3-104"><a href="#cb3-104"></a>diets.</span>
+<span id="cb3-105"><a href="#cb3-105"></a></span>
+<span id="cb3-106"><a href="#cb3-106"></a>Note that as <span class="in">`Diet`</span> is a categorical variable, the priors need to be</span>
+<span id="cb3-107"><a href="#cb3-107"></a>specified for each category (apart from <span class="in">`Diet1`</span> which is taken to be</span>
+<span id="cb3-108"><a href="#cb3-108"></a>the baseline).</span>
+<span id="cb3-109"><a href="#cb3-109"></a>:::</span>
+<span id="cb3-110"><a href="#cb3-110"></a></span>
+<span id="cb3-111"><a href="#cb3-111"></a></span>
+<span id="cb3-112"><a href="#cb3-112"></a></span>
+<span id="cb3-113"><a href="#cb3-113"></a>:::{.subrubric}</span>
+<span id="cb3-114"><a href="#cb3-114"></a><span class="ss">* </span>Is the brms-formula **...**?</span>
+<span id="cb3-115"><a href="#cb3-115"></a><span class="ss">* </span>Is the family **...**?</span>
+<span id="cb3-116"><a href="#cb3-116"></a><span class="ss">* </span>Are the prior standard deviations around **...**?</span>
+<span id="cb3-117"><a href="#cb3-117"></a>:::</span>
+<span id="cb3-118"><a href="#cb3-118"></a></span>
+<span id="cb3-119"><a href="#cb3-119"></a></span>
+<span id="cb3-120"><a href="#cb3-120"></a>Next, you can use the <span class="in">`bayesplot`</span> package to check the posterior</span>
+<span id="cb3-121"><a href="#cb3-121"></a>predictions in relation to the observed data using the <span class="co">[</span><span class="ot">`pp_check` function</span><span class="co">](https://mc-stan.org/bayesplot/reference/pp_check.html)</span>. </span>
+<span id="cb3-122"><a href="#cb3-122"></a>The function plots the $y$ values, which are the observed data, </span>
+<span id="cb3-123"><a href="#cb3-123"></a>and the $y_\text{rep}$ values, which are replicated data sets from the</span>
+<span id="cb3-124"><a href="#cb3-124"></a>posterior predictive distribution.</span>
+<span id="cb3-125"><a href="#cb3-125"></a></span>
+<span id="cb3-126"><a href="#cb3-126"></a>:::{.subtask}</span>
+<span id="cb3-127"><a href="#cb3-127"></a>Perform the posterior predictive check with the default arguments.</span>
+<span id="cb3-128"><a href="#cb3-128"></a>What do you observe? Based on the plot, do the posterior predictions</span>
+<span id="cb3-129"><a href="#cb3-129"></a>encapsulate the main features of the observed data? Point out any</span>
+<span id="cb3-130"><a href="#cb3-130"></a>major differences between the predictions and the observed data.</span>
+<span id="cb3-131"><a href="#cb3-131"></a>Answer the following questions:</span>
+<span id="cb3-132"><a href="#cb3-132"></a></span>
+<span id="cb3-133"><a href="#cb3-133"></a><span class="ss">* </span>Are there qualitative differences between the observed data and the predicted data?</span>
+<span id="cb3-134"><a href="#cb3-134"></a><span class="ss">* </span>Do the observed data seem quantitatively similar?</span>
+<span id="cb3-135"><a href="#cb3-135"></a>:::</span>
+<span id="cb3-136"><a href="#cb3-136"></a></span>
+<span id="cb3-137"><a href="#cb3-137"></a>:::{.subrubric}</span>
+<span id="cb3-138"><a href="#cb3-138"></a><span class="ss">* </span>Does the plot look correct and is it readable?</span>
+<span id="cb3-139"><a href="#cb3-139"></a><span class="ss">* </span>Has it been recognized that the predicted data include **...**?</span>
+<span id="cb3-140"><a href="#cb3-140"></a><span class="ss">* </span>Has it been recognized that the observed and predicted data **...**?</span>
+<span id="cb3-141"><a href="#cb3-141"></a>:::</span>
+<span id="cb3-142"><a href="#cb3-142"></a></span>
+<span id="cb3-143"><a href="#cb3-143"></a>The default density plot is not always informative, but <span class="in">`bayesplot`</span></span>
+<span id="cb3-144"><a href="#cb3-144"></a>has different settings that can be used to create plots more</span>
+<span id="cb3-145"><a href="#cb3-145"></a>appropriate for specific data.</span>
+<span id="cb3-146"><a href="#cb3-146"></a></span>
+<span id="cb3-147"><a href="#cb3-147"></a>:::{.subtask}</span>
+<span id="cb3-148"><a href="#cb3-148"></a>Create another plot with grouping to the PPC plot using the arguments</span>
+<span id="cb3-149"><a href="#cb3-149"></a><span class="in">`type = "intervals_grouped"`</span> and <span class="in">`group = "Diet"`</span>.</span>
+<span id="cb3-150"><a href="#cb3-150"></a>What do you observe? Point out any major differences</span>
+<span id="cb3-151"><a href="#cb3-151"></a>between the predictions and the observed data.</span>
+<span id="cb3-152"><a href="#cb3-152"></a>Based on your visualisations, how could the model be improved?</span>
+<span id="cb3-153"><a href="#cb3-153"></a>:::</span>
+<span id="cb3-154"><a href="#cb3-154"></a></span>
+<span id="cb3-155"><a href="#cb3-155"></a>:::{.subrubric}</span>
+<span id="cb3-156"><a href="#cb3-156"></a><span class="ss">* </span>Does the plot look correct and is it readable?</span>
+<span id="cb3-157"><a href="#cb3-157"></a><span class="ss">* </span>Is there at least one reasonable way to improve the model, e.g. **...**?</span>
+<span id="cb3-158"><a href="#cb3-158"></a>:::</span>
+<span id="cb3-159"><a href="#cb3-159"></a></span>
+<span id="cb3-160"><a href="#cb3-160"></a><span class="fu">## Log-normal linear regression</span></span>
+<span id="cb3-161"><a href="#cb3-161"></a></span>
+<span id="cb3-162"><a href="#cb3-162"></a>Based on the identified issues from the posterior predictive check,</span>
+<span id="cb3-163"><a href="#cb3-163"></a>the model can be improved. It is advisable to change only one or a few</span>
+<span id="cb3-164"><a href="#cb3-164"></a>things about a model at once. At this stage, focus on changing the</span>
+<span id="cb3-165"><a href="#cb3-165"></a>observation model family to better account for the observed data.</span>
+<span id="cb3-166"><a href="#cb3-166"></a></span>
+<span id="cb3-167"><a href="#cb3-167"></a>One option is to use the lognormal observation model, which only allows</span>
+<span id="cb3-168"><a href="#cb3-168"></a>positive values. In <span class="in">`brms`</span> you can change the observation model family</span>
+<span id="cb3-169"><a href="#cb3-169"></a>to this by setting the argument <span class="in">`family = "lognormal"`</span>.</span>
+<span id="cb3-170"><a href="#cb3-170"></a>Note that when using the log-normal observation model, the regression</span>
+<span id="cb3-171"><a href="#cb3-171"></a>coefficients represent the change in the log weight of a chicken. The</span>
+<span id="cb3-172"><a href="#cb3-172"></a>priors have been adjusted accordingly in the template.</span>
+<span id="cb3-173"><a href="#cb3-173"></a></span>
+<span id="cb3-174"><a href="#cb3-174"></a>::: {.subtask}</span>
+<span id="cb3-175"><a href="#cb3-175"></a>Adjust the model, sample from the posterior and create the same two posterior predictive</span>
+<span id="cb3-176"><a href="#cb3-176"></a>check plots. Comment on your observations. Does the new model better</span>
+<span id="cb3-177"><a href="#cb3-177"></a>capture some aspects of the data?</span>
+<span id="cb3-178"><a href="#cb3-178"></a>:::</span>
+<span id="cb3-179"><a href="#cb3-179"></a>::: {.hint}</span>
+<span id="cb3-180"><a href="#cb3-180"></a>:::</span>
+<span id="cb3-181"><a href="#cb3-181"></a></span>
+<span id="cb3-182"><a href="#cb3-182"></a>:::{.subrubric}</span>
+<span id="cb3-183"><a href="#cb3-183"></a><span class="ss">* </span>Do the plots look correct and are they readable?</span>
+<span id="cb3-184"><a href="#cb3-184"></a><span class="ss">* </span>Has it been recognized that the fit to data is **...**?</span>
+<span id="cb3-185"><a href="#cb3-185"></a>:::</span>
+<span id="cb3-186"><a href="#cb3-186"></a></span>
+<span id="cb3-187"><a href="#cb3-187"></a><span class="fu">## Hierarchical log-normal linear regression</span></span>
+<span id="cb3-188"><a href="#cb3-188"></a></span>
+<span id="cb3-189"><a href="#cb3-189"></a>The model can further be improved by directly considering potential</span>
+<span id="cb3-190"><a href="#cb3-190"></a>differences in growth rate for individual chicken. Some chickens may</span>
+<span id="cb3-191"><a href="#cb3-191"></a>innately grow faster than others, and this difference can be included</span>
+<span id="cb3-192"><a href="#cb3-192"></a>by including both population and group level effects in to the model.</span>
+<span id="cb3-193"><a href="#cb3-193"></a></span>
+<span id="cb3-194"><a href="#cb3-194"></a>To include a group effect in <span class="in">`brms`</span>, the code `+</span>
+<span id="cb3-195"><a href="#cb3-195"></a>(predictor|group)` can be added to the model formula. In this case,</span>
+<span id="cb3-196"><a href="#cb3-196"></a>the predictor is <span class="in">`Time`</span> and the group is <span class="in">`Chick`</span>.</span>
+<span id="cb3-197"><a href="#cb3-197"></a></span>
+<span id="cb3-198"><a href="#cb3-198"></a>::: {.subtask}</span>
+<span id="cb3-199"><a href="#cb3-199"></a>Create the same two plots as for the previous models. Comment on what</span>
+<span id="cb3-200"><a href="#cb3-200"></a>you see. Do the predictions seem to better capture the observed data?</span>
+<span id="cb3-201"><a href="#cb3-201"></a>Are there remaining discrepancies between the predictions and observed</span>
+<span id="cb3-202"><a href="#cb3-202"></a>data that could be addressed?</span>
+<span id="cb3-203"><a href="#cb3-203"></a>:::</span>
+<span id="cb3-204"><a href="#cb3-204"></a></span>
+<span id="cb3-205"><a href="#cb3-205"></a>:::{.subrubric}</span>
+<span id="cb3-206"><a href="#cb3-206"></a><span class="ss">* </span>Do the plots look correct and are they readable?</span>
+<span id="cb3-207"><a href="#cb3-207"></a><span class="ss">* </span>Has it been recognized that the fit to data is **...**?</span>
+<span id="cb3-208"><a href="#cb3-208"></a>:::</span>
+<span id="cb3-209"><a href="#cb3-209"></a></span>
+<span id="cb3-210"><a href="#cb3-210"></a>:::{.subtask}</span>
+<span id="cb3-211"><a href="#cb3-211"></a>Have you encountered any convergence issues in the above models? Report and comment.</span>
+<span id="cb3-212"><a href="#cb3-212"></a>:::</span>
+<span id="cb3-213"><a href="#cb3-213"></a>:::{.subrubric}</span>
+<span id="cb3-214"><a href="#cb3-214"></a><span class="ss">* </span>Has there been a potentially brief discussion of the standard convergence criteria (Rhat, ESS, divergent transitions) for all models?</span>
+<span id="cb3-215"><a href="#cb3-215"></a>:::</span>
+<span id="cb3-216"><a href="#cb3-216"></a></span>
+<span id="cb3-217"><a href="#cb3-217"></a><span class="fu">## Model comparison using the ELPD</span></span>
+<span id="cb3-218"><a href="#cb3-218"></a></span>
+<span id="cb3-219"><a href="#cb3-219"></a>There are many ways of comparing models<span class="ot">[^footnote1]</span>. Commonly, we evaluate point predictions, such as the mean of the predictive distribution<span class="ot">[^footnote2]</span>, or accuracy of the whole posterior predictive. Whether we prioritise point or density predictive accuracy may serve different purposes and lead to different outcomes for model choice <span class="ot">[^footnote3]</span>. It is common, however, to report predictive accuracy via log-scores and point-predictive accuracy via root-mean-squared-error based on the empirical average of the predictive distribution. To cross-validate both metrics on left out observations without need to sample from each leave-one-out posterior, we use Pareto-smoothed importance sampling as discussed in the course materials (see Lecture 9). </span>
+<span id="cb3-220"><a href="#cb3-220"></a></span>
+<span id="cb3-221"><a href="#cb3-221"></a>We start comparing models based on the log-score. Use <span class="in">`loo::loo()`</span> and <span class="in">`loo::loo_compare()`</span> to quantify the differences in predictive performance.</span>
+<span id="cb3-222"><a href="#cb3-222"></a></span>
+<span id="cb3-223"><a href="#cb3-223"></a><span class="ot">[^footnote1]: </span>In principle, when comparing models based on accuracy in predictions or parameter estimation (if true parameter values are available to you, as e.g. in simulation studies), we want to use so called strictly proper scoring rules that will always indicate when a "better" model is better and the score reaches its uniquely defined best value at the "true" model, if it is also well defined. See <span class="co">[</span><span class="ot">**Gneiting and Raftery, (2007)**</span><span class="co">](https://www.tandfonline.com/doi/abs/10.1198/016214506000001437)</span> for and in depth treatment of this topic.</span>
+<span id="cb3-224"><a href="#cb3-224"></a></span>
+<span id="cb3-225"><a href="#cb3-225"></a><span class="ot">[^footnote2]: </span>NOT predictions based on the mean of the posterior parameters, but first generating the predictive distribution and then computing an average.</span>
+<span id="cb3-226"><a href="#cb3-226"></a></span>
+<span id="cb3-227"><a href="#cb3-227"></a><span class="ot">[^footnote3]: </span>For instance, a unimodal and bimodal predictive density may have the same expected value, but very different areas of high posterior density and therefore very different log-scores.</span>
+<span id="cb3-228"><a href="#cb3-228"></a></span>
+<span id="cb3-229"><a href="#cb3-229"></a>:::{.subtask}</span>
+<span id="cb3-230"><a href="#cb3-230"></a>Answer the following questions using <span class="in">`loo`</span>/<span class="in">`loo_compare`</span>:</span>
+<span id="cb3-231"><a href="#cb3-231"></a></span>
+<span id="cb3-232"><a href="#cb3-232"></a><span class="ss">* </span>Which model has the best predictive performance? </span>
+<span id="cb3-233"><a href="#cb3-233"></a><span class="ss">* </span>Does the uncertainty influence the decision of which model is best?</span>
+<span id="cb3-234"><a href="#cb3-234"></a>:::</span>
+<span id="cb3-235"><a href="#cb3-235"></a></span>
+<span id="cb3-236"><a href="#cb3-236"></a>:::{.subrubric}</span>
+<span id="cb3-237"><a href="#cb3-237"></a><span class="ss">* </span>Do the results look correct and have they been presented in a readable way? They should be roughly **...**.</span>
+<span id="cb3-238"><a href="#cb3-238"></a><span class="ss">* </span>Has it been recognized that the best model is **...** and that the uncertainty is **...**?</span>
+<span id="cb3-239"><a href="#cb3-239"></a>:::</span>
+<span id="cb3-240"><a href="#cb3-240"></a>:::{.subtask}</span>
+<span id="cb3-241"><a href="#cb3-241"></a>Assess whether the approximation to the LOO-CV distributions are reliable.</span>
+<span id="cb3-242"><a href="#cb3-242"></a>Consult the $\hat{k}$ statistic which informs on the reliability of PSIS computation in PSIS-LOO. </span>
+<span id="cb3-243"><a href="#cb3-243"></a>Plot the $\hat{k}$ values for each model against the data point ID and discuss.</span>
+<span id="cb3-244"><a href="#cb3-244"></a>Are they as expected?</span>
+<span id="cb3-245"><a href="#cb3-245"></a>:::</span>
+<span id="cb3-246"><a href="#cb3-246"></a>:::{.hint}</span>
+<span id="cb3-247"><a href="#cb3-247"></a>For hierarchical models, it may be more important to think about how well the individual group is predicted and how many observations there are in a group compared to the number of parameters estimated. Also check out <span class="co">[</span><span class="ot">CV-FAQ on high Pareto-$\hat{k}$ values</span><span class="co">]</span>(https://avehtari.github.io/modelselection/CV-FAQ.html#17_What_to_do_if_I_have_high_Pareto_(hat{k})%E2%80%99s).</span>
+<span id="cb3-248"><a href="#cb3-248"></a>:::</span>
+<span id="cb3-249"><a href="#cb3-249"></a></span>
+<span id="cb3-250"><a href="#cb3-250"></a>:::{.subrubric}</span>
+<span id="cb3-251"><a href="#cb3-251"></a><span class="ss">* </span>Do the plots look correct and are they readable?</span>
+<span id="cb3-252"><a href="#cb3-252"></a><span class="ss">* </span>Has it been explained why the $\hat{k}$ values are highest for the **...**? **...**.</span>
+<span id="cb3-253"><a href="#cb3-253"></a>:::</span>
+<span id="cb3-254"><a href="#cb3-254"></a>:::{.subtask}</span>
+<span id="cb3-255"><a href="#cb3-255"></a>Perform a PPC for the hierarchical model for </span>
+<span id="cb3-256"><a href="#cb3-256"></a></span>
+<span id="cb3-257"><a href="#cb3-257"></a><span class="ss">* </span>a few of the chickens with the highest $\hat{k}$ values and</span>
+<span id="cb3-258"><a href="#cb3-258"></a><span class="ss">* </span>a few of the chickens with the lowest $\hat{k}$ values</span>
+<span id="cb3-259"><a href="#cb3-259"></a></span>
+<span id="cb3-260"><a href="#cb3-260"></a>using the code in the template. What do you observe?</span>
+<span id="cb3-261"><a href="#cb3-261"></a>:::</span>
+<span id="cb3-262"><a href="#cb3-262"></a></span>
+<span id="cb3-263"><a href="#cb3-263"></a>:::{.subrubric}</span>
+<span id="cb3-264"><a href="#cb3-264"></a><span class="ss">* </span>Does the plot look correct and is it readable?</span>
+<span id="cb3-265"><a href="#cb3-265"></a><span class="ss">* </span>Has it been recognized that the chickens with high $\hat{k}$ values **...**?</span>
+<span id="cb3-266"><a href="#cb3-266"></a>:::</span>
+<span id="cb3-267"><a href="#cb3-267"></a></span>
+<span id="cb3-268"><a href="#cb3-268"></a><span class="fu">## Model comparison using the RMSE</span></span>
+<span id="cb3-269"><a href="#cb3-269"></a></span>
+<span id="cb3-270"><a href="#cb3-270"></a>:::{.subtask}</span>
+<span id="cb3-271"><a href="#cb3-271"></a>Use the function in the template to compare the RMSE and the LOO-RMSE for the three models.</span>
+<span id="cb3-272"><a href="#cb3-272"></a>Explain the difference between the RMSE and the LOO-RMSE in 1--3 sentences. Is one generally lower than the other? Why?</span>
+<span id="cb3-273"><a href="#cb3-273"></a>:::</span>
+<span id="cb3-274"><a href="#cb3-274"></a></span>
+<span id="cb3-275"><a href="#cb3-275"></a>:::{.subrubric}</span>
+<span id="cb3-276"><a href="#cb3-276"></a><span class="ss">* </span>Do the results look correct and have they been presented in a readable way? They should be roughly: **...**.</span>
+<span id="cb3-277"><a href="#cb3-277"></a><span class="ss">* </span>Has it been recognized that the RMSE is **...** than the LOO-RMSE because **...**?</span>
+<span id="cb3-278"><a href="#cb3-278"></a>:::</span>
+<span id="cb3-279"><a href="#cb3-279"></a></span>
+<span id="cb3-280"><a href="#cb3-280"></a>{{&lt; include includes/_overall_quality.md &gt;}}</span>
+<span id="cb3-281"><a href="#cb3-281"></a>  </span>
+</code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
+
 
 
 

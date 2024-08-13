@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.211">
+<meta name="generator" content="quarto-1.5.56">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="anonymous">
 
-<title>Bayesian Data Analysis - Assignment 3</title>
+<title>Assignment 3 – Bayesian Data Analysis</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -18,11 +18,12 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -33,7 +34,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -47,43 +48,13 @@ pre.numberSource code > span > a:first-child::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
-    color: #aaaaaa;
   }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
 div.sourceCode
   {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -111,7 +82,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -120,12 +97,42 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -135,12 +142,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./template1.html">Templates</a></li><li class="breadcrumb-item"><a href="./template3.html">Assignment 3</a></li></ol></nav>
-      <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./template1.html">Templates</a></li><li class="breadcrumb-item"><a href="./template3.html">Assignment 3</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
@@ -150,7 +157,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Bayesian Data Analysis</a> 
@@ -165,20 +172,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">General instructions</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">General instructions</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment_instructions.html" class="sidebar-item-text sidebar-link">Assignment instructions</a>
+  <a href="./assignment_instructions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment instructions</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./docker.html" class="sidebar-item-text sidebar-link">How to set up docker</a>
+  <a href="./docker.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">How to set up docker</span></a>
   </div>
 </li>
       </ul>
@@ -186,55 +196,65 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Assignments</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Assignments</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment1.html" class="sidebar-item-text sidebar-link">Assignment 1</a>
+  <a href="./assignment1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 1</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment2.html" class="sidebar-item-text sidebar-link">Assignment 2</a>
+  <a href="./assignment2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 2</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment3.html" class="sidebar-item-text sidebar-link">Assignment 3</a>
+  <a href="./assignment3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 3</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment4.html" class="sidebar-item-text sidebar-link">Assignment 4</a>
+  <a href="./assignment4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 4</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment5.html" class="sidebar-item-text sidebar-link">Assignment 5</a>
+  <a href="./assignment5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 5</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment6.html" class="sidebar-item-text sidebar-link">Assignment 6</a>
+  <a href="./assignment6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 6</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment7.html" class="sidebar-item-text sidebar-link">Assignment 7</a>
+  <a href="./assignment7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 7</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment8.html" class="sidebar-item-text sidebar-link">Assignment 8</a>
+  <a href="./assignment8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 8</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment9.html" class="sidebar-item-text sidebar-link">Assignment 9</a>
+  <a href="./assignment9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 9</span></a>
   </div>
 </li>
       </ul>
@@ -242,55 +262,65 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Templates</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Templates</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template1.html" class="sidebar-item-text sidebar-link">Assignment 1</a>
+  <a href="./template1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 1</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template2.html" class="sidebar-item-text sidebar-link">Assignment 2</a>
+  <a href="./template2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 2</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template3.html" class="sidebar-item-text sidebar-link active">Assignment 3</a>
+  <a href="./template3.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Assignment 3</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template4.html" class="sidebar-item-text sidebar-link">Assignment 4</a>
+  <a href="./template4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 4</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template5.html" class="sidebar-item-text sidebar-link">Assignment 5</a>
+  <a href="./template5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 5</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template6.html" class="sidebar-item-text sidebar-link">Assignment 6</a>
+  <a href="./template6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 6</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template7.html" class="sidebar-item-text sidebar-link">Assignment 7</a>
+  <a href="./template7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 7</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template8.html" class="sidebar-item-text sidebar-link">Assignment 8</a>
+  <a href="./template8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 8</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template9.html" class="sidebar-item-text sidebar-link">Assignment 9</a>
+  <a href="./template9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 9</span></a>
   </div>
 </li>
       </ul>
@@ -298,31 +328,31 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </ul>
     </div>
 </nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#general-information" id="toc-general-information" class="nav-link active" data-scroll-target="#general-information"><span class="toc-section-number">1</span>  General information</a></li>
-  <li><a href="#inference-for-normal-mean-and-deviation-3-points" id="toc-inference-for-normal-mean-and-deviation-3-points" class="nav-link" data-scroll-target="#inference-for-normal-mean-and-deviation-3-points"><span class="toc-section-number">2</span>  Inference for normal mean and deviation (3 points)</a>
+  <li><a href="#general-information" id="toc-general-information" class="nav-link active" data-scroll-target="#general-information"><span class="header-section-number">1</span> General information</a></li>
+  <li><a href="#inference-for-normal-mean-and-deviation-3-points" id="toc-inference-for-normal-mean-and-deviation-3-points" class="nav-link" data-scroll-target="#inference-for-normal-mean-and-deviation-3-points"><span class="header-section-number">2</span> Inference for normal mean and deviation (3 points)</a>
   <ul class="collapse">
-  <li><a href="#a" id="toc-a" class="nav-link" data-scroll-target="#a"><span class="toc-section-number">2.1</span>  (a)</a></li>
-  <li><a href="#b" id="toc-b" class="nav-link" data-scroll-target="#b"><span class="toc-section-number">2.2</span>  (b)</a></li>
-  <li><a href="#c" id="toc-c" class="nav-link" data-scroll-target="#c"><span class="toc-section-number">2.3</span>  (c)</a></li>
+  <li><a href="#a" id="toc-a" class="nav-link" data-scroll-target="#a"><span class="header-section-number">2.1</span> (a)</a></li>
+  <li><a href="#b" id="toc-b" class="nav-link" data-scroll-target="#b"><span class="header-section-number">2.2</span> (b)</a></li>
+  <li><a href="#c" id="toc-c" class="nav-link" data-scroll-target="#c"><span class="header-section-number">2.3</span> (c)</a></li>
   </ul></li>
-  <li><a href="#inference-for-the-difference-between-proportions-3-points" id="toc-inference-for-the-difference-between-proportions-3-points" class="nav-link" data-scroll-target="#inference-for-the-difference-between-proportions-3-points"><span class="toc-section-number">3</span>  Inference for the difference between proportions (3 points)</a>
+  <li><a href="#inference-for-the-difference-between-proportions-3-points" id="toc-inference-for-the-difference-between-proportions-3-points" class="nav-link" data-scroll-target="#inference-for-the-difference-between-proportions-3-points"><span class="header-section-number">3</span> Inference for the difference between proportions (3 points)</a>
   <ul class="collapse">
-  <li><a href="#a-1" id="toc-a-1" class="nav-link" data-scroll-target="#a-1"><span class="toc-section-number">3.1</span>  (a)</a></li>
-  <li><a href="#b-1" id="toc-b-1" class="nav-link" data-scroll-target="#b-1"><span class="toc-section-number">3.2</span>  (b)</a></li>
-  <li><a href="#c-1" id="toc-c-1" class="nav-link" data-scroll-target="#c-1"><span class="toc-section-number">3.3</span>  (c)</a></li>
+  <li><a href="#a-1" id="toc-a-1" class="nav-link" data-scroll-target="#a-1"><span class="header-section-number">3.1</span> (a)</a></li>
+  <li><a href="#b-1" id="toc-b-1" class="nav-link" data-scroll-target="#b-1"><span class="header-section-number">3.2</span> (b)</a></li>
+  <li><a href="#c-1" id="toc-c-1" class="nav-link" data-scroll-target="#c-1"><span class="header-section-number">3.3</span> (c)</a></li>
   </ul></li>
-  <li><a href="#inference-for-the-difference-between-normal-means-3-points" id="toc-inference-for-the-difference-between-normal-means-3-points" class="nav-link" data-scroll-target="#inference-for-the-difference-between-normal-means-3-points"><span class="toc-section-number">4</span>  Inference for the difference between normal means (3 points)</a>
+  <li><a href="#inference-for-the-difference-between-normal-means-3-points" id="toc-inference-for-the-difference-between-normal-means-3-points" class="nav-link" data-scroll-target="#inference-for-the-difference-between-normal-means-3-points"><span class="header-section-number">4</span> Inference for the difference between normal means (3 points)</a>
   <ul class="collapse">
-  <li><a href="#a-2" id="toc-a-2" class="nav-link" data-scroll-target="#a-2"><span class="toc-section-number">4.1</span>  (a)</a></li>
-  <li><a href="#b-2" id="toc-b-2" class="nav-link" data-scroll-target="#b-2"><span class="toc-section-number">4.2</span>  (b)</a></li>
-  <li><a href="#c-2" id="toc-c-2" class="nav-link" data-scroll-target="#c-2"><span class="toc-section-number">4.3</span>  (c)</a></li>
+  <li><a href="#a-2" id="toc-a-2" class="nav-link" data-scroll-target="#a-2"><span class="header-section-number">4.1</span> (a)</a></li>
+  <li><a href="#b-2" id="toc-b-2" class="nav-link" data-scroll-target="#b-2"><span class="header-section-number">4.2</span> (b)</a></li>
+  <li><a href="#c-2" id="toc-c-2" class="nav-link" data-scroll-target="#c-2"><span class="header-section-number">4.3</span> (c)</a></li>
   </ul></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="template3.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
@@ -330,7 +360,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./template1.html">Templates</a></li><li class="breadcrumb-item"><a href="./template3.html">Assignment 3</a></li></ol></nav>
 <div class="quarto-title">
 <div class="quarto-title-block"><div><h1 class="title">Assignment 3</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
@@ -351,16 +381,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </div>
   
 
+
 </header>
+
 
 <section id="general-information" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> General information</h1>
-<div class="callout callout-style-default callout-warning callout-captioned">
+<div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Setup
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -375,54 +407,34 @@ Setup
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(markmyassignment)){</span>
 <span id="cb1-2"><a href="#cb1-2"></a>    <span class="fu">install.packages</span>(<span class="st">"markmyassignment"</span>)</span>
 <span id="cb1-3"><a href="#cb1-3"></a>    <span class="fu">library</span>(markmyassignment)</span>
-<span id="cb1-4"><a href="#cb1-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: markmyassignment</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>assignment_path <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">"https://github.com/avehtari/BDA_course_Aalto/"</span>,</span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="st">"blob/master/assignments/tests/assignment3.yml"</span>, <span class="at">sep=</span><span class="st">""</span>)</span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="fu">set_assignment</span>(assignment_path)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Assignment set:
-assignment3: Bayesian Data Analysis: Assignment 3
-The assignment contain the following (6) tasks:
-- mu_point_est
-- mu_interval
-- mu_pred_interval
-- mu_pred_point_est
-- posterior_odds_ratio_point_est
-- posterior_odds_ratio_interval</code></pre>
-</div>
+<span id="cb1-4"><a href="#cb1-4"></a>}</span>
+<span id="cb1-5"><a href="#cb1-5"></a>assignment_path <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">"https://github.com/avehtari/BDA_course_Aalto/"</span>,</span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="st">"blob/master/assignments/tests/assignment3.yml"</span>, <span class="at">sep=</span><span class="st">""</span>)</span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="fu">set_assignment</span>(assignment_path)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The following installs and loads the <code>aaltobda</code> package:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(aaltobda)){</span>
-<span id="cb5-2"><a href="#cb5-2"></a>    <span class="fu">install.packages</span>(<span class="st">"aaltobda"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://avehtari.github.io/BDA_course_Aalto/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span>
-<span id="cb5-3"><a href="#cb5-3"></a>    <span class="fu">library</span>(aaltobda)</span>
-<span id="cb5-4"><a href="#cb5-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: aaltobda</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(aaltobda)){</span>
+<span id="cb2-2"><a href="#cb2-2"></a>    <span class="fu">install.packages</span>(<span class="st">"aaltobda"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://avehtari.github.io/BDA_course_Aalto/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span>
+<span id="cb2-3"><a href="#cb2-3"></a>    <span class="fu">library</span>(aaltobda)</span>
+<span id="cb2-4"><a href="#cb2-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The following installs and loads the <a href="https://github.com/stefano-meschiari/latex2exp"><code>latex2exp</code> package</a>, which allows us to use LaTeX in plots:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(latex2exp)){</span>
-<span id="cb7-2"><a href="#cb7-2"></a>    <span class="fu">install.packages</span>(<span class="st">"latex2exp"</span>)</span>
-<span id="cb7-3"><a href="#cb7-3"></a>    <span class="fu">library</span>(latex2exp)</span>
-<span id="cb7-4"><a href="#cb7-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: latex2exp</code></pre>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(latex2exp)){</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    <span class="fu">install.packages</span>(<span class="st">"latex2exp"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3"></a>    <span class="fu">library</span>(latex2exp)</span>
+<span id="cb3-4"><a href="#cb3-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
 </div>
-</div>
-<div class="callout callout-style-default callout-tip callout-captioned">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Showcase: Setting up advanced packages (<code>posterior</code> and <code>ggdist</code>)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -433,53 +445,22 @@ Showcase: Setting up advanced packages (<code>posterior</code> and <code>ggdist<
 <p><em>This block showcases advanced tools, which you will be allowed and expected to use after this assignment.</em> <strong>For now, you should solve the assignment without the tools showcased herein.</strong></p>
 <p>The following installs and loads the <a href="https://mc-stan.org/posterior/index.html"><code>posterior</code> package</a>, which allows us to use its <a href="https://mc-stan.org/posterior/articles/rvar.html"><code>rvar</code> Random Variable Datatype</a>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(posterior)){</span>
-<span id="cb9-2"><a href="#cb9-2"></a>    <span class="fu">install.packages</span>(<span class="st">"posterior"</span>)</span>
-<span id="cb9-3"><a href="#cb9-3"></a>    <span class="fu">library</span>(posterior)</span>
-<span id="cb9-4"><a href="#cb9-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: posterior</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>This is posterior version 1.4.0</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'posterior'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:aaltobda':
-
-    mcse_quantile</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:stats':
-
-    mad, sd, var</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:base':
-
-    %in%, match</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(posterior)){</span>
+<span id="cb4-2"><a href="#cb4-2"></a>    <span class="fu">install.packages</span>(<span class="st">"posterior"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3"></a>    <span class="fu">library</span>(posterior)</span>
+<span id="cb4-4"><a href="#cb4-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The following installs and loads the <a href="https://mjskay.github.io/ggdist/"><code>ggdist</code> package</a> for advanced plotting functions:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(ggplot2)){</span>
-<span id="cb16-2"><a href="#cb16-2"></a>    <span class="fu">install.packages</span>(<span class="st">"ggplot2"</span>)</span>
-<span id="cb16-3"><a href="#cb16-3"></a>    <span class="fu">library</span>(ggplot2)</span>
-<span id="cb16-4"><a href="#cb16-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: ggplot2</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>ggplot2<span class="sc">::</span><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
-<span id="cb18-2"><a href="#cb18-2"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(ggdist)){</span>
-<span id="cb18-3"><a href="#cb18-3"></a>    <span class="fu">install.packages</span>(<span class="st">"ggdist"</span>)</span>
-<span id="cb18-4"><a href="#cb18-4"></a>    <span class="fu">library</span>(ggdist)</span>
-<span id="cb18-5"><a href="#cb18-5"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: ggdist</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(ggplot2)){</span>
+<span id="cb5-2"><a href="#cb5-2"></a>    <span class="fu">install.packages</span>(<span class="st">"ggplot2"</span>)</span>
+<span id="cb5-3"><a href="#cb5-3"></a>    <span class="fu">library</span>(ggplot2)</span>
+<span id="cb5-4"><a href="#cb5-4"></a>}</span>
+<span id="cb5-5"><a href="#cb5-5"></a>ggplot2<span class="sc">::</span><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(ggdist)){</span>
+<span id="cb5-7"><a href="#cb5-7"></a>    <span class="fu">install.packages</span>(<span class="st">"ggdist"</span>)</span>
+<span id="cb5-8"><a href="#cb5-8"></a>    <span class="fu">library</span>(ggdist)</span>
+<span id="cb5-9"><a href="#cb5-9"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><em>This block showcases advanced tools, which you will be allowed and expected to use after this assignment.</em> <strong>For now, you should solve the assignment without the tools showcased herein.</strong></p>
 </div>
@@ -490,17 +471,14 @@ Attaching package: 'posterior'</code></pre>
 <h1 data-number="2"><span class="header-section-number">2</span> Inference for normal mean and deviation (3 points)</h1>
 <p>Loading the library and the data.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">data</span>(<span class="st">"windshieldy1"</span>)</span>
-<span id="cb20-2"><a href="#cb20-2"></a><span class="co"># The data are now stored in the variable `windshieldy1`.</span></span>
-<span id="cb20-3"><a href="#cb20-3"></a><span class="co"># The below displays the data:</span></span>
-<span id="cb20-4"><a href="#cb20-4"></a>windshieldy1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 13.357 14.928 14.896 15.297 14.820 12.067 14.824 13.865 17.447</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">data</span>(<span class="st">"windshieldy1"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="co"># The data are now stored in the variable `windshieldy1`.</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="co"># The below displays the data:</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a>windshieldy1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The below data is <strong>only for the tests</strong>, you need to change to the full data <code>windshieldy1</code> when reporting your results.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>windshieldy_test <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">13.357</span>, <span class="fl">14.928</span>, <span class="fl">14.896</span>, <span class="fl">14.820</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>windshieldy_test <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">13.357</span>, <span class="fl">14.928</span>, <span class="fl">14.896</span>, <span class="fl">14.820</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="a" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="a"><span class="header-section-number">2.1</span> (a)</h2>
@@ -511,53 +489,45 @@ Attaching package: 'posterior'</code></pre>
 <p>Write your answers and code here!</p>
 <p><strong>Keep the below name and format for the functions to work with <code>markmyassignment</code>:</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="co"># Useful functions: mean(), length(), sqrt(), sum()</span></span>
-<span id="cb23-2"><a href="#cb23-2"></a><span class="co"># and qtnew(), dtnew() (from aaltobda)</span></span>
-<span id="cb23-3"><a href="#cb23-3"></a></span>
-<span id="cb23-4"><a href="#cb23-4"></a>mu_point_est <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
-<span id="cb23-5"><a href="#cb23-5"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb23-6"><a href="#cb23-6"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
-<span id="cb23-7"><a href="#cb23-7"></a>    <span class="fl">14.5</span></span>
-<span id="cb23-8"><a href="#cb23-8"></a></span>
-<span id="cb23-9"><a href="#cb23-9"></a>}</span>
-<span id="cb23-10"><a href="#cb23-10"></a>mu_interval <span class="ot">&lt;-</span> <span class="cf">function</span>(data, <span class="at">prob =</span> <span class="fl">0.95</span>) {</span>
-<span id="cb23-11"><a href="#cb23-11"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb23-12"><a href="#cb23-12"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
-<span id="cb23-13"><a href="#cb23-13"></a>    <span class="fu">c</span>(<span class="fl">13.3</span>, <span class="fl">15.7</span>)</span>
-<span id="cb23-14"><a href="#cb23-14"></a></span>
-<span id="cb23-15"><a href="#cb23-15"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># Useful functions: mean(), length(), sqrt(), sum()</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="co"># and qtnew(), dtnew() (from aaltobda)</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a></span>
+<span id="cb8-4"><a href="#cb8-4"></a>mu_point_est <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
+<span id="cb8-5"><a href="#cb8-5"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a>    <span class="fl">14.5</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a></span>
+<span id="cb8-9"><a href="#cb8-9"></a>}</span>
+<span id="cb8-10"><a href="#cb8-10"></a>mu_interval <span class="ot">&lt;-</span> <span class="cf">function</span>(data, <span class="at">prob =</span> <span class="fl">0.95</span>) {</span>
+<span id="cb8-11"><a href="#cb8-11"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb8-13"><a href="#cb8-13"></a>    <span class="fu">c</span>(<span class="fl">13.3</span>, <span class="fl">15.7</span>)</span>
+<span id="cb8-14"><a href="#cb8-14"></a></span>
+<span id="cb8-15"><a href="#cb8-15"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>You can plot the density as below if you implement <code>mu_pdf</code> to compute the PDF of the posterior <span class="math inline">\(p(\mu|y)\)</span> of the average hardness <span class="math inline">\(\mu\)</span>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>mu_pdf <span class="ot">&lt;-</span> <span class="cf">function</span>(data, x){</span>
-<span id="cb24-2"><a href="#cb24-2"></a>    <span class="co"># Compute necessary parameters here.</span></span>
-<span id="cb24-3"><a href="#cb24-3"></a>    <span class="co"># These are the correct parameters for `windshieldy_test`</span></span>
-<span id="cb24-4"><a href="#cb24-4"></a>    <span class="co"># with the provided uninformative prior.</span></span>
-<span id="cb24-5"><a href="#cb24-5"></a>    df <span class="ot">=</span> <span class="dv">3</span></span>
-<span id="cb24-6"><a href="#cb24-6"></a>    location <span class="ot">=</span> <span class="fl">14.5</span></span>
-<span id="cb24-7"><a href="#cb24-7"></a>    scale <span class="ot">=</span> <span class="fl">0.3817557</span></span>
-<span id="cb24-8"><a href="#cb24-8"></a>    <span class="co"># Use the computed parameters as below to compute the PDF:</span></span>
-<span id="cb24-9"><a href="#cb24-9"></a></span>
-<span id="cb24-10"><a href="#cb24-10"></a>    <span class="fu">dtnew</span>(x, df, location, scale)</span>
-<span id="cb24-11"><a href="#cb24-11"></a>}</span>
-<span id="cb24-12"><a href="#cb24-12"></a></span>
-<span id="cb24-13"><a href="#cb24-13"></a>x_interval <span class="ot">=</span> <span class="fu">mu_interval</span>(windshieldy1, .<span class="dv">999</span>)</span>
-<span id="cb24-14"><a href="#cb24-14"></a>lower_x <span class="ot">=</span> x_interval[<span class="dv">1</span>]</span>
-<span id="cb24-15"><a href="#cb24-15"></a>upper_x <span class="ot">=</span> x_interval[<span class="dv">2</span>]</span>
-<span id="cb24-16"><a href="#cb24-16"></a>x <span class="ot">=</span> <span class="fu">seq</span>(lower_x, upper_x, <span class="at">length.out=</span><span class="dv">1000</span>)</span>
-<span id="cb24-17"><a href="#cb24-17"></a><span class="fu">plot</span>(</span>
-<span id="cb24-18"><a href="#cb24-18"></a>    x, <span class="fu">mu_pdf</span>(windshieldy1, x), <span class="at">type=</span><span class="st">"l"</span>,</span>
-<span id="cb24-19"><a href="#cb24-19"></a>    <span class="at">xlab=</span><span class="fu">TeX</span>(r<span class="st">'(average hardness $\mu$)'</span>),</span>
-<span id="cb24-20"><a href="#cb24-20"></a>    <span class="at">ylab=</span><span class="fu">TeX</span>(r<span class="st">'(PDF of the posterior $p(\mu|y)$)'</span>)</span>
-<span id="cb24-21"><a href="#cb24-21"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div id="fig-2b-density" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="template3_files/figure-html/fig-2b-density-1.png" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;1: PDF of the posterior <span class="math inline">\(p(\mu|y)\)</span> of the average hardness <span class="math inline">\(\mu\)</span></figcaption><p></p>
-</figure>
-</div>
-</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>mu_pdf <span class="ot">&lt;-</span> <span class="cf">function</span>(data, x){</span>
+<span id="cb9-2"><a href="#cb9-2"></a>    <span class="co"># Compute necessary parameters here.</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a>    <span class="co"># These are the correct parameters for `windshieldy_test`</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a>    <span class="co"># with the provided uninformative prior.</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a>    df <span class="ot">=</span> <span class="dv">3</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a>    location <span class="ot">=</span> <span class="fl">14.5</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a>    scale <span class="ot">=</span> <span class="fl">0.3817557</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a>    <span class="co"># Use the computed parameters as below to compute the PDF:</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a></span>
+<span id="cb9-10"><a href="#cb9-10"></a>    <span class="fu">dtnew</span>(x, df, location, scale)</span>
+<span id="cb9-11"><a href="#cb9-11"></a>}</span>
+<span id="cb9-12"><a href="#cb9-12"></a></span>
+<span id="cb9-13"><a href="#cb9-13"></a>x_interval <span class="ot">=</span> <span class="fu">mu_interval</span>(windshieldy1, .<span class="dv">999</span>)</span>
+<span id="cb9-14"><a href="#cb9-14"></a>lower_x <span class="ot">=</span> x_interval[<span class="dv">1</span>]</span>
+<span id="cb9-15"><a href="#cb9-15"></a>upper_x <span class="ot">=</span> x_interval[<span class="dv">2</span>]</span>
+<span id="cb9-16"><a href="#cb9-16"></a>x <span class="ot">=</span> <span class="fu">seq</span>(lower_x, upper_x, <span class="at">length.out=</span><span class="dv">1000</span>)</span>
+<span id="cb9-17"><a href="#cb9-17"></a><span class="fu">plot</span>(</span>
+<span id="cb9-18"><a href="#cb9-18"></a>    x, <span class="fu">mu_pdf</span>(windshieldy1, x), <span class="at">type=</span><span class="st">"l"</span>,</span>
+<span id="cb9-19"><a href="#cb9-19"></a>    <span class="at">xlab=</span><span class="fu">TeX</span>(r<span class="st">'(average hardness $\mu$)'</span>),</span>
+<span id="cb9-20"><a href="#cb9-20"></a>    <span class="at">ylab=</span><span class="fu">TeX</span>(r<span class="st">'(PDF of the posterior $p(\mu|y)$)'</span>)</span>
+<span id="cb9-21"><a href="#cb9-21"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="c" class="level2" data-number="2.3">
@@ -565,53 +535,45 @@ Attaching package: 'posterior'</code></pre>
 <p>Write your answers and code here!</p>
 <p><strong>Keep the below name and format for the functions to work with <code>markmyassignment</code>:</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="co"># Useful functions: mean(), length(), sqrt(), sum()</span></span>
-<span id="cb25-2"><a href="#cb25-2"></a><span class="co"># and qtnew(), dtnew() (from aaltobda)</span></span>
-<span id="cb25-3"><a href="#cb25-3"></a></span>
-<span id="cb25-4"><a href="#cb25-4"></a>mu_pred_point_est <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
-<span id="cb25-5"><a href="#cb25-5"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb25-6"><a href="#cb25-6"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
-<span id="cb25-7"><a href="#cb25-7"></a>    <span class="fl">14.5</span></span>
-<span id="cb25-8"><a href="#cb25-8"></a></span>
-<span id="cb25-9"><a href="#cb25-9"></a>}</span>
-<span id="cb25-10"><a href="#cb25-10"></a>mu_pred_interval <span class="ot">&lt;-</span> <span class="cf">function</span>(data, <span class="at">prob =</span> <span class="fl">0.95</span>) {</span>
-<span id="cb25-11"><a href="#cb25-11"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb25-12"><a href="#cb25-12"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
-<span id="cb25-13"><a href="#cb25-13"></a>    <span class="fu">c</span>(<span class="fl">11.8</span>, <span class="fl">17.2</span>)</span>
-<span id="cb25-14"><a href="#cb25-14"></a></span>
-<span id="cb25-15"><a href="#cb25-15"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># Useful functions: mean(), length(), sqrt(), sum()</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="co"># and qtnew(), dtnew() (from aaltobda)</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a></span>
+<span id="cb10-4"><a href="#cb10-4"></a>mu_pred_point_est <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
+<span id="cb10-5"><a href="#cb10-5"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a>    <span class="fl">14.5</span></span>
+<span id="cb10-8"><a href="#cb10-8"></a></span>
+<span id="cb10-9"><a href="#cb10-9"></a>}</span>
+<span id="cb10-10"><a href="#cb10-10"></a>mu_pred_interval <span class="ot">&lt;-</span> <span class="cf">function</span>(data, <span class="at">prob =</span> <span class="fl">0.95</span>) {</span>
+<span id="cb10-11"><a href="#cb10-11"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb10-12"><a href="#cb10-12"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb10-13"><a href="#cb10-13"></a>    <span class="fu">c</span>(<span class="fl">11.8</span>, <span class="fl">17.2</span>)</span>
+<span id="cb10-14"><a href="#cb10-14"></a></span>
+<span id="cb10-15"><a href="#cb10-15"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>You can plot the density as below if you implement <code>mu_pred_pdf</code> to compute the PDF of the posterior predictive <span class="math inline">\(p(\tilde{y}|y)\)</span> of a new hardness observation <span class="math inline">\(\tilde{y}\)</span>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>mu_pred_pdf <span class="ot">&lt;-</span> <span class="cf">function</span>(data, x){</span>
-<span id="cb26-2"><a href="#cb26-2"></a>    <span class="co"># Compute necessary parameters here.</span></span>
-<span id="cb26-3"><a href="#cb26-3"></a>    <span class="co"># These are the correct parameters for `windshieldy_test`</span></span>
-<span id="cb26-4"><a href="#cb26-4"></a>    <span class="co"># with the provided uninformative prior.</span></span>
-<span id="cb26-5"><a href="#cb26-5"></a>    df <span class="ot">=</span> <span class="dv">3</span></span>
-<span id="cb26-6"><a href="#cb26-6"></a>    location <span class="ot">=</span> <span class="fl">14.5</span></span>
-<span id="cb26-7"><a href="#cb26-7"></a>    scale <span class="ot">=</span> <span class="fl">0.8536316</span></span>
-<span id="cb26-8"><a href="#cb26-8"></a>    <span class="co"># Use the computed parameters as below to compute the PDF:</span></span>
-<span id="cb26-9"><a href="#cb26-9"></a></span>
-<span id="cb26-10"><a href="#cb26-10"></a>    <span class="fu">dtnew</span>(x, df, location, scale)</span>
-<span id="cb26-11"><a href="#cb26-11"></a>}</span>
-<span id="cb26-12"><a href="#cb26-12"></a></span>
-<span id="cb26-13"><a href="#cb26-13"></a>x_interval <span class="ot">=</span> <span class="fu">mu_pred_interval</span>(windshieldy1, .<span class="dv">999</span>)</span>
-<span id="cb26-14"><a href="#cb26-14"></a>lower_x <span class="ot">=</span> x_interval[<span class="dv">1</span>]</span>
-<span id="cb26-15"><a href="#cb26-15"></a>upper_x <span class="ot">=</span> x_interval[<span class="dv">2</span>]</span>
-<span id="cb26-16"><a href="#cb26-16"></a>x <span class="ot">=</span> <span class="fu">seq</span>(lower_x, upper_x, <span class="at">length.out=</span><span class="dv">1000</span>)</span>
-<span id="cb26-17"><a href="#cb26-17"></a><span class="fu">plot</span>(</span>
-<span id="cb26-18"><a href="#cb26-18"></a>    x, <span class="fu">mu_pred_pdf</span>(windshieldy1, x), <span class="at">type=</span><span class="st">"l"</span>,</span>
-<span id="cb26-19"><a href="#cb26-19"></a>    <span class="at">xlab=</span><span class="fu">TeX</span>(r<span class="st">'(new hardness observation $</span><span class="sc">\t</span><span class="st">ilde{y}$)'</span>),</span>
-<span id="cb26-20"><a href="#cb26-20"></a>    <span class="at">ylab=</span><span class="fu">TeX</span>(r<span class="st">'(PDF of the posterior predictive $p(</span><span class="sc">\t</span><span class="st">ilde{y}|y)$)'</span>)</span>
-<span id="cb26-21"><a href="#cb26-21"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div id="fig-2c-density" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="template3_files/figure-html/fig-2c-density-1.png" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;2: PDF of the posterior predictive <span class="math inline">\(p(\tilde{y}|y)\)</span> of a new hardness observation <span class="math inline">\(\tilde{y}\)</span></figcaption><p></p>
-</figure>
-</div>
-</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>mu_pred_pdf <span class="ot">&lt;-</span> <span class="cf">function</span>(data, x){</span>
+<span id="cb11-2"><a href="#cb11-2"></a>    <span class="co"># Compute necessary parameters here.</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a>    <span class="co"># These are the correct parameters for `windshieldy_test`</span></span>
+<span id="cb11-4"><a href="#cb11-4"></a>    <span class="co"># with the provided uninformative prior.</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a>    df <span class="ot">=</span> <span class="dv">3</span></span>
+<span id="cb11-6"><a href="#cb11-6"></a>    location <span class="ot">=</span> <span class="fl">14.5</span></span>
+<span id="cb11-7"><a href="#cb11-7"></a>    scale <span class="ot">=</span> <span class="fl">0.8536316</span></span>
+<span id="cb11-8"><a href="#cb11-8"></a>    <span class="co"># Use the computed parameters as below to compute the PDF:</span></span>
+<span id="cb11-9"><a href="#cb11-9"></a></span>
+<span id="cb11-10"><a href="#cb11-10"></a>    <span class="fu">dtnew</span>(x, df, location, scale)</span>
+<span id="cb11-11"><a href="#cb11-11"></a>}</span>
+<span id="cb11-12"><a href="#cb11-12"></a></span>
+<span id="cb11-13"><a href="#cb11-13"></a>x_interval <span class="ot">=</span> <span class="fu">mu_pred_interval</span>(windshieldy1, .<span class="dv">999</span>)</span>
+<span id="cb11-14"><a href="#cb11-14"></a>lower_x <span class="ot">=</span> x_interval[<span class="dv">1</span>]</span>
+<span id="cb11-15"><a href="#cb11-15"></a>upper_x <span class="ot">=</span> x_interval[<span class="dv">2</span>]</span>
+<span id="cb11-16"><a href="#cb11-16"></a>x <span class="ot">=</span> <span class="fu">seq</span>(lower_x, upper_x, <span class="at">length.out=</span><span class="dv">1000</span>)</span>
+<span id="cb11-17"><a href="#cb11-17"></a><span class="fu">plot</span>(</span>
+<span id="cb11-18"><a href="#cb11-18"></a>    x, <span class="fu">mu_pred_pdf</span>(windshieldy1, x), <span class="at">type=</span><span class="st">"l"</span>,</span>
+<span id="cb11-19"><a href="#cb11-19"></a>    <span class="at">xlab=</span><span class="fu">TeX</span>(r<span class="st">'(new hardness observation $</span><span class="sc">\t</span><span class="st">ilde{y}$)'</span>),</span>
+<span id="cb11-20"><a href="#cb11-20"></a>    <span class="at">ylab=</span><span class="fu">TeX</span>(r<span class="st">'(PDF of the posterior predictive $p(</span><span class="sc">\t</span><span class="st">ilde{y}|y)$)'</span>)</span>
+<span id="cb11-21"><a href="#cb11-21"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -626,34 +588,34 @@ Attaching package: 'posterior'</code></pre>
 <p>Write your answers and code here!</p>
 <p>The below data is <strong>only for the tests</strong>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="fu">set.seed</span>(<span class="dv">4711</span>)</span>
-<span id="cb27-2"><a href="#cb27-2"></a>ndraws <span class="ot">=</span> <span class="dv">1000</span></span>
-<span id="cb27-3"><a href="#cb27-3"></a>p0 <span class="ot">=</span> <span class="fu">rbeta</span>(ndraws, <span class="dv">5</span>, <span class="dv">95</span>)</span>
-<span id="cb27-4"><a href="#cb27-4"></a>p1 <span class="ot">=</span> <span class="fu">rbeta</span>(ndraws, <span class="dv">10</span>, <span class="dv">90</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">set.seed</span>(<span class="dv">4711</span>)</span>
+<span id="cb12-2"><a href="#cb12-2"></a>ndraws <span class="ot">=</span> <span class="dv">1000</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a>p0 <span class="ot">=</span> <span class="fu">rbeta</span>(ndraws, <span class="dv">5</span>, <span class="dv">95</span>)</span>
+<span id="cb12-4"><a href="#cb12-4"></a>p1 <span class="ot">=</span> <span class="fu">rbeta</span>(ndraws, <span class="dv">10</span>, <span class="dv">90</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>Keep the below name and format for the functions to work with <code>markmyassignment</code>:</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="co"># Useful function: mean(), quantile()</span></span>
-<span id="cb28-2"><a href="#cb28-2"></a></span>
-<span id="cb28-3"><a href="#cb28-3"></a>posterior_odds_ratio_point_est <span class="ot">&lt;-</span> <span class="cf">function</span>(p0, p1) {</span>
-<span id="cb28-4"><a href="#cb28-4"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb28-5"><a href="#cb28-5"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
-<span id="cb28-6"><a href="#cb28-6"></a>    <span class="fl">2.650172</span></span>
-<span id="cb28-7"><a href="#cb28-7"></a></span>
-<span id="cb28-8"><a href="#cb28-8"></a>}</span>
-<span id="cb28-9"><a href="#cb28-9"></a>posterior_odds_ratio_interval <span class="ot">&lt;-</span> <span class="cf">function</span>(p0, p1, <span class="at">prob =</span> <span class="fl">0.95</span>) {</span>
-<span id="cb28-10"><a href="#cb28-10"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb28-11"><a href="#cb28-11"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
-<span id="cb28-12"><a href="#cb28-12"></a>    <span class="fu">c</span>(<span class="fl">0.6796942</span>,<span class="fl">7.3015964</span>)</span>
-<span id="cb28-13"><a href="#cb28-13"></a></span>
-<span id="cb28-14"><a href="#cb28-14"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="co"># Useful function: mean(), quantile()</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a></span>
+<span id="cb13-3"><a href="#cb13-3"></a>posterior_odds_ratio_point_est <span class="ot">&lt;-</span> <span class="cf">function</span>(p0, p1) {</span>
+<span id="cb13-4"><a href="#cb13-4"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb13-5"><a href="#cb13-5"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb13-6"><a href="#cb13-6"></a>    <span class="fl">2.650172</span></span>
+<span id="cb13-7"><a href="#cb13-7"></a></span>
+<span id="cb13-8"><a href="#cb13-8"></a>}</span>
+<span id="cb13-9"><a href="#cb13-9"></a>posterior_odds_ratio_interval <span class="ot">&lt;-</span> <span class="cf">function</span>(p0, p1, <span class="at">prob =</span> <span class="fl">0.95</span>) {</span>
+<span id="cb13-10"><a href="#cb13-10"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb13-11"><a href="#cb13-11"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb13-12"><a href="#cb13-12"></a>    <span class="fu">c</span>(<span class="fl">0.6796942</span>,<span class="fl">7.3015964</span>)</span>
+<span id="cb13-13"><a href="#cb13-13"></a></span>
+<span id="cb13-14"><a href="#cb13-14"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="callout callout-style-default callout-tip callout-captioned">
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Showcase: advanced tools (<code>posterior</code>’s <code>rvar</code>, <code>ggdist</code>’s <code>stat_dotsinterval</code>)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -662,56 +624,40 @@ Showcase: advanced tools (<code>posterior</code>’s <code>rvar</code>, <code>gg
 <div class="callout-body-container callout-body">
 <p><em>This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.</em> <strong>Make sure that this does not get displayed in the PDF!</strong></p>
 <p><em>This block showcases advanced tools, which you will be allowed and expected to use after this assignment.</em> <strong>For now, you should solve the assignment without the tools showcased herein.</strong></p>
-<p>The <code>posterior</code> package’s random variable datatype <code>rvar</code> is a <a href="https://mc-stan.org/posterior/articles/rvar.html#:~:text=sample%2Dbased%20representation%20of%20random%20variables">“sample-based representation of random variables”</a> which makes handling of random samples (of draws) such as the ones contained in the above variables <code>p0</code> and <code>p1</code> easier. <a href="https://mc-stan.org/posterior/articles/rvar.html#:~:text=The%20default%20display%20of%20an%20rvar%20shows%20the%20mean%20and%20standard%20deviation%20of%20each%20element%20of%20the%20array.">By default, it prints as the mean and standard deviation of the draws</a>, <strong>such that <code>rvar(p0)</code> prints as 0.05 ± 0.021 and <code>rvar(p1)</code> prints as 0.1 ± 0.029</strong>.</p>
+<p>The <code>posterior</code> package’s random variable datatype <code>rvar</code> is a <a href="https://mc-stan.org/posterior/articles/rvar.html#:~:text=sample%2Dbased%20representation%20of%20random%20variables">“sample-based representation of random variables”</a> which makes handling of random samples (of draws) such as the ones contained in the above variables <code>p0</code> and <code>p1</code> easier. <a href="https://mc-stan.org/posterior/articles/rvar.html#:~:text=The%20default%20display%20of%20an%20rvar%20shows%20the%20mean%20and%20standard%20deviation%20of%20each%20element%20of%20the%20array.">By default, it prints as the mean and standard deviation of the draws</a>, <strong>such that <code>rvar(p0)</code> prints as <code>rvar(p0)</code> and <code>rvar(p1)</code> prints as <code>rvar(p1)</code></strong>.</p>
 <p>The datatype is <a href="https://mc-stan.org/posterior/articles/rvar.html#:~:text=designed%20to%20interoperate%20with%20vectorized%20distributions%20in%20the%20distributional%20package%2C%20to%20be%20able%20to%20be%20used%20inside%20data.frame()s%20and%20tibble()s%2C%20and%20to%20be%20used%20with%20distribution%20visualizations%20in%20the%20ggdist%20package.">“designed to […] be able to be used inside <code>data.frame()</code>s and <code>tibble()</code>s, and to be used with distribution visualizations in the ggdist package.”</a> The code below sets up an <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/data.frame">R <code>data.frame()</code></a> with the draws in <code>p0</code> and <code>p1</code> wrapped in an <code>rvar</code>, and uses that data frame to visualize the draws using <a href="https://mjskay.github.io/ggdist/index.html"><code>ggdist</code></a>, an R package building on <a href="https://ggplot2.tidyverse.org/"><code>ggplot2</code></a> and <a href="https://mjskay.github.io/ggdist/index.html#:~:text=designed%20for%20both%20frequentist%20and%20Bayesian%20uncertainty%20visualization">“designed for both frequentist and Bayesian uncertainty visualization”</a>.</p>
-<p>The below plot, <a href="#fig-showcase-probabilities">Figure&nbsp;3</a> uses <code>ggdist</code>’s <a href="https://mjskay.github.io/ggdist/articles/dotsinterval.html"><code>stat_dotsinterval()</code></a>, which by default visualizes</p>
+<p>The below plot, <strong>?@fig-showcase-probabilities</strong> uses <code>ggdist</code>’s <a href="https://mjskay.github.io/ggdist/articles/dotsinterval.html"><code>stat_dotsinterval()</code></a>, which by default visualizes</p>
 <ul>
 <li><a href="https://mjskay.github.io/ggdist/reference/stat_dotsinterval.html#:~:text=point_interval%20%3D%20%22median_qi%22%2C%0A%20%20.width%20%3D%20c(0.66%2C%200.95)%2C">an <code>rvar</code>’s median and central 66% and 95% intervals</a> using a black dot and lines of varying thicknesses as when using <code>ggdist</code>’s <a href="https://mjskay.github.io/ggdist/reference/stat_pointinterval.html#examples"><code>stat_pointinterval()</code></a> and</li>
 <li>an <code>rvar</code>’s draws using grey dots as when using <code>ggdist</code>’s <a href="https://mjskay.github.io/ggdist/reference/stat_dots.html#examples"><code>stat_dots()</code></a>:</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>r0 <span class="ot">=</span> <span class="fu">rvar</span>(p0)</span>
-<span id="cb29-2"><a href="#cb29-2"></a>r1 <span class="ot">=</span> <span class="fu">rvar</span>(p1)</span>
-<span id="cb29-3"><a href="#cb29-3"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(</span>
-<span id="cb29-4"><a href="#cb29-4"></a>    <span class="at">rv_name=</span><span class="fu">c</span>(<span class="st">"control"</span>, <span class="st">"treatment"</span>), <span class="at">rv=</span><span class="fu">c</span>(r0, r1)</span>
-<span id="cb29-5"><a href="#cb29-5"></a>)) <span class="sc">+</span></span>
-<span id="cb29-6"><a href="#cb29-6"></a>    <span class="fu">aes</span>(<span class="at">xdist=</span>rv, <span class="at">y=</span>rv_name) <span class="sc">+</span></span>
-<span id="cb29-7"><a href="#cb29-7"></a>    <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"probabilities of death"</span>, <span class="at">y=</span><span class="st">"patient group"</span>) <span class="sc">+</span></span>
-<span id="cb29-8"><a href="#cb29-8"></a>    <span class="fu">stat_dotsinterval</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div id="fig-showcase-probabilities" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="template3_files/figure-html/fig-showcase-probabilities-1.png" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;3: Probabilities of death for the two patient groups.</figcaption><p></p>
-</figure>
-</div>
-</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>r0 <span class="ot">=</span> <span class="fu">rvar</span>(p0)</span>
+<span id="cb14-2"><a href="#cb14-2"></a>r1 <span class="ot">=</span> <span class="fu">rvar</span>(p1)</span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(</span>
+<span id="cb14-4"><a href="#cb14-4"></a>    <span class="at">rv_name=</span><span class="fu">c</span>(<span class="st">"control"</span>, <span class="st">"treatment"</span>), <span class="at">rv=</span><span class="fu">c</span>(r0, r1)</span>
+<span id="cb14-5"><a href="#cb14-5"></a>)) <span class="sc">+</span></span>
+<span id="cb14-6"><a href="#cb14-6"></a>    <span class="fu">aes</span>(<span class="at">xdist=</span>rv, <span class="at">y=</span>rv_name) <span class="sc">+</span></span>
+<span id="cb14-7"><a href="#cb14-7"></a>    <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"probabilities of death"</span>, <span class="at">y=</span><span class="st">"patient group"</span>) <span class="sc">+</span></span>
+<span id="cb14-8"><a href="#cb14-8"></a>    <span class="fu">stat_dotsinterval</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><code>rvar</code>s make it easy to compute functions of random variables, such as</p>
 <ul>
-<li>differences, e.g.&nbsp;<span class="math inline">\(p_0 - p_1\)</span>: <code>r0 - r1</code> computes an <code>rvar</code> which prints as -0.05 ± 0.037, indicating the <strong>sample mean</strong> and the <strong>sample standard deviation</strong> of the difference of the probabilities of death,</li>
-<li>products, e.g.&nbsp;<span class="math inline">\(p_0 \, p_1\)</span>: <code>r0 * r1</code> computes an <code>rvar</code> which prints as 0.005 ± 0.0026 which in this case has no great interpretation, or</li>
+<li>differences, e.g.&nbsp;<span class="math inline">\(p_0 - p_1\)</span>: <code>r0 - r1</code> computes an <code>rvar</code> which prints as <code>r0 - r1</code>, indicating the <strong>sample mean</strong> and the <strong>sample standard deviation</strong> of the difference of the probabilities of death,</li>
+<li>products, e.g.&nbsp;<span class="math inline">\(p_0 \, p_1\)</span>: <code>r0 * r1</code> computes an <code>rvar</code> which prints as <code>r0 * r1</code> which in this case has no great interpretation, or</li>
 <li>the odds ratios needed in task 3.b).</li>
 </ul>
-<p>Below, in <a href="#fig-showcase-odds-ratios">Figure&nbsp;4</a>, we compute the odds ratios using the <code>rvar</code>s and visualize its median, central intervals and draws, as above in <a href="#fig-showcase-probabilities">Figure&nbsp;3</a>:</p>
+<p>Below, in <strong>?@fig-showcase-odds-ratios</strong>, we compute the odds ratios using the <code>rvar</code>s and visualize its median, central intervals and draws, as above in <strong>?@fig-showcase-probabilities</strong>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>rodds_ratio <span class="ot">=</span> (r1<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>r1))<span class="sc">/</span>(r0<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>r0))</span>
-<span id="cb30-2"><a href="#cb30-2"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(</span>
-<span id="cb30-3"><a href="#cb30-3"></a>    <span class="at">rv=</span><span class="fu">c</span>(rodds_ratio)</span>
-<span id="cb30-4"><a href="#cb30-4"></a>)) <span class="sc">+</span></span>
-<span id="cb30-5"><a href="#cb30-5"></a>    <span class="fu">aes</span>(<span class="at">xdist=</span>rv) <span class="sc">+</span></span>
-<span id="cb30-6"><a href="#cb30-6"></a>    <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"odds ratio"</span>, <span class="at">y=</span><span class="st">"relative amount of draws"</span>) <span class="sc">+</span></span>
-<span id="cb30-7"><a href="#cb30-7"></a>    <span class="fu">stat_dotsinterval</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div id="fig-showcase-odds-ratios" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="template3_files/figure-html/fig-showcase-odds-ratios-1.png" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;4: Odds ratios of the two patient groups.</figcaption><p></p>
-</figure>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>rodds_ratio <span class="ot">=</span> (r1<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>r1))<span class="sc">/</span>(r0<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>r0))</span>
+<span id="cb15-2"><a href="#cb15-2"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(</span>
+<span id="cb15-3"><a href="#cb15-3"></a>    <span class="at">rv=</span><span class="fu">c</span>(rodds_ratio)</span>
+<span id="cb15-4"><a href="#cb15-4"></a>)) <span class="sc">+</span></span>
+<span id="cb15-5"><a href="#cb15-5"></a>    <span class="fu">aes</span>(<span class="at">xdist=</span>rv) <span class="sc">+</span></span>
+<span id="cb15-6"><a href="#cb15-6"></a>    <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"odds ratio"</span>, <span class="at">y=</span><span class="st">"relative amount of draws"</span>) <span class="sc">+</span></span>
+<span id="cb15-7"><a href="#cb15-7"></a>    <span class="fu">stat_dotsinterval</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
-</div>
-<p>You can use <a href="#fig-showcase-odds-ratios">Figure&nbsp;4</a> to visually check whether the answers you computed for 3.b) make sense.</p>
+<p>You can use <strong>?@fig-showcase-odds-ratios</strong> to visually check whether the answers you computed for 3.b) make sense.</p>
 <p><em>This block showcases advanced tools, which you will be allowed and expected to use after this assignment.</em> <strong>For now, you should solve the assignment without the tools showcased herein.</strong></p>
 </div>
 </div>
@@ -726,13 +672,10 @@ Showcase: advanced tools (<code>posterior</code>’s <code>rvar</code>, <code>gg
 <h1 data-number="4"><span class="header-section-number">4</span> Inference for the difference between normal means (3 points)</h1>
 <p>Loading the library and the data.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="fu">data</span>(<span class="st">"windshieldy2"</span>)</span>
-<span id="cb31-2"><a href="#cb31-2"></a><span class="co"># The new data are now stored in the variable `windshieldy2`.</span></span>
-<span id="cb31-3"><a href="#cb31-3"></a><span class="co"># The below displays the first few rows of the new data:</span></span>
-<span id="cb31-4"><a href="#cb31-4"></a><span class="fu">head</span>(windshieldy2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 15.980 14.206 16.011 17.250 15.993 15.722</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">data</span>(<span class="st">"windshieldy2"</span>)</span>
+<span id="cb16-2"><a href="#cb16-2"></a><span class="co"># The new data are now stored in the variable `windshieldy2`.</span></span>
+<span id="cb16-3"><a href="#cb16-3"></a><span class="co"># The below displays the first few rows of the new data:</span></span>
+<span id="cb16-4"><a href="#cb16-4"></a><span class="fu">head</span>(windshieldy2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="a-2" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="a-2"><span class="header-section-number">4.1</span> (a)</h2>
@@ -742,19 +685,19 @@ Showcase: advanced tools (<code>posterior</code>’s <code>rvar</code>, <code>gg
 <h2 data-number="4.2" class="anchored" data-anchor-id="b-2"><span class="header-section-number">4.2</span> (b)</h2>
 <p>Write your answers and code here!</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="co"># Useful functions: mean(), length(), sqrt(), sum(),</span></span>
-<span id="cb33-2"><a href="#cb33-2"></a><span class="co"># rtnew() (from aaltobda), quantile() and hist().</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># Useful functions: mean(), length(), sqrt(), sum(),</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="co"># rtnew() (from aaltobda), quantile() and hist().</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="c-2" class="level2" data-number="4.3">
 <h2 data-number="4.3" class="anchored" data-anchor-id="c-2"><span class="header-section-number">4.3</span> (c)</h2>
 <p>Write your answers here!</p>
-<div class="callout callout-style-default callout-warning callout-captioned">
+<div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 markmyassignment
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -764,148 +707,7 @@ markmyassignment
 <p><em>This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.</em> <strong>Make sure that this does not get displayed in the PDF!</strong></p>
 <p>The following will check the functions for which <code>markmyassignment</code> has been set up:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a><span class="fu">mark_my_assignment</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>✔ | F W S  OK | Context
-
-⠏ |         0 | task-1-subtask-1-tests                                          
-⠏ |         0 | mu_point_est()                                                  
-✖ | 1       3 | mu_point_est()
-────────────────────────────────────────────────────────────────────────────────
-Failure ('test-task-1-subtask-1-tests.R:17:3'): mu_point_est()
-mu_point_est(data = 1:10) not equivalent to 5.5.
-1/1 mismatches
-[1] 14.5 - 5.5 == 9
-Error: Incorrect result for vector 1:10
-────────────────────────────────────────────────────────────────────────────────
-
-⠏ |         0 | task-2-subtask-1-tests                                          
-⠏ |         0 | mu_interval()                                                   
-✖ | 2       3 | mu_interval()
-────────────────────────────────────────────────────────────────────────────────
-Failure ('test-task-2-subtask-1-tests.R:15:3'): mu_interval()
-mu_interval(data = 1:10, prob = 0.95) not equivalent to c(3.3, 7.7).
-2/2 mismatches (average diff: 9)
-[1] 13.3 - 3.3 == 10
-[2] 15.7 - 7.7 ==  8
-Error: Incorrect result for 1:10 using a 95% interval.
-
-Failure ('test-task-2-subtask-1-tests.R:16:3'): mu_interval()
-mu_interval(data = 1:10, prob = 0.8) not equivalent to c(4.2, 6.8).
-2/2 mismatches (average diff: 9)
-[1] 13.3 - 4.2 == 9.1
-[2] 15.7 - 6.8 == 8.9
-Error: Incorrect result for 1:10 using a 80% interval.
-────────────────────────────────────────────────────────────────────────────────
-
-⠏ |         0 | task-3-subtask-1-tests                                          
-⠏ |         0 | mu_pred_interval()                                              
-✖ | 2       3 | mu_pred_interval()
-────────────────────────────────────────────────────────────────────────────────
-Failure ('test-task-3-subtask-1-tests.R:16:3'): mu_pred_interval()
-mu_pred_interval(1:10, 0.95) not equivalent to c(-1.7, 12.7).
-2/2 mismatches (average diff: 9)
-[1] 11.8 - -1.7 == 13.5
-[2] 17.2 - 12.7 ==  4.5
-Error: Incorrect result for 1:10, (95%)
-
-Failure ('test-task-3-subtask-1-tests.R:18:3'): mu_pred_interval()
-mu_pred_interval(1:10, 0.8) not equivalent to c(1.1, 9.9).
-2/2 mismatches (average diff: 9)
-[1] 11.8 - 1.1 == 10.7
-[2] 17.2 - 9.9 ==  7.3
-Error: Incorrect result for 1:10, (80%)
-────────────────────────────────────────────────────────────────────────────────
-
-⠏ |         0 | task-4-subtask-1-tests                                          
-⠏ |         0 | mu_pred_point_est()                                             
-✖ | 1       3 | mu_pred_point_est()
-────────────────────────────────────────────────────────────────────────────────
-Failure ('test-task-4-subtask-1-tests.R:16:3'): mu_pred_point_est()
-mu_pred_point_est(data = 1:10) not equivalent to 5.5.
-1/1 mismatches
-[1] 14.5 - 5.5 == 9
-Error: Incorrect result for vector 1:10
-────────────────────────────────────────────────────────────────────────────────
-
-⠏ |         0 | task-5-subtask-1-tests                                          
-⠏ |         0 | posterior_odds_ratio_point_est()                                
-✖ | 3       3 | posterior_odds_ratio_point_est()
-────────────────────────────────────────────────────────────────────────────────
-Failure ('test-task-5-subtask-1-tests.R:18:3'): posterior_odds_ratio_point_est()
-posterior_odds_ratio_point_est(p1, p0) not equivalent to 0.5307909.
-1/1 mismatches
-[1] 2.65 - 0.531 == 2.12
-Error: Incorrect result for p1 = rbeta(100000, 5, 95), p0 = rbeta(100000, 10, 90).
-
-Failure ('test-task-5-subtask-1-tests.R:24:3'): posterior_odds_ratio_point_est()
-posterior_odds_ratio_point_est(p0, p1) not equivalent to 1.876519.
-1/1 mismatches
-[1] 2.65 - 1.88 == 0.774
-Error: Incorrect result for p0 = rbeta(100000, 5, 5), p1 = rbeta(100000, 5, 6).
-
-Failure ('test-task-5-subtask-1-tests.R:25:3'): posterior_odds_ratio_point_est()
-posterior_odds_ratio_point_est(p1, p0) not equivalent to 1.24902.
-1/1 mismatches
-[1] 2.65 - 1.25 == 1.4
-Error: Incorrect result for p0 = rbeta(100000, 5, 6), p1 = rbeta(100000, 5, 5).
-────────────────────────────────────────────────────────────────────────────────
-
-⠏ |         0 | task-6-subtask-1-tests                                          
-⠏ |         0 | posterior_odds_ratio_interval()                                 
-✖ | 6       2 | posterior_odds_ratio_interval()
-────────────────────────────────────────────────────────────────────────────────
-Failure ('test-task-6-subtask-1-tests.R:17:3'): posterior_odds_ratio_interval()
-posterior_odds_ratio_interval(p0, p1, 0.9) not equivalent to c(0.875367, 6.05911).
-2/2 mismatches (average diff: 0.719)
-[1] 0.68 - 0.875 == -0.196
-[2] 7.30 - 6.059 ==  1.242
-Error: Incorrect result for p0 = rbeta(100000, 5, 95), p1 = rbeta(100000, 10, 90) and 90%.
-
-Failure ('test-task-6-subtask-1-tests.R:19:3'): posterior_odds_ratio_interval()
-posterior_odds_ratio_interval(p1, p0, 0.9) not equivalent to c(0.1650407, 1.142378).
-2/2 mismatches (average diff: 3.34)
-[1] 0.68 - 0.165 == 0.515
-[2] 7.30 - 1.142 == 6.159
-Error: Incorrect result for p1 = rbeta(100000, 5, 95), p0 = rbeta(100000, 10, 90) and 90%.
-
-Failure ('test-task-6-subtask-1-tests.R:21:3'): posterior_odds_ratio_interval()
-posterior_odds_ratio_interval(p1, p0, 0.8) not equivalent to c(0.2086461, 0.9392956).
-2/2 mismatches (average diff: 3.42)
-[1] 0.68 - 0.209 == 0.471
-[2] 7.30 - 0.939 == 6.362
-Error: Incorrect result for p1 = rbeta(100000, 5, 95), p0 = rbeta(100000, 10, 90) and 80%.
-
-Failure ('test-task-6-subtask-1-tests.R:27:3'): posterior_odds_ratio_interval()
-posterior_odds_ratio_interval(p0, p1, 0.9) not equivalent to c(0.2714472, 5.5970131).
-2/2 mismatches (average diff: 1.06)
-[1] 0.68 - 0.271 == 0.408
-[2] 7.30 - 5.597 == 1.705
-Error: Incorrect result for p0 = rbeta(100000, 5, 5), p1 = rbeta(100000, 5, 6) and 90%.
-
-Failure ('test-task-6-subtask-1-tests.R:29:3'): posterior_odds_ratio_interval()
-posterior_odds_ratio_interval(p1, p0, 0.9) not equivalent to c(0.1786667, 3.6839583).
-2/2 mismatches (average diff: 2.06)
-[1] 0.68 - 0.179 == 0.501
-[2] 7.30 - 3.684 == 3.618
-Error: Incorrect result for p0 = rbeta(100000, 5, 6), p1 = rbeta(100000, 5, 5) and 90%.
-
-Failure ('test-task-6-subtask-1-tests.R:31:3'): posterior_odds_ratio_interval()
-posterior_odds_ratio_interval(p1, p0, 0.8) not equivalent to c(0.252972, 2.633517).
-2/2 mismatches (average diff: 2.55)
-[1] 0.68 - 0.253 == 0.427
-[2] 7.30 - 2.634 == 4.668
-Error: Incorrect result for p0 = rbeta(100000, 5, 6), p1 = rbeta(100000, 5, 5) and 80%.
-────────────────────────────────────────────────────────────────────────────────
-Maximum number of failures exceeded; quitting at end of file.
-ℹ Increase this number with (e.g.) `testthat::set_max_fails(Inf)` 
-
-══ Results ═════════════════════════════════════════════════════════════════════
-Duration: 0.5 s
-
-[ FAIL 15 | WARN 0 | SKIP 0 | PASS 17 ]
-══ Terminated early ════════════════════════════════════════════════════════════</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="fu">mark_my_assignment</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -945,12 +747,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
     }
-  });
-  clipboard.on('success', function(e) {
+    return false;
+  }
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -982,7 +787,29 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
   const viewSource = window.document.getElementById('quarto-view-source') ||
                      window.document.getElementById('quarto-code-tools-source');
   if (viewSource) {
@@ -1034,10 +861,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   if (showAllCode) {
     showAllCode.addEventListener("click", toggleCodeHandler(true));
   }
-  function tippyHover(el, contentFn) {
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1047,8 +891,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1060,7 +913,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1104,6 +1080,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1129,6 +1106,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1190,455 +1193,456 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./template2.html" class="pagination-link">
+      <a href="./template2.html" class="pagination-link" aria-label="Assignment 2">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Assignment 2</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./template4.html" class="pagination-link">
+      <a href="./template4.html" class="pagination-link" aria-label="Assignment 4">
         <span class="nav-page-text">Assignment 4</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb36" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb36-1"><a href="#cb36-1"></a><span class="co">---</span></span>
-<span id="cb36-2"><a href="#cb36-2"></a><span class="an">title:</span><span class="co"> "Assignment 3"</span></span>
-<span id="cb36-3"><a href="#cb36-3"></a><span class="an">author:</span><span class="co"> anonymous # &lt;-- hand in anonymously</span></span>
-<span id="cb36-4"><a href="#cb36-4"></a><span class="an">format:</span></span>
-<span id="cb36-5"><a href="#cb36-5"></a><span class="co">  html:</span></span>
-<span id="cb36-6"><a href="#cb36-6"></a><span class="co">    toc: true</span></span>
-<span id="cb36-7"><a href="#cb36-7"></a><span class="co">    code-tools: true</span></span>
-<span id="cb36-8"><a href="#cb36-8"></a><span class="co">    code-line-numbers: true</span></span>
-<span id="cb36-9"><a href="#cb36-9"></a><span class="co">    number-sections: true</span></span>
-<span id="cb36-10"><a href="#cb36-10"></a><span class="co">    mainfont: Georgia, serif</span></span>
-<span id="cb36-11"><a href="#cb36-11"></a><span class="co">    page-layout: article</span></span>
-<span id="cb36-12"><a href="#cb36-12"></a><span class="co">  pdf:</span></span>
-<span id="cb36-13"><a href="#cb36-13"></a><span class="co">    geometry:</span></span>
-<span id="cb36-14"><a href="#cb36-14"></a><span class="co">    - left=1cm,top=1cm,bottom=1cm,right=7cm</span></span>
-<span id="cb36-15"><a href="#cb36-15"></a><span class="co">    number-sections: true</span></span>
-<span id="cb36-16"><a href="#cb36-16"></a><span class="co">    code-annotations: none</span></span>
-<span id="cb36-17"><a href="#cb36-17"></a><span class="an">editor:</span><span class="co"> source</span></span>
-<span id="cb36-18"><a href="#cb36-18"></a><span class="co">---</span></span>
-<span id="cb36-19"><a href="#cb36-19"></a></span>
-<span id="cb36-20"><a href="#cb36-20"></a></span>
-<span id="cb36-21"><a href="#cb36-21"></a><span class="fu"># General information</span></span>
-<span id="cb36-22"><a href="#cb36-22"></a></span>
-<span id="cb36-23"><a href="#cb36-23"></a>:::: {.content-hidden when-format="pdf"}</span>
-<span id="cb36-24"><a href="#cb36-24"></a>::: {.callout-warning collapse=false}</span>
-<span id="cb36-25"><a href="#cb36-25"></a></span>
-<span id="cb36-26"><a href="#cb36-26"></a><span class="fu">## Setup</span></span>
-<span id="cb36-27"><a href="#cb36-27"></a></span>
-<span id="cb36-28"><a href="#cb36-28"></a></span>
-<span id="cb36-29"><a href="#cb36-29"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
-<span id="cb36-30"><a href="#cb36-30"></a>**Make sure that this does not get displayed in the PDF!**</span>
-<span id="cb36-31"><a href="#cb36-31"></a></span>
-<span id="cb36-32"><a href="#cb36-32"></a></span>
-<span id="cb36-33"><a href="#cb36-33"></a></span>
-<span id="cb36-34"><a href="#cb36-34"></a></span>
-<span id="cb36-35"><a href="#cb36-35"></a>This is the template for <span class="co">[</span><span class="ot">assignment 3</span><span class="co">](assignment3.html)</span>. You can download the qmd-files (<span class="co">[</span><span class="ot">full</span><span class="co">](https://avehtari.github.io/BDA_course_Aalto/assignments/template3.qmd)</span>, <span class="co">[</span><span class="ot">simple</span><span class="co">](https://avehtari.github.io/BDA_course_Aalto/assignments/simple_template3.qmd)</span>) or copy the code from this rendered document after clicking on <span class="in">`&lt;/&gt; Code`</span> in the top right corner.</span>
-<span id="cb36-36"><a href="#cb36-36"></a></span>
-<span id="cb36-37"><a href="#cb36-37"></a>**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.**</span>
-<span id="cb36-38"><a href="#cb36-38"></a></span>
-<span id="cb36-39"><a href="#cb36-39"></a>The following will set-up <span class="co">[</span><span class="ot">`markmyassignment`</span><span class="co">](https://github.com/MansMeg/markmyassignment)</span> to check your functions at the end of the notebook:</span>
-<span id="cb36-40"><a href="#cb36-40"></a></span>
-<span id="cb36-43"><a href="#cb36-43"></a><span class="in">```{r}</span></span>
-<span id="cb36-44"><a href="#cb36-44"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(markmyassignment)){</span>
-<span id="cb36-45"><a href="#cb36-45"></a>    <span class="fu">install.packages</span>(<span class="st">"markmyassignment"</span>)</span>
-<span id="cb36-46"><a href="#cb36-46"></a>    <span class="fu">library</span>(markmyassignment)</span>
-<span id="cb36-47"><a href="#cb36-47"></a>}</span>
-<span id="cb36-48"><a href="#cb36-48"></a>assignment_path <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">"https://github.com/avehtari/BDA_course_Aalto/"</span>,</span>
-<span id="cb36-49"><a href="#cb36-49"></a><span class="st">"blob/master/assignments/tests/assignment3.yml"</span>, <span class="at">sep=</span><span class="st">""</span>)</span>
-<span id="cb36-50"><a href="#cb36-50"></a><span class="fu">set_assignment</span>(assignment_path)</span>
-<span id="cb36-51"><a href="#cb36-51"></a><span class="in">```</span></span>
-<span id="cb36-52"><a href="#cb36-52"></a></span>
-<span id="cb36-53"><a href="#cb36-53"></a>The following installs and loads the <span class="in">`aaltobda`</span> package:</span>
-<span id="cb36-56"><a href="#cb36-56"></a><span class="in">```{r}</span></span>
-<span id="cb36-57"><a href="#cb36-57"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(aaltobda)){</span>
-<span id="cb36-58"><a href="#cb36-58"></a>    <span class="fu">install.packages</span>(<span class="st">"aaltobda"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://avehtari.github.io/BDA_course_Aalto/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span>
-<span id="cb36-59"><a href="#cb36-59"></a>    <span class="fu">library</span>(aaltobda)</span>
-<span id="cb36-60"><a href="#cb36-60"></a>}</span>
-<span id="cb36-61"><a href="#cb36-61"></a><span class="in">```</span></span>
-<span id="cb36-62"><a href="#cb36-62"></a>The following installs and loads the <span class="co">[</span><span class="ot">`latex2exp` package</span><span class="co">](https://github.com/stefano-meschiari/latex2exp)</span>, which allows us to use LaTeX in plots:</span>
-<span id="cb36-65"><a href="#cb36-65"></a><span class="in">```{r}</span></span>
-<span id="cb36-66"><a href="#cb36-66"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(latex2exp)){</span>
-<span id="cb36-67"><a href="#cb36-67"></a>    <span class="fu">install.packages</span>(<span class="st">"latex2exp"</span>)</span>
-<span id="cb36-68"><a href="#cb36-68"></a>    <span class="fu">library</span>(latex2exp)</span>
-<span id="cb36-69"><a href="#cb36-69"></a>}</span>
-<span id="cb36-70"><a href="#cb36-70"></a><span class="in">```</span></span>
-<span id="cb36-71"><a href="#cb36-71"></a></span>
-<span id="cb36-72"><a href="#cb36-72"></a>:::</span>
-<span id="cb36-73"><a href="#cb36-73"></a>::::</span>
-<span id="cb36-74"><a href="#cb36-74"></a></span>
-<span id="cb36-75"><a href="#cb36-75"></a></span>
-<span id="cb36-76"><a href="#cb36-76"></a></span>
-<span id="cb36-77"><a href="#cb36-77"></a>:::: {.content-hidden when-format="pdf"}</span>
-<span id="cb36-78"><a href="#cb36-78"></a>::: {.callout-tip collapse=false}</span>
-<span id="cb36-79"><a href="#cb36-79"></a></span>
-<span id="cb36-80"><a href="#cb36-80"></a><span class="fu">## Showcase: Setting up advanced packages (`posterior` and `ggdist`)</span></span>
-<span id="cb36-81"><a href="#cb36-81"></a></span>
-<span id="cb36-82"><a href="#cb36-82"></a></span>
-<span id="cb36-83"><a href="#cb36-83"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
-<span id="cb36-84"><a href="#cb36-84"></a>**Make sure that this does not get displayed in the PDF!**</span>
-<span id="cb36-85"><a href="#cb36-85"></a></span>
-<span id="cb36-86"><a href="#cb36-86"></a></span>
-<span id="cb36-87"><a href="#cb36-87"></a></span>
-<span id="cb36-88"><a href="#cb36-88"></a>*This block showcases advanced tools, which you will be allowed and expected to use after this assignment.*</span>
-<span id="cb36-89"><a href="#cb36-89"></a>**For now, you should solve the assignment without the tools showcased herein.**</span>
-<span id="cb36-90"><a href="#cb36-90"></a></span>
-<span id="cb36-91"><a href="#cb36-91"></a></span>
-<span id="cb36-92"><a href="#cb36-92"></a></span>
-<span id="cb36-93"><a href="#cb36-93"></a></span>
-<span id="cb36-94"><a href="#cb36-94"></a>The following installs and loads the <span class="co">[</span><span class="ot">`posterior` package</span><span class="co">](https://mc-stan.org/posterior/index.html)</span>,</span>
-<span id="cb36-95"><a href="#cb36-95"></a>which allows us to use its [<span class="in">`rvar`</span> Random Variable Datatype</span>
-<span id="cb36-96"><a href="#cb36-96"></a>](https://mc-stan.org/posterior/articles/rvar.html):</span>
-<span id="cb36-99"><a href="#cb36-99"></a><span class="in">```{r}</span></span>
-<span id="cb36-100"><a href="#cb36-100"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(posterior)){</span>
-<span id="cb36-101"><a href="#cb36-101"></a>    <span class="fu">install.packages</span>(<span class="st">"posterior"</span>)</span>
-<span id="cb36-102"><a href="#cb36-102"></a>    <span class="fu">library</span>(posterior)</span>
-<span id="cb36-103"><a href="#cb36-103"></a>}</span>
-<span id="cb36-104"><a href="#cb36-104"></a><span class="in">```</span></span>
-<span id="cb36-105"><a href="#cb36-105"></a></span>
-<span id="cb36-106"><a href="#cb36-106"></a>The following installs and loads the <span class="co">[</span><span class="ot">`ggdist` package</span><span class="co">](https://mjskay.github.io/ggdist/)</span></span>
-<span id="cb36-107"><a href="#cb36-107"></a>for advanced plotting functions:</span>
-<span id="cb36-110"><a href="#cb36-110"></a><span class="in">```{r}</span></span>
-<span id="cb36-111"><a href="#cb36-111"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(ggplot2)){</span>
-<span id="cb36-112"><a href="#cb36-112"></a>    <span class="fu">install.packages</span>(<span class="st">"ggplot2"</span>)</span>
-<span id="cb36-113"><a href="#cb36-113"></a>    <span class="fu">library</span>(ggplot2)</span>
-<span id="cb36-114"><a href="#cb36-114"></a>}</span>
-<span id="cb36-115"><a href="#cb36-115"></a>ggplot2<span class="sc">::</span><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
-<span id="cb36-116"><a href="#cb36-116"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(ggdist)){</span>
-<span id="cb36-117"><a href="#cb36-117"></a>    <span class="fu">install.packages</span>(<span class="st">"ggdist"</span>)</span>
-<span id="cb36-118"><a href="#cb36-118"></a>    <span class="fu">library</span>(ggdist)</span>
-<span id="cb36-119"><a href="#cb36-119"></a>}</span>
-<span id="cb36-120"><a href="#cb36-120"></a><span class="in">```</span></span>
-<span id="cb36-121"><a href="#cb36-121"></a></span>
-<span id="cb36-122"><a href="#cb36-122"></a></span>
-<span id="cb36-123"><a href="#cb36-123"></a></span>
-<span id="cb36-124"><a href="#cb36-124"></a>*This block showcases advanced tools, which you will be allowed and expected to use after this assignment.*</span>
-<span id="cb36-125"><a href="#cb36-125"></a>**For now, you should solve the assignment without the tools showcased herein.**</span>
-<span id="cb36-126"><a href="#cb36-126"></a></span>
-<span id="cb36-127"><a href="#cb36-127"></a></span>
-<span id="cb36-128"><a href="#cb36-128"></a></span>
-<span id="cb36-129"><a href="#cb36-129"></a>:::</span>
-<span id="cb36-130"><a href="#cb36-130"></a>::::</span>
-<span id="cb36-131"><a href="#cb36-131"></a></span>
-<span id="cb36-132"><a href="#cb36-132"></a></span>
-<span id="cb36-133"><a href="#cb36-133"></a><span class="fu"># Inference for normal mean and deviation (3 points)</span></span>
-<span id="cb36-134"><a href="#cb36-134"></a></span>
-<span id="cb36-135"><a href="#cb36-135"></a>Loading the library and the data.</span>
-<span id="cb36-136"><a href="#cb36-136"></a><span class="in">``` {r}</span></span>
-<span id="cb36-137"><a href="#cb36-137"></a><span class="fu">data</span>(<span class="st">"windshieldy1"</span>)</span>
-<span id="cb36-138"><a href="#cb36-138"></a><span class="co"># The data are now stored in the variable `windshieldy1`.</span></span>
-<span id="cb36-139"><a href="#cb36-139"></a><span class="co"># The below displays the data:</span></span>
-<span id="cb36-140"><a href="#cb36-140"></a>windshieldy1</span>
-<span id="cb36-141"><a href="#cb36-141"></a><span class="in">```</span></span>
-<span id="cb36-142"><a href="#cb36-142"></a>The below data is **only for the tests**, you need to change to the</span>
-<span id="cb36-143"><a href="#cb36-143"></a>full data <span class="in">`windshieldy1`</span> when reporting your results.</span>
-<span id="cb36-144"><a href="#cb36-144"></a><span class="in">``` {r}</span></span>
-<span id="cb36-145"><a href="#cb36-145"></a>windshieldy_test <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">13.357</span>, <span class="fl">14.928</span>, <span class="fl">14.896</span>, <span class="fl">14.820</span>)</span>
-<span id="cb36-146"><a href="#cb36-146"></a><span class="in">```</span></span>
-<span id="cb36-147"><a href="#cb36-147"></a></span>
-<span id="cb36-148"><a href="#cb36-148"></a></span>
-<span id="cb36-149"><a href="#cb36-149"></a></span>
-<span id="cb36-150"><a href="#cb36-150"></a><span class="fu">## (a)</span></span>
-<span id="cb36-151"><a href="#cb36-151"></a></span>
-<span id="cb36-152"><a href="#cb36-152"></a></span>
-<span id="cb36-153"><a href="#cb36-153"></a>Write your answers here!</span>
-<span id="cb36-154"><a href="#cb36-154"></a></span>
-<span id="cb36-155"><a href="#cb36-155"></a></span>
-<span id="cb36-156"><a href="#cb36-156"></a></span>
-<span id="cb36-157"><a href="#cb36-157"></a><span class="fu">## (b)</span></span>
-<span id="cb36-158"><a href="#cb36-158"></a></span>
-<span id="cb36-159"><a href="#cb36-159"></a></span>
-<span id="cb36-160"><a href="#cb36-160"></a>Write your answers and code here!</span>
-<span id="cb36-161"><a href="#cb36-161"></a></span>
-<span id="cb36-162"><a href="#cb36-162"></a>**Keep the below name and format for the functions to work with `markmyassignment`:**</span>
-<span id="cb36-165"><a href="#cb36-165"></a><span class="in">```{r}</span></span>
-<span id="cb36-166"><a href="#cb36-166"></a><span class="co"># Useful functions: mean(), length(), sqrt(), sum()</span></span>
-<span id="cb36-167"><a href="#cb36-167"></a><span class="co"># and qtnew(), dtnew() (from aaltobda)</span></span>
-<span id="cb36-168"><a href="#cb36-168"></a></span>
-<span id="cb36-169"><a href="#cb36-169"></a>mu_point_est <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
-<span id="cb36-170"><a href="#cb36-170"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb36-171"><a href="#cb36-171"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
-<span id="cb36-172"><a href="#cb36-172"></a>    <span class="fl">14.5</span></span>
-<span id="cb36-173"><a href="#cb36-173"></a></span>
-<span id="cb36-174"><a href="#cb36-174"></a>}</span>
-<span id="cb36-175"><a href="#cb36-175"></a>mu_interval <span class="ot">&lt;-</span> <span class="cf">function</span>(data, <span class="at">prob =</span> <span class="fl">0.95</span>) {</span>
-<span id="cb36-176"><a href="#cb36-176"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb36-177"><a href="#cb36-177"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
-<span id="cb36-178"><a href="#cb36-178"></a>    <span class="fu">c</span>(<span class="fl">13.3</span>, <span class="fl">15.7</span>)</span>
-<span id="cb36-179"><a href="#cb36-179"></a></span>
-<span id="cb36-180"><a href="#cb36-180"></a>}</span>
-<span id="cb36-181"><a href="#cb36-181"></a><span class="in">```</span></span>
-<span id="cb36-182"><a href="#cb36-182"></a></span>
-<span id="cb36-183"><a href="#cb36-183"></a>You can plot the density as below if you implement <span class="in">`mu_pdf`</span> to compute the PDF of the posterior $p(\mu|y)$ of the average hardness $\mu$.</span>
-<span id="cb36-184"><a href="#cb36-184"></a></span>
-<span id="cb36-187"><a href="#cb36-187"></a><span class="in">```{r}</span></span>
-<span id="cb36-188"><a href="#cb36-188"></a><span class="co">#| label: fig-2b-density</span></span>
-<span id="cb36-189"><a href="#cb36-189"></a><span class="co">#| fig-cap: PDF of the posterior $p(\mu|y)$ of the average hardness $\mu$</span></span>
-<span id="cb36-190"><a href="#cb36-190"></a>mu_pdf <span class="ot">&lt;-</span> <span class="cf">function</span>(data, x){</span>
-<span id="cb36-191"><a href="#cb36-191"></a>    <span class="co"># Compute necessary parameters here.</span></span>
-<span id="cb36-192"><a href="#cb36-192"></a>    <span class="co"># These are the correct parameters for `windshieldy_test`</span></span>
-<span id="cb36-193"><a href="#cb36-193"></a>    <span class="co"># with the provided uninformative prior.</span></span>
-<span id="cb36-194"><a href="#cb36-194"></a>    df <span class="ot">=</span> <span class="dv">3</span></span>
-<span id="cb36-195"><a href="#cb36-195"></a>    location <span class="ot">=</span> <span class="fl">14.5</span></span>
-<span id="cb36-196"><a href="#cb36-196"></a>    scale <span class="ot">=</span> <span class="fl">0.3817557</span></span>
-<span id="cb36-197"><a href="#cb36-197"></a>    <span class="co"># Use the computed parameters as below to compute the PDF:</span></span>
-<span id="cb36-198"><a href="#cb36-198"></a></span>
-<span id="cb36-199"><a href="#cb36-199"></a>    <span class="fu">dtnew</span>(x, df, location, scale)</span>
-<span id="cb36-200"><a href="#cb36-200"></a>}</span>
-<span id="cb36-201"><a href="#cb36-201"></a></span>
-<span id="cb36-202"><a href="#cb36-202"></a>x_interval <span class="ot">=</span> <span class="fu">mu_interval</span>(windshieldy1, .<span class="dv">999</span>)</span>
-<span id="cb36-203"><a href="#cb36-203"></a>lower_x <span class="ot">=</span> x_interval[<span class="dv">1</span>]</span>
-<span id="cb36-204"><a href="#cb36-204"></a>upper_x <span class="ot">=</span> x_interval[<span class="dv">2</span>]</span>
-<span id="cb36-205"><a href="#cb36-205"></a>x <span class="ot">=</span> <span class="fu">seq</span>(lower_x, upper_x, <span class="at">length.out=</span><span class="dv">1000</span>)</span>
-<span id="cb36-206"><a href="#cb36-206"></a><span class="fu">plot</span>(</span>
-<span id="cb36-207"><a href="#cb36-207"></a>    x, <span class="fu">mu_pdf</span>(windshieldy1, x), <span class="at">type=</span><span class="st">"l"</span>,</span>
-<span id="cb36-208"><a href="#cb36-208"></a>    <span class="at">xlab=</span><span class="fu">TeX</span>(r<span class="st">'(average hardness $\mu$)'</span>),</span>
-<span id="cb36-209"><a href="#cb36-209"></a>    <span class="at">ylab=</span><span class="fu">TeX</span>(r<span class="st">'(PDF of the posterior $p(\mu|y)$)'</span>)</span>
-<span id="cb36-210"><a href="#cb36-210"></a>)</span>
-<span id="cb36-211"><a href="#cb36-211"></a><span class="in">```</span></span>
-<span id="cb36-212"><a href="#cb36-212"></a></span>
-<span id="cb36-213"><a href="#cb36-213"></a></span>
-<span id="cb36-214"><a href="#cb36-214"></a></span>
-<span id="cb36-215"><a href="#cb36-215"></a><span class="fu">## (c)</span></span>
-<span id="cb36-216"><a href="#cb36-216"></a></span>
-<span id="cb36-217"><a href="#cb36-217"></a></span>
-<span id="cb36-218"><a href="#cb36-218"></a>Write your answers and code here!</span>
-<span id="cb36-219"><a href="#cb36-219"></a></span>
-<span id="cb36-220"><a href="#cb36-220"></a>**Keep the below name and format for the functions to work with `markmyassignment`:**</span>
-<span id="cb36-223"><a href="#cb36-223"></a><span class="in">```{r}</span></span>
-<span id="cb36-224"><a href="#cb36-224"></a><span class="co"># Useful functions: mean(), length(), sqrt(), sum()</span></span>
-<span id="cb36-225"><a href="#cb36-225"></a><span class="co"># and qtnew(), dtnew() (from aaltobda)</span></span>
-<span id="cb36-226"><a href="#cb36-226"></a></span>
-<span id="cb36-227"><a href="#cb36-227"></a>mu_pred_point_est <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
-<span id="cb36-228"><a href="#cb36-228"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb36-229"><a href="#cb36-229"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
-<span id="cb36-230"><a href="#cb36-230"></a>    <span class="fl">14.5</span></span>
-<span id="cb36-231"><a href="#cb36-231"></a></span>
-<span id="cb36-232"><a href="#cb36-232"></a>}</span>
-<span id="cb36-233"><a href="#cb36-233"></a>mu_pred_interval <span class="ot">&lt;-</span> <span class="cf">function</span>(data, <span class="at">prob =</span> <span class="fl">0.95</span>) {</span>
-<span id="cb36-234"><a href="#cb36-234"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb36-235"><a href="#cb36-235"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
-<span id="cb36-236"><a href="#cb36-236"></a>    <span class="fu">c</span>(<span class="fl">11.8</span>, <span class="fl">17.2</span>)</span>
-<span id="cb36-237"><a href="#cb36-237"></a></span>
-<span id="cb36-238"><a href="#cb36-238"></a>}</span>
-<span id="cb36-239"><a href="#cb36-239"></a><span class="in">```</span></span>
-<span id="cb36-240"><a href="#cb36-240"></a></span>
-<span id="cb36-241"><a href="#cb36-241"></a>You can plot the density as below if you implement <span class="in">`mu_pred_pdf`</span> to compute the PDF of the posterior predictive $p(\tilde{y}|y)$ of a new hardness observation $\tilde{y}$.</span>
-<span id="cb36-242"><a href="#cb36-242"></a></span>
-<span id="cb36-245"><a href="#cb36-245"></a><span class="in">```{r}</span></span>
-<span id="cb36-246"><a href="#cb36-246"></a><span class="co">#| label: fig-2c-density</span></span>
-<span id="cb36-247"><a href="#cb36-247"></a><span class="co">#| fig-cap: PDF of the posterior predictive $p(\tilde{y}|y)$ of a new hardness observation $\tilde{y}$</span></span>
-<span id="cb36-248"><a href="#cb36-248"></a>mu_pred_pdf <span class="ot">&lt;-</span> <span class="cf">function</span>(data, x){</span>
-<span id="cb36-249"><a href="#cb36-249"></a>    <span class="co"># Compute necessary parameters here.</span></span>
-<span id="cb36-250"><a href="#cb36-250"></a>    <span class="co"># These are the correct parameters for `windshieldy_test`</span></span>
-<span id="cb36-251"><a href="#cb36-251"></a>    <span class="co"># with the provided uninformative prior.</span></span>
-<span id="cb36-252"><a href="#cb36-252"></a>    df <span class="ot">=</span> <span class="dv">3</span></span>
-<span id="cb36-253"><a href="#cb36-253"></a>    location <span class="ot">=</span> <span class="fl">14.5</span></span>
-<span id="cb36-254"><a href="#cb36-254"></a>    scale <span class="ot">=</span> <span class="fl">0.8536316</span></span>
-<span id="cb36-255"><a href="#cb36-255"></a>    <span class="co"># Use the computed parameters as below to compute the PDF:</span></span>
-<span id="cb36-256"><a href="#cb36-256"></a></span>
-<span id="cb36-257"><a href="#cb36-257"></a>    <span class="fu">dtnew</span>(x, df, location, scale)</span>
-<span id="cb36-258"><a href="#cb36-258"></a>}</span>
-<span id="cb36-259"><a href="#cb36-259"></a></span>
-<span id="cb36-260"><a href="#cb36-260"></a>x_interval <span class="ot">=</span> <span class="fu">mu_pred_interval</span>(windshieldy1, .<span class="dv">999</span>)</span>
-<span id="cb36-261"><a href="#cb36-261"></a>lower_x <span class="ot">=</span> x_interval[<span class="dv">1</span>]</span>
-<span id="cb36-262"><a href="#cb36-262"></a>upper_x <span class="ot">=</span> x_interval[<span class="dv">2</span>]</span>
-<span id="cb36-263"><a href="#cb36-263"></a>x <span class="ot">=</span> <span class="fu">seq</span>(lower_x, upper_x, <span class="at">length.out=</span><span class="dv">1000</span>)</span>
-<span id="cb36-264"><a href="#cb36-264"></a><span class="fu">plot</span>(</span>
-<span id="cb36-265"><a href="#cb36-265"></a>    x, <span class="fu">mu_pred_pdf</span>(windshieldy1, x), <span class="at">type=</span><span class="st">"l"</span>,</span>
-<span id="cb36-266"><a href="#cb36-266"></a>    <span class="at">xlab=</span><span class="fu">TeX</span>(r<span class="st">'(new hardness observation $</span><span class="sc">\t</span><span class="st">ilde{y}$)'</span>),</span>
-<span id="cb36-267"><a href="#cb36-267"></a>    <span class="at">ylab=</span><span class="fu">TeX</span>(r<span class="st">'(PDF of the posterior predictive $p(</span><span class="sc">\t</span><span class="st">ilde{y}|y)$)'</span>)</span>
-<span id="cb36-268"><a href="#cb36-268"></a>)</span>
-<span id="cb36-269"><a href="#cb36-269"></a><span class="in">```</span></span>
-<span id="cb36-270"><a href="#cb36-270"></a></span>
-<span id="cb36-271"><a href="#cb36-271"></a></span>
-<span id="cb36-272"><a href="#cb36-272"></a><span class="fu"># Inference for the difference between proportions (3 points)</span></span>
-<span id="cb36-273"><a href="#cb36-273"></a></span>
-<span id="cb36-274"><a href="#cb36-274"></a><span class="fu">## (a)</span></span>
-<span id="cb36-275"><a href="#cb36-275"></a></span>
-<span id="cb36-276"><a href="#cb36-276"></a></span>
-<span id="cb36-277"><a href="#cb36-277"></a>Write your answers here!</span>
-<span id="cb36-278"><a href="#cb36-278"></a></span>
-<span id="cb36-279"><a href="#cb36-279"></a></span>
-<span id="cb36-280"><a href="#cb36-280"></a></span>
-<span id="cb36-281"><a href="#cb36-281"></a><span class="fu">## (b)</span></span>
-<span id="cb36-282"><a href="#cb36-282"></a></span>
-<span id="cb36-283"><a href="#cb36-283"></a></span>
-<span id="cb36-284"><a href="#cb36-284"></a>Write your answers and code here!</span>
-<span id="cb36-285"><a href="#cb36-285"></a></span>
-<span id="cb36-286"><a href="#cb36-286"></a>The below data is **only for the tests**:</span>
-<span id="cb36-287"><a href="#cb36-287"></a><span class="in">``` {r}</span></span>
-<span id="cb36-288"><a href="#cb36-288"></a><span class="fu">set.seed</span>(<span class="dv">4711</span>)</span>
-<span id="cb36-289"><a href="#cb36-289"></a>ndraws <span class="ot">=</span> <span class="dv">1000</span></span>
-<span id="cb36-290"><a href="#cb36-290"></a>p0 <span class="ot">=</span> <span class="fu">rbeta</span>(ndraws, <span class="dv">5</span>, <span class="dv">95</span>)</span>
-<span id="cb36-291"><a href="#cb36-291"></a>p1 <span class="ot">=</span> <span class="fu">rbeta</span>(ndraws, <span class="dv">10</span>, <span class="dv">90</span>)</span>
-<span id="cb36-292"><a href="#cb36-292"></a></span>
-<span id="cb36-293"><a href="#cb36-293"></a><span class="in">```</span></span>
-<span id="cb36-294"><a href="#cb36-294"></a></span>
-<span id="cb36-295"><a href="#cb36-295"></a>**Keep the below name and format for the functions to work with `markmyassignment`:**</span>
-<span id="cb36-296"><a href="#cb36-296"></a></span>
-<span id="cb36-299"><a href="#cb36-299"></a><span class="in">```{r}</span></span>
-<span id="cb36-300"><a href="#cb36-300"></a><span class="co"># Useful function: mean(), quantile()</span></span>
-<span id="cb36-301"><a href="#cb36-301"></a></span>
-<span id="cb36-302"><a href="#cb36-302"></a>posterior_odds_ratio_point_est <span class="ot">&lt;-</span> <span class="cf">function</span>(p0, p1) {</span>
-<span id="cb36-303"><a href="#cb36-303"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb36-304"><a href="#cb36-304"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
-<span id="cb36-305"><a href="#cb36-305"></a>    <span class="fl">2.650172</span></span>
-<span id="cb36-306"><a href="#cb36-306"></a></span>
-<span id="cb36-307"><a href="#cb36-307"></a>}</span>
-<span id="cb36-308"><a href="#cb36-308"></a>posterior_odds_ratio_interval <span class="ot">&lt;-</span> <span class="cf">function</span>(p0, p1, <span class="at">prob =</span> <span class="fl">0.95</span>) {</span>
-<span id="cb36-309"><a href="#cb36-309"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb36-310"><a href="#cb36-310"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
-<span id="cb36-311"><a href="#cb36-311"></a>    <span class="fu">c</span>(<span class="fl">0.6796942</span>,<span class="fl">7.3015964</span>)</span>
-<span id="cb36-312"><a href="#cb36-312"></a></span>
-<span id="cb36-313"><a href="#cb36-313"></a>}</span>
-<span id="cb36-314"><a href="#cb36-314"></a><span class="in">```</span></span>
-<span id="cb36-315"><a href="#cb36-315"></a></span>
-<span id="cb36-316"><a href="#cb36-316"></a></span>
-<span id="cb36-317"><a href="#cb36-317"></a></span>
-<span id="cb36-318"><a href="#cb36-318"></a>:::: {.content-hidden when-format="pdf"}</span>
-<span id="cb36-319"><a href="#cb36-319"></a>::: {.callout-tip collapse=false}</span>
-<span id="cb36-320"><a href="#cb36-320"></a></span>
-<span id="cb36-321"><a href="#cb36-321"></a><span class="fu">## Showcase: advanced tools (`posterior`'s `rvar`, `ggdist`'s `stat_dotsinterval`)</span></span>
-<span id="cb36-322"><a href="#cb36-322"></a></span>
-<span id="cb36-323"><a href="#cb36-323"></a></span>
-<span id="cb36-324"><a href="#cb36-324"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
-<span id="cb36-325"><a href="#cb36-325"></a>**Make sure that this does not get displayed in the PDF!**</span>
-<span id="cb36-326"><a href="#cb36-326"></a></span>
-<span id="cb36-327"><a href="#cb36-327"></a></span>
-<span id="cb36-328"><a href="#cb36-328"></a></span>
-<span id="cb36-329"><a href="#cb36-329"></a>*This block showcases advanced tools, which you will be allowed and expected to use after this assignment.*</span>
-<span id="cb36-330"><a href="#cb36-330"></a>**For now, you should solve the assignment without the tools showcased herein.**</span>
-<span id="cb36-331"><a href="#cb36-331"></a></span>
-<span id="cb36-332"><a href="#cb36-332"></a></span>
-<span id="cb36-333"><a href="#cb36-333"></a></span>
-<span id="cb36-334"><a href="#cb36-334"></a></span>
-<span id="cb36-335"><a href="#cb36-335"></a>The <span class="in">`posterior`</span> package's random variable datatype <span class="in">`rvar`</span> is a</span>
-<span id="cb36-336"><a href="#cb36-336"></a><span class="co">[</span><span class="ot">"sample-based representation of random variables"</span><span class="co">](https://mc-stan.org/posterior/articles/rvar.html#:~:text=sample%2Dbased%20representation%20of%20random%20variables)</span></span>
-<span id="cb36-337"><a href="#cb36-337"></a>which makes handling of random samples (of draws) such as the ones contained in the above variables <span class="in">`p0`</span> and <span class="in">`p1`</span> easier.</span>
-<span id="cb36-338"><a href="#cb36-338"></a><span class="co">[</span><span class="ot">By default, it prints as the mean and standard deviation of the draws</span><span class="co">](https://mc-stan.org/posterior/articles/rvar.html#:~:text=The%20default%20display%20of%20an%20rvar%20shows%20the%20mean%20and%20standard%20deviation%20of%20each%20element%20of%20the%20array.)</span>, **such that `rvar(p0)` prints as `r rvar(p0)` and `rvar(p1)` prints as `r rvar(p1)`**.</span>
-<span id="cb36-339"><a href="#cb36-339"></a></span>
-<span id="cb36-340"><a href="#cb36-340"></a>The datatype is <span class="co">[</span><span class="ot">"designed to [...] be able to be used inside `data.frame()`s and `tibble()`s, and to be used with distribution visualizations in the ggdist package."</span><span class="co">]</span>(https://mc-stan.org/posterior/articles/rvar.html#:~:text=designed%20to%20interoperate%20with%20vectorized%20distributions%20in%20the%20distributional%20package%2C%20to%20be%20able%20to%20be%20used%20inside%20data.frame()s%20and%20tibble()s%2C%20and%20to%20be%20used%20with%20distribution%20visualizations%20in%20the%20ggdist%20package.)</span>
-<span id="cb36-341"><a href="#cb36-341"></a>The code below sets up an <span class="co">[</span><span class="ot">R `data.frame()`</span><span class="co">](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/data.frame)</span> with the draws in <span class="in">`p0`</span> and <span class="in">`p1`</span> wrapped in an <span class="in">`rvar`</span>, and uses that data frame to visualize the draws using <span class="co">[</span><span class="ot">`ggdist`</span><span class="co">](https://mjskay.github.io/ggdist/index.html)</span>, an R package building on <span class="co">[</span><span class="ot">`ggplot2`</span><span class="co">](https://ggplot2.tidyverse.org/)</span> and <span class="co">[</span><span class="ot">"designed for both frequentist and Bayesian uncertainty visualization"</span><span class="co">](https://mjskay.github.io/ggdist/index.html#:~:text=designed%20for%20both%20frequentist%20and%20Bayesian%20uncertainty%20visualization)</span>.</span>
-<span id="cb36-342"><a href="#cb36-342"></a></span>
-<span id="cb36-343"><a href="#cb36-343"></a>The below plot, @fig-showcase-probabilities uses <span class="in">`ggdist`</span>'s <span class="co">[</span><span class="ot">`stat_dotsinterval()`</span><span class="co">](https://mjskay.github.io/ggdist/articles/dotsinterval.html)</span>, which by default visualizes</span>
-<span id="cb36-344"><a href="#cb36-344"></a></span>
-<span id="cb36-345"><a href="#cb36-345"></a><span class="ss">* </span><span class="co">[</span><span class="ot">an `rvar`'s median and central 66% and 95% intervals</span><span class="co">]</span>(https://mjskay.github.io/ggdist/reference/stat_dotsinterval.html#:~:text=point_interval%20%3D%20%22median_qi%22%2C%0A%20%20.width%20%3D%20c(0.66%2C%200.95)%2C) using a black dot and lines of varying thicknesses as when using <span class="in">`ggdist`</span>'s <span class="co">[</span><span class="ot">`stat_pointinterval()`</span><span class="co">](https://mjskay.github.io/ggdist/reference/stat_pointinterval.html#examples)</span> and</span>
-<span id="cb36-346"><a href="#cb36-346"></a><span class="ss">* </span>an <span class="in">`rvar`</span>'s draws using grey dots as when using <span class="in">`ggdist`</span>'s <span class="co">[</span><span class="ot">`stat_dots()`</span><span class="co">](https://mjskay.github.io/ggdist/reference/stat_dots.html#examples)</span>:</span>
-<span id="cb36-347"><a href="#cb36-347"></a></span>
-<span id="cb36-350"><a href="#cb36-350"></a><span class="in">```{r}</span></span>
-<span id="cb36-351"><a href="#cb36-351"></a><span class="co">#| label: fig-showcase-probabilities</span></span>
-<span id="cb36-352"><a href="#cb36-352"></a><span class="co">#| fig-cap: Probabilities of death for the two patient groups.</span></span>
-<span id="cb36-353"><a href="#cb36-353"></a>r0 <span class="ot">=</span> <span class="fu">rvar</span>(p0)</span>
-<span id="cb36-354"><a href="#cb36-354"></a>r1 <span class="ot">=</span> <span class="fu">rvar</span>(p1)</span>
-<span id="cb36-355"><a href="#cb36-355"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(</span>
-<span id="cb36-356"><a href="#cb36-356"></a>    <span class="at">rv_name=</span><span class="fu">c</span>(<span class="st">"control"</span>, <span class="st">"treatment"</span>), <span class="at">rv=</span><span class="fu">c</span>(r0, r1)</span>
-<span id="cb36-357"><a href="#cb36-357"></a>)) <span class="sc">+</span></span>
-<span id="cb36-358"><a href="#cb36-358"></a>    <span class="fu">aes</span>(<span class="at">xdist=</span>rv, <span class="at">y=</span>rv_name) <span class="sc">+</span></span>
-<span id="cb36-359"><a href="#cb36-359"></a>    <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"probabilities of death"</span>, <span class="at">y=</span><span class="st">"patient group"</span>) <span class="sc">+</span></span>
-<span id="cb36-360"><a href="#cb36-360"></a>    <span class="fu">stat_dotsinterval</span>()</span>
-<span id="cb36-361"><a href="#cb36-361"></a><span class="in">```</span></span>
-<span id="cb36-362"><a href="#cb36-362"></a></span>
-<span id="cb36-363"><a href="#cb36-363"></a><span class="in">`rvar`</span>s make it easy to compute functions of random variables, such as</span>
-<span id="cb36-364"><a href="#cb36-364"></a></span>
-<span id="cb36-365"><a href="#cb36-365"></a><span class="ss">* </span>differences, e.g. $p_0 - p_1$: <span class="in">`r0 - r1`</span> computes an <span class="in">`rvar`</span> which prints as <span class="in">`r r0 - r1`</span>, indicating the **sample mean** and the **sample standard deviation** of the difference of the probabilities of death,</span>
-<span id="cb36-366"><a href="#cb36-366"></a><span class="ss">* </span>products, e.g. $p_0 \, p_1$: <span class="in">`r0 * r1`</span> computes an <span class="in">`rvar`</span> which prints as <span class="in">`r r0 * r1`</span> which in this case</span>
-<span id="cb36-367"><a href="#cb36-367"></a>has no great interpretation, or</span>
-<span id="cb36-368"><a href="#cb36-368"></a><span class="ss">* </span>the odds ratios needed in task 3.b).</span>
-<span id="cb36-369"><a href="#cb36-369"></a></span>
-<span id="cb36-370"><a href="#cb36-370"></a>Below, in @fig-showcase-odds-ratios, we compute the odds ratios using the <span class="in">`rvar`</span>s and visualize its median, central intervals and draws, as above in @fig-showcase-probabilities:</span>
-<span id="cb36-373"><a href="#cb36-373"></a><span class="in">```{r}</span></span>
-<span id="cb36-374"><a href="#cb36-374"></a><span class="co">#| label: fig-showcase-odds-ratios</span></span>
-<span id="cb36-375"><a href="#cb36-375"></a><span class="co">#| fig-cap: Odds ratios of the two patient groups.</span></span>
-<span id="cb36-376"><a href="#cb36-376"></a>rodds_ratio <span class="ot">=</span> (r1<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>r1))<span class="sc">/</span>(r0<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>r0))</span>
-<span id="cb36-377"><a href="#cb36-377"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(</span>
-<span id="cb36-378"><a href="#cb36-378"></a>    <span class="at">rv=</span><span class="fu">c</span>(rodds_ratio)</span>
-<span id="cb36-379"><a href="#cb36-379"></a>)) <span class="sc">+</span></span>
-<span id="cb36-380"><a href="#cb36-380"></a>    <span class="fu">aes</span>(<span class="at">xdist=</span>rv) <span class="sc">+</span></span>
-<span id="cb36-381"><a href="#cb36-381"></a>    <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"odds ratio"</span>, <span class="at">y=</span><span class="st">"relative amount of draws"</span>) <span class="sc">+</span></span>
-<span id="cb36-382"><a href="#cb36-382"></a>    <span class="fu">stat_dotsinterval</span>()</span>
-<span id="cb36-383"><a href="#cb36-383"></a><span class="in">```</span></span>
-<span id="cb36-384"><a href="#cb36-384"></a></span>
-<span id="cb36-385"><a href="#cb36-385"></a>You can use @fig-showcase-odds-ratios to visually check whether the answers you computed for 3.b) make sense.</span>
-<span id="cb36-386"><a href="#cb36-386"></a></span>
-<span id="cb36-387"><a href="#cb36-387"></a></span>
-<span id="cb36-388"><a href="#cb36-388"></a></span>
-<span id="cb36-389"><a href="#cb36-389"></a>*This block showcases advanced tools, which you will be allowed and expected to use after this assignment.*</span>
-<span id="cb36-390"><a href="#cb36-390"></a>**For now, you should solve the assignment without the tools showcased herein.**</span>
-<span id="cb36-391"><a href="#cb36-391"></a></span>
-<span id="cb36-392"><a href="#cb36-392"></a></span>
-<span id="cb36-393"><a href="#cb36-393"></a></span>
-<span id="cb36-394"><a href="#cb36-394"></a>:::</span>
-<span id="cb36-395"><a href="#cb36-395"></a>::::</span>
-<span id="cb36-396"><a href="#cb36-396"></a></span>
-<span id="cb36-397"><a href="#cb36-397"></a></span>
-<span id="cb36-398"><a href="#cb36-398"></a></span>
-<span id="cb36-399"><a href="#cb36-399"></a><span class="fu">## (c)</span></span>
-<span id="cb36-400"><a href="#cb36-400"></a></span>
-<span id="cb36-401"><a href="#cb36-401"></a></span>
-<span id="cb36-402"><a href="#cb36-402"></a>Write your answers and code here!</span>
-<span id="cb36-403"><a href="#cb36-403"></a></span>
-<span id="cb36-404"><a href="#cb36-404"></a></span>
-<span id="cb36-405"><a href="#cb36-405"></a><span class="fu"># Inference for the difference between normal means (3 points)</span></span>
-<span id="cb36-406"><a href="#cb36-406"></a></span>
-<span id="cb36-407"><a href="#cb36-407"></a>Loading the library and the data.</span>
-<span id="cb36-408"><a href="#cb36-408"></a><span class="in">``` {r}</span></span>
-<span id="cb36-409"><a href="#cb36-409"></a><span class="fu">data</span>(<span class="st">"windshieldy2"</span>)</span>
-<span id="cb36-410"><a href="#cb36-410"></a><span class="co"># The new data are now stored in the variable `windshieldy2`.</span></span>
-<span id="cb36-411"><a href="#cb36-411"></a><span class="co"># The below displays the first few rows of the new data:</span></span>
-<span id="cb36-412"><a href="#cb36-412"></a><span class="fu">head</span>(windshieldy2)</span>
-<span id="cb36-413"><a href="#cb36-413"></a><span class="in">```</span></span>
-<span id="cb36-414"><a href="#cb36-414"></a></span>
-<span id="cb36-415"><a href="#cb36-415"></a></span>
-<span id="cb36-416"><a href="#cb36-416"></a></span>
-<span id="cb36-417"><a href="#cb36-417"></a><span class="fu">## (a)</span></span>
-<span id="cb36-418"><a href="#cb36-418"></a></span>
-<span id="cb36-419"><a href="#cb36-419"></a></span>
-<span id="cb36-420"><a href="#cb36-420"></a>Write your answers here!</span>
-<span id="cb36-421"><a href="#cb36-421"></a></span>
-<span id="cb36-422"><a href="#cb36-422"></a></span>
-<span id="cb36-423"><a href="#cb36-423"></a></span>
-<span id="cb36-424"><a href="#cb36-424"></a><span class="fu">## (b)</span></span>
-<span id="cb36-425"><a href="#cb36-425"></a></span>
-<span id="cb36-426"><a href="#cb36-426"></a></span>
-<span id="cb36-427"><a href="#cb36-427"></a>Write your answers and code here!</span>
-<span id="cb36-430"><a href="#cb36-430"></a><span class="in">```{r}</span></span>
-<span id="cb36-431"><a href="#cb36-431"></a><span class="co"># Useful functions: mean(), length(), sqrt(), sum(),</span></span>
-<span id="cb36-432"><a href="#cb36-432"></a><span class="co"># rtnew() (from aaltobda), quantile() and hist().</span></span>
-<span id="cb36-433"><a href="#cb36-433"></a><span class="in">```</span></span>
-<span id="cb36-434"><a href="#cb36-434"></a></span>
-<span id="cb36-435"><a href="#cb36-435"></a></span>
-<span id="cb36-436"><a href="#cb36-436"></a></span>
-<span id="cb36-437"><a href="#cb36-437"></a><span class="fu">## (c)</span></span>
-<span id="cb36-438"><a href="#cb36-438"></a></span>
-<span id="cb36-439"><a href="#cb36-439"></a></span>
-<span id="cb36-440"><a href="#cb36-440"></a>Write your answers here!</span>
-<span id="cb36-441"><a href="#cb36-441"></a></span>
-<span id="cb36-442"><a href="#cb36-442"></a></span>
-<span id="cb36-443"><a href="#cb36-443"></a></span>
-<span id="cb36-444"><a href="#cb36-444"></a>:::: {.content-hidden when-format="pdf"}</span>
-<span id="cb36-445"><a href="#cb36-445"></a>::: {.callout-warning collapse=false}</span>
-<span id="cb36-446"><a href="#cb36-446"></a></span>
-<span id="cb36-447"><a href="#cb36-447"></a><span class="fu">## markmyassignment</span></span>
-<span id="cb36-448"><a href="#cb36-448"></a></span>
-<span id="cb36-449"><a href="#cb36-449"></a></span>
-<span id="cb36-450"><a href="#cb36-450"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
-<span id="cb36-451"><a href="#cb36-451"></a>**Make sure that this does not get displayed in the PDF!**</span>
-<span id="cb36-452"><a href="#cb36-452"></a></span>
-<span id="cb36-453"><a href="#cb36-453"></a></span>
-<span id="cb36-454"><a href="#cb36-454"></a></span>
-<span id="cb36-455"><a href="#cb36-455"></a>The following will check the functions for which <span class="in">`markmyassignment`</span> has been set up:</span>
-<span id="cb36-456"><a href="#cb36-456"></a></span>
-<span id="cb36-459"><a href="#cb36-459"></a><span class="in">```{r}</span></span>
-<span id="cb36-460"><a href="#cb36-460"></a><span class="fu">mark_my_assignment</span>()</span>
-<span id="cb36-461"><a href="#cb36-461"></a><span class="in">```</span></span>
-<span id="cb36-462"><a href="#cb36-462"></a></span>
-<span id="cb36-463"><a href="#cb36-463"></a>:::</span>
-<span id="cb36-464"><a href="#cb36-464"></a>::::</span>
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb19" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb19-1"><a href="#cb19-1"></a><span class="co">---</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="an">title:</span><span class="co"> "Assignment 3"</span></span>
+<span id="cb19-3"><a href="#cb19-3"></a><span class="an">author:</span><span class="co"> anonymous # &lt;-- hand in anonymously</span></span>
+<span id="cb19-4"><a href="#cb19-4"></a><span class="an">format:</span></span>
+<span id="cb19-5"><a href="#cb19-5"></a><span class="co">  html:</span></span>
+<span id="cb19-6"><a href="#cb19-6"></a><span class="co">    toc: true</span></span>
+<span id="cb19-7"><a href="#cb19-7"></a><span class="co">    code-tools: true</span></span>
+<span id="cb19-8"><a href="#cb19-8"></a><span class="co">    code-line-numbers: true</span></span>
+<span id="cb19-9"><a href="#cb19-9"></a><span class="co">    number-sections: true</span></span>
+<span id="cb19-10"><a href="#cb19-10"></a><span class="co">    mainfont: Georgia, serif</span></span>
+<span id="cb19-11"><a href="#cb19-11"></a><span class="co">    page-layout: article</span></span>
+<span id="cb19-12"><a href="#cb19-12"></a><span class="co">  pdf:</span></span>
+<span id="cb19-13"><a href="#cb19-13"></a><span class="co">    geometry:</span></span>
+<span id="cb19-14"><a href="#cb19-14"></a><span class="co">    - left=1cm,top=1cm,bottom=1cm,right=7cm</span></span>
+<span id="cb19-15"><a href="#cb19-15"></a><span class="co">    number-sections: true</span></span>
+<span id="cb19-16"><a href="#cb19-16"></a><span class="co">    code-annotations: none</span></span>
+<span id="cb19-17"><a href="#cb19-17"></a><span class="an">editor:</span><span class="co"> source</span></span>
+<span id="cb19-18"><a href="#cb19-18"></a><span class="co">---</span></span>
+<span id="cb19-19"><a href="#cb19-19"></a></span>
+<span id="cb19-20"><a href="#cb19-20"></a></span>
+<span id="cb19-21"><a href="#cb19-21"></a><span class="fu"># General information</span></span>
+<span id="cb19-22"><a href="#cb19-22"></a></span>
+<span id="cb19-23"><a href="#cb19-23"></a>:::: {.content-hidden when-format="pdf"}</span>
+<span id="cb19-24"><a href="#cb19-24"></a>::: {.callout-warning collapse=false}</span>
+<span id="cb19-25"><a href="#cb19-25"></a></span>
+<span id="cb19-26"><a href="#cb19-26"></a><span class="fu">## Setup</span></span>
+<span id="cb19-27"><a href="#cb19-27"></a></span>
+<span id="cb19-28"><a href="#cb19-28"></a></span>
+<span id="cb19-29"><a href="#cb19-29"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
+<span id="cb19-30"><a href="#cb19-30"></a>**Make sure that this does not get displayed in the PDF!**</span>
+<span id="cb19-31"><a href="#cb19-31"></a></span>
+<span id="cb19-32"><a href="#cb19-32"></a></span>
+<span id="cb19-33"><a href="#cb19-33"></a></span>
+<span id="cb19-34"><a href="#cb19-34"></a></span>
+<span id="cb19-35"><a href="#cb19-35"></a>This is the template for <span class="co">[</span><span class="ot">assignment 3</span><span class="co">](assignment3.html)</span>. You can download the qmd-files (<span class="co">[</span><span class="ot">full</span><span class="co">](https://avehtari.github.io/BDA_course_Aalto/assignments/template3.qmd)</span>, <span class="co">[</span><span class="ot">simple</span><span class="co">](https://avehtari.github.io/BDA_course_Aalto/assignments/simple_template3.qmd)</span>) or copy the code from this rendered document after clicking on <span class="in">`&lt;/&gt; Code`</span> in the top right corner.</span>
+<span id="cb19-36"><a href="#cb19-36"></a></span>
+<span id="cb19-37"><a href="#cb19-37"></a>**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.**</span>
+<span id="cb19-38"><a href="#cb19-38"></a></span>
+<span id="cb19-39"><a href="#cb19-39"></a>The following will set-up <span class="co">[</span><span class="ot">`markmyassignment`</span><span class="co">](https://github.com/MansMeg/markmyassignment)</span> to check your functions at the end of the notebook:</span>
+<span id="cb19-40"><a href="#cb19-40"></a></span>
+<span id="cb19-43"><a href="#cb19-43"></a><span class="in">```{r}</span></span>
+<span id="cb19-44"><a href="#cb19-44"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(markmyassignment)){</span>
+<span id="cb19-45"><a href="#cb19-45"></a>    <span class="fu">install.packages</span>(<span class="st">"markmyassignment"</span>)</span>
+<span id="cb19-46"><a href="#cb19-46"></a>    <span class="fu">library</span>(markmyassignment)</span>
+<span id="cb19-47"><a href="#cb19-47"></a>}</span>
+<span id="cb19-48"><a href="#cb19-48"></a>assignment_path <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">"https://github.com/avehtari/BDA_course_Aalto/"</span>,</span>
+<span id="cb19-49"><a href="#cb19-49"></a><span class="st">"blob/master/assignments/tests/assignment3.yml"</span>, <span class="at">sep=</span><span class="st">""</span>)</span>
+<span id="cb19-50"><a href="#cb19-50"></a><span class="fu">set_assignment</span>(assignment_path)</span>
+<span id="cb19-51"><a href="#cb19-51"></a><span class="in">```</span></span>
+<span id="cb19-52"><a href="#cb19-52"></a></span>
+<span id="cb19-53"><a href="#cb19-53"></a>The following installs and loads the <span class="in">`aaltobda`</span> package:</span>
+<span id="cb19-56"><a href="#cb19-56"></a><span class="in">```{r}</span></span>
+<span id="cb19-57"><a href="#cb19-57"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(aaltobda)){</span>
+<span id="cb19-58"><a href="#cb19-58"></a>    <span class="fu">install.packages</span>(<span class="st">"aaltobda"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://avehtari.github.io/BDA_course_Aalto/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span>
+<span id="cb19-59"><a href="#cb19-59"></a>    <span class="fu">library</span>(aaltobda)</span>
+<span id="cb19-60"><a href="#cb19-60"></a>}</span>
+<span id="cb19-61"><a href="#cb19-61"></a><span class="in">```</span></span>
+<span id="cb19-62"><a href="#cb19-62"></a>The following installs and loads the <span class="co">[</span><span class="ot">`latex2exp` package</span><span class="co">](https://github.com/stefano-meschiari/latex2exp)</span>, which allows us to use LaTeX in plots:</span>
+<span id="cb19-65"><a href="#cb19-65"></a><span class="in">```{r}</span></span>
+<span id="cb19-66"><a href="#cb19-66"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(latex2exp)){</span>
+<span id="cb19-67"><a href="#cb19-67"></a>    <span class="fu">install.packages</span>(<span class="st">"latex2exp"</span>)</span>
+<span id="cb19-68"><a href="#cb19-68"></a>    <span class="fu">library</span>(latex2exp)</span>
+<span id="cb19-69"><a href="#cb19-69"></a>}</span>
+<span id="cb19-70"><a href="#cb19-70"></a><span class="in">```</span></span>
+<span id="cb19-71"><a href="#cb19-71"></a></span>
+<span id="cb19-72"><a href="#cb19-72"></a>:::</span>
+<span id="cb19-73"><a href="#cb19-73"></a>::::</span>
+<span id="cb19-74"><a href="#cb19-74"></a></span>
+<span id="cb19-75"><a href="#cb19-75"></a></span>
+<span id="cb19-76"><a href="#cb19-76"></a></span>
+<span id="cb19-77"><a href="#cb19-77"></a>:::: {.content-hidden when-format="pdf"}</span>
+<span id="cb19-78"><a href="#cb19-78"></a>::: {.callout-tip collapse=false}</span>
+<span id="cb19-79"><a href="#cb19-79"></a></span>
+<span id="cb19-80"><a href="#cb19-80"></a><span class="fu">## Showcase: Setting up advanced packages (`posterior` and `ggdist`)</span></span>
+<span id="cb19-81"><a href="#cb19-81"></a></span>
+<span id="cb19-82"><a href="#cb19-82"></a></span>
+<span id="cb19-83"><a href="#cb19-83"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
+<span id="cb19-84"><a href="#cb19-84"></a>**Make sure that this does not get displayed in the PDF!**</span>
+<span id="cb19-85"><a href="#cb19-85"></a></span>
+<span id="cb19-86"><a href="#cb19-86"></a></span>
+<span id="cb19-87"><a href="#cb19-87"></a></span>
+<span id="cb19-88"><a href="#cb19-88"></a>*This block showcases advanced tools, which you will be allowed and expected to use after this assignment.*</span>
+<span id="cb19-89"><a href="#cb19-89"></a>**For now, you should solve the assignment without the tools showcased herein.**</span>
+<span id="cb19-90"><a href="#cb19-90"></a></span>
+<span id="cb19-91"><a href="#cb19-91"></a></span>
+<span id="cb19-92"><a href="#cb19-92"></a></span>
+<span id="cb19-93"><a href="#cb19-93"></a></span>
+<span id="cb19-94"><a href="#cb19-94"></a>The following installs and loads the <span class="co">[</span><span class="ot">`posterior` package</span><span class="co">](https://mc-stan.org/posterior/index.html)</span>,</span>
+<span id="cb19-95"><a href="#cb19-95"></a>which allows us to use its [<span class="in">`rvar`</span> Random Variable Datatype</span>
+<span id="cb19-96"><a href="#cb19-96"></a>](https://mc-stan.org/posterior/articles/rvar.html):</span>
+<span id="cb19-99"><a href="#cb19-99"></a><span class="in">```{r}</span></span>
+<span id="cb19-100"><a href="#cb19-100"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(posterior)){</span>
+<span id="cb19-101"><a href="#cb19-101"></a>    <span class="fu">install.packages</span>(<span class="st">"posterior"</span>)</span>
+<span id="cb19-102"><a href="#cb19-102"></a>    <span class="fu">library</span>(posterior)</span>
+<span id="cb19-103"><a href="#cb19-103"></a>}</span>
+<span id="cb19-104"><a href="#cb19-104"></a><span class="in">```</span></span>
+<span id="cb19-105"><a href="#cb19-105"></a></span>
+<span id="cb19-106"><a href="#cb19-106"></a>The following installs and loads the <span class="co">[</span><span class="ot">`ggdist` package</span><span class="co">](https://mjskay.github.io/ggdist/)</span></span>
+<span id="cb19-107"><a href="#cb19-107"></a>for advanced plotting functions:</span>
+<span id="cb19-110"><a href="#cb19-110"></a><span class="in">```{r}</span></span>
+<span id="cb19-111"><a href="#cb19-111"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(ggplot2)){</span>
+<span id="cb19-112"><a href="#cb19-112"></a>    <span class="fu">install.packages</span>(<span class="st">"ggplot2"</span>)</span>
+<span id="cb19-113"><a href="#cb19-113"></a>    <span class="fu">library</span>(ggplot2)</span>
+<span id="cb19-114"><a href="#cb19-114"></a>}</span>
+<span id="cb19-115"><a href="#cb19-115"></a>ggplot2<span class="sc">::</span><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
+<span id="cb19-116"><a href="#cb19-116"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(ggdist)){</span>
+<span id="cb19-117"><a href="#cb19-117"></a>    <span class="fu">install.packages</span>(<span class="st">"ggdist"</span>)</span>
+<span id="cb19-118"><a href="#cb19-118"></a>    <span class="fu">library</span>(ggdist)</span>
+<span id="cb19-119"><a href="#cb19-119"></a>}</span>
+<span id="cb19-120"><a href="#cb19-120"></a><span class="in">```</span></span>
+<span id="cb19-121"><a href="#cb19-121"></a></span>
+<span id="cb19-122"><a href="#cb19-122"></a></span>
+<span id="cb19-123"><a href="#cb19-123"></a></span>
+<span id="cb19-124"><a href="#cb19-124"></a>*This block showcases advanced tools, which you will be allowed and expected to use after this assignment.*</span>
+<span id="cb19-125"><a href="#cb19-125"></a>**For now, you should solve the assignment without the tools showcased herein.**</span>
+<span id="cb19-126"><a href="#cb19-126"></a></span>
+<span id="cb19-127"><a href="#cb19-127"></a></span>
+<span id="cb19-128"><a href="#cb19-128"></a></span>
+<span id="cb19-129"><a href="#cb19-129"></a>:::</span>
+<span id="cb19-130"><a href="#cb19-130"></a>::::</span>
+<span id="cb19-131"><a href="#cb19-131"></a></span>
+<span id="cb19-132"><a href="#cb19-132"></a></span>
+<span id="cb19-133"><a href="#cb19-133"></a><span class="fu"># Inference for normal mean and deviation (3 points)</span></span>
+<span id="cb19-134"><a href="#cb19-134"></a></span>
+<span id="cb19-135"><a href="#cb19-135"></a>Loading the library and the data.</span>
+<span id="cb19-136"><a href="#cb19-136"></a><span class="in">``` {r}</span></span>
+<span id="cb19-137"><a href="#cb19-137"></a><span class="in">data("windshieldy1")</span></span>
+<span id="cb19-138"><a href="#cb19-138"></a><span class="in"># The data are now stored in the variable `windshieldy1`.</span></span>
+<span id="cb19-139"><a href="#cb19-139"></a><span class="in"># The below displays the data:</span></span>
+<span id="cb19-140"><a href="#cb19-140"></a><span class="in">windshieldy1</span></span>
+<span id="cb19-141"><a href="#cb19-141"></a><span class="in">```</span></span>
+<span id="cb19-142"><a href="#cb19-142"></a>The below data is **only for the tests**, you need to change to the</span>
+<span id="cb19-143"><a href="#cb19-143"></a>full data <span class="in">`windshieldy1`</span> when reporting your results.</span>
+<span id="cb19-144"><a href="#cb19-144"></a><span class="in">``` {r}</span></span>
+<span id="cb19-145"><a href="#cb19-145"></a><span class="in">windshieldy_test &lt;- c(13.357, 14.928, 14.896, 14.820)</span></span>
+<span id="cb19-146"><a href="#cb19-146"></a><span class="in">```</span></span>
+<span id="cb19-147"><a href="#cb19-147"></a></span>
+<span id="cb19-148"><a href="#cb19-148"></a></span>
+<span id="cb19-149"><a href="#cb19-149"></a></span>
+<span id="cb19-150"><a href="#cb19-150"></a><span class="fu">## (a)</span></span>
+<span id="cb19-151"><a href="#cb19-151"></a></span>
+<span id="cb19-152"><a href="#cb19-152"></a></span>
+<span id="cb19-153"><a href="#cb19-153"></a>Write your answers here!</span>
+<span id="cb19-154"><a href="#cb19-154"></a></span>
+<span id="cb19-155"><a href="#cb19-155"></a></span>
+<span id="cb19-156"><a href="#cb19-156"></a></span>
+<span id="cb19-157"><a href="#cb19-157"></a><span class="fu">## (b)</span></span>
+<span id="cb19-158"><a href="#cb19-158"></a></span>
+<span id="cb19-159"><a href="#cb19-159"></a></span>
+<span id="cb19-160"><a href="#cb19-160"></a>Write your answers and code here!</span>
+<span id="cb19-161"><a href="#cb19-161"></a></span>
+<span id="cb19-162"><a href="#cb19-162"></a>**Keep the below name and format for the functions to work with `markmyassignment`:**</span>
+<span id="cb19-165"><a href="#cb19-165"></a><span class="in">```{r}</span></span>
+<span id="cb19-166"><a href="#cb19-166"></a><span class="co"># Useful functions: mean(), length(), sqrt(), sum()</span></span>
+<span id="cb19-167"><a href="#cb19-167"></a><span class="co"># and qtnew(), dtnew() (from aaltobda)</span></span>
+<span id="cb19-168"><a href="#cb19-168"></a></span>
+<span id="cb19-169"><a href="#cb19-169"></a>mu_point_est <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
+<span id="cb19-170"><a href="#cb19-170"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb19-171"><a href="#cb19-171"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb19-172"><a href="#cb19-172"></a>    <span class="fl">14.5</span></span>
+<span id="cb19-173"><a href="#cb19-173"></a></span>
+<span id="cb19-174"><a href="#cb19-174"></a>}</span>
+<span id="cb19-175"><a href="#cb19-175"></a>mu_interval <span class="ot">&lt;-</span> <span class="cf">function</span>(data, <span class="at">prob =</span> <span class="fl">0.95</span>) {</span>
+<span id="cb19-176"><a href="#cb19-176"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb19-177"><a href="#cb19-177"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb19-178"><a href="#cb19-178"></a>    <span class="fu">c</span>(<span class="fl">13.3</span>, <span class="fl">15.7</span>)</span>
+<span id="cb19-179"><a href="#cb19-179"></a></span>
+<span id="cb19-180"><a href="#cb19-180"></a>}</span>
+<span id="cb19-181"><a href="#cb19-181"></a><span class="in">```</span></span>
+<span id="cb19-182"><a href="#cb19-182"></a></span>
+<span id="cb19-183"><a href="#cb19-183"></a>You can plot the density as below if you implement <span class="in">`mu_pdf`</span> to compute the PDF of the posterior $p(\mu|y)$ of the average hardness $\mu$.</span>
+<span id="cb19-184"><a href="#cb19-184"></a></span>
+<span id="cb19-187"><a href="#cb19-187"></a><span class="in">```{r}</span></span>
+<span id="cb19-188"><a href="#cb19-188"></a><span class="co">#| label: fig-2b-density</span></span>
+<span id="cb19-189"><a href="#cb19-189"></a><span class="co">#| fig-cap: PDF of the posterior $p(\mu|y)$ of the average hardness $\mu$</span></span>
+<span id="cb19-190"><a href="#cb19-190"></a>mu_pdf <span class="ot">&lt;-</span> <span class="cf">function</span>(data, x){</span>
+<span id="cb19-191"><a href="#cb19-191"></a>    <span class="co"># Compute necessary parameters here.</span></span>
+<span id="cb19-192"><a href="#cb19-192"></a>    <span class="co"># These are the correct parameters for `windshieldy_test`</span></span>
+<span id="cb19-193"><a href="#cb19-193"></a>    <span class="co"># with the provided uninformative prior.</span></span>
+<span id="cb19-194"><a href="#cb19-194"></a>    df <span class="ot">=</span> <span class="dv">3</span></span>
+<span id="cb19-195"><a href="#cb19-195"></a>    location <span class="ot">=</span> <span class="fl">14.5</span></span>
+<span id="cb19-196"><a href="#cb19-196"></a>    scale <span class="ot">=</span> <span class="fl">0.3817557</span></span>
+<span id="cb19-197"><a href="#cb19-197"></a>    <span class="co"># Use the computed parameters as below to compute the PDF:</span></span>
+<span id="cb19-198"><a href="#cb19-198"></a></span>
+<span id="cb19-199"><a href="#cb19-199"></a>    <span class="fu">dtnew</span>(x, df, location, scale)</span>
+<span id="cb19-200"><a href="#cb19-200"></a>}</span>
+<span id="cb19-201"><a href="#cb19-201"></a></span>
+<span id="cb19-202"><a href="#cb19-202"></a>x_interval <span class="ot">=</span> <span class="fu">mu_interval</span>(windshieldy1, .<span class="dv">999</span>)</span>
+<span id="cb19-203"><a href="#cb19-203"></a>lower_x <span class="ot">=</span> x_interval[<span class="dv">1</span>]</span>
+<span id="cb19-204"><a href="#cb19-204"></a>upper_x <span class="ot">=</span> x_interval[<span class="dv">2</span>]</span>
+<span id="cb19-205"><a href="#cb19-205"></a>x <span class="ot">=</span> <span class="fu">seq</span>(lower_x, upper_x, <span class="at">length.out=</span><span class="dv">1000</span>)</span>
+<span id="cb19-206"><a href="#cb19-206"></a><span class="fu">plot</span>(</span>
+<span id="cb19-207"><a href="#cb19-207"></a>    x, <span class="fu">mu_pdf</span>(windshieldy1, x), <span class="at">type=</span><span class="st">"l"</span>,</span>
+<span id="cb19-208"><a href="#cb19-208"></a>    <span class="at">xlab=</span><span class="fu">TeX</span>(r<span class="st">'(average hardness $\mu$)'</span>),</span>
+<span id="cb19-209"><a href="#cb19-209"></a>    <span class="at">ylab=</span><span class="fu">TeX</span>(r<span class="st">'(PDF of the posterior $p(\mu|y)$)'</span>)</span>
+<span id="cb19-210"><a href="#cb19-210"></a>)</span>
+<span id="cb19-211"><a href="#cb19-211"></a><span class="in">```</span></span>
+<span id="cb19-212"><a href="#cb19-212"></a></span>
+<span id="cb19-213"><a href="#cb19-213"></a></span>
+<span id="cb19-214"><a href="#cb19-214"></a></span>
+<span id="cb19-215"><a href="#cb19-215"></a><span class="fu">## (c)</span></span>
+<span id="cb19-216"><a href="#cb19-216"></a></span>
+<span id="cb19-217"><a href="#cb19-217"></a></span>
+<span id="cb19-218"><a href="#cb19-218"></a>Write your answers and code here!</span>
+<span id="cb19-219"><a href="#cb19-219"></a></span>
+<span id="cb19-220"><a href="#cb19-220"></a>**Keep the below name and format for the functions to work with `markmyassignment`:**</span>
+<span id="cb19-223"><a href="#cb19-223"></a><span class="in">```{r}</span></span>
+<span id="cb19-224"><a href="#cb19-224"></a><span class="co"># Useful functions: mean(), length(), sqrt(), sum()</span></span>
+<span id="cb19-225"><a href="#cb19-225"></a><span class="co"># and qtnew(), dtnew() (from aaltobda)</span></span>
+<span id="cb19-226"><a href="#cb19-226"></a></span>
+<span id="cb19-227"><a href="#cb19-227"></a>mu_pred_point_est <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
+<span id="cb19-228"><a href="#cb19-228"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb19-229"><a href="#cb19-229"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb19-230"><a href="#cb19-230"></a>    <span class="fl">14.5</span></span>
+<span id="cb19-231"><a href="#cb19-231"></a></span>
+<span id="cb19-232"><a href="#cb19-232"></a>}</span>
+<span id="cb19-233"><a href="#cb19-233"></a>mu_pred_interval <span class="ot">&lt;-</span> <span class="cf">function</span>(data, <span class="at">prob =</span> <span class="fl">0.95</span>) {</span>
+<span id="cb19-234"><a href="#cb19-234"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb19-235"><a href="#cb19-235"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb19-236"><a href="#cb19-236"></a>    <span class="fu">c</span>(<span class="fl">11.8</span>, <span class="fl">17.2</span>)</span>
+<span id="cb19-237"><a href="#cb19-237"></a></span>
+<span id="cb19-238"><a href="#cb19-238"></a>}</span>
+<span id="cb19-239"><a href="#cb19-239"></a><span class="in">```</span></span>
+<span id="cb19-240"><a href="#cb19-240"></a></span>
+<span id="cb19-241"><a href="#cb19-241"></a>You can plot the density as below if you implement <span class="in">`mu_pred_pdf`</span> to compute the PDF of the posterior predictive $p(\tilde{y}|y)$ of a new hardness observation $\tilde{y}$.</span>
+<span id="cb19-242"><a href="#cb19-242"></a></span>
+<span id="cb19-245"><a href="#cb19-245"></a><span class="in">```{r}</span></span>
+<span id="cb19-246"><a href="#cb19-246"></a><span class="co">#| label: fig-2c-density</span></span>
+<span id="cb19-247"><a href="#cb19-247"></a><span class="co">#| fig-cap: PDF of the posterior predictive $p(\tilde{y}|y)$ of a new hardness observation $\tilde{y}$</span></span>
+<span id="cb19-248"><a href="#cb19-248"></a>mu_pred_pdf <span class="ot">&lt;-</span> <span class="cf">function</span>(data, x){</span>
+<span id="cb19-249"><a href="#cb19-249"></a>    <span class="co"># Compute necessary parameters here.</span></span>
+<span id="cb19-250"><a href="#cb19-250"></a>    <span class="co"># These are the correct parameters for `windshieldy_test`</span></span>
+<span id="cb19-251"><a href="#cb19-251"></a>    <span class="co"># with the provided uninformative prior.</span></span>
+<span id="cb19-252"><a href="#cb19-252"></a>    df <span class="ot">=</span> <span class="dv">3</span></span>
+<span id="cb19-253"><a href="#cb19-253"></a>    location <span class="ot">=</span> <span class="fl">14.5</span></span>
+<span id="cb19-254"><a href="#cb19-254"></a>    scale <span class="ot">=</span> <span class="fl">0.8536316</span></span>
+<span id="cb19-255"><a href="#cb19-255"></a>    <span class="co"># Use the computed parameters as below to compute the PDF:</span></span>
+<span id="cb19-256"><a href="#cb19-256"></a></span>
+<span id="cb19-257"><a href="#cb19-257"></a>    <span class="fu">dtnew</span>(x, df, location, scale)</span>
+<span id="cb19-258"><a href="#cb19-258"></a>}</span>
+<span id="cb19-259"><a href="#cb19-259"></a></span>
+<span id="cb19-260"><a href="#cb19-260"></a>x_interval <span class="ot">=</span> <span class="fu">mu_pred_interval</span>(windshieldy1, .<span class="dv">999</span>)</span>
+<span id="cb19-261"><a href="#cb19-261"></a>lower_x <span class="ot">=</span> x_interval[<span class="dv">1</span>]</span>
+<span id="cb19-262"><a href="#cb19-262"></a>upper_x <span class="ot">=</span> x_interval[<span class="dv">2</span>]</span>
+<span id="cb19-263"><a href="#cb19-263"></a>x <span class="ot">=</span> <span class="fu">seq</span>(lower_x, upper_x, <span class="at">length.out=</span><span class="dv">1000</span>)</span>
+<span id="cb19-264"><a href="#cb19-264"></a><span class="fu">plot</span>(</span>
+<span id="cb19-265"><a href="#cb19-265"></a>    x, <span class="fu">mu_pred_pdf</span>(windshieldy1, x), <span class="at">type=</span><span class="st">"l"</span>,</span>
+<span id="cb19-266"><a href="#cb19-266"></a>    <span class="at">xlab=</span><span class="fu">TeX</span>(r<span class="st">'(new hardness observation $</span><span class="sc">\t</span><span class="st">ilde{y}$)'</span>),</span>
+<span id="cb19-267"><a href="#cb19-267"></a>    <span class="at">ylab=</span><span class="fu">TeX</span>(r<span class="st">'(PDF of the posterior predictive $p(</span><span class="sc">\t</span><span class="st">ilde{y}|y)$)'</span>)</span>
+<span id="cb19-268"><a href="#cb19-268"></a>)</span>
+<span id="cb19-269"><a href="#cb19-269"></a><span class="in">```</span></span>
+<span id="cb19-270"><a href="#cb19-270"></a></span>
+<span id="cb19-271"><a href="#cb19-271"></a></span>
+<span id="cb19-272"><a href="#cb19-272"></a><span class="fu"># Inference for the difference between proportions (3 points)</span></span>
+<span id="cb19-273"><a href="#cb19-273"></a></span>
+<span id="cb19-274"><a href="#cb19-274"></a><span class="fu">## (a)</span></span>
+<span id="cb19-275"><a href="#cb19-275"></a></span>
+<span id="cb19-276"><a href="#cb19-276"></a></span>
+<span id="cb19-277"><a href="#cb19-277"></a>Write your answers here!</span>
+<span id="cb19-278"><a href="#cb19-278"></a></span>
+<span id="cb19-279"><a href="#cb19-279"></a></span>
+<span id="cb19-280"><a href="#cb19-280"></a></span>
+<span id="cb19-281"><a href="#cb19-281"></a><span class="fu">## (b)</span></span>
+<span id="cb19-282"><a href="#cb19-282"></a></span>
+<span id="cb19-283"><a href="#cb19-283"></a></span>
+<span id="cb19-284"><a href="#cb19-284"></a>Write your answers and code here!</span>
+<span id="cb19-285"><a href="#cb19-285"></a></span>
+<span id="cb19-286"><a href="#cb19-286"></a>The below data is **only for the tests**:</span>
+<span id="cb19-287"><a href="#cb19-287"></a><span class="in">``` {r}</span></span>
+<span id="cb19-288"><a href="#cb19-288"></a><span class="in">set.seed(4711)</span></span>
+<span id="cb19-289"><a href="#cb19-289"></a><span class="in">ndraws = 1000</span></span>
+<span id="cb19-290"><a href="#cb19-290"></a><span class="in">p0 = rbeta(ndraws, 5, 95)</span></span>
+<span id="cb19-291"><a href="#cb19-291"></a><span class="in">p1 = rbeta(ndraws, 10, 90)</span></span>
+<span id="cb19-292"><a href="#cb19-292"></a></span>
+<span id="cb19-293"><a href="#cb19-293"></a><span class="in">```</span></span>
+<span id="cb19-294"><a href="#cb19-294"></a></span>
+<span id="cb19-295"><a href="#cb19-295"></a>**Keep the below name and format for the functions to work with `markmyassignment`:**</span>
+<span id="cb19-296"><a href="#cb19-296"></a></span>
+<span id="cb19-299"><a href="#cb19-299"></a><span class="in">```{r}</span></span>
+<span id="cb19-300"><a href="#cb19-300"></a><span class="co"># Useful function: mean(), quantile()</span></span>
+<span id="cb19-301"><a href="#cb19-301"></a></span>
+<span id="cb19-302"><a href="#cb19-302"></a>posterior_odds_ratio_point_est <span class="ot">&lt;-</span> <span class="cf">function</span>(p0, p1) {</span>
+<span id="cb19-303"><a href="#cb19-303"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb19-304"><a href="#cb19-304"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb19-305"><a href="#cb19-305"></a>    <span class="fl">2.650172</span></span>
+<span id="cb19-306"><a href="#cb19-306"></a></span>
+<span id="cb19-307"><a href="#cb19-307"></a>}</span>
+<span id="cb19-308"><a href="#cb19-308"></a>posterior_odds_ratio_interval <span class="ot">&lt;-</span> <span class="cf">function</span>(p0, p1, <span class="at">prob =</span> <span class="fl">0.95</span>) {</span>
+<span id="cb19-309"><a href="#cb19-309"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb19-310"><a href="#cb19-310"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb19-311"><a href="#cb19-311"></a>    <span class="fu">c</span>(<span class="fl">0.6796942</span>,<span class="fl">7.3015964</span>)</span>
+<span id="cb19-312"><a href="#cb19-312"></a></span>
+<span id="cb19-313"><a href="#cb19-313"></a>}</span>
+<span id="cb19-314"><a href="#cb19-314"></a><span class="in">```</span></span>
+<span id="cb19-315"><a href="#cb19-315"></a></span>
+<span id="cb19-316"><a href="#cb19-316"></a></span>
+<span id="cb19-317"><a href="#cb19-317"></a></span>
+<span id="cb19-318"><a href="#cb19-318"></a>:::: {.content-hidden when-format="pdf"}</span>
+<span id="cb19-319"><a href="#cb19-319"></a>::: {.callout-tip collapse=false}</span>
+<span id="cb19-320"><a href="#cb19-320"></a></span>
+<span id="cb19-321"><a href="#cb19-321"></a><span class="fu">## Showcase: advanced tools (`posterior`'s `rvar`, `ggdist`'s `stat_dotsinterval`)</span></span>
+<span id="cb19-322"><a href="#cb19-322"></a></span>
+<span id="cb19-323"><a href="#cb19-323"></a></span>
+<span id="cb19-324"><a href="#cb19-324"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
+<span id="cb19-325"><a href="#cb19-325"></a>**Make sure that this does not get displayed in the PDF!**</span>
+<span id="cb19-326"><a href="#cb19-326"></a></span>
+<span id="cb19-327"><a href="#cb19-327"></a></span>
+<span id="cb19-328"><a href="#cb19-328"></a></span>
+<span id="cb19-329"><a href="#cb19-329"></a>*This block showcases advanced tools, which you will be allowed and expected to use after this assignment.*</span>
+<span id="cb19-330"><a href="#cb19-330"></a>**For now, you should solve the assignment without the tools showcased herein.**</span>
+<span id="cb19-331"><a href="#cb19-331"></a></span>
+<span id="cb19-332"><a href="#cb19-332"></a></span>
+<span id="cb19-333"><a href="#cb19-333"></a></span>
+<span id="cb19-334"><a href="#cb19-334"></a></span>
+<span id="cb19-335"><a href="#cb19-335"></a>The <span class="in">`posterior`</span> package's random variable datatype <span class="in">`rvar`</span> is a</span>
+<span id="cb19-336"><a href="#cb19-336"></a><span class="co">[</span><span class="ot">"sample-based representation of random variables"</span><span class="co">](https://mc-stan.org/posterior/articles/rvar.html#:~:text=sample%2Dbased%20representation%20of%20random%20variables)</span></span>
+<span id="cb19-337"><a href="#cb19-337"></a>which makes handling of random samples (of draws) such as the ones contained in the above variables <span class="in">`p0`</span> and <span class="in">`p1`</span> easier.</span>
+<span id="cb19-338"><a href="#cb19-338"></a><span class="co">[</span><span class="ot">By default, it prints as the mean and standard deviation of the draws</span><span class="co">](https://mc-stan.org/posterior/articles/rvar.html#:~:text=The%20default%20display%20of%20an%20rvar%20shows%20the%20mean%20and%20standard%20deviation%20of%20each%20element%20of%20the%20array.)</span>, **such that `rvar(p0)` prints as `rvar(p0)` and `rvar(p1)` prints as `rvar(p1)`**.</span>
+<span id="cb19-339"><a href="#cb19-339"></a></span>
+<span id="cb19-340"><a href="#cb19-340"></a>The datatype is <span class="co">[</span><span class="ot">"designed to [...] be able to be used inside `data.frame()`s and `tibble()`s, and to be used with distribution visualizations in the ggdist package."</span><span class="co">]</span>(https://mc-stan.org/posterior/articles/rvar.html#:~:text=designed%20to%20interoperate%20with%20vectorized%20distributions%20in%20the%20distributional%20package%2C%20to%20be%20able%20to%20be%20used%20inside%20data.frame()s%20and%20tibble()s%2C%20and%20to%20be%20used%20with%20distribution%20visualizations%20in%20the%20ggdist%20package.)</span>
+<span id="cb19-341"><a href="#cb19-341"></a>The code below sets up an <span class="co">[</span><span class="ot">R `data.frame()`</span><span class="co">](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/data.frame)</span> with the draws in <span class="in">`p0`</span> and <span class="in">`p1`</span> wrapped in an <span class="in">`rvar`</span>, and uses that data frame to visualize the draws using <span class="co">[</span><span class="ot">`ggdist`</span><span class="co">](https://mjskay.github.io/ggdist/index.html)</span>, an R package building on <span class="co">[</span><span class="ot">`ggplot2`</span><span class="co">](https://ggplot2.tidyverse.org/)</span> and <span class="co">[</span><span class="ot">"designed for both frequentist and Bayesian uncertainty visualization"</span><span class="co">](https://mjskay.github.io/ggdist/index.html#:~:text=designed%20for%20both%20frequentist%20and%20Bayesian%20uncertainty%20visualization)</span>.</span>
+<span id="cb19-342"><a href="#cb19-342"></a></span>
+<span id="cb19-343"><a href="#cb19-343"></a>The below plot, @fig-showcase-probabilities uses <span class="in">`ggdist`</span>'s <span class="co">[</span><span class="ot">`stat_dotsinterval()`</span><span class="co">](https://mjskay.github.io/ggdist/articles/dotsinterval.html)</span>, which by default visualizes</span>
+<span id="cb19-344"><a href="#cb19-344"></a></span>
+<span id="cb19-345"><a href="#cb19-345"></a><span class="ss">* </span><span class="co">[</span><span class="ot">an `rvar`'s median and central 66% and 95% intervals</span><span class="co">]</span>(https://mjskay.github.io/ggdist/reference/stat_dotsinterval.html#:~:text=point_interval%20%3D%20%22median_qi%22%2C%0A%20%20.width%20%3D%20c(0.66%2C%200.95)%2C) using a black dot and lines of varying thicknesses as when using <span class="in">`ggdist`</span>'s <span class="co">[</span><span class="ot">`stat_pointinterval()`</span><span class="co">](https://mjskay.github.io/ggdist/reference/stat_pointinterval.html#examples)</span> and</span>
+<span id="cb19-346"><a href="#cb19-346"></a><span class="ss">* </span>an <span class="in">`rvar`</span>'s draws using grey dots as when using <span class="in">`ggdist`</span>'s <span class="co">[</span><span class="ot">`stat_dots()`</span><span class="co">](https://mjskay.github.io/ggdist/reference/stat_dots.html#examples)</span>:</span>
+<span id="cb19-347"><a href="#cb19-347"></a></span>
+<span id="cb19-350"><a href="#cb19-350"></a><span class="in">```{r}</span></span>
+<span id="cb19-351"><a href="#cb19-351"></a><span class="co">#| label: fig-showcase-probabilities</span></span>
+<span id="cb19-352"><a href="#cb19-352"></a><span class="co">#| fig-cap: Probabilities of death for the two patient groups.</span></span>
+<span id="cb19-353"><a href="#cb19-353"></a>r0 <span class="ot">=</span> <span class="fu">rvar</span>(p0)</span>
+<span id="cb19-354"><a href="#cb19-354"></a>r1 <span class="ot">=</span> <span class="fu">rvar</span>(p1)</span>
+<span id="cb19-355"><a href="#cb19-355"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(</span>
+<span id="cb19-356"><a href="#cb19-356"></a>    <span class="at">rv_name=</span><span class="fu">c</span>(<span class="st">"control"</span>, <span class="st">"treatment"</span>), <span class="at">rv=</span><span class="fu">c</span>(r0, r1)</span>
+<span id="cb19-357"><a href="#cb19-357"></a>)) <span class="sc">+</span></span>
+<span id="cb19-358"><a href="#cb19-358"></a>    <span class="fu">aes</span>(<span class="at">xdist=</span>rv, <span class="at">y=</span>rv_name) <span class="sc">+</span></span>
+<span id="cb19-359"><a href="#cb19-359"></a>    <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"probabilities of death"</span>, <span class="at">y=</span><span class="st">"patient group"</span>) <span class="sc">+</span></span>
+<span id="cb19-360"><a href="#cb19-360"></a>    <span class="fu">stat_dotsinterval</span>()</span>
+<span id="cb19-361"><a href="#cb19-361"></a><span class="in">```</span></span>
+<span id="cb19-362"><a href="#cb19-362"></a></span>
+<span id="cb19-363"><a href="#cb19-363"></a><span class="in">`rvar`</span>s make it easy to compute functions of random variables, such as</span>
+<span id="cb19-364"><a href="#cb19-364"></a></span>
+<span id="cb19-365"><a href="#cb19-365"></a><span class="ss">* </span>differences, e.g. $p_0 - p_1$: <span class="in">`r0 - r1`</span> computes an <span class="in">`rvar`</span> which prints as <span class="in">`r0 - r1`</span>, indicating the **sample mean** and the **sample standard deviation** of the difference of the probabilities of death,</span>
+<span id="cb19-366"><a href="#cb19-366"></a><span class="ss">* </span>products, e.g. $p_0 \, p_1$: <span class="in">`r0 * r1`</span> computes an <span class="in">`rvar`</span> which prints as <span class="in">`r0 * r1`</span> which in this case</span>
+<span id="cb19-367"><a href="#cb19-367"></a>has no great interpretation, or</span>
+<span id="cb19-368"><a href="#cb19-368"></a><span class="ss">* </span>the odds ratios needed in task 3.b).</span>
+<span id="cb19-369"><a href="#cb19-369"></a></span>
+<span id="cb19-370"><a href="#cb19-370"></a>Below, in @fig-showcase-odds-ratios, we compute the odds ratios using the <span class="in">`rvar`</span>s and visualize its median, central intervals and draws, as above in @fig-showcase-probabilities:</span>
+<span id="cb19-373"><a href="#cb19-373"></a><span class="in">```{r}</span></span>
+<span id="cb19-374"><a href="#cb19-374"></a><span class="co">#| label: fig-showcase-odds-ratios</span></span>
+<span id="cb19-375"><a href="#cb19-375"></a><span class="co">#| fig-cap: Odds ratios of the two patient groups.</span></span>
+<span id="cb19-376"><a href="#cb19-376"></a>rodds_ratio <span class="ot">=</span> (r1<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>r1))<span class="sc">/</span>(r0<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>r0))</span>
+<span id="cb19-377"><a href="#cb19-377"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(</span>
+<span id="cb19-378"><a href="#cb19-378"></a>    <span class="at">rv=</span><span class="fu">c</span>(rodds_ratio)</span>
+<span id="cb19-379"><a href="#cb19-379"></a>)) <span class="sc">+</span></span>
+<span id="cb19-380"><a href="#cb19-380"></a>    <span class="fu">aes</span>(<span class="at">xdist=</span>rv) <span class="sc">+</span></span>
+<span id="cb19-381"><a href="#cb19-381"></a>    <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"odds ratio"</span>, <span class="at">y=</span><span class="st">"relative amount of draws"</span>) <span class="sc">+</span></span>
+<span id="cb19-382"><a href="#cb19-382"></a>    <span class="fu">stat_dotsinterval</span>()</span>
+<span id="cb19-383"><a href="#cb19-383"></a><span class="in">```</span></span>
+<span id="cb19-384"><a href="#cb19-384"></a></span>
+<span id="cb19-385"><a href="#cb19-385"></a>You can use @fig-showcase-odds-ratios to visually check whether the answers you computed for 3.b) make sense.</span>
+<span id="cb19-386"><a href="#cb19-386"></a></span>
+<span id="cb19-387"><a href="#cb19-387"></a></span>
+<span id="cb19-388"><a href="#cb19-388"></a></span>
+<span id="cb19-389"><a href="#cb19-389"></a>*This block showcases advanced tools, which you will be allowed and expected to use after this assignment.*</span>
+<span id="cb19-390"><a href="#cb19-390"></a>**For now, you should solve the assignment without the tools showcased herein.**</span>
+<span id="cb19-391"><a href="#cb19-391"></a></span>
+<span id="cb19-392"><a href="#cb19-392"></a></span>
+<span id="cb19-393"><a href="#cb19-393"></a></span>
+<span id="cb19-394"><a href="#cb19-394"></a>:::</span>
+<span id="cb19-395"><a href="#cb19-395"></a>::::</span>
+<span id="cb19-396"><a href="#cb19-396"></a></span>
+<span id="cb19-397"><a href="#cb19-397"></a></span>
+<span id="cb19-398"><a href="#cb19-398"></a></span>
+<span id="cb19-399"><a href="#cb19-399"></a><span class="fu">## (c)</span></span>
+<span id="cb19-400"><a href="#cb19-400"></a></span>
+<span id="cb19-401"><a href="#cb19-401"></a></span>
+<span id="cb19-402"><a href="#cb19-402"></a>Write your answers and code here!</span>
+<span id="cb19-403"><a href="#cb19-403"></a></span>
+<span id="cb19-404"><a href="#cb19-404"></a></span>
+<span id="cb19-405"><a href="#cb19-405"></a><span class="fu"># Inference for the difference between normal means (3 points)</span></span>
+<span id="cb19-406"><a href="#cb19-406"></a></span>
+<span id="cb19-407"><a href="#cb19-407"></a>Loading the library and the data.</span>
+<span id="cb19-408"><a href="#cb19-408"></a><span class="in">``` {r}</span></span>
+<span id="cb19-409"><a href="#cb19-409"></a><span class="in">data("windshieldy2")</span></span>
+<span id="cb19-410"><a href="#cb19-410"></a><span class="in"># The new data are now stored in the variable `windshieldy2`.</span></span>
+<span id="cb19-411"><a href="#cb19-411"></a><span class="in"># The below displays the first few rows of the new data:</span></span>
+<span id="cb19-412"><a href="#cb19-412"></a><span class="in">head(windshieldy2)</span></span>
+<span id="cb19-413"><a href="#cb19-413"></a><span class="in">```</span></span>
+<span id="cb19-414"><a href="#cb19-414"></a></span>
+<span id="cb19-415"><a href="#cb19-415"></a></span>
+<span id="cb19-416"><a href="#cb19-416"></a></span>
+<span id="cb19-417"><a href="#cb19-417"></a><span class="fu">## (a)</span></span>
+<span id="cb19-418"><a href="#cb19-418"></a></span>
+<span id="cb19-419"><a href="#cb19-419"></a></span>
+<span id="cb19-420"><a href="#cb19-420"></a>Write your answers here!</span>
+<span id="cb19-421"><a href="#cb19-421"></a></span>
+<span id="cb19-422"><a href="#cb19-422"></a></span>
+<span id="cb19-423"><a href="#cb19-423"></a></span>
+<span id="cb19-424"><a href="#cb19-424"></a><span class="fu">## (b)</span></span>
+<span id="cb19-425"><a href="#cb19-425"></a></span>
+<span id="cb19-426"><a href="#cb19-426"></a></span>
+<span id="cb19-427"><a href="#cb19-427"></a>Write your answers and code here!</span>
+<span id="cb19-430"><a href="#cb19-430"></a><span class="in">```{r}</span></span>
+<span id="cb19-431"><a href="#cb19-431"></a><span class="co"># Useful functions: mean(), length(), sqrt(), sum(),</span></span>
+<span id="cb19-432"><a href="#cb19-432"></a><span class="co"># rtnew() (from aaltobda), quantile() and hist().</span></span>
+<span id="cb19-433"><a href="#cb19-433"></a><span class="in">```</span></span>
+<span id="cb19-434"><a href="#cb19-434"></a></span>
+<span id="cb19-435"><a href="#cb19-435"></a></span>
+<span id="cb19-436"><a href="#cb19-436"></a></span>
+<span id="cb19-437"><a href="#cb19-437"></a><span class="fu">## (c)</span></span>
+<span id="cb19-438"><a href="#cb19-438"></a></span>
+<span id="cb19-439"><a href="#cb19-439"></a></span>
+<span id="cb19-440"><a href="#cb19-440"></a>Write your answers here!</span>
+<span id="cb19-441"><a href="#cb19-441"></a></span>
+<span id="cb19-442"><a href="#cb19-442"></a></span>
+<span id="cb19-443"><a href="#cb19-443"></a></span>
+<span id="cb19-444"><a href="#cb19-444"></a>:::: {.content-hidden when-format="pdf"}</span>
+<span id="cb19-445"><a href="#cb19-445"></a>::: {.callout-warning collapse=false}</span>
+<span id="cb19-446"><a href="#cb19-446"></a></span>
+<span id="cb19-447"><a href="#cb19-447"></a><span class="fu">## markmyassignment</span></span>
+<span id="cb19-448"><a href="#cb19-448"></a></span>
+<span id="cb19-449"><a href="#cb19-449"></a></span>
+<span id="cb19-450"><a href="#cb19-450"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
+<span id="cb19-451"><a href="#cb19-451"></a>**Make sure that this does not get displayed in the PDF!**</span>
+<span id="cb19-452"><a href="#cb19-452"></a></span>
+<span id="cb19-453"><a href="#cb19-453"></a></span>
+<span id="cb19-454"><a href="#cb19-454"></a></span>
+<span id="cb19-455"><a href="#cb19-455"></a>The following will check the functions for which <span class="in">`markmyassignment`</span> has been set up:</span>
+<span id="cb19-456"><a href="#cb19-456"></a></span>
+<span id="cb19-459"><a href="#cb19-459"></a><span class="in">```{r}</span></span>
+<span id="cb19-460"><a href="#cb19-460"></a><span class="fu">mark_my_assignment</span>()</span>
+<span id="cb19-461"><a href="#cb19-461"></a><span class="in">```</span></span>
+<span id="cb19-462"><a href="#cb19-462"></a></span>
+<span id="cb19-463"><a href="#cb19-463"></a>:::</span>
+<span id="cb19-464"><a href="#cb19-464"></a>::::</span>
+</code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
+
 
 
 

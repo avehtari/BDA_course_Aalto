@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.211">
+<meta name="generator" content="quarto-1.5.56">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="anonymous">
 
-<title>Bayesian Data Analysis - Assignment 4</title>
+<title>Assignment 4 – Bayesian Data Analysis</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -18,11 +18,12 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -33,7 +34,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -47,43 +48,13 @@ pre.numberSource code > span > a:first-child::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
-    color: #aaaaaa;
   }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
 div.sourceCode
   {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -111,7 +82,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -120,8 +97,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 
@@ -134,12 +113,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./template1.html">Templates</a></li><li class="breadcrumb-item"><a href="./template4.html">Assignment 4</a></li></ol></nav>
-      <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./template1.html">Templates</a></li><li class="breadcrumb-item"><a href="./template4.html">Assignment 4</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
@@ -149,7 +128,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Bayesian Data Analysis</a> 
@@ -164,20 +143,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">General instructions</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">General instructions</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment_instructions.html" class="sidebar-item-text sidebar-link">Assignment instructions</a>
+  <a href="./assignment_instructions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment instructions</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./docker.html" class="sidebar-item-text sidebar-link">How to set up docker</a>
+  <a href="./docker.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">How to set up docker</span></a>
   </div>
 </li>
       </ul>
@@ -185,55 +167,65 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Assignments</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Assignments</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment1.html" class="sidebar-item-text sidebar-link">Assignment 1</a>
+  <a href="./assignment1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 1</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment2.html" class="sidebar-item-text sidebar-link">Assignment 2</a>
+  <a href="./assignment2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 2</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment3.html" class="sidebar-item-text sidebar-link">Assignment 3</a>
+  <a href="./assignment3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 3</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment4.html" class="sidebar-item-text sidebar-link">Assignment 4</a>
+  <a href="./assignment4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 4</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment5.html" class="sidebar-item-text sidebar-link">Assignment 5</a>
+  <a href="./assignment5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 5</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment6.html" class="sidebar-item-text sidebar-link">Assignment 6</a>
+  <a href="./assignment6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 6</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment7.html" class="sidebar-item-text sidebar-link">Assignment 7</a>
+  <a href="./assignment7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 7</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment8.html" class="sidebar-item-text sidebar-link">Assignment 8</a>
+  <a href="./assignment8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 8</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment9.html" class="sidebar-item-text sidebar-link">Assignment 9</a>
+  <a href="./assignment9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 9</span></a>
   </div>
 </li>
       </ul>
@@ -241,55 +233,65 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Templates</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Templates</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template1.html" class="sidebar-item-text sidebar-link">Assignment 1</a>
+  <a href="./template1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 1</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template2.html" class="sidebar-item-text sidebar-link">Assignment 2</a>
+  <a href="./template2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 2</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template3.html" class="sidebar-item-text sidebar-link">Assignment 3</a>
+  <a href="./template3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 3</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template4.html" class="sidebar-item-text sidebar-link active">Assignment 4</a>
+  <a href="./template4.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Assignment 4</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template5.html" class="sidebar-item-text sidebar-link">Assignment 5</a>
+  <a href="./template5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 5</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template6.html" class="sidebar-item-text sidebar-link">Assignment 6</a>
+  <a href="./template6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 6</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template7.html" class="sidebar-item-text sidebar-link">Assignment 7</a>
+  <a href="./template7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 7</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template8.html" class="sidebar-item-text sidebar-link">Assignment 8</a>
+  <a href="./template8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 8</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template9.html" class="sidebar-item-text sidebar-link">Assignment 9</a>
+  <a href="./template9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 9</span></a>
   </div>
 </li>
       </ul>
@@ -297,27 +299,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </ul>
     </div>
 </nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#general-information" id="toc-general-information" class="nav-link active" data-scroll-target="#general-information"><span class="toc-section-number">1</span>  General information</a></li>
-  <li><a href="#bioassay-model" id="toc-bioassay-model" class="nav-link" data-scroll-target="#bioassay-model"><span class="toc-section-number">2</span>  Bioassay model</a>
+  <li><a href="#general-information" id="toc-general-information" class="nav-link active" data-scroll-target="#general-information"><span class="header-section-number">1</span> General information</a></li>
+  <li><a href="#bioassay-model" id="toc-bioassay-model" class="nav-link" data-scroll-target="#bioassay-model"><span class="header-section-number">2</span> Bioassay model</a>
   <ul class="collapse">
-  <li><a href="#a" id="toc-a" class="nav-link" data-scroll-target="#a"><span class="toc-section-number">2.1</span>  (a)</a></li>
-  <li><a href="#b" id="toc-b" class="nav-link" data-scroll-target="#b"><span class="toc-section-number">2.2</span>  (b)</a></li>
+  <li><a href="#a" id="toc-a" class="nav-link" data-scroll-target="#a"><span class="header-section-number">2.1</span> (a)</a></li>
+  <li><a href="#b" id="toc-b" class="nav-link" data-scroll-target="#b"><span class="header-section-number">2.2</span> (b)</a></li>
   </ul></li>
-  <li><a href="#importance-sampling" id="toc-importance-sampling" class="nav-link" data-scroll-target="#importance-sampling"><span class="toc-section-number">3</span>  Importance sampling</a>
+  <li><a href="#importance-sampling" id="toc-importance-sampling" class="nav-link" data-scroll-target="#importance-sampling"><span class="header-section-number">3</span> Importance sampling</a>
   <ul class="collapse">
-  <li><a href="#c" id="toc-c" class="nav-link" data-scroll-target="#c"><span class="toc-section-number">3.1</span>  (c)</a></li>
-  <li><a href="#d" id="toc-d" class="nav-link" data-scroll-target="#d"><span class="toc-section-number">3.2</span>  (d)</a></li>
-  <li><a href="#e" id="toc-e" class="nav-link" data-scroll-target="#e"><span class="toc-section-number">3.3</span>  (e)</a></li>
-  <li><a href="#f" id="toc-f" class="nav-link" data-scroll-target="#f"><span class="toc-section-number">3.4</span>  (f)</a></li>
-  <li><a href="#g" id="toc-g" class="nav-link" data-scroll-target="#g"><span class="toc-section-number">3.5</span>  (g)</a></li>
-  <li><a href="#h" id="toc-h" class="nav-link" data-scroll-target="#h"><span class="toc-section-number">3.6</span>  (h)</a></li>
+  <li><a href="#c" id="toc-c" class="nav-link" data-scroll-target="#c"><span class="header-section-number">3.1</span> (c)</a></li>
+  <li><a href="#d" id="toc-d" class="nav-link" data-scroll-target="#d"><span class="header-section-number">3.2</span> (d)</a></li>
+  <li><a href="#e" id="toc-e" class="nav-link" data-scroll-target="#e"><span class="header-section-number">3.3</span> (e)</a></li>
+  <li><a href="#f" id="toc-f" class="nav-link" data-scroll-target="#f"><span class="header-section-number">3.4</span> (f)</a></li>
+  <li><a href="#g" id="toc-g" class="nav-link" data-scroll-target="#g"><span class="header-section-number">3.5</span> (g)</a></li>
+  <li><a href="#h" id="toc-h" class="nav-link" data-scroll-target="#h"><span class="header-section-number">3.6</span> (h)</a></li>
   </ul></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="template4.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
@@ -325,7 +327,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./template1.html">Templates</a></li><li class="breadcrumb-item"><a href="./template4.html">Assignment 4</a></li></ol></nav>
 <div class="quarto-title">
 <div class="quarto-title-block"><div><h1 class="title">Assignment 4</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
@@ -346,16 +348,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </div>
   
 
+
 </header>
+
 
 <section id="general-information" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> General information</h1>
-<div class="callout callout-style-default callout-warning callout-captioned">
+<div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Setup
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -370,42 +374,24 @@ Setup
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(markmyassignment)){</span>
 <span id="cb1-2"><a href="#cb1-2"></a>    <span class="fu">install.packages</span>(<span class="st">"markmyassignment"</span>)</span>
 <span id="cb1-3"><a href="#cb1-3"></a>    <span class="fu">library</span>(markmyassignment)</span>
-<span id="cb1-4"><a href="#cb1-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: markmyassignment</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>assignment_path <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">"https://github.com/avehtari/BDA_course_Aalto/"</span>,</span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="st">"blob/master/assignments/tests/assignment4.yml"</span>, <span class="at">sep=</span><span class="st">""</span>)</span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="fu">set_assignment</span>(assignment_path)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Assignment set:
-assignment4: Bayesian Data Analysis: Assignment 4
-The assignment contain the following (4) tasks:
-- log_importance_weights
-- normalized_importance_weights
-- S_eff
-- posterior_mean</code></pre>
-</div>
+<span id="cb1-4"><a href="#cb1-4"></a>}</span>
+<span id="cb1-5"><a href="#cb1-5"></a>assignment_path <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">"https://github.com/avehtari/BDA_course_Aalto/"</span>,</span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="st">"blob/master/assignments/tests/assignment4.yml"</span>, <span class="at">sep=</span><span class="st">""</span>)</span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="fu">set_assignment</span>(assignment_path)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The following installs and loads the <code>aaltobda</code> package:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(aaltobda)){</span>
-<span id="cb5-2"><a href="#cb5-2"></a>    <span class="fu">install.packages</span>(<span class="st">"aaltobda"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://avehtari.github.io/BDA_course_Aalto/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span>
-<span id="cb5-3"><a href="#cb5-3"></a>    <span class="fu">library</span>(aaltobda)</span>
-<span id="cb5-4"><a href="#cb5-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: aaltobda</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(aaltobda)){</span>
+<span id="cb2-2"><a href="#cb2-2"></a>    <span class="fu">install.packages</span>(<span class="st">"aaltobda"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://avehtari.github.io/BDA_course_Aalto/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span>
+<span id="cb2-3"><a href="#cb2-3"></a>    <span class="fu">library</span>(aaltobda)</span>
+<span id="cb2-4"><a href="#cb2-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The following installs and loads the <a href="https://github.com/stefano-meschiari/latex2exp"><code>latex2exp</code> package</a>, which allows us to use LaTeX in plots:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(latex2exp)){</span>
-<span id="cb7-2"><a href="#cb7-2"></a>    <span class="fu">install.packages</span>(<span class="st">"latex2exp"</span>)</span>
-<span id="cb7-3"><a href="#cb7-3"></a>    <span class="fu">library</span>(latex2exp)</span>
-<span id="cb7-4"><a href="#cb7-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: latex2exp</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(latex2exp)){</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    <span class="fu">install.packages</span>(<span class="st">"latex2exp"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3"></a>    <span class="fu">library</span>(latex2exp)</span>
+<span id="cb3-4"><a href="#cb3-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -420,22 +406,13 @@ The assignment contain the following (4) tasks:
 <h2 data-number="2.2" class="anchored" data-anchor-id="b"><span class="header-section-number">2.2</span> (b)</h2>
 <p>Loading the library and the data.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># Useful functions: quantile()</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a><span class="co"># and mcse_quantile() (from aaltobda)</span></span>
-<span id="cb9-3"><a href="#cb9-3"></a></span>
-<span id="cb9-4"><a href="#cb9-4"></a><span class="fu">data</span>(<span class="st">"bioassay_posterior"</span>)</span>
-<span id="cb9-5"><a href="#cb9-5"></a><span class="co"># The 4000 draws are now stored in the variable `bioassay_posterior`.</span></span>
-<span id="cb9-6"><a href="#cb9-6"></a><span class="co"># The below displays the first rows of the data:</span></span>
-<span id="cb9-7"><a href="#cb9-7"></a><span class="fu">head</span>(bioassay_posterior)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>        alpha      beta
-1 -0.02050577 10.032841
-2  1.21738518  4.504546
-3  3.04829407 16.239424
-4  1.32272770  4.924268
-5  1.36274817 12.880561
-6  1.08593225  5.943731</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Useful functions: quantile()</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="co"># and mcse_quantile() (from aaltobda)</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="fu">data</span>(<span class="st">"bioassay_posterior"</span>)</span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="co"># The 4000 draws are now stored in the variable `bioassay_posterior`.</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="co"># The below displays the first rows of the data:</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="fu">head</span>(bioassay_posterior)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -444,26 +421,26 @@ The assignment contain the following (4) tasks:
 <section id="c" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="c"><span class="header-section-number">3.1</span> (c)</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># Useful functions: bioassaylp (from aaltobda)</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a>alpha_test <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">1.896</span>, <span class="sc">-</span><span class="fl">3.6</span>,  <span class="fl">0.374</span>, <span class="fl">0.964</span>, <span class="sc">-</span><span class="fl">3.123</span>, <span class="sc">-</span><span class="fl">1.581</span>)</span>
-<span id="cb11-3"><a href="#cb11-3"></a>beta_test <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">24.76</span>, <span class="fl">20.04</span>, <span class="fl">6.15</span>, <span class="fl">18.65</span>, <span class="fl">8.16</span>, <span class="fl">17.4</span>)</span>
-<span id="cb11-4"><a href="#cb11-4"></a></span>
-<span id="cb11-5"><a href="#cb11-5"></a></span>
-<span id="cb11-6"><a href="#cb11-6"></a>log_importance_weights <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha, beta) {</span>
-<span id="cb11-7"><a href="#cb11-7"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb11-8"><a href="#cb11-8"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
-<span id="cb11-9"><a href="#cb11-9"></a>    <span class="fu">c</span>(<span class="sc">-</span><span class="fl">8.95</span>, <span class="sc">-</span><span class="fl">23.47</span>, <span class="sc">-</span><span class="fl">6.02</span>, <span class="sc">-</span><span class="fl">8.13</span>, <span class="sc">-</span><span class="fl">16.61</span>, <span class="sc">-</span><span class="fl">14.57</span>)</span>
-<span id="cb11-10"><a href="#cb11-10"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Useful functions: bioassaylp (from aaltobda)</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>alpha_test <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">1.896</span>, <span class="sc">-</span><span class="fl">3.6</span>,  <span class="fl">0.374</span>, <span class="fl">0.964</span>, <span class="sc">-</span><span class="fl">3.123</span>, <span class="sc">-</span><span class="fl">1.581</span>)</span>
+<span id="cb5-3"><a href="#cb5-3"></a>beta_test <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">24.76</span>, <span class="fl">20.04</span>, <span class="fl">6.15</span>, <span class="fl">18.65</span>, <span class="fl">8.16</span>, <span class="fl">17.4</span>)</span>
+<span id="cb5-4"><a href="#cb5-4"></a></span>
+<span id="cb5-5"><a href="#cb5-5"></a></span>
+<span id="cb5-6"><a href="#cb5-6"></a>log_importance_weights <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha, beta) {</span>
+<span id="cb5-7"><a href="#cb5-7"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a>    <span class="fu">c</span>(<span class="sc">-</span><span class="fl">8.95</span>, <span class="sc">-</span><span class="fl">23.47</span>, <span class="sc">-</span><span class="fl">6.02</span>, <span class="sc">-</span><span class="fl">8.13</span>, <span class="sc">-</span><span class="fl">16.61</span>, <span class="sc">-</span><span class="fl">14.57</span>)</span>
+<span id="cb5-10"><a href="#cb5-10"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="d" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="d"><span class="header-section-number">3.2</span> (d)</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>normalized_importance_weights <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha, beta) {</span>
-<span id="cb12-2"><a href="#cb12-2"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb12-3"><a href="#cb12-3"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
-<span id="cb12-4"><a href="#cb12-4"></a>    <span class="fu">c</span>(<span class="fl">0.045</span>, <span class="fl">0.000</span>, <span class="fl">0.852</span>, <span class="fl">0.103</span>, <span class="fl">0.000</span>, <span class="fl">0.000</span>)</span>
-<span id="cb12-5"><a href="#cb12-5"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>normalized_importance_weights <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha, beta) {</span>
+<span id="cb6-2"><a href="#cb6-2"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a>    <span class="fu">c</span>(<span class="fl">0.045</span>, <span class="fl">0.000</span>, <span class="fl">0.852</span>, <span class="fl">0.103</span>, <span class="fl">0.000</span>, <span class="fl">0.000</span>)</span>
+<span id="cb6-5"><a href="#cb6-5"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="e" class="level2" data-number="3.3">
@@ -473,11 +450,11 @@ The assignment contain the following (4) tasks:
 <section id="f" class="level2" data-number="3.4">
 <h2 data-number="3.4" class="anchored" data-anchor-id="f"><span class="header-section-number">3.4</span> (f)</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>S_eff <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha, beta) {</span>
-<span id="cb13-2"><a href="#cb13-2"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb13-3"><a href="#cb13-3"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
-<span id="cb13-4"><a href="#cb13-4"></a>    <span class="fl">1.354</span></span>
-<span id="cb13-5"><a href="#cb13-5"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>S_eff <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha, beta) {</span>
+<span id="cb7-2"><a href="#cb7-2"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a>    <span class="fl">1.354</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="g" class="level2" data-number="3.5">
@@ -486,18 +463,18 @@ The assignment contain the following (4) tasks:
 <section id="h" class="level2" data-number="3.6">
 <h2 data-number="3.6" class="anchored" data-anchor-id="h"><span class="header-section-number">3.6</span> (h)</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>posterior_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha, beta) {</span>
-<span id="cb14-2"><a href="#cb14-2"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb14-3"><a href="#cb14-3"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
-<span id="cb14-4"><a href="#cb14-4"></a>    <span class="fu">c</span>(<span class="fl">0.503</span>, <span class="fl">8.275</span>)</span>
-<span id="cb14-5"><a href="#cb14-5"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>posterior_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha, beta) {</span>
+<span id="cb8-2"><a href="#cb8-2"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a>    <span class="fu">c</span>(<span class="fl">0.503</span>, <span class="fl">8.275</span>)</span>
+<span id="cb8-5"><a href="#cb8-5"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="callout callout-style-default callout-warning callout-captioned">
+<div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 markmyassignment
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -507,81 +484,7 @@ markmyassignment
 <p><em>This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.</em> <strong>Make sure that this does not get displayed in the PDF!</strong></p>
 <p>The following will check the functions for which <code>markmyassignment</code> has been set up:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">mark_my_assignment</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>✔ | F W S  OK | Context
-
-⠏ |         0 | task-1-subtask-1-tests                                          
-⠏ |         0 | log_importance_weights()                                        
-✖ | 2       3 | log_importance_weights()
-────────────────────────────────────────────────────────────────────────────────
-Failure ('test-task-1-subtask-1-tests.R:23:3'): log_importance_weights()
-log_importance_weights(alpha, beta) not equivalent to c(...).
-Lengths differ: 6 is not 10
-Error: Incorrect result for alpha = c(4.5, 1.8, -2.4, 0.7, 0.3, -3.1, 0.4, 1.7, -0.5, -0.1) and beta = c(25.2, 7, -5.6, 1.1, 14.7, -6.5, 14.2, 25.9, 13.4, 19.8).
-
-Failure ('test-task-1-subtask-1-tests.R:31:3'): log_importance_weights()
-log_importance_weights(alpha, beta) not equivalent to c(...).
-Lengths differ: 6 is not 10
-Error: Incorrect result for alpha = c(1.4, 1.5, -2.3, -2.3, -0.5, 1.9, 1.6, -1.8, -2.7, -1.9) and beta = c(11.4, 8.2, 10.8, 7.4, 18.2, 27.8, 5.1, 1.9, -15.7, 25.1).
-────────────────────────────────────────────────────────────────────────────────
-
-⠏ |         0 | task-2-subtask-1-tests                                          
-⠏ |         0 | normalized_importance_weights()                                 
-✖ | 2       3 | normalized_importance_weights()
-────────────────────────────────────────────────────────────────────────────────
-Failure ('test-task-2-subtask-1-tests.R:23:3'): normalized_importance_weights()
-normalized_importance_weights(alpha, beta) not equivalent to c(0.03, 0.44, 0, 0.01, 0.18, 0, 0.25, 0.04, 0.04, 0.01).
-Lengths differ: 6 is not 10
-Error: Incorrect result for alpha = c(4.5, 1.8, -2.4, 0.7, 0.3, -3.1, 0.4, 1.7, -0.5, -0.1) and beta = c(25.2, 7, -5.6, 1.1, 14.7, -6.5, 14.2, 25.9, 13.4, 19.8).
-
-Failure ('test-task-2-subtask-1-tests.R:31:3'): normalized_importance_weights()
-normalized_importance_weights(alpha, beta) not equivalent to c(0.47, 0.42, 0, 0, 0, 0.01, 0.09, 0, 0, 0).
-Lengths differ: 6 is not 10
-Error: Incorrect result for alpha = c(1.4, 1.5, -2.3, -2.3, -0.5, 1.9, 1.6, -1.8, -2.7, -1.9) and beta = c(11.4, 8.2, 10.8, 7.4, 18.2, 27.8, 5.1, 1.9, -15.7, 25.1).
-────────────────────────────────────────────────────────────────────────────────
-
-⠏ |         0 | task-3-subtask-1-tests                                          
-⠏ |         0 | S_eff()                                                         
-✖ | 2       3 | S_eff()
-────────────────────────────────────────────────────────────────────────────────
-Failure ('test-task-3-subtask-1-tests.R:23:3'): S_eff()
-S_eff(alpha, beta) not equivalent to 3.404.
-1/1 mismatches
-[1] 1.35 - 3.4 == -2.05
-Error: Incorrect result for alpha = c(4.5, 1.8, -2.4, 0.7, 0.3, -3.1, 0.4, 1.7, -0.5, -0.1) and beta = c(25.2, 7, -5.6, 1.1, 14.7, -6.5, 14.2, 25.9, 13.4, 19.8).
-
-Failure ('test-task-3-subtask-1-tests.R:31:3'): S_eff()
-S_eff(alpha, beta) not equivalent to 2.448.
-1/1 mismatches
-[1] 1.35 - 2.45 == -1.09
-Error: Incorrect result for alpha = c(1.4, 1.5, -2.3, -2.3, -0.5, 1.9, 1.6, -1.8, -2.7, -1.9) and beta = c(11.4, 8.2, 10.8, 7.4, 18.2, 27.8, 5.1, 1.9, -15.7, 25.1).
-────────────────────────────────────────────────────────────────────────────────
-
-⠏ |         0 | task-4-subtask-1-tests                                          
-⠏ |         0 | posterior_mean()                                                
-✖ | 2       3 | posterior_mean()
-────────────────────────────────────────────────────────────────────────────────
-Failure ('test-task-4-subtask-1-tests.R:23:3'): posterior_mean()
-posterior_mean(alpha, beta) not equivalent to c(1.111039, 11.854793).
-2/2 mismatches (average diff: 2.09)
-[1] 0.503 -  1.11 == -0.608
-[2] 8.275 - 11.85 == -3.580
-Error: Incorrect result for alpha = c(4.5, 1.8, -2.4, 0.7, 0.3, -3.1, 0.4, 1.7, -0.5, -0.1) and beta = c(25.2, 7, -5.6, 1.1, 14.7, -6.5, 14.2, 25.9, 13.4, 19.8).
-
-Failure ('test-task-4-subtask-1-tests.R:30:3'): posterior_mean()
-posterior_mean(alpha, beta) not equivalent to c(1.458649, 9.67896).
-2/2 mismatches (average diff: 1.18)
-[1] 0.503 - 1.46 == -0.956
-[2] 8.275 - 9.68 == -1.404
-Error: Incorrect result for alpha = c(1.4, 1.5, -2.3, -2.3, -0.5, 1.9, 1.6, -1.8, -2.7, -1.9) and beta = c(11.4, 8.2, 10.8, 7.4, 18.2, 27.8, 5.1, 1.9, -15.7, 25.1).
-────────────────────────────────────────────────────────────────────────────────
-
-══ Results ═════════════════════════════════════════════════════════════════════
-Duration: 0.3 s
-
-[ FAIL 8 | WARN 0 | SKIP 0 | PASS 12 ]</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">mark_my_assignment</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -621,12 +524,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
     }
-  });
-  clipboard.on('success', function(e) {
+    return false;
+  }
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -658,7 +564,29 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
   const viewSource = window.document.getElementById('quarto-view-source') ||
                      window.document.getElementById('quarto-code-tools-source');
   if (viewSource) {
@@ -710,10 +638,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   if (showAllCode) {
     showAllCode.addEventListener("click", toggleCodeHandler(true));
   }
-  function tippyHover(el, contentFn) {
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -723,8 +668,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -736,7 +690,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -780,6 +857,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -805,6 +883,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -866,196 +970,197 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./template3.html" class="pagination-link">
+      <a href="./template3.html" class="pagination-link" aria-label="Assignment 3">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Assignment 3</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./template5.html" class="pagination-link">
+      <a href="./template5.html" class="pagination-link" aria-label="Assignment 5">
         <span class="nav-page-text">Assignment 5</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb17" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb17-1"><a href="#cb17-1"></a><span class="co">---</span></span>
-<span id="cb17-2"><a href="#cb17-2"></a><span class="an">title:</span><span class="co"> "Assignment 4"</span></span>
-<span id="cb17-3"><a href="#cb17-3"></a><span class="an">author:</span><span class="co"> anonymous # &lt;-- hand in anonymously</span></span>
-<span id="cb17-4"><a href="#cb17-4"></a><span class="an">format:</span></span>
-<span id="cb17-5"><a href="#cb17-5"></a><span class="co">  html:</span></span>
-<span id="cb17-6"><a href="#cb17-6"></a><span class="co">    toc: true</span></span>
-<span id="cb17-7"><a href="#cb17-7"></a><span class="co">    code-tools: true</span></span>
-<span id="cb17-8"><a href="#cb17-8"></a><span class="co">    code-line-numbers: true</span></span>
-<span id="cb17-9"><a href="#cb17-9"></a><span class="co">    number-sections: true</span></span>
-<span id="cb17-10"><a href="#cb17-10"></a><span class="co">    mainfont: Georgia, serif</span></span>
-<span id="cb17-11"><a href="#cb17-11"></a><span class="co">    page-layout: article</span></span>
-<span id="cb17-12"><a href="#cb17-12"></a><span class="co">  pdf:</span></span>
-<span id="cb17-13"><a href="#cb17-13"></a><span class="co">    geometry:</span></span>
-<span id="cb17-14"><a href="#cb17-14"></a><span class="co">    - left=1cm,top=1cm,bottom=1cm,right=7cm</span></span>
-<span id="cb17-15"><a href="#cb17-15"></a><span class="co">    number-sections: true</span></span>
-<span id="cb17-16"><a href="#cb17-16"></a><span class="co">    code-annotations: none</span></span>
-<span id="cb17-17"><a href="#cb17-17"></a><span class="an">editor:</span><span class="co"> source</span></span>
-<span id="cb17-18"><a href="#cb17-18"></a><span class="co">---</span></span>
-<span id="cb17-19"><a href="#cb17-19"></a></span>
-<span id="cb17-20"><a href="#cb17-20"></a></span>
-<span id="cb17-21"><a href="#cb17-21"></a><span class="fu"># General information</span></span>
-<span id="cb17-22"><a href="#cb17-22"></a></span>
-<span id="cb17-23"><a href="#cb17-23"></a>:::: {.content-hidden when-format="pdf"}</span>
-<span id="cb17-24"><a href="#cb17-24"></a>::: {.callout-warning collapse=false}</span>
-<span id="cb17-25"><a href="#cb17-25"></a></span>
-<span id="cb17-26"><a href="#cb17-26"></a><span class="fu">## Setup</span></span>
-<span id="cb17-27"><a href="#cb17-27"></a></span>
-<span id="cb17-28"><a href="#cb17-28"></a></span>
-<span id="cb17-29"><a href="#cb17-29"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
-<span id="cb17-30"><a href="#cb17-30"></a>**Make sure that this does not get displayed in the PDF!**</span>
-<span id="cb17-31"><a href="#cb17-31"></a></span>
-<span id="cb17-32"><a href="#cb17-32"></a></span>
-<span id="cb17-33"><a href="#cb17-33"></a></span>
-<span id="cb17-34"><a href="#cb17-34"></a></span>
-<span id="cb17-35"><a href="#cb17-35"></a>This is the template for <span class="co">[</span><span class="ot">assignment 4</span><span class="co">](assignment4.html)</span>. You can download the <span class="co">[</span><span class="ot">qmd-file</span><span class="co">](https://avehtari.github.io/BDA_course_Aalto/assignments/template4.qmd)</span> or copy the code from this rendered document after clicking on <span class="in">`&lt;/&gt; Code`</span> in the top right corner.</span>
-<span id="cb17-36"><a href="#cb17-36"></a></span>
-<span id="cb17-37"><a href="#cb17-37"></a>**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.**</span>
-<span id="cb17-38"><a href="#cb17-38"></a></span>
-<span id="cb17-39"><a href="#cb17-39"></a>The following will set-up <span class="co">[</span><span class="ot">`markmyassignment`</span><span class="co">](https://github.com/MansMeg/markmyassignment)</span> to check your functions at the end of the notebook:</span>
-<span id="cb17-40"><a href="#cb17-40"></a></span>
-<span id="cb17-43"><a href="#cb17-43"></a><span class="in">```{r}</span></span>
-<span id="cb17-44"><a href="#cb17-44"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(markmyassignment)){</span>
-<span id="cb17-45"><a href="#cb17-45"></a>    <span class="fu">install.packages</span>(<span class="st">"markmyassignment"</span>)</span>
-<span id="cb17-46"><a href="#cb17-46"></a>    <span class="fu">library</span>(markmyassignment)</span>
-<span id="cb17-47"><a href="#cb17-47"></a>}</span>
-<span id="cb17-48"><a href="#cb17-48"></a>assignment_path <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">"https://github.com/avehtari/BDA_course_Aalto/"</span>,</span>
-<span id="cb17-49"><a href="#cb17-49"></a><span class="st">"blob/master/assignments/tests/assignment4.yml"</span>, <span class="at">sep=</span><span class="st">""</span>)</span>
-<span id="cb17-50"><a href="#cb17-50"></a><span class="fu">set_assignment</span>(assignment_path)</span>
-<span id="cb17-51"><a href="#cb17-51"></a><span class="in">```</span></span>
-<span id="cb17-52"><a href="#cb17-52"></a></span>
-<span id="cb17-53"><a href="#cb17-53"></a>The following installs and loads the <span class="in">`aaltobda`</span> package:</span>
-<span id="cb17-56"><a href="#cb17-56"></a><span class="in">```{r}</span></span>
-<span id="cb17-57"><a href="#cb17-57"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(aaltobda)){</span>
-<span id="cb17-58"><a href="#cb17-58"></a>    <span class="fu">install.packages</span>(<span class="st">"aaltobda"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://avehtari.github.io/BDA_course_Aalto/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span>
-<span id="cb17-59"><a href="#cb17-59"></a>    <span class="fu">library</span>(aaltobda)</span>
-<span id="cb17-60"><a href="#cb17-60"></a>}</span>
-<span id="cb17-61"><a href="#cb17-61"></a><span class="in">```</span></span>
-<span id="cb17-62"><a href="#cb17-62"></a>The following installs and loads the <span class="co">[</span><span class="ot">`latex2exp` package</span><span class="co">](https://github.com/stefano-meschiari/latex2exp)</span>, which allows us to use LaTeX in plots:</span>
-<span id="cb17-65"><a href="#cb17-65"></a><span class="in">```{r}</span></span>
-<span id="cb17-66"><a href="#cb17-66"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(latex2exp)){</span>
-<span id="cb17-67"><a href="#cb17-67"></a>    <span class="fu">install.packages</span>(<span class="st">"latex2exp"</span>)</span>
-<span id="cb17-68"><a href="#cb17-68"></a>    <span class="fu">library</span>(latex2exp)</span>
-<span id="cb17-69"><a href="#cb17-69"></a>}</span>
-<span id="cb17-70"><a href="#cb17-70"></a><span class="in">```</span></span>
-<span id="cb17-71"><a href="#cb17-71"></a></span>
-<span id="cb17-72"><a href="#cb17-72"></a>:::</span>
-<span id="cb17-73"><a href="#cb17-73"></a>::::</span>
-<span id="cb17-74"><a href="#cb17-74"></a></span>
-<span id="cb17-75"><a href="#cb17-75"></a></span>
-<span id="cb17-76"><a href="#cb17-76"></a><span class="fu"># Bioassay model</span></span>
-<span id="cb17-77"><a href="#cb17-77"></a></span>
-<span id="cb17-78"><a href="#cb17-78"></a><span class="fu">## (a)</span></span>
-<span id="cb17-79"><a href="#cb17-79"></a></span>
-<span id="cb17-80"><a href="#cb17-80"></a></span>
-<span id="cb17-81"><a href="#cb17-81"></a><span class="fu">## (b)</span></span>
-<span id="cb17-82"><a href="#cb17-82"></a></span>
-<span id="cb17-83"><a href="#cb17-83"></a></span>
-<span id="cb17-84"><a href="#cb17-84"></a>Loading the library and the data.</span>
-<span id="cb17-85"><a href="#cb17-85"></a><span class="in">``` {r}</span></span>
-<span id="cb17-86"><a href="#cb17-86"></a><span class="co"># Useful functions: quantile()</span></span>
-<span id="cb17-87"><a href="#cb17-87"></a><span class="co"># and mcse_quantile() (from aaltobda)</span></span>
-<span id="cb17-88"><a href="#cb17-88"></a></span>
-<span id="cb17-89"><a href="#cb17-89"></a><span class="fu">data</span>(<span class="st">"bioassay_posterior"</span>)</span>
-<span id="cb17-90"><a href="#cb17-90"></a><span class="co"># The 4000 draws are now stored in the variable `bioassay_posterior`.</span></span>
-<span id="cb17-91"><a href="#cb17-91"></a><span class="co"># The below displays the first rows of the data:</span></span>
-<span id="cb17-92"><a href="#cb17-92"></a><span class="fu">head</span>(bioassay_posterior)</span>
-<span id="cb17-93"><a href="#cb17-93"></a><span class="in">```</span></span>
-<span id="cb17-94"><a href="#cb17-94"></a></span>
-<span id="cb17-95"><a href="#cb17-95"></a></span>
-<span id="cb17-96"><a href="#cb17-96"></a><span class="fu"># Importance sampling</span></span>
-<span id="cb17-97"><a href="#cb17-97"></a></span>
-<span id="cb17-98"><a href="#cb17-98"></a><span class="fu">## (c)</span></span>
-<span id="cb17-99"><a href="#cb17-99"></a></span>
-<span id="cb17-100"><a href="#cb17-100"></a></span>
-<span id="cb17-103"><a href="#cb17-103"></a><span class="in">```{r}</span></span>
-<span id="cb17-104"><a href="#cb17-104"></a><span class="co"># Useful functions: bioassaylp (from aaltobda)</span></span>
-<span id="cb17-105"><a href="#cb17-105"></a>alpha_test <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">1.896</span>, <span class="sc">-</span><span class="fl">3.6</span>,  <span class="fl">0.374</span>, <span class="fl">0.964</span>, <span class="sc">-</span><span class="fl">3.123</span>, <span class="sc">-</span><span class="fl">1.581</span>)</span>
-<span id="cb17-106"><a href="#cb17-106"></a>beta_test <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">24.76</span>, <span class="fl">20.04</span>, <span class="fl">6.15</span>, <span class="fl">18.65</span>, <span class="fl">8.16</span>, <span class="fl">17.4</span>)</span>
-<span id="cb17-107"><a href="#cb17-107"></a></span>
-<span id="cb17-108"><a href="#cb17-108"></a></span>
-<span id="cb17-109"><a href="#cb17-109"></a>log_importance_weights <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha, beta) {</span>
-<span id="cb17-110"><a href="#cb17-110"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb17-111"><a href="#cb17-111"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
-<span id="cb17-112"><a href="#cb17-112"></a>    <span class="fu">c</span>(<span class="sc">-</span><span class="fl">8.95</span>, <span class="sc">-</span><span class="fl">23.47</span>, <span class="sc">-</span><span class="fl">6.02</span>, <span class="sc">-</span><span class="fl">8.13</span>, <span class="sc">-</span><span class="fl">16.61</span>, <span class="sc">-</span><span class="fl">14.57</span>)</span>
-<span id="cb17-113"><a href="#cb17-113"></a>}</span>
-<span id="cb17-114"><a href="#cb17-114"></a><span class="in">```</span></span>
-<span id="cb17-115"><a href="#cb17-115"></a></span>
-<span id="cb17-116"><a href="#cb17-116"></a></span>
-<span id="cb17-117"><a href="#cb17-117"></a></span>
-<span id="cb17-118"><a href="#cb17-118"></a><span class="fu">## (d)</span></span>
-<span id="cb17-119"><a href="#cb17-119"></a></span>
-<span id="cb17-120"><a href="#cb17-120"></a></span>
-<span id="cb17-123"><a href="#cb17-123"></a><span class="in">```{r}</span></span>
-<span id="cb17-124"><a href="#cb17-124"></a>normalized_importance_weights <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha, beta) {</span>
-<span id="cb17-125"><a href="#cb17-125"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb17-126"><a href="#cb17-126"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
-<span id="cb17-127"><a href="#cb17-127"></a>    <span class="fu">c</span>(<span class="fl">0.045</span>, <span class="fl">0.000</span>, <span class="fl">0.852</span>, <span class="fl">0.103</span>, <span class="fl">0.000</span>, <span class="fl">0.000</span>)</span>
-<span id="cb17-128"><a href="#cb17-128"></a>}</span>
-<span id="cb17-129"><a href="#cb17-129"></a><span class="in">```</span></span>
-<span id="cb17-130"><a href="#cb17-130"></a></span>
-<span id="cb17-131"><a href="#cb17-131"></a></span>
-<span id="cb17-132"><a href="#cb17-132"></a></span>
-<span id="cb17-133"><a href="#cb17-133"></a><span class="fu">## (e)</span></span>
-<span id="cb17-134"><a href="#cb17-134"></a></span>
-<span id="cb17-135"><a href="#cb17-135"></a></span>
-<span id="cb17-136"><a href="#cb17-136"></a>Write your answers and code here!</span>
-<span id="cb17-137"><a href="#cb17-137"></a></span>
-<span id="cb17-138"><a href="#cb17-138"></a></span>
-<span id="cb17-139"><a href="#cb17-139"></a></span>
-<span id="cb17-140"><a href="#cb17-140"></a><span class="fu">## (f)</span></span>
-<span id="cb17-141"><a href="#cb17-141"></a></span>
-<span id="cb17-142"><a href="#cb17-142"></a></span>
-<span id="cb17-145"><a href="#cb17-145"></a><span class="in">```{r}</span></span>
-<span id="cb17-146"><a href="#cb17-146"></a>S_eff <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha, beta) {</span>
-<span id="cb17-147"><a href="#cb17-147"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb17-148"><a href="#cb17-148"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
-<span id="cb17-149"><a href="#cb17-149"></a>    <span class="fl">1.354</span></span>
-<span id="cb17-150"><a href="#cb17-150"></a>}</span>
-<span id="cb17-151"><a href="#cb17-151"></a><span class="in">```</span></span>
-<span id="cb17-152"><a href="#cb17-152"></a></span>
-<span id="cb17-153"><a href="#cb17-153"></a></span>
-<span id="cb17-154"><a href="#cb17-154"></a></span>
-<span id="cb17-155"><a href="#cb17-155"></a><span class="fu">## (g)</span></span>
-<span id="cb17-156"><a href="#cb17-156"></a></span>
-<span id="cb17-157"><a href="#cb17-157"></a></span>
-<span id="cb17-158"><a href="#cb17-158"></a><span class="fu">## (h)</span></span>
-<span id="cb17-159"><a href="#cb17-159"></a></span>
-<span id="cb17-160"><a href="#cb17-160"></a></span>
-<span id="cb17-163"><a href="#cb17-163"></a><span class="in">```{r}</span></span>
-<span id="cb17-164"><a href="#cb17-164"></a>posterior_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha, beta) {</span>
-<span id="cb17-165"><a href="#cb17-165"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb17-166"><a href="#cb17-166"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
-<span id="cb17-167"><a href="#cb17-167"></a>    <span class="fu">c</span>(<span class="fl">0.503</span>, <span class="fl">8.275</span>)</span>
-<span id="cb17-168"><a href="#cb17-168"></a>}</span>
-<span id="cb17-169"><a href="#cb17-169"></a><span class="in">```</span></span>
-<span id="cb17-170"><a href="#cb17-170"></a></span>
-<span id="cb17-171"><a href="#cb17-171"></a></span>
-<span id="cb17-172"><a href="#cb17-172"></a></span>
-<span id="cb17-173"><a href="#cb17-173"></a>:::: {.content-hidden when-format="pdf"}</span>
-<span id="cb17-174"><a href="#cb17-174"></a>::: {.callout-warning collapse=false}</span>
-<span id="cb17-175"><a href="#cb17-175"></a></span>
-<span id="cb17-176"><a href="#cb17-176"></a><span class="fu">## markmyassignment</span></span>
-<span id="cb17-177"><a href="#cb17-177"></a></span>
-<span id="cb17-178"><a href="#cb17-178"></a></span>
-<span id="cb17-179"><a href="#cb17-179"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
-<span id="cb17-180"><a href="#cb17-180"></a>**Make sure that this does not get displayed in the PDF!**</span>
-<span id="cb17-181"><a href="#cb17-181"></a></span>
-<span id="cb17-182"><a href="#cb17-182"></a></span>
-<span id="cb17-183"><a href="#cb17-183"></a></span>
-<span id="cb17-184"><a href="#cb17-184"></a>The following will check the functions for which <span class="in">`markmyassignment`</span> has been set up:</span>
-<span id="cb17-185"><a href="#cb17-185"></a></span>
-<span id="cb17-188"><a href="#cb17-188"></a><span class="in">```{r}</span></span>
-<span id="cb17-189"><a href="#cb17-189"></a><span class="fu">mark_my_assignment</span>()</span>
-<span id="cb17-190"><a href="#cb17-190"></a><span class="in">```</span></span>
-<span id="cb17-191"><a href="#cb17-191"></a></span>
-<span id="cb17-192"><a href="#cb17-192"></a>:::</span>
-<span id="cb17-193"><a href="#cb17-193"></a>::::</span>
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb10" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb10-1"><a href="#cb10-1"></a><span class="co">---</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="an">title:</span><span class="co"> "Assignment 4"</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="an">author:</span><span class="co"> anonymous # &lt;-- hand in anonymously</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="an">format:</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="co">  html:</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="co">    toc: true</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="co">    code-tools: true</span></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="co">    code-line-numbers: true</span></span>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="co">    number-sections: true</span></span>
+<span id="cb10-10"><a href="#cb10-10"></a><span class="co">    mainfont: Georgia, serif</span></span>
+<span id="cb10-11"><a href="#cb10-11"></a><span class="co">    page-layout: article</span></span>
+<span id="cb10-12"><a href="#cb10-12"></a><span class="co">  pdf:</span></span>
+<span id="cb10-13"><a href="#cb10-13"></a><span class="co">    geometry:</span></span>
+<span id="cb10-14"><a href="#cb10-14"></a><span class="co">    - left=1cm,top=1cm,bottom=1cm,right=7cm</span></span>
+<span id="cb10-15"><a href="#cb10-15"></a><span class="co">    number-sections: true</span></span>
+<span id="cb10-16"><a href="#cb10-16"></a><span class="co">    code-annotations: none</span></span>
+<span id="cb10-17"><a href="#cb10-17"></a><span class="an">editor:</span><span class="co"> source</span></span>
+<span id="cb10-18"><a href="#cb10-18"></a><span class="co">---</span></span>
+<span id="cb10-19"><a href="#cb10-19"></a></span>
+<span id="cb10-20"><a href="#cb10-20"></a></span>
+<span id="cb10-21"><a href="#cb10-21"></a><span class="fu"># General information</span></span>
+<span id="cb10-22"><a href="#cb10-22"></a></span>
+<span id="cb10-23"><a href="#cb10-23"></a>:::: {.content-hidden when-format="pdf"}</span>
+<span id="cb10-24"><a href="#cb10-24"></a>::: {.callout-warning collapse=false}</span>
+<span id="cb10-25"><a href="#cb10-25"></a></span>
+<span id="cb10-26"><a href="#cb10-26"></a><span class="fu">## Setup</span></span>
+<span id="cb10-27"><a href="#cb10-27"></a></span>
+<span id="cb10-28"><a href="#cb10-28"></a></span>
+<span id="cb10-29"><a href="#cb10-29"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
+<span id="cb10-30"><a href="#cb10-30"></a>**Make sure that this does not get displayed in the PDF!**</span>
+<span id="cb10-31"><a href="#cb10-31"></a></span>
+<span id="cb10-32"><a href="#cb10-32"></a></span>
+<span id="cb10-33"><a href="#cb10-33"></a></span>
+<span id="cb10-34"><a href="#cb10-34"></a></span>
+<span id="cb10-35"><a href="#cb10-35"></a>This is the template for <span class="co">[</span><span class="ot">assignment 4</span><span class="co">](assignment4.html)</span>. You can download the <span class="co">[</span><span class="ot">qmd-file</span><span class="co">](https://avehtari.github.io/BDA_course_Aalto/assignments/template4.qmd)</span> or copy the code from this rendered document after clicking on <span class="in">`&lt;/&gt; Code`</span> in the top right corner.</span>
+<span id="cb10-36"><a href="#cb10-36"></a></span>
+<span id="cb10-37"><a href="#cb10-37"></a>**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.**</span>
+<span id="cb10-38"><a href="#cb10-38"></a></span>
+<span id="cb10-39"><a href="#cb10-39"></a>The following will set-up <span class="co">[</span><span class="ot">`markmyassignment`</span><span class="co">](https://github.com/MansMeg/markmyassignment)</span> to check your functions at the end of the notebook:</span>
+<span id="cb10-40"><a href="#cb10-40"></a></span>
+<span id="cb10-43"><a href="#cb10-43"></a><span class="in">```{r}</span></span>
+<span id="cb10-44"><a href="#cb10-44"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(markmyassignment)){</span>
+<span id="cb10-45"><a href="#cb10-45"></a>    <span class="fu">install.packages</span>(<span class="st">"markmyassignment"</span>)</span>
+<span id="cb10-46"><a href="#cb10-46"></a>    <span class="fu">library</span>(markmyassignment)</span>
+<span id="cb10-47"><a href="#cb10-47"></a>}</span>
+<span id="cb10-48"><a href="#cb10-48"></a>assignment_path <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">"https://github.com/avehtari/BDA_course_Aalto/"</span>,</span>
+<span id="cb10-49"><a href="#cb10-49"></a><span class="st">"blob/master/assignments/tests/assignment4.yml"</span>, <span class="at">sep=</span><span class="st">""</span>)</span>
+<span id="cb10-50"><a href="#cb10-50"></a><span class="fu">set_assignment</span>(assignment_path)</span>
+<span id="cb10-51"><a href="#cb10-51"></a><span class="in">```</span></span>
+<span id="cb10-52"><a href="#cb10-52"></a></span>
+<span id="cb10-53"><a href="#cb10-53"></a>The following installs and loads the <span class="in">`aaltobda`</span> package:</span>
+<span id="cb10-56"><a href="#cb10-56"></a><span class="in">```{r}</span></span>
+<span id="cb10-57"><a href="#cb10-57"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(aaltobda)){</span>
+<span id="cb10-58"><a href="#cb10-58"></a>    <span class="fu">install.packages</span>(<span class="st">"aaltobda"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://avehtari.github.io/BDA_course_Aalto/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span>
+<span id="cb10-59"><a href="#cb10-59"></a>    <span class="fu">library</span>(aaltobda)</span>
+<span id="cb10-60"><a href="#cb10-60"></a>}</span>
+<span id="cb10-61"><a href="#cb10-61"></a><span class="in">```</span></span>
+<span id="cb10-62"><a href="#cb10-62"></a>The following installs and loads the <span class="co">[</span><span class="ot">`latex2exp` package</span><span class="co">](https://github.com/stefano-meschiari/latex2exp)</span>, which allows us to use LaTeX in plots:</span>
+<span id="cb10-65"><a href="#cb10-65"></a><span class="in">```{r}</span></span>
+<span id="cb10-66"><a href="#cb10-66"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(latex2exp)){</span>
+<span id="cb10-67"><a href="#cb10-67"></a>    <span class="fu">install.packages</span>(<span class="st">"latex2exp"</span>)</span>
+<span id="cb10-68"><a href="#cb10-68"></a>    <span class="fu">library</span>(latex2exp)</span>
+<span id="cb10-69"><a href="#cb10-69"></a>}</span>
+<span id="cb10-70"><a href="#cb10-70"></a><span class="in">```</span></span>
+<span id="cb10-71"><a href="#cb10-71"></a></span>
+<span id="cb10-72"><a href="#cb10-72"></a>:::</span>
+<span id="cb10-73"><a href="#cb10-73"></a>::::</span>
+<span id="cb10-74"><a href="#cb10-74"></a></span>
+<span id="cb10-75"><a href="#cb10-75"></a></span>
+<span id="cb10-76"><a href="#cb10-76"></a><span class="fu"># Bioassay model</span></span>
+<span id="cb10-77"><a href="#cb10-77"></a></span>
+<span id="cb10-78"><a href="#cb10-78"></a><span class="fu">## (a)</span></span>
+<span id="cb10-79"><a href="#cb10-79"></a></span>
+<span id="cb10-80"><a href="#cb10-80"></a></span>
+<span id="cb10-81"><a href="#cb10-81"></a><span class="fu">## (b)</span></span>
+<span id="cb10-82"><a href="#cb10-82"></a></span>
+<span id="cb10-83"><a href="#cb10-83"></a></span>
+<span id="cb10-84"><a href="#cb10-84"></a>Loading the library and the data.</span>
+<span id="cb10-85"><a href="#cb10-85"></a><span class="in">``` {r}</span></span>
+<span id="cb10-86"><a href="#cb10-86"></a><span class="in"># Useful functions: quantile()</span></span>
+<span id="cb10-87"><a href="#cb10-87"></a><span class="in"># and mcse_quantile() (from aaltobda)</span></span>
+<span id="cb10-88"><a href="#cb10-88"></a></span>
+<span id="cb10-89"><a href="#cb10-89"></a><span class="in">data("bioassay_posterior")</span></span>
+<span id="cb10-90"><a href="#cb10-90"></a><span class="in"># The 4000 draws are now stored in the variable `bioassay_posterior`.</span></span>
+<span id="cb10-91"><a href="#cb10-91"></a><span class="in"># The below displays the first rows of the data:</span></span>
+<span id="cb10-92"><a href="#cb10-92"></a><span class="in">head(bioassay_posterior)</span></span>
+<span id="cb10-93"><a href="#cb10-93"></a><span class="in">```</span></span>
+<span id="cb10-94"><a href="#cb10-94"></a></span>
+<span id="cb10-95"><a href="#cb10-95"></a></span>
+<span id="cb10-96"><a href="#cb10-96"></a><span class="fu"># Importance sampling</span></span>
+<span id="cb10-97"><a href="#cb10-97"></a></span>
+<span id="cb10-98"><a href="#cb10-98"></a><span class="fu">## (c)</span></span>
+<span id="cb10-99"><a href="#cb10-99"></a></span>
+<span id="cb10-100"><a href="#cb10-100"></a></span>
+<span id="cb10-103"><a href="#cb10-103"></a><span class="in">```{r}</span></span>
+<span id="cb10-104"><a href="#cb10-104"></a><span class="co"># Useful functions: bioassaylp (from aaltobda)</span></span>
+<span id="cb10-105"><a href="#cb10-105"></a>alpha_test <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">1.896</span>, <span class="sc">-</span><span class="fl">3.6</span>,  <span class="fl">0.374</span>, <span class="fl">0.964</span>, <span class="sc">-</span><span class="fl">3.123</span>, <span class="sc">-</span><span class="fl">1.581</span>)</span>
+<span id="cb10-106"><a href="#cb10-106"></a>beta_test <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">24.76</span>, <span class="fl">20.04</span>, <span class="fl">6.15</span>, <span class="fl">18.65</span>, <span class="fl">8.16</span>, <span class="fl">17.4</span>)</span>
+<span id="cb10-107"><a href="#cb10-107"></a></span>
+<span id="cb10-108"><a href="#cb10-108"></a></span>
+<span id="cb10-109"><a href="#cb10-109"></a>log_importance_weights <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha, beta) {</span>
+<span id="cb10-110"><a href="#cb10-110"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb10-111"><a href="#cb10-111"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb10-112"><a href="#cb10-112"></a>    <span class="fu">c</span>(<span class="sc">-</span><span class="fl">8.95</span>, <span class="sc">-</span><span class="fl">23.47</span>, <span class="sc">-</span><span class="fl">6.02</span>, <span class="sc">-</span><span class="fl">8.13</span>, <span class="sc">-</span><span class="fl">16.61</span>, <span class="sc">-</span><span class="fl">14.57</span>)</span>
+<span id="cb10-113"><a href="#cb10-113"></a>}</span>
+<span id="cb10-114"><a href="#cb10-114"></a><span class="in">```</span></span>
+<span id="cb10-115"><a href="#cb10-115"></a></span>
+<span id="cb10-116"><a href="#cb10-116"></a></span>
+<span id="cb10-117"><a href="#cb10-117"></a></span>
+<span id="cb10-118"><a href="#cb10-118"></a><span class="fu">## (d)</span></span>
+<span id="cb10-119"><a href="#cb10-119"></a></span>
+<span id="cb10-120"><a href="#cb10-120"></a></span>
+<span id="cb10-123"><a href="#cb10-123"></a><span class="in">```{r}</span></span>
+<span id="cb10-124"><a href="#cb10-124"></a>normalized_importance_weights <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha, beta) {</span>
+<span id="cb10-125"><a href="#cb10-125"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb10-126"><a href="#cb10-126"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb10-127"><a href="#cb10-127"></a>    <span class="fu">c</span>(<span class="fl">0.045</span>, <span class="fl">0.000</span>, <span class="fl">0.852</span>, <span class="fl">0.103</span>, <span class="fl">0.000</span>, <span class="fl">0.000</span>)</span>
+<span id="cb10-128"><a href="#cb10-128"></a>}</span>
+<span id="cb10-129"><a href="#cb10-129"></a><span class="in">```</span></span>
+<span id="cb10-130"><a href="#cb10-130"></a></span>
+<span id="cb10-131"><a href="#cb10-131"></a></span>
+<span id="cb10-132"><a href="#cb10-132"></a></span>
+<span id="cb10-133"><a href="#cb10-133"></a><span class="fu">## (e)</span></span>
+<span id="cb10-134"><a href="#cb10-134"></a></span>
+<span id="cb10-135"><a href="#cb10-135"></a></span>
+<span id="cb10-136"><a href="#cb10-136"></a>Write your answers and code here!</span>
+<span id="cb10-137"><a href="#cb10-137"></a></span>
+<span id="cb10-138"><a href="#cb10-138"></a></span>
+<span id="cb10-139"><a href="#cb10-139"></a></span>
+<span id="cb10-140"><a href="#cb10-140"></a><span class="fu">## (f)</span></span>
+<span id="cb10-141"><a href="#cb10-141"></a></span>
+<span id="cb10-142"><a href="#cb10-142"></a></span>
+<span id="cb10-145"><a href="#cb10-145"></a><span class="in">```{r}</span></span>
+<span id="cb10-146"><a href="#cb10-146"></a>S_eff <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha, beta) {</span>
+<span id="cb10-147"><a href="#cb10-147"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb10-148"><a href="#cb10-148"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb10-149"><a href="#cb10-149"></a>    <span class="fl">1.354</span></span>
+<span id="cb10-150"><a href="#cb10-150"></a>}</span>
+<span id="cb10-151"><a href="#cb10-151"></a><span class="in">```</span></span>
+<span id="cb10-152"><a href="#cb10-152"></a></span>
+<span id="cb10-153"><a href="#cb10-153"></a></span>
+<span id="cb10-154"><a href="#cb10-154"></a></span>
+<span id="cb10-155"><a href="#cb10-155"></a><span class="fu">## (g)</span></span>
+<span id="cb10-156"><a href="#cb10-156"></a></span>
+<span id="cb10-157"><a href="#cb10-157"></a></span>
+<span id="cb10-158"><a href="#cb10-158"></a><span class="fu">## (h)</span></span>
+<span id="cb10-159"><a href="#cb10-159"></a></span>
+<span id="cb10-160"><a href="#cb10-160"></a></span>
+<span id="cb10-163"><a href="#cb10-163"></a><span class="in">```{r}</span></span>
+<span id="cb10-164"><a href="#cb10-164"></a>posterior_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha, beta) {</span>
+<span id="cb10-165"><a href="#cb10-165"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb10-166"><a href="#cb10-166"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb10-167"><a href="#cb10-167"></a>    <span class="fu">c</span>(<span class="fl">0.503</span>, <span class="fl">8.275</span>)</span>
+<span id="cb10-168"><a href="#cb10-168"></a>}</span>
+<span id="cb10-169"><a href="#cb10-169"></a><span class="in">```</span></span>
+<span id="cb10-170"><a href="#cb10-170"></a></span>
+<span id="cb10-171"><a href="#cb10-171"></a></span>
+<span id="cb10-172"><a href="#cb10-172"></a></span>
+<span id="cb10-173"><a href="#cb10-173"></a>:::: {.content-hidden when-format="pdf"}</span>
+<span id="cb10-174"><a href="#cb10-174"></a>::: {.callout-warning collapse=false}</span>
+<span id="cb10-175"><a href="#cb10-175"></a></span>
+<span id="cb10-176"><a href="#cb10-176"></a><span class="fu">## markmyassignment</span></span>
+<span id="cb10-177"><a href="#cb10-177"></a></span>
+<span id="cb10-178"><a href="#cb10-178"></a></span>
+<span id="cb10-179"><a href="#cb10-179"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
+<span id="cb10-180"><a href="#cb10-180"></a>**Make sure that this does not get displayed in the PDF!**</span>
+<span id="cb10-181"><a href="#cb10-181"></a></span>
+<span id="cb10-182"><a href="#cb10-182"></a></span>
+<span id="cb10-183"><a href="#cb10-183"></a></span>
+<span id="cb10-184"><a href="#cb10-184"></a>The following will check the functions for which <span class="in">`markmyassignment`</span> has been set up:</span>
+<span id="cb10-185"><a href="#cb10-185"></a></span>
+<span id="cb10-188"><a href="#cb10-188"></a><span class="in">```{r}</span></span>
+<span id="cb10-189"><a href="#cb10-189"></a><span class="fu">mark_my_assignment</span>()</span>
+<span id="cb10-190"><a href="#cb10-190"></a><span class="in">```</span></span>
+<span id="cb10-191"><a href="#cb10-191"></a></span>
+<span id="cb10-192"><a href="#cb10-192"></a>:::</span>
+<span id="cb10-193"><a href="#cb10-193"></a>::::</span>
+</code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
+
 
 
 

@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.211">
+<meta name="generator" content="quarto-1.5.56">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="anonymous">
 
-<title>Bayesian Data Analysis - Assignment 9</title>
+<title>Assignment 9 – Bayesian Data Analysis</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -18,11 +18,12 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -33,7 +34,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -47,43 +48,13 @@ pre.numberSource code > span > a:first-child::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
-    color: #aaaaaa;
   }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
 div.sourceCode
   {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -110,7 +81,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -119,8 +96,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 
@@ -133,12 +112,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./template1.html">Templates</a></li><li class="breadcrumb-item"><a href="./template9.html">Assignment 9</a></li></ol></nav>
-      <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./template1.html">Templates</a></li><li class="breadcrumb-item"><a href="./template9.html">Assignment 9</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
@@ -148,7 +127,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Bayesian Data Analysis</a> 
@@ -163,20 +142,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">General instructions</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">General instructions</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment_instructions.html" class="sidebar-item-text sidebar-link">Assignment instructions</a>
+  <a href="./assignment_instructions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment instructions</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./docker.html" class="sidebar-item-text sidebar-link">How to set up docker</a>
+  <a href="./docker.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">How to set up docker</span></a>
   </div>
 </li>
       </ul>
@@ -184,55 +166,65 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Assignments</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Assignments</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment1.html" class="sidebar-item-text sidebar-link">Assignment 1</a>
+  <a href="./assignment1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 1</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment2.html" class="sidebar-item-text sidebar-link">Assignment 2</a>
+  <a href="./assignment2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 2</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment3.html" class="sidebar-item-text sidebar-link">Assignment 3</a>
+  <a href="./assignment3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 3</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment4.html" class="sidebar-item-text sidebar-link">Assignment 4</a>
+  <a href="./assignment4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 4</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment5.html" class="sidebar-item-text sidebar-link">Assignment 5</a>
+  <a href="./assignment5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 5</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment6.html" class="sidebar-item-text sidebar-link">Assignment 6</a>
+  <a href="./assignment6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 6</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment7.html" class="sidebar-item-text sidebar-link">Assignment 7</a>
+  <a href="./assignment7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 7</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment8.html" class="sidebar-item-text sidebar-link">Assignment 8</a>
+  <a href="./assignment8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 8</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment9.html" class="sidebar-item-text sidebar-link">Assignment 9</a>
+  <a href="./assignment9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 9</span></a>
   </div>
 </li>
       </ul>
@@ -240,55 +232,65 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Templates</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Templates</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template1.html" class="sidebar-item-text sidebar-link">Assignment 1</a>
+  <a href="./template1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 1</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template2.html" class="sidebar-item-text sidebar-link">Assignment 2</a>
+  <a href="./template2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 2</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template3.html" class="sidebar-item-text sidebar-link">Assignment 3</a>
+  <a href="./template3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 3</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template4.html" class="sidebar-item-text sidebar-link">Assignment 4</a>
+  <a href="./template4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 4</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template5.html" class="sidebar-item-text sidebar-link">Assignment 5</a>
+  <a href="./template5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 5</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template6.html" class="sidebar-item-text sidebar-link">Assignment 6</a>
+  <a href="./template6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 6</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template7.html" class="sidebar-item-text sidebar-link">Assignment 7</a>
+  <a href="./template7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 7</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template8.html" class="sidebar-item-text sidebar-link">Assignment 8</a>
+  <a href="./template8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 8</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./template9.html" class="sidebar-item-text sidebar-link active">Assignment 9</a>
+  <a href="./template9.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Assignment 9</span></a>
   </div>
 </li>
       </ul>
@@ -296,19 +298,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </ul>
     </div>
 </nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#general-information" id="toc-general-information" class="nav-link active" data-scroll-target="#general-information"><span class="toc-section-number">1</span>  General information</a></li>
-  <li><a href="#escaping-from-the-chicken-coop" id="toc-escaping-from-the-chicken-coop" class="nav-link" data-scroll-target="#escaping-from-the-chicken-coop"><span class="toc-section-number">2</span>  Escaping from the chicken coop</a>
+  <li><a href="#general-information" id="toc-general-information" class="nav-link active" data-scroll-target="#general-information"><span class="header-section-number">1</span> General information</a></li>
+  <li><a href="#escaping-from-the-chicken-coop" id="toc-escaping-from-the-chicken-coop" class="nav-link" data-scroll-target="#escaping-from-the-chicken-coop"><span class="header-section-number">2</span> Escaping from the chicken coop</a>
   <ul class="collapse">
-  <li><a href="#a" id="toc-a" class="nav-link" data-scroll-target="#a"><span class="toc-section-number">2.1</span>  (a)</a></li>
-  <li><a href="#b" id="toc-b" class="nav-link" data-scroll-target="#b"><span class="toc-section-number">2.2</span>  (b)</a></li>
-  <li><a href="#c" id="toc-c" class="nav-link" data-scroll-target="#c"><span class="toc-section-number">2.3</span>  (c)</a></li>
+  <li><a href="#a" id="toc-a" class="nav-link" data-scroll-target="#a"><span class="header-section-number">2.1</span> (a)</a></li>
+  <li><a href="#b" id="toc-b" class="nav-link" data-scroll-target="#b"><span class="header-section-number">2.2</span> (b)</a></li>
+  <li><a href="#c" id="toc-c" class="nav-link" data-scroll-target="#c"><span class="header-section-number">2.3</span> (c)</a></li>
   </ul></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="template9.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
@@ -316,7 +318,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./template1.html">Templates</a></li><li class="breadcrumb-item"><a href="./template9.html">Assignment 9</a></li></ol></nav>
 <div class="quarto-title">
 <div class="quarto-title-block"><div><h1 class="title">Assignment 9</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 <p class="subtitle lead">Decision analysis</p>
@@ -338,18 +340,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </div>
   
 
+
 </header>
+
 
 <section id="general-information" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> General information</h1>
 <p>This is the template for <a href="assignment9.html">assignment 9</a>. You can download the <a href="https://avehtari.github.io/BDA_course_Aalto/assignments/template9.qmd">qmd-file</a> or copy the code from this rendered document after clicking on <code>&lt;/&gt; Code</code> in the top right corner.</p>
 <p><strong>Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.</strong></p>
-<div class="callout callout-style-default callout-warning callout-captioned">
+<div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Setup
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -359,116 +363,21 @@ Setup
 <p><em>This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.</em> <strong>Make sure that this does not get displayed in the PDF!</strong></p>
 <p>The following loads several needed packages:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(bayesplot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>This is bayesplot version 1.10.0</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>- Online documentation and vignettes at mc-stan.org/bayesplot</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>- bayesplot theme set to bayesplot::theme_default()</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>   * Does _not_ affect other ggplot2 plots</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>   * See ?bayesplot_theme_set for details on theme setting</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">library</span>(cmdstanr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>This is cmdstanr version 0.5.3</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>- CmdStanR documentation and vignettes: mc-stan.org/cmdstanr</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>- CmdStan path: /root/.cmdstan/cmdstan-2.31.0</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>- CmdStan version: 2.31.0</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-A newer version of CmdStan is available. See ?install_cmdstan() to install it.
-To disable this check set option or environment variable CMDSTANR_NO_VER_CHECK=TRUE.</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'dplyr'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:stats':
-
-    filter, lag</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:base':
-
-    intersect, setdiff, setequal, union</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb17-2"><a href="#cb17-2"></a><span class="fu">library</span>(ggdist) <span class="co"># for stat_dotsinterval</span></span>
-<span id="cb17-3"><a href="#cb17-3"></a><span class="fu">library</span>(posterior)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>This is posterior version 1.4.0</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'posterior'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:bayesplot':
-
-    rhat</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:stats':
-
-    mad, sd, var</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:base':
-
-    %in%, match</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">library</span>(brms)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: Rcpp</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading 'brms' package (version 2.19.0). Useful instructions
-can be found by typing help('brms'). A more detailed introduction
-to the package is available through vignette('brms_overview').</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'brms'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:ggdist':
-
-    dstudent_t, pstudent_t, qstudent_t, rstudent_t</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:bayesplot':
-
-    rhat</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:stats':
-
-    ar</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="co"># Globally specfiy cmdstan backend for brms</span></span>
-<span id="cb30-2"><a href="#cb30-2"></a><span class="fu">options</span>(<span class="at">brms.backend=</span><span class="st">"cmdstanr"</span>)</span>
-<span id="cb30-3"><a href="#cb30-3"></a><span class="co"># Tell brms to cache results if possible</span></span>
-<span id="cb30-4"><a href="#cb30-4"></a><span class="fu">options</span>(<span class="at">brms.file_refit=</span><span class="st">"on_change"</span>)</span>
-<span id="cb30-5"><a href="#cb30-5"></a></span>
-<span id="cb30-6"><a href="#cb30-6"></a><span class="co"># Set more readable themes with bigger font for plotting packages</span></span>
-<span id="cb30-7"><a href="#cb30-7"></a>ggplot2<span class="sc">::</span><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
-<span id="cb30-8"><a href="#cb30-8"></a>bayesplot<span class="sc">::</span><span class="fu">bayesplot_theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(bayesplot)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">library</span>(cmdstanr)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="fu">library</span>(ggdist) <span class="co"># for stat_dotsinterval</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="fu">library</span>(posterior)</span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="fu">library</span>(brms)</span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="co"># Globally specfiy cmdstan backend for brms</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="fu">options</span>(<span class="at">brms.backend=</span><span class="st">"cmdstanr"</span>)</span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="co"># Tell brms to cache results if possible</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="fu">options</span>(<span class="at">brms.file_refit=</span><span class="st">"on_change"</span>)</span>
+<span id="cb1-12"><a href="#cb1-12"></a></span>
+<span id="cb1-13"><a href="#cb1-13"></a><span class="co"># Set more readable themes with bigger font for plotting packages</span></span>
+<span id="cb1-14"><a href="#cb1-14"></a>ggplot2<span class="sc">::</span><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
+<span id="cb1-15"><a href="#cb1-15"></a>bayesplot<span class="sc">::</span><span class="fu">bayesplot_theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -478,12 +387,12 @@ Attaching package: 'brms'</code></pre>
 <h1 data-number="2"><span class="header-section-number">2</span> Escaping from the chicken coop</h1>
 <section id="a" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="a"><span class="header-section-number">2.1</span> (a)</h2>
-<div class="callout callout-style-default callout-warning callout-captioned">
+<div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 A simple GP model
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -493,35 +402,29 @@ A simple GP model
 <p><em>This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.</em> <strong>Make sure that this does not get displayed in the PDF!</strong></p>
 <p>The below fits a GP model to the chicken growth curves. It may take a few minutes to fit, but you can also <a href="./additional_files/assignment9/gp_chicken_fit.rds">download the fit <code>.rds</code>-file</a> and work with that fit object.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
-<span id="cb31-2"><a href="#cb31-2"></a>  weight <span class="sc">~</span> <span class="fu">gp</span>(Time) <span class="sc">+</span> (<span class="dv">0</span><span class="sc">+</span>Time<span class="sc">|</span>Diet) <span class="sc">+</span> (<span class="dv">0</span><span class="sc">+</span>Time<span class="sc">|</span>Chick),</span>
-<span id="cb31-3"><a href="#cb31-3"></a>  <span class="at">data =</span> ChickWeight,</span>
-<span id="cb31-4"><a href="#cb31-4"></a>  <span class="at">family =</span> <span class="st">"lognormal"</span>,</span>
-<span id="cb31-5"><a href="#cb31-5"></a>  <span class="at">file=</span><span class="st">"additional_files/assignment9/gp_chicken_fit"</span></span>
-<span id="cb31-6"><a href="#cb31-6"></a>)</span>
-<span id="cb31-7"><a href="#cb31-7"></a>brms<span class="sc">::</span><span class="fu">pp_check</span>(fit, <span class="at">type =</span> <span class="st">"intervals_grouped"</span>, <span class="at">group =</span> <span class="st">"Diet"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Using all posterior draws for ppc type 'intervals_grouped' by default.</code></pre>
-</div>
-<div class="cell-output-display">
-<p><img src="template9_files/figure-html/fit-1.png" class="img-fluid" width="672"></p>
-</div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
+<span id="cb2-2"><a href="#cb2-2"></a>  weight <span class="sc">~</span> <span class="fu">gp</span>(Time) <span class="sc">+</span> (<span class="dv">0</span><span class="sc">+</span>Time<span class="sc">|</span>Diet) <span class="sc">+</span> (<span class="dv">0</span><span class="sc">+</span>Time<span class="sc">|</span>Chick),</span>
+<span id="cb2-3"><a href="#cb2-3"></a>  <span class="at">data =</span> ChickWeight,</span>
+<span id="cb2-4"><a href="#cb2-4"></a>  <span class="at">family =</span> <span class="st">"lognormal"</span>,</span>
+<span id="cb2-5"><a href="#cb2-5"></a>  <span class="at">file=</span><span class="st">"additional_files/assignment9/gp_chicken_fit"</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a>)</span>
+<span id="cb2-7"><a href="#cb2-7"></a>brms<span class="sc">::</span><span class="fu">pp_check</span>(fit, <span class="at">type =</span> <span class="st">"intervals_grouped"</span>, <span class="at">group =</span> <span class="st">"Diet"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="co"># Useful r functions: </span></span>
-<span id="cb33-2"><a href="#cb33-2"></a><span class="co">#   rep(..., each=...), cbind, colMeans, </span></span>
-<span id="cb33-3"><a href="#cb33-3"></a><span class="co">#   posterior_predict(..., newdata=..., allow_new_levels=TRUE, sample_new_levels="gaussian")</span></span>
-<span id="cb33-4"><a href="#cb33-4"></a><span class="co">#   ggplot, geom_line, aes(..., group=..., color=...)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># Useful r functions: </span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="co">#   rep(..., each=...), cbind, colMeans, </span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co">#   posterior_predict(..., newdata=..., allow_new_levels=TRUE, sample_new_levels="gaussian")</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#   ggplot, geom_line, aes(..., group=..., color=...)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="callout callout-style-default callout-warning callout-captioned">
+<div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Chickenwise probability of escape function
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -530,23 +433,23 @@ Chickenwise probability of escape function
 <div class="callout-body-container callout-body">
 <p><em>This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.</em> <strong>Make sure that this does not get displayed in the PDF!</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>bump <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">loc=</span><span class="dv">0</span>, <span class="at">scale=</span><span class="dv">1</span>){</span>
-<span id="cb34-2"><a href="#cb34-2"></a>  xi <span class="ot">=</span> (x <span class="sc">-</span> loc) <span class="sc">/</span> scale</span>
-<span id="cb34-3"><a href="#cb34-3"></a>  <span class="fu">ifelse</span>(<span class="fu">abs</span>(xi) <span class="sc">&lt;</span> <span class="dv">1</span>, <span class="fu">exp</span>(<span class="sc">-</span><span class="dv">1</span><span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>xi<span class="sc">^</span><span class="dv">2</span>)), <span class="fl">0.</span>)</span>
-<span id="cb34-4"><a href="#cb34-4"></a>}</span>
-<span id="cb34-5"><a href="#cb34-5"></a>daily_probability_of_escape <span class="ot">&lt;-</span> <span class="cf">function</span>(day, weight){</span>
-<span id="cb34-6"><a href="#cb34-6"></a>  <span class="co"># Expects a day and a weight and computes the daily probability of escape </span></span>
-<span id="cb34-7"><a href="#cb34-7"></a>  <span class="fu">bump</span>(day, <span class="dv">30</span>, <span class="dv">10</span>) <span class="sc">*</span> (<span class="fl">1e-2</span> <span class="sc">+</span> <span class="fu">bump</span>(weight, <span class="dv">200</span>, <span class="dv">150</span>)<span class="sc">+</span><span class="fu">bump</span>(weight, <span class="dv">700</span>, <span class="dv">150</span>))</span>
-<span id="cb34-8"><a href="#cb34-8"></a>}</span>
-<span id="cb34-9"><a href="#cb34-9"></a>chickenwise_probability_of_escape <span class="ot">&lt;-</span> <span class="cf">function</span>(weights){</span>
-<span id="cb34-10"><a href="#cb34-10"></a>  <span class="co"># Expects a vector of daily weights from day 1 to N and computes the probability of </span></span>
-<span id="cb34-11"><a href="#cb34-11"></a>  <span class="co"># escape at the end of the time series</span></span>
-<span id="cb34-12"><a href="#cb34-12"></a>  prob_of_failure <span class="ot">=</span> <span class="dv">1</span></span>
-<span id="cb34-13"><a href="#cb34-13"></a>  <span class="cf">for</span>(day <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(weights)){</span>
-<span id="cb34-14"><a href="#cb34-14"></a>    prob_of_failure <span class="ot">=</span> prob_of_failure <span class="sc">*</span> (<span class="dv">1</span><span class="sc">-</span><span class="fu">daily_probability_of_escape</span>(day, weights[day]))</span>
-<span id="cb34-15"><a href="#cb34-15"></a>  }</span>
-<span id="cb34-16"><a href="#cb34-16"></a>  <span class="fu">return</span>(<span class="dv">1</span> <span class="sc">-</span> prob_of_failure)</span>
-<span id="cb34-17"><a href="#cb34-17"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>bump <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">loc=</span><span class="dv">0</span>, <span class="at">scale=</span><span class="dv">1</span>){</span>
+<span id="cb4-2"><a href="#cb4-2"></a>  xi <span class="ot">=</span> (x <span class="sc">-</span> loc) <span class="sc">/</span> scale</span>
+<span id="cb4-3"><a href="#cb4-3"></a>  <span class="fu">ifelse</span>(<span class="fu">abs</span>(xi) <span class="sc">&lt;</span> <span class="dv">1</span>, <span class="fu">exp</span>(<span class="sc">-</span><span class="dv">1</span><span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>xi<span class="sc">^</span><span class="dv">2</span>)), <span class="fl">0.</span>)</span>
+<span id="cb4-4"><a href="#cb4-4"></a>}</span>
+<span id="cb4-5"><a href="#cb4-5"></a>daily_probability_of_escape <span class="ot">&lt;-</span> <span class="cf">function</span>(day, weight){</span>
+<span id="cb4-6"><a href="#cb4-6"></a>  <span class="co"># Expects a day and a weight and computes the daily probability of escape </span></span>
+<span id="cb4-7"><a href="#cb4-7"></a>  <span class="fu">bump</span>(day, <span class="dv">30</span>, <span class="dv">10</span>) <span class="sc">*</span> (<span class="fl">1e-2</span> <span class="sc">+</span> <span class="fu">bump</span>(weight, <span class="dv">200</span>, <span class="dv">150</span>)<span class="sc">+</span><span class="fu">bump</span>(weight, <span class="dv">700</span>, <span class="dv">150</span>))</span>
+<span id="cb4-8"><a href="#cb4-8"></a>}</span>
+<span id="cb4-9"><a href="#cb4-9"></a>chickenwise_probability_of_escape <span class="ot">&lt;-</span> <span class="cf">function</span>(weights){</span>
+<span id="cb4-10"><a href="#cb4-10"></a>  <span class="co"># Expects a vector of daily weights from day 1 to N and computes the probability of </span></span>
+<span id="cb4-11"><a href="#cb4-11"></a>  <span class="co"># escape at the end of the time series</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a>  prob_of_failure <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a>  <span class="cf">for</span>(day <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(weights)){</span>
+<span id="cb4-14"><a href="#cb4-14"></a>    prob_of_failure <span class="ot">=</span> prob_of_failure <span class="sc">*</span> (<span class="dv">1</span><span class="sc">-</span><span class="fu">daily_probability_of_escape</span>(day, weights[day]))</span>
+<span id="cb4-15"><a href="#cb4-15"></a>  }</span>
+<span id="cb4-16"><a href="#cb4-16"></a>  <span class="fu">return</span>(<span class="dv">1</span> <span class="sc">-</span> prob_of_failure)</span>
+<span id="cb4-17"><a href="#cb4-17"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -555,16 +458,16 @@ Chickenwise probability of escape function
 <section id="b" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="b"><span class="header-section-number">2.2</span> (b)</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="co"># Useful r functions: chickenwise_probability_of_escape (see above)</span></span>
-<span id="cb35-2"><a href="#cb35-2"></a><span class="co"># rep(..., each=...), apply, </span></span>
-<span id="cb35-3"><a href="#cb35-3"></a><span class="co"># ggplot, stat_dotsinterval</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Useful r functions: chickenwise_probability_of_escape (see above)</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="co"># rep(..., each=...), apply, </span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="co"># ggplot, stat_dotsinterval</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="c" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="c"><span class="header-section-number">2.3</span> (c)</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a><span class="co"># Useful r functions: chickenwise_probability_of_escape (see above)</span></span>
-<span id="cb36-2"><a href="#cb36-2"></a><span class="co"># apply, aggregate, </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Useful r functions: chickenwise_probability_of_escape (see above)</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="co"># apply, aggregate, </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
@@ -601,12 +504,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
     }
-  });
-  clipboard.on('success', function(e) {
+    return false;
+  }
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -638,7 +544,29 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
   const viewSource = window.document.getElementById('quarto-view-source') ||
                      window.document.getElementById('quarto-code-tools-source');
   if (viewSource) {
@@ -690,10 +618,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   if (showAllCode) {
     showAllCode.addEventListener("click", toggleCodeHandler(true));
   }
-  function tippyHover(el, contentFn) {
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -703,8 +648,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -716,7 +670,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -760,6 +837,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -785,6 +863,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -846,182 +950,183 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./template8.html" class="pagination-link">
+      <a href="./template8.html" class="pagination-link" aria-label="Assignment 8">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Assignment 8</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb37" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb37-1"><a href="#cb37-1"></a><span class="co">---</span></span>
-<span id="cb37-2"><a href="#cb37-2"></a><span class="an">title:</span><span class="co"> "Assignment 9"</span></span>
-<span id="cb37-3"><a href="#cb37-3"></a><span class="an">subtitle:</span><span class="co"> "Decision analysis"</span></span>
-<span id="cb37-4"><a href="#cb37-4"></a><span class="an">author:</span><span class="co"> anonymous # &lt;-- hand in anonymously</span></span>
-<span id="cb37-5"><a href="#cb37-5"></a><span class="an">format:</span></span>
-<span id="cb37-6"><a href="#cb37-6"></a><span class="co">  html:</span></span>
-<span id="cb37-7"><a href="#cb37-7"></a><span class="co">    toc: true</span></span>
-<span id="cb37-8"><a href="#cb37-8"></a><span class="co">    code-tools: true</span></span>
-<span id="cb37-9"><a href="#cb37-9"></a><span class="co">    code-line-numbers: true</span></span>
-<span id="cb37-10"><a href="#cb37-10"></a><span class="co">    number-sections: true</span></span>
-<span id="cb37-11"><a href="#cb37-11"></a><span class="co">    mainfont: Georgia, serif</span></span>
-<span id="cb37-12"><a href="#cb37-12"></a><span class="co">    page-layout: article</span></span>
-<span id="cb37-13"><a href="#cb37-13"></a><span class="co">  pdf:  </span></span>
-<span id="cb37-14"><a href="#cb37-14"></a><span class="co">    geometry:</span></span>
-<span id="cb37-15"><a href="#cb37-15"></a><span class="co">    - left=1cm,top=1cm,bottom=1cm,right=7cm</span></span>
-<span id="cb37-16"><a href="#cb37-16"></a><span class="co">    number-sections: true</span></span>
-<span id="cb37-17"><a href="#cb37-17"></a><span class="co">    code-annotations: none</span></span>
-<span id="cb37-18"><a href="#cb37-18"></a><span class="an">editor:</span><span class="co"> source</span></span>
-<span id="cb37-19"><a href="#cb37-19"></a><span class="co">---</span></span>
-<span id="cb37-20"><a href="#cb37-20"></a></span>
-<span id="cb37-21"><a href="#cb37-21"></a></span>
-<span id="cb37-22"><a href="#cb37-22"></a><span class="fu"># General information</span></span>
-<span id="cb37-23"><a href="#cb37-23"></a></span>
-<span id="cb37-24"><a href="#cb37-24"></a>This is the template for <span class="co">[</span><span class="ot">assignment 9</span><span class="co">](assignment9.html)</span>. You can download the <span class="co">[</span><span class="ot">qmd-file</span><span class="co">](https://avehtari.github.io/BDA_course_Aalto/assignments/template9.qmd)</span> or copy the code from this rendered document after clicking on <span class="in">`&lt;/&gt; Code`</span> in the top right corner.</span>
-<span id="cb37-25"><a href="#cb37-25"></a></span>
-<span id="cb37-26"><a href="#cb37-26"></a>**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.** </span>
-<span id="cb37-27"><a href="#cb37-27"></a></span>
-<span id="cb37-28"><a href="#cb37-28"></a></span>
-<span id="cb37-29"><a href="#cb37-29"></a></span>
-<span id="cb37-30"><a href="#cb37-30"></a>:::: {.content-hidden when-format="pdf"}</span>
-<span id="cb37-31"><a href="#cb37-31"></a>::: {.callout-warning collapse=false}</span>
-<span id="cb37-32"><a href="#cb37-32"></a> </span>
-<span id="cb37-33"><a href="#cb37-33"></a><span class="fu">## Setup</span></span>
-<span id="cb37-34"><a href="#cb37-34"></a></span>
-<span id="cb37-35"><a href="#cb37-35"></a></span>
-<span id="cb37-36"><a href="#cb37-36"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
-<span id="cb37-37"><a href="#cb37-37"></a>**Make sure that this does not get displayed in the PDF!**</span>
-<span id="cb37-38"><a href="#cb37-38"></a>    </span>
-<span id="cb37-39"><a href="#cb37-39"></a></span>
-<span id="cb37-40"><a href="#cb37-40"></a></span>
-<span id="cb37-41"><a href="#cb37-41"></a></span>
-<span id="cb37-42"><a href="#cb37-42"></a>The following loads several needed packages:</span>
-<span id="cb37-43"><a href="#cb37-43"></a></span>
-<span id="cb37-46"><a href="#cb37-46"></a><span class="in">```{r}</span></span>
-<span id="cb37-47"><a href="#cb37-47"></a><span class="co">#| label: imports</span></span>
-<span id="cb37-48"><a href="#cb37-48"></a><span class="fu">library</span>(bayesplot)</span>
-<span id="cb37-49"><a href="#cb37-49"></a><span class="fu">library</span>(cmdstanr)</span>
-<span id="cb37-50"><a href="#cb37-50"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb37-51"><a href="#cb37-51"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb37-52"><a href="#cb37-52"></a><span class="fu">library</span>(ggdist) <span class="co"># for stat_dotsinterval</span></span>
-<span id="cb37-53"><a href="#cb37-53"></a><span class="fu">library</span>(posterior)</span>
-<span id="cb37-54"><a href="#cb37-54"></a><span class="fu">library</span>(brms)</span>
-<span id="cb37-55"><a href="#cb37-55"></a><span class="co"># Globally specfiy cmdstan backend for brms</span></span>
-<span id="cb37-56"><a href="#cb37-56"></a><span class="fu">options</span>(<span class="at">brms.backend=</span><span class="st">"cmdstanr"</span>)</span>
-<span id="cb37-57"><a href="#cb37-57"></a><span class="co"># Tell brms to cache results if possible</span></span>
-<span id="cb37-58"><a href="#cb37-58"></a><span class="fu">options</span>(<span class="at">brms.file_refit=</span><span class="st">"on_change"</span>)</span>
-<span id="cb37-59"><a href="#cb37-59"></a></span>
-<span id="cb37-60"><a href="#cb37-60"></a><span class="co"># Set more readable themes with bigger font for plotting packages</span></span>
-<span id="cb37-61"><a href="#cb37-61"></a>ggplot2<span class="sc">::</span><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
-<span id="cb37-62"><a href="#cb37-62"></a>bayesplot<span class="sc">::</span><span class="fu">bayesplot_theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
-<span id="cb37-63"><a href="#cb37-63"></a><span class="in">```</span></span>
-<span id="cb37-64"><a href="#cb37-64"></a></span>
-<span id="cb37-65"><a href="#cb37-65"></a>:::</span>
-<span id="cb37-66"><a href="#cb37-66"></a>::::</span>
-<span id="cb37-67"><a href="#cb37-67"></a></span>
-<span id="cb37-68"><a href="#cb37-68"></a></span>
-<span id="cb37-69"><a href="#cb37-69"></a><span class="fu"># Escaping from the chicken coop</span></span>
-<span id="cb37-70"><a href="#cb37-70"></a></span>
-<span id="cb37-71"><a href="#cb37-71"></a><span class="fu">## (a)</span></span>
-<span id="cb37-72"><a href="#cb37-72"></a></span>
-<span id="cb37-73"><a href="#cb37-73"></a></span>
-<span id="cb37-74"><a href="#cb37-74"></a>:::: {.content-hidden when-format="pdf"}</span>
-<span id="cb37-75"><a href="#cb37-75"></a>::: {.callout-warning collapse=false}</span>
-<span id="cb37-76"><a href="#cb37-76"></a> </span>
-<span id="cb37-77"><a href="#cb37-77"></a><span class="fu">### A simple GP model</span></span>
-<span id="cb37-78"><a href="#cb37-78"></a></span>
-<span id="cb37-79"><a href="#cb37-79"></a></span>
-<span id="cb37-80"><a href="#cb37-80"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
-<span id="cb37-81"><a href="#cb37-81"></a>**Make sure that this does not get displayed in the PDF!**</span>
-<span id="cb37-82"><a href="#cb37-82"></a>    </span>
-<span id="cb37-83"><a href="#cb37-83"></a></span>
-<span id="cb37-84"><a href="#cb37-84"></a></span>
-<span id="cb37-85"><a href="#cb37-85"></a></span>
-<span id="cb37-86"><a href="#cb37-86"></a>The below fits a GP model to the chicken growth curves. It may take a few minutes to fit, but you </span>
-<span id="cb37-87"><a href="#cb37-87"></a>can also <span class="co">[</span><span class="ot">download the fit `.rds`-file</span><span class="co">](./additional_files/assignment9/gp_chicken_fit.rds)</span> and work with that fit object. </span>
-<span id="cb37-88"><a href="#cb37-88"></a></span>
-<span id="cb37-89"><a href="#cb37-89"></a><span class="in">```{r fit}</span></span>
-<span id="cb37-90"><a href="#cb37-90"></a></span>
-<span id="cb37-91"><a href="#cb37-91"></a>fit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
-<span id="cb37-92"><a href="#cb37-92"></a>  weight <span class="sc">~</span> <span class="fu">gp</span>(Time) <span class="sc">+</span> (<span class="dv">0</span><span class="sc">+</span>Time<span class="sc">|</span>Diet) <span class="sc">+</span> (<span class="dv">0</span><span class="sc">+</span>Time<span class="sc">|</span>Chick),</span>
-<span id="cb37-93"><a href="#cb37-93"></a>  <span class="at">data =</span> ChickWeight,</span>
-<span id="cb37-94"><a href="#cb37-94"></a>  <span class="at">family =</span> <span class="st">"lognormal"</span>,</span>
-<span id="cb37-95"><a href="#cb37-95"></a>  <span class="at">file=</span><span class="st">"additional_files/assignment9/gp_chicken_fit"</span></span>
-<span id="cb37-96"><a href="#cb37-96"></a>)</span>
-<span id="cb37-97"><a href="#cb37-97"></a>brms<span class="sc">::</span><span class="fu">pp_check</span>(fit, <span class="at">type =</span> <span class="st">"intervals_grouped"</span>, <span class="at">group =</span> <span class="st">"Diet"</span>)</span>
-<span id="cb37-98"><a href="#cb37-98"></a><span class="in">```</span></span>
-<span id="cb37-99"><a href="#cb37-99"></a></span>
-<span id="cb37-100"><a href="#cb37-100"></a>:::</span>
-<span id="cb37-101"><a href="#cb37-101"></a>::::</span>
-<span id="cb37-102"><a href="#cb37-102"></a></span>
-<span id="cb37-103"><a href="#cb37-103"></a></span>
-<span id="cb37-104"><a href="#cb37-104"></a></span>
-<span id="cb37-107"><a href="#cb37-107"></a><span class="in">```{r}</span></span>
-<span id="cb37-108"><a href="#cb37-108"></a><span class="co"># Useful r functions: </span></span>
-<span id="cb37-109"><a href="#cb37-109"></a><span class="co">#   rep(..., each=...), cbind, colMeans, </span></span>
-<span id="cb37-110"><a href="#cb37-110"></a><span class="co">#   posterior_predict(..., newdata=..., allow_new_levels=TRUE, sample_new_levels="gaussian")</span></span>
-<span id="cb37-111"><a href="#cb37-111"></a><span class="co">#   ggplot, geom_line, aes(..., group=..., color=...)</span></span>
-<span id="cb37-112"><a href="#cb37-112"></a><span class="in">```</span></span>
-<span id="cb37-113"><a href="#cb37-113"></a></span>
-<span id="cb37-114"><a href="#cb37-114"></a></span>
-<span id="cb37-115"><a href="#cb37-115"></a></span>
-<span id="cb37-116"><a href="#cb37-116"></a>:::: {.content-hidden when-format="pdf"}</span>
-<span id="cb37-117"><a href="#cb37-117"></a>::: {.callout-warning collapse=false}</span>
-<span id="cb37-118"><a href="#cb37-118"></a></span>
-<span id="cb37-119"><a href="#cb37-119"></a><span class="fu">###  Chickenwise probability of escape function</span></span>
-<span id="cb37-120"><a href="#cb37-120"></a></span>
-<span id="cb37-121"><a href="#cb37-121"></a></span>
-<span id="cb37-122"><a href="#cb37-122"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
-<span id="cb37-123"><a href="#cb37-123"></a>**Make sure that this does not get displayed in the PDF!**</span>
-<span id="cb37-124"><a href="#cb37-124"></a>    </span>
-<span id="cb37-125"><a href="#cb37-125"></a></span>
-<span id="cb37-126"><a href="#cb37-126"></a></span>
-<span id="cb37-127"><a href="#cb37-127"></a></span>
-<span id="cb37-130"><a href="#cb37-130"></a><span class="in">```{r}</span></span>
-<span id="cb37-131"><a href="#cb37-131"></a>bump <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">loc=</span><span class="dv">0</span>, <span class="at">scale=</span><span class="dv">1</span>){</span>
-<span id="cb37-132"><a href="#cb37-132"></a>  xi <span class="ot">=</span> (x <span class="sc">-</span> loc) <span class="sc">/</span> scale</span>
-<span id="cb37-133"><a href="#cb37-133"></a>  <span class="fu">ifelse</span>(<span class="fu">abs</span>(xi) <span class="sc">&lt;</span> <span class="dv">1</span>, <span class="fu">exp</span>(<span class="sc">-</span><span class="dv">1</span><span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>xi<span class="sc">^</span><span class="dv">2</span>)), <span class="fl">0.</span>)</span>
-<span id="cb37-134"><a href="#cb37-134"></a>}</span>
-<span id="cb37-135"><a href="#cb37-135"></a>daily_probability_of_escape <span class="ot">&lt;-</span> <span class="cf">function</span>(day, weight){</span>
-<span id="cb37-136"><a href="#cb37-136"></a>  <span class="co"># Expects a day and a weight and computes the daily probability of escape </span></span>
-<span id="cb37-137"><a href="#cb37-137"></a>  <span class="fu">bump</span>(day, <span class="dv">30</span>, <span class="dv">10</span>) <span class="sc">*</span> (<span class="fl">1e-2</span> <span class="sc">+</span> <span class="fu">bump</span>(weight, <span class="dv">200</span>, <span class="dv">150</span>)<span class="sc">+</span><span class="fu">bump</span>(weight, <span class="dv">700</span>, <span class="dv">150</span>))</span>
-<span id="cb37-138"><a href="#cb37-138"></a>}</span>
-<span id="cb37-139"><a href="#cb37-139"></a>chickenwise_probability_of_escape <span class="ot">&lt;-</span> <span class="cf">function</span>(weights){</span>
-<span id="cb37-140"><a href="#cb37-140"></a>  <span class="co"># Expects a vector of daily weights from day 1 to N and computes the probability of </span></span>
-<span id="cb37-141"><a href="#cb37-141"></a>  <span class="co"># escape at the end of the time series</span></span>
-<span id="cb37-142"><a href="#cb37-142"></a>  prob_of_failure <span class="ot">=</span> <span class="dv">1</span></span>
-<span id="cb37-143"><a href="#cb37-143"></a>  <span class="cf">for</span>(day <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(weights)){</span>
-<span id="cb37-144"><a href="#cb37-144"></a>    prob_of_failure <span class="ot">=</span> prob_of_failure <span class="sc">*</span> (<span class="dv">1</span><span class="sc">-</span><span class="fu">daily_probability_of_escape</span>(day, weights[day]))</span>
-<span id="cb37-145"><a href="#cb37-145"></a>  }</span>
-<span id="cb37-146"><a href="#cb37-146"></a>  <span class="fu">return</span>(<span class="dv">1</span> <span class="sc">-</span> prob_of_failure)</span>
-<span id="cb37-147"><a href="#cb37-147"></a>}</span>
-<span id="cb37-148"><a href="#cb37-148"></a><span class="in">```</span></span>
-<span id="cb37-149"><a href="#cb37-149"></a></span>
-<span id="cb37-150"><a href="#cb37-150"></a>:::</span>
-<span id="cb37-151"><a href="#cb37-151"></a>::::</span>
-<span id="cb37-152"><a href="#cb37-152"></a></span>
-<span id="cb37-153"><a href="#cb37-153"></a></span>
-<span id="cb37-154"><a href="#cb37-154"></a></span>
-<span id="cb37-155"><a href="#cb37-155"></a><span class="fu">## (b)</span></span>
-<span id="cb37-156"><a href="#cb37-156"></a></span>
-<span id="cb37-157"><a href="#cb37-157"></a></span>
-<span id="cb37-160"><a href="#cb37-160"></a><span class="in">```{r}</span></span>
-<span id="cb37-161"><a href="#cb37-161"></a><span class="co"># Useful r functions: chickenwise_probability_of_escape (see above)</span></span>
-<span id="cb37-162"><a href="#cb37-162"></a><span class="co"># rep(..., each=...), apply, </span></span>
-<span id="cb37-163"><a href="#cb37-163"></a><span class="co"># ggplot, stat_dotsinterval</span></span>
-<span id="cb37-164"><a href="#cb37-164"></a><span class="in">```</span></span>
-<span id="cb37-165"><a href="#cb37-165"></a></span>
-<span id="cb37-166"><a href="#cb37-166"></a></span>
-<span id="cb37-167"><a href="#cb37-167"></a></span>
-<span id="cb37-168"><a href="#cb37-168"></a><span class="fu">## (c)</span></span>
-<span id="cb37-169"><a href="#cb37-169"></a></span>
-<span id="cb37-170"><a href="#cb37-170"></a></span>
-<span id="cb37-173"><a href="#cb37-173"></a><span class="in">```{r}</span></span>
-<span id="cb37-174"><a href="#cb37-174"></a><span class="co"># Useful r functions: chickenwise_probability_of_escape (see above)</span></span>
-<span id="cb37-175"><a href="#cb37-175"></a><span class="co"># apply, aggregate, </span></span>
-<span id="cb37-176"><a href="#cb37-176"></a><span class="in">```</span></span>
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1"></a><span class="co">---</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="an">title:</span><span class="co"> "Assignment 9"</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="an">subtitle:</span><span class="co"> "Decision analysis"</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="an">author:</span><span class="co"> anonymous # &lt;-- hand in anonymously</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="an">format:</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="co">  html:</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="co">    toc: true</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="co">    code-tools: true</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="co">    code-line-numbers: true</span></span>
+<span id="cb7-10"><a href="#cb7-10"></a><span class="co">    number-sections: true</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a><span class="co">    mainfont: Georgia, serif</span></span>
+<span id="cb7-12"><a href="#cb7-12"></a><span class="co">    page-layout: article</span></span>
+<span id="cb7-13"><a href="#cb7-13"></a><span class="co">  pdf:  </span></span>
+<span id="cb7-14"><a href="#cb7-14"></a><span class="co">    geometry:</span></span>
+<span id="cb7-15"><a href="#cb7-15"></a><span class="co">    - left=1cm,top=1cm,bottom=1cm,right=7cm</span></span>
+<span id="cb7-16"><a href="#cb7-16"></a><span class="co">    number-sections: true</span></span>
+<span id="cb7-17"><a href="#cb7-17"></a><span class="co">    code-annotations: none</span></span>
+<span id="cb7-18"><a href="#cb7-18"></a><span class="an">editor:</span><span class="co"> source</span></span>
+<span id="cb7-19"><a href="#cb7-19"></a><span class="co">---</span></span>
+<span id="cb7-20"><a href="#cb7-20"></a></span>
+<span id="cb7-21"><a href="#cb7-21"></a></span>
+<span id="cb7-22"><a href="#cb7-22"></a><span class="fu"># General information</span></span>
+<span id="cb7-23"><a href="#cb7-23"></a></span>
+<span id="cb7-24"><a href="#cb7-24"></a>This is the template for <span class="co">[</span><span class="ot">assignment 9</span><span class="co">](assignment9.html)</span>. You can download the <span class="co">[</span><span class="ot">qmd-file</span><span class="co">](https://avehtari.github.io/BDA_course_Aalto/assignments/template9.qmd)</span> or copy the code from this rendered document after clicking on <span class="in">`&lt;/&gt; Code`</span> in the top right corner.</span>
+<span id="cb7-25"><a href="#cb7-25"></a></span>
+<span id="cb7-26"><a href="#cb7-26"></a>**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.** </span>
+<span id="cb7-27"><a href="#cb7-27"></a></span>
+<span id="cb7-28"><a href="#cb7-28"></a></span>
+<span id="cb7-29"><a href="#cb7-29"></a></span>
+<span id="cb7-30"><a href="#cb7-30"></a>:::: {.content-hidden when-format="pdf"}</span>
+<span id="cb7-31"><a href="#cb7-31"></a>::: {.callout-warning collapse=false}</span>
+<span id="cb7-32"><a href="#cb7-32"></a> </span>
+<span id="cb7-33"><a href="#cb7-33"></a><span class="fu">## Setup</span></span>
+<span id="cb7-34"><a href="#cb7-34"></a></span>
+<span id="cb7-35"><a href="#cb7-35"></a></span>
+<span id="cb7-36"><a href="#cb7-36"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
+<span id="cb7-37"><a href="#cb7-37"></a>**Make sure that this does not get displayed in the PDF!**</span>
+<span id="cb7-38"><a href="#cb7-38"></a>    </span>
+<span id="cb7-39"><a href="#cb7-39"></a></span>
+<span id="cb7-40"><a href="#cb7-40"></a></span>
+<span id="cb7-41"><a href="#cb7-41"></a></span>
+<span id="cb7-42"><a href="#cb7-42"></a>The following loads several needed packages:</span>
+<span id="cb7-43"><a href="#cb7-43"></a></span>
+<span id="cb7-46"><a href="#cb7-46"></a><span class="in">```{r}</span></span>
+<span id="cb7-47"><a href="#cb7-47"></a><span class="co">#| label: imports</span></span>
+<span id="cb7-48"><a href="#cb7-48"></a><span class="fu">library</span>(bayesplot)</span>
+<span id="cb7-49"><a href="#cb7-49"></a><span class="fu">library</span>(cmdstanr)</span>
+<span id="cb7-50"><a href="#cb7-50"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb7-51"><a href="#cb7-51"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb7-52"><a href="#cb7-52"></a><span class="fu">library</span>(ggdist) <span class="co"># for stat_dotsinterval</span></span>
+<span id="cb7-53"><a href="#cb7-53"></a><span class="fu">library</span>(posterior)</span>
+<span id="cb7-54"><a href="#cb7-54"></a><span class="fu">library</span>(brms)</span>
+<span id="cb7-55"><a href="#cb7-55"></a><span class="co"># Globally specfiy cmdstan backend for brms</span></span>
+<span id="cb7-56"><a href="#cb7-56"></a><span class="fu">options</span>(<span class="at">brms.backend=</span><span class="st">"cmdstanr"</span>)</span>
+<span id="cb7-57"><a href="#cb7-57"></a><span class="co"># Tell brms to cache results if possible</span></span>
+<span id="cb7-58"><a href="#cb7-58"></a><span class="fu">options</span>(<span class="at">brms.file_refit=</span><span class="st">"on_change"</span>)</span>
+<span id="cb7-59"><a href="#cb7-59"></a></span>
+<span id="cb7-60"><a href="#cb7-60"></a><span class="co"># Set more readable themes with bigger font for plotting packages</span></span>
+<span id="cb7-61"><a href="#cb7-61"></a>ggplot2<span class="sc">::</span><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
+<span id="cb7-62"><a href="#cb7-62"></a>bayesplot<span class="sc">::</span><span class="fu">bayesplot_theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
+<span id="cb7-63"><a href="#cb7-63"></a><span class="in">```</span></span>
+<span id="cb7-64"><a href="#cb7-64"></a></span>
+<span id="cb7-65"><a href="#cb7-65"></a>:::</span>
+<span id="cb7-66"><a href="#cb7-66"></a>::::</span>
+<span id="cb7-67"><a href="#cb7-67"></a></span>
+<span id="cb7-68"><a href="#cb7-68"></a></span>
+<span id="cb7-69"><a href="#cb7-69"></a><span class="fu"># Escaping from the chicken coop</span></span>
+<span id="cb7-70"><a href="#cb7-70"></a></span>
+<span id="cb7-71"><a href="#cb7-71"></a><span class="fu">## (a)</span></span>
+<span id="cb7-72"><a href="#cb7-72"></a></span>
+<span id="cb7-73"><a href="#cb7-73"></a></span>
+<span id="cb7-74"><a href="#cb7-74"></a>:::: {.content-hidden when-format="pdf"}</span>
+<span id="cb7-75"><a href="#cb7-75"></a>::: {.callout-warning collapse=false}</span>
+<span id="cb7-76"><a href="#cb7-76"></a> </span>
+<span id="cb7-77"><a href="#cb7-77"></a><span class="fu">### A simple GP model</span></span>
+<span id="cb7-78"><a href="#cb7-78"></a></span>
+<span id="cb7-79"><a href="#cb7-79"></a></span>
+<span id="cb7-80"><a href="#cb7-80"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
+<span id="cb7-81"><a href="#cb7-81"></a>**Make sure that this does not get displayed in the PDF!**</span>
+<span id="cb7-82"><a href="#cb7-82"></a>    </span>
+<span id="cb7-83"><a href="#cb7-83"></a></span>
+<span id="cb7-84"><a href="#cb7-84"></a></span>
+<span id="cb7-85"><a href="#cb7-85"></a></span>
+<span id="cb7-86"><a href="#cb7-86"></a>The below fits a GP model to the chicken growth curves. It may take a few minutes to fit, but you </span>
+<span id="cb7-87"><a href="#cb7-87"></a>can also <span class="co">[</span><span class="ot">download the fit `.rds`-file</span><span class="co">](./additional_files/assignment9/gp_chicken_fit.rds)</span> and work with that fit object. </span>
+<span id="cb7-88"><a href="#cb7-88"></a></span>
+<span id="cb7-89"><a href="#cb7-89"></a><span class="in">```{r fit}</span></span>
+<span id="cb7-90"><a href="#cb7-90"></a></span>
+<span id="cb7-91"><a href="#cb7-91"></a><span class="in">fit &lt;- brm(</span></span>
+<span id="cb7-92"><a href="#cb7-92"></a><span class="in">  weight ~ gp(Time) + (0+Time|Diet) + (0+Time|Chick),</span></span>
+<span id="cb7-93"><a href="#cb7-93"></a><span class="in">  data = ChickWeight,</span></span>
+<span id="cb7-94"><a href="#cb7-94"></a><span class="in">  family = "lognormal",</span></span>
+<span id="cb7-95"><a href="#cb7-95"></a><span class="in">  file="additional_files/assignment9/gp_chicken_fit"</span></span>
+<span id="cb7-96"><a href="#cb7-96"></a><span class="in">)</span></span>
+<span id="cb7-97"><a href="#cb7-97"></a><span class="in">brms::pp_check(fit, type = "intervals_grouped", group = "Diet")</span></span>
+<span id="cb7-98"><a href="#cb7-98"></a><span class="in">```</span></span>
+<span id="cb7-99"><a href="#cb7-99"></a></span>
+<span id="cb7-100"><a href="#cb7-100"></a>:::</span>
+<span id="cb7-101"><a href="#cb7-101"></a>::::</span>
+<span id="cb7-102"><a href="#cb7-102"></a></span>
+<span id="cb7-103"><a href="#cb7-103"></a></span>
+<span id="cb7-104"><a href="#cb7-104"></a></span>
+<span id="cb7-107"><a href="#cb7-107"></a><span class="in">```{r}</span></span>
+<span id="cb7-108"><a href="#cb7-108"></a><span class="co"># Useful r functions: </span></span>
+<span id="cb7-109"><a href="#cb7-109"></a><span class="co">#   rep(..., each=...), cbind, colMeans, </span></span>
+<span id="cb7-110"><a href="#cb7-110"></a><span class="co">#   posterior_predict(..., newdata=..., allow_new_levels=TRUE, sample_new_levels="gaussian")</span></span>
+<span id="cb7-111"><a href="#cb7-111"></a><span class="co">#   ggplot, geom_line, aes(..., group=..., color=...)</span></span>
+<span id="cb7-112"><a href="#cb7-112"></a><span class="in">```</span></span>
+<span id="cb7-113"><a href="#cb7-113"></a></span>
+<span id="cb7-114"><a href="#cb7-114"></a></span>
+<span id="cb7-115"><a href="#cb7-115"></a></span>
+<span id="cb7-116"><a href="#cb7-116"></a>:::: {.content-hidden when-format="pdf"}</span>
+<span id="cb7-117"><a href="#cb7-117"></a>::: {.callout-warning collapse=false}</span>
+<span id="cb7-118"><a href="#cb7-118"></a></span>
+<span id="cb7-119"><a href="#cb7-119"></a><span class="fu">###  Chickenwise probability of escape function</span></span>
+<span id="cb7-120"><a href="#cb7-120"></a></span>
+<span id="cb7-121"><a href="#cb7-121"></a></span>
+<span id="cb7-122"><a href="#cb7-122"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
+<span id="cb7-123"><a href="#cb7-123"></a>**Make sure that this does not get displayed in the PDF!**</span>
+<span id="cb7-124"><a href="#cb7-124"></a>    </span>
+<span id="cb7-125"><a href="#cb7-125"></a></span>
+<span id="cb7-126"><a href="#cb7-126"></a></span>
+<span id="cb7-127"><a href="#cb7-127"></a></span>
+<span id="cb7-130"><a href="#cb7-130"></a><span class="in">```{r}</span></span>
+<span id="cb7-131"><a href="#cb7-131"></a>bump <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">loc=</span><span class="dv">0</span>, <span class="at">scale=</span><span class="dv">1</span>){</span>
+<span id="cb7-132"><a href="#cb7-132"></a>  xi <span class="ot">=</span> (x <span class="sc">-</span> loc) <span class="sc">/</span> scale</span>
+<span id="cb7-133"><a href="#cb7-133"></a>  <span class="fu">ifelse</span>(<span class="fu">abs</span>(xi) <span class="sc">&lt;</span> <span class="dv">1</span>, <span class="fu">exp</span>(<span class="sc">-</span><span class="dv">1</span><span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>xi<span class="sc">^</span><span class="dv">2</span>)), <span class="fl">0.</span>)</span>
+<span id="cb7-134"><a href="#cb7-134"></a>}</span>
+<span id="cb7-135"><a href="#cb7-135"></a>daily_probability_of_escape <span class="ot">&lt;-</span> <span class="cf">function</span>(day, weight){</span>
+<span id="cb7-136"><a href="#cb7-136"></a>  <span class="co"># Expects a day and a weight and computes the daily probability of escape </span></span>
+<span id="cb7-137"><a href="#cb7-137"></a>  <span class="fu">bump</span>(day, <span class="dv">30</span>, <span class="dv">10</span>) <span class="sc">*</span> (<span class="fl">1e-2</span> <span class="sc">+</span> <span class="fu">bump</span>(weight, <span class="dv">200</span>, <span class="dv">150</span>)<span class="sc">+</span><span class="fu">bump</span>(weight, <span class="dv">700</span>, <span class="dv">150</span>))</span>
+<span id="cb7-138"><a href="#cb7-138"></a>}</span>
+<span id="cb7-139"><a href="#cb7-139"></a>chickenwise_probability_of_escape <span class="ot">&lt;-</span> <span class="cf">function</span>(weights){</span>
+<span id="cb7-140"><a href="#cb7-140"></a>  <span class="co"># Expects a vector of daily weights from day 1 to N and computes the probability of </span></span>
+<span id="cb7-141"><a href="#cb7-141"></a>  <span class="co"># escape at the end of the time series</span></span>
+<span id="cb7-142"><a href="#cb7-142"></a>  prob_of_failure <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb7-143"><a href="#cb7-143"></a>  <span class="cf">for</span>(day <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(weights)){</span>
+<span id="cb7-144"><a href="#cb7-144"></a>    prob_of_failure <span class="ot">=</span> prob_of_failure <span class="sc">*</span> (<span class="dv">1</span><span class="sc">-</span><span class="fu">daily_probability_of_escape</span>(day, weights[day]))</span>
+<span id="cb7-145"><a href="#cb7-145"></a>  }</span>
+<span id="cb7-146"><a href="#cb7-146"></a>  <span class="fu">return</span>(<span class="dv">1</span> <span class="sc">-</span> prob_of_failure)</span>
+<span id="cb7-147"><a href="#cb7-147"></a>}</span>
+<span id="cb7-148"><a href="#cb7-148"></a><span class="in">```</span></span>
+<span id="cb7-149"><a href="#cb7-149"></a></span>
+<span id="cb7-150"><a href="#cb7-150"></a>:::</span>
+<span id="cb7-151"><a href="#cb7-151"></a>::::</span>
+<span id="cb7-152"><a href="#cb7-152"></a></span>
+<span id="cb7-153"><a href="#cb7-153"></a></span>
+<span id="cb7-154"><a href="#cb7-154"></a></span>
+<span id="cb7-155"><a href="#cb7-155"></a><span class="fu">## (b)</span></span>
+<span id="cb7-156"><a href="#cb7-156"></a></span>
+<span id="cb7-157"><a href="#cb7-157"></a></span>
+<span id="cb7-160"><a href="#cb7-160"></a><span class="in">```{r}</span></span>
+<span id="cb7-161"><a href="#cb7-161"></a><span class="co"># Useful r functions: chickenwise_probability_of_escape (see above)</span></span>
+<span id="cb7-162"><a href="#cb7-162"></a><span class="co"># rep(..., each=...), apply, </span></span>
+<span id="cb7-163"><a href="#cb7-163"></a><span class="co"># ggplot, stat_dotsinterval</span></span>
+<span id="cb7-164"><a href="#cb7-164"></a><span class="in">```</span></span>
+<span id="cb7-165"><a href="#cb7-165"></a></span>
+<span id="cb7-166"><a href="#cb7-166"></a></span>
+<span id="cb7-167"><a href="#cb7-167"></a></span>
+<span id="cb7-168"><a href="#cb7-168"></a><span class="fu">## (c)</span></span>
+<span id="cb7-169"><a href="#cb7-169"></a></span>
+<span id="cb7-170"><a href="#cb7-170"></a></span>
+<span id="cb7-173"><a href="#cb7-173"></a><span class="in">```{r}</span></span>
+<span id="cb7-174"><a href="#cb7-174"></a><span class="co"># Useful r functions: chickenwise_probability_of_escape (see above)</span></span>
+<span id="cb7-175"><a href="#cb7-175"></a><span class="co"># apply, aggregate, </span></span>
+<span id="cb7-176"><a href="#cb7-176"></a><span class="in">```</span></span>
+</code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
+
 
 
 
