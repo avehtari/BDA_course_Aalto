@@ -1,735 +1,771 @@
 <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
-<html>
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.56">
 
-<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta charset="utf-8" />
-<meta name="generator" content="pandoc" />
-<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
-
-
-
+<meta name="dcterms.date" content="2024-08-13">
 
 <title>Bayesian Data Analysis course</title>
-
-<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
-<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
-<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
-<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
-<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<style>h1 {font-size: 34px;}
-       h1.title {font-size: 38px;}
-       h2 {font-size: 30px;}
-       h3 {font-size: 24px;}
-       h4 {font-size: 18px;}
-       h5 {font-size: 16px;}
-       h6 {font-size: 12px;}
-       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
-       pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
-<script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-
-<style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
-
-<style type="text/css">code{white-space: pre;}</style>
-<script type="text/javascript">
-if (window.hljs) {
-  hljs.configure({languages: []});
-  hljs.initHighlightingOnLoad();
-  if (document.readyState && document.readyState === "complete") {
-    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
-  }
-}
-</script>
-
-
-
-
-
-
-
-
-
-<style type = "text/css">
-.main-container {
-  max-width: 940px;
-  margin-left: auto;
-  margin-right: auto;
-}
-img {
-  max-width:100%;
-}
-.tabbed-pane {
-  padding-top: 12px;
-}
-.html-widget {
-  margin-bottom: 20px;
-}
-button.code-folding-btn:focus {
-  outline: none;
-}
-summary {
-  display: list-item;
-}
-details > summary > p:only-child {
-  display: inline;
-}
-pre code {
-  padding: 0;
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
 }
 </style>
 
 
-<style type="text/css">
-.dropdown-submenu {
-  position: relative;
-}
-.dropdown-submenu>.dropdown-menu {
-  top: 0;
-  left: 100%;
-  margin-top: -6px;
-  margin-left: -1px;
-  border-radius: 0 6px 6px 6px;
-}
-.dropdown-submenu:hover>.dropdown-menu {
-  display: block;
-}
-.dropdown-submenu>a:after {
-  display: block;
-  content: " ";
-  float: right;
-  width: 0;
-  height: 0;
-  border-color: transparent;
-  border-style: solid;
-  border-width: 5px 0 5px 5px;
-  border-left-color: #cccccc;
-  margin-top: 5px;
-  margin-right: -10px;
-}
-.dropdown-submenu:hover>a:after {
-  border-left-color: #adb5bd;
-}
-.dropdown-submenu.pull-left {
-  float: none;
-}
-.dropdown-submenu.pull-left>.dropdown-menu {
-  left: -100%;
-  margin-left: 10px;
-  border-radius: 6px 0 6px 6px;
-}
-</style>
-
-<script type="text/javascript">
-// manage active state of menu based on current page
-$(document).ready(function () {
-  // active menu anchor
-  href = window.location.pathname
-  href = href.substr(href.lastIndexOf('/') + 1)
-  if (href === "")
-    href = "index.html";
-  var menuAnchor = $('a[href="' + href + '"]');
-
-  // mark the anchor link active (and if it's in a dropdown, also mark that active)
-  var dropdown = menuAnchor.closest('li.dropdown');
-  if (window.bootstrap) { // Bootstrap 4+
-    menuAnchor.addClass('active');
-    dropdown.find('> .dropdown-toggle').addClass('active');
-  } else { // Bootstrap 3
-    menuAnchor.parent().addClass('active');
-    dropdown.addClass('active');
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
-
-  // Navbar adjustments
-  var navHeight = $(".navbar").first().height() + 15;
-  var style = document.createElement('style');
-  var pt = "padding-top: " + navHeight + "px; ";
-  var mt = "margin-top: -" + navHeight + "px; ";
-  var css = "";
-  // offset scroll position for anchor links (for fixed navbar)
-  for (var i = 1; i <= 6; i++) {
-    css += ".section h" + i + "{ " + pt + mt + "}\n";
-  }
-  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
-  document.head.appendChild(style);
-});
-</script>
-
-<!-- tabsets -->
-
-<style type="text/css">
-.tabset-dropdown > .nav-tabs {
-  display: inline-table;
-  max-height: 500px;
-  min-height: 44px;
-  overflow-y: auto;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "\e259";
-  font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "\e258";
-  font-family: 'Glyphicons Halflings';
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs > li.active {
-  display: block;
-}
-
-.tabset-dropdown > .nav-tabs > li > a,
-.tabset-dropdown > .nav-tabs > li > a:focus,
-.tabset-dropdown > .nav-tabs > li > a:hover {
-  border: none;
-  display: inline-block;
-  border-radius: 4px;
-  background-color: transparent;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
-  display: block;
-  float: none;
-}
-
-.tabset-dropdown > .nav-tabs > li {
-  display: none;
-}
-</style>
-
-<!-- code folding -->
-
-
-
-<style type="text/css">
-
-#TOC {
-  margin: 25px 0px 20px 0px;
-}
-@media (max-width: 768px) {
-#TOC {
-  position: relative;
-  width: 100%;
-}
-}
-
-@media print {
-.toc-content {
-  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
-  float: right;
-}
-}
-
-.toc-content {
-  padding-left: 30px;
-  padding-right: 40px;
-}
-
-div.main-container {
-  max-width: 1200px;
-}
-
-div.tocify {
-  width: 20%;
-  max-width: 260px;
-  max-height: 85%;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  div.tocify {
-    width: 25%;
-  }
-}
-
-@media (max-width: 767px) {
-  div.tocify {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-.tocify ul, .tocify li {
-  line-height: 20px;
-}
-
-.tocify-subheader .tocify-item {
-  font-size: 0.90em;
-}
-
-.tocify .list-group-item {
-  border-radius: 0px;
-}
-
-
-</style>
-
+}</script>
 
 
 </head>
 
-<body>
+<body class="floating nav-fixed">
 
-
-<div class="container-fluid main-container">
-
-
-<!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row">
-<div class="col-xs-12 col-sm-4 col-md-3">
-<div id="TOC" class="tocify">
-</div>
-</div>
-
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
-
-
-
-
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="index.html">Bayesian Data Analysis course</a>
-    </div>
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-        <li>
-  <a href="index.html">Material</a>
-</li>
-<li>
-  <a href="Aalto2024.html">Aalto 2024</a>
-</li>
-<li>
-  <a href="BDA3_notes.html">BDA3 notes</a>
-</li>
-<li>
-  <a href="assignments.html">Assignments</a>
-</li>
-<li>
-  <a href="project.html">Project</a>
-</li>
-<li>
-  <a href="demos.html">Demos</a>
-</li>
-<li>
-  <a href="FAQ.html">FAQ</a>
-</li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        
-      </ul>
-    </div><!--/.nav-collapse -->
-  </div><!--/.container -->
-</div><!--/.navbar -->
-
-<div id="header">
-
-
-
-<h1 class="title toc-ignore">Bayesian Data Analysis course</h1>
-<h4 class="date">Page updated: 2024-08-13</h4>
-
-</div>
-
-
-<p>This is the web page for the Bayesian Data Analysis course at Aalto
-(CS-E5710) by <a href="https://users.aalto.fi/~ave/">Aki
-Vehtari</a>.</p>
-<p>Aalto students should check <a href="Aalto2024.html">the 2024
-specific course web page</a> and <a
-href="https://mycourses.aalto.fi/course/view.php?id=44799">MyCourses</a>.
-<strong>In 2024</strong> Aalto course can be taken online except for the
-final project presentation. The lectures will be given on campus, but
-recorded and the recording will be made available online after the
-course. The registration for the course lectures will be used to
-estimate the need for the resources. If you are unable to register for
-the course at the moment in the Sisu, there is no need to email the
-lecturer. You can start taking the course and register before the end of
-the course. Sisu shows rooms on campus for the computer exercises, but
-you can join the TA sessions also online via Zulip and Zoom. You can
-choose which TA session to join each week separately, without a need to
-register for those sessions.</p>
-<ul>
-<li><a
-href="https://into.aalto.fi/display/ensaannot/Aalto+University+Code+of+Academic+Integrity+and+Handling+Violations+Thereof">Aalto
-University Code of Academic Integrity and Handling Violations
-Thereof</a></li>
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Bayesian Data Analysis course</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="./index.html" aria-current="page"> 
+<span class="menu-text">Material</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./Aalto2024.html"> 
+<span class="menu-text">Aalto 2024</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./BDA3_notes.html"> 
+<span class="menu-text">BDA3 notes</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./assignments.html"> 
+<span class="menu-text">Assignments</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./project.html"> 
+<span class="menu-text">Project</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./demos.html"> 
+<span class="menu-text">Demos</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./FAQ.html"> 
+<span class="menu-text">FAQ</span></a>
+  </li>  
 </ul>
-<p>All the course material is available in a <a
-href="https://github.com/avehtari/BDA_course_Aalto">git repo</a> (and
-these pages are for easier navigation). All the material can be used in
-other courses. Text (except the BDA3 book) and videos licensed under
-CC-BY-NC 4.0. Code licensed under BSD-3.</p>
-<div style="float:right;position: relative;">
-<p><img src="bda_cover.png" /></p>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
 </div>
-<p><a href="https://users.aalto.fi/~ave/BDA3.pdf">The electronic version
-of the course book Bayesian Data Analysis, 3rd ed, by Andrew Gelman,
-John Carlin, Hal Stern, David Dunson, Aki Vehtari, and Donald Rubin</a>
-is available for non-commercial purposes. Hard copies are available from
-<a
-href="https://www.crcpress.com/Bayesian-Data-Analysis/Gelman-Carlin-Stern-Dunson-Vehtari-Rubin/p/book/9781439840955">the
-publisher</a> and many book stores. See also <a
-href="http://www.stat.columbia.edu/~gelman/book/">home page for the
-book</a>, <a
-href="http://www.stat.columbia.edu/~gelman/book/errata_bda3.txt">errata
-for the book</a>, and <a href="BDA3_notes.html">chapter notes</a>.</p>
-<div id="prerequisites" class="section level2">
-<h2>Prerequisites</h2>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link active" data-scroll-target="#prerequisites">Prerequisites</a></li>
+  <li><a href="#course-contents-following-bda3" id="toc-course-contents-following-bda3" class="nav-link" data-scroll-target="#course-contents-following-bda3">Course contents following BDA3</a></li>
+  <li><a href="#how-to-study" id="toc-how-to-study" class="nav-link" data-scroll-target="#how-to-study">How to study</a></li>
+  <li><a href="#slides-and-chapter-notes" id="toc-slides-and-chapter-notes" class="nav-link" data-scroll-target="#slides-and-chapter-notes">Slides and chapter notes</a></li>
+  <li><a href="#videos" id="toc-videos" class="nav-link" data-scroll-target="#videos">Videos</a></li>
+  <li><a href="#r-and-python" id="toc-r-and-python" class="nav-link" data-scroll-target="#r-and-python">R and Python</a></li>
+  <li><a href="#demos" id="toc-demos" class="nav-link" data-scroll-target="#demos">Demos</a></li>
+  <li><a href="#self-study-exercises" id="toc-self-study-exercises" class="nav-link" data-scroll-target="#self-study-exercises">Self study exercises</a></li>
+  <li><a href="#stan" id="toc-stan" class="nav-link" data-scroll-target="#stan">Stan</a></li>
+  <li><a href="#extra-reading" id="toc-extra-reading" class="nav-link" data-scroll-target="#extra-reading">Extra reading</a></li>
+  <li><a href="#acknowledgements" id="toc-acknowledgements" class="nav-link" data-scroll-target="#acknowledgements">Acknowledgements</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Bayesian Data Analysis course</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 13, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>This is the web page for the Bayesian Data Analysis course at Aalto (CS-E5710) by <a href="https://users.aalto.fi/~ave/">Aki Vehtari</a>.</p>
+<p>Aalto students should check <a href="Aalto2024.html">the 2024 specific course web page</a> and <a href="https://mycourses.aalto.fi/course/view.php?id=44799">MyCourses</a>. <strong>In 2024</strong> Aalto course can be taken online except for the final project presentation. The lectures will be given on campus, but recorded and the recording will be made available online after the course. The registration for the course lectures will be used to estimate the need for the resources. If you are unable to register for the course at the moment in the Sisu, there is no need to email the lecturer. You can start taking the course and register before the end of the course. Sisu shows rooms on campus for the computer exercises, but you can join the TA sessions also online via Zulip and Zoom. You can choose which TA session to join each week separately, without a need to register for those sessions.</p>
+<ul>
+<li><a href="https://into.aalto.fi/display/ensaannot/Aalto+University+Code+of+Academic+Integrity+and+Handling+Violations+Thereof">Aalto University Code of Academic Integrity and Handling Violations Thereof</a></li>
+</ul>
+<p>All the course material is available in a <a href="https://github.com/avehtari/BDA_course_Aalto">git repo</a> (and these pages are for easier navigation). All the material can be used in other courses. Text (except the BDA3 book) and videos licensed under CC-BY-NC 4.0. Code licensed under BSD-3.</p>
+<div style="float:right;position: relative;">
+<p><img src="bda_cover.png" class="img-fluid"></p>
+</div>
+<p><a href="https://users.aalto.fi/~ave/BDA3.pdf">The electronic version of the course book Bayesian Data Analysis, 3rd ed, by Andrew Gelman, John Carlin, Hal Stern, David Dunson, Aki Vehtari, and Donald Rubin</a> is available for non-commercial purposes. Hard copies are available from <a href="https://www.crcpress.com/Bayesian-Data-Analysis/Gelman-Carlin-Stern-Dunson-Vehtari-Rubin/p/book/9781439840955">the publisher</a> and many book stores. See also <a href="http://www.stat.columbia.edu/~gelman/book/">home page for the book</a>, <a href="http://www.stat.columbia.edu/~gelman/book/errata_bda3.txt">errata for the book</a>, and <a href="BDA3_notes.html">chapter notes</a>.</p>
+<section id="prerequisites" class="level2">
+<h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
 <ul>
 <li>Basic terms of probability theory
 <ul>
 <li>probability, probability density, distribution</li>
 <li>sum, product rule, and Bayes’ rule</li>
 <li>expectation, mean, variance, median</li>
-<li>in Finnish, see e.g. <a
-href="http://math.aalto.fi/~lleskela/LectureNotes003.html">Stokastiikka
-ja tilastollinen ajattelu</a></li>
-<li>in English, see e.g. Wikipedia and <a
-href="https://ocw.mit.edu/courses/mathematics/18-05-introduction-to-probability-and-statistics-spring-2014/readings/">Introduction
-to probability and statistics</a></li>
+<li>in Finnish, see e.g.&nbsp;<a href="http://math.aalto.fi/~lleskela/LectureNotes003.html">Stokastiikka ja tilastollinen ajattelu</a></li>
+<li>in English, see e.g.&nbsp;Wikipedia and <a href="https://ocw.mit.edu/courses/mathematics/18-05-introduction-to-probability-and-statistics-spring-2014/readings/">Introduction to probability and statistics</a></li>
 </ul></li>
 <li>Some algebra and calculus</li>
 <li>Basic visualisation techniques (R or Python)
 <ul>
 <li>histogram, density plot, scatter plot</li>
-<li>see e.g. <a href="demos.html#BDA_R_demos">BDA R demos</a></li>
-<li>see e.g. <a href="demos.html#BDA_Python_demos">BDA Python
-demos</a></li>
+<li>see e.g.&nbsp;<a href="demos.html#BDA_R_demos">BDA R demos</a></li>
+<li>see e.g.&nbsp;<a href="demos.html#BDA_Python_demos">BDA Python demos</a></li>
 </ul></li>
 </ul>
-<p>This course has been designed so that there is strong emphasis in
-computational aspects of Bayesian data analysis and using the latest
-computational tools.</p>
+<p>This course has been designed so that there is strong emphasis in computational aspects of Bayesian data analysis and using the latest computational tools.</p>
 <p>If you find BDA3 too difficult to start with, I recommend</p>
 <ul>
-<li>For regression models, their connection to statistical testing and
-causal analysis see <a
-href="https://avehtari.github.io/ROS-Examples/">Gelman, Hill and
-Vehtari, “Regression and Other Stories”</a>.</li>
-<li>Richard McElreath’s <a
-href="https://xcelab.net/rm/statistical-rethinking/">Statistical
-Rethinking, 2nd ed</a> book is easier than BDA3 and the 2nd ed is
-excellent. Statistical Rethinking doesn’t go as deep in some details,
-math, algorithms and programming as BDA course. Richard’s lecture videos
-of <a
-href="https://github.com/rmcelreath/statrethinking_winter2019">Statistical
-Rethinking: A Bayesian Course Using R and Stan</a> are highly
-recommended even if you are following BDA3.</li>
-<li>For background prerequisites some students have found chapters 2, 4
-and 5 in <a
-href="https://sites.google.com/site/doingbayesiandataanalysis/">Kruschke,
-“Doing Bayesian Data Analysis”</a> useful.</li>
+<li>For regression models, their connection to statistical testing and causal analysis see <a href="https://avehtari.github.io/ROS-Examples/">Gelman, Hill and Vehtari, “Regression and Other Stories”</a>.</li>
+<li>Richard McElreath’s <a href="https://xcelab.net/rm/statistical-rethinking/">Statistical Rethinking, 2nd ed</a> book is easier than BDA3 and the 2nd ed is excellent. Statistical Rethinking doesn’t go as deep in some details, math, algorithms and programming as BDA course. Richard’s lecture videos of <a href="https://github.com/rmcelreath/statrethinking_winter2019">Statistical Rethinking: A Bayesian Course Using R and Stan</a> are highly recommended even if you are following BDA3.</li>
+<li>For background prerequisites some students have found chapters 2, 4 and 5 in <a href="https://sites.google.com/site/doingbayesiandataanalysis/">Kruschke, “Doing Bayesian Data Analysis”</a> useful.</li>
 </ul>
-</div>
-<div id="course-contents-following-bda3" class="section level2">
-<h2>Course contents following BDA3</h2>
-<p>Bayesian Data Analysis, 3rd ed, by Andrew Gelman, John Carlin, Hal
-Stern, David Dunson, Aki Vehtari, and Donald Rubin. <a
-href="http://www.stat.columbia.edu/~gelman/book/">Home page for the
-book</a>. <a
-href="http://www.stat.columbia.edu/~gelman/book/errata_bda3.txt">Errata
-for the book</a>. <a
-href="https://users.aalto.fi/~ave/BDA3.pdf">Electronic edition for
-non-commercial purposes only</a>.</p>
+</section>
+<section id="course-contents-following-bda3" class="level2">
+<h2 class="anchored" data-anchor-id="course-contents-following-bda3">Course contents following BDA3</h2>
+<p>Bayesian Data Analysis, 3rd ed, by Andrew Gelman, John Carlin, Hal Stern, David Dunson, Aki Vehtari, and Donald Rubin. <a href="http://www.stat.columbia.edu/~gelman/book/">Home page for the book</a>. <a href="http://www.stat.columbia.edu/~gelman/book/errata_bda3.txt">Errata for the book</a>. <a href="https://users.aalto.fi/~ave/BDA3.pdf">Electronic edition for non-commercial purposes only</a>.</p>
 <ul>
 <li>Background (Ch 1, Lecture 1)</li>
 <li>Single-parameter models (Ch 2, Lecture 2)</li>
 <li>Multiparameter models (Ch 3, Lecture 3)</li>
 <li>Computational methods (Ch 10 , Lecture 4)</li>
 <li>Markov chain Monte Carlo (Chs 11-12, Lectures 5-6)</li>
-<li>Extra material for Stan and probabilistic programming (see below,
-Lecture 6)</li>
+<li>Extra material for Stan and probabilistic programming (see below, Lecture 6)</li>
 <li>Hierarchical models (Ch 5, Lecture 7)</li>
 <li>Model checking (Ch 6, Lectures 8-9)
 <ul>
-<li>+ <a href="https://doi.org/10.1111/rssa.12378">Visualization in
-Bayesian workflow</a></li>
+<li>+ <a href="https://doi.org/10.1111/rssa.12378">Visualization in Bayesian workflow</a></li>
 </ul></li>
 <li>Evaluating and comparing models (Ch 7)
 <ul>
-<li>+ <a href="https://arxiv.org/abs/1507.04544">Practical Bayesian
-model evaluation using leave-one-out cross-validation and WAIC</a> (<a
-href="https://doi.org/10.1007/s11222-016-9696-4">Journal link</a>)</li>
-<li>+ <a href="https://avehtari.github.io/modelselection/">Videos and
-case studies</a></li>
-<li>+ <a
-href="https://avehtari.github.io/modelselection/CV-FAQ.html">Cross-validation
-FAQ</a></li>
+<li>+ <a href="https://arxiv.org/abs/1507.04544">Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC</a> (<a href="https://doi.org/10.1007/s11222-016-9696-4">Journal link</a>)</li>
+<li>+ <a href="https://avehtari.github.io/modelselection/">Videos and case studies</a></li>
+<li>+ <a href="https://avehtari.github.io/modelselection/CV-FAQ.html">Cross-validation FAQ</a></li>
 </ul></li>
 <li>Decision analysis (Ch 9, Lecture 10)</li>
-<li>Large sample properties and Laplace approximation (Ch 4, Lecture
-11-12)</li>
+<li>Large sample properties and Laplace approximation (Ch 4, Lecture 11-12)</li>
 <li>In addition you learn workflow for Bayesian data analysis</li>
 </ul>
-</div>
-<div id="how-to-study" class="section level2">
-<h2>How to study</h2>
+</section>
+<section id="how-to-study" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-study">How to study</h2>
 <p>Recommended way to go through the material is</p>
 <ul>
-<li>Read the reading instructions for a chapter in <a
-href="BDA3_notes.html">chapter notes</a>.</li>
-<li>Read the chapter in BDA3 and check that you find the terms listed in
-the reading instructions.</li>
-<li>Watch the corresponding <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx#folderID=%224a7f385e-fdb1-4382-bfd0-af0700b7fc46%22">lecture
-video</a> to get explanations for most important parts.</li>
-<li>Read corresponding additional information in the <a
-href="BDA3_notes.html">chapter notes</a>.</li>
-<li>Run the corresponding demos in <a
-href="https://github.com/avehtari/BDA_R_demos">R demos</a> or <a
-href="https://github.com/avehtari/BDA_py_demos">Python demos</a>.</li>
-<li>Read the exercise instructions and make the corresponding <a
-href="https://github.com/avehtari/BDA_course_Aalto/tree/master/assignments">assignments</a>.
-Demo codes in <a href="https://github.com/avehtari/BDA_R_demos">R
-demos</a> and <a href="https://github.com/avehtari/BDA_py_demos">Python
-demos</a> have a lot of useful examples for handling data and plotting
-figures. If you have problems, visit TA sessions or ask in course slack
-channel.</li>
-<li>If you want to learn more, make also self study exercises listed
-below</li>
+<li>Read the reading instructions for a chapter in <a href="BDA3_notes.html">chapter notes</a>.</li>
+<li>Read the chapter in BDA3 and check that you find the terms listed in the reading instructions.</li>
+<li>Watch the corresponding <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx#folderID=%224a7f385e-fdb1-4382-bfd0-af0700b7fc46%22">lecture video</a> to get explanations for most important parts.</li>
+<li>Read corresponding additional information in the <a href="BDA3_notes.html">chapter notes</a>.</li>
+<li>Run the corresponding demos in <a href="https://github.com/avehtari/BDA_R_demos">R demos</a> or <a href="https://github.com/avehtari/BDA_py_demos">Python demos</a>.</li>
+<li>Read the exercise instructions and make the corresponding <a href="https://github.com/avehtari/BDA_course_Aalto/tree/master/assignments">assignments</a>. Demo codes in <a href="https://github.com/avehtari/BDA_R_demos">R demos</a> and <a href="https://github.com/avehtari/BDA_py_demos">Python demos</a> have a lot of useful examples for handling data and plotting figures. If you have problems, visit TA sessions or ask in course slack channel.</li>
+<li>If you want to learn more, make also self study exercises listed below</li>
 </ul>
-</div>
-<div id="slides-and-chapter-notes" class="section level2">
-<h2>Slides and chapter notes</h2>
+</section>
+<section id="slides-and-chapter-notes" class="level2">
+<h2 class="anchored" data-anchor-id="slides-and-chapter-notes">Slides and chapter notes</h2>
 <ul>
-<li><a
-href="https://github.com/avehtari/BDA_course_Aalto/tree/master/slides">Slides</a>
+<li><a href="https://github.com/avehtari/BDA_course_Aalto/tree/master/slides">Slides</a>
 <ul>
 <li>including code for reproducing some of the figures</li>
 </ul></li>
 <li><a href="BDA3_notes.html">Chapter notes</a>
 <ul>
-<li>including reading instructions highlighting most important parts and
-terms</li>
+<li>including reading instructions highlighting most important parts and terms</li>
 </ul></li>
 </ul>
-</div>
-<div id="videos" class="section level2">
-<h2>Videos</h2>
-<p>The following video motivates why computational probabilistic methods
-and probabilistic programming are important part of modern Bayesian data
-analysis.</p>
+</section>
+<section id="videos" class="level2">
+<h2 class="anchored" data-anchor-id="videos">Videos</h2>
+<p>The following video motivates why computational probabilistic methods and probabilistic programming are important part of modern Bayesian data analysis.</p>
 <ul>
-<li><a href="https://www.youtube.com/watch?v=ukE5aqdoLZI">Computational
-probabilistic modeling in 15mins</a></li>
+<li><a href="https://www.youtube.com/watch?v=ukE5aqdoLZI">Computational probabilistic modeling in 15mins</a></li>
 </ul>
-<p>Short video clips on selected introductory topics are available in <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx#folderID/=%22f0ec3a25-9e23-4935-873b-a9f401646812%22">a
-Panopto folder</a>.</p>
-<p>The 2022 lecture videos are in <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx#folderID=%224a7f385e-fdb1-4382-bfd0-af0700b7fc46%22">a
-Panopto folder</a>. The 2023 lecture videos will be uploaded in another
-folder after each lecture.</p>
-</div>
-<div id="r-and-python" class="section level2">
-<h2>R and Python</h2>
-<p>We strongly recommend using R in the course as there are more
-packages for Stan and statistical analysis in R. If you are already
-fluent in Python, but not in R, then using Python may be easier, but it
-can still be more useful to learn also R. Unless you are already
-experienced and have figured out your preferred way to work with R, we
-recommend installing <a
-href="https://posit.co/download/rstudio-desktop/">RStudio Desktop</a> or
-using <a href="https://jupyter.cs.aalto.fi/">Aalto teaching
-JupyterHub</a>. See <a href="FAQ.html">FAQ</a> for frequently asked
-questions about R problems in this course. The <a href="demos.html">demo
-codes</a> provide useful starting points for all the assignments.</p>
+<p>Short video clips on selected introductory topics are available in <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx#folderID/=%22f0ec3a25-9e23-4935-873b-a9f401646812%22">a Panopto folder</a>.</p>
+<p>The 2022 lecture videos are in <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx#folderID=%224a7f385e-fdb1-4382-bfd0-af0700b7fc46%22">a Panopto folder</a>. The 2023 lecture videos will be uploaded in another folder after each lecture.</p>
+</section>
+<section id="r-and-python" class="level2">
+<h2 class="anchored" data-anchor-id="r-and-python">R and Python</h2>
+<p>We strongly recommend using R in the course as there are more packages for Stan and statistical analysis in R. If you are already fluent in Python, but not in R, then using Python may be easier, but it can still be more useful to learn also R. Unless you are already experienced and have figured out your preferred way to work with R, we recommend installing <a href="https://posit.co/download/rstudio-desktop/">RStudio Desktop</a> or using <a href="https://jupyter.cs.aalto.fi/">Aalto teaching JupyterHub</a>. See <a href="FAQ.html">FAQ</a> for frequently asked questions about R problems in this course. The <a href="demos.html">demo codes</a> provide useful starting points for all the assignments.</p>
 <ul>
 <li>For learning R programming basics we recommend
 <ul>
-<li><a href="https://rstudio-education.github.io/hopr/">Garrett
-Grolemund, Hands-On Programming with R</a></li>
+<li><a href="https://rstudio-education.github.io/hopr/">Garrett Grolemund, Hands-On Programming with R</a></li>
 </ul></li>
 <li>For learning basic and advanced plotting using R we recommend
 <ul>
-<li><a href="https://socviz.co/">Kieran Healy, Data Visualization - A
-practical introduction</a></li>
-<li><a href="http://www.gradaanwr.net/">Antony Unwin, Graphical Data
-Analysis with R</a></li>
+<li><a href="https://socviz.co/">Kieran Healy, Data Visualization - A practical introduction</a></li>
+<li><a href="http://www.gradaanwr.net/">Antony Unwin, Graphical Data Analysis with R</a></li>
 </ul></li>
 </ul>
-</div>
-<div id="demos" class="section level2">
-<h2>Demos</h2>
-<p>These demos include a lot of useful code for making the
-assignments.</p>
+</section>
+<section id="demos" class="level2">
+<h2 class="anchored" data-anchor-id="demos">Demos</h2>
+<p>These demos include a lot of useful code for making the assignments.</p>
 <ul>
 <li><a href="demos.html#BDA_R_demos">R demos</a></li>
 <li><a href="demos.html#BDA_Python_demos">Python demos</a></li>
 </ul>
-</div>
-<div id="self-study-exercises" class="section level2">
-<h2>Self study exercises</h2>
-<p>Great self study BDA3 exercises for this course are listed below.
-Most of these have also <a
-href="http://www.stat.columbia.edu/~gelman/book/solutions3.pdf">model
-solutions available</a>.</p>
+</section>
+<section id="self-study-exercises" class="level2">
+<h2 class="anchored" data-anchor-id="self-study-exercises">Self study exercises</h2>
+<p>Great self study BDA3 exercises for this course are listed below. Most of these have also <a href="http://www.stat.columbia.edu/~gelman/book/solutions3.pdf">model solutions available</a>.</p>
 <ul>
 <li>1.1-1.4, 1.6-1.8 (model solutions for 1.1-1.6)</li>
-<li>2.1-2.5, 2.8, 2.9, 2.14, 2.17, 2.22 (model solutions for 2.1-2.5,
-2.7-2.13, 2.16, 2.17, 2.20, and 2.14 is in slides)</li>
+<li>2.1-2.5, 2.8, 2.9, 2.14, 2.17, 2.22 (model solutions for 2.1-2.5, 2.7-2.13, 2.16, 2.17, 2.20, and 2.14 is in slides)</li>
 <li>3.2, 3.3, 3.9 (model solutions for 3.1-3.3, 3.5, 3.9, 3.10)</li>
-<li>4.2, 4.4, 4.6 (model solutions for 3.2-3.4, 3.6, 3.7, 3.9,
-3.10)</li>
+<li>4.2, 4.4, 4.6 (model solutions for 3.2-3.4, 3.6, 3.7, 3.9, 3.10)</li>
 <li>5.1, 5.2 (model solutions for 5.3-5.5, 5.7-5.12)</li>
 <li>6.1 (model solutions for 6.1, 6.5-6.7)</li>
 <li>9.1</li>
 <li>10.1, 10.2 (model solution for 10.4)</li>
 <li>11.1 (model solution for 11.1)</li>
 </ul>
-</div>
-<div id="stan" class="section level2">
-<h2>Stan</h2>
+</section>
+<section id="stan" class="level2">
+<h2 class="anchored" data-anchor-id="stan">Stan</h2>
 <ul>
 <li><a href="http://mc-stan.org/">Stan home page</a></li>
-<li><a
-href="http://www.stat.columbia.edu/~gelman/research/published/Stan-paper-aug-2015.pdf">Introductory
-article in Journal of Statistical Software</a></li>
-<li><a
-href="https://mc-stan.org/users/documentation/">Documentation</a></li>
-<li><a
-href="https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started">RStan
-installation</a></li>
-<li><a
-href="https://pystan.readthedocs.io/en/latest/getting_started.html">PyStan
-installation</a></li>
-<li>Basics of Bayesian inference and Stan, Jonah Gabry &amp; Lauren
-Kennedy <a
-href="https://www.youtube.com/watch?v=ZRpo41l02KQ&amp;t=8s&amp;list=PLuwyh42iHquU4hUBQs20hkBsKSMrp6H0J&amp;index=6">Part
-1</a> and <a
-href="https://www.youtube.com/watch?v=6cc4N1vT8pk&amp;t=0s&amp;list=PLuwyh42iHquU4hUBQs20hkBsKSMrp6H0J&amp;index=7">Part
-2</a></li>
+<li><a href="http://www.stat.columbia.edu/~gelman/research/published/Stan-paper-aug-2015.pdf">Introductory article in Journal of Statistical Software</a></li>
+<li><a href="https://mc-stan.org/users/documentation/">Documentation</a></li>
+<li><a href="https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started">RStan installation</a></li>
+<li><a href="https://pystan.readthedocs.io/en/latest/getting_started.html">PyStan installation</a></li>
+<li>Basics of Bayesian inference and Stan, Jonah Gabry &amp; Lauren Kennedy <a href="https://www.youtube.com/watch?v=ZRpo41l02KQ&amp;t=8s&amp;list=PLuwyh42iHquU4hUBQs20hkBsKSMrp6H0J&amp;index=6">Part 1</a> and <a href="https://www.youtube.com/watch?v=6cc4N1vT8pk&amp;t=0s&amp;list=PLuwyh42iHquU4hUBQs20hkBsKSMrp6H0J&amp;index=7">Part 2</a></li>
 </ul>
-</div>
-<div id="extra-reading" class="section level2">
-<h2>Extra reading</h2>
+</section>
+<section id="extra-reading" class="level2">
+<h2 class="anchored" data-anchor-id="extra-reading">Extra reading</h2>
 <ul>
-<li><a href="https://doi.org/10.1111/j.1740-9713.2004.00050.x">Dicing
-with the unknown</a></li>
-<li><a href="http://jeff560.tripod.com/b.html">Origin of word
-Bayesian</a></li>
-<li><a href="https://avehtari.github.io/modelselection/">Model
-selection</a></li>
-<li><a
-href="https://avehtari.github.io/modelselection/CV-FAQ.html">Cross-validation
-FAQ</a></li>
+<li><a href="https://doi.org/10.1111/j.1740-9713.2004.00050.x">Dicing with the unknown</a></li>
+<li><a href="http://jeff560.tripod.com/b.html">Origin of word Bayesian</a></li>
+<li><a href="https://avehtari.github.io/modelselection/">Model selection</a></li>
+<li><a href="https://avehtari.github.io/modelselection/CV-FAQ.html">Cross-validation FAQ</a></li>
 </ul>
-</div>
-<div id="acknowledgements" class="section level2">
-<h2>Acknowledgements</h2>
-<p>The course material has been greatly improved by the previous and
-current course assistants (in alphabetical order): Michael Riis
-Andersen, Paul Bürkner, Akash Daka, Alejandro Catalina, Kunal Ghosh,
-Meenal Jhajharia, Andrew Johnson, Noa Kallioinen, Joona Karjalainen,
-David Kohns, Juho Kokkala, Leevi Lindgren, Yann McLatchie, Måns
-Magnusson, Anton Mallasto, Janne Ojanen, Topi Paananen, Markus
-Paasiniemi, Juho Piironen, Anna Riha, Jaakko Riihimäki, Niko Siccha,
-Eero Siivola, Tuomas Sivula, Teemu Säilynoja, Jarno Vanhatalo.</p>
+</section>
+<section id="acknowledgements" class="level2">
+<h2 class="anchored" data-anchor-id="acknowledgements">Acknowledgements</h2>
+<p>The course material has been greatly improved by the previous and current course assistants (in alphabetical order): Michael Riis Andersen, Paul Bürkner, Akash Daka, Alejandro Catalina, Kunal Ghosh, Meenal Jhajharia, Andrew Johnson, Noa Kallioinen, Joona Karjalainen, David Kohns, Juho Kokkala, Leevi Lindgren, Yann McLatchie, Måns Magnusson, Anton Mallasto, Janne Ojanen, Topi Paananen, Markus Paasiniemi, Juho Piironen, Anna Riha, Jaakko Riihimäki, Niko Siccha, Eero Siivola, Tuomas Sivula, Teemu Säilynoja, Jarno Vanhatalo.</p>
 <p>The web page has been made with rmarkdown’s site generator.</p>
 <p><a href="https://bayes.club/@avehtari" rel="me"></a></p>
-</div>
 
 
+</section>
 
-</div>
-</div>
-
-</div>
-
-<script>
-
-// add bootstrap table styles to pandoc tables
-function bootstrapStylePandocTables() {
-  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
-}
-$(document).ready(function () {
-  bootstrapStylePandocTables();
-});
-
-
-</script>
-
-<!-- tabsets -->
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open');
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-});
-</script>
-
-<!-- code folding -->
-
-<script>
-$(document).ready(function ()  {
-
-    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
-    $('.unlisted.unnumbered').addClass('toc-ignore')
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/avehtari\.github\.io\/BDA_course_Aalto\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
       },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
     };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
 });
 </script>
+</div> <!-- /content -->
 
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
 
-</body>
-</html>
+
+
+</body></html>

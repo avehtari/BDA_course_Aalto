@@ -1,562 +1,276 @@
 <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
-<html>
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.56">
 
-<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta charset="utf-8" />
-<meta name="generator" content="pandoc" />
-<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+<meta name="dcterms.date" content="2024-08-13">
 
-
-
-
-<title>Bayesian Data Analysis course - Aalto 2023</title>
-
-<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
-<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
-<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
-<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
-<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<style>h1 {font-size: 34px;}
-       h1.title {font-size: 38px;}
-       h2 {font-size: 30px;}
-       h3 {font-size: 24px;}
-       h4 {font-size: 18px;}
-       h5 {font-size: 16px;}
-       h6 {font-size: 12px;}
-       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
-       pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
-<script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-
-<style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
-
-<style type="text/css">code{white-space: pre;}</style>
-<script type="text/javascript">
-if (window.hljs) {
-  hljs.configure({languages: []});
-  hljs.initHighlightingOnLoad();
-  if (document.readyState && document.readyState === "complete") {
-    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
-  }
-}
-</script>
-
-
-
-
-
-
-
-
-
-<style type = "text/css">
-.main-container {
-  max-width: 940px;
-  margin-left: auto;
-  margin-right: auto;
-}
-img {
-  max-width:100%;
-}
-.tabbed-pane {
-  padding-top: 12px;
-}
-.html-widget {
-  margin-bottom: 20px;
-}
-button.code-folding-btn:focus {
-  outline: none;
-}
-summary {
-  display: list-item;
-}
-details > summary > p:only-child {
-  display: inline;
-}
-pre code {
-  padding: 0;
+<title>Bayesian Data Analysis course - Aalto 2023 – Bayesian Data Analysis course</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
 }
 </style>
 
 
-<style type="text/css">
-.dropdown-submenu {
-  position: relative;
-}
-.dropdown-submenu>.dropdown-menu {
-  top: 0;
-  left: 100%;
-  margin-top: -6px;
-  margin-left: -1px;
-  border-radius: 0 6px 6px 6px;
-}
-.dropdown-submenu:hover>.dropdown-menu {
-  display: block;
-}
-.dropdown-submenu>a:after {
-  display: block;
-  content: " ";
-  float: right;
-  width: 0;
-  height: 0;
-  border-color: transparent;
-  border-style: solid;
-  border-width: 5px 0 5px 5px;
-  border-left-color: #cccccc;
-  margin-top: 5px;
-  margin-right: -10px;
-}
-.dropdown-submenu:hover>a:after {
-  border-left-color: #adb5bd;
-}
-.dropdown-submenu.pull-left {
-  float: none;
-}
-.dropdown-submenu.pull-left>.dropdown-menu {
-  left: -100%;
-  margin-left: 10px;
-  border-radius: 6px 0 6px 6px;
-}
-</style>
-
-<script type="text/javascript">
-// manage active state of menu based on current page
-$(document).ready(function () {
-  // active menu anchor
-  href = window.location.pathname
-  href = href.substr(href.lastIndexOf('/') + 1)
-  if (href === "")
-    href = "index.html";
-  var menuAnchor = $('a[href="' + href + '"]');
-
-  // mark the anchor link active (and if it's in a dropdown, also mark that active)
-  var dropdown = menuAnchor.closest('li.dropdown');
-  if (window.bootstrap) { // Bootstrap 4+
-    menuAnchor.addClass('active');
-    dropdown.find('> .dropdown-toggle').addClass('active');
-  } else { // Bootstrap 3
-    menuAnchor.parent().addClass('active');
-    dropdown.addClass('active');
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
-
-  // Navbar adjustments
-  var navHeight = $(".navbar").first().height() + 15;
-  var style = document.createElement('style');
-  var pt = "padding-top: " + navHeight + "px; ";
-  var mt = "margin-top: -" + navHeight + "px; ";
-  var css = "";
-  // offset scroll position for anchor links (for fixed navbar)
-  for (var i = 1; i <= 6; i++) {
-    css += ".section h" + i + "{ " + pt + mt + "}\n";
-  }
-  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
-  document.head.appendChild(style);
-});
-</script>
-
-<!-- tabsets -->
-
-<style type="text/css">
-.tabset-dropdown > .nav-tabs {
-  display: inline-table;
-  max-height: 500px;
-  min-height: 44px;
-  overflow-y: auto;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "\e259";
-  font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "\e258";
-  font-family: 'Glyphicons Halflings';
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs > li.active {
-  display: block;
-}
-
-.tabset-dropdown > .nav-tabs > li > a,
-.tabset-dropdown > .nav-tabs > li > a:focus,
-.tabset-dropdown > .nav-tabs > li > a:hover {
-  border: none;
-  display: inline-block;
-  border-radius: 4px;
-  background-color: transparent;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
-  display: block;
-  float: none;
-}
-
-.tabset-dropdown > .nav-tabs > li {
-  display: none;
-}
-</style>
-
-<!-- code folding -->
-
-
-
-<style type="text/css">
-
-#TOC {
-  margin: 25px 0px 20px 0px;
-}
-@media (max-width: 768px) {
-#TOC {
-  position: relative;
-  width: 100%;
-}
-}
-
-@media print {
-.toc-content {
-  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
-  float: right;
-}
-}
-
-.toc-content {
-  padding-left: 30px;
-  padding-right: 40px;
-}
-
-div.main-container {
-  max-width: 1200px;
-}
-
-div.tocify {
-  width: 20%;
-  max-width: 260px;
-  max-height: 85%;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  div.tocify {
-    width: 25%;
-  }
-}
-
-@media (max-width: 767px) {
-  div.tocify {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-.tocify ul, .tocify li {
-  line-height: 20px;
-}
-
-.tocify-subheader .tocify-item {
-  font-size: 0.90em;
-}
-
-.tocify .list-group-item {
-  border-radius: 0px;
-}
-
-
-</style>
-
+}</script>
 
 
 </head>
 
-<body>
+<body class="floating nav-fixed">
 
-
-<div class="container-fluid main-container">
-
-
-<!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row">
-<div class="col-xs-12 col-sm-4 col-md-3">
-<div id="TOC" class="tocify">
-</div>
-</div>
-
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
-
-
-
-
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="index.html">Bayesian Data Analysis course</a>
-    </div>
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-        <li>
-  <a href="index.html">Material</a>
-</li>
-<li>
-  <a href="Aalto2024.html">Aalto 2024</a>
-</li>
-<li>
-  <a href="BDA3_notes.html">BDA3 notes</a>
-</li>
-<li>
-  <a href="assignments.html">Assignments</a>
-</li>
-<li>
-  <a href="project.html">Project</a>
-</li>
-<li>
-  <a href="demos.html">Demos</a>
-</li>
-<li>
-  <a href="FAQ.html">FAQ</a>
-</li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        
-      </ul>
-    </div><!--/.nav-collapse -->
-  </div><!--/.container -->
-</div><!--/.navbar -->
-
-<div id="header">
-
-
-
-<h1 class="title toc-ignore">Bayesian Data Analysis course - Aalto
-2023</h1>
-<h4 class="date">Page updated: 2024-08-13</h4>
-
-</div>
-
-
-<p><strong>Aalto 2023</strong> course can be taken online except for the
-final project presentation. The lectures will be given on campus, but
-recorded and the recording will be made available online after the
-lecture. If you are unable to register for the course at the moment in
-the Sisu, there is no need to email the lecturer. You can start taking
-the course and register before the end of the course. Sisu shows rooms
-on campus for the computer exercises, and you can come to ask questions
-on campus, but you can also ask in Zulip during the same times. You can
-choose which TA session to join each week separately, without a need to
-register for those sessions.</p>
-<ul>
-<li><a
-href="https://mycourses.aalto.fi/course/view.php?id=40722">MyCourses</a>
-is used for initial announcements, linking to Zulip, peergrade, and some
-questionnaires.</li>
-<li>Most of the communication happens in the course chat (see
-below)</li>
-<li><a
-href="https://www.aalto.fi/en/applications-instructions-and-guidelines/aalto-university-code-of-academic-integrity-and-handling-violations-thereof">Aalto
-University Code of Academic Integrity and Handling Violations
-Thereof</a></li>
-<li>Use of AI is allowed on the course, but the most of the work needs
-to be made by the student, and you need to report whether you used AI
-and in which way you used them (See <a
-href="https://www.aalto.fi/en/services/guidance-for-the-use-of-artificial-intelligence-in-teaching-and-learning-at-aalto-university">points
-5 and 6 in Aalto guidelines for use of AI in teaching</a>). We have
-tested some AI on the course topics and assignments and the output can
-be copy of existing text without attribution (ie plagiarism), vague or
-have mistakes, so you need to be careful when using such outputs.</li>
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Bayesian Data Analysis course</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Material</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./Aalto2024.html"> 
+<span class="menu-text">Aalto 2024</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./BDA3_notes.html"> 
+<span class="menu-text">BDA3 notes</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./assignments.html"> 
+<span class="menu-text">Assignments</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./project.html"> 
+<span class="menu-text">Project</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./demos.html"> 
+<span class="menu-text">Demos</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./FAQ.html"> 
+<span class="menu-text">FAQ</span></a>
+  </li>  
 </ul>
-<p>All the course material is available in a <a
-href="https://github.com/avehtari/BDA_course_Aalto">git repo</a> (and
-these pages are for easier navigation). All the material can be used in
-other courses. Text and videos licensed under CC-BY-NC 4.0. Code
-licensed under BSD-3.</p>
-<p>The material will be updated during the course. Exercise instructions
-and slides will be updated at latest on Monday of the corresponding
-week. The updated material will appear on the web pages, or you can
-clone the repo and pull before checking new material. If you don’t want
-to learn git, you can download the latest <a
-href="https://github.com/avehtari/BDA_course_Aalto/archive/master.zip">zip
-file</a>.</p>
-<div id="book-bda3" class="section level2">
-<h2>Book: BDA3</h2>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#book-bda3" id="toc-book-bda3" class="nav-link active" data-scroll-target="#book-bda3">Book: BDA3</a></li>
+  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link" data-scroll-target="#prerequisites">Prerequisites</a></li>
+  <li><a href="#communication-channels" id="toc-communication-channels" class="nav-link" data-scroll-target="#communication-channels">Communication channels</a></li>
+  <li><a href="#assessment" id="toc-assessment" class="nav-link" data-scroll-target="#assessment">Assessment</a></li>
+  <li><a href="#schedule-2023" id="toc-schedule-2023" class="nav-link" data-scroll-target="#schedule-2023">Schedule 2023</a>
+  <ul class="collapse">
+  <li><a href="#schedule-overview" id="toc-schedule-overview" class="nav-link" data-scroll-target="#schedule-overview">Schedule overview</a></li>
+  <li><a href="#course-introduction-bda-3-ch-1-prerequisites-assignment" id="toc-course-introduction-bda-3-ch-1-prerequisites-assignment" class="nav-link" data-scroll-target="#course-introduction-bda-3-ch-1-prerequisites-assignment">1) Course introduction, BDA 3 Ch 1, prerequisites assignment</a></li>
+  <li><a href="#bda3-ch-12-basics-of-bayesian-inference" id="toc-bda3-ch-12-basics-of-bayesian-inference" class="nav-link" data-scroll-target="#bda3-ch-12-basics-of-bayesian-inference">2) BDA3 Ch 1+2, basics of Bayesian inference</a></li>
+  <li><a href="#bda3-ch-3-multidimensional-posterior" id="toc-bda3-ch-3-multidimensional-posterior" class="nav-link" data-scroll-target="#bda3-ch-3-multidimensional-posterior">3) BDA3 Ch 3, multidimensional posterior</a></li>
+  <li><a href="#bda3-ch-10-monte-carlo" id="toc-bda3-ch-10-monte-carlo" class="nav-link" data-scroll-target="#bda3-ch-10-monte-carlo">4) BDA3 Ch 10, Monte Carlo</a></li>
+  <li><a href="#bda3-ch-11-markov-chain-monte-carlo" id="toc-bda3-ch-11-markov-chain-monte-carlo" class="nav-link" data-scroll-target="#bda3-ch-11-markov-chain-monte-carlo">5) BDA3 Ch 11, Markov chain Monte Carlo</a></li>
+  <li><a href="#bda3-ch-12-stan-hmc-ppl-stan" id="toc-bda3-ch-12-stan-hmc-ppl-stan" class="nav-link" data-scroll-target="#bda3-ch-12-stan-hmc-ppl-stan">6) BDA3 Ch 12 + Stan, HMC, PPL, Stan</a></li>
+  <li><a href="#bda3-ch-5-hierarchical-models" id="toc-bda3-ch-5-hierarchical-models" class="nav-link" data-scroll-target="#bda3-ch-5-hierarchical-models">7) BDA3 Ch 5, hierarchical models</a></li>
+  <li><a href="#bda3-ch-67-extra-material-model-checking-cross-validation" id="toc-bda3-ch-67-extra-material-model-checking-cross-validation" class="nav-link" data-scroll-target="#bda3-ch-67-extra-material-model-checking-cross-validation">8) BDA3 Ch 6+7 + extra material, model checking, cross-validation</a></li>
+  <li><a href="#bda3-ch-7-extra-material-model-comparison-and-selection" id="toc-bda3-ch-7-extra-material-model-comparison-and-selection" class="nav-link" data-scroll-target="#bda3-ch-7-extra-material-model-comparison-and-selection">9) BDA3 Ch 7, extra material, model comparison and selection</a></li>
+  <li><a href="#bda3-ch-9-decision-analysis-bda3-ch-4-laplace-approximation-and-asymptotics" id="toc-bda3-ch-9-decision-analysis-bda3-ch-4-laplace-approximation-and-asymptotics" class="nav-link" data-scroll-target="#bda3-ch-9-decision-analysis-bda3-ch-4-laplace-approximation-and-asymptotics">10) BDA3 Ch 9, decision analysis + BDA3 Ch 4 Laplace approximation and asymptotics</a></li>
+  <li><a href="#variable-selection-with-projpred-project-presentation-example-extra" id="toc-variable-selection-with-projpred-project-presentation-example-extra" class="nav-link" data-scroll-target="#variable-selection-with-projpred-project-presentation-example-extra">11) Variable selection with projpred, project presentation example, extra</a></li>
+  <li><a href="#tba" id="toc-tba" class="nav-link" data-scroll-target="#tba">12) TBA</a></li>
+  <li><a href="#project-evaluation" id="toc-project-evaluation" class="nav-link" data-scroll-target="#project-evaluation">13) Project evaluation</a></li>
+  </ul></li>
+  <li><a href="#r-and-python" id="toc-r-and-python" class="nav-link" data-scroll-target="#r-and-python">R and Python</a></li>
+  <li><a href="#english-finnish-english-statistics-dictionary" id="toc-english-finnish-english-statistics-dictionary" class="nav-link" data-scroll-target="#english-finnish-english-statistics-dictionary">English-Finnish-English statistics dictionary</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Bayesian Data Analysis course - Aalto 2023</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 13, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><strong>Aalto 2023</strong> course can be taken online except for the final project presentation. The lectures will be given on campus, but recorded and the recording will be made available online after the lecture. If you are unable to register for the course at the moment in the Sisu, there is no need to email the lecturer. You can start taking the course and register before the end of the course. Sisu shows rooms on campus for the computer exercises, and you can come to ask questions on campus, but you can also ask in Zulip during the same times. You can choose which TA session to join each week separately, without a need to register for those sessions.</p>
+<ul>
+<li><a href="https://mycourses.aalto.fi/course/view.php?id=40722">MyCourses</a> is used for initial announcements, linking to Zulip, peergrade, and some questionnaires.</li>
+<li>Most of the communication happens in the course chat (see below)</li>
+<li><a href="https://www.aalto.fi/en/applications-instructions-and-guidelines/aalto-university-code-of-academic-integrity-and-handling-violations-thereof">Aalto University Code of Academic Integrity and Handling Violations Thereof</a></li>
+<li>Use of AI is allowed on the course, but the most of the work needs to be made by the student, and you need to report whether you used AI and in which way you used them (See <a href="https://www.aalto.fi/en/services/guidance-for-the-use-of-artificial-intelligence-in-teaching-and-learning-at-aalto-university">points 5 and 6 in Aalto guidelines for use of AI in teaching</a>). We have tested some AI on the course topics and assignments and the output can be copy of existing text without attribution (ie plagiarism), vague or have mistakes, so you need to be careful when using such outputs.</li>
+</ul>
+<p>All the course material is available in a <a href="https://github.com/avehtari/BDA_course_Aalto">git repo</a> (and these pages are for easier navigation). All the material can be used in other courses. Text and videos licensed under CC-BY-NC 4.0. Code licensed under BSD-3.</p>
+<p>The material will be updated during the course. Exercise instructions and slides will be updated at latest on Monday of the corresponding week. The updated material will appear on the web pages, or you can clone the repo and pull before checking new material. If you don’t want to learn git, you can download the latest <a href="https://github.com/avehtari/BDA_course_Aalto/archive/master.zip">zip file</a>.</p>
+<section id="book-bda3" class="level2">
+<h2 class="anchored" data-anchor-id="book-bda3">Book: BDA3</h2>
 <div style="float:right;position: relative;">
-<p><img src="bda_cover.png" /></p>
+<p><img src="bda_cover.png" class="img-fluid"></p>
 </div>
-<p><a href="https://users.aalto.fi/~ave/BDA3.pdf">The electronic version
-of the course book Bayesian Data Analysis, 3rd ed, by Andrew Gelman,
-John Carlin, Hal Stern, David Dunson, Aki Vehtari, and Donald Rubin</a>
-is available for non-commercial purposes. Hard copies are available from
-<a
-href="https://www.crcpress.com/Bayesian-Data-Analysis/Gelman-Carlin-Stern-Dunson-Vehtari-Rubin/p/book/9781439840955">the
-publisher</a> and many book stores. Aalto library has also copies. See
-also <a href="http://www.stat.columbia.edu/~gelman/book/">home page for
-the book</a>, <a
-href="http://www.stat.columbia.edu/~gelman/book/errata_bda3.txt">errata
-for the book</a>, and <a href="BDA3_notes.html">chapter notes</a>.</p>
-</div>
-<div id="prerequisites" class="section level2">
-<h2>Prerequisites</h2>
+<p><a href="https://users.aalto.fi/~ave/BDA3.pdf">The electronic version of the course book Bayesian Data Analysis, 3rd ed, by Andrew Gelman, John Carlin, Hal Stern, David Dunson, Aki Vehtari, and Donald Rubin</a> is available for non-commercial purposes. Hard copies are available from <a href="https://www.crcpress.com/Bayesian-Data-Analysis/Gelman-Carlin-Stern-Dunson-Vehtari-Rubin/p/book/9781439840955">the publisher</a> and many book stores. Aalto library has also copies. See also <a href="http://www.stat.columbia.edu/~gelman/book/">home page for the book</a>, <a href="http://www.stat.columbia.edu/~gelman/book/errata_bda3.txt">errata for the book</a>, and <a href="BDA3_notes.html">chapter notes</a>.</p>
+</section>
+<section id="prerequisites" class="level2">
+<h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
 <ul>
 <li>Basic terms of probability theory
 <ul>
 <li>probability, probability density, distribution</li>
 <li>sum, product rule, and Bayes’ rule</li>
 <li>expectation, mean, variance, median</li>
-<li>in Finnish, see e.g. <a
-href="http://math.aalto.fi/~lleskela/LectureNotes003.html">Stokastiikka
-ja tilastollinen ajattelu</a></li>
-<li>in English, see e.g. Wikipedia and <a
-href="https://ocw.mit.edu/courses/mathematics/18-05-introduction-to-probability-and-statistics-spring-2014/readings/">Introduction
-to probability and statistics</a></li>
+<li>in Finnish, see e.g.&nbsp;<a href="http://math.aalto.fi/~lleskela/LectureNotes003.html">Stokastiikka ja tilastollinen ajattelu</a></li>
+<li>in English, see e.g.&nbsp;Wikipedia and <a href="https://ocw.mit.edu/courses/mathematics/18-05-introduction-to-probability-and-statistics-spring-2014/readings/">Introduction to probability and statistics</a></li>
 </ul></li>
 <li>Some algebra and calculus</li>
 <li>Basic visualisation techniques (R or Python)
 <ul>
 <li>histogram, density plot, scatter plot</li>
-<li>see e.g. <a href="demos.html#BDA_R_demos">BDA R demos</a></li>
-<li>see e.g. <a href="demos.html#BDA_Python_demos">BDA Python
-demos</a></li>
+<li>see e.g.&nbsp;<a href="demos.html#BDA_R_demos">BDA R demos</a></li>
+<li>see e.g.&nbsp;<a href="demos.html#BDA_Python_demos">BDA Python demos</a></li>
 </ul></li>
 </ul>
-<p>This course has been designed so that there is strong emphasis in
-computational aspects of Bayesian data analysis and using the latest
-computational tools. The project brings together the overall Bayesian
-workflow aspects.</p>
+<p>This course has been designed so that there is strong emphasis in computational aspects of Bayesian data analysis and using the latest computational tools. The project brings together the overall Bayesian workflow aspects.</p>
 <p>If you find BDA3 too difficult to start with, I recommend</p>
 <ul>
-<li>For regression models, their connection to statistical testing and
-causal analysis see <a
-href="https://avehtari.github.io/ROS-Examples/">Gelman, Hill and
-Vehtari: “Regression and Other Stories”</a>.</li>
-<li><a href="https://xcelab.net/rm/statistical-rethinking/">Richard
-McElreath: Statistical Rethinking, 2nd ed</a> book is easier than BDA3
-and the 2nd ed is excellent. Statistical Rethinking doesn’t go as deep
-in some details, math, algorithms and programming as BDA course.
-Richard’s lecture videos of <a
-href="https://github.com/rmcelreath/statrethinking_winter2019">Statistical
-Rethinking: A Bayesian Course Using R and Stan</a> are highly
-recommended even if you are following BDA3.</li>
-<li><a href="https://www.bayesrulesbook.com/">Johnson, Ott, and Dogucu:
-Bayes Rules! An Introduction to Applied Bayesian Modeling</a></li>
-<li>For background prerequisites some students have found chapters 2, 4
-and 5 in <a
-href="https://sites.google.com/site/doingbayesiandataanalysis/">Kruschke,
-“Doing Bayesian Data Analysis”</a> useful.</li>
+<li>For regression models, their connection to statistical testing and causal analysis see <a href="https://avehtari.github.io/ROS-Examples/">Gelman, Hill and Vehtari: “Regression and Other Stories”</a>.</li>
+<li><a href="https://xcelab.net/rm/statistical-rethinking/">Richard McElreath: Statistical Rethinking, 2nd ed</a> book is easier than BDA3 and the 2nd ed is excellent. Statistical Rethinking doesn’t go as deep in some details, math, algorithms and programming as BDA course. Richard’s lecture videos of <a href="https://github.com/rmcelreath/statrethinking_winter2019">Statistical Rethinking: A Bayesian Course Using R and Stan</a> are highly recommended even if you are following BDA3.</li>
+<li><a href="https://www.bayesrulesbook.com/">Johnson, Ott, and Dogucu: Bayes Rules! An Introduction to Applied Bayesian Modeling</a></li>
+<li>For background prerequisites some students have found chapters 2, 4 and 5 in <a href="https://sites.google.com/site/doingbayesiandataanalysis/">Kruschke, “Doing Bayesian Data Analysis”</a> useful.</li>
 </ul>
-</div>
-<div id="communication-channels" class="section level2">
-<h2>Communication channels</h2>
+</section>
+<section id="communication-channels" class="level2">
+<h2 class="anchored" data-anchor-id="communication-channels">Communication channels</h2>
 <ul>
-<li><a
-href="https://mycourses.aalto.fi/course/view.php?id=40722">MyCourses</a>
-is used for some intial announcements, linking to Zulip and Peergrade,
-and some questionnaires.</li>
-<li>The primary communication channel is the Zulip course chat (link in
-MyCourses, login with Aalto account)
+<li><a href="https://mycourses.aalto.fi/course/view.php?id=40722">MyCourses</a> is used for some intial announcements, linking to Zulip and Peergrade, and some questionnaires.</li>
+<li>The primary communication channel is the Zulip course chat (link in MyCourses, login with Aalto account)
 <ul>
-<li>Don’t ask via email or direct messages. By asking via common streams
-in the course chat, more eyes will see your question, it will get
-answered faster and it’s likely that other students benefit from the
-answer.</li>
-<li>Login with Aalto account to the Zulip course chat. You can adjust
-the notifications in the settings.</li>
-<li>If you have any questions, please ask in the public streams and get
-answers from course staff or other students (active students helping
-others will get bonus points).</li>
-<li>In the chat system, we will have separate streams for each
-assignment and the project.</li>
-<li>Stream <strong>#general</strong> can be used for any kind of general
-discussions and questions related to the course.</li>
-<li>All important announcements will be posted to
-<strong>#announcements</strong> (no discussion on this stream).</li>
-<li>Any kind of feedback is welcome on stream
-<strong>#feedback</strong>.</li>
-<li>We have also streams <strong>#r</strong>, <strong>#python</strong>,
-and <strong>#stan</strong> for questions that are not specific to
-assignments or the project.</li>
-<li>Stream <strong>#queue</strong> is used as a queue for getting help
-during <a href="assignments.html#TA_sessions">TA sessions</a>.</li>
-<li>The lecturer and teaching assistants have names with “(staff)” or
-“(TA)” in the end of their names.</li>
+<li>Don’t ask via email or direct messages. By asking via common streams in the course chat, more eyes will see your question, it will get answered faster and it’s likely that other students benefit from the answer.</li>
+<li>Login with Aalto account to the Zulip course chat. You can adjust the notifications in the settings.</li>
+<li>If you have any questions, please ask in the public streams and get answers from course staff or other students (active students helping others will get bonus points).</li>
+<li>In the chat system, we will have separate streams for each assignment and the project.</li>
+<li>Stream <strong>#general</strong> can be used for any kind of general discussions and questions related to the course.</li>
+<li>All important announcements will be posted to <strong>#announcements</strong> (no discussion on this stream).</li>
+<li>Any kind of feedback is welcome on stream <strong>#feedback</strong>.</li>
+<li>We have also streams <strong>#r</strong>, <strong>#python</strong>, and <strong>#stan</strong> for questions that are not specific to assignments or the project.</li>
+<li>Stream <strong>#queue</strong> is used as a queue for getting help during <a href="assignments.html#TA_sessions">TA sessions</a>.</li>
+<li>The lecturer and teaching assistants have names with “(staff)” or “(TA)” in the end of their names.</li>
 </ul></li>
-<li>A weekly lecture time on campus includes times for questions and
-answers</li>
-<li>If you need one-to-one help, please take part in the <a
-href="assignments.html#TA_sessions">TA sessions</a> and ask there.</li>
-<li>If you find errors in material, post in <strong>#feedback</strong>
-stream or <a
-href="https://github.com/avehtari/BDA_course_Aalto/issues">submit an
-issue in github</a>.</li>
-<li>Peergrade alerts: If you are worried that you forget the deadlines,
-you can set peergade to send you email when assignment opens for
-submission, 24 hours before assignment close for submission, assignment
-is open for reviewing, 24 hours before an assignment closes for
-reviewing if you haven’t started yet, someone likes my feedback (once a
-day). Click your name -&gt; User Settings to choose which alerts you
-want.</li>
+<li>A weekly lecture time on campus includes times for questions and answers</li>
+<li>If you need one-to-one help, please take part in the <a href="assignments.html#TA_sessions">TA sessions</a> and ask there.</li>
+<li>If you find errors in material, post in <strong>#feedback</strong> stream or <a href="https://github.com/avehtari/BDA_course_Aalto/issues">submit an issue in github</a>.</li>
+<li>Peergrade alerts: If you are worried that you forget the deadlines, you can set peergade to send you email when assignment opens for submission, 24 hours before assignment close for submission, assignment is open for reviewing, 24 hours before an assignment closes for reviewing if you haven’t started yet, someone likes my feedback (once a day). Click your name -&gt; User Settings to choose which alerts you want.</li>
 </ul>
-</div>
-<div id="assessment" class="section level2">
-<h2>Assessment</h2>
-<p><a href="assignments.html">Assignments</a> (60%) and a <a
-href="project.html">project work with presentation</a> (40%). Minimum of
-50% of points must be obtained from both the assignments and project
-work. You can get <a href="assignments.html#bonus">bonus points</a> from
-chat activity (e.g. helping other students and reporting typos in the
-material) and answering time usage questionnaries.</p>
-</div>
-<div id="schedule-2023" class="section level2">
-<h2>Schedule 2023</h2>
-<p>The course consists of 12 lectures, 9 assignments, a project work,
-and a project presentation in periods I and II. It’s good start reading
-the material for the next lecture and assignment while making the
-assignment related to the previous lecture. There are 9 assignments and
-a project work with presentation, and thus the assignments are not in
-one-to-one correspondence with the lectures. The schedule below lists
-the lectures and how they connect to the topics, book chapters and
-assignments.</p>
-<div id="schedule-overview" class="section level3">
-<h3>Schedule overview</h3>
-<p>Here is an overview of the schedule. Scroll down the page to see
-detailed instructions for each block. When you are working on assignment
-related to previous lecture, it is good to start reading the book
-chapters relaed to the next lecture and assignment.</p>
-<table style="width:100%;">
-<colgroup>
-<col width="16%" />
-<col width="16%" />
-<col width="16%" />
-<col width="16%" />
-<col width="16%" />
-<col width="16%" />
-</colgroup>
+</section>
+<section id="assessment" class="level2">
+<h2 class="anchored" data-anchor-id="assessment">Assessment</h2>
+<p><a href="assignments.html">Assignments</a> (60%) and a <a href="project.html">project work with presentation</a> (40%). Minimum of 50% of points must be obtained from both the assignments and project work. You can get <a href="assignments.html#bonus">bonus points</a> from chat activity (e.g.&nbsp;helping other students and reporting typos in the material) and answering time usage questionnaries.</p>
+</section>
+<section id="schedule-2023" class="level2">
+<h2 class="anchored" data-anchor-id="schedule-2023">Schedule 2023</h2>
+<p>The course consists of 12 lectures, 9 assignments, a project work, and a project presentation in periods I and II. It’s good start reading the material for the next lecture and assignment while making the assignment related to the previous lecture. There are 9 assignments and a project work with presentation, and thus the assignments are not in one-to-one correspondence with the lectures. The schedule below lists the lectures and how they connect to the topics, book chapters and assignments.</p>
+<section id="schedule-overview" class="level3">
+<h3 class="anchored" data-anchor-id="schedule-overview">Schedule overview</h3>
+<p>Here is an overview of the schedule. Scroll down the page to see detailed instructions for each block. When you are working on assignment related to previous lecture, it is good to start reading the book chapters relaed to the next lecture and assignment.</p>
+<table class="caption-top table">
 <thead>
 <tr class="header">
 <th></th>
-<th align="left">Readings</th>
+<th style="text-align: left;">Readings</th>
 <th>Lectures</th>
 <th>Assignment</th>
 <th>Lecture Date</th>
@@ -566,165 +280,95 @@ chapters relaed to the next lecture and assignment.</p>
 <tbody>
 <tr class="odd">
 <td>1. Introduction</td>
-<td align="left"><a href="BDA3_notes.html#ch1">BDA3 Chapter 1</a></td>
-<td><a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=5dde55e8-e2fe-4ccd-9019-b07300ba7620">2023
-Lecture 1.1 Introduction</a>, <br> <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=6b55e970-bc1c-4212-9f63-b07300c8414c">2023
-Lecture 1.2 Course practicalities</a>, <br><a
-href="slides/BDA_lecture_1a.pdf">Slides 1.1</a>,<br> <a
-href="slides/BDA_lecture_1b.pdf">Slides 1.2</a></td>
+<td style="text-align: left;"><a href="BDA3_notes.html#ch1">BDA3 Chapter 1</a></td>
+<td><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=5dde55e8-e2fe-4ccd-9019-b07300ba7620">2023 Lecture 1.1 Introduction</a>, <br> <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=6b55e970-bc1c-4212-9f63-b07300c8414c">2023 Lecture 1.2 Course practicalities</a>, <br><a href="slides/BDA_lecture_1a.pdf">Slides 1.1</a>,<br> <a href="slides/BDA_lecture_1b.pdf">Slides 1.2</a></td>
 <td><a href="assignments/assignment1.html">Assignment 1</a></td>
 <td>2023-09-04</td>
 <td>2023-09-10</td>
 </tr>
 <tr class="even">
 <td>2. Basics of Bayesian inference</td>
-<td align="left"><a href="BDA3_notes.html#ch1">BDA3 Chapter 1</a>, <br>
-<a href="BDA3_notes.html#ch2">BDA3 Chapter 2</a></td>
-<td><a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=ed9cb7e6-a910-4afe-8659-b07a00bab594">2023
-Lecture 2.1</a>, <br> <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=48582af7-da3f-4798-ab0c-b07a00ca7aa2">2023
-Lecture 2.2</a>, <br><a href="slides/BDA_lecture_2.pdf">Slides
-2</a></td>
+<td style="text-align: left;"><a href="BDA3_notes.html#ch1">BDA3 Chapter 1</a>, <br> <a href="BDA3_notes.html#ch2">BDA3 Chapter 2</a></td>
+<td><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=ed9cb7e6-a910-4afe-8659-b07a00bab594">2023 Lecture 2.1</a>, <br> <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=48582af7-da3f-4798-ab0c-b07a00ca7aa2">2023 Lecture 2.2</a>, <br><a href="slides/BDA_lecture_2.pdf">Slides 2</a></td>
 <td><a href="assignments/assignment2.html">Assignment 2</a></td>
 <td>2023-09-11</td>
 <td>2023-09-17</td>
 </tr>
 <tr class="odd">
 <td>3. Multidimensional posterior</td>
-<td align="left"><a href="BDA3_notes.html#ch3">BDA3 Chapter 3</a></td>
-<td><a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=802abb82-07a2-4b4e-a16b-b0820089d994">2023
-Lecture 3.1</a>,<br> <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c070e17c-ce4c-4a98-801c-b08200a5b22f">2023
-Lecture 3.2</a><br><a href="slides/BDA_lecture_3.pdf">Slides 3</a></td>
+<td style="text-align: left;"><a href="BDA3_notes.html#ch3">BDA3 Chapter 3</a></td>
+<td><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=802abb82-07a2-4b4e-a16b-b0820089d994">2023 Lecture 3.1</a>,<br> <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c070e17c-ce4c-4a98-801c-b08200a5b22f">2023 Lecture 3.2</a><br><a href="slides/BDA_lecture_3.pdf">Slides 3</a></td>
 <td><a href="assignments/assignment3.html">Assignment 3</a></td>
 <td>2023-09-18</td>
 <td>2023-09-24</td>
 </tr>
 <tr class="even">
 <td>4. Monte Carlo</td>
-<td align="left"><a href="BDA3_notes.html#ch10">BDA3 Chapter 10</a></td>
-<td><a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d0a08786-0796-4e93-90a3-b08800b99601">2023
-Lecture 4.1</a>,<br> <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=ad034e33-56da-4255-9f3a-b08800cbe37e">2023
-Lecture 4.2</a>, <br><a href="slides/BDA_lecture_4.pdf">Slides
-4</a></td>
+<td style="text-align: left;"><a href="BDA3_notes.html#ch10">BDA3 Chapter 10</a></td>
+<td><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d0a08786-0796-4e93-90a3-b08800b99601">2023 Lecture 4.1</a>,<br> <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=ad034e33-56da-4255-9f3a-b08800cbe37e">2023 Lecture 4.2</a>, <br><a href="slides/BDA_lecture_4.pdf">Slides 4</a></td>
 <td><a href="assignments/assignment4.html">Assignment 4</a></td>
 <td>2023-09-25</td>
 <td>2023-10-01</td>
 </tr>
 <tr class="odd">
 <td>5. Markov chain Monte Carlo</td>
-<td align="left"><a href="BDA3_notes.html#ch11">BDA3 Chapter 11</a></td>
-<td><a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=279b3da6-efe6-44f7-b382-b08f00dd234b">2023
-Lecture 5.1</a>, <br> <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=ff3d41ef-b1cc-42b3-8544-b08f00ca25b2">2023
-Lecture 5.2</a>, <br><a href="slides/BDA_lecture_5.pdf">Slides
-5</a></td>
+<td style="text-align: left;"><a href="BDA3_notes.html#ch11">BDA3 Chapter 11</a></td>
+<td><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=279b3da6-efe6-44f7-b382-b08f00dd234b">2023 Lecture 5.1</a>, <br> <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=ff3d41ef-b1cc-42b3-8544-b08f00ca25b2">2023 Lecture 5.2</a>, <br><a href="slides/BDA_lecture_5.pdf">Slides 5</a></td>
 <td><a href="assignments/assignment5.html">Assignment 5</a></td>
 <td>2023-10-02</td>
 <td>2023-10-08</td>
 </tr>
 <tr class="even">
 <td>6. Stan, HMC, PPL</td>
-<td align="left"><a href="BDA3_notes.html#ch12">BDA3 Chapter 12</a> + <a
-href="index.html#stan">extra material on Stan</a></td>
-<td><a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=80a36d3a-d67c-4534-a7ef-b09600b9f338">2023
-Lecture 6.1</a>, <br><a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=65bf5b2b-0a4e-4cae-ba26-b09600cb6222">2023
-Lecture 6.2</a>, <br><a href="slides/BDA_lecture_6.pdf">Slides
-6</a></td>
+<td style="text-align: left;"><a href="BDA3_notes.html#ch12">BDA3 Chapter 12</a> + <a href="index.html#stan">extra material on Stan</a></td>
+<td><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=80a36d3a-d67c-4534-a7ef-b09600b9f338">2023 Lecture 6.1</a>, <br><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=65bf5b2b-0a4e-4cae-ba26-b09600cb6222">2023 Lecture 6.2</a>, <br><a href="slides/BDA_lecture_6.pdf">Slides 6</a></td>
 <td><a href="assignments/assignment6.html">Assignment 6</a></td>
 <td>2023-10-09</td>
 <td>2023-10-22</td>
 </tr>
 <tr class="odd">
 <td>7. Hierarchical models and exchangeability</td>
-<td align="left"><a href="BDA3_notes.html#ch5">BDA3 Chapter 5</a></td>
-<td><a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c1014690-1133-4232-ad0f-b0a400ba228d">2023
-Lecture 7.1</a>, <br> <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=196c3a91-3ba2-4469-ab15-b0a400ca6074">2023
-Lecture 7.2</a>,<br> <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=8f0158f9-6abf-4ada-bdb7-af3800d139de">2022
-Project info</a>, <br><a href="slides/BDA_lecture_7.pdf">Slides
-7</a></td>
+<td style="text-align: left;"><a href="BDA3_notes.html#ch5">BDA3 Chapter 5</a></td>
+<td><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c1014690-1133-4232-ad0f-b0a400ba228d">2023 Lecture 7.1</a>, <br> <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=196c3a91-3ba2-4469-ab15-b0a400ca6074">2023 Lecture 7.2</a>,<br> <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=8f0158f9-6abf-4ada-bdb7-af3800d139de">2022 Project info</a>, <br><a href="slides/BDA_lecture_7.pdf">Slides 7</a></td>
 <td><a href="assignments/assignment7.html">Assignment 7</a></td>
 <td>2023-10-23</td>
 <td>2023-11-05</td>
 </tr>
 <tr class="even">
 <td>8. Model checking &amp; cross-validation</td>
-<td align="left"><a href="BDA3_notes.html#ch6">BDA3 Chapter 6</a>, <a
-href="BDA3_notes.html#ch7">BDA3 Chapter 7</a>, <a
-href="https://doi.org/10.1111/rssa.12378">Visualization in Bayesian
-workflow</a>, <a href="https://arxiv.org/abs/1507.04544">Practical
-Bayesian cross-validation</a></td>
-<td><a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=785ece8a-16ef-4f64-8134-b0ab00cbd1e8">2023
-Lecture 8.1</a>, <br> <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=456afda7-0e6d-4903-b0df-b0ab00da8f1e">2023
-Lecture 8.2</a>, <br><a href="slides/BDA_lecture_8a.pdf">Slides
-8a</a>,<a href="slides/BDA_lecture_8b.pdf">Slides 8b</a></td>
+<td style="text-align: left;"><a href="BDA3_notes.html#ch6">BDA3 Chapter 6</a>, <a href="BDA3_notes.html#ch7">BDA3 Chapter 7</a>, <a href="https://doi.org/10.1111/rssa.12378">Visualization in Bayesian workflow</a>, <a href="https://arxiv.org/abs/1507.04544">Practical Bayesian cross-validation</a></td>
+<td><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=785ece8a-16ef-4f64-8134-b0ab00cbd1e8">2023 Lecture 8.1</a>, <br> <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=456afda7-0e6d-4903-b0df-b0ab00da8f1e">2023 Lecture 8.2</a>, <br><a href="slides/BDA_lecture_8a.pdf">Slides 8a</a>,<a href="slides/BDA_lecture_8b.pdf">Slides 8b</a></td>
 <td>Start project work</td>
 <td>2023-10-30</td>
 <td>N/A</td>
 </tr>
 <tr class="odd">
 <td>9. Model comparison, selection, and hypothesis testing</td>
-<td align="left"><a href="BDA3_notes.html#ch7">BDA3 Chapter 7 (not 7.2
-and 7.3)</a>, <br> <a href="https://arxiv.org/abs/1507.04544">Practical
-Bayesian cross-validation</a></td>
-<td><a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=a4961b5a-7e42-4603-8aaf-b0b200ca6295">2023
-Lecture 9.1</a>, <br> <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=a4796c79-eab2-436e-b55f-b0b200dac7ce">2023
-Lecture 9.2</a>, <br><a href="slides/BDA_lecture_9.pdf">Slides
-9</a></td>
+<td style="text-align: left;"><a href="BDA3_notes.html#ch7">BDA3 Chapter 7 (not 7.2 and 7.3)</a>, <br> <a href="https://arxiv.org/abs/1507.04544">Practical Bayesian cross-validation</a></td>
+<td><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=a4961b5a-7e42-4603-8aaf-b0b200ca6295">2023 Lecture 9.1</a>, <br> <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=a4796c79-eab2-436e-b55f-b0b200dac7ce">2023 Lecture 9.2</a>, <br><a href="slides/BDA_lecture_9.pdf">Slides 9</a></td>
 <td><a href="assignments/assignment8.html">Assignment 8</a></td>
 <td>2023-11-06</td>
 <td>2023-11-12</td>
 </tr>
 <tr class="even">
 <td>10. Decision analysis</td>
-<td align="left"><a href="BDA3_notes.html#ch9">BDA3 Chapter 9</a></td>
-<td><a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c4ab903a-bc22-416f-99c8-b0b900c9f3f7">2023
-Lecture 10.1</a>, <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=2a6d7c79-7797-4a6d-8efa-b0b900d8f24c">2023
-Lecture 10.2</a>, <br><a href="slides/BDA_lecture_10a.pdf">Slides
-10a</a>, <a href="slides/BDA_lecture_10b.pdf">Slides 10b</a></td>
+<td style="text-align: left;"><a href="BDA3_notes.html#ch9">BDA3 Chapter 9</a></td>
+<td><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c4ab903a-bc22-416f-99c8-b0b900c9f3f7">2023 Lecture 10.1</a>, <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=2a6d7c79-7797-4a6d-8efa-b0b900d8f24c">2023 Lecture 10.2</a>, <br><a href="slides/BDA_lecture_10a.pdf">Slides 10a</a>, <a href="slides/BDA_lecture_10b.pdf">Slides 10b</a></td>
 <td><a href="assignments/assignment9.html">Assignment 9</a></td>
 <td>2023-11-13</td>
 <td>2023-11-19</td>
 </tr>
 <tr class="odd">
-<td>11. Variable selectio with projpred, project presentation
-example</td>
-<td align="left"><a href="BDA3_notes.html#ch4">BDA3 Chapter 4</a></td>
-<td><a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=7ef70bc8-122b-4e86-80fa-b0c000cb5511">2023
-Lecture 11.1</a>, <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=a2b3bcb8-240e-4e6c-b90e-b0c000d92770">2023
-Lecture 11.2</a>, <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=ae634732-1f4e-4568-8529-b0c000e0f153">2023
-Lecture 11.3</a>, <br><a href="slides/BDA_lecture_11a.pdf">Slides
-11a</a>, <a href="project_work/BDA_presentation_example.pdf">Slides
-Project Presentation</a>, <a href="slides/slides_extra.pdf">Slides 11
-extra</a></td>
+<td>11. Variable selectio with projpred, project presentation example</td>
+<td style="text-align: left;"><a href="BDA3_notes.html#ch4">BDA3 Chapter 4</a></td>
+<td><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=7ef70bc8-122b-4e86-80fa-b0c000cb5511">2023 Lecture 11.1</a>, <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=a2b3bcb8-240e-4e6c-b90e-b0c000d92770">2023 Lecture 11.2</a>, <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=ae634732-1f4e-4568-8529-b0c000e0f153">2023 Lecture 11.3</a>, <br><a href="slides/BDA_lecture_11a.pdf">Slides 11a</a>, <a href="project_work/BDA_presentation_example.pdf">Slides Project Presentation</a>, <a href="slides/slides_extra.pdf">Slides 11 extra</a></td>
 <td>Project work</td>
 <td>2023-11-20</td>
 <td>N/A</td>
 </tr>
 <tr class="even">
 <td>12. TBA</td>
-<td align="left"></td>
+<td style="text-align: left;"></td>
 <td>Optional: <br> <br> <br></td>
 <td>Project work</td>
 <td>2023-11-27</td>
@@ -732,7 +376,7 @@ extra</a></td>
 </tr>
 <tr class="odd">
 <td>13. Project evaluation</td>
-<td align="left"></td>
+<td style="text-align: left;"></td>
 <td></td>
 <td></td>
 <td>Project presentations: 11.-15.12.</td>
@@ -740,670 +384,779 @@ extra</a></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div id="course-introduction-bda-3-ch-1-prerequisites-assignment"
-class="section level3">
-<h3>1) Course introduction, BDA 3 Ch 1, prerequisites assignment</h3>
-<p>Course practicalities, material, assignments, project work,
-peergrading, QA sessions, TA sessions, prerequisites, chat, etc.</p>
+</section>
+<section id="course-introduction-bda-3-ch-1-prerequisites-assignment" class="level3">
+<h3 class="anchored" data-anchor-id="course-introduction-bda-3-ch-1-prerequisites-assignment">1) Course introduction, BDA 3 Ch 1, prerequisites assignment</h3>
+<p>Course practicalities, material, assignments, project work, peergrading, QA sessions, TA sessions, prerequisites, chat, etc.</p>
 <ul>
-<li>Login with Aalto account to the Zulip course chat with link in
-MyCourses</li>
-<li>Signin to <a href="https://www.peergrade.io">Peergrade</a> with link
-in MyCourses.</li>
-<li>Introduction/practicalities <strong>lecture Monday 2023-09-04
-14:15-16</strong>, hall C, Otakaari 1**<br>
+<li>Login with Aalto account to the Zulip course chat with link in MyCourses</li>
+<li>Signin to <a href="https://www.peergrade.io">Peergrade</a> with link in MyCourses.</li>
+<li>Introduction/practicalities <strong>lecture Monday 2023-09-04 14:15-16</strong>, hall C, Otakaari 1**<br>
 <ul>
-<li><a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx?folderID=351877e5-230e-4d4a-8b64-b07300b81d0e">2023
-Lecture videos 1.1 and 1.2 in Panopto</a></li>
-<li><a href="slides/BDA_lecture_1a.pdf">Slides 1.1</a>, <a
-href="slides/BDA_lecture_1b.pdf">Slides 1.2</a></li>
+<li><a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx?folderID=351877e5-230e-4d4a-8b64-b07300b81d0e">2023 Lecture videos 1.1 and 1.2 in Panopto</a></li>
+<li><a href="slides/BDA_lecture_1a.pdf">Slides 1.1</a>, <a href="slides/BDA_lecture_1b.pdf">Slides 1.2</a></li>
 </ul></li>
 <li>Read BDA3 Chapter 1
 <ul>
-<li>start with <a href="BDA3_notes.html#ch1">reading instructions for
-Chapter 1</a> and afterwards read the additional comments in the same
-document</li>
+<li>start with <a href="BDA3_notes.html#ch1">reading instructions for Chapter 1</a> and afterwards read the additional comments in the same document</li>
 </ul></li>
 <li>There are no R/Python demos for Chapter 1</li>
-<li>Make and submit <a href="assignments/assignment1.html">Assignment
-1</a>. <strong>Deadline Sunday 2023-09-10 23:59</strong>
+<li>Make and submit <a href="assignments/assignment1.html">Assignment 1</a>. <strong>Deadline Sunday 2023-09-10 23:59</strong>
 <ul>
-<li>We highly recommend to submit all assignments Friday before 3pm so
-that you can get TA help before submission. As the course has students
-who work weekdays (e.g. FiTech students), the late submission until
-Sunday night is allowed, but we can’t provide support during the
-weekends.</li>
-<li>this assignment checks that you have sufficient prerequisite skills
-(basic probability calculus, and R or Python)</li>
+<li>We highly recommend to submit all assignments Friday before 3pm so that you can get TA help before submission. As the course has students who work weekdays (e.g.&nbsp;FiTech students), the late submission until Sunday night is allowed, but we can’t provide support during the weekends.</li>
+<li>this assignment checks that you have sufficient prerequisite skills (basic probability calculus, and R or Python)</li>
 <li><a href="assignments.html">General information about assignments</a>
 <ul>
-<li><a
-href="https://github.com/avehtari/BDA_course_Aalto/tree/master/templates/">R
-markdown template for assignments</a></li>
-<li><a href="FAQ.html">FAQ for the assignments</a> has solutions to
-commonly asked questions related RStudio setup, errors during package
-installations, etc.</li>
+<li><a href="https://github.com/avehtari/BDA_course_Aalto/tree/master/templates/">R markdown template for assignments</a></li>
+<li><a href="FAQ.html">FAQ for the assignments</a> has solutions to commonly asked questions related RStudio setup, errors during package installations, etc.</li>
 </ul></li>
 </ul></li>
-<li>Get help in TA sessions 2023-09-06 14-16, 2023-09-07 12-14,
-2023-09-08 10-12
+<li>Get help in TA sessions 2023-09-06 14-16, 2023-09-07 12-14, 2023-09-08 10-12
 <ul>
-<li>in Sisu these are marked as exercise sessions, but we call them TA
-sessions</li>
+<li>in Sisu these are marked as exercise sessions, but we call them TA sessions</li>
 <li>these are optional and you can choose which one to join</li>
-<li>see more info about <a href="assignments.html#TA_sessions">TA
-sessions</a></li>
+<li>see more info about <a href="assignments.html#TA_sessions">TA sessions</a></li>
 </ul></li>
-<li>Optional: Make BDA3 exercises 1.1-1.4, 1.6-1.8 (<a
-href="http://www.stat.columbia.edu/~gelman/book/solutions3.pdf">model
-solutions available for 1.1-1.6</a>)</li>
+<li>Optional: Make BDA3 exercises 1.1-1.4, 1.6-1.8 (<a href="http://www.stat.columbia.edu/~gelman/book/solutions3.pdf">model solutions available for 1.1-1.6</a>)</li>
 <li>Start reading Chapters 1+2, see instructions below</li>
 </ul>
-</div>
-<div id="bda3-ch-12-basics-of-bayesian-inference"
-class="section level3">
-<h3>2) BDA3 Ch 1+2, basics of Bayesian inference</h3>
-<p>BDA3 Chapters 1+2, basics of Bayesian inference, observation model,
-likelihood, posterior and binomial model, predictive distribution and
-benefit of integration, priors and prior information, and one parameter
-normal model.</p>
+</section>
+<section id="bda3-ch-12-basics-of-bayesian-inference" class="level3">
+<h3 class="anchored" data-anchor-id="bda3-ch-12-basics-of-bayesian-inference">2) BDA3 Ch 1+2, basics of Bayesian inference</h3>
+<p>BDA3 Chapters 1+2, basics of Bayesian inference, observation model, likelihood, posterior and binomial model, predictive distribution and benefit of integration, priors and prior information, and one parameter normal model.</p>
 <ul>
 <li>Read BDA3 Chapter 2
 <ul>
-<li>see <a href="BDA3_notes.html#ch2">reading instructions for Chapter
-2</a></li>
+<li>see <a href="BDA3_notes.html#ch2">reading instructions for Chapter 2</a></li>
 </ul></li>
-<li><strong>Lecture Monday 2023-09-11 14:15-16, hall T1, CS
-building</strong>
+<li><strong>Lecture Monday 2023-09-11 14:15-16, hall T1, CS building</strong>
 <ul>
 <li><a href="slides/BDA_lecture_2.pdf">Slides 2</a></li>
-<li>Videos: <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=ed9cb7e6-a910-4afe-8659-b07a00bab594">2023
-Lecture 2.1</a>, <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=48582af7-da3f-4798-ab0c-b07a00ca7aa2">2023
-Lecture 2.2</a> on basics of Bayesian inference, observation model,
-likelihood, posterior and binomial model, predictive distribution and
-benefit of integration, priors and prior information, and one parameter
-normal model. BDA3 Ch 1+2.</li>
+<li>Videos: <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=ed9cb7e6-a910-4afe-8659-b07a00bab594">2023 Lecture 2.1</a>, <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=48582af7-da3f-4798-ab0c-b07a00ca7aa2">2023 Lecture 2.2</a> on basics of Bayesian inference, observation model, likelihood, posterior and binomial model, predictive distribution and benefit of integration, priors and prior information, and one parameter normal model. BDA3 Ch 1+2.</li>
 </ul></li>
-<li>Read <a href="BDA3_notes.html#ch2">the additional comments for
-Chapter 2</a></li>
-<li>Check <a href="demos.html#BDA_R_demos">R demos</a> or <a
-href="demos.html#BDA_Python_demos">Python demos</a> for Chapter 2</li>
-<li>Make and submit <a href="assignments/assignment2.html">Assignment
-2</a>. <strong>Deadline Sunday 2023-09-17 23:59</strong>
+<li>Read <a href="BDA3_notes.html#ch2">the additional comments for Chapter 2</a></li>
+<li>Check <a href="demos.html#BDA_R_demos">R demos</a> or <a href="demos.html#BDA_Python_demos">Python demos</a> for Chapter 2</li>
+<li>Make and submit <a href="assignments/assignment2.html">Assignment 2</a>. <strong>Deadline Sunday 2023-09-17 23:59</strong>
 <ul>
 <li>Review Assignment 1 done by your peers before 23:59 2023-09-13</li>
 <li>Reflect on your feedback</li>
-<li><a href="assignments.html#TA_sessions">TA sessions</a> 2023-09-13
-12-14, 2023-09-14 12-14, 2023-09-15 12-14.</li>
+<li><a href="assignments.html#TA_sessions">TA sessions</a> 2023-09-13 12-14, 2023-09-14 12-14, 2023-09-15 12-14.</li>
 </ul></li>
-<li>Optional: Make BDA3 exercises 2.1-2.5, 2.8, 2.9, 2.14, 2.17, 2.22
-(<a
-href="http://www.stat.columbia.edu/~gelman/book/solutions3.pdf">model
-solutions available for 2.1-2.5, 2.7-2.13, 2.16, 2.17, 2.20</a>, and
-2.14 is in course slides)</li>
+<li>Optional: Make BDA3 exercises 2.1-2.5, 2.8, 2.9, 2.14, 2.17, 2.22 (<a href="http://www.stat.columbia.edu/~gelman/book/solutions3.pdf">model solutions available for 2.1-2.5, 2.7-2.13, 2.16, 2.17, 2.20</a>, and 2.14 is in course slides)</li>
 <li>Start reading Chapter 3, see instructions below</li>
 </ul>
-</div>
-<div id="bda3-ch-3-multidimensional-posterior" class="section level3">
-<h3>3) BDA3 Ch 3, multidimensional posterior</h3>
-<p>Multiparameter models, joint, marginal and conditional distribution,
-normal model, bioassay example, grid sampling and grid evaluation. BDA3
-Ch 3.</p>
+</section>
+<section id="bda3-ch-3-multidimensional-posterior" class="level3">
+<h3 class="anchored" data-anchor-id="bda3-ch-3-multidimensional-posterior">3) BDA3 Ch 3, multidimensional posterior</h3>
+<p>Multiparameter models, joint, marginal and conditional distribution, normal model, bioassay example, grid sampling and grid evaluation. BDA3 Ch 3.</p>
 <ul>
 <li>Read BDA3 Chapter 3
 <ul>
-<li>see <a href="BDA3_notes.html#ch3">reading instructions for Chapter
-3</a></li>
+<li>see <a href="BDA3_notes.html#ch3">reading instructions for Chapter 3</a></li>
 </ul></li>
-<li><strong>Lecture Monday 2023-09-18. 14:15-16, hall T1, CS
-building</strong>
+<li><strong>Lecture Monday 2023-09-18. 14:15-16, hall T1, CS building</strong>
 <ul>
 <li><a href="slides/BDA_lecture_3.pdf">Slides 3</a></li>
-<li>Videos: <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=802abb82-07a2-4b4e-a16b-b0820089d994">2023
-Lecture 3.1</a> <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c070e17c-ce4c-4a98-801c-b08200a5b22f">2023
-Lecture 3.2</a> on multiparameter models, joint, marginal and
-conditional distribution, normal model, bioassay example, grid sampling
-and grid evaluation. BDA3 Ch 3.</li>
+<li>Videos: <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=802abb82-07a2-4b4e-a16b-b0820089d994">2023 Lecture 3.1</a> <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c070e17c-ce4c-4a98-801c-b08200a5b22f">2023 Lecture 3.2</a> on multiparameter models, joint, marginal and conditional distribution, normal model, bioassay example, grid sampling and grid evaluation. BDA3 Ch 3.</li>
 </ul></li>
-<li>Read <a href="BDA3_notes.html#ch3">the additional comments for
-Chapter 3</a></li>
-<li>Check <a href="demos.html#BDA_R_demos">R demos</a> or <a
-href="demos.html#BDA_Python_demos">Python demos</a> for Chapter 3</li>
-<li>Make and submit <a href="assignments/assignment3.html">Assignment
-3</a>. <strong>Deadline Sunday 2023-09-24 23:59</strong>
+<li>Read <a href="BDA3_notes.html#ch3">the additional comments for Chapter 3</a></li>
+<li>Check <a href="demos.html#BDA_R_demos">R demos</a> or <a href="demos.html#BDA_Python_demos">Python demos</a> for Chapter 3</li>
+<li>Make and submit <a href="assignments/assignment3.html">Assignment 3</a>. <strong>Deadline Sunday 2023-09-24 23:59</strong>
 <ul>
-<li>Review Assignment 2 done by your peers before 23:59 2023-09-20, and
-reflect on your feedback.</li>
+<li>Review Assignment 2 done by your peers before 23:59 2023-09-20, and reflect on your feedback.</li>
 </ul></li>
-<li><a href="assignments.html#TA_sessions">TA sessions</a> 2023-09-20
-12-14, 2023-09-21 12-14, 2023-09-22 12-14.</li>
-<li>Optional: Make BDA3 exercises 3.2, 3.3, 3.9 (<a
-href="http://www.stat.columbia.edu/~gelman/book/solutions3.pdf">model
-solutions available for 3.1-3.3, 3.5, 3.9, 3.10</a>)</li>
+<li><a href="assignments.html#TA_sessions">TA sessions</a> 2023-09-20 12-14, 2023-09-21 12-14, 2023-09-22 12-14.</li>
+<li>Optional: Make BDA3 exercises 3.2, 3.3, 3.9 (<a href="http://www.stat.columbia.edu/~gelman/book/solutions3.pdf">model solutions available for 3.1-3.3, 3.5, 3.9, 3.10</a>)</li>
 <li>Start reading Chapter 10, see instructions below</li>
 </ul>
-</div>
-<div id="bda3-ch-10-monte-carlo" class="section level3">
-<h3>4) BDA3 Ch 10, Monte Carlo</h3>
-<p>Numerical issues, Monte Carlo, how many simulation draws are needed,
-how many digits to report, direct simulation, curse of dimensionality,
-rejection sampling, and importance sampling. BDA3 Ch 10.</p>
+</section>
+<section id="bda3-ch-10-monte-carlo" class="level3">
+<h3 class="anchored" data-anchor-id="bda3-ch-10-monte-carlo">4) BDA3 Ch 10, Monte Carlo</h3>
+<p>Numerical issues, Monte Carlo, how many simulation draws are needed, how many digits to report, direct simulation, curse of dimensionality, rejection sampling, and importance sampling. BDA3 Ch 10.</p>
 <ul>
 <li>Read BDA3 Chapter 10
 <ul>
-<li>see <a href="BDA3_notes.html#ch10">reading instructions for Chapter
-10</a></li>
+<li>see <a href="BDA3_notes.html#ch10">reading instructions for Chapter 10</a></li>
 </ul></li>
-<li><strong>Lecture Monday 2023-09-25 14:15-16, hall T1, CS
-building</strong>
+<li><strong>Lecture Monday 2023-09-25 14:15-16, hall T1, CS building</strong>
 <ul>
 <li><a href="slides/BDA_lecture_4.pdf">Slides 4</a></li>
-<li>Videos: <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d0a08786-0796-4e93-90a3-b08800b99601">2023
-Lecture 4.1</a> on numerical issues, Monte Carlo, how many simulation
-draws are needed, how many digits to report, and <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=ad034e33-56da-4255-9f3a-b08800cbe37e">2023
-Lecture 4.2</a> on direct simulation, curse of dimensionality, rejection
-sampling, and importance sampling. BDA3 Ch 10.</li>
+<li>Videos: <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=d0a08786-0796-4e93-90a3-b08800b99601">2023 Lecture 4.1</a> on numerical issues, Monte Carlo, how many simulation draws are needed, how many digits to report, and <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=ad034e33-56da-4255-9f3a-b08800cbe37e">2023 Lecture 4.2</a> on direct simulation, curse of dimensionality, rejection sampling, and importance sampling. BDA3 Ch 10.</li>
 </ul></li>
-<li>Read <a href="BDA3_notes.html#ch10">the additional comments for
-Chapter 10</a></li>
-<li>Check <a href="demos.html#BDA_R_demos">R demos</a> or <a
-href="demos.html#BDA_Python_demos">Python demos</a> for Chapter 10</li>
-<li>Make and submit <a href="assignments/assignment4.html">Assignment
-4</a>. <strong>Deadline Sunday 2023-10-01 23:59</strong>
+<li>Read <a href="BDA3_notes.html#ch10">the additional comments for Chapter 10</a></li>
+<li>Check <a href="demos.html#BDA_R_demos">R demos</a> or <a href="demos.html#BDA_Python_demos">Python demos</a> for Chapter 10</li>
+<li>Make and submit <a href="assignments/assignment4.html">Assignment 4</a>. <strong>Deadline Sunday 2023-10-01 23:59</strong>
 <ul>
-<li>Review Assignment 3 done by your peers before 23:59 2023-09-27, and
-reflect on your feedback</li>
+<li>Review Assignment 3 done by your peers before 23:59 2023-09-27, and reflect on your feedback</li>
 </ul></li>
-<li><a href="assignments.html#TA_sessions">TA sessions</a> 2023-09-27
-12-14, 2023-09-28 12-14, 2023-09-29 12-14.</li>
-<li>Optional: Make BDA3 exercises 10.1, 10.2 (<a
-href="http://www.stat.columbia.edu/~gelman/book/solutions3.pdf">model
-solution available for 10.4</a>)</li>
+<li><a href="assignments.html#TA_sessions">TA sessions</a> 2023-09-27 12-14, 2023-09-28 12-14, 2023-09-29 12-14.</li>
+<li>Optional: Make BDA3 exercises 10.1, 10.2 (<a href="http://www.stat.columbia.edu/~gelman/book/solutions3.pdf">model solution available for 10.4</a>)</li>
 <li>Start reading Chapter 11, see instructions below</li>
 </ul>
-</div>
-<div id="bda3-ch-11-markov-chain-monte-carlo" class="section level3">
-<h3>5) BDA3 Ch 11, Markov chain Monte Carlo</h3>
-<p>Markov chain Monte Carlo, Gibbs sampling, Metropolis algorithm,
-warm-up, convergence diagnostics, R-hat, and effective sample size. BDA3
-Ch 11.</p>
+</section>
+<section id="bda3-ch-11-markov-chain-monte-carlo" class="level3">
+<h3 class="anchored" data-anchor-id="bda3-ch-11-markov-chain-monte-carlo">5) BDA3 Ch 11, Markov chain Monte Carlo</h3>
+<p>Markov chain Monte Carlo, Gibbs sampling, Metropolis algorithm, warm-up, convergence diagnostics, R-hat, and effective sample size. BDA3 Ch 11.</p>
 <ul>
 <li>Read BDA3 Chapter 11
 <ul>
-<li>see <a href="BDA3_notes.html#ch11">reading instructions for Chapter
-11</a></li>
+<li>see <a href="BDA3_notes.html#ch11">reading instructions for Chapter 11</a></li>
 </ul></li>
-<li><strong>Lecture Monday 2023-10-02 14:15-16, hall T1, CS
-building</strong>
+<li><strong>Lecture Monday 2023-10-02 14:15-16, hall T1, CS building</strong>
 <ul>
 <li><a href="slides/BDA_lecture_5.pdf">Slides 5</a></li>
-<li>Videos: <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=279b3da6-efe6-44f7-b382-b08f00dd234b">2023
-Lecture 5.1</a> on Markov chain Monte Carlo, Gibbs sampling, Metropolis
-algorithm, and <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=ff3d41ef-b1cc-42b3-8544-b08f00ca25b2">2023
-Lecture 5.2</a> on warm-up, convergence diagnostics, R-hat, and
-effective sample size.</li>
+<li>Videos: <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=279b3da6-efe6-44f7-b382-b08f00dd234b">2023 Lecture 5.1</a> on Markov chain Monte Carlo, Gibbs sampling, Metropolis algorithm, and <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=ff3d41ef-b1cc-42b3-8544-b08f00ca25b2">2023 Lecture 5.2</a> on warm-up, convergence diagnostics, R-hat, and effective sample size.</li>
 </ul></li>
-<li>Read <a href="BDA3_notes.html#ch11">the additional comments for
-Chapter 11</a></li>
-<li>Check <a href="demos.html#BDA_R_demos">R demos</a> or <a
-href="demos.html#BDA_Python_demos">Python demos</a> for Chapter 11</li>
-<li>Make and submit <a href="assignments/assignment5.html">Assignment
-5</a>. <strong>Deadline Sunday 2023-10-08 23:59</strong>
+<li>Read <a href="BDA3_notes.html#ch11">the additional comments for Chapter 11</a></li>
+<li>Check <a href="demos.html#BDA_R_demos">R demos</a> or <a href="demos.html#BDA_Python_demos">Python demos</a> for Chapter 11</li>
+<li>Make and submit <a href="assignments/assignment5.html">Assignment 5</a>. <strong>Deadline Sunday 2023-10-08 23:59</strong>
 <ul>
-<li>Review Assignment 4 done by your peers before 23:59 2023-10-04, and
-reflect on your feedback</li>
+<li>Review Assignment 4 done by your peers before 23:59 2023-10-04, and reflect on your feedback</li>
 </ul></li>
-<li><a href="assignments.html#TA_sessions">TA sessions</a> 2023-10-04
-12-14, 2023-10-05 12-14, 2023-10-06 12-14.</li>
-<li>Optional: Make BDA3 exercise 11.1 (<a
-href="http://www.stat.columbia.edu/~gelman/book/solutions3.pdf">model
-solution available for 11.1</a>)</li>
-<li>Start reading Chapter 12 + Stan material, see instructions
-below</li>
+<li><a href="assignments.html#TA_sessions">TA sessions</a> 2023-10-04 12-14, 2023-10-05 12-14, 2023-10-06 12-14.</li>
+<li>Optional: Make BDA3 exercise 11.1 (<a href="http://www.stat.columbia.edu/~gelman/book/solutions3.pdf">model solution available for 11.1</a>)</li>
+<li>Start reading Chapter 12 + Stan material, see instructions below</li>
 </ul>
-</div>
-<div id="bda3-ch-12-stan-hmc-ppl-stan" class="section level3">
-<h3>6) BDA3 Ch 12 + Stan, HMC, PPL, Stan</h3>
-<p>HMC, NUTS, dynamic HMC and HMC specific convergence diagnostics,
-probabilistic programming and Stan. BDA3 Ch 12 + <a
-href="index.html#stan">extra material</a></p>
+</section>
+<section id="bda3-ch-12-stan-hmc-ppl-stan" class="level3">
+<h3 class="anchored" data-anchor-id="bda3-ch-12-stan-hmc-ppl-stan">6) BDA3 Ch 12 + Stan, HMC, PPL, Stan</h3>
+<p>HMC, NUTS, dynamic HMC and HMC specific convergence diagnostics, probabilistic programming and Stan. BDA3 Ch 12 + <a href="index.html#stan">extra material</a></p>
 <ul>
 <li>Read BDA3 Chapter 12
 <ul>
-<li>see <a href="BDA3_notes.html#ch12">reading instructions for Chapter
-12</a></li>
+<li>see <a href="BDA3_notes.html#ch12">reading instructions for Chapter 12</a></li>
 </ul></li>
-<li><strong>Lecture Monday 2023-10-09 14:15-16, hall T1, CS
-building</strong>
+<li><strong>Lecture Monday 2023-10-09 14:15-16, hall T1, CS building</strong>
 <ul>
 <li><a href="slides/BDA_lecture_6.pdf">Slides 6</a></li>
-<li>Videos: <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=80a36d3a-d67c-4534-a7ef-b09600b9f338">2022
-Lecture 6.1</a> on HMC, NUTS, dynamic HMC and HMC specific convergence
-diagnostics, and <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=65bf5b2b-0a4e-4cae-ba26-b09600cb6222">2022
-Lecture 6.2</a> on probabilistic programming and Stan. BDA3 Ch 12 + <a
-href="#stan">extra material</a>.</li>
-<li>Optional: <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=f4b61f2a-4a94-43f7-828c-ac460144f64f">Stan
-Extra introduction recorded 2020</a> Golf putting example, main features
-of Stan, benefits of probabilistic programming, and comparison to some
-other software.</li>
+<li>Videos: <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=80a36d3a-d67c-4534-a7ef-b09600b9f338">2022 Lecture 6.1</a> on HMC, NUTS, dynamic HMC and HMC specific convergence diagnostics, and <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=65bf5b2b-0a4e-4cae-ba26-b09600cb6222">2022 Lecture 6.2</a> on probabilistic programming and Stan. BDA3 Ch 12 + <a href="#stan">extra material</a>.</li>
+<li>Optional: <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=f4b61f2a-4a94-43f7-828c-ac460144f64f">Stan Extra introduction recorded 2020</a> Golf putting example, main features of Stan, benefits of probabilistic programming, and comparison to some other software.</li>
 </ul></li>
-<li>Read <a href="BDA3_notes.html#ch12">the additional comments for
-Chapter 12</a></li>
-<li>Read <a
-href="http://www.stat.columbia.edu/~gelman/research/published/Stan-paper-aug-2015.pdf">Stan
-introduction article</a></li>
-<li>Check <a href="demos.html#BDA_R_demos">R demos</a> for RStan or <a
-href="demos.html#BDA_Python_demos">Python demos</a> for PyStan</li>
+<li>Read <a href="BDA3_notes.html#ch12">the additional comments for Chapter 12</a></li>
+<li>Read <a href="http://www.stat.columbia.edu/~gelman/research/published/Stan-paper-aug-2015.pdf">Stan introduction article</a></li>
+<li>Check <a href="demos.html#BDA_R_demos">R demos</a> for RStan or <a href="demos.html#BDA_Python_demos">Python demos</a> for PyStan</li>
 <li>Additional material for Stan:
 <ul>
-<li><a
-href="https://mc-stan.org/users/documentation/">Documentation</a></li>
-<li><a
-href="https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started">RStan
-installation</a></li>
-<li><a
-href="https://pystan.readthedocs.io/en/latest/getting_started.html">PyStan
-installation</a></li>
-<li>Basics of Bayesian inference and Stan, Jonah Gabry &amp; Lauren
-Kennedy <a
-href="https://www.youtube.com/watch?v=ZRpo41l02KQ&amp;t=8s&amp;list=PLuwyh42iHquU4hUBQs20hkBsKSMrp6H0J&amp;index=6">Part
-1</a> and <a
-href="https://www.youtube.com/watch?v=6cc4N1vT8pk&amp;t=0s&amp;list=PLuwyh42iHquU4hUBQs20hkBsKSMrp6H0J&amp;index=7">Part
-2</a></li>
+<li><a href="https://mc-stan.org/users/documentation/">Documentation</a></li>
+<li><a href="https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started">RStan installation</a></li>
+<li><a href="https://pystan.readthedocs.io/en/latest/getting_started.html">PyStan installation</a></li>
+<li>Basics of Bayesian inference and Stan, Jonah Gabry &amp; Lauren Kennedy <a href="https://www.youtube.com/watch?v=ZRpo41l02KQ&amp;t=8s&amp;list=PLuwyh42iHquU4hUBQs20hkBsKSMrp6H0J&amp;index=6">Part 1</a> and <a href="https://www.youtube.com/watch?v=6cc4N1vT8pk&amp;t=0s&amp;list=PLuwyh42iHquU4hUBQs20hkBsKSMrp6H0J&amp;index=7">Part 2</a></li>
 </ul></li>
-<li>Make and submit <a href="assignments/assignment6.html">Assignment
-6</a>. <strong>DeadlineSunday 2023-10-22 23:59</strong> (two weeks for
-this assignment)
+<li>Make and submit <a href="assignments/assignment6.html">Assignment 6</a>. <strong>DeadlineSunday 2023-10-22 23:59</strong> (two weeks for this assignment)
 <ul>
-<li>Review Assignment 5 done by your peers before 23:59 2023-10-11, and
-reflect on your feedback</li>
+<li>Review Assignment 5 done by your peers before 23:59 2023-10-11, and reflect on your feedback</li>
 </ul></li>
-<li><a href="assignments.html#TA_sessions">TA sessions</a> 2023-10-11
-14-16, 2023-10-12 12-14, 2023-10-13 10-12.</li>
+<li><a href="assignments.html#TA_sessions">TA sessions</a> 2023-10-11 14-16, 2023-10-12 12-14, 2023-10-13 10-12.</li>
 <li>Start reading Chapter 5 + Stan material, see instructions below</li>
 <li>No Lecture on evaluation week.</li>
 </ul>
-</div>
-<div id="bda3-ch-5-hierarchical-models" class="section level3">
-<h3>7) BDA3 Ch 5, hierarchical models</h3>
+</section>
+<section id="bda3-ch-5-hierarchical-models" class="level3">
+<h3 class="anchored" data-anchor-id="bda3-ch-5-hierarchical-models">7) BDA3 Ch 5, hierarchical models</h3>
 <p>Hierarchical models and exchangeability. BDA3 Ch 5.</p>
 <ul>
 <li>Read BDA3 Chapter 5
 <ul>
-<li>see <a href="BDA3_notes.html#ch5">reading instructions for Chapter
-5</a></li>
+<li>see <a href="BDA3_notes.html#ch5">reading instructions for Chapter 5</a></li>
 </ul></li>
-<li><strong>Lecture Monday 2023-10-23 14:15-16, hall T2, CS
-building</strong>
+<li><strong>Lecture Monday 2023-10-23 14:15-16, hall T2, CS building</strong>
 <ul>
 <li><a href="slides/BDA_lecture_7.pdf">Slides 7</a></li>
-<li>Videos: <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c1014690-1133-4232-ad0f-b0a400ba228d">2023
-Lecture 7.1</a> on hierarchical models, <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=196c3a91-3ba2-4469-ab15-b0a400ca6074">2023
-Lecture 7.2</a> on exchangeability.</li>
+<li>Videos: <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c1014690-1133-4232-ad0f-b0a400ba228d">2023 Lecture 7.1</a> on hierarchical models, <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=196c3a91-3ba2-4469-ab15-b0a400ca6074">2023 Lecture 7.2</a> on exchangeability.</li>
 </ul></li>
-<li>Read <a href="BDA3_notes.html#ch5">the additional comments for
-Chapter 5</a></li>
-<li>Check <a href="demos.html#BDA_R_demos">R demos</a> or <a
-href="demos.html#BDA_Python_demos">Python demos</a> for Chapter 5</li>
-<li>Make and submit <a href="assignments/assignment7.html">Assignment
-7</a>. <strong>Deadline Sunday 2023-11-05 23:59</strong> (two weeks for
-this assignment)
+<li>Read <a href="BDA3_notes.html#ch5">the additional comments for Chapter 5</a></li>
+<li>Check <a href="demos.html#BDA_R_demos">R demos</a> or <a href="demos.html#BDA_Python_demos">Python demos</a> for Chapter 5</li>
+<li>Make and submit <a href="assignments/assignment7.html">Assignment 7</a>. <strong>Deadline Sunday 2023-11-05 23:59</strong> (two weeks for this assignment)
 <ul>
-<li>Review Assignment 6 done by your peers before 23:59 2023-10-25, and
-reflect on your feedback</li>
+<li>Review Assignment 6 done by your peers before 23:59 2023-10-25, and reflect on your feedback</li>
 </ul></li>
-<li><a href="assignments.html#TA_sessions">TA sessions</a> 2023-10-25
-14-16, 2023-10-26 12-14, 2023-10-27 10-12.</li>
-<li>Optional: Make BDA3 exercises 5.1 and 5.2 (<a
-href="http://www.stat.columbia.edu/~gelman/book/solutions3.pdf">model
-solution available for 5.3-5.5, 5.7-5.12</a>)</li>
-<li>Start reading Chapters 6-7 and additional material, see instructions
-below.</li>
+<li><a href="assignments.html#TA_sessions">TA sessions</a> 2023-10-25 14-16, 2023-10-26 12-14, 2023-10-27 10-12.</li>
+<li>Optional: Make BDA3 exercises 5.1 and 5.2 (<a href="http://www.stat.columbia.edu/~gelman/book/solutions3.pdf">model solution available for 5.3-5.5, 5.7-5.12</a>)</li>
+<li>Start reading Chapters 6-7 and additional material, see instructions below.</li>
 </ul>
-</div>
-<div id="bda3-ch-67-extra-material-model-checking-cross-validation"
-class="section level3">
-<h3>8) BDA3 Ch 6+7 + extra material, model checking,
-cross-validation</h3>
+</section>
+<section id="bda3-ch-67-extra-material-model-checking-cross-validation" class="level3">
+<h3 class="anchored" data-anchor-id="bda3-ch-67-extra-material-model-checking-cross-validation">8) BDA3 Ch 6+7 + extra material, model checking, cross-validation</h3>
 <p>Model checking and cross-validation.</p>
 <ul>
 <li>Read BDA3 Chapters 6 and 7 (skip 7.2 and 7.3)
 <ul>
-<li>see <a href="BDA3_notes.html#ch6">reading instructions for Chapter
-6</a> and <a href="BDA3_notes.html#ch7">Chapter 7</a></li>
+<li>see <a href="BDA3_notes.html#ch6">reading instructions for Chapter 6</a> and <a href="BDA3_notes.html#ch7">Chapter 7</a></li>
 </ul></li>
-<li>Read <a href="https://doi.org/10.1111/rssa.12378">Visualization in
-Bayesian workflow</a>
+<li>Read <a href="https://doi.org/10.1111/rssa.12378">Visualization in Bayesian workflow</a>
 <ul>
-<li>more about workflow and examples of prior predictive checking and
-LOO-CV probability integral transformations</li>
+<li>more about workflow and examples of prior predictive checking and LOO-CV probability integral transformations</li>
 </ul></li>
-<li>Read <a href="https://arxiv.org/abs/1507.04544">Practical Bayesian
-model evaluation using leave-one-out cross-validation and WAIC</a> (<a
-href="https://doi.org/10.1007/s11222-016-9696-4">Journal link</a>)
+<li>Read <a href="https://arxiv.org/abs/1507.04544">Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC</a> (<a href="https://doi.org/10.1007/s11222-016-9696-4">Journal link</a>)
 <ul>
 <li>replaces BDA3 Sections 7.2 and 7.3 on cross-validation</li>
 </ul></li>
-<li><strong>Lecture Monday 2023-10-30 14:15-16, hall T2, CS
-building</strong>
+<li><strong>Lecture Monday 2023-10-30 14:15-16, hall T2, CS building</strong>
 <ul>
-<li><a href="slides/BDA_lecture_8a.pdf">Slides 8a</a>, <a
-href="slides/BDA_lecture_8b.pdf">Slides 8b</a></li>
-<li>Videos: <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=785ece8a-16ef-4f64-8134-b0ab00cbd1e8">2022
-Lecture 8.1</a> on model checking, and <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=456afda7-0e6d-4903-b0df-b0ab00da8f1e">2023
-Lecture 8.2</a> on cross-validation part 1. BDA3 Ch 6-7 + extra
-material.</li>
+<li><a href="slides/BDA_lecture_8a.pdf">Slides 8a</a>, <a href="slides/BDA_lecture_8b.pdf">Slides 8b</a></li>
+<li>Videos: <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=785ece8a-16ef-4f64-8134-b0ab00cbd1e8">2022 Lecture 8.1</a> on model checking, and <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=456afda7-0e6d-4903-b0df-b0ab00da8f1e">2023 Lecture 8.2</a> on cross-validation part 1. BDA3 Ch 6-7 + extra material.</li>
 </ul></li>
-<li>Read <a href="BDA3_notes.html#ch6">the additional comments for
-Chapter 6</a> and <a href="BDA3_notes.html#ch7">Chapter 7</a></li>
-<li>Check <a href="demos.html#BDA_R_demos">R demos</a> or <a
-href="demos.html#BDA_Python_demos">Python demos</a> for Chapter 6</li>
+<li>Read <a href="BDA3_notes.html#ch6">the additional comments for Chapter 6</a> and <a href="BDA3_notes.html#ch7">Chapter 7</a></li>
+<li>Check <a href="demos.html#BDA_R_demos">R demos</a> or <a href="demos.html#BDA_Python_demos">Python demos</a> for Chapter 6</li>
 <li>Additional reading material
 <ul>
-<li><a href="https://users.aalto.fi/~ave/CV-FAQ.html">Cross-validation
-FAQ</a></li>
+<li><a href="https://users.aalto.fi/~ave/CV-FAQ.html">Cross-validation FAQ</a></li>
 </ul></li>
 <li>No new assignment in this block</li>
-<li>Start <a href="project.Rmd">the project work</a></li>
-<li><a href="assignments.html#TA_sessions">TA sessions</a> 2023-11-01
-14-16, 2023-11-02 12-14, 2023-11-03 10-12.</li>
-<li>Optional: Make BDA3 exercise 6.1 (<a
-href="http://www.stat.columbia.edu/~gelman/book/solutions3.pdf">model
-solution available for 6.1, 6.5-6.7</a>)</li>
+<li>Start <a href="./project.html">the project work</a></li>
+<li><a href="assignments.html#TA_sessions">TA sessions</a> 2023-11-01 14-16, 2023-11-02 12-14, 2023-11-03 10-12.</li>
+<li>Optional: Make BDA3 exercise 6.1 (<a href="http://www.stat.columbia.edu/~gelman/book/solutions3.pdf">model solution available for 6.1, 6.5-6.7</a>)</li>
 </ul>
-</div>
-<div id="bda3-ch-7-extra-material-model-comparison-and-selection"
-class="section level3">
-<h3>9) BDA3 Ch 7, extra material, model comparison and selection</h3>
-<p>PSIS-LOO, K-fold-CV, model comparison and selection. Extra lecture on
-variable selection with projection predictive variable selection.</p>
+</section>
+<section id="bda3-ch-7-extra-material-model-comparison-and-selection" class="level3">
+<h3 class="anchored" data-anchor-id="bda3-ch-7-extra-material-model-comparison-and-selection">9) BDA3 Ch 7, extra material, model comparison and selection</h3>
+<p>PSIS-LOO, K-fold-CV, model comparison and selection. Extra lecture on variable selection with projection predictive variable selection.</p>
 <ul>
 <li>Read Chapter 7 (no 7.2 and 7.3)
 <ul>
-<li>see <a href="BDA3_notes.html#ch7">reading instructions for Chapter
-7</a></li>
+<li>see <a href="BDA3_notes.html#ch7">reading instructions for Chapter 7</a></li>
 </ul></li>
-<li>Read <a href="https://arxiv.org/abs/1507.04544">Practical Bayesian
-model evaluation using leave-one-out cross-validation and WAIC</a> (<a
-href="https://doi.org/10.1007/s11222-016-9696-4">Journal link</a>)
+<li>Read <a href="https://arxiv.org/abs/1507.04544">Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC</a> (<a href="https://doi.org/10.1007/s11222-016-9696-4">Journal link</a>)
 <ul>
 <li>replaces BDA3 Sections 7.2 and 7.3 on cross-validation</li>
 </ul></li>
-<li><strong>Lecture Monday 2023-11-06 14:15-16, hall T2, CS
-building</strong>
+<li><strong>Lecture Monday 2023-11-06 14:15-16, hall T2, CS building</strong>
 <ul>
 <li><a href="slides/BDA_lecture_9.pdf">Slides 9</a></li>
-<li>Videos: <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=a4961b5a-7e42-4603-8aaf-b0b200ca6295">2023
-Lecture 9.1</a> and <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=a4796c79-eab2-436e-b55f-b0b200dac7ce">2023
-Lecture 9.2</a> on model comparison, selection, and hypothesis
-testing.</li>
+<li>Videos: <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=a4961b5a-7e42-4603-8aaf-b0b200ca6295">2023 Lecture 9.1</a> and <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=a4796c79-eab2-436e-b55f-b0b200dac7ce">2023 Lecture 9.2</a> on model comparison, selection, and hypothesis testing.</li>
 </ul></li>
 <li>Additional reading material
 <ul>
 <li><a href="https://users.aalto.fi/~ave/CV-FAQ.html">CV FAQ</a></li>
 </ul></li>
-<li>Make and submit <a href="assignments/assignment8.html">Assignment
-8</a>. <strong>Sunday 2023-11-12 23:59</strong>
+<li>Make and submit <a href="assignments/assignment8.html">Assignment 8</a>. <strong>Sunday 2023-11-12 23:59</strong>
 <ul>
-<li>Review Assignment 7 done by your peers before 23:59 2023-11-08, and
-reflect on your feedback</li>
+<li>Review Assignment 7 done by your peers before 23:59 2023-11-08, and reflect on your feedback</li>
 </ul></li>
-<li><a href="assignments.html#TA_sessions">TA sessions</a> 2023-11-08
-14-16, 2023-11-09 12-14, 2023-11-10 10-12.</li>
+<li><a href="assignments.html#TA_sessions">TA sessions</a> 2023-11-08 14-16, 2023-11-09 12-14, 2023-11-10 10-12.</li>
 <li>Start reading Chapter 9, see instructions below.</li>
 </ul>
-</div>
-<div
-id="bda3-ch-9-decision-analysis-bda3-ch-4-laplace-approximation-and-asymptotics"
-class="section level3">
-<h3>10) BDA3 Ch 9, decision analysis + BDA3 Ch 4 Laplace approximation
-and asymptotics</h3>
-<p>Decision analysis. BDA3 Ch 9. + Laplace approximation and
-asymptotics. BDA Ch 4.</p>
+</section>
+<section id="bda3-ch-9-decision-analysis-bda3-ch-4-laplace-approximation-and-asymptotics" class="level3">
+<h3 class="anchored" data-anchor-id="bda3-ch-9-decision-analysis-bda3-ch-4-laplace-approximation-and-asymptotics">10) BDA3 Ch 9, decision analysis + BDA3 Ch 4 Laplace approximation and asymptotics</h3>
+<p>Decision analysis. BDA3 Ch 9. + Laplace approximation and asymptotics. BDA Ch 4.</p>
 <ul>
 <li>Read Chapter 9 and 4
 <ul>
-<li>see <a href="BDA3_notes.html#ch9">reading instructions for Chapter
-9</a></li>
-<li>see <a href="BDA3_notes.html#ch4">reading instructions for Chapter
-4</a></li>
+<li>see <a href="BDA3_notes.html#ch9">reading instructions for Chapter 9</a></li>
+<li>see <a href="BDA3_notes.html#ch4">reading instructions for Chapter 4</a></li>
 </ul></li>
-<li><strong>Lecture Monday 2023-11-13 14:15-16, hall T2, CS
-building</strong>
+<li><strong>Lecture Monday 2023-11-13 14:15-16, hall T2, CS building</strong>
 <ul>
-<li><a href="slides/BDA_lecture_10a.pdf">Slides 10a</a>, <a
-href="slides/BDA_lecture_10b.pdf">Slides 10b</a></li>
-<li>Videos: <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c4ab903a-bc22-416f-99c8-b0b900c9f3f7">2023
-Lecture 10.1</a> on decision analysis. BDA3 Ch 9, and <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=2a6d7c79-7797-4a6d-8efa-b0b900d8f24c">2023
-Lecture 10.2</a> on Laplace approximation, and asymptotics, BDA3 Ch
-4.</li>
+<li><a href="slides/BDA_lecture_10a.pdf">Slides 10a</a>, <a href="slides/BDA_lecture_10b.pdf">Slides 10b</a></li>
+<li>Videos: <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=c4ab903a-bc22-416f-99c8-b0b900c9f3f7">2023 Lecture 10.1</a> on decision analysis. BDA3 Ch 9, and <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=2a6d7c79-7797-4a6d-8efa-b0b900d8f24c">2023 Lecture 10.2</a> on Laplace approximation, and asymptotics, BDA3 Ch 4.</li>
 </ul></li>
-<li>Make and submit <a href="assignments/assignment9.html">Assignment
-9</a>. <strong>Sunday 2023-11-19 23:59</strong>
+<li>Make and submit <a href="assignments/assignment9.html">Assignment 9</a>. <strong>Sunday 2023-11-19 23:59</strong>
 <ul>
-<li>Review Assignment 8 done by your peers before 23:59 N/A, and reflect
-on your feedback</li>
+<li>Review Assignment 8 done by your peers before 23:59 N/A, and reflect on your feedback</li>
 </ul></li>
-<li><a href="assignments.html#TA_sessions">TA sessions</a> 2023-11-15
-14-16, 2023-11-16 12-14, 2023-11-17 10-12.</li>
+<li><a href="assignments.html#TA_sessions">TA sessions</a> 2023-11-15 14-16, 2023-11-16 12-14, 2023-11-17 10-12.</li>
 <li>Start reading Chapter 4, see instructions below.</li>
 </ul>
-</div>
-<div
-id="variable-selection-with-projpred-project-presentation-example-extra"
-class="section level3">
-<h3>11) Variable selection with projpred, project presentation example,
-extra</h3>
+</section>
+<section id="variable-selection-with-projpred-project-presentation-example-extra" class="level3">
+<h3 class="anchored" data-anchor-id="variable-selection-with-projpred-project-presentation-example-extra">11) Variable selection with projpred, project presentation example, extra</h3>
 <ul>
-<li><strong>Lecture Monday 2023-11-20 14:15-16, hall T2, CS
-building</strong>
+<li><strong>Lecture Monday 2023-11-20 14:15-16, hall T2, CS building</strong>
 <ul>
-<li><a href="slides/BDA_lecture_11a.pdf">Slides 11a</a>, <a
-href="project_work/BDA_presentation_example.pdf">Slides Project
-Presentation</a>, <a href="slides/slides_extra.pdf">Slides 11
-extra</a></li>
-<li>Videos: <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=7ef70bc8-122b-4e86-80fa-b0c000cb5511">2023
-Lecture 11.1</a> on variable selecion with projpred, <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=a2b3bcb8-240e-4e6c-b90e-b0c000d92770">2023
-Lecture 11.2</a> on project presentations, <a
-href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=ae634732-1f4e-4568-8529-b0c000e0f153">2023
-Lecture 11.3</a> on rest of BDA3, ROS, and Bayesian Workflow</li>
+<li><a href="slides/BDA_lecture_11a.pdf">Slides 11a</a>, <a href="project_work/BDA_presentation_example.pdf">Slides Project Presentation</a>, <a href="slides/slides_extra.pdf">Slides 11 extra</a></li>
+<li>Videos: <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=7ef70bc8-122b-4e86-80fa-b0c000cb5511">2023 Lecture 11.1</a> on variable selecion with projpred, <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=a2b3bcb8-240e-4e6c-b90e-b0c000d92770">2023 Lecture 11.2</a> on project presentations, <a href="https://aalto.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=ae634732-1f4e-4568-8529-b0c000e0f153">2023 Lecture 11.3</a> on rest of BDA3, ROS, and Bayesian Workflow</li>
 </ul></li>
 <li>No new assignment. Work on project. TAs help with projects.
 <ul>
-<li>Review Assignment 9 done by your peers before 23:59 2023-11-15, and
-reflect on your feedback</li>
+<li>Review Assignment 9 done by your peers before 23:59 2023-11-15, and reflect on your feedback</li>
 </ul></li>
-<li><a href="assignments.html#TA_sessions">TA sessions</a> 2023-11-22
-14-16, 2023-11-23 12-14, 2023-11-24 10-12.</li>
+<li><a href="assignments.html#TA_sessions">TA sessions</a> 2023-11-22 14-16, 2023-11-23 12-14, 2023-11-24 10-12.</li>
 </ul>
-</div>
-<div id="tba" class="section level3">
-<h3>12) TBA</h3>
+</section>
+<section id="tba" class="level3">
+<h3 class="anchored" data-anchor-id="tba">12) TBA</h3>
 <ul>
-<li><strong>Lecture Monday 2023-11-27 14:15-16, hall T2, CS
-building</strong>
+<li><strong>Lecture Monday 2023-11-27 14:15-16, hall T2, CS building</strong>
 <ul>
 <li><a href="slides/BDA_lecture_12.pdf">Slides 12</a></li>
 </ul></li>
 <li>TBA</li>
-<li>Work on project. TAs help with projects. <strong>Project deadline
-3.12. 23:59</strong></li>
-<li><a href="assignments.html#TA_sessions">TA sessions</a> 2023-11-29
-14-16, 2023-11-30 12-14, 2023-12-01 10-12.</li>
+<li>Work on project. TAs help with projects. <strong>Project deadline 3.12. 23:59</strong></li>
+<li><a href="assignments.html#TA_sessions">TA sessions</a> 2023-11-29 14-16, 2023-11-30 12-14, 2023-12-01 10-12.</li>
 </ul>
-</div>
-<div id="project-evaluation" class="section level3">
-<h3>13) Project evaluation</h3>
+</section>
+<section id="project-evaluation" class="level3">
+<h3 class="anchored" data-anchor-id="project-evaluation">13) Project evaluation</h3>
 <ul>
 <li>Project report deadline 3.12. 23:59 (submit to peergrade).
 <ul>
-<li>Review project reports done by your peers before 7.12. 23:59, and
-reflect on your feedback.</li>
+<li>Review project reports done by your peers before 7.12. 23:59, and reflect on your feedback.</li>
 </ul></li>
 <li>Project presentations 11.-15.12. (evaluation week)</li>
 </ul>
-</div>
-</div>
-<div id="r-and-python" class="section level2">
-<h2>R and Python</h2>
-<p>We strongly recommend using R in the course as there are more
-packages for Stan and statistical analysis in R. If you are already
-fluent in Python, but not in R, then using Python may be easier, but it
-can still be more useful to learn also R. Unless you are already
-experienced and have figured out your preferred way to work with R, we
-recommend</p>
+</section>
+</section>
+<section id="r-and-python" class="level2">
+<h2 class="anchored" data-anchor-id="r-and-python">R and Python</h2>
+<p>We strongly recommend using R in the course as there are more packages for Stan and statistical analysis in R. If you are already fluent in Python, but not in R, then using Python may be easier, but it can still be more useful to learn also R. Unless you are already experienced and have figured out your preferred way to work with R, we recommend</p>
 <ul>
-<li><a href="FAQ.html#How_to_use_R_and_RStudio_remotely">use RStudio
-remotely</a></li>
-<li><a href="https://posit.co/download/rstudio-desktop/">or install
-RStudio Desktop</a>,</li>
+<li><a href="FAQ.html#How_to_use_R_and_RStudio_remotely">use RStudio remotely</a></li>
+<li><a href="https://posit.co/download/rstudio-desktop/">or install RStudio Desktop</a>,</li>
 </ul>
-<p>See <a href="FAQ.html">FAQ</a> for frequently asked questions about R
-problems in this course. The <a href="demos.html">demo codes</a> provide
-useful starting points for all the assignments.</p>
+<p>See <a href="FAQ.html">FAQ</a> for frequently asked questions about R problems in this course. The <a href="demos.html">demo codes</a> provide useful starting points for all the assignments.</p>
 <ul>
 <li>For learning R programming basics
 <ul>
-<li><a href="https://rstudio-education.github.io/hopr/">Garrett
-Grolemund, Hands-On Programming with R</a></li>
+<li><a href="https://rstudio-education.github.io/hopr/">Garrett Grolemund, Hands-On Programming with R</a></li>
 </ul></li>
 <li>For learning basic and advanced plotting using R
 <ul>
-<li><a href="https://socviz.co/">Kieran Healy, Data Visualization - A
-practical introduction</a></li>
-<li><a href="http://www.gradaanwr.net/">Antony Unwin, Graphical Data
-Analysis with R</a></li>
+<li><a href="https://socviz.co/">Kieran Healy, Data Visualization - A practical introduction</a></li>
+<li><a href="http://www.gradaanwr.net/">Antony Unwin, Graphical Data Analysis with R</a></li>
 </ul></li>
 </ul>
-</div>
-<div id="english-finnish-english-statistics-dictionary"
-class="section level2">
-<h2>English-Finnish-English statistics dictionary</h2>
+</section>
+<section id="english-finnish-english-statistics-dictionary" class="level2">
+<h2 class="anchored" data-anchor-id="english-finnish-english-statistics-dictionary">English-Finnish-English statistics dictionary</h2>
 <p>Excellent online English-Finnish-English statistics dictionary:</p>
 <ul>
-<li><a href="https://sanasto.tilastoseura.fi/">Juha Alho, Elja Arjas,
-Esa Läärä ja Pekka Pere (2023). Tilastotieteen sanasto. Suomen
-Tilastoseuran julkaisuja no. 8. 2. laitos. Suomen Tilastoseura.
-Helsinki. https://sanasto.tilastoseura.fi/</a></li>
+<li><a href="https://sanasto.tilastoseura.fi/">Juha Alho, Elja Arjas, Esa Läärä ja Pekka Pere (2023). Tilastotieteen sanasto. Suomen Tilastoseuran julkaisuja no. 8. 2. laitos. Suomen Tilastoseura. Helsinki. https://sanasto.tilastoseura.fi/</a></li>
 </ul>
-<p>Shorter English-Finnish dictionary for the terms specific for this
-course</p>
+<p>Shorter English-Finnish dictionary for the terms specific for this course</p>
 <ul>
-<li><a href="extra_reading/sanasto.pdf">Lyhyt englanti-suomi sanasto
-kurssin termeistä</a></li>
+<li><a href="extra_reading/sanasto.pdf">Lyhyt englanti-suomi sanasto kurssin termeistä</a></li>
 </ul>
-<p>Sanasta “bayesilainen” esiintyy Suomessa muutamaa erilaista
-kirjoitustapaa. Olen käyttänyt muotoa “bayesilainen”, joka on
-muodostettu yleisen vieraskielisten nimien taivutussääntöjen mukaan:
-<em>“Jos nimi on kirjoitettuna takavokaalinen mutta äännettynä
-etuvokaalinen, kirjoitetaan päätteseen tavallisesti takavokaali
-etuvokaalin sijasta, esim. Birminghamissa, Thamesilla.” Terho Itkonen,
-Kieliopas, 6. painos, Kirjayhtymä, 1997.</em></p>
-<p>Suomen tilastoseura sen sijaan suosittaa muotoa “bayseiläinen”.
-Heidän perustelunsa löytyy Tilastotieteen sanastosta (ks. linkki yllä).
-Tilastotieteen sanaston verkkoversiossa on hakutoiminto, ja PDF-versio
-sisältää käännösten perusteluita sekä hieman tilastotieteen varhaista
-historiaa Suomessa.</p>
-</div>
+<p>Sanasta “bayesilainen” esiintyy Suomessa muutamaa erilaista kirjoitustapaa. Olen käyttänyt muotoa “bayesilainen”, joka on muodostettu yleisen vieraskielisten nimien taivutussääntöjen mukaan: <em>“Jos nimi on kirjoitettuna takavokaalinen mutta äännettynä etuvokaalinen, kirjoitetaan päätteseen tavallisesti takavokaali etuvokaalin sijasta, esim. Birminghamissa, Thamesilla.” Terho Itkonen, Kieliopas, 6. painos, Kirjayhtymä, 1997.</em></p>
+<p>Suomen tilastoseura sen sijaan suosittaa muotoa “bayseiläinen”. Heidän perustelunsa löytyy Tilastotieteen sanastosta (ks. linkki yllä). Tilastotieteen sanaston verkkoversiossa on hakutoiminto, ja PDF-versio sisältää käännösten perusteluita sekä hieman tilastotieteen varhaista historiaa Suomessa.</p>
 
 
+</section>
 
-</div>
-</div>
-
-</div>
-
-<script>
-
-// add bootstrap table styles to pandoc tables
-function bootstrapStylePandocTables() {
-  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
-}
-$(document).ready(function () {
-  bootstrapStylePandocTables();
-});
-
-
-</script>
-
-<!-- tabsets -->
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open');
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-});
-</script>
-
-<!-- code folding -->
-
-<script>
-$(document).ready(function ()  {
-
-    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
-    $('.unlisted.unnumbered').addClass('toc-ignore')
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/avehtari\.github\.io\/BDA_course_Aalto\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
       },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
     };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
 });
 </script>
+</div> <!-- /content -->
 
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
 
-</body>
-</html>
+
+
+</body></html>
