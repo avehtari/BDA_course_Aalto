@@ -1,0 +1,432 @@
+---
+title: "Assignment 7"
+subtitle: "Hierarchical model in Stan"
+author: anonymous # <-- hand in anonymously
+format: 
+  html:
+    toc: true
+    code-tools: true
+    code-line-numbers: true  
+    number-sections: true
+    mainfont: Georgia, serif
+    page-layout: article
+  pdf:  
+    geometry:
+    - left=1cm,top=1cm,bottom=1cm,right=7cm
+    number-sections: true
+    code-annotations: none
+editor: source
+---
+
+
+
+
+:::{.callout-warning}
+
+Currently, rendering on github is broken, such that the rendered template at [https://avehtari.github.io/BDA_course_Aalto/assignments/template7.html](https://avehtari.github.io/BDA_course_Aalto/assignments/template7.html)
+looks weird. Rendering should however work on Aalto's JupyterLab, but we will also try to fix rendering on github ASAP.
+
+:::
+
+
+
+# General information
+
+This is the template for [assignment 7](assignment7.html). You can download the [separate model with bad priors](./additional_files/assignment7/chickens_separate.stan) and the [qmd-file](https://avehtari.github.io/BDA_course_Aalto/assignments/template7.qmd) or copy the code from this rendered document after clicking on `</> Code` in the top right corner.
+
+**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.** 
+
+
+
+:::: {.content-hidden when-format="pdf"}
+::: {.callout-warning collapse=false}
+ 
+## Setup 
+
+
+*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*
+**Make sure that this does not get displayed in the PDF!**
+    
+
+
+The following loads several needed packages:
+
+```{r}
+#| label: imports
+
+library(aaltobda)
+library(bayesplot)
+library(cmdstanr)
+library(dplyr)
+library(ggplot2)
+library(ggdist) # for stat_dotsinterval
+library(posterior)
+if(!require(brms)){
+    install.packages("brms")
+    library(brms)
+}
+
+# Set more readable themes with bigger font for plotting packages.
+ggplot2::theme_set(theme_minimal(base_size = 14))
+bayesplot::bayesplot_theme_set(theme_minimal(base_size = 14))
+
+# This registers CmdStan as the backend for compiling cmdstan-chunks.
+check_cmdstan_toolchain(fix = TRUE, quiet = TRUE)
+register_knitr_engine(override = FALSE)
+```
+
+:::
+::::
+
+
+# Hierarchical Model: Chicken Data with Stan (6p)
+
+
+## Choosing a weakly informative prior by intuition
+::: {.callout-caution collapse="false"}
+## A word of caution on eliciting the priors below
+Please note that in the below, we intend to set a prior on $\mu$ (the *mean* chick weight), but the intuition we ilicit is based on the weight of *individual* chicks. We do so to help create intuition about what the mean could be, however, it would be theoretically more accurate to ilicit priors about *mean* chick weights. 
+:::
+
+:::{.callout-important}
+
+We have made changes to the assignment text and some of the rubrics to make it clearer.
+
+:::
+
+
+## (a)
+
+
+## (b)
+
+
+## (c)
+
+
+## (d)
+
+
+## (e)
+
+## Choosing a weakly informative prior using external references
+
+## (f)
+
+
+## (g)
+
+
+## (h)
+
+
+## (i)
+
+## Non-normal priors
+
+## (j)
+
+## Modeling diet effects on chicken weight
+::::{.callout-important collapse=true}
+# Data inside, don't peek before you have set your priors!
+:::{.callout-important collapse=true}
+# Have you set your priors?
+```{r}
+#| message: false
+data("ChickWeight")
+
+Chick12 <- ChickWeight |> filter(Time == 12)
+
+head(Chick12)
+```
+:::
+::::
+
+
+:::: {.content-hidden when-format="pdf"}
+::: {.callout-warning collapse=false}
+
+## Sample from the posterior
+
+
+*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*
+**Make sure that this does not get displayed in the PDF!**
+    
+
+
+
+To sample from the posterior using Stan, use:
+
+```{r}
+#| label: format data for Stan
+stan_data <- list(
+  N_observations = nrow(Chick12),
+  N_diets = length(unique(Chick12$Diet)),
+  diet_idx = Chick12$Diet,
+  weight = Chick12$weight
+)
+
+model_separate <- cmdstan_model(stan_file = "additional_files/assignment7/chickens_separate.stan")
+
+# Sampling from the posterior distribution happens here:
+fit_separate <- model_separate$sample(data = stan_data, refresh=0,
+                                      show_messages=FALSE,
+                                      show_exceptions=FALSE)
+```
+Fit objects returned by the `sample()` method, by default print a summary of the posterior draws.
+These are **NOT** the results you would expect to turn in your report. You will need to change the priors in the code for the separate model.
+```{r}
+fit_separate
+```
+Quick model convergence check (as in assignment 6):
+```{r}
+fit_separate$cmdstan_diagnose()
+```
+
+
+:::
+::::
+
+
+
+## (k)
+
+
+## (l)
+
+
+**For the figures below, we use the earlier draws for the separate model with bad priors.
+When you have implemented the pooled and hierarchical models, edit the code below to
+include draws from your model posterior into the figures.**
+
+
+
+:::: {.content-hidden when-format="pdf"}
+::: {.callout-warning collapse=false}
+
+### Data preparation and sampling from the posterior
+
+
+*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*
+**Make sure that this does not get displayed in the PDF!**
+    
+
+
+    
+```{r}
+#| label: draws for pooled and hierarchical
+#| code-summary: Sampling from the posteriors given the pooled and hierarhical models
+
+fit_pooled <- fit_separate
+fit_hierarchical <- fit_separate
+
+
+```
+
+Below, we collect the corresponding posterior draws from the three models into a shared
+data frame using the `extract_variable` function. This makes plotting the posterior
+in a single plot easier.
+```{r}
+#| label: prepare data for plots
+#| code-summary: Prepare data for plots
+
+# Expect the same number of posterior draws from each model.
+ndraws <- nrow(fit_hierarchical$sampler_diagnostics(format = "matrix"))
+
+# Collect posterior draws and the model used to a data frame.
+mean_diet_4_separate = extract_variable(fit_separate, "mean_diet[4]")
+mean_diet_4_pooled = extract_variable(fit_pooled, "mean_diet[4]")
+mean_diet_4_hierarchical = extract_variable(fit_hierarchical, "mean_diet[4]")
+posterior_mean_diet_4 <- data.frame(
+  model_name = rep(c("Separate", "Pooled", "Hierarchical"),
+              each = ndraws),
+  mean_diet_4 = c(
+   mean_diet_4_separate, mean_diet_4_pooled, mean_diet_4_hierarchical
+  ))
+
+predicted_weight_diet_4 <- data.frame(
+  model_name = rep(c("Separate", "Pooled", "Hierarchical"),
+              each = ndraws),
+  predicted_weight = c(
+   extract_variable(fit_separate, "weight_pred"),
+   extract_variable(fit_pooled, "weight_pred"),
+   extract_variable(fit_hierarchical, "weight_pred")
+  ))
+
+# Collect posterior draws and the model used to a long data frame.
+posterior_mean_diet_5 <- data.frame(
+  model_name = rep(c("Separate", "Pooled", "Hierarchical"),
+    each = ndraws
+  ),
+  mean_diet_5 = c(
+    extract_variable(fit_separate, "mean_five"),
+    extract_variable(fit_pooled, "mean_five"),
+    extract_variable(fit_hierarchical, "mean_five")
+  )
+)
+
+# Mean observed weight per diet, these help to compare the posteriors to data.
+diet_means <- sapply(
+  1:4, function(diet) mean(Chick12[Chick12$Diet == diet, "weight"])
+)
+```
+
+:::
+::::
+
+
+
+## (m)
+
+
+```{r}
+#| label: figure - posterior of mean 4
+#| fig-cap: Posterior distribution of the mean weight of chicks consuming diet 4.
+ggplot(posterior_mean_diet_4, aes(x = mean_diet_4, y = model_name)) +
+  stat_dotsinterval(quantiles = 100, scale = .9) +
+  vline_at(diet_means[4], size = 1, linetype = "dashed") +
+  # Annotate the vline from above.
+  annotate("text", label = "Observation mean", x = diet_means[4] - 5, y = .7,
+           hjust = "right", size = 6) +
+  # Add title and axis labels. One line to make everything so much more clear!
+  labs(
+    title = "Mean of diet 4",
+    x = "Weight (g)",
+    y = "Model"
+  )
+```
+
+
+
+## (n)
+
+
+```{r}
+#| label: figure - predicted weight of for diet 4
+#| fig-cap: The (posterior) predictive distribution of the weigth of a chick consuming diet 4.
+ggplot(predicted_weight_diet_4, aes(x = predicted_weight, y = model_name)) +
+  stat_dotsinterval(quantiles = 100, scale = .9) +
+  vline_at(diet_means[4], size = 1, linetype = "dashed") +
+  # Annotate the vline from above.
+  annotate("text", label = "Observation mean", x = diet_means[4] - 5, y = .7,
+           hjust = "right", size = 6) +
+  # Add title and axis labels. One line to make everything so much more clear!
+  labs(
+    title = "Weigth of a chick with diet 4",
+    x = "Weight (g)",
+    y = "Model"
+  )
+```
+
+
+
+## (o)
+
+
+```{r}
+#| label: figure - posterior of mean 5
+#| fig-cap: Posterior distribution of the mean weight of chicks consuming the new diet 5 not seen before.
+
+ggplot(posterior_mean_diet_5, aes(x = mean_diet_5, y = model_name)) +
+  # Draw the mean of each diet from the data as a dashed vertical line.
+  vline_at(diet_means, size = .5, linetype = "dashed") +
+  # dotsinterval gives mean, 50%, and 90% intervals + dotsplot with each dot
+  # representing 1% of data (quantiles = 100).
+  stat_dotsinterval(quantiles = 100, scale = .9) +
+  # Annotate the vline from above.
+  annotate(geom = "text", label = "Means of observed diets", y = .7, x = 100,
+           hjust = "right", size = 5, family = "sans") +
+  # Add title and axis labels. One line to make everything so much more clear!
+  labs(title = "Mean of a new diet",
+       x = "Weight (g)",
+       y = "Model")
+```
+
+
+
+## (p)
+
+# Hierarchical model with BRMS (3p)
+:::{.callout-important}
+
+We have made changes to the assignment text and some of the rubrics to make it clearer.
+
+:::
+
+
+## (a)
+
+
+```{r}
+#| label: plot scatter centered parameterisation
+
+bayesplot::mcmc_scatter(x = fit_hierarchical$draws(variables = c("mean_diet[4]", "sd_diets")),
+                        np = nuts_params(fit_hierarchical)) +
+  scale_y_log10() +
+  labs(x = expression(mean_diet[4]), y = expression(sd_diets)) +
+  ylim(c(0,NA))
+```
+
+
+
+## (b)
+
+
+**Create a brms model and sample from the posterior**
+    
+```{r}
+#| label: fit brms model
+#| output: false
+brms_fit = brm(
+  weight ~ 1 + (1 | Diet),
+  data=Chick12,
+  prior=c(
+    # REPLACE WITH YOUR PRIOR DERIVED in 2)
+    prior(normal(0,10), class="Intercept"), 
+    # YOU CAN LEAVE THE BELOW PRIORS
+    prior(exponential(.02), class="sd"), 
+    prior(exponential(.02), class="sigma"), 
+  ),
+  backend = "cmdstanr",
+  save_pars = save_pars(manual = c("z_1[1,4]"))
+)
+```
+
+
+
+## (c)
+
+
+```{r}
+#| label: transformed posterior draws from brms
+# Draws for mu_4
+mu_4 = posterior_epred(brms_fit, newdata = data.frame(Diet=4))
+
+# Compute the mean, and quantiles. Remember to round your answers accordingly.
+# ...
+```
+
+
+
+## (d)
+
+
+Due the non-centered parametrization, we need to transform compute the $\mu_d$ term as the sum of the population intercept and the group specific deviation from the intercept. You can choose which diet to plot by modifying the `d` integer in `r_Diet[d,Intercept]`.
+```{r}
+#| label: plot scatter non-centered parameterisation
+
+draws = as_draws_df(brms_fit) |>
+  posterior::mutate_variables(mean_diet_4 = `r_Diet[4,Intercept]` + b_Intercept)
+
+bayesplot::mcmc_scatter(draws,
+                        pars = c("mean_diet_4", "sd_Diet__Intercept"),
+                        np = nuts_params(brms_fit)) +
+  scale_y_log10() +
+  xlab(expression(mean_diet[4])) +
+  ylab(expression(sd_diets))
+
+```
+
+
+
+## (e)

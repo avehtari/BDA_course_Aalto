@@ -1,0 +1,167 @@
+---
+title: "Assignment 9"
+subtitle: "Decision analysis"
+author: anonymous # <-- hand in anonymously
+format:
+  html:
+    toc: true
+    code-tools: true
+    code-line-numbers: true
+    number-sections: true
+    mainfont: Georgia, serif
+    page-layout: article
+  pdf:  
+    geometry:
+    - left=1cm,top=1cm,bottom=1cm,right=7cm
+    number-sections: true
+    code-annotations: none
+editor: source
+---
+
+
+# General information
+
+This is the template for [assignment 9](assignment9.html). You can download the [qmd-file](https://avehtari.github.io/BDA_course_Aalto/assignments/template9.qmd) or copy the code from this rendered document after clicking on `</> Code` in the top right corner.
+
+**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.** 
+
+
+
+:::: {.content-hidden when-format="pdf"}
+::: {.callout-warning collapse=false}
+ 
+## Setup
+
+
+*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*
+**Make sure that this does not get displayed in the PDF!**
+    
+
+
+
+The following loads several needed packages:
+
+```{r}
+#| label: imports
+library(bayesplot)
+library(cmdstanr)
+library(dplyr)
+library(ggplot2)
+library(ggdist) # for stat_dotsinterval
+library(posterior)
+library(brms)
+# Globally specfiy cmdstan backend for brms
+options(brms.backend="cmdstanr")
+# Tell brms to cache results if possible
+options(brms.file_refit="on_change")
+
+# Set more readable themes with bigger font for plotting packages
+ggplot2::theme_set(theme_minimal(base_size = 14))
+bayesplot::bayesplot_theme_set(theme_minimal(base_size = 14))
+```
+
+:::
+::::
+
+
+# Escaping from the chicken coop
+
+## (a)
+
+
+:::: {.content-hidden when-format="pdf"}
+::: {.callout-warning collapse=false}
+ 
+### A simple GP model
+
+
+*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*
+**Make sure that this does not get displayed in the PDF!**
+    
+
+
+
+The below fits a GP model to the chicken growth curves. It may take a few minutes to fit, but you 
+can also [download the fit `.rds`-file](./additional_files/assignment9/gp_chicken_fit.rds) and work with that fit object. 
+
+```{r fit}
+
+fit <- brm(
+  weight ~ gp(Time) + (0+Time|Diet) + (0+Time|Chick),
+  data = ChickWeight,
+  family = "lognormal",
+  file="additional_files/assignment9/gp_chicken_fit"
+)
+brms::pp_check(fit, type = "intervals_grouped", group = "Diet")
+```
+
+:::
+::::
+
+
+
+```{r}
+# Useful r functions: 
+#   rep(..., each=...), cbind, colMeans, 
+#   posterior_predict(..., newdata=..., allow_new_levels=TRUE, sample_new_levels="gaussian")
+#   ggplot, geom_line, aes(..., group=..., color=...)
+```
+
+
+
+:::: {.content-hidden when-format="pdf"}
+::: {.callout-warning collapse=false}
+
+###  Chickenwise probability of escape function
+
+
+*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*
+**Make sure that this does not get displayed in the PDF!**
+    
+
+
+
+```{r}
+bump <- function(x, loc=0, scale=1){
+  xi = (x - loc) / scale
+  ifelse(abs(xi) < 1, exp(-1/(1-xi^2)), 0.)
+}
+daily_probability_of_escape <- function(day, weight){
+  # Expects a day and a weight and computes the daily probability of escape 
+  bump(day, 30, 10) * (1e-2 + bump(weight, 200, 150)+bump(weight, 700, 150))
+}
+chickenwise_probability_of_escape <- function(weights){
+  # Expects a vector of daily weights from day 1 to N and computes the probability of 
+  # escape at the end of the time series
+  prob_of_failure = 1
+  for(day in 1:length(weights)){
+    prob_of_failure = prob_of_failure * (1-daily_probability_of_escape(day, weights[day]))
+  }
+  return(1 - prob_of_failure)
+}
+```
+
+:::
+::::
+
+
+
+## (b)
+
+
+```{r}
+# Useful r functions: chickenwise_probability_of_escape (see above)
+# rep(..., each=...), apply, 
+# ggplot, stat_dotsinterval
+```
+
+
+
+## (c)
+
+
+```{r}
+# Useful r functions: chickenwise_probability_of_escape (see above)
+# apply, aggregate, 
+```
+

@@ -1,0 +1,255 @@
+---
+title: "Assignment 8"
+subtitle: "LOO-CV model comparison"
+author: anonymous # <-- hand in anonymously
+format:
+  html:
+    toc: true
+    code-tools: true
+    code-line-numbers: true
+    number-sections: true
+    mainfont: Georgia, serif
+    page-layout: article
+  pdf:  
+    geometry:
+    - left=1cm,top=1cm,bottom=1cm,right=7cm
+    number-sections: true
+    code-annotations: none
+editor: source
+---
+
+
+# General information
+
+This is the template for [assignment 8](assignment8.html). You can download the [qmd-file](https://avehtari.github.io/BDA_course_Aalto/assignments/template8.qmd) or copy the code from this rendered document after clicking on `</> Code` in the top right corner.
+
+**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.** 
+
+
+
+:::: {.content-hidden when-format="pdf"}
+::: {.callout-warning collapse=false}
+ 
+## Setup
+
+
+*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*
+**Make sure that this does not get displayed in the PDF!**
+    
+
+
+
+The following loads several needed packages:
+
+```{r}
+#| label: imports
+library(bayesplot)
+library(cmdstanr)
+library(dplyr)
+library(ggplot2)
+library(ggdist) # for stat_dotsinterval
+library(posterior)
+library(brms)
+# Globally specfiy cmdstan backend for brms
+options(brms.backend="cmdstanr")
+# Tell brms to cache results if possible
+options(brms.file_refit="on_change")
+
+# Set more readable themes with bigger font for plotting packages
+ggplot2::theme_set(theme_minimal(base_size = 14))
+bayesplot::bayesplot_theme_set(theme_minimal(base_size = 14))
+```
+
+:::
+::::
+
+
+# A hierarchical model for chicken weight time series
+
+
+## Exploratory data analysis
+
+## (a)
+
+
+```{r}
+# Useful functions: ggplot, aes(x=...), geom_histogram
+```
+
+
+
+## (b)
+
+
+```{r}
+# Useful functions: ggplot, aes(x=...,y=...,group=...,color=...), geom_line
+```
+
+
+## Linear regression
+
+## (c)
+
+
+In `brms`, a regression can be specified as below, see also [below (#m)](#m) or [the last template](template7.html#b-1). Fill in the appropriate variables,
+data, and likelihood family. Specify the priors, then run the model (by removing `#| eval: false` below).
+
+```{r}
+#| eval: false
+priors <- c(
+  prior(normal(0, <value>), coef = "Time"),
+  prior(normal(0, <value>), coef = "Diet2"),
+  prior(normal(0, <value>), coef = "Diet3"),
+  prior(normal(0, <value>), coef = "Diet4")
+)
+
+f1 <- brms::brm(
+  # This specifies the formula
+  <OUTCOME> ~ 1 + <PREDICTOR> + <PREDICTOR>,
+  # This specifies the dataset
+  data = <data>,
+  # This specifies the observation model family
+  family = <observation_family>,
+  # This passes the priors specified above to brms
+  prior = priors,
+  # This causes brms to cache the results
+  file = "additional_files/assignment8/f1"
+)
+```
+
+
+
+## (d)
+
+
+```{r}
+# Useful functions: brms::pp_check
+```
+
+
+
+## (e)
+
+
+```{r}
+# Useful functions: brms::pp_check(..., type = ..., group=...)
+```
+
+
+## Log-normal linear regression
+
+## (f)
+
+
+```{r}
+log_priors <- c(
+  prior(normal(0, log(3)), coef = "Time"),
+  prior(normal(0, log(5)), coef = "Diet2"),
+  prior(normal(0, log(5)), coef = "Diet3"),
+  prior(normal(0, log(5)), coef = "Diet4")
+)
+```
+
+
+## Hierarchical log-normal linear regression
+
+## (g)
+
+
+## (h)
+
+## Model comparison using the ELPD
+
+## (i)
+
+
+```{r}
+# Useful functions: loo, loo_compare
+```
+
+
+
+## (j)
+
+
+```{r}
+# Useful functions: plot(loo(...), label_points = TRUE)
+```
+
+
+
+## (k)
+
+
+:::: {.content-hidden when-format="pdf"}
+::: {.callout-warning collapse=false}
+
+## Creating a dummy example plot 
+
+
+*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*
+**Make sure that this does not get displayed in the PDF!**
+    
+
+
+
+Creating a dummy fit just to be able to generate an example plot below. 
+Generate a similar plot for your hierarchical model.
+
+```{r}
+#| output: false
+
+# The brms-formula (weights ~ ...) below is not one that you should be using in your models!
+dummy_fit <- brms::brm(
+  weight ~ 1 + Time + Chick,
+  data = ChickWeight,
+  file="additional_files/assignment8/dummy_fit"
+)
+# Adjust the chicken_idxs variable to select appropriate chickens
+chicken_idxs = c(1,3,11,43)
+# Create this plot for your hierarchical model for selected chickens
+brms::pp_check(
+  dummy_fit, type = "intervals_grouped", group = "Chick", 
+  newdata=ChickWeight |> filter(Chick %in% chicken_idxs)
+)
+```
+
+:::
+::::
+
+
+## Model comparison using the RMSE
+
+## (l)
+
+
+:::: {.content-hidden when-format="pdf"}
+::: {.callout-warning collapse=false}
+
+## `rmse` function implementation
+
+
+*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*
+**Make sure that this does not get displayed in the PDF!**
+    
+
+
+
+The below function takes a brms fit object and computes either the [root-mean-square error (RMSE)](https://en.wikipedia.org/wiki/Root-mean-square_deviation) or the PSIS-LOO-RMSE, i.e. the RMSE using LOO-CV estimated using PSIS-LOO.
+```{r}
+# Compute RMSE or LOO-RMSE
+rmse <- function(fit, use_loo=FALSE){
+  mean_y_pred <- if(use_loo){
+    brms::loo_predict(fit)
+  }else{
+    colMeans(brms::posterior_predict(fit)) 
+  }
+  sqrt(mean(
+    (mean_y_pred - brms::get_y(fit))^2
+  ))
+}
+```
+
+:::
+::::
+
