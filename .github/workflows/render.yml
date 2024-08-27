@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - assignments-new
+      - master
   workflow_dispatch:
     # paths: ['**.Rmd']
 
@@ -24,17 +24,13 @@ jobs:
       - name: Check out private repo with assignments
         uses: actions/checkout@v4
         with:
-          repository: 'andrjohns/bda_course'
-          ref: 'infra'
+          repository: 'avehtari/bda_course'
           path: 'bda_course'
           fetch-depth: 1
           token: ${{ secrets.GH_ACTION }}
 
       - name: Copy assignments
         run: cp -r bda_course/assignments/ assignments/
-
-      - name: List files
-        run: ls -l assignments/
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
