@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - master
+      - assignments-new
     # paths: ['**.Rmd']
 
 name: Render and Publish Website
@@ -19,6 +19,17 @@ jobs:
         with:
           fetch-depth: 1
           token: ${{ secrets.GH_ACTION}}
+
+      - name: Check out private repo with assignments
+        uses: actions/checkout@v4
+        with:
+          repository: 'avehtari/bda_course'
+          ref: 'infra'
+          fetch-depth: 1
+          token: ${{ secrets.GH_ACTION}}
+
+      - name: Copy assignments
+        run: cp -r bda_course/assignments/ assignments/
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
