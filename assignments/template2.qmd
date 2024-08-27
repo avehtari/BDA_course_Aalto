@@ -1,6 +1,6 @@
 ---
 title: "Assignment 2"
-author: anonymous # <-- hand in anonymously
+author: "Aki Vehtari et al."
 format:
   html:
     toc: true
@@ -13,35 +13,35 @@ format:
     - left=1cm,top=1cm,bottom=1cm,right=7cm
     number-sections: true
     code-annotations: none
-    include-in-header:
-      text: |
-        % You can add TeX macros here for PDF,
-        % see https://quarto.org/docs/output-formats/pdf-basics.html#latex-includes
-        \newcommand{\BetaDist}{\mathrm{Beta}}
 editor: source
 ---
 
 
-::: {.hidden}
-$$
-% You can add TeX macros here for HTML, see https://quarto.org/docs/authoring/markdown-basics.html#equations
-\renewcommand{\BetaDist}{\mathrm{Beta}}
-$$
-:::
-
 # General information
 
-:::: {.content-hidden when-format="pdf"}
+This assignment is related to Lecture 2 and BDA3 Chapters 1 and 2.
+You may find an additional discussion
+about choosing priors in a [**blog post by Andrew
+Gelman**](http://andrewgelman.com/2017/10/04/worry-rigged-priors/).
+
+**The maximum amount of points from this assignment is 3.**
+
+We prepared a **quarto template specific to this assignment ([html](template2.html), [qmd](https://avehtari.github.io/BDA_course_Aalto/assignments/template2.qmd), [pdf](template2.pdf))** to help you get started.
+
+::: {.callout-tip collapse=false}
+**Reading instructions**:
+
+- [**The reading instructions for BDA3 Chapter 1**](../BDA3_notes.html#ch1).
+- [**The reading instructions for BDA3 Chapter 2**](../BDA3_notes.html#ch2).
+
+{{< include includes/_grading_instructions.md >}}
+:::
+
+
+{{< include includes/_general_info.md >}}
+
 ::: {.callout-warning collapse=false}
-
 ## Setup
-
-
-*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*
-**Make sure that this does not get displayed in the PDF!**
-
-
-
 
 This is the template for [assignment 2](assignment2.html). You can download the [qmd-file](https://avehtari.github.io/BDA_course_Aalto/assignments/template2.qmd) or copy the code from this rendered document after clicking on `</> Code` in the top right corner.
 
@@ -49,7 +49,7 @@ This is the template for [assignment 2](assignment2.html). You can download the 
 
 The following will set-up `markmyassignment` to check your functions at the end of the notebook:
 
-```{r}
+```{.r}
 library(markmyassignment)
 assignment_path = paste("https://github.com/avehtari/BDA_course_Aalto/",
 "blob/master/assignments/tests/assignment2.yml", sep="")
@@ -57,18 +57,21 @@ set_assignment(assignment_path)
 ```
 
 The following installs the `aaltobda` package:
-```{r}
+```{.r}
 #| cache: true
 # Caching should be fine here
-install.packages("aaltobda", repos = c("https://avehtari.r-universe.dev", getOption("repos")))
+install.packages("aaltobda", repos = c("https://avehtari.github.io/BDA_course_Aalto/", getOption("repos")))
 ```
-
 :::
-::::
-
 
 # Inference for binomial proportion
 
+Algae status is monitored in 274 sites at Finnish lakes and rivers. The
+observations for the 2008 algae status at each site are presented in
+the dataset `algae` in the `aaltobda` package ('0': no algae, '1': algae present).
+
+
+::: {.content-visible when-profile="public"}
 Loading the library and the data.
 ```{r}
 library(aaltobda)
@@ -81,15 +84,40 @@ prior_beta = 10
 
 The below data is **only for the tests**, you need to change to the
 full data `algae` when reporting your results.
-```{r}
+```{.r}
 algae_test <- c(0, 1, 1, 0, 0, 0)
 ```
+:::
 
+Let $\pi$ be the probability of a monitoring site having detectable
+blue-green algae levels and $y$ the observations in `algae`. Use a
+binomial model for the observations $y$ and a $Beta(2,10)$ prior for
+binomial model parameter $\pi$ to formulate a Bayesian model. Here it is
+not necessary to derive the posterior distribution for $\pi$ as it has
+already been done in the book and it suffices to refer to that
+derivation. Also, it is not necessary to write out the distributions; it
+is sufficient to use label-parameter format, e.g. $Beta(\alpha,\beta)$.
 
+Your task is to perform Bayesian inference for a binomial model and answer
+questions based on it:
 
-## (a)
+::: {.callout-warning icon=false title="Subtask 2.a)"}
+Formulate
 
+1. the likelihood $p(y|\pi)$ as a function of $\pi$,
+2. the prior $p(\pi)$, and
+3. the resulting posterior $p(\pi|y)$.
 
+Report the posterior in the format $Beta(\alpha,\beta)$, where you
+replace $\alpha$ and $\beta$ with the correct numerical values.
+:::
+
+::: {.callout-tip collapse=false}
+With a conjugate prior, a closed-form posterior has Beta form
+(see equations in BDA3 and in the slides).
+:::
+
+::: {.content-visible when-profile="public"}
 Write the likelihood, the prior and the posterior here!
 ```{r}
 # These are not the actual values for the posterior!
@@ -100,18 +128,25 @@ posterior_beta = 10
 
 You can do [string interpolation](https://en.wikipedia.org/wiki/String_interpolation) using [R inline code execution in quarto](https://quarto.org/docs/computations/execution-options.html#knitr) as such:
 
-$\alpha_\text{prior}$ is **`r 10`** and $\beta_\text{prior}$ is **`r 2`**.
-Or string interpolation within math: $\BetaDist(`r 10`,`r 2`)$
+$\alpha_\text{prior}$ is **`r prior_alpha`** and $\beta_\text{prior}$ is **`r prior_beta`**.
+Or string interpolation within math: $Beta(`r prior_alpha`,`r prior_beta`)$
+:::
 
-This template defines a `\BetaDist` TeX command which renders `$\BetaDist(1,2)$` as $\BetaDist(1,2)$.
+::: {.callout-warning icon=false title="Subtask 2.b)"}
+What can you say about the value of the unknown $\pi$ according to
+the observations and your prior knowledge? Summarize your results
+with a point estimate (i.e. $E(\pi|y)$) and a 90% posterior
+interval.
+:::
 
+::: {.callout-tip collapse=false}
+Posterior intervals are also called credible
+intervals and are different from confidence intervals.
+:::
 
-
-## (b)
-
-
+::: {.content-visible when-profile="public"}
 Keep the below name and format for the functions to work with `markmyassignment`:
-```{r}
+```{.r}
 # Useful function: qbeta()
 
 beta_point_est <- function(prior_alpha, prior_beta, data) {
@@ -127,14 +162,16 @@ beta_interval <- function(prior_alpha, prior_beta, data, prob=0.9) {
     c(0.0846451, 0.3956414)
 }
 ```
+:::
 
-
-
-## (c)
-
-
+::: {.callout-warning icon=false title="Subtask 2.c)"}
+What is the probability that the proportion of monitoring sites with
+detectable algae levels $\pi$ is smaller than $\pi_0=0.2$ that is
+known from historical records?
+:::
+::: {.content-visible when-profile="public"}
 Keep the below name and format for the function to work with `markmyassignment`:
-```{r}
+```{.r}
 # Useful function: pbeta()
 
 beta_low <- function(prior_alpha, prior_beta, data, pi_0=0.2) {
@@ -144,42 +181,79 @@ beta_low <- function(prior_alpha, prior_beta, data, pi_0=0.2) {
     0.4511238
 }
 ```
+:::
 
+::: {.callout-warning icon=false title="Subtask 2.d)"}
+What assumptions are required in order to use this kind of a model
+with this type of data?
+:::
 
+::: {.callout-tip collapse=false}
+No need to discuss exchangeability yet, as
+it is discussed in more detail in BDA3 Chapter 5 and Lecture 7.
+:::
 
-## (d)
-
-
+::: {.content-visible when-profile="public"}
 Write your answer here!
+:::
 
+::: {.callout-warning icon=false title="Subtask 2.e)"}
+Make prior sensitivity analysis by testing a couple of different
+reasonable priors and plot the different posteriors. Summarize the
+results by one or two sentences.
+:::
 
-
-## (e)
-
-
+::: {.content-visible when-profile="public"}
 Plot the PDFs here. Explain shortly what you do.
-```{r}
+```{.r}
 # Useful function: dbeta()
 ```
+:::
 
 
+::: {.callout-note icon=false title="Rubric" weight=85}
 
-:::: {.content-hidden when-format="pdf"}
-::: {.callout-warning collapse=false}
-
-## markmyassignment
-
-
-*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*
-**Make sure that this does not get displayed in the PDF!**
-
-
-
-The following will check the functions for which `markmyassignment` has been set up:
-
-```{r}
-mark_my_assignment()
-```
+* Is source code included?
+* Are the prior, likelihood and posterior forms in a) reported (derivation of posterior not necessary)?
+    * No
+    * Some missing
+    * Yes
+* Is the reported resulting posterior correct ?
+  * It is not reported, that the posterior distribution is a  distribution.
+  * It is reported, that the posterior distribution is , but the numerical values for the
+  parameters are incorrect
+  * It is reported, that the posterior distribution is , and the numerical values for the
+parameters are correct.
+* In part b), is there at least one point estimate reported. Sample based estimates are also OK. Points
+should be given if the method is right, even if the result is wrong due to a wrong posterior distribution
+being used. With the right posterior, mean, median, and mode are all approximately .
+* For the b) part, is the 90% posterior interval reported? Sample based estimate is also OK. Points
+should be given if the method is right, even if the result is wrong because the posterior was wrong in
+the first place. If the posterior was right, the 90% posterior interval is roughly .
+* For the c) part, is the posterior probability Pr(π<0.2|y) reported? Points should be given if the method
+is right, even if the result is wrong because the posterior was wrong. If the posterior was right, the
+result should be approximately .
+* For the d) part, does the report discuss [somehow the assumption of independence given the shared
+success probability π (i.i.d. or independent and exchangeable trials is also OK)?]{.content-hidden when-profile="public"}
+    * No
+    * No, but other reasonable assumptions are discussed
+    * Yes, but not quite right or some missing
+    * Yes
+* For the e) part, is there some comparison and discussion of results obtained with alternative prior
+parameters?
+    * No
+    * Yes, but the results and conclusions are clearly wrong
+    * Yes
 
 :::
-::::
+
+::: {.callout-warning collapse=false}
+## markmyassignment
+The following will check the functions for which `markmyassignment` has been set up:
+
+```{.r}
+mark_my_assignment()
+```
+:::
+
+{{< include includes/_overall_quality.md >}}

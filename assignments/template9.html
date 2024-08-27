@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="anonymous">
+<meta name="author" content="Aki Vehtari et al.">
 
 <title>Assignment 9 – Bayesian Data Analysis</title>
 <style>
@@ -103,6 +103,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -153,12 +182,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="sidebar-item-container"> 
   <a href="./assignment_instructions.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Assignment instructions</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./docker.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">How to set up docker</span></a>
   </div>
 </li>
       </ul>
@@ -229,7 +252,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
       </ul>
   </li>
-        <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
@@ -306,12 +328,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#general-information" id="toc-general-information" class="nav-link active" data-scroll-target="#general-information"><span class="header-section-number">1</span> General information</a></li>
-  <li><a href="#escaping-from-the-chicken-coop" id="toc-escaping-from-the-chicken-coop" class="nav-link" data-scroll-target="#escaping-from-the-chicken-coop"><span class="header-section-number">2</span> Escaping from the chicken coop</a>
-  <ul class="collapse">
-  <li><a href="#a" id="toc-a" class="nav-link" data-scroll-target="#a"><span class="header-section-number">2.1</span> (a)</a></li>
-  <li><a href="#b" id="toc-b" class="nav-link" data-scroll-target="#b"><span class="header-section-number">2.2</span> (b)</a></li>
-  <li><a href="#c" id="toc-c" class="nav-link" data-scroll-target="#c"><span class="header-section-number">2.3</span> (c)</a></li>
-  </ul></li>
+  <li><a href="#escaping-from-the-chicken-coop" id="toc-escaping-from-the-chicken-coop" class="nav-link" data-scroll-target="#escaping-from-the-chicken-coop"><span class="header-section-number">2</span> Escaping from the chicken coop</a></li>
+  <li><a href="#overall-quality-of-the-report" id="toc-overall-quality-of-the-report" class="nav-link" data-scroll-target="#overall-quality-of-the-report"><span class="header-section-number">3</span> Overall quality of the report</a></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="template9.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
     </div>
@@ -331,7 +349,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>anonymous </p>
+             <p>Aki Vehtari et al. </p>
           </div>
   </div>
     
@@ -346,10 +364,130 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="general-information" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> General information</h1>
+<p><strong>The maximum amount of points from this assignment is 3.</strong></p>
+<p>We have prepared a <strong>quarto template specific to this assignment (<a href="template9.html">html</a>, <a href="https://avehtari.github.io/BDA_course_Aalto/assignments/template9.qmd">qmd</a>, <a href="template9.pdf">pdf</a>)</strong> to help you get started.</p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Setup">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Setup
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>We recommend Aalto students use <a href="https://jupyter.cs.aalto.fi">jupyter.cs.aalto.fi</a>, for all others we also provide a <a href="docker.html">docker container</a>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p><strong>Reading instructions</strong>:</p>
+<ul>
+<li><a href="../BDA3_notes.html#ch6"><strong>The reading instructions for BDA3 Chapter 9</strong></a> (decision analysis).</li>
+</ul>
+<p><strong>Grading instructions:</strong></p>
+<p>The grading will be done in peergrade. All grading questions and evaluations for this assignment are contained within this document in the collapsible <strong>Rubric</strong> blocks.</p>
+<p><strong>Installing and using <code>CmdStanR</code>:</strong></p>
+<p>See the <a href="https://avehtari.github.io/BDA_course_Aalto/demos.html">Stan demos</a> on how to use Stan in R (or Python). <a href="https://Aalto%20JupyterHub">Aalto JupyterHub</a> has working R and CmdStanR/RStan environment and is probably the easiest way to use Stan. * To use CmdStanR in <a href="https://Aalto%20JupyterHub">Aalto JupyterHub</a>:<br> <code>library(cmdstanr)</code><br> <code>set_cmdstan_path('/coursedata/cmdstan')</code></p>
+<p>The Aalto Ubuntu desktops also have the necessary libraries installed.</p>
+<p>To install Stan on your laptop, run ‘install.packages("cmdstanr", repos = c("https://mc-stan.org/r-packages/", getOption("repos")))’ in R. If you encounter problems, see additional answers in <a href="https://avehtari.github.io/BDA_course_Aalto/FAQ.html"><strong>FAQ</strong></a>. For Aalto students, if you don’t succeed in short amount of time, it is probably easier to use <a href="https://Aalto%20JupyterHub">Aalto JupyterHub</a>.</p>
+<p>If you use <code>Aalto JupyterHub</code>, all necessary packages have been pre-installed. In your laptop, install package <code>cmdstanr</code>. Installation instructions on Linux, Mac and Windows can be found at <a href="https://mc-stan.org/cmdstanr/" class="uri">https://mc-stan.org/cmdstanr/</a>. Additional useful packages are <code>loo</code>, <code>bayesplot</code> and <code>posterior</code> (but you don’t need these in this assignment). For Python users, <code>PyStan</code>, <code>CmdStanPy</code>, and <code>ArviZ</code> packages are useful.</p>
+<p>Stan manual can be found at <a href="https://mc-stan.org/users/documentation/" class="uri">https://mc-stan.org/users/documentation/</a>. From this website, you can also find a lot of other useful material about Stan.</p>
+<p>If you edit files ending <code>.stan</code> in RStudio, you can click “Check” in the editor toolbar to make syntax check. This can significantly speed-up writing a working Stan model.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Reporting accuracy
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p><strong>For posterior statistics of interest, only report digits that are not completely random based on the Monte Carlo standard error (MCSE).</strong></p>
+<p><em>Example:</em> If you estimate <span class="math inline">\(E(\mu) \approx 1.234\)</span> with MCSE(<span class="math inline">\(E(\mu)\)</span>) = 0.01, then the true expectation is likely to be between <span class="math inline">\(1.204\)</span> and <span class="math inline">\(1.264\)</span>, it makes sense to report <span class="math inline">\(E(\mu) \approx 1.2\)</span>.</p>
+<p>See Lecture video 4.1, <a href="../BDA3_notes.html#ch10">the chapter notes</a>, and <a href="https://avehtari.github.io/casestudies/Digits/digits.html">a case study</a> for more information.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Further information
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li>The recommended tool in this course is R (with the IDE RStudio).</li>
+<li>Instead of installing R and RStudio on you own computer, see <a href="https://avehtari.github.io/BDA_course_Aalto/FAQ.html#How_to_use_R_and_RStudio_remotely"><strong>how to use R and RStudio remotely</strong></a>.</li>
+<li>If you want to install R and RStudio locally, download <a href="https://posit.co/download/rstudio-desktop/">R and RStudio</a>.</li>
+<li>There are tons of tutorials, videos and introductions to R and RStudio online. You can find some initial hints from <a href="https://education.rstudio.com/"><strong>RStudio Education pages</strong></a>.</li>
+<li>When working with R, we recommend writing the report using <code>quarto</code> and the provided template. The template includes the formatting instructions and how to include code and figures.</li>
+<li>Instead of <code>quarto</code>, you can use other software to make the PDF report, but the the same instructions for formatting should be used.</li>
+<li>Report all results in a single, <strong>anonymous</strong> *.pdf -file and submit it in <a href="peergrade.io"><strong>peergrade.io</strong></a>.</li>
+<li>The course has its own R package <code>aaltobda</code> with data and functionality to simplify coding. The package is pre-installed in JupyterHub. To install the package on your own system, run the following code (upgrade="never" skips question about updating other packages):</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">install.packages</span>(<span class="st">"aaltobda"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://avehtari.github.io/BDA_course_Aalto/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Many of the exercises can be checked automatically using the R package <code>markmyassignment</code> (pre-installed in JupyterHub). Information on how to install and use the package can be found in <a href="https://cran.r-project.org/web/packages/markmyassignment/vignettes/markmyassignment.html">the <code>markmyassignment</code> documentation</a>. There is no need to include <code>markmyassignment</code> results in the report.</li>
+<li>Recommended additional self study exercises for each chapter in BDA3 are listed in the course web page. These will help to gain deeper understanding of the topic.</li>
+<li>Common questions and answers regarding installation and technical problems can be found in <a href="https://avehtari.github.io/BDA_course_Aalto/FAQ.html">Frequently Asked Questions (FAQ)</a>.</li>
+<li>Deadlines for all assignments can be found on the course web page and in Peergrade. You can set email alerts for the deadlines in Peergrade settings.</li>
+<li>You are allowed to discuss assignments with your friends, but it is not allowed to copy solutions directly from other students or from internet.</li>
+<li>You can copy, e.g., plotting code from the course demos, but really try to solve the actual assignment problems with your own code and explanations.</li>
+<li>Do not share your answers publicly.</li>
+<li>Do not copy answers from the internet or from previous years. We compare the answers to the answers from previous years and to the answers from other students this year.</li>
+<li>Use of AI is allowed on the course, but the most of the work needs to by the student, and you need to report whether you used AI and in which way you used them (See <a href="https://www.aalto.fi/en/services/guidance-for-the-use-of-artificial-intelligence-in-teaching-and-learning-at-aalto-university">points 5 and 6 in Aalto guidelines for use of AI in teaching</a>).</li>
+<li>All suspected plagiarism will be reported and investigated. See more about the <a href="https://into.aalto.fi/display/ensaannot/Aalto+University+Code+of+Academic+Integrity+and+Handling+Violations+Thereof"><strong>Aalto University Code of Academic Integrity and Handling Violations Thereof</strong></a>.</li>
+<li>Do not submit empty PDFs, almost empty PDFs, copy of the questions, nonsense generated by yourself or AI, as these are just harming the other students as they can’t do peergrading for the empty or nonsense submissions. Violations of this rule will be reported and investigated in the same way was plagiarism.</li>
+<li>If you have any suggestions or improvements to the course material, please post in the course chat feedback channel, create an issue, or submit a pull request to the public repository!</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Can you open the PDF and it’s not blank nor nonsense? If the pdf is blank, nonsense, or something like only a copy of the questions, 1) report it as problematic in Peergrade-interface to get another report to review, and 2) send a message to TAs.</li>
+<li>Is the report anonymous?</li>
+</ul>
+</div>
+</div>
 <p>This is the template for <a href="assignment9.html">assignment 9</a>. You can download the <a href="https://avehtari.github.io/BDA_course_Aalto/assignments/template9.qmd">qmd-file</a> or copy the code from this rendered document after clicking on <code>&lt;/&gt; Code</code> in the top right corner.</p>
 <p><strong>Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.</strong></p>
 <div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -358,37 +496,156 @@ Setup
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse show">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
-<p><em>This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.</em> <strong>Make sure that this does not get displayed in the PDF!</strong></p>
 <p>The following loads several needed packages:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(bayesplot)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">library</span>(cmdstanr)</span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="fu">library</span>(ggdist) <span class="co"># for stat_dotsinterval</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="fu">library</span>(posterior)</span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="fu">library</span>(brms)</span>
-<span id="cb1-8"><a href="#cb1-8"></a><span class="co"># Globally specfiy cmdstan backend for brms</span></span>
-<span id="cb1-9"><a href="#cb1-9"></a><span class="fu">options</span>(<span class="at">brms.backend=</span><span class="st">"cmdstanr"</span>)</span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="co"># Tell brms to cache results if possible</span></span>
-<span id="cb1-11"><a href="#cb1-11"></a><span class="fu">options</span>(<span class="at">brms.file_refit=</span><span class="st">"on_change"</span>)</span>
-<span id="cb1-12"><a href="#cb1-12"></a></span>
-<span id="cb1-13"><a href="#cb1-13"></a><span class="co"># Set more readable themes with bigger font for plotting packages</span></span>
-<span id="cb1-14"><a href="#cb1-14"></a>ggplot2<span class="sc">::</span><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
-<span id="cb1-15"><a href="#cb1-15"></a>bayesplot<span class="sc">::</span><span class="fu">bayesplot_theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">library</span>(bayesplot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>This is bayesplot version 1.11.1</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>- Online documentation and vignettes at mc-stan.org/bayesplot</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>- bayesplot theme set to bayesplot::theme_default()</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>   * Does _not_ affect other ggplot2 plots</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>   * See ?bayesplot_theme_set for details on theme setting</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">library</span>(cmdstanr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>This is cmdstanr version 0.8.1</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>- CmdStanR documentation and vignettes: mc-stan.org/cmdstanr</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>- CmdStan path: /home/runner/.cmdstan/cmdstan-2.35.0</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>- CmdStan version: 2.35.0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="fu">library</span>(ggdist) <span class="co"># for stat_dotsinterval</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a><span class="fu">library</span>(posterior)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>This is posterior version 1.6.0</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'posterior'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:bayesplot':
+
+    rhat</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    mad, sd, var</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    %in%, match</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">library</span>(brms)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: Rcpp</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading 'brms' package (version 2.21.0). Useful instructions
+can be found by typing help('brms'). A more detailed introduction
+to the package is available through vignette('brms_overview').</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'brms'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:ggdist':
+
+    dstudent_t, pstudent_t, qstudent_t, rstudent_t</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:bayesplot':
+
+    rhat</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:stats':
+
+    ar</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="co"># Globally specfiy cmdstan backend for brms</span></span>
+<span id="cb30-2"><a href="#cb30-2"></a><span class="fu">options</span>(<span class="at">brms.backend=</span><span class="st">"cmdstanr"</span>)</span>
+<span id="cb30-3"><a href="#cb30-3"></a><span class="co"># Tell brms to cache results if possible</span></span>
+<span id="cb30-4"><a href="#cb30-4"></a><span class="fu">options</span>(<span class="at">brms.file_refit=</span><span class="st">"on_change"</span>)</span>
+<span id="cb30-5"><a href="#cb30-5"></a></span>
+<span id="cb30-6"><a href="#cb30-6"></a><span class="co"># Set more readable themes with bigger font for plotting packages</span></span>
+<span id="cb30-7"><a href="#cb30-7"></a>ggplot2<span class="sc">::</span><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
+<span id="cb30-8"><a href="#cb30-8"></a>bayesplot<span class="sc">::</span><span class="fu">bayesplot_theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
 </div>
+<p>This exercise is an example of a decision analysis (DA). In a broad context, this means optimizing over different decisions that lead to different outcomes that all have different utilities. In a Bayesian context, this means using posterior distributions to make decisions.</p>
 </section>
 <section id="escaping-from-the-chicken-coop" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Escaping from the chicken coop</h1>
-<section id="a" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="a"><span class="header-section-number">2.1</span> (a)</h2>
+<p>You are an adult chicken living in an organic chicken commune, where life is great, if a bit boring. You have settled in comfortably, but you want something more for your offspring. Your traveling corvid friends tell you of places where chickens eat corn all day, get ferried around in <a href="https://www.chicken-trailer.de/en/chicken-trailer-en/chicken-trailer-330">mobile chicken coops to see the world</a> or <a href="https://en.wikipedia.org/wiki/Marian_Breland_Bailey#:~:text=Popular%20acts%20included,that%20played%20basketball.">get mental stimulation by being trained humanely to perform tricks</a>. The chicken elders have gained access to the computers of your human caretakers and have found the results of a complicated statistical analysis of the growth curves of your relatives. Because you are a chicken, you don’t care about convergence diagnostics or priors.</p>
+<p><strong>Your task is to maximizes the chance of escape for your offspring.</strong></p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 2.c">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 2.c
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Compute and visualize the <strong>expected chicken weight for days 1–40 per diet</strong>, according to the model provided in the template. Do the predictions look reasonable? Why/why not?</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>To sample a “new chicken” from the posterior, use <a href="https://rdrr.io/cran/brms/man/posterior_epred.brmsfit.html">posterior_predict</a> with options <code>newdata=..., allow_new_levels=TRUE, sample_new_levels="gaussian"</code>, where you pass a dataframe as <code>newdata</code> which has a “new” chicken ID <code>Chick</code> and appropriate values for <code>Time</code> and <code>Diet</code>.</p>
+</div>
+</div>
+</div>
 <div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -397,30 +654,120 @@ A simple GP model
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse show">
+<div id="callout-9" class="callout-9-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
-<p><em>This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.</em> <strong>Make sure that this does not get displayed in the PDF!</strong></p>
 <p>The below fits a GP model to the chicken growth curves. It may take a few minutes to fit, but you can also <a href="./additional_files/assignment9/gp_chicken_fit.rds">download the fit <code>.rds</code>-file</a> and work with that fit object.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
-<span id="cb2-2"><a href="#cb2-2"></a>  weight <span class="sc">~</span> <span class="fu">gp</span>(Time) <span class="sc">+</span> (<span class="dv">0</span><span class="sc">+</span>Time<span class="sc">|</span>Diet) <span class="sc">+</span> (<span class="dv">0</span><span class="sc">+</span>Time<span class="sc">|</span>Chick),</span>
-<span id="cb2-3"><a href="#cb2-3"></a>  <span class="at">data =</span> ChickWeight,</span>
-<span id="cb2-4"><a href="#cb2-4"></a>  <span class="at">family =</span> <span class="st">"lognormal"</span>,</span>
-<span id="cb2-5"><a href="#cb2-5"></a>  <span class="at">file=</span><span class="st">"additional_files/assignment9/gp_chicken_fit"</span></span>
-<span id="cb2-6"><a href="#cb2-6"></a>)</span>
-<span id="cb2-7"><a href="#cb2-7"></a>brms<span class="sc">::</span><span class="fu">pp_check</span>(fit, <span class="at">type =</span> <span class="st">"intervals_grouped"</span>, <span class="at">group =</span> <span class="st">"Diet"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
+<span id="cb31-2"><a href="#cb31-2"></a>  weight <span class="sc">~</span> <span class="fu">gp</span>(Time) <span class="sc">+</span> (<span class="dv">0</span><span class="sc">+</span>Time<span class="sc">|</span>Diet) <span class="sc">+</span> (<span class="dv">0</span><span class="sc">+</span>Time<span class="sc">|</span>Chick),</span>
+<span id="cb31-3"><a href="#cb31-3"></a>  <span class="at">data =</span> ChickWeight,</span>
+<span id="cb31-4"><a href="#cb31-4"></a>  <span class="at">family =</span> <span class="st">"lognormal"</span>,</span>
+<span id="cb31-5"><a href="#cb31-5"></a>  <span class="at">file=</span><span class="st">"additional_files/assignment9/gp_chicken_fit"</span>,</span>
+<span id="cb31-6"><a href="#cb31-6"></a>  <span class="at">cores =</span> parallel<span class="sc">::</span><span class="fu">detectCores</span>(),</span>
+<span id="cb31-7"><a href="#cb31-7"></a>  <span class="co"># For the template only, remove the below from your code!</span></span>
+<span id="cb31-8"><a href="#cb31-8"></a>  <span class="at">iter =</span> <span class="dv">500</span></span>
+<span id="cb31-9"><a href="#cb31-9"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Start sampling</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Running MCMC with 4 parallel chains...
+
+Chain 1 Iteration:   1 / 500 [  0%]  (Warmup) 
+Chain 2 Iteration:   1 / 500 [  0%]  (Warmup) 
+Chain 3 Iteration:   1 / 500 [  0%]  (Warmup) 
+Chain 4 Iteration:   1 / 500 [  0%]  (Warmup) 
+Chain 1 Iteration: 100 / 500 [ 20%]  (Warmup) 
+Chain 2 Iteration: 100 / 500 [ 20%]  (Warmup) 
+Chain 4 Iteration: 100 / 500 [ 20%]  (Warmup) 
+Chain 3 Iteration: 100 / 500 [ 20%]  (Warmup) 
+Chain 2 Iteration: 200 / 500 [ 40%]  (Warmup) 
+Chain 1 Iteration: 200 / 500 [ 40%]  (Warmup) 
+Chain 4 Iteration: 200 / 500 [ 40%]  (Warmup) 
+Chain 3 Iteration: 200 / 500 [ 40%]  (Warmup) 
+Chain 2 Iteration: 251 / 500 [ 50%]  (Sampling) 
+Chain 1 Iteration: 251 / 500 [ 50%]  (Sampling) 
+Chain 4 Iteration: 251 / 500 [ 50%]  (Sampling) 
+Chain 3 Iteration: 251 / 500 [ 50%]  (Sampling) 
+Chain 2 Iteration: 350 / 500 [ 70%]  (Sampling) 
+Chain 4 Iteration: 350 / 500 [ 70%]  (Sampling) 
+Chain 1 Iteration: 350 / 500 [ 70%]  (Sampling) 
+Chain 3 Iteration: 350 / 500 [ 70%]  (Sampling) 
+Chain 2 Iteration: 450 / 500 [ 90%]  (Sampling) 
+Chain 4 Iteration: 450 / 500 [ 90%]  (Sampling) 
+Chain 1 Iteration: 450 / 500 [ 90%]  (Sampling) 
+Chain 3 Iteration: 450 / 500 [ 90%]  (Sampling) 
+Chain 2 Iteration: 500 / 500 [100%]  (Sampling) 
+Chain 2 finished in 35.0 seconds.
+Chain 4 Iteration: 500 / 500 [100%]  (Sampling) 
+Chain 4 finished in 35.2 seconds.
+Chain 1 Iteration: 500 / 500 [100%]  (Sampling) 
+Chain 1 finished in 36.5 seconds.
+Chain 3 Iteration: 500 / 500 [100%]  (Sampling) 
+Chain 3 finished in 37.2 seconds.
+
+All 4 chains finished successfully.
+Mean chain execution time: 36.0 seconds.
+Total execution time: 37.4 seconds.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: 32 of 1000 (3.0%) transitions ended with a divergence.
+See https://mc-stan.org/misc/warnings for details.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: 803 of 1000 (80.0%) transitions hit the maximum treedepth limit of 10.
+See https://mc-stan.org/misc/warnings for details.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>brms<span class="sc">::</span><span class="fu">pp_check</span>(fit, <span class="at">type =</span> <span class="st">"intervals_grouped"</span>, <span class="at">group =</span> <span class="st">"Diet"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Using all posterior draws for ppc type 'intervals_grouped' by default.</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="template9_files/figure-html/fit-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># Useful r functions: </span></span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="co">#   rep(..., each=...), cbind, colMeans, </span></span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="co">#   posterior_predict(..., newdata=..., allow_new_levels=TRUE, sample_new_levels="gaussian")</span></span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#   ggplot, geom_line, aes(..., group=..., color=...)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a><span class="co"># Useful r functions:</span></span>
+<span id="cb38-2"><a href="#cb38-2"></a><span class="co">#   rep(..., each=...), cbind, colMeans,</span></span>
+<span id="cb38-3"><a href="#cb38-3"></a><span class="co">#   posterior_predict(..., newdata=..., allow_new_levels=TRUE, sample_new_levels="gaussian")</span></span>
+<span id="cb38-4"><a href="#cb38-4"></a><span class="co">#   ggplot, geom_line, aes(..., group=..., color=...)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Does the plot look right and is it readable? It should be quite close to the reference plot below:</li>
+<li>Has it been recognized that the prediction time ?</li>
+</ul>
+</div>
+</div>
+<p>Your chicken elders have been meticulously collecting data on what kind of characteristics have allowed previous chickens to escape. They have found out that both the age and the weight influence the (daily) probability of escape for a chicken:</p>
+<ul>
+<li>If the chicken is too young, it is not yet mature enough to venture out into the world.</li>
+<li>If the chicken is too old, it will not try to escape anymore.</li>
+<li>If the chicken is small and has just the right size, it can try to squeze through a tiny crack in the fence.</li>
+<li>If the chicken is big enough, it is strong enough to try to fly over the fence.</li>
+<li>No matter the size, there is always a small residual probability that the chicken can escape.</li>
+</ul>
+<p>Every day, chickens will try to escape if they are of the right age. Their daily escape probability <span class="math inline">\(e(\text{day}, \text{weight})\)</span> is implemented in the <code>daily_probability_of_escape(day, weight)</code> function. The probability that a chicken with daily weights <span class="math inline">\(w = (w_1,\dots,w_N)\)</span> <strong>has not escaped</strong> after <span class="math inline">\(i+1\)</span> days can be computed as follows: <span class="math display">\[
+  f_{i+1} = f_i \, (1 - e(i, w_i))
+\]</span> The <code>chickenwise_probability_of_escape(weights)</code> computes the probability that a chicken <strong>has escaped</strong> after <code>length(weights)</code> days.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -429,51 +776,169 @@ Chickenwise probability of escape function
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse show">
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p><em>This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.</em> <strong>Make sure that this does not get displayed in the PDF!</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>bump <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">loc=</span><span class="dv">0</span>, <span class="at">scale=</span><span class="dv">1</span>){</span>
-<span id="cb4-2"><a href="#cb4-2"></a>  xi <span class="ot">=</span> (x <span class="sc">-</span> loc) <span class="sc">/</span> scale</span>
-<span id="cb4-3"><a href="#cb4-3"></a>  <span class="fu">ifelse</span>(<span class="fu">abs</span>(xi) <span class="sc">&lt;</span> <span class="dv">1</span>, <span class="fu">exp</span>(<span class="sc">-</span><span class="dv">1</span><span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>xi<span class="sc">^</span><span class="dv">2</span>)), <span class="fl">0.</span>)</span>
-<span id="cb4-4"><a href="#cb4-4"></a>}</span>
-<span id="cb4-5"><a href="#cb4-5"></a>daily_probability_of_escape <span class="ot">&lt;-</span> <span class="cf">function</span>(day, weight){</span>
-<span id="cb4-6"><a href="#cb4-6"></a>  <span class="co"># Expects a day and a weight and computes the daily probability of escape </span></span>
-<span id="cb4-7"><a href="#cb4-7"></a>  <span class="fu">bump</span>(day, <span class="dv">30</span>, <span class="dv">10</span>) <span class="sc">*</span> (<span class="fl">1e-2</span> <span class="sc">+</span> <span class="fu">bump</span>(weight, <span class="dv">200</span>, <span class="dv">150</span>)<span class="sc">+</span><span class="fu">bump</span>(weight, <span class="dv">700</span>, <span class="dv">150</span>))</span>
-<span id="cb4-8"><a href="#cb4-8"></a>}</span>
-<span id="cb4-9"><a href="#cb4-9"></a>chickenwise_probability_of_escape <span class="ot">&lt;-</span> <span class="cf">function</span>(weights){</span>
-<span id="cb4-10"><a href="#cb4-10"></a>  <span class="co"># Expects a vector of daily weights from day 1 to N and computes the probability of </span></span>
-<span id="cb4-11"><a href="#cb4-11"></a>  <span class="co"># escape at the end of the time series</span></span>
-<span id="cb4-12"><a href="#cb4-12"></a>  prob_of_failure <span class="ot">=</span> <span class="dv">1</span></span>
-<span id="cb4-13"><a href="#cb4-13"></a>  <span class="cf">for</span>(day <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(weights)){</span>
-<span id="cb4-14"><a href="#cb4-14"></a>    prob_of_failure <span class="ot">=</span> prob_of_failure <span class="sc">*</span> (<span class="dv">1</span><span class="sc">-</span><span class="fu">daily_probability_of_escape</span>(day, weights[day]))</span>
-<span id="cb4-15"><a href="#cb4-15"></a>  }</span>
-<span id="cb4-16"><a href="#cb4-16"></a>  <span class="fu">return</span>(<span class="dv">1</span> <span class="sc">-</span> prob_of_failure)</span>
-<span id="cb4-17"><a href="#cb4-17"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>bump <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">loc=</span><span class="dv">0</span>, <span class="at">scale=</span><span class="dv">1</span>){</span>
+<span id="cb39-2"><a href="#cb39-2"></a>  xi <span class="ot">=</span> (x <span class="sc">-</span> loc) <span class="sc">/</span> scale</span>
+<span id="cb39-3"><a href="#cb39-3"></a>  <span class="fu">ifelse</span>(<span class="fu">abs</span>(xi) <span class="sc">&lt;</span> <span class="dv">1</span>, <span class="fu">exp</span>(<span class="sc">-</span><span class="dv">1</span><span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>xi<span class="sc">^</span><span class="dv">2</span>)), <span class="fl">0.</span>)</span>
+<span id="cb39-4"><a href="#cb39-4"></a>}</span>
+<span id="cb39-5"><a href="#cb39-5"></a>daily_probability_of_escape <span class="ot">&lt;-</span> <span class="cf">function</span>(day, weight){</span>
+<span id="cb39-6"><a href="#cb39-6"></a>  <span class="co"># Expects a day and a weight and computes the daily probability of escape</span></span>
+<span id="cb39-7"><a href="#cb39-7"></a>  <span class="fu">bump</span>(day, <span class="dv">30</span>, <span class="dv">10</span>) <span class="sc">*</span> (<span class="fl">1e-2</span> <span class="sc">+</span> <span class="fu">bump</span>(weight, <span class="dv">200</span>, <span class="dv">150</span>)<span class="sc">+</span><span class="fu">bump</span>(weight, <span class="dv">700</span>, <span class="dv">150</span>))</span>
+<span id="cb39-8"><a href="#cb39-8"></a>}</span>
+<span id="cb39-9"><a href="#cb39-9"></a>chickenwise_probability_of_escape <span class="ot">&lt;-</span> <span class="cf">function</span>(weights){</span>
+<span id="cb39-10"><a href="#cb39-10"></a>  <span class="co"># Expects a vector of daily weights from day 1 to N and computes the probability of</span></span>
+<span id="cb39-11"><a href="#cb39-11"></a>  <span class="co"># escape at the end of the time series</span></span>
+<span id="cb39-12"><a href="#cb39-12"></a>  prob_of_failure <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb39-13"><a href="#cb39-13"></a>  <span class="cf">for</span>(day <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(weights)){</span>
+<span id="cb39-14"><a href="#cb39-14"></a>    prob_of_failure <span class="ot">=</span> prob_of_failure <span class="sc">*</span> (<span class="dv">1</span><span class="sc">-</span><span class="fu">daily_probability_of_escape</span>(day, weights[day]))</span>
+<span id="cb39-15"><a href="#cb39-15"></a>  }</span>
+<span id="cb39-16"><a href="#cb39-16"></a>  <span class="fu">return</span>(<span class="dv">1</span> <span class="sc">-</span> prob_of_failure)</span>
+<span id="cb39-17"><a href="#cb39-17"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a>days <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">40</span></span>
+<span id="cb40-2"><a href="#cb40-2"></a>weights <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">900</span></span>
+<span id="cb40-3"><a href="#cb40-3"></a>heatmap_matrix <span class="ot">=</span> <span class="fu">outer</span>(days,weights,daily_probability_of_escape)</span>
+<span id="cb40-4"><a href="#cb40-4"></a><span class="fu">image</span>(days, weights, heatmap_matrix, <span class="at">xlab=</span><span class="st">"day"</span>, <span class="at">ylab=</span><span class="st">"weight"</span>, <span class="at">main=</span><span class="st">"Daily probability of escape"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-prob" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-prob-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="template9_files/figure-html/fig-prob-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-prob-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Daily probability of escape for a given day and weight
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 2.a">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 2.a
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Compute and visualize the <strong>distribution of the chickenwise probabilities of escape per diet</strong>, according to the model provided in the template.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>You can reuse the predictions you created in the previous subtask. <strong>Work with the draws to compute the chickenwise probability of escape first, and then take the expectation!</strong></p>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a><span class="co"># Useful r functions: chickenwise_probability_of_escape (see above)</span></span>
+<span id="cb41-2"><a href="#cb41-2"></a><span class="co"># rep(..., each=...), apply,</span></span>
+<span id="cb41-3"><a href="#cb41-3"></a><span class="co"># ggplot, stat_dotsinterval</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Does the plot look right and is it readable? It should be quite close to the reference plot below:</li>
+</ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 2.b">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 2.b
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Compute the <strong>expected probability of escape for each diet</strong>. Why would it be wrong to compute the expected probability of escape by applying the <code>chickenwise_probability_of_escape</code> function in the template to the <em>daily expected chicken weights per diet</em> computed in subtask 2.a? How does the correctly calculated value compare to the incorrectly calculated value? Why is one higher than the other?</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a><span class="co"># Useful r functions: chickenwise_probability_of_escape (see above)</span></span>
+<span id="cb42-2"><a href="#cb42-2"></a><span class="co"># apply, aggregate,</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Do the results look correct and have they been presented in a readable way? They should be roughly the first column below for the correct calculation and the second column below for the wrong calculation: [</li>
+</ul>
+<p>diet chickenwise_loss meanwise_loss 1 0.55 0.83 2 0.57 0.67 3 0.50 0.10 4 0.52 0.15 ]{.content-hidden when-profile=“public”} * Has it been explained that the expected probability of escape depends on ? * Has it been explained that</p>
+<p>?</p>
+<p>[AND/OR</p>
+<p>for some diets the “incorrect” computation (meanwise_loss) is lower because the mean growth curve (used in the incorrect meanwise_loss) “by chance” passes through the region of low probability of escape, even though due to high within-population variation most chickens’ growth curve won’t pass through that region of low probability of escape?</p>
+<p>(Due to a slightly misleading public rubric, either of the above answers would be sufficient)]{.content-hidden when-profile=“public”}</p>
 </div>
 </div>
 </section>
-<section id="b" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="b"><span class="header-section-number">2.2</span> (b)</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Useful r functions: chickenwise_probability_of_escape (see above)</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="co"># rep(..., each=...), apply, </span></span>
-<span id="cb5-3"><a href="#cb5-3"></a><span class="co"># ggplot, stat_dotsinterval</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="overall-quality-of-the-report" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Overall quality of the report</h1>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
 </div>
-</section>
-<section id="c" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="c"><span class="header-section-number">2.3</span> (c)</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Useful r functions: chickenwise_probability_of_escape (see above)</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="co"># apply, aggregate, </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Does the report include comment on whether AI was used, and if AI was used, explanation on how it was used?
+<ul>
+<li>No</li>
+<li>Yes</li>
+</ul></li>
+<li>Does the report follow the formatting instructions?
+<ul>
+<li>Not at all</li>
+<li>Little</li>
+<li>Mostly</li>
+<li>Yes</li>
+</ul></li>
+<li>In case the report doesn’t fully follow the general and formatting instructions, specify the instructions that have not been followed. If applicable, specify the page of the report, where this difference is visible. This will help the other student to improve their reports so that they are easier to read and review. If applicable, specify the page of the report, where this difference in formatting is visible.</li>
+<li>Please also provide feedback on the presentation (e.g.&nbsp;text, layout, flow of the responses, figures, figure captions). Part of the course is practicing making data analysis reports. By providing feedback on the report presentation, other students can learn what they can improve or what they already did well. You should be able to provide constructive or positive feedback for all non-empty and non-nonsense reports. If you think the report is perfect, and you can’t come up with any suggestions how to improve, you can provide feedback on what you liked and why you think some part of the report is better than yours.</li>
+</ul>
+</div>
 </div>
 
 
 <!-- -->
 
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -957,172 +1422,246 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   <div class="nav-page nav-page-next">
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb7" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1"></a><span class="co">---</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a><span class="an">title:</span><span class="co"> "Assignment 9"</span></span>
-<span id="cb7-3"><a href="#cb7-3"></a><span class="an">subtitle:</span><span class="co"> "Decision analysis"</span></span>
-<span id="cb7-4"><a href="#cb7-4"></a><span class="an">author:</span><span class="co"> anonymous # &lt;-- hand in anonymously</span></span>
-<span id="cb7-5"><a href="#cb7-5"></a><span class="an">format:</span></span>
-<span id="cb7-6"><a href="#cb7-6"></a><span class="co">  html:</span></span>
-<span id="cb7-7"><a href="#cb7-7"></a><span class="co">    toc: true</span></span>
-<span id="cb7-8"><a href="#cb7-8"></a><span class="co">    code-tools: true</span></span>
-<span id="cb7-9"><a href="#cb7-9"></a><span class="co">    code-line-numbers: true</span></span>
-<span id="cb7-10"><a href="#cb7-10"></a><span class="co">    number-sections: true</span></span>
-<span id="cb7-11"><a href="#cb7-11"></a><span class="co">    mainfont: Georgia, serif</span></span>
-<span id="cb7-12"><a href="#cb7-12"></a><span class="co">    page-layout: article</span></span>
-<span id="cb7-13"><a href="#cb7-13"></a><span class="co">  pdf:  </span></span>
-<span id="cb7-14"><a href="#cb7-14"></a><span class="co">    geometry:</span></span>
-<span id="cb7-15"><a href="#cb7-15"></a><span class="co">    - left=1cm,top=1cm,bottom=1cm,right=7cm</span></span>
-<span id="cb7-16"><a href="#cb7-16"></a><span class="co">    number-sections: true</span></span>
-<span id="cb7-17"><a href="#cb7-17"></a><span class="co">    code-annotations: none</span></span>
-<span id="cb7-18"><a href="#cb7-18"></a><span class="an">editor:</span><span class="co"> source</span></span>
-<span id="cb7-19"><a href="#cb7-19"></a><span class="co">---</span></span>
-<span id="cb7-20"><a href="#cb7-20"></a></span>
-<span id="cb7-21"><a href="#cb7-21"></a></span>
-<span id="cb7-22"><a href="#cb7-22"></a><span class="fu"># General information</span></span>
-<span id="cb7-23"><a href="#cb7-23"></a></span>
-<span id="cb7-24"><a href="#cb7-24"></a>This is the template for <span class="co">[</span><span class="ot">assignment 9</span><span class="co">](assignment9.html)</span>. You can download the <span class="co">[</span><span class="ot">qmd-file</span><span class="co">](https://avehtari.github.io/BDA_course_Aalto/assignments/template9.qmd)</span> or copy the code from this rendered document after clicking on <span class="in">`&lt;/&gt; Code`</span> in the top right corner.</span>
-<span id="cb7-25"><a href="#cb7-25"></a></span>
-<span id="cb7-26"><a href="#cb7-26"></a>**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.** </span>
-<span id="cb7-27"><a href="#cb7-27"></a></span>
-<span id="cb7-28"><a href="#cb7-28"></a></span>
-<span id="cb7-29"><a href="#cb7-29"></a></span>
-<span id="cb7-30"><a href="#cb7-30"></a>:::: {.content-hidden when-format="pdf"}</span>
-<span id="cb7-31"><a href="#cb7-31"></a>::: {.callout-warning collapse=false}</span>
-<span id="cb7-32"><a href="#cb7-32"></a> </span>
-<span id="cb7-33"><a href="#cb7-33"></a><span class="fu">## Setup</span></span>
-<span id="cb7-34"><a href="#cb7-34"></a></span>
-<span id="cb7-35"><a href="#cb7-35"></a></span>
-<span id="cb7-36"><a href="#cb7-36"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
-<span id="cb7-37"><a href="#cb7-37"></a>**Make sure that this does not get displayed in the PDF!**</span>
-<span id="cb7-38"><a href="#cb7-38"></a>    </span>
-<span id="cb7-39"><a href="#cb7-39"></a></span>
-<span id="cb7-40"><a href="#cb7-40"></a></span>
-<span id="cb7-41"><a href="#cb7-41"></a></span>
-<span id="cb7-42"><a href="#cb7-42"></a>The following loads several needed packages:</span>
-<span id="cb7-43"><a href="#cb7-43"></a></span>
-<span id="cb7-46"><a href="#cb7-46"></a><span class="in">```{r}</span></span>
-<span id="cb7-47"><a href="#cb7-47"></a><span class="co">#| label: imports</span></span>
-<span id="cb7-48"><a href="#cb7-48"></a><span class="fu">library</span>(bayesplot)</span>
-<span id="cb7-49"><a href="#cb7-49"></a><span class="fu">library</span>(cmdstanr)</span>
-<span id="cb7-50"><a href="#cb7-50"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb7-51"><a href="#cb7-51"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb7-52"><a href="#cb7-52"></a><span class="fu">library</span>(ggdist) <span class="co"># for stat_dotsinterval</span></span>
-<span id="cb7-53"><a href="#cb7-53"></a><span class="fu">library</span>(posterior)</span>
-<span id="cb7-54"><a href="#cb7-54"></a><span class="fu">library</span>(brms)</span>
-<span id="cb7-55"><a href="#cb7-55"></a><span class="co"># Globally specfiy cmdstan backend for brms</span></span>
-<span id="cb7-56"><a href="#cb7-56"></a><span class="fu">options</span>(<span class="at">brms.backend=</span><span class="st">"cmdstanr"</span>)</span>
-<span id="cb7-57"><a href="#cb7-57"></a><span class="co"># Tell brms to cache results if possible</span></span>
-<span id="cb7-58"><a href="#cb7-58"></a><span class="fu">options</span>(<span class="at">brms.file_refit=</span><span class="st">"on_change"</span>)</span>
-<span id="cb7-59"><a href="#cb7-59"></a></span>
-<span id="cb7-60"><a href="#cb7-60"></a><span class="co"># Set more readable themes with bigger font for plotting packages</span></span>
-<span id="cb7-61"><a href="#cb7-61"></a>ggplot2<span class="sc">::</span><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
-<span id="cb7-62"><a href="#cb7-62"></a>bayesplot<span class="sc">::</span><span class="fu">bayesplot_theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
-<span id="cb7-63"><a href="#cb7-63"></a><span class="in">```</span></span>
-<span id="cb7-64"><a href="#cb7-64"></a></span>
-<span id="cb7-65"><a href="#cb7-65"></a>:::</span>
-<span id="cb7-66"><a href="#cb7-66"></a>::::</span>
-<span id="cb7-67"><a href="#cb7-67"></a></span>
-<span id="cb7-68"><a href="#cb7-68"></a></span>
-<span id="cb7-69"><a href="#cb7-69"></a><span class="fu"># Escaping from the chicken coop</span></span>
-<span id="cb7-70"><a href="#cb7-70"></a></span>
-<span id="cb7-71"><a href="#cb7-71"></a><span class="fu">## (a)</span></span>
-<span id="cb7-72"><a href="#cb7-72"></a></span>
-<span id="cb7-73"><a href="#cb7-73"></a></span>
-<span id="cb7-74"><a href="#cb7-74"></a>:::: {.content-hidden when-format="pdf"}</span>
-<span id="cb7-75"><a href="#cb7-75"></a>::: {.callout-warning collapse=false}</span>
-<span id="cb7-76"><a href="#cb7-76"></a> </span>
-<span id="cb7-77"><a href="#cb7-77"></a><span class="fu">### A simple GP model</span></span>
-<span id="cb7-78"><a href="#cb7-78"></a></span>
-<span id="cb7-79"><a href="#cb7-79"></a></span>
-<span id="cb7-80"><a href="#cb7-80"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
-<span id="cb7-81"><a href="#cb7-81"></a>**Make sure that this does not get displayed in the PDF!**</span>
-<span id="cb7-82"><a href="#cb7-82"></a>    </span>
-<span id="cb7-83"><a href="#cb7-83"></a></span>
-<span id="cb7-84"><a href="#cb7-84"></a></span>
-<span id="cb7-85"><a href="#cb7-85"></a></span>
-<span id="cb7-86"><a href="#cb7-86"></a>The below fits a GP model to the chicken growth curves. It may take a few minutes to fit, but you </span>
-<span id="cb7-87"><a href="#cb7-87"></a>can also <span class="co">[</span><span class="ot">download the fit `.rds`-file</span><span class="co">](./additional_files/assignment9/gp_chicken_fit.rds)</span> and work with that fit object. </span>
-<span id="cb7-88"><a href="#cb7-88"></a></span>
-<span id="cb7-89"><a href="#cb7-89"></a><span class="in">```{r fit}</span></span>
-<span id="cb7-90"><a href="#cb7-90"></a></span>
-<span id="cb7-91"><a href="#cb7-91"></a><span class="in">fit &lt;- brm(</span></span>
-<span id="cb7-92"><a href="#cb7-92"></a><span class="in">  weight ~ gp(Time) + (0+Time|Diet) + (0+Time|Chick),</span></span>
-<span id="cb7-93"><a href="#cb7-93"></a><span class="in">  data = ChickWeight,</span></span>
-<span id="cb7-94"><a href="#cb7-94"></a><span class="in">  family = "lognormal",</span></span>
-<span id="cb7-95"><a href="#cb7-95"></a><span class="in">  file="additional_files/assignment9/gp_chicken_fit"</span></span>
-<span id="cb7-96"><a href="#cb7-96"></a><span class="in">)</span></span>
-<span id="cb7-97"><a href="#cb7-97"></a><span class="in">brms::pp_check(fit, type = "intervals_grouped", group = "Diet")</span></span>
-<span id="cb7-98"><a href="#cb7-98"></a><span class="in">```</span></span>
-<span id="cb7-99"><a href="#cb7-99"></a></span>
-<span id="cb7-100"><a href="#cb7-100"></a>:::</span>
-<span id="cb7-101"><a href="#cb7-101"></a>::::</span>
-<span id="cb7-102"><a href="#cb7-102"></a></span>
-<span id="cb7-103"><a href="#cb7-103"></a></span>
-<span id="cb7-104"><a href="#cb7-104"></a></span>
-<span id="cb7-107"><a href="#cb7-107"></a><span class="in">```{r}</span></span>
-<span id="cb7-108"><a href="#cb7-108"></a><span class="co"># Useful r functions: </span></span>
-<span id="cb7-109"><a href="#cb7-109"></a><span class="co">#   rep(..., each=...), cbind, colMeans, </span></span>
-<span id="cb7-110"><a href="#cb7-110"></a><span class="co">#   posterior_predict(..., newdata=..., allow_new_levels=TRUE, sample_new_levels="gaussian")</span></span>
-<span id="cb7-111"><a href="#cb7-111"></a><span class="co">#   ggplot, geom_line, aes(..., group=..., color=...)</span></span>
-<span id="cb7-112"><a href="#cb7-112"></a><span class="in">```</span></span>
-<span id="cb7-113"><a href="#cb7-113"></a></span>
-<span id="cb7-114"><a href="#cb7-114"></a></span>
-<span id="cb7-115"><a href="#cb7-115"></a></span>
-<span id="cb7-116"><a href="#cb7-116"></a>:::: {.content-hidden when-format="pdf"}</span>
-<span id="cb7-117"><a href="#cb7-117"></a>::: {.callout-warning collapse=false}</span>
-<span id="cb7-118"><a href="#cb7-118"></a></span>
-<span id="cb7-119"><a href="#cb7-119"></a><span class="fu">###  Chickenwise probability of escape function</span></span>
-<span id="cb7-120"><a href="#cb7-120"></a></span>
-<span id="cb7-121"><a href="#cb7-121"></a></span>
-<span id="cb7-122"><a href="#cb7-122"></a>*This block will only be visible in your HTML output, but will be hidden when rendering to PDF with quarto for the submission.*</span>
-<span id="cb7-123"><a href="#cb7-123"></a>**Make sure that this does not get displayed in the PDF!**</span>
-<span id="cb7-124"><a href="#cb7-124"></a>    </span>
-<span id="cb7-125"><a href="#cb7-125"></a></span>
-<span id="cb7-126"><a href="#cb7-126"></a></span>
-<span id="cb7-127"><a href="#cb7-127"></a></span>
-<span id="cb7-130"><a href="#cb7-130"></a><span class="in">```{r}</span></span>
-<span id="cb7-131"><a href="#cb7-131"></a>bump <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">loc=</span><span class="dv">0</span>, <span class="at">scale=</span><span class="dv">1</span>){</span>
-<span id="cb7-132"><a href="#cb7-132"></a>  xi <span class="ot">=</span> (x <span class="sc">-</span> loc) <span class="sc">/</span> scale</span>
-<span id="cb7-133"><a href="#cb7-133"></a>  <span class="fu">ifelse</span>(<span class="fu">abs</span>(xi) <span class="sc">&lt;</span> <span class="dv">1</span>, <span class="fu">exp</span>(<span class="sc">-</span><span class="dv">1</span><span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>xi<span class="sc">^</span><span class="dv">2</span>)), <span class="fl">0.</span>)</span>
-<span id="cb7-134"><a href="#cb7-134"></a>}</span>
-<span id="cb7-135"><a href="#cb7-135"></a>daily_probability_of_escape <span class="ot">&lt;-</span> <span class="cf">function</span>(day, weight){</span>
-<span id="cb7-136"><a href="#cb7-136"></a>  <span class="co"># Expects a day and a weight and computes the daily probability of escape </span></span>
-<span id="cb7-137"><a href="#cb7-137"></a>  <span class="fu">bump</span>(day, <span class="dv">30</span>, <span class="dv">10</span>) <span class="sc">*</span> (<span class="fl">1e-2</span> <span class="sc">+</span> <span class="fu">bump</span>(weight, <span class="dv">200</span>, <span class="dv">150</span>)<span class="sc">+</span><span class="fu">bump</span>(weight, <span class="dv">700</span>, <span class="dv">150</span>))</span>
-<span id="cb7-138"><a href="#cb7-138"></a>}</span>
-<span id="cb7-139"><a href="#cb7-139"></a>chickenwise_probability_of_escape <span class="ot">&lt;-</span> <span class="cf">function</span>(weights){</span>
-<span id="cb7-140"><a href="#cb7-140"></a>  <span class="co"># Expects a vector of daily weights from day 1 to N and computes the probability of </span></span>
-<span id="cb7-141"><a href="#cb7-141"></a>  <span class="co"># escape at the end of the time series</span></span>
-<span id="cb7-142"><a href="#cb7-142"></a>  prob_of_failure <span class="ot">=</span> <span class="dv">1</span></span>
-<span id="cb7-143"><a href="#cb7-143"></a>  <span class="cf">for</span>(day <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(weights)){</span>
-<span id="cb7-144"><a href="#cb7-144"></a>    prob_of_failure <span class="ot">=</span> prob_of_failure <span class="sc">*</span> (<span class="dv">1</span><span class="sc">-</span><span class="fu">daily_probability_of_escape</span>(day, weights[day]))</span>
-<span id="cb7-145"><a href="#cb7-145"></a>  }</span>
-<span id="cb7-146"><a href="#cb7-146"></a>  <span class="fu">return</span>(<span class="dv">1</span> <span class="sc">-</span> prob_of_failure)</span>
-<span id="cb7-147"><a href="#cb7-147"></a>}</span>
-<span id="cb7-148"><a href="#cb7-148"></a><span class="in">```</span></span>
-<span id="cb7-149"><a href="#cb7-149"></a></span>
-<span id="cb7-150"><a href="#cb7-150"></a>:::</span>
-<span id="cb7-151"><a href="#cb7-151"></a>::::</span>
-<span id="cb7-152"><a href="#cb7-152"></a></span>
-<span id="cb7-153"><a href="#cb7-153"></a></span>
-<span id="cb7-154"><a href="#cb7-154"></a></span>
-<span id="cb7-155"><a href="#cb7-155"></a><span class="fu">## (b)</span></span>
-<span id="cb7-156"><a href="#cb7-156"></a></span>
-<span id="cb7-157"><a href="#cb7-157"></a></span>
-<span id="cb7-160"><a href="#cb7-160"></a><span class="in">```{r}</span></span>
-<span id="cb7-161"><a href="#cb7-161"></a><span class="co"># Useful r functions: chickenwise_probability_of_escape (see above)</span></span>
-<span id="cb7-162"><a href="#cb7-162"></a><span class="co"># rep(..., each=...), apply, </span></span>
-<span id="cb7-163"><a href="#cb7-163"></a><span class="co"># ggplot, stat_dotsinterval</span></span>
-<span id="cb7-164"><a href="#cb7-164"></a><span class="in">```</span></span>
-<span id="cb7-165"><a href="#cb7-165"></a></span>
-<span id="cb7-166"><a href="#cb7-166"></a></span>
-<span id="cb7-167"><a href="#cb7-167"></a></span>
-<span id="cb7-168"><a href="#cb7-168"></a><span class="fu">## (c)</span></span>
-<span id="cb7-169"><a href="#cb7-169"></a></span>
-<span id="cb7-170"><a href="#cb7-170"></a></span>
-<span id="cb7-173"><a href="#cb7-173"></a><span class="in">```{r}</span></span>
-<span id="cb7-174"><a href="#cb7-174"></a><span class="co"># Useful r functions: chickenwise_probability_of_escape (see above)</span></span>
-<span id="cb7-175"><a href="#cb7-175"></a><span class="co"># apply, aggregate, </span></span>
-<span id="cb7-176"><a href="#cb7-176"></a><span class="in">```</span></span>
+<div class="sourceCode" id="cb43" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb43-1"><a href="#cb43-1"></a><span class="co">---</span></span>
+<span id="cb43-2"><a href="#cb43-2"></a><span class="an">title:</span><span class="co"> "Assignment 9"</span></span>
+<span id="cb43-3"><a href="#cb43-3"></a><span class="an">subtitle:</span><span class="co"> "Decision analysis"</span></span>
+<span id="cb43-4"><a href="#cb43-4"></a><span class="an">author:</span><span class="co"> "Aki Vehtari et al."</span></span>
+<span id="cb43-5"><a href="#cb43-5"></a><span class="an">format:</span></span>
+<span id="cb43-6"><a href="#cb43-6"></a><span class="co">  html:</span></span>
+<span id="cb43-7"><a href="#cb43-7"></a><span class="co">    toc: true</span></span>
+<span id="cb43-8"><a href="#cb43-8"></a><span class="co">    code-tools: true</span></span>
+<span id="cb43-9"><a href="#cb43-9"></a><span class="co">    code-line-numbers: true</span></span>
+<span id="cb43-10"><a href="#cb43-10"></a><span class="co">    number-sections: true</span></span>
+<span id="cb43-11"><a href="#cb43-11"></a><span class="co">    mainfont: Georgia, serif</span></span>
+<span id="cb43-12"><a href="#cb43-12"></a><span class="co">    page-layout: article</span></span>
+<span id="cb43-13"><a href="#cb43-13"></a><span class="co">  pdf:</span></span>
+<span id="cb43-14"><a href="#cb43-14"></a><span class="co">    geometry:</span></span>
+<span id="cb43-15"><a href="#cb43-15"></a><span class="co">    - left=1cm,top=1cm,bottom=1cm,right=7cm</span></span>
+<span id="cb43-16"><a href="#cb43-16"></a><span class="co">    number-sections: true</span></span>
+<span id="cb43-17"><a href="#cb43-17"></a><span class="co">    code-annotations: none</span></span>
+<span id="cb43-18"><a href="#cb43-18"></a><span class="an">editor:</span><span class="co"> source</span></span>
+<span id="cb43-19"><a href="#cb43-19"></a><span class="co">---</span></span>
+<span id="cb43-20"><a href="#cb43-20"></a></span>
+<span id="cb43-21"><a href="#cb43-21"></a><span class="fu"># General information</span></span>
+<span id="cb43-22"><a href="#cb43-22"></a></span>
+<span id="cb43-23"><a href="#cb43-23"></a>**The maximum amount of points from this assignment is 3.**</span>
+<span id="cb43-24"><a href="#cb43-24"></a></span>
+<span id="cb43-25"><a href="#cb43-25"></a>We have prepared a **quarto template specific to this assignment ([html](template9.html), [qmd](https://avehtari.github.io/BDA_course_Aalto/assignments/template9.qmd), [pdf](template9.pdf))** to help you get started.</span>
+<span id="cb43-26"><a href="#cb43-26"></a></span>
+<span id="cb43-27"><a href="#cb43-27"></a>:::{.callout-warning icon=false title="Setup" collapse=true}</span>
+<span id="cb43-28"><a href="#cb43-28"></a>We recommend Aalto students use <span class="co">[</span><span class="ot">jupyter.cs.aalto.fi</span><span class="co">](https://jupyter.cs.aalto.fi)</span>, for all others we also provide a <span class="co">[</span><span class="ot">docker container</span><span class="co">](docker.html)</span>.</span>
+<span id="cb43-29"><a href="#cb43-29"></a>:::</span>
+<span id="cb43-30"><a href="#cb43-30"></a></span>
+<span id="cb43-31"><a href="#cb43-31"></a></span>
+<span id="cb43-32"><a href="#cb43-32"></a>:::{.callout-tip collapse=false}</span>
+<span id="cb43-33"><a href="#cb43-33"></a>**Reading instructions**:</span>
+<span id="cb43-34"><a href="#cb43-34"></a></span>
+<span id="cb43-35"><a href="#cb43-35"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**The reading instructions for BDA3 Chapter 9**</span><span class="co">](../BDA3_notes.html#ch6)</span> (decision analysis).</span>
+<span id="cb43-36"><a href="#cb43-36"></a></span>
+<span id="cb43-37"><a href="#cb43-37"></a>{{&lt; include includes/_grading_instructions.md &gt;}}</span>
+<span id="cb43-38"><a href="#cb43-38"></a></span>
+<span id="cb43-39"><a href="#cb43-39"></a>{{&lt; include includes/_cmdstanr.md &gt;}}</span>
+<span id="cb43-40"><a href="#cb43-40"></a>:::</span>
+<span id="cb43-41"><a href="#cb43-41"></a></span>
+<span id="cb43-42"><a href="#cb43-42"></a>{{&lt; include includes/_reporting_accuracy.md &gt;}}</span>
+<span id="cb43-43"><a href="#cb43-43"></a></span>
+<span id="cb43-44"><a href="#cb43-44"></a>{{&lt; include includes/_general_info.md &gt;}}</span>
+<span id="cb43-45"><a href="#cb43-45"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb43-46"><a href="#cb43-46"></a>This is the template for <span class="co">[</span><span class="ot">assignment 9</span><span class="co">](assignment9.html)</span>. You can download the <span class="co">[</span><span class="ot">qmd-file</span><span class="co">](https://avehtari.github.io/BDA_course_Aalto/assignments/template9.qmd)</span> or copy the code from this rendered document after clicking on <span class="in">`&lt;/&gt; Code`</span> in the top right corner.</span>
+<span id="cb43-47"><a href="#cb43-47"></a></span>
+<span id="cb43-48"><a href="#cb43-48"></a>**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.**</span>
+<span id="cb43-49"><a href="#cb43-49"></a>:::</span>
+<span id="cb43-50"><a href="#cb43-50"></a>::: {.callout-warning collapse=false}</span>
+<span id="cb43-51"><a href="#cb43-51"></a><span class="fu">## Setup</span></span>
+<span id="cb43-52"><a href="#cb43-52"></a></span>
+<span id="cb43-53"><a href="#cb43-53"></a>The following loads several needed packages:</span>
+<span id="cb43-54"><a href="#cb43-54"></a></span>
+<span id="cb43-57"><a href="#cb43-57"></a><span class="in">```{r}</span></span>
+<span id="cb43-58"><a href="#cb43-58"></a><span class="co">#| label: imports</span></span>
+<span id="cb43-59"><a href="#cb43-59"></a><span class="fu">library</span>(bayesplot)</span>
+<span id="cb43-60"><a href="#cb43-60"></a><span class="fu">library</span>(cmdstanr)</span>
+<span id="cb43-61"><a href="#cb43-61"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb43-62"><a href="#cb43-62"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb43-63"><a href="#cb43-63"></a><span class="fu">library</span>(ggdist) <span class="co"># for stat_dotsinterval</span></span>
+<span id="cb43-64"><a href="#cb43-64"></a><span class="fu">library</span>(posterior)</span>
+<span id="cb43-65"><a href="#cb43-65"></a><span class="fu">library</span>(brms)</span>
+<span id="cb43-66"><a href="#cb43-66"></a><span class="co"># Globally specfiy cmdstan backend for brms</span></span>
+<span id="cb43-67"><a href="#cb43-67"></a><span class="fu">options</span>(<span class="at">brms.backend=</span><span class="st">"cmdstanr"</span>)</span>
+<span id="cb43-68"><a href="#cb43-68"></a><span class="co"># Tell brms to cache results if possible</span></span>
+<span id="cb43-69"><a href="#cb43-69"></a><span class="fu">options</span>(<span class="at">brms.file_refit=</span><span class="st">"on_change"</span>)</span>
+<span id="cb43-70"><a href="#cb43-70"></a></span>
+<span id="cb43-71"><a href="#cb43-71"></a><span class="co"># Set more readable themes with bigger font for plotting packages</span></span>
+<span id="cb43-72"><a href="#cb43-72"></a>ggplot2<span class="sc">::</span><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
+<span id="cb43-73"><a href="#cb43-73"></a>bayesplot<span class="sc">::</span><span class="fu">bayesplot_theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
+<span id="cb43-74"><a href="#cb43-74"></a><span class="in">```</span></span>
+<span id="cb43-75"><a href="#cb43-75"></a>:::</span>
+<span id="cb43-76"><a href="#cb43-76"></a></span>
+<span id="cb43-77"><a href="#cb43-77"></a></span>
+<span id="cb43-78"><a href="#cb43-78"></a></span>
+<span id="cb43-79"><a href="#cb43-79"></a></span>
+<span id="cb43-80"><a href="#cb43-80"></a>This exercise is an example of a decision analysis (DA). In a broad context, this means optimizing over different decisions that lead to different outcomes that all have different utilities. In a Bayesian context, this means using posterior distributions to make decisions.</span>
+<span id="cb43-81"><a href="#cb43-81"></a></span>
+<span id="cb43-82"><a href="#cb43-82"></a><span class="fu"># Escaping from the chicken coop</span></span>
+<span id="cb43-83"><a href="#cb43-83"></a></span>
+<span id="cb43-84"><a href="#cb43-84"></a>You are an adult chicken living in an organic chicken commune, where life is great, if a bit boring.</span>
+<span id="cb43-85"><a href="#cb43-85"></a>You have settled in comfortably, but you want something more for your offspring.</span>
+<span id="cb43-86"><a href="#cb43-86"></a>Your traveling corvid friends tell you of places where chickens eat corn all day,</span>
+<span id="cb43-87"><a href="#cb43-87"></a>get ferried around in <span class="co">[</span><span class="ot">mobile chicken coops to see the world</span><span class="co">](https://www.chicken-trailer.de/en/chicken-trailer-en/chicken-trailer-330)</span> or [get mental stimulation by being trained humanely to perform</span>
+<span id="cb43-88"><a href="#cb43-88"></a>tricks](https://en.wikipedia.org/wiki/Marian_Breland_Bailey#:~:text=Popular%20acts%20included,that%20played%20basketball.).</span>
+<span id="cb43-89"><a href="#cb43-89"></a>The chicken elders have gained access to the computers of your human caretakers</span>
+<span id="cb43-90"><a href="#cb43-90"></a>and have found the results of a complicated statistical analysis of the growth curves</span>
+<span id="cb43-91"><a href="#cb43-91"></a>of your relatives. Because you are a chicken, you don't care about convergence diagnostics or priors.</span>
+<span id="cb43-92"><a href="#cb43-92"></a></span>
+<span id="cb43-93"><a href="#cb43-93"></a>**Your task is to maximizes the chance of escape for your offspring.**</span>
+<span id="cb43-94"><a href="#cb43-94"></a></span>
+<span id="cb43-95"><a href="#cb43-95"></a>::: {.callout-warning icon=false title="Subtask 2.c"}</span>
+<span id="cb43-96"><a href="#cb43-96"></a>Compute and visualize the **expected chicken weight for days 1--40 per diet**, according to the</span>
+<span id="cb43-97"><a href="#cb43-97"></a>model provided in the template. Do the predictions look reasonable? Why/why not?</span>
+<span id="cb43-98"><a href="#cb43-98"></a>:::</span>
+<span id="cb43-99"><a href="#cb43-99"></a>::: {.callout-tip collapse=false}</span>
+<span id="cb43-100"><a href="#cb43-100"></a>To sample a "new chicken" from the posterior, use <span class="co">[</span><span class="ot">posterior_predict</span><span class="co">](https://rdrr.io/cran/brms/man/posterior_epred.brmsfit.html)</span> with options <span class="in">`newdata=..., allow_new_levels=TRUE, sample_new_levels="gaussian"`</span>, where you pass a dataframe as <span class="in">`newdata`</span> which has a "new" chicken ID <span class="in">`Chick`</span> and appropriate values for <span class="in">`Time`</span> and <span class="in">`Diet`</span>.</span>
+<span id="cb43-101"><a href="#cb43-101"></a>:::</span>
+<span id="cb43-102"><a href="#cb43-102"></a>:::{.callout-warning collapse=false}</span>
+<span id="cb43-103"><a href="#cb43-103"></a><span class="fu">### A simple GP model</span></span>
+<span id="cb43-104"><a href="#cb43-104"></a></span>
+<span id="cb43-105"><a href="#cb43-105"></a>The below fits a GP model to the chicken growth curves. It may take a few minutes to fit, but you</span>
+<span id="cb43-106"><a href="#cb43-106"></a>can also <span class="co">[</span><span class="ot">download the fit `.rds`-file</span><span class="co">](./additional_files/assignment9/gp_chicken_fit.rds)</span> and work with that fit object.</span>
+<span id="cb43-107"><a href="#cb43-107"></a></span>
+<span id="cb43-108"><a href="#cb43-108"></a><span class="in">```{r fit}</span></span>
+<span id="cb43-109"><a href="#cb43-109"></a></span>
+<span id="cb43-110"><a href="#cb43-110"></a><span class="in">fit &lt;- brm(</span></span>
+<span id="cb43-111"><a href="#cb43-111"></a><span class="in">  weight ~ gp(Time) + (0+Time|Diet) + (0+Time|Chick),</span></span>
+<span id="cb43-112"><a href="#cb43-112"></a><span class="in">  data = ChickWeight,</span></span>
+<span id="cb43-113"><a href="#cb43-113"></a><span class="in">  family = "lognormal",</span></span>
+<span id="cb43-114"><a href="#cb43-114"></a><span class="in">  file="additional_files/assignment9/gp_chicken_fit",</span></span>
+<span id="cb43-115"><a href="#cb43-115"></a><span class="in">  cores = parallel::detectCores(),</span></span>
+<span id="cb43-116"><a href="#cb43-116"></a><span class="in">  # For the template only, remove the below from your code!</span></span>
+<span id="cb43-117"><a href="#cb43-117"></a><span class="in">  iter = 500</span></span>
+<span id="cb43-118"><a href="#cb43-118"></a><span class="in">)</span></span>
+<span id="cb43-119"><a href="#cb43-119"></a><span class="in">brms::pp_check(fit, type = "intervals_grouped", group = "Diet")</span></span>
+<span id="cb43-120"><a href="#cb43-120"></a><span class="in">```</span></span>
+<span id="cb43-121"><a href="#cb43-121"></a>:::</span>
+<span id="cb43-122"><a href="#cb43-122"></a>:::{.content-visible when-profile="public"}</span>
+<span id="cb43-125"><a href="#cb43-125"></a><span class="in">```{r}</span></span>
+<span id="cb43-126"><a href="#cb43-126"></a><span class="co"># Useful r functions:</span></span>
+<span id="cb43-127"><a href="#cb43-127"></a><span class="co">#   rep(..., each=...), cbind, colMeans,</span></span>
+<span id="cb43-128"><a href="#cb43-128"></a><span class="co">#   posterior_predict(..., newdata=..., allow_new_levels=TRUE, sample_new_levels="gaussian")</span></span>
+<span id="cb43-129"><a href="#cb43-129"></a><span class="co">#   ggplot, geom_line, aes(..., group=..., color=...)</span></span>
+<span id="cb43-130"><a href="#cb43-130"></a><span class="in">```</span></span>
+<span id="cb43-131"><a href="#cb43-131"></a>:::</span>
+<span id="cb43-132"><a href="#cb43-132"></a>:::{.callout-note icon=false title="Rubric"}</span>
+<span id="cb43-133"><a href="#cb43-133"></a><span class="ss">* </span>Does the plot look right and is it readable? It should be quite close to the reference plot below:</span>
+<span id="cb43-134"><a href="#cb43-134"></a><span class="ss">* </span>Has it been recognized that the prediction time ?</span>
+<span id="cb43-135"><a href="#cb43-135"></a>:::</span>
+<span id="cb43-136"><a href="#cb43-136"></a></span>
+<span id="cb43-137"><a href="#cb43-137"></a>Your chicken elders have been meticulously collecting data on what kind of characteristics have allowed</span>
+<span id="cb43-138"><a href="#cb43-138"></a>previous chickens to escape. They have found out that both the age and the weight influence the (daily)</span>
+<span id="cb43-139"><a href="#cb43-139"></a>probability of escape for a chicken:</span>
+<span id="cb43-140"><a href="#cb43-140"></a></span>
+<span id="cb43-141"><a href="#cb43-141"></a><span class="ss">* </span>If the chicken is too young, it is not yet mature enough to venture out into the world.</span>
+<span id="cb43-142"><a href="#cb43-142"></a><span class="ss">* </span>If the chicken is too old, it will not try to escape anymore.</span>
+<span id="cb43-143"><a href="#cb43-143"></a><span class="ss">* </span>If the chicken is small and has just the right size, it can try to squeze through a tiny crack in the fence.</span>
+<span id="cb43-144"><a href="#cb43-144"></a><span class="ss">* </span>If the chicken is big enough, it is strong enough to try to fly over the fence.</span>
+<span id="cb43-145"><a href="#cb43-145"></a><span class="ss">* </span>No matter the size, there is always a small residual probability that the chicken can escape.</span>
+<span id="cb43-146"><a href="#cb43-146"></a></span>
+<span id="cb43-147"><a href="#cb43-147"></a>Every day, chickens will try to escape if they are of the right age.</span>
+<span id="cb43-148"><a href="#cb43-148"></a>Their daily escape probability $e(\text{day}, \text{weight})$ is implemented in the <span class="in">`daily_probability_of_escape(day, weight)`</span> function.</span>
+<span id="cb43-149"><a href="#cb43-149"></a>The probability that a chicken with daily weights $w = (w_1,\dots,w_N)$ **has not escaped** after $i+1$ days can be computed as follows:</span>
+<span id="cb43-150"><a href="#cb43-150"></a>$$</span>
+<span id="cb43-151"><a href="#cb43-151"></a>  f_{i+1} = f_i \, (1 - e(i, w_i))</span>
+<span id="cb43-152"><a href="#cb43-152"></a>$$</span>
+<span id="cb43-153"><a href="#cb43-153"></a>The <span class="in">`chickenwise_probability_of_escape(weights)`</span> computes the probability that a chicken **has escaped** after <span class="in">`length(weights)`</span> days.</span>
+<span id="cb43-154"><a href="#cb43-154"></a></span>
+<span id="cb43-155"><a href="#cb43-155"></a></span>
+<span id="cb43-156"><a href="#cb43-156"></a>:::{.callout-tip collapse=true}</span>
+<span id="cb43-157"><a href="#cb43-157"></a><span class="fu">###  Chickenwise probability of escape function</span></span>
+<span id="cb43-158"><a href="#cb43-158"></a></span>
+<span id="cb43-161"><a href="#cb43-161"></a><span class="in">```{r}</span></span>
+<span id="cb43-162"><a href="#cb43-162"></a>bump <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">loc=</span><span class="dv">0</span>, <span class="at">scale=</span><span class="dv">1</span>){</span>
+<span id="cb43-163"><a href="#cb43-163"></a>  xi <span class="ot">=</span> (x <span class="sc">-</span> loc) <span class="sc">/</span> scale</span>
+<span id="cb43-164"><a href="#cb43-164"></a>  <span class="fu">ifelse</span>(<span class="fu">abs</span>(xi) <span class="sc">&lt;</span> <span class="dv">1</span>, <span class="fu">exp</span>(<span class="sc">-</span><span class="dv">1</span><span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>xi<span class="sc">^</span><span class="dv">2</span>)), <span class="fl">0.</span>)</span>
+<span id="cb43-165"><a href="#cb43-165"></a>}</span>
+<span id="cb43-166"><a href="#cb43-166"></a>daily_probability_of_escape <span class="ot">&lt;-</span> <span class="cf">function</span>(day, weight){</span>
+<span id="cb43-167"><a href="#cb43-167"></a>  <span class="co"># Expects a day and a weight and computes the daily probability of escape</span></span>
+<span id="cb43-168"><a href="#cb43-168"></a>  <span class="fu">bump</span>(day, <span class="dv">30</span>, <span class="dv">10</span>) <span class="sc">*</span> (<span class="fl">1e-2</span> <span class="sc">+</span> <span class="fu">bump</span>(weight, <span class="dv">200</span>, <span class="dv">150</span>)<span class="sc">+</span><span class="fu">bump</span>(weight, <span class="dv">700</span>, <span class="dv">150</span>))</span>
+<span id="cb43-169"><a href="#cb43-169"></a>}</span>
+<span id="cb43-170"><a href="#cb43-170"></a>chickenwise_probability_of_escape <span class="ot">&lt;-</span> <span class="cf">function</span>(weights){</span>
+<span id="cb43-171"><a href="#cb43-171"></a>  <span class="co"># Expects a vector of daily weights from day 1 to N and computes the probability of</span></span>
+<span id="cb43-172"><a href="#cb43-172"></a>  <span class="co"># escape at the end of the time series</span></span>
+<span id="cb43-173"><a href="#cb43-173"></a>  prob_of_failure <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb43-174"><a href="#cb43-174"></a>  <span class="cf">for</span>(day <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(weights)){</span>
+<span id="cb43-175"><a href="#cb43-175"></a>    prob_of_failure <span class="ot">=</span> prob_of_failure <span class="sc">*</span> (<span class="dv">1</span><span class="sc">-</span><span class="fu">daily_probability_of_escape</span>(day, weights[day]))</span>
+<span id="cb43-176"><a href="#cb43-176"></a>  }</span>
+<span id="cb43-177"><a href="#cb43-177"></a>  <span class="fu">return</span>(<span class="dv">1</span> <span class="sc">-</span> prob_of_failure)</span>
+<span id="cb43-178"><a href="#cb43-178"></a>}</span>
+<span id="cb43-179"><a href="#cb43-179"></a><span class="in">```</span></span>
+<span id="cb43-180"><a href="#cb43-180"></a>:::</span>
+<span id="cb43-181"><a href="#cb43-181"></a></span>
+<span id="cb43-184"><a href="#cb43-184"></a><span class="in">```{r}</span></span>
+<span id="cb43-185"><a href="#cb43-185"></a><span class="co">#| fig-cap: Daily probability of escape for a given day and weight</span></span>
+<span id="cb43-186"><a href="#cb43-186"></a><span class="co">#| label: fig-prob</span></span>
+<span id="cb43-187"><a href="#cb43-187"></a>days <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">40</span></span>
+<span id="cb43-188"><a href="#cb43-188"></a>weights <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">900</span></span>
+<span id="cb43-189"><a href="#cb43-189"></a>heatmap_matrix <span class="ot">=</span> <span class="fu">outer</span>(days,weights,daily_probability_of_escape)</span>
+<span id="cb43-190"><a href="#cb43-190"></a><span class="fu">image</span>(days, weights, heatmap_matrix, <span class="at">xlab=</span><span class="st">"day"</span>, <span class="at">ylab=</span><span class="st">"weight"</span>, <span class="at">main=</span><span class="st">"Daily probability of escape"</span>)</span>
+<span id="cb43-191"><a href="#cb43-191"></a><span class="in">```</span></span>
+<span id="cb43-192"><a href="#cb43-192"></a></span>
+<span id="cb43-193"><a href="#cb43-193"></a>::: {.callout-warning icon=false title="Subtask 2.a"}</span>
+<span id="cb43-194"><a href="#cb43-194"></a>Compute and visualize the **distribution of the chickenwise probabilities of escape per diet**,</span>
+<span id="cb43-195"><a href="#cb43-195"></a>according to the model provided in the template.</span>
+<span id="cb43-196"><a href="#cb43-196"></a>:::</span>
+<span id="cb43-197"><a href="#cb43-197"></a>::: {.callout-tip collapse=false}</span>
+<span id="cb43-198"><a href="#cb43-198"></a>You can reuse the predictions you created in the previous subtask.</span>
+<span id="cb43-199"><a href="#cb43-199"></a>**Work with the draws to compute the chickenwise probability of escape first, and then take the expectation!**</span>
+<span id="cb43-200"><a href="#cb43-200"></a>:::</span>
+<span id="cb43-201"><a href="#cb43-201"></a>:::{.content-visible when-profile="public"}</span>
+<span id="cb43-204"><a href="#cb43-204"></a><span class="in">```{r}</span></span>
+<span id="cb43-205"><a href="#cb43-205"></a><span class="co"># Useful r functions: chickenwise_probability_of_escape (see above)</span></span>
+<span id="cb43-206"><a href="#cb43-206"></a><span class="co"># rep(..., each=...), apply,</span></span>
+<span id="cb43-207"><a href="#cb43-207"></a><span class="co"># ggplot, stat_dotsinterval</span></span>
+<span id="cb43-208"><a href="#cb43-208"></a><span class="in">```</span></span>
+<span id="cb43-209"><a href="#cb43-209"></a>:::</span>
+<span id="cb43-210"><a href="#cb43-210"></a>:::{.callout-note icon=false title="Rubric"}</span>
+<span id="cb43-211"><a href="#cb43-211"></a><span class="ss">* </span>Does the plot look right and is it readable? It should be quite close to the reference plot below:</span>
+<span id="cb43-212"><a href="#cb43-212"></a>:::</span>
+<span id="cb43-213"><a href="#cb43-213"></a></span>
+<span id="cb43-214"><a href="#cb43-214"></a>::: {.callout-warning icon=false title="Subtask 2.b"}</span>
+<span id="cb43-215"><a href="#cb43-215"></a>Compute the **expected probability of escape for each diet**.</span>
+<span id="cb43-216"><a href="#cb43-216"></a>Why would it be wrong to compute the expected probability of escape by</span>
+<span id="cb43-217"><a href="#cb43-217"></a>applying the <span class="in">`chickenwise_probability_of_escape`</span> function in the template to the</span>
+<span id="cb43-218"><a href="#cb43-218"></a>*daily expected chicken weights per diet* computed in subtask 2.a?</span>
+<span id="cb43-219"><a href="#cb43-219"></a>How does the correctly calculated value compare to the incorrectly calculated value?</span>
+<span id="cb43-220"><a href="#cb43-220"></a>Why is one higher than the other?</span>
+<span id="cb43-221"><a href="#cb43-221"></a>:::</span>
+<span id="cb43-222"><a href="#cb43-222"></a>:::{.content-visible when-profile="public"}</span>
+<span id="cb43-225"><a href="#cb43-225"></a><span class="in">```{r}</span></span>
+<span id="cb43-226"><a href="#cb43-226"></a><span class="co"># Useful r functions: chickenwise_probability_of_escape (see above)</span></span>
+<span id="cb43-227"><a href="#cb43-227"></a><span class="co"># apply, aggregate,</span></span>
+<span id="cb43-228"><a href="#cb43-228"></a><span class="in">```</span></span>
+<span id="cb43-229"><a href="#cb43-229"></a>:::</span>
+<span id="cb43-230"><a href="#cb43-230"></a>:::{.callout-note icon=false title="Rubric"}</span>
+<span id="cb43-231"><a href="#cb43-231"></a><span class="ss">* </span>Do the results look correct and have they been presented in a readable way? They should be roughly the first column below for the correct calculation and the second column below for the wrong calculation: [</span>
+<span id="cb43-232"><a href="#cb43-232"></a></span>
+<span id="cb43-233"><a href="#cb43-233"></a>diet chickenwise_loss meanwise_loss</span>
+<span id="cb43-234"><a href="#cb43-234"></a>  1       0.55           0.83</span>
+<span id="cb43-235"><a href="#cb43-235"></a>  2       0.57           0.67</span>
+<span id="cb43-236"><a href="#cb43-236"></a>  3       0.50           0.10</span>
+<span id="cb43-237"><a href="#cb43-237"></a>  4       0.52           0.15</span>
+<span id="cb43-238"><a href="#cb43-238"></a>]{.content-hidden when-profile="public"}</span>
+<span id="cb43-239"><a href="#cb43-239"></a><span class="ss">* </span>Has it been explained that the expected probability of escape depends on ?</span>
+<span id="cb43-240"><a href="#cb43-240"></a><span class="ss">* </span>Has it been explained that</span>
+<span id="cb43-241"><a href="#cb43-241"></a></span>
+<span id="cb43-242"><a href="#cb43-242"></a>?</span>
+<span id="cb43-243"><a href="#cb43-243"></a></span>
+<span id="cb43-244"><a href="#cb43-244"></a>[AND/OR</span>
+<span id="cb43-245"><a href="#cb43-245"></a></span>
+<span id="cb43-246"><a href="#cb43-246"></a>for some diets the “incorrect” computation (meanwise_loss) is lower because the mean growth curve (used in the incorrect meanwise_loss) “by chance” passes through the region of low probability of escape, even though due to high within-population variation most chickens’ growth curve won’t pass through that region of low probability of escape?</span>
+<span id="cb43-247"><a href="#cb43-247"></a></span>
+<span id="cb43-248"><a href="#cb43-248"></a>(Due to a slightly misleading public rubric, either of the above answers would be sufficient)]{.content-hidden when-profile="public"}</span>
+<span id="cb43-249"><a href="#cb43-249"></a></span>
+<span id="cb43-250"><a href="#cb43-250"></a>:::</span>
+<span id="cb43-251"><a href="#cb43-251"></a></span>
+<span id="cb43-252"><a href="#cb43-252"></a>{{&lt; include includes/_overall_quality.md &gt;}}</span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
