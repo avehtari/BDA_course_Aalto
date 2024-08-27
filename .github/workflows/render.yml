@@ -2,6 +2,7 @@ on:
   push:
     branches:
       - master
+  workflow_dispatch:
     # paths: ['**.Rmd']
 
 name: Render and Publish Website
@@ -18,7 +19,18 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
-          token: ${{ secrets.GH_ACTION}}
+          token: ${{ secrets.GH_ACTION }}
+
+      - name: Check out private repo with assignments
+        uses: actions/checkout@v4
+        with:
+          repository: 'avehtari/bda_course'
+          path: 'bda_course'
+          fetch-depth: 1
+          token: ${{ secrets.GH_ACTION }}
+
+      - name: Copy assignments
+        run: cp -r bda_course/assignments/ assignments/
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
@@ -29,11 +41,38 @@ jobs:
         uses: r-lib/actions/setup-r@v2
         with:
           use-public-rspm: true
+          extra-repositories: 'https://avehtari.r-universe.dev https://stan-dev.r-universe.dev'
 
       - name: Install R dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          packages: any::tidyr
+          cache: "always"
+          packages:
+            any::dplyr
+            any::tidyr
+            any::rmarkdown
+            any::knitr
+            any::markmyassignment
+            any::aaltobda
+            any::bayesplot
+            any::brms
+            any::posterior
+            any::latex2exp
+            any::ggplot2
+            any::ggdist
+            any::cmdstanr
+
+      - name: Cache CmdStan
+        id: cache-cmdstan
+        uses: actions/cache@v4
+        with:
+          path: ~/.cmdstan
+          key: gha-cmdstan
+
+      - name: Setup cmdstan
+        if: steps.cache-cmdstan.outputs.cache-hit != 'true'
+        run: cmdstanr::install_cmdstan(cores = 2)
+        shell: Rscript {0}
 
       - name: Render and Publish Website
         uses: quarto-dev/quarto-actions/publish@v2
