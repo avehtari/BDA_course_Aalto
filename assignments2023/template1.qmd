@@ -1,0 +1,411 @@
+---
+title: "Assignment 1, 2023"
+author: "Aki Vehtari et al."
+format:
+  html:
+    toc: true
+    code-tools: true
+    code-line-numbers: true
+    number-sections: true
+    mainfont: Georgia, serif
+  pdf:
+    geometry:
+    - left=1cm,top=1cm,bottom=1cm,right=7cm
+    number-sections: true
+    code-annotations: none
+editor: source
+---
+
+# General information
+
+**This is for BDA 2023**
+
+The exercises of this assignment are meant to test whether or not you have sufficient knowledge
+to participate in the course. The first question checks that you
+remember basic terms of probability calculus. The second exercise checks
+your basic computer skills and guides you to learn some R functions. In
+the last three ones you will first write the math for solving the
+problems (you can, for example, write the equations in markdown or
+include a photo of hand written answers), and then implement the final
+equations in R (and then you can use `markmyassignment` to check your
+results). The last question checks that you have found the course book.
+
+**The maximum amount of points from this assignment is 3.**
+
+We prepared a quarto template specific to this assignment to help you get started. You can inspect this and future templates
+
+* as a [qmd file](https://avehtari.github.io/BDA_course_Aalto/assignments/template1.qmd),
+* as a [rendered html file](template1.html)
+* or as a [rendered pdf file](template1.pdf)
+
+or you can download all template `qmd` files and some additional files at [templates.zip](https://avehtari.github.io/BDA_course_Aalto/assignments/templates.zip) (also available on Aalto JupyterHub under `/coursedata`).
+
+::: {.callout-tip collapse=false}
+**Reading instructions**:
+
+- [**The reading instructions for BDA3 Chapter 1**](../BDA3_notes.html#ch1).
+
+{{< include includes/_grading_instructions.md >}}
+:::
+
+
+{{< include includes/_general_info.md >}}
+
+
+::: {.callout-warning collapse=false}
+## Setup
+
+This is the template for [assignment 1](assignment1.html). You can download the [qmd-file](https://avehtari.github.io/BDA_course_Aalto/assignments/template1.qmd) or copy the code from this rendered document after clicking on `</> Code` in the top right corner.
+
+**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.**
+
+The following will set-up `markmyassignment` to check your functions at the end of the notebook:
+
+```{r}
+library(markmyassignment)
+assignment_path = paste("https://github.com/avehtari/BDA_course_Aalto/",
+"blob/master/assignments/tests/assignment1.yml", sep="")
+set_assignment(assignment_path)
+```
+:::
+
+# Basic probability theory notation and terms
+
+This can be trivial or you may need to refresh your memory on these concepts (see, e.g. Aalto course *First Course in Probability and
+Statistics*). Explain each of the following terms with one sentence:
+
+-   probability
+-   probability mass (function)
+-   probability density (function)
+-   probability distribution
+-   discrete probability distribution
+-   continuous probability distribution
+-   cumulative distribution function (cdf)
+-   likelihood
+
+
+
+::: {.callout-note icon=false title="Rubric"}
+
+* How is the answer?
+    - Totally wrong/has not tried
+    - Something sensible written
+    - All/almost all are correct (>=70% correct)
+:::
+
+# Basic computer skills
+
+
+This task deals with elementary plotting
+and computing skills needed during the rest of the course. You can
+use either R or Python, although R is the recommended language in this course and
+we will only guarantee support in R. For documentation in R, just
+type `?{function name here}`.
+
+
+::: {.callout-warning icon=false title="Subtask 3.a)"}
+Plot the density function of the Beta-distribution, with mean
+$\mu = 0.2$ and variance $\sigma^2=0.01$. The parameters
+$\alpha$ and $\beta$ of the Beta-distribution are related to the
+mean and variance according to the following equations
+$$\begin{aligned}
+    \alpha = \mu \left( \frac{\mu(1-\mu)}{\sigma^2} - 1 \right), \quad
+    \beta = \frac{\alpha (1-\mu) }{\mu} \,.\end{aligned}$$
+
+:::
+
+::: {.content-visible when-profile="public"}
+Plot the PDF here. Explain in text what you do.
+```{r}
+# Useful functions: seq(), plot() and dbeta()
+```
+:::
+
+
+
+
+
+::: {.callout-warning icon=false title="Subtask 3.b)"}
+Take a sample of 1000 random numbers from the above distribution
+and plot a histogram of the results. Compare visually to the
+density function.
+:::
+
+::: {.content-visible when-profile="public"}
+Sample and plot the histogram here. Explain in text what you do.
+```{r}
+# Useful functions: rbeta() and hist()
+```
+:::
+
+
+
+::: {.callout-warning icon=false title="Subtask 3.c)"}
+
+Compute the sample mean and variance from the drawn sample.
+Verify that they match (roughly) to the true mean and variance
+of the distribution.
+
+:::
+
+::: {.content-visible when-profile="public"}
+Compute the sample mean and variance here. Explain in text what you do.
+```{r}
+# Useful functions: mean() and var()
+```
+:::
+
+
+
+::: {.callout-warning icon=false title="Subtask 3.d)"}
+Estimate the central 95% probability interval of the distribution from the drawn sample.
+:::
+
+::: {.content-visible when-profile="public"}
+Compute the central interval here. Explain in text what you do.
+```{r}
+# Useful functions: quantile()
+```
+:::
+
+
+
+
+::: {.callout-note icon=false title="Rubric"}
+
+* Is the source code for the solutions included?
+* Does the plot in a) look something like this: 
+* Does the plot in b) look something like this: 
+* Is the computed mean in c) close to ?
+* Is the variance in c) close to ?
+* Is the probability interval in d) roughly ? Remember that since the interval is computed from random sample, there can be small variation, but the answers should be roughly the same!
+
+:::
+
+::: {.callout-tip}
+## Further formatting recommendations
+
+* Please try to include as much code and output as needed, but as little as possible.
+* Please make sure that the plots are properly labeled and are easily legible and understandable. This means
+    * they should have x- and y-labels,
+    * the text within should be of a size comparable to the size of the surrounding text and
+    * each plot should have a concise but descriptive caption or title.
+* Please make sure to report a sensible number of digits when reporting numbers. You will get more precise instructions later on, but for now think independently about how many digits of your results are important for the assignment.
+
+:::
+
+# Bayes' theorem 1
+
+A group of researchers has designed a new
+inexpensive and painless test for detecting lung cancer. The test is
+intended to be an initial screening test for the population in
+general. A positive result (presence of lung cancer) from the test
+would be followed up immediately with medication, surgery or more
+extensive and expensive test. The researchers know from their
+studies the following facts:
+
+-   Test gives a positive result in $98\%$ of the time when the test
+    subject has lung cancer.
+-   Test gives a negative result in $96\%$ of the time when the
+    test subject does not have lung cancer.
+-   In general population approximately one person in 1000 has lung
+    cancer.
+
+::: {.callout-warning icon=false title="Subtask 4.a)"}
+
+The researchers are happy with these preliminary results (about
+$97\%$ success rate), and wish to get the test to market as soon as
+possible. How would you advise them? Base your answer on Bayes' rule
+computations.
+
+:::
+
+::: {.callout-tip collapse=false}
+Relatively high false negative (cancer doesn't get
+detected) or high false positive (unnecessarily administer
+medication) rates are typically bad and undesirable in tests.
+:::
+
+::: {.content-visible when-profile="public"}
+Compute the quantities needed to justify your recommendation here. Explain in text what you do.
+You can do the computation with pen and paper or in R.
+Either way, you have to explain why you compute what you compute.
+
+If you use pen and paper, you can include scans or pictures as follows (see also [assignment_instructions#fig-workflow](assignment_instructions#fig-workflow)):
+
+![Parts of Bayesian workflow](additional_files/bayes_workflow.jpg){#fig-workflow width="350"}
+
+See @fig-workflow for illustration of parts of Bayesian workflow.
+:::
+
+
+Here are some probability values that can help you figure
+out if you copied the right conditional probabilities from the
+question.
+
+-   P(Test gives positive \| Subject does not have lung cancer) =
+    $4\%$
+-   P(Test gives positive **and** Subject has lung cancer) =
+    $0.098\%$ this is also referred to as the **joint probability**
+    of *test being positive* and the *subject having lung cancer*.
+
+
+
+
+::: {.callout-note icon=false title="Rubric"}
+
+* Is p(has cancer|test result is positive) computed using Bayes' formula
+(or its complement p(does not have cancer|test result is positive))?
+* Is the result p(has cancer|test result is positive)= (or p(does not have cancer|test result
+is positive)=)
+* Is the result motivated with something like ["The test should not be used as even if the test result is
+positive, it is very unlikely that the person has a cancer" (or "The test should not be used as even if the
+test gives positive result, it is very likely that the patient does not have a cancer")]{.content-hidden when-profile="public"}
+
+:::
+
+# Bayes' theorem 2
+
+We have three boxes, A, B, and C. There are
+
+-   2 red balls and 5 white balls in the box A,
+-   4 red balls and 1 white ball in the box B, and
+-   1 red ball and 3 white balls in the box C.
+
+Consider a random experiment in which one of the boxes is randomly
+selected and from that box, one ball is randomly picked up. After
+observing the color of the ball it is replaced in the box it came
+from. Suppose also that on average box A is selected 40% of the time
+and box B $10\%$ of the time (i.e. $P(A) = 0.4$).
+
+::: {.content-visible when-profile="public"}
+You will need to change the numbers to the numbers in the exercise.
+```{r}
+boxes_test <- matrix(c(2,2,1,5,5,1), ncol = 2,
+    dimnames = list(c("A", "B", "C"), c("red", "white")))
+```
+:::
+
+::: {.callout-warning icon=false title="Subtask 5.a)"}
+What is the probability of picking a red ball?
+Implement an R function to compute that probability.
+:::
+
+::: {.content-visible when-profile="public"}
+Keep the below name and format for the function to work with `markmyassignment`:
+```{r}
+p_red <- function(boxes) {
+    # Do computation here, and return as below.
+    # This is the correct return value for the test data provided above.
+    0.3928571
+}
+```
+:::
+
+
+
+
+::: {.callout-warning icon=false title="Subtask 5.b)"}
+If a red ball was picked, from which box did it most probably come from?
+Implement an R function to compute the probabilities for each box.
+:::
+
+::: {.content-visible when-profile="public"}
+Keep the below name and format for the function to work with `markmyassignment`:
+```{r}
+p_box <- function(boxes) {
+    # Do computation here, and return as below.
+    # This is the correct return value for the test data provided above.
+    c(0.29090909,0.07272727,0.63636364)
+}
+```
+:::
+
+
+
+::: {.callout-note icon=false title="Rubric"}
+
+
+* Is the source code available?
+* How is the answer for probability of picking a red ball?
+    - No answer
+    - Probability rules 
+    - Probability rules 
+* How is the answer for what box is most probable?
+    - No answer
+    - Bayes rule used to compute probabilities for all boxes given that the picked ball is red, but the answers are not 
+    - Bayes rule used to compute probabilities for all boxes given that the picked ball is red, the answers are p
+    - Bayes rule used to compute probabilities for all boxes given that the picked ball is red, the answers are 
+
+:::
+
+# Bayes' theorem 3
+
+Assume that on average fraternal twins (two
+fertilized eggs and then could be of different sex) occur once in
+150 births and identical twins (single egg divides into two separate
+embryos, so both have the same sex) once in 400 births (**Note!**
+This is not the true value, see Exercise 1.6, page 28, in BDA3).
+American male singer-actor Elvis Presley (1935 -- 1977) had a twin
+brother who died in birth. Assume that an equal number of boys and
+girls are born on average.
+
+::: {.callout-warning icon=false title="Subtask 6.a)"}
+What is the probability that Elvis was an
+identical twin? Show the steps how you derived the equations to
+compute that probability and implement a function in R that computes the probability.
+:::
+
+::: {.content-visible when-profile="public"}
+You will need to change the numbers to the numbers in the exercise.
+```{r}
+fraternal_prob = 1/125
+identical_prob = 1/300
+```
+Keep the below name and format for the function to work with `markmyassignment`:
+```{r}
+p_identical_twin <- function(fraternal_prob, identical_prob) {
+    # Do computation here, and return as below.
+    # This is the correct return value for the test data provided above.
+    0.4545455
+}
+```
+:::
+
+
+
+
+::: {.callout-note icon=false title="Rubric"}
+* How is the answer for probability of Elvis having had an identical twin brother?
+    - No answer
+    - Probability that Elvis had an identical twin brother is computed using Bayes rule, but the result is not roughly 
+    - Probability that Elvis had an identical twin brother is computed using Bayes rule, and the result is roughly 
+:::
+
+# The three steps of Bayesian data analysis
+
+::: {.callout-warning icon=false title="Subtask 7.a)"}
+Fill in the three steps of Bayesian data analysis (see BDA3 section 1.1):
+
+1. 
+2. 
+3. 
+:::
+
+::: {.callout-note icon=false title="Rubric"}
+* Are the three steps listed as follows:
+    1. 
+    2. 
+    3. 
+:::
+
+::: {.callout-warning collapse=false}
+## markmyassignment
+The following will check the functions for which `markmyassignment` has been set up:
+
+```{r}
+mark_my_assignment()
+```
+:::
+
+{{< include includes/_overall_quality.md >}}

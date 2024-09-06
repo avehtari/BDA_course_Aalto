@@ -1,0 +1,517 @@
+---
+title: "Assignment 8, 2023"
+subtitle: "LOO-CV model comparison"
+author: "Aki Vehtari et al."
+format:
+  html:
+    toc: true
+    code-tools: true
+    code-line-numbers: true
+    number-sections: true
+    mainfont: Georgia, serif
+    page-layout: article
+  pdf:
+    geometry:
+    - left=1cm,top=1cm,bottom=1cm,right=7cm
+    number-sections: true
+    code-annotations: none
+editor: source
+assignments: ta
+---
+
+# General information
+
+**This is for BDA 2023**
+
+**The maximum amount of points from this assignment is 6.**
+
+We have prepared a **quarto template specific to this assignment ([html](template8.html), [qmd](https://avehtari.github.io/BDA_course_Aalto/assignments/template8.qmd), [pdf](template8.pdf))** to help you get started.
+
+
+:::{.callout-warning icon=false title="Setup" collapse=true}
+We recommend Aalto students use [jupyter.cs.aalto.fi](https://jupyter.cs.aalto.fi), for all others we also provide a [docker container](docker.html).
+:::
+
+
+:::{.callout-tip collapse=false}
+**Reading instructions**:
+
+- [**The reading instructions for BDA3 Chapter 6**](../BDA3_notes.html#ch6) (posterior predictive checking).
+- [**The reading instructions for BDA3 Chapter 7**](../BDA3_notes.html#ch7) (predictive performance).
+- The [‘loo‘ package vignette on the basics of LOO](https://mc-stan.org/loo/articles/loo2-with-rstan.html)
+shows an example of how to modify Stan code and use the package with Stan models.
+- Also read
+about PSIS-LOO in the [PSIS-LOO paper](https://link.springer.com/article/10.1007/s11222-016-9696-4).
+- [CV-FAQ](https://avehtari.github.io/modelselection/CV-FAQ.html) includes a lot of informative answers to frequent questions and misconceptions.
+
+{{< include includes/_grading_instructions.md >}}
+
+{{< include includes/_cmdstanr.md >}}
+:::
+
+{{< include includes/_reporting_accuracy.md >}}
+
+{{< include includes/_general_info.md >}}
+::: {.content-visible when-profile="public"}
+This is the template for [assignment 8](assignment8.html). You can download the [qmd-file](https://avehtari.github.io/BDA_course_Aalto/assignments/template8.qmd) or copy the code from this rendered document after clicking on `</> Code` in the top right corner.
+
+**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.**
+:::
+::: {.callout-warning collapse=false}
+## Setup
+
+The following loads several needed packages:
+
+```{r}
+#| label: imports
+library(bayesplot)
+library(cmdstanr)
+library(dplyr)
+library(ggplot2)
+library(ggdist) # for stat_dotsinterval
+library(posterior)
+library(brms)
+# Globally specfiy cmdstan backend for brms
+options(brms.backend="cmdstanr")
+# Tell brms to cache results if possible
+options(brms.file_refit="on_change")
+
+# Set more readable themes with bigger font for plotting packages
+ggplot2::theme_set(theme_minimal(base_size = 14))
+bayesplot::bayesplot_theme_set(theme_minimal(base_size = 14))
+```
+:::
+
+
+# A hierarchical model for chicken weight time series
+
+## Exploratory data analysis
+
+In the first part of this assignment, you will explore the dataset `ChickWeight`. In particular, you will see what information is recorded in the dataset, and how you can use visualisation to learn more about the dataset. More information can be found on the corresponding page of the [R documentation](https://www.rdocumentation.org/packages/datasets/versions/3.6.2/topics/ChickWeight).
+
+```{r}
+head(ChickWeight, 10)
+```
+
+:::{.callout-warning icon=false title="Subtask 2.a)"}
+Create a histogram to explore the range of chicken weights.
+Describe what you see in the plot. What is the qualitative range of the data?
+:::
+
+:::{.content-visible when-profile="public"}
+```{r}
+# Useful functions: ggplot, aes(x=...), geom_histogram
+
+### {.content-hidden when-profile="public"}
+ggplot(data = ChickWeight, aes(x=ChickWeight$weight)) +
+  geom_histogram()
+###
+
+```
+:::
+
+:::{.callout-note icon=false title="Rubric"}
+* Does the plot look correct and is it readable?
+* Has it been stated that the data takes on only values which are ?
+:::
+
+:::{.callout-warning icon=false title="Subtask 2.b"}
+Plot the weight of each chicken over time in a line plot. Add colours based on the diet.
+Describe what you see in the plot.
+:::
+:::{.content-visible when-profile="public"}
+```{r}
+# Useful functions: ggplot, aes(x=...,y=...,group=...,color=...), geom_line
+
+### {.content-hidden when-profile="public"}
+ggplot(data = ChickWeight, aes(x=Time, y=weight, group = Chick, color=Diet)) +
+  geom_line()
+###
+
+```
+:::
+:::{.callout-note icon=false title="Rubric"}
+* Does the plot look correct and is it readable?
+:::
+
+## Linear regression
+
+In this section, you will build a model that predicts the weight of a
+chicken over time and depending on the diet. After sampling from the posteriors, you
+will use posterior predictive checks to see how well the predictions
+match the observations. Then you will adjust the model by adding more
+complexity, and check again.
+
+::: {.callout-warning icon=false title="Subtask 2.c"}
+Using `brms`, implement a pooled linear regression with a normal
+model and `weight` as the predicted
+variable using `Diet` and `Time` as predictors. Try to use weakly informative priors.
+:::
+::: {.callout-tip collapse=false}
+For the prior on `Time`, consider how much the weight of a chicken (in grams) could possibly
+change each day. For the priors on the effects of different diets,
+consider how much average weight difference would be possible between
+diets.
+
+Note that as `Diet` is a categorical variable, the priors need to be
+specified for each category (apart from `Diet1` which is taken to be
+the baseline).
+:::
+
+:::{.content-visible when-profile="public"}
+In `brms`, a regression can be specified as below, see also [below (#m)](#m) or [the last template](template7.html#b-1). Fill in the appropriate variables,
+data, and likelihood family. Specify the priors, then run the model (by removing `#| eval: false` below).
+
+```{r}
+#| eval: false
+priors <- c(
+  prior(normal(0, <value>), coef = "Time"),
+  prior(normal(0, <value>), coef = "Diet2"),
+  prior(normal(0, <value>), coef = "Diet3"),
+  prior(normal(0, <value>), coef = "Diet4")
+)
+
+f1 <- brms::brm(
+  # This specifies the formula
+  <OUTCOME> ~ 1 + <PREDICTOR> + <PREDICTOR>,
+  # This specifies the dataset
+  data = <data>,
+  # This specifies the observation model family
+  family = <observation_family>,
+  # This passes the priors specified above to brms
+  prior = priors,
+  # This causes brms to cache the results
+  file = "additional_files/assignment8/f1"
+)
+
+### {.content-hidden when-profile="public"}
+priors <- c(
+  prior(normal(0, 10), coef = "Time"),
+  prior(normal(0, 50), coef = "Diet2"),
+  prior(normal(0, 50), coef = "Diet3"),
+  prior(normal(0, 50), coef = "Diet4")
+)
+
+f1 <- brms::brm(
+  weight ~ 1 + Diet + Time,
+  data = ChickWeight,
+  family = "gaussian",
+  prior = priors
+)
+###
+
+```
+:::
+
+:::{.callout-note icon=false title="Rubric"}
+* Is the brms-formula ?
+* Is the family ?
+* Are the prior standard deviations reasonable, e.g. around ?
+:::
+
+
+Next, you can use the `bayesplot` package to check the posterior
+predictions in relation to the observed data using the [`pp_check` function](https://mc-stan.org/bayesplot/reference/pp_check.html).
+The function plots the $y$ values, which are the observed data,
+and the $y_\text{rep}$ values, which are replicated data sets from the
+posterior predictive distribution.
+
+:::{.callout-warning icon=false title="Subtask 2.d"}
+Perform the posterior predictive check with the default arguments.
+What do you observe? Based on the plot, do the posterior predictions
+encapsulate the main features of the observed data? Point out any
+major differences between the predictions and the observed data.
+Answer the following questions:
+
+* Are there qualitative differences between the observed data and the predicted data?
+* Do the observed data seem quantitatively similar?
+:::
+:::{.content-visible when-profile="public"}
+```{r}
+# Useful functions: brms::pp_check
+
+### {.content-hidden when-profile="public"}
+brms::pp_check(f1, plotfun="hist")
+###
+
+```
+:::
+:::{.callout-note icon=false title="Rubric"}
+* Does the plot look correct and is it readable?
+* Has it been recognized that the predicted data include ?
+* Has it been recognized that the observed and predicted data ?
+:::
+
+The default density plot is not always informative, but `bayesplot`
+has different settings that can be used to create plots more
+appropriate for specific data.
+
+:::{.callout-warning icon=false title="Subtask 2.e"}
+Create another plot with grouping to the PPC plot using the arguments
+`type = "intervals_grouped"` and `group = "Diet"`.
+What do you observe? Point out any major differences
+between the predictions and the observed data.
+Based on your visualisations, how could the model be improved?
+:::
+:::{.content-visible when-profile="public"}
+```{r}
+# Useful functions: brms::pp_check(..., type = ..., group=...)
+
+### {.content-hidden when-profile="public"}
+brms::pp_check(..., type = "intervals_grouped", group="Diet")
+###
+
+```
+:::
+:::{.callout-note icon=false title="Rubric"}
+* Does the plot look correct and is it readable?
+* Is there at least one reasonable way to improve the model, e.g. ?
+:::
+
+## Log-normal linear regression
+
+Based on the identified issues from the posterior predictive check,
+the model can be improved. It is advisable to change only one or a few
+things about a model at once. At this stage, focus on changing the
+observation model family to better account for the observed data.
+
+One option is to use the lognormal observation model, which only allows
+positive values. In `brms` you can change the observation model family
+to this by setting the argument `family = "lognormal"`.
+Note that when using the log-normal observation model, the regression
+coefficients represent the change in the log weight of a chicken. The
+priors have been adjusted accordingly in the template.
+
+::: {.callout-warning icon=false title="Subtask 2.f"}
+Adjust the model, sample from the posterior and create the same two posterior predictive
+check plots. Comment on your observations. Does the new model better
+capture some aspects of the data?
+:::
+::: {.callout-tip collapse=false}
+:::
+:::{.content-visible when-profile="public"}
+```{r}
+log_priors <- c(
+  prior(normal(0, log(3)), coef = "Time"),
+  prior(normal(0, log(5)), coef = "Diet2"),
+  prior(normal(0, log(5)), coef = "Diet3"),
+  prior(normal(0, log(5)), coef = "Diet4")
+)
+
+### {.content-hidden when-profile="public"}
+f2 <- brm(
+  weight ~ Diet + Time,
+  data = ChickWeight,
+  family = "lognormal",
+  prior = priors
+)
+
+# criticism with ppc density (not grouped)
+brms::pp_check(f2)
+
+# information for each chicken
+brms::pp_check(f2, type = "intervals_grouped", group = "Diet")
+
+###
+
+```
+:::
+:::{.callout-note icon=false title="Rubric"}
+* Do the plots look correct and are they readable?
+* Has it been recognized that the fit to data is ?
+:::
+
+## Hierarchical log-normal linear regression
+
+The model can further be improved by directly considering potential
+differences in growth rate for individual chicken. Some chickens may
+innately grow faster than others, and this difference can be included
+by including both population and group level effects in to the model.
+
+To include a group effect in `brms`, the code `+
+(predictor|group)` can be added to the model formula. In this case,
+the predictor is `Time` and the group is `Chick`.
+
+::: {.callout-warning icon=false title="Subtask 2.g"}
+Create the same two plots as for the previous models. Comment on what
+you see. Do the predictions seem to better capture the observed data?
+Are there remaining discrepancies between the predictions and observed
+data that could be addressed?
+
+### {.content-hidden when-profile="public"}
+```{r}
+priors <- c(
+  prior(normal(0, log(3)), coef = "Time"),
+  prior(normal(0, log(5)), coef = "Diet2"),
+  prior(normal(0, log(5)), coef = "Diet3"),
+  prior(normal(0, log(5)), coef = "Diet4")
+)
+
+f3 <-  brm(
+  weight ~ Diet + Time + (Time|Chick),
+  data = ChickWeight,
+  family = "lognormal",
+  prior = priors
+)
+```
+###
+
+:::
+
+:::{.callout-note icon=false title="Rubric"}
+* Do the plots look correct and are they readable?
+* Has it been recognized that the fit to data is ?
+:::
+
+:::{.callout-warning icon=false title="Subtask 2.h"}
+Have you encountered any convergence issues in the above models? Report and comment.
+:::
+:::{.callout-note icon=false title="Rubric"}
+* Has there been a potentially brief discussion of the standard convergence criteria (Rhat, ESS, divergent transitions) for all models?
+:::
+
+## Model comparison using the ELPD
+
+There are many ways of comparing models[^footnote1]. Commonly, we evaluate point predictions, such as the mean of the predictive distribution[^footnote2], or accuracy of the whole posterior predictive. Whether we prioritise point or density predictive accuracy may serve different purposes and lead to different outcomes for model choice [^footnote3]. It is common, however, to report predictive accuracy via log-scores and point-predictive accuracy via root-mean-squared-error based on the empirical average of the predictive distribution. To cross-validate both metrics on left out observations without need to sample from each leave-one-out posterior, we use Pareto-smoothed importance sampling as discussed in the course materials (see Lecture 8).
+
+We start comparing models based on the log-score. Use `loo::loo()` and `loo::loo_compare()` to quantify the differences in predictive performance.
+
+[^footnote1]: In principle, when comparing models based on accuracy in predictions or parameter estimation (if true parameter values are available to you, as e.g. in simulation studies), we want to use so called strictly proper scoring rules that will always indicate when a "better" model is better and the score reaches its uniquely defined best value at the "true" model, if it is also well defined. See [**Gneiting and Raftery, (2007)**](https://www.tandfonline.com/doi/abs/10.1198/016214506000001437) for an in depth treatment of this topic.
+
+[^footnote2]: NOT predictions based on the mean of the posterior parameters, but first generating the predictive distribution and then computing an average.
+
+[^footnote3]: For instance, a unimodal and bimodal predictive density may have the same expected value, but very different areas of high posterior density and therefore very different log-scores.
+
+:::{.callout-warning icon=false title="Subtask 2.i"}
+Answer the following questions using `loo`/`loo_compare`:
+
+* Which model has the best predictive performance?
+* Does the uncertainty influence the decision of which model is best?
+:::
+:::{.content-visible when-profile="public"}
+```{r}
+# Useful functions: loo, loo_compare
+
+### {.content-hidden when-profile="public"}
+loo_f1 <- loo(f1)
+loo_f1
+loo_f2 <- loo(f2)
+loo_f2
+loo_f3 <- loo(f3)
+loo_f3
+
+loo_compare(loo_f1, loo_f2, loo_f3)
+
+###
+
+```
+:::
+:::{.callout-note icon=false title="Rubric"}
+* Do the results look correct and have they been presented in a readable way? They should be roughly [
+  model:              elpd_diff s e_diff
+  hierarchical_model:     0.0       0.0
+  lognormal_model:       -395.6    30.2
+  normal_model:          -642.0    31.8
+]{.content-hidden when-profile="public"}.
+* Has it been recognized that the best model is ?
+:::
+:::{.callout-warning icon=false title="Subtask 2.j"}
+Assess whether the approximation to the LOO-CV distributions are reliable.
+Consult the $\hat{k}$ statistic which informs on the reliability of PSIS computation in PSIS-LOO.
+Plot the $\hat{k}$ values for each model against the data point ID and discuss.
+Are they as expected?
+:::
+:::{.callout-tip collapse=false}
+For hierarchical models, it may be more important to think about how well the individual group is predicted and how many observations there are in a group compared to the number of parameters estimated. Also check out [CV-FAQ on high Pareto-$\hat{k}$ values](https://avehtari.github.io/modelselection/CV-FAQ.html#17_What_to_do_if_I_have_high_Pareto_(hat{k})%E2%80%99s).
+:::
+:::{.content-visible when-profile="public"}
+```{r}
+# Useful functions: plot(loo(...), label_points = TRUE)
+### {.content-hidden when-profile="public"}
+plot(loo(f1), label_points = TRUE)
+plot(loo(f2), label_points = TRUE)
+plot(loo(f3), label_points = TRUE)
+
+###
+
+```
+:::
+:::{.callout-note icon=false title="Rubric"}
+* Do the plots look correct and are they readable?
+* Has it been explained why the $\hat{k}$ values are highest for the .
+:::
+:::{.callout-warning icon=false title="Subtask 2.k"}
+Perform a PPC for the hierarchical model for
+
+* a few of the chickens with the highest $\hat{k}$ values and
+* a few of the chickens with the lowest $\hat{k}$ values
+
+using the code in the template. What do you observe?
+:::
+:::{.callout-warning collapse=false}
+## Creating a dummy example plot
+
+Creating a dummy fit just to be able to generate an example plot below.
+Generate a similar plot for your hierarchical model.
+
+```{r}
+#| output: false
+
+# The brms-formula (weights ~ ...) below is not one that you should be using in your models!
+dummy_fit <- brms::brm(
+  weight ~ 1 + Time + Chick,
+  data = ChickWeight,
+  file="additional_files/assignment8/dummy_fit"
+)
+# Adjust the chicken_idxs variable to select appropriate chickens
+chicken_idxs = c(1,3,11,43)
+# Create this plot for your hierarchical model for selected chickens
+brms::pp_check(
+  dummy_fit, type = "intervals_grouped", group = "Chick",
+  newdata=ChickWeight |> filter(Chick %in% chicken_idxs)
+)
+```
+:::
+:::{.callout-note icon=false title="Rubric"}
+* Does the plot look correct and is it readable?
+* Has it been recognized that the chickens with high $\hat{k}$ values ?
+:::
+
+## Model comparison using the RMSE
+
+:::{.callout-warning icon=false title="Subtask 2.l"}
+Use the function in the template to compare the RMSE and the LOO-RMSE for the three models.
+Explain the difference between the RMSE and the LOO-RMSE in 1--3 sentences. Is one generally lower than the other? Why?
+:::
+:::{.callout-warning collapse=false}
+## `rmse` function implementation
+
+The below function takes a brms fit object and computes either the [root-mean-square error (RMSE)](https://en.wikipedia.org/wiki/Root-mean-square_deviation) or the PSIS-LOO-RMSE, i.e. the RMSE using LOO-CV estimated using PSIS-LOO.
+```{r}
+# Compute RMSE or LOO-RMSE
+rmse <- function(fit, use_loo=FALSE){
+  mean_y_pred <- if(use_loo){
+    brms::loo_predict(fit)
+  }else{
+    colMeans(brms::posterior_predict(fit))
+  }
+  sqrt(mean(
+    (mean_y_pred - brms::get_y(fit))^2
+  ))
+}
+
+
+
+```
+:::
+:::{.callout-note icon=false title="Rubric"}
+* Do the results look correct and have they been presented in a readable way? They should be roughly: [
+  model             rmse      loo_rmse
+  1 normal        35.88809    36.17574
+  2 log-normal    34.77978    35.06848
+  3 hierarchical  15.79850    19.85490
+]{.content-hidden when-profile="public"}.
+* Has it been recognized that the RMSE is ?
+:::
+
+{{< include includes/_overall_quality.md >}}

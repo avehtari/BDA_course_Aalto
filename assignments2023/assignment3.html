@@ -1,0 +1,2451 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.550">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Aki Vehtari et al.">
+
+<title>Bayesian Data Analysis Assignments 2023 - Assignment 3, 2023</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./assignment4.html" rel="next">
+<link href="./assignment2.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./assignment1.html">Assignments</a></li><li class="breadcrumb-item"><a href="./assignment3.html">Assignment 3, 2023</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Bayesian Data Analysis Assignments 2023</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">General instructions</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment_instructions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment instructions</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Assignments</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 1, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 2, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment3.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Assignment 3, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 4, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 5, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 6, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 7, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 8, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 9, 2023</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Templates</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 1, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 2, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 3, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 4, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 5, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 6, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 7, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 8, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 9, 2023</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#general-information" id="toc-general-information" class="nav-link active" data-scroll-target="#general-information"><span class="header-section-number">1</span> General information</a></li>
+  <li><a href="#inference-for-normal-mean-and-deviation-3-points" id="toc-inference-for-normal-mean-and-deviation-3-points" class="nav-link" data-scroll-target="#inference-for-normal-mean-and-deviation-3-points"><span class="header-section-number">2</span> Inference for normal mean and deviation (3 points)</a></li>
+  <li><a href="#inference-for-the-difference-between-proportions-3-points" id="toc-inference-for-the-difference-between-proportions-3-points" class="nav-link" data-scroll-target="#inference-for-the-difference-between-proportions-3-points"><span class="header-section-number">3</span> Inference for the difference between proportions (3 points)</a></li>
+  <li><a href="#inference-for-the-difference-between-normal-means-3-points" id="toc-inference-for-the-difference-between-normal-means-3-points" class="nav-link" data-scroll-target="#inference-for-the-difference-between-normal-means-3-points"><span class="header-section-number">4</span> Inference for the difference between normal means (3 points)</a></li>
+  <li><a href="#overall-quality-of-the-report" id="toc-overall-quality-of-the-report" class="nav-link" data-scroll-target="#overall-quality-of-the-report"><span class="header-section-number">5</span> Overall quality of the report</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="assignment3.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./assignment1.html">Assignments</a></li><li class="breadcrumb-item"><a href="./assignment3.html">Assignment 3, 2023</a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Assignment 3, 2023</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Aki Vehtari et al. </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="general-information" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> General information</h1>
+<p><strong>This is for BDA 2023</strong></p>
+<p>This assignment is related to Lecture 3 and BDA3 Chapters 2 and 3. Use <a href="https://hbiostat.org/blog/post/bayes-freq-stmts/">Frank Harrell’s recommendations</a> on how to state results in Bayesian two group comparisons (and note that there is no <em>point null hypothesis testing</em> in this assignment).</p>
+<p><strong>The maximum amount of points from this assignment is 9.</strong></p>
+<p>We have prepared <strong>two quarto templates specific to this assignment</strong> to help you get started:</p>
+<ul>
+<li>A recommended template (<a href="template3.html">html</a>, <a href="https://avehtari.github.io/BDA_course_Aalto/assignments/template3.qmd">qmd</a>, <a href="template3.pdf">pdf</a>) which uses some additional packages, which however requires a bit more set-up work to run and</li>
+<li>a simple template (<a href="simple_template3.html">html</a>, <a href="https://avehtari.github.io/BDA_course_Aalto/assignments/simple_template3.qmd">qmd</a>, <a href="simple_template3.pdf">pdf</a>) which doesn’t use those additional packages and is therefore easier to get to run.</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p><strong>Reading instructions:</strong></p>
+<ul>
+<li><a href="../BDA3_notes.html#ch2"><strong>The reading instructions for BDA3 Chapter 1</strong></a>.</li>
+<li><a href="../BDA3_notes.html#ch3"><strong>The reading instructions for BDA3 Chapter 2</strong></a>.</li>
+</ul>
+<p><strong>Grading instructions:</strong></p>
+<p>The grading will be done in peergrade. All grading questions and evaluations for this assignment are contained within this document in the collapsible <strong>Rubric</strong> blocks.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Further information
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li>The recommended tool in this course is R (with the IDE RStudio).</li>
+<li>Instead of installing R and RStudio on you own computer, see <a href="https://avehtari.github.io/BDA_course_Aalto/FAQ.html#How_to_use_R_and_RStudio_remotely"><strong>how to use R and RStudio remotely</strong></a>.</li>
+<li>If you want to install R and RStudio locally, download <a href="https://posit.co/download/rstudio-desktop/">R and RStudio</a>.</li>
+<li>There are tons of tutorials, videos and introductions to R and RStudio online. You can find some initial hints from <a href="https://education.rstudio.com/"><strong>RStudio Education pages</strong></a>.</li>
+<li>When working with R, we recommend writing the report using <code>quarto</code> and the provided template. The template includes the formatting instructions and how to include code and figures.</li>
+<li>Instead of <code>quarto</code>, you can use other software to make the PDF report, but the the same instructions for formatting should be used.</li>
+<li>Report all results in a single, <strong>anonymous</strong> *.pdf -file and submit it in <a href="peergrade.io"><strong>peergrade.io</strong></a>.</li>
+<li>The course has its own R package <code>aaltobda</code> with data and functionality to simplify coding. The package is pre-installed in JupyterHub. To install the package on your own system, run the following code (upgrade="never" skips question about updating other packages):</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">install.packages</span>(<span class="st">"aaltobda"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://avehtari.github.io/BDA_course_Aalto/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Many of the exercises can be checked automatically using the R package <code>markmyassignment</code> (pre-installed in JupyterHub). Information on how to install and use the package can be found in <a href="https://cran.r-project.org/web/packages/markmyassignment/vignettes/markmyassignment.html">the <code>markmyassignment</code> documentation</a>. There is no need to include <code>markmyassignment</code> results in the report.</li>
+<li>Recommended additional self study exercises for each chapter in BDA3 are listed in the course web page. These will help to gain deeper understanding of the topic.</li>
+<li>Common questions and answers regarding installation and technical problems can be found in <a href="https://avehtari.github.io/BDA_course_Aalto/FAQ.html">Frequently Asked Questions (FAQ)</a>.</li>
+<li>Deadlines for all assignments can be found on the course web page and in Peergrade. You can set email alerts for the deadlines in Peergrade settings.</li>
+<li>You are allowed to discuss assignments with your friends, but it is not allowed to copy solutions directly from other students or from internet.</li>
+<li>You can copy, e.g., plotting code from the course demos, but really try to solve the actual assignment problems with your own code and explanations.</li>
+<li>Do not share your answers publicly.</li>
+<li>Do not copy answers from the internet or from previous years. We compare the answers to the answers from previous years and to the answers from other students this year.</li>
+<li>Use of AI is allowed on the course, but the most of the work needs to by the student, and you need to report whether you used AI and in which way you used them (See <a href="https://www.aalto.fi/en/services/guidance-for-the-use-of-artificial-intelligence-in-teaching-and-learning-at-aalto-university">points 5 and 6 in Aalto guidelines for use of AI in teaching</a>).</li>
+<li>All suspected plagiarism will be reported and investigated. See more about the <a href="https://into.aalto.fi/display/ensaannot/Aalto+University+Code+of+Academic+Integrity+and+Handling+Violations+Thereof"><strong>Aalto University Code of Academic Integrity and Handling Violations Thereof</strong></a>.</li>
+<li>Do not submit empty PDFs, almost empty PDFs, copy of the questions, nonsense generated by yourself or AI, as these are just harming the other students as they can’t do peergrading for the empty or nonsense submissions. Violations of this rule will be reported and investigated in the same way was plagiarism.</li>
+<li>If you have any suggestions or improvements to the course material, please post in the course chat feedback channel, create an issue, or submit a pull request to the public repository!</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Can you open the PDF and it’s not blank nor nonsense? If the pdf is blank, nonsense, or something like only a copy of the questions, 1) report it as problematic in Peergrade-interface to get another report to review, and 2) send a message to TAs.</li>
+<li>Is the report anonymous?</li>
+</ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Setup
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>This is the template for <a href="assignment3.html">assignment 3</a>. You can download qmd-files (<a href="https://avehtari.github.io/BDA_course_Aalto/assignments/template3.qmd">full</a>, <a href="https://avehtari.github.io/BDA_course_Aalto/assignments/simple_template3.qmd">simple</a>) or copy the code from this rendered document after clicking on <code>&lt;/&gt; Code</code> in the top right corner.</p>
+<p><strong>Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.</strong></p>
+<p>The following will set-up <a href="https://github.com/MansMeg/markmyassignment"><code>markmyassignment</code></a> to check your functions at the end of the notebook:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(markmyassignment)){</span>
+<span id="cb2-2"><a href="#cb2-2"></a>    <span class="fu">install.packages</span>(<span class="st">"markmyassignment"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3"></a>    <span class="fu">library</span>(markmyassignment)</span>
+<span id="cb2-4"><a href="#cb2-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: markmyassignment</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>assignment_path <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">"https://github.com/avehtari/BDA_course_Aalto/"</span>,</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="st">"blob/master/assignments/tests/assignment3.yml"</span>, <span class="at">sep=</span><span class="st">""</span>)</span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="fu">set_assignment</span>(assignment_path)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in get_file.path_github(path = path, dest = temp_file): Not Found (HTTP 404).</code></pre>
+</div>
+</div>
+<p>The following installs and loads the <code>aaltobda</code> package:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(aaltobda)){</span>
+<span id="cb6-2"><a href="#cb6-2"></a>    <span class="fu">install.packages</span>(<span class="st">"aaltobda"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://avehtari.github.io/BDA_course_Aalto/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span>
+<span id="cb6-3"><a href="#cb6-3"></a>    <span class="fu">library</span>(aaltobda)</span>
+<span id="cb6-4"><a href="#cb6-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: aaltobda</code></pre>
+</div>
+</div>
+<p>The following installs and loads the <a href="https://github.com/stefano-meschiari/latex2exp"><code>latex2exp</code> package</a>, which allows us to use LaTeX in plots:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(latex2exp)){</span>
+<span id="cb8-2"><a href="#cb8-2"></a>    <span class="fu">install.packages</span>(<span class="st">"latex2exp"</span>)</span>
+<span id="cb8-3"><a href="#cb8-3"></a>    <span class="fu">library</span>(latex2exp)</span>
+<span id="cb8-4"><a href="#cb8-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: latex2exp</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Setting up advanced packages (<code>posterior</code> and <code>ggdist</code>)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The following installs and loads the <a href="https://mc-stan.org/posterior/index.html"><code>posterior</code> package</a>, which allows us to use its <a href="https://mc-stan.org/posterior/articles/rvar.html"><code>rvar</code> Random Variable Datatype</a>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(posterior)){</span>
+<span id="cb10-2"><a href="#cb10-2"></a>    <span class="fu">install.packages</span>(<span class="st">"posterior"</span>)</span>
+<span id="cb10-3"><a href="#cb10-3"></a>    <span class="fu">library</span>(posterior)</span>
+<span id="cb10-4"><a href="#cb10-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: posterior</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>This is posterior version 1.6.0</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'posterior'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:aaltobda':
+
+    mcse_quantile</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    mad, sd, var</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    %in%, match</code></pre>
+</div>
+</div>
+<p>The following installs and loads the <a href="https://mjskay.github.io/ggdist/"><code>ggdist</code> package</a> for advanced plotting functions:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(ggplot2)){</span>
+<span id="cb17-2"><a href="#cb17-2"></a>    <span class="fu">install.packages</span>(<span class="st">"ggplot2"</span>)</span>
+<span id="cb17-3"><a href="#cb17-3"></a>    <span class="fu">library</span>(ggplot2)</span>
+<span id="cb17-4"><a href="#cb17-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: ggplot2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>ggplot2<span class="sc">::</span><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(ggdist)){</span>
+<span id="cb19-3"><a href="#cb19-3"></a>    <span class="fu">install.packages</span>(<span class="st">"ggdist"</span>)</span>
+<span id="cb19-4"><a href="#cb19-4"></a>    <span class="fu">library</span>(ggdist)</span>
+<span id="cb19-5"><a href="#cb19-5"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: ggdist</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="inference-for-normal-mean-and-deviation-3-points" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Inference for normal mean and deviation (3 points)</h1>
+<p>A factory has a production line for manufacturing car windshields. A sample of windshields has been taken for testing hardness. The observed hardness values <span class="math inline">\(\mathbf{y}_1\)</span> can be found in the dataset <code>windshieldy1</code> in the <code>aaltobda</code> package.</p>
+<p>We may assume that the observations follow a normal distribution with an unknown standard deviation <span class="math inline">\(\sigma\)</span>. We wish to obtain information about the unknown average hardness <span class="math inline">\(\mu\)</span>. For simplicity we assume standard uninformative prior discussed in the book, that is, <span class="math inline">\(p(\mu, \sigma) \propto \sigma^{-1}\)</span>. It is not necessary to derive the posterior distribution in the report, as it has already been done in the book (see section 3.2).</p>
+<p>Loading the library and the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">data</span>(<span class="st">"windshieldy1"</span>)</span>
+<span id="cb21-2"><a href="#cb21-2"></a><span class="co"># The data are now stored in the variable `windshieldy1`.</span></span>
+<span id="cb21-3"><a href="#cb21-3"></a><span class="co"># The below displays the data:</span></span>
+<span id="cb21-4"><a href="#cb21-4"></a>windshieldy1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 13.357 14.928 14.896 15.297 14.820 12.067 14.824 13.865 17.447</code></pre>
+</div>
+</div>
+<p>The below data is <strong>only for the tests</strong>, you need to change to the full data <code>windshieldy1</code> when reporting your results.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>windshieldy_test <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">13.357</span>, <span class="fl">14.928</span>, <span class="fl">14.896</span>, <span class="fl">14.820</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 2.a)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 2.a)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Formulate</p>
+<ol type="1">
+<li>the likelihood,</li>
+<li>the prior, and</li>
+<li>the resulting posterior.</li>
+</ol>
+</div>
+</div>
+<p>Write your answers here!</p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 2.b)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 2.b)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>What can you say about the unknown <span class="math inline">\(\mu\)</span>?</p>
+<ul>
+<li>Compute and report the point estimate <span class="math inline">\(E(\mu|y)\)</span>,</li>
+<li>compute and report a posterior 95%-interval,</li>
+<li>plot the density, and</li>
+<li>write interpretation of the result in text.</li>
+</ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Posterior intervals are also called credible intervals and are different from confidence intervals.</p>
+</div>
+</div>
+</div>
+<p>Write your answers and code here!</p>
+<p><strong>Keep the below name and format for the functions to work with <code>markmyassignment</code>:</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="co"># Useful functions: mean(), length(), sqrt(), sum()</span></span>
+<span id="cb24-2"><a href="#cb24-2"></a><span class="co"># and qtnew(), dtnew() (from aaltobda)</span></span>
+<span id="cb24-3"><a href="#cb24-3"></a></span>
+<span id="cb24-4"><a href="#cb24-4"></a>mu_point_est <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
+<span id="cb24-5"><a href="#cb24-5"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb24-6"><a href="#cb24-6"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb24-7"><a href="#cb24-7"></a>    <span class="fl">14.5</span></span>
+<span id="cb24-8"><a href="#cb24-8"></a>    <span class="do">### {.content-hidden when-profile="public"}</span></span>
+<span id="cb24-9"><a href="#cb24-9"></a>    <span class="fu">mean</span>(data)</span>
+<span id="cb24-10"><a href="#cb24-10"></a>    <span class="do">###</span></span>
+<span id="cb24-11"><a href="#cb24-11"></a>}</span>
+<span id="cb24-12"><a href="#cb24-12"></a>mu_interval <span class="ot">&lt;-</span> <span class="cf">function</span>(data, <span class="at">prob =</span> <span class="fl">0.95</span>) {</span>
+<span id="cb24-13"><a href="#cb24-13"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb24-14"><a href="#cb24-14"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb24-15"><a href="#cb24-15"></a>    <span class="fu">c</span>(<span class="fl">13.3</span>, <span class="fl">15.7</span>)</span>
+<span id="cb24-16"><a href="#cb24-16"></a>    <span class="do">### {.content-hidden when-profile="public"}</span></span>
+<span id="cb24-17"><a href="#cb24-17"></a>    n <span class="ot">=</span> <span class="fu">length</span>(data)</span>
+<span id="cb24-18"><a href="#cb24-18"></a>    df <span class="ot">=</span> n<span class="dv">-1</span></span>
+<span id="cb24-19"><a href="#cb24-19"></a>    location <span class="ot">=</span> <span class="fu">mean</span>(data)</span>
+<span id="cb24-20"><a href="#cb24-20"></a>    scale <span class="ot">=</span> <span class="fu">sqrt</span>((</span>
+<span id="cb24-21"><a href="#cb24-21"></a>        <span class="dv">1</span><span class="sc">/</span>(n<span class="dv">-1</span>) <span class="sc">*</span> <span class="fu">sum</span>((data<span class="sc">-</span>location)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb24-22"><a href="#cb24-22"></a>    )<span class="sc">/</span>n)</span>
+<span id="cb24-23"><a href="#cb24-23"></a>    ql <span class="ot">=</span> (<span class="dv">1</span><span class="sc">-</span>prob)<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb24-24"><a href="#cb24-24"></a>    qu <span class="ot">=</span> prob <span class="sc">+</span> (<span class="dv">1</span><span class="sc">-</span>prob)<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb24-25"><a href="#cb24-25"></a>    <span class="fu">qtnew</span>(<span class="fu">c</span>(ql, qu), df, location, scale)</span>
+<span id="cb24-26"><a href="#cb24-26"></a>    <span class="do">###</span></span>
+<span id="cb24-27"><a href="#cb24-27"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You can plot the density as below if you implement <code>mu_pdf</code> to compute the PDF of the posterior <span class="math inline">\(p(\mu|y)\)</span> of the average hardness <span class="math inline">\(\mu\)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>mu_pdf <span class="ot">&lt;-</span> <span class="cf">function</span>(data, x){</span>
+<span id="cb25-2"><a href="#cb25-2"></a>    <span class="co"># Compute necessary parameters here.</span></span>
+<span id="cb25-3"><a href="#cb25-3"></a>    <span class="co"># These are the correct parameters for `windshieldy_test`</span></span>
+<span id="cb25-4"><a href="#cb25-4"></a>    <span class="co"># with the provided uninformative prior.</span></span>
+<span id="cb25-5"><a href="#cb25-5"></a>    df <span class="ot">=</span> <span class="dv">3</span></span>
+<span id="cb25-6"><a href="#cb25-6"></a>    location <span class="ot">=</span> <span class="fl">14.5</span></span>
+<span id="cb25-7"><a href="#cb25-7"></a>    scale <span class="ot">=</span> <span class="fl">0.3817557</span></span>
+<span id="cb25-8"><a href="#cb25-8"></a>    <span class="co"># Use the computed parameters as below to compute the PDF:</span></span>
+<span id="cb25-9"><a href="#cb25-9"></a>    <span class="do">### {.content-hidden when-profile="public"}</span></span>
+<span id="cb25-10"><a href="#cb25-10"></a>    n <span class="ot">=</span> <span class="fu">length</span>(data)</span>
+<span id="cb25-11"><a href="#cb25-11"></a>    df <span class="ot">=</span> n<span class="dv">-1</span></span>
+<span id="cb25-12"><a href="#cb25-12"></a>    location <span class="ot">=</span> <span class="fu">mean</span>(data)</span>
+<span id="cb25-13"><a href="#cb25-13"></a>    scale <span class="ot">=</span> <span class="fu">sqrt</span>((</span>
+<span id="cb25-14"><a href="#cb25-14"></a>        <span class="dv">1</span><span class="sc">/</span>(n<span class="dv">-1</span>) <span class="sc">*</span> <span class="fu">sum</span>((data<span class="sc">-</span>location)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb25-15"><a href="#cb25-15"></a>    )<span class="sc">/</span>n)</span>
+<span id="cb25-16"><a href="#cb25-16"></a>    <span class="do">###</span></span>
+<span id="cb25-17"><a href="#cb25-17"></a>    <span class="fu">dtnew</span>(x, df, location, scale)</span>
+<span id="cb25-18"><a href="#cb25-18"></a>}</span>
+<span id="cb25-19"><a href="#cb25-19"></a></span>
+<span id="cb25-20"><a href="#cb25-20"></a>x_interval <span class="ot">=</span> <span class="fu">mu_interval</span>(windshieldy1, .<span class="dv">999</span>)</span>
+<span id="cb25-21"><a href="#cb25-21"></a>lower_x <span class="ot">=</span> x_interval[<span class="dv">1</span>]</span>
+<span id="cb25-22"><a href="#cb25-22"></a>upper_x <span class="ot">=</span> x_interval[<span class="dv">2</span>]</span>
+<span id="cb25-23"><a href="#cb25-23"></a>x <span class="ot">=</span> <span class="fu">seq</span>(lower_x, upper_x, <span class="at">length.out=</span><span class="dv">1000</span>)</span>
+<span id="cb25-24"><a href="#cb25-24"></a><span class="fu">plot</span>(</span>
+<span id="cb25-25"><a href="#cb25-25"></a>    x, <span class="fu">mu_pdf</span>(windshieldy1, x), <span class="at">type=</span><span class="st">"l"</span>,</span>
+<span id="cb25-26"><a href="#cb25-26"></a>    <span class="at">xlab=</span><span class="fu">TeX</span>(r<span class="st">'(average hardness $\mu$)'</span>),</span>
+<span id="cb25-27"><a href="#cb25-27"></a>    <span class="at">ylab=</span><span class="fu">TeX</span>(r<span class="st">'(PDF of the posterior $p(\mu|y)$)'</span>)</span>
+<span id="cb25-28"><a href="#cb25-28"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-2b-density" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-2b-density-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assignment3_files/figure-html/fig-2b-density-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-2b-density-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: PDF of the posterior <span class="math inline">\(p(\mu|y)\)</span> of the average hardness <span class="math inline">\(\mu\)</span>
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 2.c)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 2.c)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>What can you say about the hardness of the next windshield coming from the production line before actually measuring the hardness?</p>
+<ul>
+<li>Compute and report the point estimate <span class="math inline">\(E(\tilde{y}|y)\)</span>,</li>
+<li>compute and report a posterior <strong>predictive</strong> 95%-interval,</li>
+<li>plot the density, and</li>
+<li>write interpretation of the result in text.</li>
+</ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Predictive intervals are different from posterior intervals.</p>
+<p>With a conjugate prior a closed form posterior is Student’s <span class="math inline">\(t\)</span> form (see equations in the book).</p>
+</div>
+</div>
+</div>
+<p>Write your answers and code here!</p>
+<p><strong>Keep the below name and format for the functions to work with <code>markmyassignment</code>:</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="co"># Useful functions: mean(), length(), sqrt(), sum()</span></span>
+<span id="cb26-2"><a href="#cb26-2"></a><span class="co"># and qtnew(), dtnew() (from aaltobda)</span></span>
+<span id="cb26-3"><a href="#cb26-3"></a></span>
+<span id="cb26-4"><a href="#cb26-4"></a>mu_pred_point_est <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
+<span id="cb26-5"><a href="#cb26-5"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb26-6"><a href="#cb26-6"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb26-7"><a href="#cb26-7"></a>    <span class="fl">14.5</span></span>
+<span id="cb26-8"><a href="#cb26-8"></a>    <span class="do">### {.content-hidden when-profile="public"}</span></span>
+<span id="cb26-9"><a href="#cb26-9"></a>    <span class="fu">mean</span>(data)</span>
+<span id="cb26-10"><a href="#cb26-10"></a>    <span class="do">###</span></span>
+<span id="cb26-11"><a href="#cb26-11"></a>}</span>
+<span id="cb26-12"><a href="#cb26-12"></a>mu_pred_interval <span class="ot">&lt;-</span> <span class="cf">function</span>(data, <span class="at">prob =</span> <span class="fl">0.95</span>) {</span>
+<span id="cb26-13"><a href="#cb26-13"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb26-14"><a href="#cb26-14"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb26-15"><a href="#cb26-15"></a>    <span class="fu">c</span>(<span class="fl">11.8</span>, <span class="fl">17.2</span>)</span>
+<span id="cb26-16"><a href="#cb26-16"></a>    <span class="do">### {.content-hidden when-profile="public"}</span></span>
+<span id="cb26-17"><a href="#cb26-17"></a>    n <span class="ot">=</span> <span class="fu">length</span>(data)</span>
+<span id="cb26-18"><a href="#cb26-18"></a>    df <span class="ot">=</span> n<span class="dv">-1</span></span>
+<span id="cb26-19"><a href="#cb26-19"></a>    location <span class="ot">=</span> <span class="fu">mean</span>(data)</span>
+<span id="cb26-20"><a href="#cb26-20"></a>    scale <span class="ot">=</span> <span class="fu">sqrt</span>((</span>
+<span id="cb26-21"><a href="#cb26-21"></a>        <span class="dv">1</span><span class="sc">/</span>(n<span class="dv">-1</span>) <span class="sc">*</span> <span class="fu">sum</span>((data<span class="sc">-</span>location)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb26-22"><a href="#cb26-22"></a>    )<span class="sc">*</span>(<span class="dv">1</span><span class="sc">+</span><span class="dv">1</span><span class="sc">/</span>n))</span>
+<span id="cb26-23"><a href="#cb26-23"></a>    ql <span class="ot">=</span> (<span class="dv">1</span><span class="sc">-</span>prob)<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb26-24"><a href="#cb26-24"></a>    qu <span class="ot">=</span> prob <span class="sc">+</span> (<span class="dv">1</span><span class="sc">-</span>prob)<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb26-25"><a href="#cb26-25"></a>    <span class="fu">qtnew</span>(<span class="fu">c</span>(ql, qu), df, location, scale)</span>
+<span id="cb26-26"><a href="#cb26-26"></a>    <span class="do">###</span></span>
+<span id="cb26-27"><a href="#cb26-27"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You can plot the density as below if you implement <code>mu_pred_pdf</code> to compute the PDF of the posterior predictive <span class="math inline">\(p(\tilde{y}|y)\)</span> of a new hardness observation <span class="math inline">\(\tilde{y}\)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>mu_pred_pdf <span class="ot">&lt;-</span> <span class="cf">function</span>(data, x){</span>
+<span id="cb27-2"><a href="#cb27-2"></a>    <span class="co"># Compute necessary parameters here.</span></span>
+<span id="cb27-3"><a href="#cb27-3"></a>    <span class="co"># These are the correct parameters for `windshieldy_test`</span></span>
+<span id="cb27-4"><a href="#cb27-4"></a>    <span class="co"># with the provided uninformative prior.</span></span>
+<span id="cb27-5"><a href="#cb27-5"></a>    df <span class="ot">=</span> <span class="dv">3</span></span>
+<span id="cb27-6"><a href="#cb27-6"></a>    location <span class="ot">=</span> <span class="fl">14.5</span></span>
+<span id="cb27-7"><a href="#cb27-7"></a>    scale <span class="ot">=</span> <span class="fl">0.8536316</span></span>
+<span id="cb27-8"><a href="#cb27-8"></a>    <span class="co"># Use the computed parameters as below to compute the PDF:</span></span>
+<span id="cb27-9"><a href="#cb27-9"></a>    <span class="do">### {.content-hidden when-profile="public"}</span></span>
+<span id="cb27-10"><a href="#cb27-10"></a>    n <span class="ot">=</span> <span class="fu">length</span>(data)</span>
+<span id="cb27-11"><a href="#cb27-11"></a>    df <span class="ot">=</span> n<span class="dv">-1</span></span>
+<span id="cb27-12"><a href="#cb27-12"></a>    location <span class="ot">=</span> <span class="fu">mean</span>(data)</span>
+<span id="cb27-13"><a href="#cb27-13"></a>    scale <span class="ot">=</span> <span class="fu">sqrt</span>((</span>
+<span id="cb27-14"><a href="#cb27-14"></a>        <span class="dv">1</span><span class="sc">/</span>(n<span class="dv">-1</span>) <span class="sc">*</span> <span class="fu">sum</span>((data<span class="sc">-</span><span class="fu">mean</span>(data))<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb27-15"><a href="#cb27-15"></a>    )<span class="sc">*</span>(<span class="dv">1</span><span class="sc">+</span><span class="dv">1</span><span class="sc">/</span>n))</span>
+<span id="cb27-16"><a href="#cb27-16"></a>    <span class="do">###</span></span>
+<span id="cb27-17"><a href="#cb27-17"></a>    <span class="fu">dtnew</span>(x, df, location, scale)</span>
+<span id="cb27-18"><a href="#cb27-18"></a>}</span>
+<span id="cb27-19"><a href="#cb27-19"></a></span>
+<span id="cb27-20"><a href="#cb27-20"></a>x_interval <span class="ot">=</span> <span class="fu">mu_pred_interval</span>(windshieldy1, .<span class="dv">999</span>)</span>
+<span id="cb27-21"><a href="#cb27-21"></a>lower_x <span class="ot">=</span> x_interval[<span class="dv">1</span>]</span>
+<span id="cb27-22"><a href="#cb27-22"></a>upper_x <span class="ot">=</span> x_interval[<span class="dv">2</span>]</span>
+<span id="cb27-23"><a href="#cb27-23"></a>x <span class="ot">=</span> <span class="fu">seq</span>(lower_x, upper_x, <span class="at">length.out=</span><span class="dv">1000</span>)</span>
+<span id="cb27-24"><a href="#cb27-24"></a><span class="fu">plot</span>(</span>
+<span id="cb27-25"><a href="#cb27-25"></a>    x, <span class="fu">mu_pred_pdf</span>(windshieldy1, x), <span class="at">type=</span><span class="st">"l"</span>,</span>
+<span id="cb27-26"><a href="#cb27-26"></a>    <span class="at">xlab=</span><span class="fu">TeX</span>(r<span class="st">'(new hardness observation $</span><span class="sc">\t</span><span class="st">ilde{y}$)'</span>),</span>
+<span id="cb27-27"><a href="#cb27-27"></a>    <span class="at">ylab=</span><span class="fu">TeX</span>(r<span class="st">'(PDF of the posterior predictive $p(</span><span class="sc">\t</span><span class="st">ilde{y}|y)$)'</span>)</span>
+<span id="cb27-28"><a href="#cb27-28"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-2c-density" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-2c-density-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assignment3_files/figure-html/fig-2c-density-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-2c-density-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: PDF of the posterior predictive <span class="math inline">\(p(\tilde{y}|y)\)</span> of a new hardness observation <span class="math inline">\(\tilde{y}\)</span>
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Is the source code included?
+<ul>
+<li>No</li>
+<li>Yes</li>
+</ul></li>
+<li>Are the likelihood, prior and the posterior for computing the average hardness value reported? It is ok to refer to the book instead of deriving the distributions.
+<ul>
+<li>No</li>
+<li>Yes, but some are missing</li>
+<li>Yes</li>
+</ul></li>
+<li>In part a), were the point estimates and posterior interval provided? (The posterior mean should be close to and 95% posterior interval should be around )
+<ul>
+<li>No</li>
+<li>Yes, but seem incorrect or only one estimate was reported</li>
+<li>Yes, and the reported values seem plausible</li>
+</ul></li>
+<li>In part b), was the density plotted?
+<ul>
+<li>No</li>
+<li>Yes, but seem incorrect</li>
+<li>Yes, and the plot seems plausible</li>
+</ul></li>
+<li>For b)-part, was a formula or a simulation method presented for computing the posterior predictive distribution? It is ok to refer to the book.
+<ul>
+<li>No</li>
+<li>Yes, but seems incorrect</li>
+<li>Yes</li>
+</ul></li>
+<li>For c)-part, were the point estimate and predictive interval provided? (95% predictive interval should be around and the mean the same as in a)-part).
+<ul>
+<li>No</li>
+<li>Yes, but seems incorrect</li>
+<li>Yes, and the reported values seem plausible</li>
+</ul></li>
+<li>For c)-part, was the density plotted?
+<ul>
+<li>No</li>
+<li>Yes, but seems incorrect</li>
+<li>Yes, and the plot seem plausible</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="inference-for-the-difference-between-proportions-3-points" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Inference for the difference between proportions (3 points)</h1>
+<p>An experiment was performed to estimate the effect of beta-blockers on mortality of cardiac patients. A group of patients was randomly assigned to treatment and control groups: out of 674 patients receiving the control, 39 died, and out of 680 receiving the treatment, 22 died. Assume that the outcomes are independent and binomially distributed, with probabilities of death of <span class="math inline">\(p_0\)</span> and <span class="math inline">\(p_1\)</span> under the control and treatment, respectively. Set up a noninformative or weakly informative prior distribution on <span class="math inline">\((p_0,p_1)\)</span>.</p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 3.a)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 3.a)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Formulate</p>
+<ol type="1">
+<li>the likelihood,</li>
+<li>the prior, and</li>
+<li>the resulting posterior.</li>
+</ol>
+</div>
+</div>
+<p>Write your answers here!</p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 3.b)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 3.b)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Summarize the posterior distribution for the <a href="https://en.wikipedia.org/wiki/Odds_ratio">odds ratio</a>, <span class="math display">\[
+\mathrm{OR} = (p_1/(1-p_1))/(p_0/(1-p_0)).
+\]</span></p>
+<ul>
+<li>Compute and report the point estimate <span class="math inline">\(E(\mathrm{OR}|y_0,y_1)\)</span>,</li>
+<li>compute and report a posterior 95%-interval,</li>
+<li>plot the histogram, and</li>
+<li>write interpretation of the result in text.</li>
+</ul>
+<p>Use <a href="https://hbiostat.org/blog/post/bayes-freq-stmts/">Frank Harrell’s recommendations</a> how to state results in Bayesian two group comparison.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>With a conjugate prior, a closed-form posterior is the Beta form for each group separately (see equations in the book). You can use <code>rbeta()</code> to sample from the posterior distributions of <span class="math inline">\(p_0\)</span> and <span class="math inline">\(p_1\)</span>, and use this sample and odds ratio equation to get a sample from the distribution of the odds ratio.</p>
+</div>
+</div>
+</div>
+<p>Write your answers and code here!</p>
+<p>The below data is <strong>only for the tests</strong>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="fu">set.seed</span>(<span class="dv">4711</span>)</span>
+<span id="cb28-2"><a href="#cb28-2"></a>ndraws <span class="ot">=</span> <span class="dv">1000</span></span>
+<span id="cb28-3"><a href="#cb28-3"></a>p0 <span class="ot">=</span> <span class="fu">rbeta</span>(ndraws, <span class="dv">5</span>, <span class="dv">95</span>)</span>
+<span id="cb28-4"><a href="#cb28-4"></a>p1 <span class="ot">=</span> <span class="fu">rbeta</span>(ndraws, <span class="dv">10</span>, <span class="dv">90</span>)</span>
+<span id="cb28-5"><a href="#cb28-5"></a><span class="do">### {.content-hidden when-profile="public"}</span></span>
+<span id="cb28-6"><a href="#cb28-6"></a><span class="fu">set.seed</span>(<span class="dv">4711</span>)</span>
+<span id="cb28-7"><a href="#cb28-7"></a>p0 <span class="ot">=</span> <span class="fu">rbeta</span>(ndraws, <span class="dv">40</span>, <span class="dv">675</span>)</span>
+<span id="cb28-8"><a href="#cb28-8"></a>p1 <span class="ot">=</span> <span class="fu">rbeta</span>(ndraws, <span class="dv">23</span>, <span class="dv">681</span>)</span>
+<span id="cb28-9"><a href="#cb28-9"></a><span class="do">###</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Keep the below name and format for the functions to work with <code>markmyassignment</code>:</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="co"># Useful function: mean(), quantile()</span></span>
+<span id="cb29-2"><a href="#cb29-2"></a></span>
+<span id="cb29-3"><a href="#cb29-3"></a>posterior_odds_ratio_point_est <span class="ot">&lt;-</span> <span class="cf">function</span>(p0, p1) {</span>
+<span id="cb29-4"><a href="#cb29-4"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb29-5"><a href="#cb29-5"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb29-6"><a href="#cb29-6"></a>    <span class="fl">2.650172</span></span>
+<span id="cb29-7"><a href="#cb29-7"></a>    <span class="do">### {.content-hidden when-profile="public"}</span></span>
+<span id="cb29-8"><a href="#cb29-8"></a>    odds_ratios <span class="ot">=</span> p1<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>p1)<span class="sc">/</span>(p0<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>p0))</span>
+<span id="cb29-9"><a href="#cb29-9"></a>    <span class="fu">mean</span>(odds_ratios)</span>
+<span id="cb29-10"><a href="#cb29-10"></a>    <span class="do">###</span></span>
+<span id="cb29-11"><a href="#cb29-11"></a>}</span>
+<span id="cb29-12"><a href="#cb29-12"></a>posterior_odds_ratio_interval <span class="ot">&lt;-</span> <span class="cf">function</span>(p0, p1, <span class="at">prob =</span> <span class="fl">0.95</span>) {</span>
+<span id="cb29-13"><a href="#cb29-13"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb29-14"><a href="#cb29-14"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb29-15"><a href="#cb29-15"></a>    <span class="fu">c</span>(<span class="fl">0.6796942</span>,<span class="fl">7.3015964</span>)</span>
+<span id="cb29-16"><a href="#cb29-16"></a>    <span class="do">### {.content-hidden when-profile="public"}</span></span>
+<span id="cb29-17"><a href="#cb29-17"></a>    odds_ratios <span class="ot">=</span> p1<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>p1)<span class="sc">/</span>(p0<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>p0))</span>
+<span id="cb29-18"><a href="#cb29-18"></a>    ql <span class="ot">=</span> (<span class="dv">1</span><span class="sc">-</span>prob)<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb29-19"><a href="#cb29-19"></a>    qu <span class="ot">=</span> prob <span class="sc">+</span> (<span class="dv">1</span><span class="sc">-</span>prob)<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb29-20"><a href="#cb29-20"></a>    <span class="fu">quantile</span>(odds_ratios, <span class="fu">c</span>(ql, qu))</span>
+<span id="cb29-21"><a href="#cb29-21"></a>    <span class="do">###</span></span>
+<span id="cb29-22"><a href="#cb29-22"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+advanced tools (<code>posterior</code>’s <code>rvar</code>, <code>ggdist</code>’s <code>stat_dotsinterval</code>)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The <code>posterior</code> package’s random variable datatype <code>rvar</code> is a <a href="https://mc-stan.org/posterior/articles/rvar.html#:~:text=sample%2Dbased%20representation%20of%20random%20variables">“sample-based representation of random variables”</a> which makes handling of random samples (of draws) such as the ones contained in the above variables <code>p0</code> and <code>p1</code> easier. <a href="https://mc-stan.org/posterior/articles/rvar.html#:~:text=The%20default%20display%20of%20an%20rvar%20shows%20the%20mean%20and%20standard%20deviation%20of%20each%20element%20of%20the%20array.">By default, it prints as the mean and standard deviation of the draws</a>, <strong>such that <code>rvar(p0)</code> prints as 0.056 ± 0.0086 and <code>rvar(p1)</code> prints as 0.033 ± 0.0066</strong>.</p>
+<p>The datatype is <a href="https://mc-stan.org/posterior/articles/rvar.html#:~:text=designed%20to%20interoperate%20with%20vectorized%20distributions%20in%20the%20distributional%20package%2C%20to%20be%20able%20to%20be%20used%20inside%20data.frame()s%20and%20tibble()s%2C%20and%20to%20be%20used%20with%20distribution%20visualizations%20in%20the%20ggdist%20package.">“designed to […] be able to be used inside <code>data.frame()</code>s and <code>tibble()</code>s, and to be used with distribution visualizations in the ggdist package.”</a> The code below sets up an <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/data.frame">R <code>data.frame()</code></a> with the draws in <code>p0</code> and <code>p1</code> wrapped in an <code>rvar</code>, and uses that data frame to visualize the draws using <a href="https://mjskay.github.io/ggdist/index.html"><code>ggdist</code></a>, an R package building on <a href="https://ggplot2.tidyverse.org/"><code>ggplot2</code></a> and <a href="https://mjskay.github.io/ggdist/index.html#:~:text=designed%20for%20both%20frequentist%20and%20Bayesian%20uncertainty%20visualization">“designed for both frequentist and Bayesian uncertainty visualization”</a>.</p>
+<p>The below plot, <a href="#fig-showcase-probabilities" class="quarto-xref">Figure&nbsp;3</a> uses <code>ggdist</code>’s <a href="https://mjskay.github.io/ggdist/articles/dotsinterval.html"><code>stat_dotsinterval()</code></a>, which by default visualizes</p>
+<ul>
+<li><a href="https://mjskay.github.io/ggdist/reference/stat_dotsinterval.html#:~:text=point_interval%20%3D%20%22median_qi%22%2C%0A%20%20.width%20%3D%20c(0.66%2C%200.95)%2C">an <code>rvar</code>’s median and central 66% and 95% intervals</a> using a black dot and lines of varying thicknesses as when using <code>ggdist</code>’s <a href="https://mjskay.github.io/ggdist/reference/stat_pointinterval.html#examples"><code>stat_pointinterval()</code></a> and</li>
+<li>an <code>rvar</code>’s draws using grey dots as when using <code>ggdist</code>’s <a href="https://mjskay.github.io/ggdist/reference/stat_dots.html#examples"><code>stat_dots()</code></a>:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>r0 <span class="ot">=</span> <span class="fu">rvar</span>(p0)</span>
+<span id="cb30-2"><a href="#cb30-2"></a>r1 <span class="ot">=</span> <span class="fu">rvar</span>(p1)</span>
+<span id="cb30-3"><a href="#cb30-3"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(</span>
+<span id="cb30-4"><a href="#cb30-4"></a>    <span class="at">rv_name=</span><span class="fu">c</span>(<span class="st">"control"</span>, <span class="st">"treatment"</span>), <span class="at">rv=</span><span class="fu">c</span>(r0, r1)</span>
+<span id="cb30-5"><a href="#cb30-5"></a>)) <span class="sc">+</span></span>
+<span id="cb30-6"><a href="#cb30-6"></a>    <span class="fu">aes</span>(<span class="at">xdist=</span>rv, <span class="at">y=</span>rv_name) <span class="sc">+</span></span>
+<span id="cb30-7"><a href="#cb30-7"></a>    <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"probabilities of death"</span>, <span class="at">y=</span><span class="st">"patient group"</span>) <span class="sc">+</span></span>
+<span id="cb30-8"><a href="#cb30-8"></a>    <span class="fu">stat_dotsinterval</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-showcase-probabilities" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-showcase-probabilities-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assignment3_files/figure-html/fig-showcase-probabilities-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-showcase-probabilities-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Probabilities of death for the two patient groups.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><code>rvar</code>s make it easy to compute functions of random variables, such as</p>
+<ul>
+<li>differences, e.g.&nbsp;<span class="math inline">\(p_0 - p_1\)</span>: <code>r0 - r1</code> computes an <code>rvar</code> which prints as 0.023 ± 0.011, indicating the <strong>sample mean</strong> and the <strong>sample standard deviation</strong> of the difference of the probabilities of death,</li>
+<li>products, e.g.&nbsp;<span class="math inline">\(p_0 \, p_1\)</span>: <code>r0 * r1</code> computes an <code>rvar</code> which prints as 0.0018 ± 0.00048 which in this case has no great interpretation, or</li>
+<li>the odds ratios needed in task 3.b).</li>
+</ul>
+<p>Below, in <a href="#fig-showcase-odds-ratios" class="quarto-xref">Figure&nbsp;4</a>, we compute the odds ratios using the <code>rvar</code>s and visualize its median, central intervals and draws, as above in <a href="#fig-showcase-probabilities" class="quarto-xref">Figure&nbsp;3</a>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>rodds_ratio <span class="ot">=</span> (r1<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>r1))<span class="sc">/</span>(r0<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>r0))</span>
+<span id="cb31-2"><a href="#cb31-2"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(</span>
+<span id="cb31-3"><a href="#cb31-3"></a>    <span class="at">rv=</span><span class="fu">c</span>(rodds_ratio)</span>
+<span id="cb31-4"><a href="#cb31-4"></a>)) <span class="sc">+</span></span>
+<span id="cb31-5"><a href="#cb31-5"></a>    <span class="fu">aes</span>(<span class="at">xdist=</span>rv) <span class="sc">+</span></span>
+<span id="cb31-6"><a href="#cb31-6"></a>    <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"odds ratio"</span>, <span class="at">y=</span><span class="st">"relative amount of draws"</span>) <span class="sc">+</span></span>
+<span id="cb31-7"><a href="#cb31-7"></a>    <span class="fu">stat_dotsinterval</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-showcase-odds-ratios" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-showcase-odds-ratios-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assignment3_files/figure-html/fig-showcase-odds-ratios-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-showcase-odds-ratios-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Odds ratios of the two patient groups.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>You can use <a href="#fig-showcase-odds-ratios" class="quarto-xref">Figure&nbsp;4</a> to visually check whether the answers you computed for 3.b) make sense.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 3.c)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 3.c)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Use at least two different priors, and discuss the sensitivity of your inference to your choice of prior density with a couple of sentences.</p>
+</div>
+</div>
+<p>Write your answers and code here!</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Is the source code included?
+<ul>
+<li>No</li>
+<li>Yes</li>
+</ul></li>
+<li>Are the likelihood, prior and the posterior for the death probabilities reported? It is ok to refer to the book instead of deriving the distributions.
+<ul>
+<li>No</li>
+<li>Yes, but some are missing</li>
+<li>Yes</li>
+</ul></li>
+<li>In part a), was the simulation algorithm for computing the posterior of the odds ratio presented or implemented?
+<ul>
+<li>No</li>
+<li>Yes, but seems incorrect</li>
+<li>Yes</li>
+</ul></li>
+<li>In part a), was the odds ratio summarized with a point estimate and a posterior interval? (The mean should be close to and 95% posterior interval approximately )
+<ul>
+<li>No</li>
+<li>Yes, but results seem incorrect</li>
+<li>Yes, and the results seem plausible</li>
+</ul></li>
+<li>In part b), was some discussion about testing alternative priors provided? (For example, one could have repeated the computations in a)-part with a couple of alternative priors and reported these results or some related general conclusions briefly)
+<ul>
+<li>Not at all</li>
+<li>Some analysis was provided but it was lacking or did not make sense</li>
+<li>Some alternative priors were tested and some sensible discussion provided</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="inference-for-the-difference-between-normal-means-3-points" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Inference for the difference between normal means (3 points)</h1>
+<p>Consider a case where the same factory has two production lines for manufacturing car windshields. Independent samples from the two production lines were tested for hardness. The hardness measurements for the two samples <span class="math inline">\(\mathbf{y}_1\)</span> and <span class="math inline">\(\mathbf{y}_2\)</span> be found in the datasets <code>windshieldy1</code> and <code>windshieldy2</code> in the <code>aaltobda</code> package.</p>
+<p>We assume that the samples have unknown standard deviations <span class="math inline">\(\sigma_1\)</span> and <span class="math inline">\(\sigma_2\)</span>. Use uninformative or weakly informative priors and answer the following questions:</p>
+<p>Loading the library and the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="fu">data</span>(<span class="st">"windshieldy2"</span>)</span>
+<span id="cb32-2"><a href="#cb32-2"></a><span class="co"># The new data are now stored in the variable `windshieldy2`.</span></span>
+<span id="cb32-3"><a href="#cb32-3"></a><span class="co"># The below displays the first few rows of the new data:</span></span>
+<span id="cb32-4"><a href="#cb32-4"></a><span class="fu">head</span>(windshieldy2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 15.980 14.206 16.011 17.250 15.993 15.722</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 4.a)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 4.a)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Formulate</p>
+<ol type="1">
+<li>the likelihood,</li>
+<li>the prior, and</li>
+<li>the resulting posterior.</li>
+</ol>
+</div>
+</div>
+<p>Write your answers here!</p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 4.b)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 4.b)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>What can you say about <span class="math inline">\(\mu_d = \mu_1 - \mu_2\)</span>?</p>
+<ul>
+<li>Compute and report the point estimate <span class="math inline">\(E(\mu_d|y_1, y_2)\)</span>,</li>
+<li>compute and report a posterior 95%-interval,</li>
+<li>plot the histogram, and</li>
+<li>write interpretation of the result in text.</li>
+</ul>
+<p>Use <a href="https://hbiostat.org/blog/post/bayes-freq-stmts/">Frank Harrell’s recommendations</a> how to state results in Bayesian two group comparison.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-20" class="callout-20-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>With a conjugate prior, a closed-form posterior is Student’s <span class="math inline">\(t\)</span> form for each group separately (see equations in the book). You can use the <code>rtnew()</code> function to sample from the posterior distributions of <span class="math inline">\(\mu_1\)</span> and <span class="math inline">\(\mu_2\)</span>, and use this sample to get a sample from the distribution of the difference <span class="math inline">\(\mu_d = \mu_1 - \mu_2\)</span>.</p>
+</div>
+</div>
+</div>
+<p>Write your answers and code here!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a><span class="co"># Useful functions: mean(), length(), sqrt(), sum(),</span></span>
+<span id="cb34-2"><a href="#cb34-2"></a><span class="co"># rtnew() (from aaltobda), quantile() and hist().</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 4.c)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 4.c)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Given this specific model, what is the probability that the means are exactly the same (<span class="math inline">\(\mu_1 = \mu_2\)</span>)? Explain your reasoning.</p>
+</div>
+</div>
+<p>Write your answers here!</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Is source code included?
+<ul>
+<li>No</li>
+<li>Yes</li>
+</ul></li>
+<li>Are the likelihood, prior and the posterior for the windshield hardness values reported? (It is also ok to refer to the book or related formulas from exercise 1)
+<ul>
+<li>No</li>
+<li>Yes, but some are missing</li>
+<li>Yes</li>
+</ul></li>
+<li>In part a), was the simulation algorithm for computing the difference in the means presented or implemented?
+<ul>
+<li>No</li>
+<li>Yes, but seems to be incorrect</li>
+<li>Yes</li>
+</ul></li>
+<li>In part a), was the posterior for the difference between the means summarized with point and interval estimates? (The mean should be close to and 95% posterior interval or something close to it)
+<ul>
+<li>No answer</li>
+<li>Yes, but results seem incorrect or only one estimate was given</li>
+<li>Yes, and results seem reasonable</li>
+</ul></li>
+<li>Were some analysis or discussion provided for assessing whether the means could be the same?
+<ul>
+<li>No analysis or explanation is given</li>
+<li>Yes, but the analysis or explanation seems incorrect</li>
+<li>Yes, and the analysis or explanation seems plausible</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-23-contents" aria-controls="callout-23" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+markmyassignment
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-23" class="callout-23-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>The following will check the functions for which <code>markmyassignment</code> has been set up:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="fu">mark_my_assignment</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error: No assignment has been set. Please use set_assignment().</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="overall-quality-of-the-report" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Overall quality of the report</h1>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Does the report include comment on whether AI was used, and if AI was used, explanation on how it was used?
+<ul>
+<li>No</li>
+<li>Yes</li>
+</ul></li>
+<li>Does the report follow the formatting instructions?
+<ul>
+<li>Not at all</li>
+<li>Little</li>
+<li>Mostly</li>
+<li>Yes</li>
+</ul></li>
+<li>In case the report doesn’t fully follow the general and formatting instructions, specify the instructions that have not been followed. If applicable, specify the page of the report, where this difference is visible. This will help the other student to improve their reports so that they are easier to read and review. If applicable, specify the page of the report, where this difference in formatting is visible.</li>
+<li>Please also provide feedback on the presentation (e.g.&nbsp;text, layout, flow of the responses, figures, figure captions). Part of the course is practicing making data analysis reports. By providing feedback on the report presentation, other students can learn what they can improve or what they already did well. You should be able to provide constructive or positive feedback for all non-empty and non-nonsense reports. If you think the report is perfect, and you can’t come up with any suggestions how to improve, you can provide feedback on what you liked and why you think some part of the report is better than yours.</li>
+</ul>
+</div>
+</div>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./assignment2.html" class="pagination-link" aria-label="Assignment 2, 2023">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Assignment 2, 2023</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./assignment4.html" class="pagination-link" aria-label="Assignment 4, 2023">
+        <span class="nav-page-text">Assignment 4, 2023</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb37" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb37-1"><a href="#cb37-1"></a><span class="co">---</span></span>
+<span id="cb37-2"><a href="#cb37-2"></a><span class="an">title:</span><span class="co"> "Assignment 3, 2023"</span></span>
+<span id="cb37-3"><a href="#cb37-3"></a><span class="an">author:</span><span class="co"> "Aki Vehtari et al."</span></span>
+<span id="cb37-4"><a href="#cb37-4"></a><span class="an">format:</span></span>
+<span id="cb37-5"><a href="#cb37-5"></a><span class="co">  html:</span></span>
+<span id="cb37-6"><a href="#cb37-6"></a><span class="co">    toc: true</span></span>
+<span id="cb37-7"><a href="#cb37-7"></a><span class="co">    code-tools: true</span></span>
+<span id="cb37-8"><a href="#cb37-8"></a><span class="co">    code-line-numbers: true</span></span>
+<span id="cb37-9"><a href="#cb37-9"></a><span class="co">    number-sections: true</span></span>
+<span id="cb37-10"><a href="#cb37-10"></a><span class="co">    mainfont: Georgia, serif</span></span>
+<span id="cb37-11"><a href="#cb37-11"></a><span class="co">    page-layout: article</span></span>
+<span id="cb37-12"><a href="#cb37-12"></a><span class="co">  pdf:</span></span>
+<span id="cb37-13"><a href="#cb37-13"></a><span class="co">    geometry:</span></span>
+<span id="cb37-14"><a href="#cb37-14"></a><span class="co">    - left=1cm,top=1cm,bottom=1cm,right=7cm</span></span>
+<span id="cb37-15"><a href="#cb37-15"></a><span class="co">    number-sections: true</span></span>
+<span id="cb37-16"><a href="#cb37-16"></a><span class="co">    code-annotations: none</span></span>
+<span id="cb37-17"><a href="#cb37-17"></a><span class="an">editor:</span><span class="co"> source</span></span>
+<span id="cb37-18"><a href="#cb37-18"></a><span class="co">---</span></span>
+<span id="cb37-19"><a href="#cb37-19"></a></span>
+<span id="cb37-20"><a href="#cb37-20"></a></span>
+<span id="cb37-21"><a href="#cb37-21"></a><span class="fu"># General information</span></span>
+<span id="cb37-22"><a href="#cb37-22"></a></span>
+<span id="cb37-23"><a href="#cb37-23"></a>**This is for BDA 2023**</span>
+<span id="cb37-24"><a href="#cb37-24"></a></span>
+<span id="cb37-25"><a href="#cb37-25"></a>This assignment is related to Lecture 3 and BDA3 Chapters 2 and 3.  Use [Frank Harrell's</span>
+<span id="cb37-26"><a href="#cb37-26"></a>recommendations](https://hbiostat.org/blog/post/bayes-freq-stmts/) on</span>
+<span id="cb37-27"><a href="#cb37-27"></a>how to state results in Bayesian two group comparisons (and note that</span>
+<span id="cb37-28"><a href="#cb37-28"></a>there is no *point null hypothesis testing* in this assignment).</span>
+<span id="cb37-29"><a href="#cb37-29"></a></span>
+<span id="cb37-30"><a href="#cb37-30"></a>**The maximum amount of points from this assignment is 9.**</span>
+<span id="cb37-31"><a href="#cb37-31"></a></span>
+<span id="cb37-32"><a href="#cb37-32"></a>We have prepared **two quarto templates specific to this assignment** to help you get started:</span>
+<span id="cb37-33"><a href="#cb37-33"></a></span>
+<span id="cb37-34"><a href="#cb37-34"></a><span class="ss">- </span>A recommended template (<span class="co">[</span><span class="ot">html</span><span class="co">](template3.html)</span>, <span class="co">[</span><span class="ot">qmd</span><span class="co">](https://avehtari.github.io/BDA_course_Aalto/assignments/template3.qmd)</span>, <span class="co">[</span><span class="ot">pdf</span><span class="co">](template3.pdf)</span>) which uses some additional packages,</span>
+<span id="cb37-35"><a href="#cb37-35"></a>which however requires a bit more set-up work to run and</span>
+<span id="cb37-36"><a href="#cb37-36"></a><span class="ss">- </span>a simple template (<span class="co">[</span><span class="ot">html</span><span class="co">](simple_template3.html)</span>, <span class="co">[</span><span class="ot">qmd</span><span class="co">](https://avehtari.github.io/BDA_course_Aalto/assignments/simple_template3.qmd)</span>, <span class="co">[</span><span class="ot">pdf</span><span class="co">](simple_template3.pdf)</span>) which doesn't use those additional packages and</span>
+<span id="cb37-37"><a href="#cb37-37"></a>is therefore easier to get to run.</span>
+<span id="cb37-38"><a href="#cb37-38"></a></span>
+<span id="cb37-39"><a href="#cb37-39"></a>::: {.callout-tip collapse=false}</span>
+<span id="cb37-40"><a href="#cb37-40"></a>**Reading instructions:**</span>
+<span id="cb37-41"><a href="#cb37-41"></a></span>
+<span id="cb37-42"><a href="#cb37-42"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**The reading instructions for BDA3 Chapter 1**</span><span class="co">](../BDA3_notes.html#ch2)</span>.</span>
+<span id="cb37-43"><a href="#cb37-43"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**The reading instructions for BDA3 Chapter 2**</span><span class="co">](../BDA3_notes.html#ch3)</span>.</span>
+<span id="cb37-44"><a href="#cb37-44"></a></span>
+<span id="cb37-45"><a href="#cb37-45"></a>{{&lt; include includes/_grading_instructions.md &gt;}}</span>
+<span id="cb37-46"><a href="#cb37-46"></a>:::</span>
+<span id="cb37-47"><a href="#cb37-47"></a></span>
+<span id="cb37-48"><a href="#cb37-48"></a></span>
+<span id="cb37-49"><a href="#cb37-49"></a>{{&lt; include includes/_general_info.md &gt;}}</span>
+<span id="cb37-50"><a href="#cb37-50"></a></span>
+<span id="cb37-51"><a href="#cb37-51"></a>::: {.callout-warning collapse=false}</span>
+<span id="cb37-52"><a href="#cb37-52"></a><span class="fu">## Setup</span></span>
+<span id="cb37-53"><a href="#cb37-53"></a></span>
+<span id="cb37-54"><a href="#cb37-54"></a>This is the template for <span class="co">[</span><span class="ot">assignment 3</span><span class="co">](assignment3.html)</span>. You can download qmd-files (<span class="co">[</span><span class="ot">full</span><span class="co">](https://avehtari.github.io/BDA_course_Aalto/assignments/template3.qmd)</span>, <span class="co">[</span><span class="ot">simple</span><span class="co">](https://avehtari.github.io/BDA_course_Aalto/assignments/simple_template3.qmd)</span>) or copy the code from this rendered document after clicking on <span class="in">`&lt;/&gt; Code`</span> in the top right corner.</span>
+<span id="cb37-55"><a href="#cb37-55"></a></span>
+<span id="cb37-56"><a href="#cb37-56"></a>**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.**</span>
+<span id="cb37-57"><a href="#cb37-57"></a></span>
+<span id="cb37-58"><a href="#cb37-58"></a>The following will set-up <span class="co">[</span><span class="ot">`markmyassignment`</span><span class="co">](https://github.com/MansMeg/markmyassignment)</span> to check your functions at the end of the notebook:</span>
+<span id="cb37-59"><a href="#cb37-59"></a></span>
+<span id="cb37-62"><a href="#cb37-62"></a><span class="in">```{r}</span></span>
+<span id="cb37-63"><a href="#cb37-63"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(markmyassignment)){</span>
+<span id="cb37-64"><a href="#cb37-64"></a>    <span class="fu">install.packages</span>(<span class="st">"markmyassignment"</span>)</span>
+<span id="cb37-65"><a href="#cb37-65"></a>    <span class="fu">library</span>(markmyassignment)</span>
+<span id="cb37-66"><a href="#cb37-66"></a>}</span>
+<span id="cb37-67"><a href="#cb37-67"></a>assignment_path <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">"https://github.com/avehtari/BDA_course_Aalto/"</span>,</span>
+<span id="cb37-68"><a href="#cb37-68"></a><span class="st">"blob/master/assignments/tests/assignment3.yml"</span>, <span class="at">sep=</span><span class="st">""</span>)</span>
+<span id="cb37-69"><a href="#cb37-69"></a><span class="fu">set_assignment</span>(assignment_path)</span>
+<span id="cb37-70"><a href="#cb37-70"></a><span class="in">```</span></span>
+<span id="cb37-71"><a href="#cb37-71"></a></span>
+<span id="cb37-72"><a href="#cb37-72"></a>The following installs and loads the <span class="in">`aaltobda`</span> package:</span>
+<span id="cb37-75"><a href="#cb37-75"></a><span class="in">```{r}</span></span>
+<span id="cb37-76"><a href="#cb37-76"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(aaltobda)){</span>
+<span id="cb37-77"><a href="#cb37-77"></a>    <span class="fu">install.packages</span>(<span class="st">"aaltobda"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://avehtari.github.io/BDA_course_Aalto/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span>
+<span id="cb37-78"><a href="#cb37-78"></a>    <span class="fu">library</span>(aaltobda)</span>
+<span id="cb37-79"><a href="#cb37-79"></a>}</span>
+<span id="cb37-80"><a href="#cb37-80"></a><span class="in">```</span></span>
+<span id="cb37-81"><a href="#cb37-81"></a>The following installs and loads the <span class="co">[</span><span class="ot">`latex2exp` package</span><span class="co">](https://github.com/stefano-meschiari/latex2exp)</span>, which allows us to use LaTeX in plots:</span>
+<span id="cb37-84"><a href="#cb37-84"></a><span class="in">```{r}</span></span>
+<span id="cb37-85"><a href="#cb37-85"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(latex2exp)){</span>
+<span id="cb37-86"><a href="#cb37-86"></a>    <span class="fu">install.packages</span>(<span class="st">"latex2exp"</span>)</span>
+<span id="cb37-87"><a href="#cb37-87"></a>    <span class="fu">library</span>(latex2exp)</span>
+<span id="cb37-88"><a href="#cb37-88"></a>}</span>
+<span id="cb37-89"><a href="#cb37-89"></a><span class="in">```</span></span>
+<span id="cb37-90"><a href="#cb37-90"></a>:::</span>
+<span id="cb37-91"><a href="#cb37-91"></a>::: {.callout-tip collapse=true}</span>
+<span id="cb37-92"><a href="#cb37-92"></a><span class="fu">## Setting up advanced packages (`posterior` and `ggdist`)</span></span>
+<span id="cb37-93"><a href="#cb37-93"></a></span>
+<span id="cb37-94"><a href="#cb37-94"></a>The following installs and loads the <span class="co">[</span><span class="ot">`posterior` package</span><span class="co">](https://mc-stan.org/posterior/index.html)</span>,</span>
+<span id="cb37-95"><a href="#cb37-95"></a>which allows us to use its [<span class="in">`rvar`</span> Random Variable Datatype</span>
+<span id="cb37-96"><a href="#cb37-96"></a>](https://mc-stan.org/posterior/articles/rvar.html):</span>
+<span id="cb37-99"><a href="#cb37-99"></a><span class="in">```{r}</span></span>
+<span id="cb37-100"><a href="#cb37-100"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(posterior)){</span>
+<span id="cb37-101"><a href="#cb37-101"></a>    <span class="fu">install.packages</span>(<span class="st">"posterior"</span>)</span>
+<span id="cb37-102"><a href="#cb37-102"></a>    <span class="fu">library</span>(posterior)</span>
+<span id="cb37-103"><a href="#cb37-103"></a>}</span>
+<span id="cb37-104"><a href="#cb37-104"></a><span class="in">```</span></span>
+<span id="cb37-105"><a href="#cb37-105"></a></span>
+<span id="cb37-106"><a href="#cb37-106"></a>The following installs and loads the <span class="co">[</span><span class="ot">`ggdist` package</span><span class="co">](https://mjskay.github.io/ggdist/)</span></span>
+<span id="cb37-107"><a href="#cb37-107"></a>for advanced plotting functions:</span>
+<span id="cb37-110"><a href="#cb37-110"></a><span class="in">```{r}</span></span>
+<span id="cb37-111"><a href="#cb37-111"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(ggplot2)){</span>
+<span id="cb37-112"><a href="#cb37-112"></a>    <span class="fu">install.packages</span>(<span class="st">"ggplot2"</span>)</span>
+<span id="cb37-113"><a href="#cb37-113"></a>    <span class="fu">library</span>(ggplot2)</span>
+<span id="cb37-114"><a href="#cb37-114"></a>}</span>
+<span id="cb37-115"><a href="#cb37-115"></a>ggplot2<span class="sc">::</span><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
+<span id="cb37-116"><a href="#cb37-116"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(ggdist)){</span>
+<span id="cb37-117"><a href="#cb37-117"></a>    <span class="fu">install.packages</span>(<span class="st">"ggdist"</span>)</span>
+<span id="cb37-118"><a href="#cb37-118"></a>    <span class="fu">library</span>(ggdist)</span>
+<span id="cb37-119"><a href="#cb37-119"></a>}</span>
+<span id="cb37-120"><a href="#cb37-120"></a><span class="in">```</span></span>
+<span id="cb37-121"><a href="#cb37-121"></a>:::</span>
+<span id="cb37-122"><a href="#cb37-122"></a></span>
+<span id="cb37-123"><a href="#cb37-123"></a><span class="fu"># Inference for normal mean and deviation (3 points)</span></span>
+<span id="cb37-124"><a href="#cb37-124"></a></span>
+<span id="cb37-125"><a href="#cb37-125"></a>A factory has a production line for manufacturing car windshields. A</span>
+<span id="cb37-126"><a href="#cb37-126"></a>sample of windshields has been taken for testing hardness.</span>
+<span id="cb37-127"><a href="#cb37-127"></a>The observed hardness values $\mathbf{y}_1$ can be found in</span>
+<span id="cb37-128"><a href="#cb37-128"></a>the dataset <span class="in">`windshieldy1`</span> in the <span class="in">`aaltobda`</span> package.</span>
+<span id="cb37-129"><a href="#cb37-129"></a></span>
+<span id="cb37-130"><a href="#cb37-130"></a>We may assume that the observations follow a normal distribution with an</span>
+<span id="cb37-131"><a href="#cb37-131"></a>unknown standard deviation $\sigma$. We wish to obtain information about</span>
+<span id="cb37-132"><a href="#cb37-132"></a>the unknown average hardness $\mu$. For simplicity we assume standard</span>
+<span id="cb37-133"><a href="#cb37-133"></a>uninformative prior discussed in the book, that is,</span>
+<span id="cb37-134"><a href="#cb37-134"></a>$p(\mu, \sigma) \propto \sigma^{-1}$. It is not necessary to derive the</span>
+<span id="cb37-135"><a href="#cb37-135"></a>posterior distribution in the report, as it has already been done in the</span>
+<span id="cb37-136"><a href="#cb37-136"></a>book (see section 3.2).</span>
+<span id="cb37-137"><a href="#cb37-137"></a></span>
+<span id="cb37-138"><a href="#cb37-138"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb37-139"><a href="#cb37-139"></a>Loading the library and the data.</span>
+<span id="cb37-140"><a href="#cb37-140"></a><span class="in">``` {r}</span></span>
+<span id="cb37-141"><a href="#cb37-141"></a><span class="in">data("windshieldy1")</span></span>
+<span id="cb37-142"><a href="#cb37-142"></a><span class="in"># The data are now stored in the variable `windshieldy1`.</span></span>
+<span id="cb37-143"><a href="#cb37-143"></a><span class="in"># The below displays the data:</span></span>
+<span id="cb37-144"><a href="#cb37-144"></a><span class="in">windshieldy1</span></span>
+<span id="cb37-145"><a href="#cb37-145"></a><span class="in">```</span></span>
+<span id="cb37-146"><a href="#cb37-146"></a>The below data is **only for the tests**, you need to change to the</span>
+<span id="cb37-147"><a href="#cb37-147"></a>full data <span class="in">`windshieldy1`</span> when reporting your results.</span>
+<span id="cb37-148"><a href="#cb37-148"></a><span class="in">``` {r}</span></span>
+<span id="cb37-149"><a href="#cb37-149"></a><span class="in">windshieldy_test &lt;- c(13.357, 14.928, 14.896, 14.820)</span></span>
+<span id="cb37-150"><a href="#cb37-150"></a><span class="in">```</span></span>
+<span id="cb37-151"><a href="#cb37-151"></a>:::</span>
+<span id="cb37-152"><a href="#cb37-152"></a>::: {.callout-warning icon=false title="Subtask 2.a)"}</span>
+<span id="cb37-153"><a href="#cb37-153"></a>Formulate</span>
+<span id="cb37-154"><a href="#cb37-154"></a></span>
+<span id="cb37-155"><a href="#cb37-155"></a><span class="ss">1. </span>the likelihood,</span>
+<span id="cb37-156"><a href="#cb37-156"></a><span class="ss">2. </span>the prior, and</span>
+<span id="cb37-157"><a href="#cb37-157"></a><span class="ss">3. </span>the resulting posterior.</span>
+<span id="cb37-158"><a href="#cb37-158"></a>:::</span>
+<span id="cb37-159"><a href="#cb37-159"></a></span>
+<span id="cb37-160"><a href="#cb37-160"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb37-161"><a href="#cb37-161"></a>Write your answers here!</span>
+<span id="cb37-162"><a href="#cb37-162"></a>:::</span>
+<span id="cb37-163"><a href="#cb37-163"></a></span>
+<span id="cb37-164"><a href="#cb37-164"></a>::: {.content-hidden when-profile="public"}</span>
+<span id="cb37-165"><a href="#cb37-165"></a><span class="ss">* </span>Likelihood:  $p(y|\mu,\sigma) = p_N(y | \mu, \sigma)$</span>
+<span id="cb37-166"><a href="#cb37-166"></a><span class="ss">* </span>Prior: $p(\mu, \sigma) \propto \sigma^{-1}$</span>
+<span id="cb37-167"><a href="#cb37-167"></a><span class="ss">* </span>Posterior: $p(\mu, \sigma | y) \propto p_N(y | \mu, \sigma) \sigma^{-1}$ which can be transformed as in the book.</span>
+<span id="cb37-168"><a href="#cb37-168"></a>:::</span>
+<span id="cb37-169"><a href="#cb37-169"></a></span>
+<span id="cb37-170"><a href="#cb37-170"></a></span>
+<span id="cb37-171"><a href="#cb37-171"></a>::: {.callout-warning icon=false title="Subtask 2.b)"}</span>
+<span id="cb37-172"><a href="#cb37-172"></a>What can you say about the unknown $\mu$?</span>
+<span id="cb37-173"><a href="#cb37-173"></a></span>
+<span id="cb37-174"><a href="#cb37-174"></a><span class="ss">* </span>Compute and report the point estimate $E(\mu|y)$,</span>
+<span id="cb37-175"><a href="#cb37-175"></a><span class="ss">* </span>compute and report a posterior 95%-interval,</span>
+<span id="cb37-176"><a href="#cb37-176"></a><span class="ss">* </span>plot the density, and</span>
+<span id="cb37-177"><a href="#cb37-177"></a><span class="ss">* </span>write interpretation of the result in text.</span>
+<span id="cb37-178"><a href="#cb37-178"></a>:::</span>
+<span id="cb37-179"><a href="#cb37-179"></a></span>
+<span id="cb37-180"><a href="#cb37-180"></a>::: {.callout-tip collapse=false}</span>
+<span id="cb37-181"><a href="#cb37-181"></a>Posterior intervals are also called credible</span>
+<span id="cb37-182"><a href="#cb37-182"></a>intervals and are different from confidence intervals.</span>
+<span id="cb37-183"><a href="#cb37-183"></a>:::</span>
+<span id="cb37-184"><a href="#cb37-184"></a></span>
+<span id="cb37-185"><a href="#cb37-185"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb37-186"><a href="#cb37-186"></a>Write your answers and code here!</span>
+<span id="cb37-187"><a href="#cb37-187"></a></span>
+<span id="cb37-188"><a href="#cb37-188"></a>**Keep the below name and format for the functions to work with `markmyassignment`:**</span>
+<span id="cb37-191"><a href="#cb37-191"></a><span class="in">```{r}</span></span>
+<span id="cb37-192"><a href="#cb37-192"></a><span class="co"># Useful functions: mean(), length(), sqrt(), sum()</span></span>
+<span id="cb37-193"><a href="#cb37-193"></a><span class="co"># and qtnew(), dtnew() (from aaltobda)</span></span>
+<span id="cb37-194"><a href="#cb37-194"></a></span>
+<span id="cb37-195"><a href="#cb37-195"></a>mu_point_est <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
+<span id="cb37-196"><a href="#cb37-196"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb37-197"><a href="#cb37-197"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb37-198"><a href="#cb37-198"></a>    <span class="fl">14.5</span></span>
+<span id="cb37-199"><a href="#cb37-199"></a>    <span class="do">### {.content-hidden when-profile="public"}</span></span>
+<span id="cb37-200"><a href="#cb37-200"></a>    <span class="fu">mean</span>(data)</span>
+<span id="cb37-201"><a href="#cb37-201"></a>    <span class="do">###</span></span>
+<span id="cb37-202"><a href="#cb37-202"></a>}</span>
+<span id="cb37-203"><a href="#cb37-203"></a>mu_interval <span class="ot">&lt;-</span> <span class="cf">function</span>(data, <span class="at">prob =</span> <span class="fl">0.95</span>) {</span>
+<span id="cb37-204"><a href="#cb37-204"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb37-205"><a href="#cb37-205"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb37-206"><a href="#cb37-206"></a>    <span class="fu">c</span>(<span class="fl">13.3</span>, <span class="fl">15.7</span>)</span>
+<span id="cb37-207"><a href="#cb37-207"></a>    <span class="do">### {.content-hidden when-profile="public"}</span></span>
+<span id="cb37-208"><a href="#cb37-208"></a>    n <span class="ot">=</span> <span class="fu">length</span>(data)</span>
+<span id="cb37-209"><a href="#cb37-209"></a>    df <span class="ot">=</span> n<span class="dv">-1</span></span>
+<span id="cb37-210"><a href="#cb37-210"></a>    location <span class="ot">=</span> <span class="fu">mean</span>(data)</span>
+<span id="cb37-211"><a href="#cb37-211"></a>    scale <span class="ot">=</span> <span class="fu">sqrt</span>((</span>
+<span id="cb37-212"><a href="#cb37-212"></a>        <span class="dv">1</span><span class="sc">/</span>(n<span class="dv">-1</span>) <span class="sc">*</span> <span class="fu">sum</span>((data<span class="sc">-</span>location)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb37-213"><a href="#cb37-213"></a>    )<span class="sc">/</span>n)</span>
+<span id="cb37-214"><a href="#cb37-214"></a>    ql <span class="ot">=</span> (<span class="dv">1</span><span class="sc">-</span>prob)<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb37-215"><a href="#cb37-215"></a>    qu <span class="ot">=</span> prob <span class="sc">+</span> (<span class="dv">1</span><span class="sc">-</span>prob)<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb37-216"><a href="#cb37-216"></a>    <span class="fu">qtnew</span>(<span class="fu">c</span>(ql, qu), df, location, scale)</span>
+<span id="cb37-217"><a href="#cb37-217"></a>    <span class="do">###</span></span>
+<span id="cb37-218"><a href="#cb37-218"></a>}</span>
+<span id="cb37-219"><a href="#cb37-219"></a><span class="in">```</span></span>
+<span id="cb37-220"><a href="#cb37-220"></a></span>
+<span id="cb37-221"><a href="#cb37-221"></a>You can plot the density as below if you implement <span class="in">`mu_pdf`</span> to compute the PDF of the posterior $p(\mu|y)$ of the average hardness $\mu$.</span>
+<span id="cb37-222"><a href="#cb37-222"></a></span>
+<span id="cb37-225"><a href="#cb37-225"></a><span class="in">```{r}</span></span>
+<span id="cb37-226"><a href="#cb37-226"></a><span class="co">#| label: fig-2b-density</span></span>
+<span id="cb37-227"><a href="#cb37-227"></a><span class="co">#| fig-cap: PDF of the posterior $p(\mu|y)$ of the average hardness $\mu$</span></span>
+<span id="cb37-228"><a href="#cb37-228"></a>mu_pdf <span class="ot">&lt;-</span> <span class="cf">function</span>(data, x){</span>
+<span id="cb37-229"><a href="#cb37-229"></a>    <span class="co"># Compute necessary parameters here.</span></span>
+<span id="cb37-230"><a href="#cb37-230"></a>    <span class="co"># These are the correct parameters for `windshieldy_test`</span></span>
+<span id="cb37-231"><a href="#cb37-231"></a>    <span class="co"># with the provided uninformative prior.</span></span>
+<span id="cb37-232"><a href="#cb37-232"></a>    df <span class="ot">=</span> <span class="dv">3</span></span>
+<span id="cb37-233"><a href="#cb37-233"></a>    location <span class="ot">=</span> <span class="fl">14.5</span></span>
+<span id="cb37-234"><a href="#cb37-234"></a>    scale <span class="ot">=</span> <span class="fl">0.3817557</span></span>
+<span id="cb37-235"><a href="#cb37-235"></a>    <span class="co"># Use the computed parameters as below to compute the PDF:</span></span>
+<span id="cb37-236"><a href="#cb37-236"></a>    <span class="do">### {.content-hidden when-profile="public"}</span></span>
+<span id="cb37-237"><a href="#cb37-237"></a>    n <span class="ot">=</span> <span class="fu">length</span>(data)</span>
+<span id="cb37-238"><a href="#cb37-238"></a>    df <span class="ot">=</span> n<span class="dv">-1</span></span>
+<span id="cb37-239"><a href="#cb37-239"></a>    location <span class="ot">=</span> <span class="fu">mean</span>(data)</span>
+<span id="cb37-240"><a href="#cb37-240"></a>    scale <span class="ot">=</span> <span class="fu">sqrt</span>((</span>
+<span id="cb37-241"><a href="#cb37-241"></a>        <span class="dv">1</span><span class="sc">/</span>(n<span class="dv">-1</span>) <span class="sc">*</span> <span class="fu">sum</span>((data<span class="sc">-</span>location)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb37-242"><a href="#cb37-242"></a>    )<span class="sc">/</span>n)</span>
+<span id="cb37-243"><a href="#cb37-243"></a>    <span class="do">###</span></span>
+<span id="cb37-244"><a href="#cb37-244"></a>    <span class="fu">dtnew</span>(x, df, location, scale)</span>
+<span id="cb37-245"><a href="#cb37-245"></a>}</span>
+<span id="cb37-246"><a href="#cb37-246"></a></span>
+<span id="cb37-247"><a href="#cb37-247"></a>x_interval <span class="ot">=</span> <span class="fu">mu_interval</span>(windshieldy1, .<span class="dv">999</span>)</span>
+<span id="cb37-248"><a href="#cb37-248"></a>lower_x <span class="ot">=</span> x_interval[<span class="dv">1</span>]</span>
+<span id="cb37-249"><a href="#cb37-249"></a>upper_x <span class="ot">=</span> x_interval[<span class="dv">2</span>]</span>
+<span id="cb37-250"><a href="#cb37-250"></a>x <span class="ot">=</span> <span class="fu">seq</span>(lower_x, upper_x, <span class="at">length.out=</span><span class="dv">1000</span>)</span>
+<span id="cb37-251"><a href="#cb37-251"></a><span class="fu">plot</span>(</span>
+<span id="cb37-252"><a href="#cb37-252"></a>    x, <span class="fu">mu_pdf</span>(windshieldy1, x), <span class="at">type=</span><span class="st">"l"</span>,</span>
+<span id="cb37-253"><a href="#cb37-253"></a>    <span class="at">xlab=</span><span class="fu">TeX</span>(r<span class="st">'(average hardness $\mu$)'</span>),</span>
+<span id="cb37-254"><a href="#cb37-254"></a>    <span class="at">ylab=</span><span class="fu">TeX</span>(r<span class="st">'(PDF of the posterior $p(\mu|y)$)'</span>)</span>
+<span id="cb37-255"><a href="#cb37-255"></a>)</span>
+<span id="cb37-256"><a href="#cb37-256"></a><span class="in">```</span></span>
+<span id="cb37-257"><a href="#cb37-257"></a>:::</span>
+<span id="cb37-258"><a href="#cb37-258"></a></span>
+<span id="cb37-259"><a href="#cb37-259"></a>::: {.callout-warning icon=false title="Subtask 2.c)"}</span>
+<span id="cb37-260"><a href="#cb37-260"></a>What can you say about the hardness of the next windshield coming</span>
+<span id="cb37-261"><a href="#cb37-261"></a>from the production line before actually measuring the hardness?</span>
+<span id="cb37-262"><a href="#cb37-262"></a></span>
+<span id="cb37-263"><a href="#cb37-263"></a></span>
+<span id="cb37-264"><a href="#cb37-264"></a></span>
+<span id="cb37-265"><a href="#cb37-265"></a><span class="ss">* </span>Compute and report the point estimate $E(\tilde{y}|y)$,</span>
+<span id="cb37-266"><a href="#cb37-266"></a><span class="ss">* </span>compute and report a posterior **predictive** 95%-interval,</span>
+<span id="cb37-267"><a href="#cb37-267"></a><span class="ss">* </span>plot the density, and</span>
+<span id="cb37-268"><a href="#cb37-268"></a><span class="ss">* </span>write interpretation of the result in text.</span>
+<span id="cb37-269"><a href="#cb37-269"></a>:::</span>
+<span id="cb37-270"><a href="#cb37-270"></a></span>
+<span id="cb37-271"><a href="#cb37-271"></a>::: {.callout-tip collapse=false}</span>
+<span id="cb37-272"><a href="#cb37-272"></a>Predictive intervals are different from posterior</span>
+<span id="cb37-273"><a href="#cb37-273"></a>intervals.</span>
+<span id="cb37-274"><a href="#cb37-274"></a></span>
+<span id="cb37-275"><a href="#cb37-275"></a>With a conjugate prior a closed form posterior is Student's $t$</span>
+<span id="cb37-276"><a href="#cb37-276"></a>form (see equations in the book).</span>
+<span id="cb37-277"><a href="#cb37-277"></a>:::</span>
+<span id="cb37-278"><a href="#cb37-278"></a></span>
+<span id="cb37-279"><a href="#cb37-279"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb37-280"><a href="#cb37-280"></a>Write your answers and code here!</span>
+<span id="cb37-281"><a href="#cb37-281"></a></span>
+<span id="cb37-282"><a href="#cb37-282"></a>**Keep the below name and format for the functions to work with `markmyassignment`:**</span>
+<span id="cb37-285"><a href="#cb37-285"></a><span class="in">```{r}</span></span>
+<span id="cb37-286"><a href="#cb37-286"></a><span class="co"># Useful functions: mean(), length(), sqrt(), sum()</span></span>
+<span id="cb37-287"><a href="#cb37-287"></a><span class="co"># and qtnew(), dtnew() (from aaltobda)</span></span>
+<span id="cb37-288"><a href="#cb37-288"></a></span>
+<span id="cb37-289"><a href="#cb37-289"></a>mu_pred_point_est <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
+<span id="cb37-290"><a href="#cb37-290"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb37-291"><a href="#cb37-291"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb37-292"><a href="#cb37-292"></a>    <span class="fl">14.5</span></span>
+<span id="cb37-293"><a href="#cb37-293"></a>    <span class="do">### {.content-hidden when-profile="public"}</span></span>
+<span id="cb37-294"><a href="#cb37-294"></a>    <span class="fu">mean</span>(data)</span>
+<span id="cb37-295"><a href="#cb37-295"></a>    <span class="do">###</span></span>
+<span id="cb37-296"><a href="#cb37-296"></a>}</span>
+<span id="cb37-297"><a href="#cb37-297"></a>mu_pred_interval <span class="ot">&lt;-</span> <span class="cf">function</span>(data, <span class="at">prob =</span> <span class="fl">0.95</span>) {</span>
+<span id="cb37-298"><a href="#cb37-298"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb37-299"><a href="#cb37-299"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb37-300"><a href="#cb37-300"></a>    <span class="fu">c</span>(<span class="fl">11.8</span>, <span class="fl">17.2</span>)</span>
+<span id="cb37-301"><a href="#cb37-301"></a>    <span class="do">### {.content-hidden when-profile="public"}</span></span>
+<span id="cb37-302"><a href="#cb37-302"></a>    n <span class="ot">=</span> <span class="fu">length</span>(data)</span>
+<span id="cb37-303"><a href="#cb37-303"></a>    df <span class="ot">=</span> n<span class="dv">-1</span></span>
+<span id="cb37-304"><a href="#cb37-304"></a>    location <span class="ot">=</span> <span class="fu">mean</span>(data)</span>
+<span id="cb37-305"><a href="#cb37-305"></a>    scale <span class="ot">=</span> <span class="fu">sqrt</span>((</span>
+<span id="cb37-306"><a href="#cb37-306"></a>        <span class="dv">1</span><span class="sc">/</span>(n<span class="dv">-1</span>) <span class="sc">*</span> <span class="fu">sum</span>((data<span class="sc">-</span>location)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb37-307"><a href="#cb37-307"></a>    )<span class="sc">*</span>(<span class="dv">1</span><span class="sc">+</span><span class="dv">1</span><span class="sc">/</span>n))</span>
+<span id="cb37-308"><a href="#cb37-308"></a>    ql <span class="ot">=</span> (<span class="dv">1</span><span class="sc">-</span>prob)<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb37-309"><a href="#cb37-309"></a>    qu <span class="ot">=</span> prob <span class="sc">+</span> (<span class="dv">1</span><span class="sc">-</span>prob)<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb37-310"><a href="#cb37-310"></a>    <span class="fu">qtnew</span>(<span class="fu">c</span>(ql, qu), df, location, scale)</span>
+<span id="cb37-311"><a href="#cb37-311"></a>    <span class="do">###</span></span>
+<span id="cb37-312"><a href="#cb37-312"></a>}</span>
+<span id="cb37-313"><a href="#cb37-313"></a><span class="in">```</span></span>
+<span id="cb37-314"><a href="#cb37-314"></a></span>
+<span id="cb37-315"><a href="#cb37-315"></a>You can plot the density as below if you implement <span class="in">`mu_pred_pdf`</span> to compute the PDF of the posterior predictive $p(\tilde{y}|y)$ of a new hardness observation $\tilde{y}$.</span>
+<span id="cb37-316"><a href="#cb37-316"></a></span>
+<span id="cb37-319"><a href="#cb37-319"></a><span class="in">```{r}</span></span>
+<span id="cb37-320"><a href="#cb37-320"></a><span class="co">#| label: fig-2c-density</span></span>
+<span id="cb37-321"><a href="#cb37-321"></a><span class="co">#| fig-cap: PDF of the posterior predictive $p(\tilde{y}|y)$ of a new hardness observation $\tilde{y}$</span></span>
+<span id="cb37-322"><a href="#cb37-322"></a>mu_pred_pdf <span class="ot">&lt;-</span> <span class="cf">function</span>(data, x){</span>
+<span id="cb37-323"><a href="#cb37-323"></a>    <span class="co"># Compute necessary parameters here.</span></span>
+<span id="cb37-324"><a href="#cb37-324"></a>    <span class="co"># These are the correct parameters for `windshieldy_test`</span></span>
+<span id="cb37-325"><a href="#cb37-325"></a>    <span class="co"># with the provided uninformative prior.</span></span>
+<span id="cb37-326"><a href="#cb37-326"></a>    df <span class="ot">=</span> <span class="dv">3</span></span>
+<span id="cb37-327"><a href="#cb37-327"></a>    location <span class="ot">=</span> <span class="fl">14.5</span></span>
+<span id="cb37-328"><a href="#cb37-328"></a>    scale <span class="ot">=</span> <span class="fl">0.8536316</span></span>
+<span id="cb37-329"><a href="#cb37-329"></a>    <span class="co"># Use the computed parameters as below to compute the PDF:</span></span>
+<span id="cb37-330"><a href="#cb37-330"></a>    <span class="do">### {.content-hidden when-profile="public"}</span></span>
+<span id="cb37-331"><a href="#cb37-331"></a>    n <span class="ot">=</span> <span class="fu">length</span>(data)</span>
+<span id="cb37-332"><a href="#cb37-332"></a>    df <span class="ot">=</span> n<span class="dv">-1</span></span>
+<span id="cb37-333"><a href="#cb37-333"></a>    location <span class="ot">=</span> <span class="fu">mean</span>(data)</span>
+<span id="cb37-334"><a href="#cb37-334"></a>    scale <span class="ot">=</span> <span class="fu">sqrt</span>((</span>
+<span id="cb37-335"><a href="#cb37-335"></a>        <span class="dv">1</span><span class="sc">/</span>(n<span class="dv">-1</span>) <span class="sc">*</span> <span class="fu">sum</span>((data<span class="sc">-</span><span class="fu">mean</span>(data))<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb37-336"><a href="#cb37-336"></a>    )<span class="sc">*</span>(<span class="dv">1</span><span class="sc">+</span><span class="dv">1</span><span class="sc">/</span>n))</span>
+<span id="cb37-337"><a href="#cb37-337"></a>    <span class="do">###</span></span>
+<span id="cb37-338"><a href="#cb37-338"></a>    <span class="fu">dtnew</span>(x, df, location, scale)</span>
+<span id="cb37-339"><a href="#cb37-339"></a>}</span>
+<span id="cb37-340"><a href="#cb37-340"></a></span>
+<span id="cb37-341"><a href="#cb37-341"></a>x_interval <span class="ot">=</span> <span class="fu">mu_pred_interval</span>(windshieldy1, .<span class="dv">999</span>)</span>
+<span id="cb37-342"><a href="#cb37-342"></a>lower_x <span class="ot">=</span> x_interval[<span class="dv">1</span>]</span>
+<span id="cb37-343"><a href="#cb37-343"></a>upper_x <span class="ot">=</span> x_interval[<span class="dv">2</span>]</span>
+<span id="cb37-344"><a href="#cb37-344"></a>x <span class="ot">=</span> <span class="fu">seq</span>(lower_x, upper_x, <span class="at">length.out=</span><span class="dv">1000</span>)</span>
+<span id="cb37-345"><a href="#cb37-345"></a><span class="fu">plot</span>(</span>
+<span id="cb37-346"><a href="#cb37-346"></a>    x, <span class="fu">mu_pred_pdf</span>(windshieldy1, x), <span class="at">type=</span><span class="st">"l"</span>,</span>
+<span id="cb37-347"><a href="#cb37-347"></a>    <span class="at">xlab=</span><span class="fu">TeX</span>(r<span class="st">'(new hardness observation $</span><span class="sc">\t</span><span class="st">ilde{y}$)'</span>),</span>
+<span id="cb37-348"><a href="#cb37-348"></a>    <span class="at">ylab=</span><span class="fu">TeX</span>(r<span class="st">'(PDF of the posterior predictive $p(</span><span class="sc">\t</span><span class="st">ilde{y}|y)$)'</span>)</span>
+<span id="cb37-349"><a href="#cb37-349"></a>)</span>
+<span id="cb37-350"><a href="#cb37-350"></a><span class="in">```</span></span>
+<span id="cb37-351"><a href="#cb37-351"></a>:::</span>
+<span id="cb37-352"><a href="#cb37-352"></a></span>
+<span id="cb37-353"><a href="#cb37-353"></a>::: {.callout-note icon=false title="Rubric"}</span>
+<span id="cb37-354"><a href="#cb37-354"></a></span>
+<span id="cb37-355"><a href="#cb37-355"></a><span class="ss">* </span>Is the source code included?</span>
+<span id="cb37-356"><a href="#cb37-356"></a><span class="ss">    * </span>No</span>
+<span id="cb37-357"><a href="#cb37-357"></a><span class="ss">    * </span>Yes</span>
+<span id="cb37-358"><a href="#cb37-358"></a><span class="ss">* </span>Are the likelihood, prior and the posterior for computing the average hardness value reported? It is ok</span>
+<span id="cb37-359"><a href="#cb37-359"></a>to refer to the book instead of deriving the distributions.</span>
+<span id="cb37-360"><a href="#cb37-360"></a><span class="ss">    * </span>No</span>
+<span id="cb37-361"><a href="#cb37-361"></a><span class="ss">    * </span>Yes, but some are missing</span>
+<span id="cb37-362"><a href="#cb37-362"></a><span class="ss">    * </span>Yes</span>
+<span id="cb37-363"><a href="#cb37-363"></a><span class="ss">* </span>In part a), were the point estimates and posterior interval provided? (The posterior mean should be</span>
+<span id="cb37-364"><a href="#cb37-364"></a>close to <span class="co">[</span><span class="ot">`r signif(mu_point_est(windshieldy1), 3)`</span><span class="co">]</span>{.content-hidden when-profile="public"} and 95% posterior interval should be around [<span class="co">[</span><span class="ot">`r signif(mu_interval(windshieldy1, .95), 3)`</span><span class="co">]</span>]{.content-hidden when-profile="public"})</span>
+<span id="cb37-365"><a href="#cb37-365"></a><span class="ss">    * </span>No</span>
+<span id="cb37-366"><a href="#cb37-366"></a><span class="ss">    * </span>Yes, but seem incorrect or only one estimate was reported</span>
+<span id="cb37-367"><a href="#cb37-367"></a><span class="ss">    * </span>Yes, and the reported values seem plausible</span>
+<span id="cb37-368"><a href="#cb37-368"></a><span class="ss">* </span>In part b), was the density plotted?</span>
+<span id="cb37-369"><a href="#cb37-369"></a><span class="ss">    * </span>No</span>
+<span id="cb37-370"><a href="#cb37-370"></a><span class="ss">    * </span>Yes, but seem incorrect</span>
+<span id="cb37-371"><a href="#cb37-371"></a><span class="ss">    * </span>Yes, and the plot seems plausible</span>
+<span id="cb37-372"><a href="#cb37-372"></a><span class="ss">* </span>For b)-part, was a formula or a simulation method presented for computing the posterior predictive</span>
+<span id="cb37-373"><a href="#cb37-373"></a>distribution? It is ok to refer to the book.</span>
+<span id="cb37-374"><a href="#cb37-374"></a><span class="ss">    * </span>No</span>
+<span id="cb37-375"><a href="#cb37-375"></a><span class="ss">    * </span>Yes, but seems incorrect</span>
+<span id="cb37-376"><a href="#cb37-376"></a><span class="ss">    * </span>Yes</span>
+<span id="cb37-377"><a href="#cb37-377"></a><span class="ss">* </span>For c)-part, were the point estimate and predictive interval provided? (95% predictive interval should</span>
+<span id="cb37-378"><a href="#cb37-378"></a>be around [<span class="co">[</span><span class="ot">`r signif(mu_pred_interval(windshieldy1, .95), 3)`</span><span class="co">]</span>]{.content-hidden when-profile="public"} and the mean the same as in a)-part).</span>
+<span id="cb37-379"><a href="#cb37-379"></a><span class="ss">    * </span>No</span>
+<span id="cb37-380"><a href="#cb37-380"></a><span class="ss">    * </span>Yes, but seems incorrect</span>
+<span id="cb37-381"><a href="#cb37-381"></a><span class="ss">    * </span>Yes, and the reported values seem plausible</span>
+<span id="cb37-382"><a href="#cb37-382"></a><span class="ss">* </span>For c)-part, was the density plotted?</span>
+<span id="cb37-383"><a href="#cb37-383"></a><span class="ss">    * </span>No</span>
+<span id="cb37-384"><a href="#cb37-384"></a><span class="ss">    * </span>Yes, but seems incorrect</span>
+<span id="cb37-385"><a href="#cb37-385"></a><span class="ss">    * </span>Yes, and the plot seem plausible</span>
+<span id="cb37-386"><a href="#cb37-386"></a></span>
+<span id="cb37-387"><a href="#cb37-387"></a>:::</span>
+<span id="cb37-388"><a href="#cb37-388"></a></span>
+<span id="cb37-389"><a href="#cb37-389"></a><span class="fu"># Inference for the difference between proportions (3 points)</span></span>
+<span id="cb37-390"><a href="#cb37-390"></a></span>
+<span id="cb37-391"><a href="#cb37-391"></a>An experiment was performed to estimate the effect of beta-blockers on</span>
+<span id="cb37-392"><a href="#cb37-392"></a>mortality of cardiac patients. A group of patients was randomly assigned</span>
+<span id="cb37-393"><a href="#cb37-393"></a>to treatment and control groups: out of 674 patients receiving the</span>
+<span id="cb37-394"><a href="#cb37-394"></a>control, 39 died, and out of 680 receiving the treatment, 22 died.</span>
+<span id="cb37-395"><a href="#cb37-395"></a>Assume that the outcomes are independent and binomially distributed,</span>
+<span id="cb37-396"><a href="#cb37-396"></a>with probabilities of death of $p_0$ and $p_1$ under the control and</span>
+<span id="cb37-397"><a href="#cb37-397"></a>treatment, respectively. Set up a noninformative or weakly informative</span>
+<span id="cb37-398"><a href="#cb37-398"></a>prior distribution on $(p_0,p_1)$.</span>
+<span id="cb37-399"><a href="#cb37-399"></a></span>
+<span id="cb37-400"><a href="#cb37-400"></a></span>
+<span id="cb37-401"><a href="#cb37-401"></a>::: {.callout-warning icon=false title="Subtask 3.a)"}</span>
+<span id="cb37-402"><a href="#cb37-402"></a>Formulate</span>
+<span id="cb37-403"><a href="#cb37-403"></a></span>
+<span id="cb37-404"><a href="#cb37-404"></a><span class="ss">1. </span>the likelihood,</span>
+<span id="cb37-405"><a href="#cb37-405"></a><span class="ss">2. </span>the prior, and</span>
+<span id="cb37-406"><a href="#cb37-406"></a><span class="ss">3. </span>the resulting posterior.</span>
+<span id="cb37-407"><a href="#cb37-407"></a>:::</span>
+<span id="cb37-408"><a href="#cb37-408"></a></span>
+<span id="cb37-409"><a href="#cb37-409"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb37-410"><a href="#cb37-410"></a>Write your answers here!</span>
+<span id="cb37-411"><a href="#cb37-411"></a>:::</span>
+<span id="cb37-412"><a href="#cb37-412"></a></span>
+<span id="cb37-413"><a href="#cb37-413"></a>::: {.callout-warning icon=false title="Subtask 3.b)"}</span>
+<span id="cb37-414"><a href="#cb37-414"></a>Summarize the posterior distribution for the <span class="co">[</span><span class="ot">odds ratio</span><span class="co">](https://en.wikipedia.org/wiki/Odds_ratio)</span>,</span>
+<span id="cb37-415"><a href="#cb37-415"></a>$$</span>
+<span id="cb37-416"><a href="#cb37-416"></a>\mathrm{OR} = (p_1/(1-p_1))/(p_0/(1-p_0)).</span>
+<span id="cb37-417"><a href="#cb37-417"></a>$$</span>
+<span id="cb37-418"><a href="#cb37-418"></a></span>
+<span id="cb37-419"><a href="#cb37-419"></a><span class="ss">* </span>Compute and report the point estimate $E(\mathrm{OR}|y_0,y_1)$,</span>
+<span id="cb37-420"><a href="#cb37-420"></a><span class="ss">* </span>compute and report a posterior 95%-interval,</span>
+<span id="cb37-421"><a href="#cb37-421"></a><span class="ss">* </span>plot the histogram, and</span>
+<span id="cb37-422"><a href="#cb37-422"></a><span class="ss">* </span>write interpretation of the result in text.</span>
+<span id="cb37-423"><a href="#cb37-423"></a></span>
+<span id="cb37-424"><a href="#cb37-424"></a>Use <span class="co">[</span><span class="ot">Frank Harrell's recommendations</span><span class="co">](https://hbiostat.org/blog/post/bayes-freq-stmts/)</span></span>
+<span id="cb37-425"><a href="#cb37-425"></a>how to state results in Bayesian two group comparison.</span>
+<span id="cb37-426"><a href="#cb37-426"></a>:::</span>
+<span id="cb37-427"><a href="#cb37-427"></a></span>
+<span id="cb37-428"><a href="#cb37-428"></a>::: {.callout-tip collapse=false}</span>
+<span id="cb37-429"><a href="#cb37-429"></a>With a conjugate prior, a closed-form posterior is the Beta</span>
+<span id="cb37-430"><a href="#cb37-430"></a>form for each group separately (see equations in the book). You can use</span>
+<span id="cb37-431"><a href="#cb37-431"></a><span class="in">`rbeta()`</span> to sample from the posterior distributions of $p_0$ and $p_1$,</span>
+<span id="cb37-432"><a href="#cb37-432"></a>and use this sample and odds ratio equation to get a sample from the</span>
+<span id="cb37-433"><a href="#cb37-433"></a>distribution of the odds ratio.</span>
+<span id="cb37-434"><a href="#cb37-434"></a>:::</span>
+<span id="cb37-435"><a href="#cb37-435"></a></span>
+<span id="cb37-436"><a href="#cb37-436"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb37-437"><a href="#cb37-437"></a>Write your answers and code here!</span>
+<span id="cb37-438"><a href="#cb37-438"></a></span>
+<span id="cb37-439"><a href="#cb37-439"></a>The below data is **only for the tests**:</span>
+<span id="cb37-440"><a href="#cb37-440"></a><span class="in">``` {r}</span></span>
+<span id="cb37-441"><a href="#cb37-441"></a><span class="in">set.seed(4711)</span></span>
+<span id="cb37-442"><a href="#cb37-442"></a><span class="in">ndraws = 1000</span></span>
+<span id="cb37-443"><a href="#cb37-443"></a><span class="in">p0 = rbeta(ndraws, 5, 95)</span></span>
+<span id="cb37-444"><a href="#cb37-444"></a><span class="in">p1 = rbeta(ndraws, 10, 90)</span></span>
+<span id="cb37-445"><a href="#cb37-445"></a><span class="in">### {.content-hidden when-profile="public"}</span></span>
+<span id="cb37-446"><a href="#cb37-446"></a><span class="in">set.seed(4711)</span></span>
+<span id="cb37-447"><a href="#cb37-447"></a><span class="in">p0 = rbeta(ndraws, 40, 675)</span></span>
+<span id="cb37-448"><a href="#cb37-448"></a><span class="in">p1 = rbeta(ndraws, 23, 681)</span></span>
+<span id="cb37-449"><a href="#cb37-449"></a><span class="in">###</span></span>
+<span id="cb37-450"><a href="#cb37-450"></a><span class="in">```</span></span>
+<span id="cb37-451"><a href="#cb37-451"></a></span>
+<span id="cb37-452"><a href="#cb37-452"></a>**Keep the below name and format for the functions to work with `markmyassignment`:**</span>
+<span id="cb37-453"><a href="#cb37-453"></a></span>
+<span id="cb37-456"><a href="#cb37-456"></a><span class="in">```{r}</span></span>
+<span id="cb37-457"><a href="#cb37-457"></a><span class="co"># Useful function: mean(), quantile()</span></span>
+<span id="cb37-458"><a href="#cb37-458"></a></span>
+<span id="cb37-459"><a href="#cb37-459"></a>posterior_odds_ratio_point_est <span class="ot">&lt;-</span> <span class="cf">function</span>(p0, p1) {</span>
+<span id="cb37-460"><a href="#cb37-460"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb37-461"><a href="#cb37-461"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb37-462"><a href="#cb37-462"></a>    <span class="fl">2.650172</span></span>
+<span id="cb37-463"><a href="#cb37-463"></a>    <span class="do">### {.content-hidden when-profile="public"}</span></span>
+<span id="cb37-464"><a href="#cb37-464"></a>    odds_ratios <span class="ot">=</span> p1<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>p1)<span class="sc">/</span>(p0<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>p0))</span>
+<span id="cb37-465"><a href="#cb37-465"></a>    <span class="fu">mean</span>(odds_ratios)</span>
+<span id="cb37-466"><a href="#cb37-466"></a>    <span class="do">###</span></span>
+<span id="cb37-467"><a href="#cb37-467"></a>}</span>
+<span id="cb37-468"><a href="#cb37-468"></a>posterior_odds_ratio_interval <span class="ot">&lt;-</span> <span class="cf">function</span>(p0, p1, <span class="at">prob =</span> <span class="fl">0.95</span>) {</span>
+<span id="cb37-469"><a href="#cb37-469"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb37-470"><a href="#cb37-470"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb37-471"><a href="#cb37-471"></a>    <span class="fu">c</span>(<span class="fl">0.6796942</span>,<span class="fl">7.3015964</span>)</span>
+<span id="cb37-472"><a href="#cb37-472"></a>    <span class="do">### {.content-hidden when-profile="public"}</span></span>
+<span id="cb37-473"><a href="#cb37-473"></a>    odds_ratios <span class="ot">=</span> p1<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>p1)<span class="sc">/</span>(p0<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>p0))</span>
+<span id="cb37-474"><a href="#cb37-474"></a>    ql <span class="ot">=</span> (<span class="dv">1</span><span class="sc">-</span>prob)<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb37-475"><a href="#cb37-475"></a>    qu <span class="ot">=</span> prob <span class="sc">+</span> (<span class="dv">1</span><span class="sc">-</span>prob)<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb37-476"><a href="#cb37-476"></a>    <span class="fu">quantile</span>(odds_ratios, <span class="fu">c</span>(ql, qu))</span>
+<span id="cb37-477"><a href="#cb37-477"></a>    <span class="do">###</span></span>
+<span id="cb37-478"><a href="#cb37-478"></a>}</span>
+<span id="cb37-479"><a href="#cb37-479"></a><span class="in">```</span></span>
+<span id="cb37-480"><a href="#cb37-480"></a>:::</span>
+<span id="cb37-481"><a href="#cb37-481"></a></span>
+<span id="cb37-482"><a href="#cb37-482"></a>::: {.callout-tip collapse=true}</span>
+<span id="cb37-483"><a href="#cb37-483"></a><span class="fu">## advanced tools (`posterior`'s `rvar`, `ggdist`'s `stat_dotsinterval`)</span></span>
+<span id="cb37-484"><a href="#cb37-484"></a></span>
+<span id="cb37-485"><a href="#cb37-485"></a>The <span class="in">`posterior`</span> package's random variable datatype <span class="in">`rvar`</span> is a</span>
+<span id="cb37-486"><a href="#cb37-486"></a><span class="co">[</span><span class="ot">"sample-based representation of random variables"</span><span class="co">](https://mc-stan.org/posterior/articles/rvar.html#:~:text=sample%2Dbased%20representation%20of%20random%20variables)</span></span>
+<span id="cb37-487"><a href="#cb37-487"></a>which makes handling of random samples (of draws) such as the ones contained in the above variables <span class="in">`p0`</span> and <span class="in">`p1`</span> easier.</span>
+<span id="cb37-488"><a href="#cb37-488"></a><span class="co">[</span><span class="ot">By default, it prints as the mean and standard deviation of the draws</span><span class="co">](https://mc-stan.org/posterior/articles/rvar.html#:~:text=The%20default%20display%20of%20an%20rvar%20shows%20the%20mean%20and%20standard%20deviation%20of%20each%20element%20of%20the%20array.)</span>, **such that `rvar(p0)` prints as `r rvar(p0)` and `rvar(p1)` prints as `r rvar(p1)`**.</span>
+<span id="cb37-489"><a href="#cb37-489"></a></span>
+<span id="cb37-490"><a href="#cb37-490"></a>The datatype is <span class="co">[</span><span class="ot">"designed to [...] be able to be used inside `data.frame()`s and `tibble()`s, and to be used with distribution visualizations in the ggdist package."</span><span class="co">]</span>(https://mc-stan.org/posterior/articles/rvar.html#:~:text=designed%20to%20interoperate%20with%20vectorized%20distributions%20in%20the%20distributional%20package%2C%20to%20be%20able%20to%20be%20used%20inside%20data.frame()s%20and%20tibble()s%2C%20and%20to%20be%20used%20with%20distribution%20visualizations%20in%20the%20ggdist%20package.)</span>
+<span id="cb37-491"><a href="#cb37-491"></a>The code below sets up an <span class="co">[</span><span class="ot">R `data.frame()`</span><span class="co">](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/data.frame)</span> with the draws in <span class="in">`p0`</span> and <span class="in">`p1`</span> wrapped in an <span class="in">`rvar`</span>, and uses that data frame to visualize the draws using <span class="co">[</span><span class="ot">`ggdist`</span><span class="co">](https://mjskay.github.io/ggdist/index.html)</span>, an R package building on <span class="co">[</span><span class="ot">`ggplot2`</span><span class="co">](https://ggplot2.tidyverse.org/)</span> and <span class="co">[</span><span class="ot">"designed for both frequentist and Bayesian uncertainty visualization"</span><span class="co">](https://mjskay.github.io/ggdist/index.html#:~:text=designed%20for%20both%20frequentist%20and%20Bayesian%20uncertainty%20visualization)</span>.</span>
+<span id="cb37-492"><a href="#cb37-492"></a></span>
+<span id="cb37-493"><a href="#cb37-493"></a>The below plot, @fig-showcase-probabilities uses <span class="in">`ggdist`</span>'s <span class="co">[</span><span class="ot">`stat_dotsinterval()`</span><span class="co">](https://mjskay.github.io/ggdist/articles/dotsinterval.html)</span>, which by default visualizes</span>
+<span id="cb37-494"><a href="#cb37-494"></a></span>
+<span id="cb37-495"><a href="#cb37-495"></a><span class="ss">* </span><span class="co">[</span><span class="ot">an `rvar`'s median and central 66% and 95% intervals</span><span class="co">]</span>(https://mjskay.github.io/ggdist/reference/stat_dotsinterval.html#:~:text=point_interval%20%3D%20%22median_qi%22%2C%0A%20%20.width%20%3D%20c(0.66%2C%200.95)%2C) using a black dot and lines of varying thicknesses as when using <span class="in">`ggdist`</span>'s <span class="co">[</span><span class="ot">`stat_pointinterval()`</span><span class="co">](https://mjskay.github.io/ggdist/reference/stat_pointinterval.html#examples)</span> and</span>
+<span id="cb37-496"><a href="#cb37-496"></a><span class="ss">* </span>an <span class="in">`rvar`</span>'s draws using grey dots as when using <span class="in">`ggdist`</span>'s <span class="co">[</span><span class="ot">`stat_dots()`</span><span class="co">](https://mjskay.github.io/ggdist/reference/stat_dots.html#examples)</span>:</span>
+<span id="cb37-497"><a href="#cb37-497"></a></span>
+<span id="cb37-500"><a href="#cb37-500"></a><span class="in">```{r}</span></span>
+<span id="cb37-501"><a href="#cb37-501"></a><span class="co">#| label: fig-showcase-probabilities</span></span>
+<span id="cb37-502"><a href="#cb37-502"></a><span class="co">#| fig-cap: Probabilities of death for the two patient groups.</span></span>
+<span id="cb37-503"><a href="#cb37-503"></a>r0 <span class="ot">=</span> <span class="fu">rvar</span>(p0)</span>
+<span id="cb37-504"><a href="#cb37-504"></a>r1 <span class="ot">=</span> <span class="fu">rvar</span>(p1)</span>
+<span id="cb37-505"><a href="#cb37-505"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(</span>
+<span id="cb37-506"><a href="#cb37-506"></a>    <span class="at">rv_name=</span><span class="fu">c</span>(<span class="st">"control"</span>, <span class="st">"treatment"</span>), <span class="at">rv=</span><span class="fu">c</span>(r0, r1)</span>
+<span id="cb37-507"><a href="#cb37-507"></a>)) <span class="sc">+</span></span>
+<span id="cb37-508"><a href="#cb37-508"></a>    <span class="fu">aes</span>(<span class="at">xdist=</span>rv, <span class="at">y=</span>rv_name) <span class="sc">+</span></span>
+<span id="cb37-509"><a href="#cb37-509"></a>    <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"probabilities of death"</span>, <span class="at">y=</span><span class="st">"patient group"</span>) <span class="sc">+</span></span>
+<span id="cb37-510"><a href="#cb37-510"></a>    <span class="fu">stat_dotsinterval</span>()</span>
+<span id="cb37-511"><a href="#cb37-511"></a><span class="in">```</span></span>
+<span id="cb37-512"><a href="#cb37-512"></a></span>
+<span id="cb37-513"><a href="#cb37-513"></a><span class="in">`rvar`</span>s make it easy to compute functions of random variables, such as</span>
+<span id="cb37-514"><a href="#cb37-514"></a></span>
+<span id="cb37-515"><a href="#cb37-515"></a><span class="ss">* </span>differences, e.g. $p_0 - p_1$: <span class="in">`r0 - r1`</span> computes an <span class="in">`rvar`</span> which prints as <span class="in">`r r0 - r1`</span>, indicating the **sample mean** and the **sample standard deviation** of the difference of the probabilities of death,</span>
+<span id="cb37-516"><a href="#cb37-516"></a><span class="ss">* </span>products, e.g. $p_0 \, p_1$: <span class="in">`r0 * r1`</span> computes an <span class="in">`rvar`</span> which prints as <span class="in">`r r0 * r1`</span> which in this case</span>
+<span id="cb37-517"><a href="#cb37-517"></a>has no great interpretation, or</span>
+<span id="cb37-518"><a href="#cb37-518"></a><span class="ss">* </span>the odds ratios needed in task 3.b).</span>
+<span id="cb37-519"><a href="#cb37-519"></a></span>
+<span id="cb37-520"><a href="#cb37-520"></a>Below, in @fig-showcase-odds-ratios, we compute the odds ratios using the <span class="in">`rvar`</span>s and visualize its median, central intervals and draws, as above in @fig-showcase-probabilities:</span>
+<span id="cb37-523"><a href="#cb37-523"></a><span class="in">```{r}</span></span>
+<span id="cb37-524"><a href="#cb37-524"></a><span class="co">#| label: fig-showcase-odds-ratios</span></span>
+<span id="cb37-525"><a href="#cb37-525"></a><span class="co">#| fig-cap: Odds ratios of the two patient groups.</span></span>
+<span id="cb37-526"><a href="#cb37-526"></a>rodds_ratio <span class="ot">=</span> (r1<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>r1))<span class="sc">/</span>(r0<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>r0))</span>
+<span id="cb37-527"><a href="#cb37-527"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(</span>
+<span id="cb37-528"><a href="#cb37-528"></a>    <span class="at">rv=</span><span class="fu">c</span>(rodds_ratio)</span>
+<span id="cb37-529"><a href="#cb37-529"></a>)) <span class="sc">+</span></span>
+<span id="cb37-530"><a href="#cb37-530"></a>    <span class="fu">aes</span>(<span class="at">xdist=</span>rv) <span class="sc">+</span></span>
+<span id="cb37-531"><a href="#cb37-531"></a>    <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"odds ratio"</span>, <span class="at">y=</span><span class="st">"relative amount of draws"</span>) <span class="sc">+</span></span>
+<span id="cb37-532"><a href="#cb37-532"></a>    <span class="fu">stat_dotsinterval</span>()</span>
+<span id="cb37-533"><a href="#cb37-533"></a><span class="in">```</span></span>
+<span id="cb37-534"><a href="#cb37-534"></a></span>
+<span id="cb37-535"><a href="#cb37-535"></a>You can use @fig-showcase-odds-ratios to visually check whether the answers you computed for 3.b) make sense.</span>
+<span id="cb37-536"><a href="#cb37-536"></a>:::</span>
+<span id="cb37-537"><a href="#cb37-537"></a></span>
+<span id="cb37-538"><a href="#cb37-538"></a>::: {.callout-warning icon=false title="Subtask 3.c)"}</span>
+<span id="cb37-539"><a href="#cb37-539"></a>Use at least two different priors, and discuss the sensitivity of</span>
+<span id="cb37-540"><a href="#cb37-540"></a>your inference to your choice of prior density with a couple of</span>
+<span id="cb37-541"><a href="#cb37-541"></a>sentences.</span>
+<span id="cb37-542"><a href="#cb37-542"></a>:::</span>
+<span id="cb37-543"><a href="#cb37-543"></a></span>
+<span id="cb37-544"><a href="#cb37-544"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb37-545"><a href="#cb37-545"></a>Write your answers and code here!</span>
+<span id="cb37-546"><a href="#cb37-546"></a>:::</span>
+<span id="cb37-547"><a href="#cb37-547"></a></span>
+<span id="cb37-548"><a href="#cb37-548"></a>::: {.callout-note icon=false title="Rubric"}</span>
+<span id="cb37-549"><a href="#cb37-549"></a><span class="ss">* </span>Is the source code included?</span>
+<span id="cb37-550"><a href="#cb37-550"></a><span class="ss">    * </span>No</span>
+<span id="cb37-551"><a href="#cb37-551"></a><span class="ss">    * </span>Yes</span>
+<span id="cb37-552"><a href="#cb37-552"></a><span class="ss">* </span>Are the likelihood, prior and the posterior for the death probabilities reported? It is ok to refer to the</span>
+<span id="cb37-553"><a href="#cb37-553"></a>book instead of deriving the distributions.</span>
+<span id="cb37-554"><a href="#cb37-554"></a><span class="ss">    * </span>No</span>
+<span id="cb37-555"><a href="#cb37-555"></a><span class="ss">    * </span>Yes, but some are missing</span>
+<span id="cb37-556"><a href="#cb37-556"></a><span class="ss">    * </span>Yes</span>
+<span id="cb37-557"><a href="#cb37-557"></a><span class="ss">* </span>In part a), was the simulation algorithm for computing the posterior of the odds ratio presented or</span>
+<span id="cb37-558"><a href="#cb37-558"></a>implemented?</span>
+<span id="cb37-559"><a href="#cb37-559"></a><span class="ss">    * </span>No</span>
+<span id="cb37-560"><a href="#cb37-560"></a><span class="ss">    * </span>Yes, but seems incorrect</span>
+<span id="cb37-561"><a href="#cb37-561"></a><span class="ss">    * </span>Yes</span>
+<span id="cb37-562"><a href="#cb37-562"></a><span class="ss">* </span>In part a), was the odds ratio summarized with a point estimate and a posterior interval? (The mean</span>
+<span id="cb37-563"><a href="#cb37-563"></a>should be close to <span class="co">[</span><span class="ot">0.57</span><span class="co">]</span>{.content-hidden when-profile="public"} and 95% posterior interval approximately <span class="co">[</span><span class="ot">(0.32, 0.94)</span><span class="co">]</span>{.content-hidden when-profile="public"})</span>
+<span id="cb37-564"><a href="#cb37-564"></a><span class="ss">    * </span>No</span>
+<span id="cb37-565"><a href="#cb37-565"></a><span class="ss">    * </span>Yes, but results seem incorrect</span>
+<span id="cb37-566"><a href="#cb37-566"></a><span class="ss">    * </span>Yes, and the results seem plausible</span>
+<span id="cb37-567"><a href="#cb37-567"></a><span class="ss">* </span>In part b), was some discussion about testing alternative priors provided? (For example, one could</span>
+<span id="cb37-568"><a href="#cb37-568"></a>have repeated the computations in a)-part with a couple of alternative priors and reported these</span>
+<span id="cb37-569"><a href="#cb37-569"></a>results or some related general conclusions briefly)</span>
+<span id="cb37-570"><a href="#cb37-570"></a><span class="ss">    * </span>Not at all</span>
+<span id="cb37-571"><a href="#cb37-571"></a><span class="ss">    * </span>Some analysis was provided but it was lacking or did not make sense</span>
+<span id="cb37-572"><a href="#cb37-572"></a><span class="ss">    * </span>Some alternative priors were tested and some sensible discussion provided</span>
+<span id="cb37-573"><a href="#cb37-573"></a>:::</span>
+<span id="cb37-574"><a href="#cb37-574"></a></span>
+<span id="cb37-575"><a href="#cb37-575"></a><span class="fu"># Inference for the difference between normal means (3 points)</span></span>
+<span id="cb37-576"><a href="#cb37-576"></a></span>
+<span id="cb37-577"><a href="#cb37-577"></a>Consider a case where the same factory has two production lines for</span>
+<span id="cb37-578"><a href="#cb37-578"></a>manufacturing car windshields. Independent samples from the two</span>
+<span id="cb37-579"><a href="#cb37-579"></a>production lines were tested for hardness. The hardness measurements for</span>
+<span id="cb37-580"><a href="#cb37-580"></a>the two samples $\mathbf{y}_1$ and $\mathbf{y}_2$ be found in</span>
+<span id="cb37-581"><a href="#cb37-581"></a>the datasets <span class="in">`windshieldy1`</span> and  <span class="in">`windshieldy2`</span> in the <span class="in">`aaltobda`</span> package.</span>
+<span id="cb37-582"><a href="#cb37-582"></a></span>
+<span id="cb37-583"><a href="#cb37-583"></a>We assume that the samples have unknown standard deviations $\sigma_1$</span>
+<span id="cb37-584"><a href="#cb37-584"></a>and $\sigma_2$. Use uninformative or weakly informative priors and answer the following</span>
+<span id="cb37-585"><a href="#cb37-585"></a>questions:</span>
+<span id="cb37-586"><a href="#cb37-586"></a></span>
+<span id="cb37-587"><a href="#cb37-587"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb37-588"><a href="#cb37-588"></a>Loading the library and the data.</span>
+<span id="cb37-589"><a href="#cb37-589"></a><span class="in">``` {r}</span></span>
+<span id="cb37-590"><a href="#cb37-590"></a><span class="in">data("windshieldy2")</span></span>
+<span id="cb37-591"><a href="#cb37-591"></a><span class="in"># The new data are now stored in the variable `windshieldy2`.</span></span>
+<span id="cb37-592"><a href="#cb37-592"></a><span class="in"># The below displays the first few rows of the new data:</span></span>
+<span id="cb37-593"><a href="#cb37-593"></a><span class="in">head(windshieldy2)</span></span>
+<span id="cb37-594"><a href="#cb37-594"></a><span class="in">```</span></span>
+<span id="cb37-595"><a href="#cb37-595"></a>:::</span>
+<span id="cb37-596"><a href="#cb37-596"></a></span>
+<span id="cb37-597"><a href="#cb37-597"></a>::: {.callout-warning icon=false title="Subtask 4.a)"}</span>
+<span id="cb37-598"><a href="#cb37-598"></a>Formulate</span>
+<span id="cb37-599"><a href="#cb37-599"></a></span>
+<span id="cb37-600"><a href="#cb37-600"></a><span class="ss">1. </span>the likelihood,</span>
+<span id="cb37-601"><a href="#cb37-601"></a><span class="ss">2. </span>the prior, and</span>
+<span id="cb37-602"><a href="#cb37-602"></a><span class="ss">3. </span>the resulting posterior.</span>
+<span id="cb37-603"><a href="#cb37-603"></a>:::</span>
+<span id="cb37-604"><a href="#cb37-604"></a></span>
+<span id="cb37-605"><a href="#cb37-605"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb37-606"><a href="#cb37-606"></a>Write your answers here!</span>
+<span id="cb37-607"><a href="#cb37-607"></a>:::</span>
+<span id="cb37-608"><a href="#cb37-608"></a></span>
+<span id="cb37-609"><a href="#cb37-609"></a>::: {.callout-warning icon=false title="Subtask 4.b)"}</span>
+<span id="cb37-610"><a href="#cb37-610"></a>What can you say about $\mu_d = \mu_1 - \mu_2$?</span>
+<span id="cb37-611"><a href="#cb37-611"></a></span>
+<span id="cb37-612"><a href="#cb37-612"></a><span class="ss">* </span>Compute and report the point estimate $E(\mu_d|y_1, y_2)$,</span>
+<span id="cb37-613"><a href="#cb37-613"></a><span class="ss">* </span>compute and report a posterior 95%-interval,</span>
+<span id="cb37-614"><a href="#cb37-614"></a><span class="ss">* </span>plot the histogram, and</span>
+<span id="cb37-615"><a href="#cb37-615"></a><span class="ss">* </span>write interpretation of the result in text.</span>
+<span id="cb37-616"><a href="#cb37-616"></a></span>
+<span id="cb37-617"><a href="#cb37-617"></a>Use <span class="co">[</span><span class="ot">Frank Harrell's recommendations</span><span class="co">](https://hbiostat.org/blog/post/bayes-freq-stmts/)</span></span>
+<span id="cb37-618"><a href="#cb37-618"></a>how to state results in Bayesian two group comparison.</span>
+<span id="cb37-619"><a href="#cb37-619"></a>:::</span>
+<span id="cb37-620"><a href="#cb37-620"></a></span>
+<span id="cb37-621"><a href="#cb37-621"></a>::: {.callout-tip collapse=false}</span>
+<span id="cb37-622"><a href="#cb37-622"></a>With a conjugate prior, a closed-form posterior is Student's</span>
+<span id="cb37-623"><a href="#cb37-623"></a>$t$ form for each group separately (see equations in the book). You can</span>
+<span id="cb37-624"><a href="#cb37-624"></a>use the <span class="in">`rtnew()`</span> function to sample from the posterior distributions of</span>
+<span id="cb37-625"><a href="#cb37-625"></a>$\mu_1$ and $\mu_2$, and use this sample to get a sample from the</span>
+<span id="cb37-626"><a href="#cb37-626"></a>distribution of the difference $\mu_d = \mu_1 - \mu_2$.</span>
+<span id="cb37-627"><a href="#cb37-627"></a>:::</span>
+<span id="cb37-628"><a href="#cb37-628"></a></span>
+<span id="cb37-629"><a href="#cb37-629"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb37-630"><a href="#cb37-630"></a>Write your answers and code here!</span>
+<span id="cb37-633"><a href="#cb37-633"></a><span class="in">```{r}</span></span>
+<span id="cb37-634"><a href="#cb37-634"></a><span class="co"># Useful functions: mean(), length(), sqrt(), sum(),</span></span>
+<span id="cb37-635"><a href="#cb37-635"></a><span class="co"># rtnew() (from aaltobda), quantile() and hist().</span></span>
+<span id="cb37-636"><a href="#cb37-636"></a><span class="in">```</span></span>
+<span id="cb37-637"><a href="#cb37-637"></a>:::</span>
+<span id="cb37-638"><a href="#cb37-638"></a></span>
+<span id="cb37-639"><a href="#cb37-639"></a>::: {.content-hidden when-profile="public"}</span>
+<span id="cb37-642"><a href="#cb37-642"></a><span class="in">```{r}</span></span>
+<span id="cb37-643"><a href="#cb37-643"></a>draw_means <span class="ot">&lt;-</span> <span class="cf">function</span>(no_samples, data){</span>
+<span id="cb37-644"><a href="#cb37-644"></a>    n <span class="ot">=</span> <span class="fu">length</span>(data)</span>
+<span id="cb37-645"><a href="#cb37-645"></a>    df <span class="ot">=</span> n<span class="dv">-1</span></span>
+<span id="cb37-646"><a href="#cb37-646"></a>    location <span class="ot">=</span> <span class="fu">mean</span>(data)</span>
+<span id="cb37-647"><a href="#cb37-647"></a>    scale <span class="ot">=</span> <span class="fu">sqrt</span>((</span>
+<span id="cb37-648"><a href="#cb37-648"></a>        <span class="dv">1</span><span class="sc">/</span>(n<span class="dv">-1</span>) <span class="sc">*</span> <span class="fu">sum</span>((data<span class="sc">-</span><span class="fu">mean</span>(data))<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb37-649"><a href="#cb37-649"></a>    )<span class="sc">/</span>n)</span>
+<span id="cb37-650"><a href="#cb37-650"></a>    <span class="fu">rtnew</span>(no_samples, df, location, scale)</span>
+<span id="cb37-651"><a href="#cb37-651"></a>}</span>
+<span id="cb37-652"><a href="#cb37-652"></a>no_samples <span class="ot">=</span> <span class="dv">10000</span></span>
+<span id="cb37-653"><a href="#cb37-653"></a>no_repetitions <span class="ot">=</span> <span class="dv">100</span></span>
+<span id="cb37-654"><a href="#cb37-654"></a>diff_means <span class="ot">=</span> <span class="fu">c</span>()</span>
+<span id="cb37-655"><a href="#cb37-655"></a>diff_lq <span class="ot">=</span> <span class="fu">c</span>()</span>
+<span id="cb37-656"><a href="#cb37-656"></a>diff_uq <span class="ot">=</span> <span class="fu">c</span>()</span>
+<span id="cb37-657"><a href="#cb37-657"></a><span class="cf">for</span>(rep <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>no_repetitions){</span>
+<span id="cb37-658"><a href="#cb37-658"></a>    diff_samples <span class="ot">=</span> <span class="fu">draw_means</span>(no_samples, windshieldy1) <span class="sc">-</span> <span class="fu">draw_means</span>(no_samples, windshieldy2)</span>
+<span id="cb37-659"><a href="#cb37-659"></a>    diff_means <span class="ot">=</span> <span class="fu">c</span>(diff_means, <span class="fu">mean</span>(diff_samples))</span>
+<span id="cb37-660"><a href="#cb37-660"></a>    diff_lq <span class="ot">=</span> <span class="fu">c</span>(diff_lq, <span class="fu">quantile</span>(diff_samples, .<span class="dv">025</span>))</span>
+<span id="cb37-661"><a href="#cb37-661"></a>    diff_uq <span class="ot">=</span> <span class="fu">c</span>(diff_uq, <span class="fu">quantile</span>(diff_samples, .<span class="dv">975</span>))</span>
+<span id="cb37-662"><a href="#cb37-662"></a>}</span>
+<span id="cb37-663"><a href="#cb37-663"></a>r_diff_mean <span class="ot">=</span> <span class="fu">rvar</span>(diff_means)</span>
+<span id="cb37-664"><a href="#cb37-664"></a>r_diff_lq <span class="ot">=</span> <span class="fu">rvar</span>(diff_lq)</span>
+<span id="cb37-665"><a href="#cb37-665"></a>r_diff_uq <span class="ot">=</span> <span class="fu">rvar</span>(diff_uq)</span>
+<span id="cb37-666"><a href="#cb37-666"></a><span class="in">```</span></span>
+<span id="cb37-667"><a href="#cb37-667"></a>When using <span class="in">`r no_samples`</span> random samples,</span>
+<span id="cb37-668"><a href="#cb37-668"></a>the mean is roughly <span class="in">`r r_diff_mean`</span> and the central 95% interval is roughly <span class="co">[</span><span class="ot">`r r_diff_lq`, `r r_diff_uq`</span><span class="co">]</span>.</span>
+<span id="cb37-669"><a href="#cb37-669"></a>:::</span>
+<span id="cb37-670"><a href="#cb37-670"></a></span>
+<span id="cb37-671"><a href="#cb37-671"></a>::: {.callout-warning icon=false title="Subtask 4.c)"}</span>
+<span id="cb37-672"><a href="#cb37-672"></a>Given this specific model, what is the probability that the means</span>
+<span id="cb37-673"><a href="#cb37-673"></a>are exactly the same ($\mu_1 = \mu_2$)? Explain your reasoning.</span>
+<span id="cb37-674"><a href="#cb37-674"></a>:::</span>
+<span id="cb37-675"><a href="#cb37-675"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb37-676"><a href="#cb37-676"></a>Write your answers here!</span>
+<span id="cb37-677"><a href="#cb37-677"></a>:::</span>
+<span id="cb37-678"><a href="#cb37-678"></a></span>
+<span id="cb37-679"><a href="#cb37-679"></a>::: {.callout-note icon=false title="Rubric"}</span>
+<span id="cb37-680"><a href="#cb37-680"></a></span>
+<span id="cb37-681"><a href="#cb37-681"></a><span class="ss">* </span>Is source code included?</span>
+<span id="cb37-682"><a href="#cb37-682"></a><span class="ss">    * </span>No</span>
+<span id="cb37-683"><a href="#cb37-683"></a><span class="ss">    * </span>Yes</span>
+<span id="cb37-684"><a href="#cb37-684"></a><span class="ss">* </span>Are the likelihood, prior and the posterior for the windshield hardness values reported? (It is also ok to</span>
+<span id="cb37-685"><a href="#cb37-685"></a>refer to the book or related formulas from exercise 1)</span>
+<span id="cb37-686"><a href="#cb37-686"></a><span class="ss">    * </span>No</span>
+<span id="cb37-687"><a href="#cb37-687"></a><span class="ss">    * </span>Yes, but some are missing</span>
+<span id="cb37-688"><a href="#cb37-688"></a><span class="ss">    * </span>Yes</span>
+<span id="cb37-689"><a href="#cb37-689"></a><span class="ss">* </span>In part a), was the simulation algorithm for computing the difference in the means presented or</span>
+<span id="cb37-690"><a href="#cb37-690"></a>implemented?</span>
+<span id="cb37-691"><a href="#cb37-691"></a><span class="ss">    * </span>No</span>
+<span id="cb37-692"><a href="#cb37-692"></a><span class="ss">    * </span>Yes, but seems to be incorrect</span>
+<span id="cb37-693"><a href="#cb37-693"></a><span class="ss">    * </span>Yes</span>
+<span id="cb37-694"><a href="#cb37-694"></a><span class="ss">* </span>In part a), was the posterior for the difference between the means summarized with point and interval</span>
+<span id="cb37-695"><a href="#cb37-695"></a>estimates? (The mean should be close to <span class="co">[</span><span class="ot">-1.2</span><span class="co">]</span>{.content-hidden when-profile="public"} and 95% posterior interval <span class="co">[</span><span class="ot">(-2.4, 0.04)</span><span class="co">]</span>{.content-hidden when-profile="public"} or something</span>
+<span id="cb37-696"><a href="#cb37-696"></a>close to it)</span>
+<span id="cb37-697"><a href="#cb37-697"></a><span class="ss">    * </span>No answer</span>
+<span id="cb37-698"><a href="#cb37-698"></a><span class="ss">    * </span>Yes, but results seem incorrect or only one estimate was given</span>
+<span id="cb37-699"><a href="#cb37-699"></a><span class="ss">    * </span>Yes, and results seem reasonable</span>
+<span id="cb37-700"><a href="#cb37-700"></a><span class="ss">* </span>Were some analysis or discussion provided for assessing whether the means could be the same? <span class="co">[</span><span class="ot">Did the discussion include recognition that the probability is 0 for a continuous distribution?</span><span class="co">]</span>{.content-hidden when-profile="public"}</span>
+<span id="cb37-701"><a href="#cb37-701"></a><span class="ss">    * </span>No analysis or explanation is given</span>
+<span id="cb37-702"><a href="#cb37-702"></a><span class="ss">    * </span>Yes, but the analysis or explanation seems incorrect</span>
+<span id="cb37-703"><a href="#cb37-703"></a><span class="ss">    * </span>Yes, and the analysis or explanation seems plausible</span>
+<span id="cb37-704"><a href="#cb37-704"></a></span>
+<span id="cb37-705"><a href="#cb37-705"></a>:::</span>
+<span id="cb37-706"><a href="#cb37-706"></a></span>
+<span id="cb37-707"><a href="#cb37-707"></a>::: {.callout-warning collapse=false}</span>
+<span id="cb37-708"><a href="#cb37-708"></a><span class="fu">## markmyassignment</span></span>
+<span id="cb37-709"><a href="#cb37-709"></a>The following will check the functions for which <span class="in">`markmyassignment`</span> has been set up:</span>
+<span id="cb37-710"><a href="#cb37-710"></a></span>
+<span id="cb37-713"><a href="#cb37-713"></a><span class="in">```{r}</span></span>
+<span id="cb37-714"><a href="#cb37-714"></a><span class="fu">mark_my_assignment</span>()</span>
+<span id="cb37-715"><a href="#cb37-715"></a><span class="in">```</span></span>
+<span id="cb37-716"><a href="#cb37-716"></a>:::</span>
+<span id="cb37-717"><a href="#cb37-717"></a></span>
+<span id="cb37-718"><a href="#cb37-718"></a>{{&lt; include includes/_overall_quality.md &gt;}}</span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

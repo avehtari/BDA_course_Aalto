@@ -1,0 +1,1776 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.550">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Aki Vehtari et al.">
+
+<title>Bayesian Data Analysis Assignments 2023 - Assignment 4, 2023</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./template5.html" rel="next">
+<link href="./template3.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./template1.html">Templates</a></li><li class="breadcrumb-item"><a href="./template4.html">Assignment 4, 2023</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Bayesian Data Analysis Assignments 2023</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">General instructions</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment_instructions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment instructions</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Assignments</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 1, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 2, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 3, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 4, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 5, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 6, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 7, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 8, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 9, 2023</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Templates</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 1, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 2, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 3, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template4.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Assignment 4, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 5, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 6, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 7, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 8, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 9, 2023</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#general-information" id="toc-general-information" class="nav-link active" data-scroll-target="#general-information"><span class="header-section-number">1</span> General information</a></li>
+  <li><a href="#bioassay-model" id="toc-bioassay-model" class="nav-link" data-scroll-target="#bioassay-model"><span class="header-section-number">2</span> Bioassay model</a></li>
+  <li><a href="#importance-sampling" id="toc-importance-sampling" class="nav-link" data-scroll-target="#importance-sampling"><span class="header-section-number">3</span> Importance sampling</a></li>
+  <li><a href="#overall-quality-of-the-report" id="toc-overall-quality-of-the-report" class="nav-link" data-scroll-target="#overall-quality-of-the-report"><span class="header-section-number">4</span> Overall quality of the report</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="template4.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./template1.html">Templates</a></li><li class="breadcrumb-item"><a href="./template4.html">Assignment 4, 2023</a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Assignment 4, 2023</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Aki Vehtari et al. </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="general-information" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> General information</h1>
+<p><strong>This is for BDA 2023</strong></p>
+<p>This assignment is related to Lecture 4 and Chapters 3 and 10.</p>
+<p><strong>The maximum amount of points from this assignment is 6.</strong></p>
+<p>We have prepared a <strong>quarto template specific for this assignment (<a href="template4.html">html</a>, <a href="https://avehtari.github.io/BDA_course_Aalto/assignments/template4.qmd">qmd</a>, <a href="template4.pdf">pdf</a>)</strong> to help you get started.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p><strong>Reading instructions:</strong></p>
+<ul>
+<li><a href="../BDA3_notes.html#ch3"><strong>The reading instructions for BDA3 Chapter 3</strong></a>.</li>
+<li><a href="../BDA3_notes.html#ch10"><strong>The reading instructions for BDA3 Chapter 10</strong></a>.</li>
+</ul>
+<p><strong>Grading instructions:</strong></p>
+<p>The grading will be done in peergrade. All grading questions and evaluations for this assignment are contained within this document in the collapsible <strong>Rubric</strong> blocks.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Reporting accuracy
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p><strong>For posterior statistics of interest, only report digits that are not completely random based on the Monte Carlo standard error (MCSE).</strong></p>
+<p><em>Example:</em> If you estimate <span class="math inline">\(E(\mu) \approx 1.234\)</span> with MCSE(<span class="math inline">\(E(\mu)\)</span>) = 0.01, then the true expectation is likely to be between <span class="math inline">\(1.204\)</span> and <span class="math inline">\(1.264\)</span>, it makes sense to report <span class="math inline">\(E(\mu) \approx 1.2\)</span>.</p>
+<p>See Lecture video 4.1, <a href="../BDA3_notes.html#ch10">the chapter notes</a>, and <a href="https://avehtari.github.io/casestudies/Digits/digits.html">a case study</a> for more information.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Further information
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li>The recommended tool in this course is R (with the IDE RStudio).</li>
+<li>Instead of installing R and RStudio on you own computer, see <a href="https://avehtari.github.io/BDA_course_Aalto/FAQ.html#How_to_use_R_and_RStudio_remotely"><strong>how to use R and RStudio remotely</strong></a>.</li>
+<li>If you want to install R and RStudio locally, download <a href="https://posit.co/download/rstudio-desktop/">R and RStudio</a>.</li>
+<li>There are tons of tutorials, videos and introductions to R and RStudio online. You can find some initial hints from <a href="https://education.rstudio.com/"><strong>RStudio Education pages</strong></a>.</li>
+<li>When working with R, we recommend writing the report using <code>quarto</code> and the provided template. The template includes the formatting instructions and how to include code and figures.</li>
+<li>Instead of <code>quarto</code>, you can use other software to make the PDF report, but the the same instructions for formatting should be used.</li>
+<li>Report all results in a single, <strong>anonymous</strong> *.pdf -file and submit it in <a href="peergrade.io"><strong>peergrade.io</strong></a>.</li>
+<li>The course has its own R package <code>aaltobda</code> with data and functionality to simplify coding. The package is pre-installed in JupyterHub. To install the package on your own system, run the following code (upgrade="never" skips question about updating other packages):</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">install.packages</span>(<span class="st">"aaltobda"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://avehtari.github.io/BDA_course_Aalto/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Many of the exercises can be checked automatically using the R package <code>markmyassignment</code> (pre-installed in JupyterHub). Information on how to install and use the package can be found in <a href="https://cran.r-project.org/web/packages/markmyassignment/vignettes/markmyassignment.html">the <code>markmyassignment</code> documentation</a>. There is no need to include <code>markmyassignment</code> results in the report.</li>
+<li>Recommended additional self study exercises for each chapter in BDA3 are listed in the course web page. These will help to gain deeper understanding of the topic.</li>
+<li>Common questions and answers regarding installation and technical problems can be found in <a href="https://avehtari.github.io/BDA_course_Aalto/FAQ.html">Frequently Asked Questions (FAQ)</a>.</li>
+<li>Deadlines for all assignments can be found on the course web page and in Peergrade. You can set email alerts for the deadlines in Peergrade settings.</li>
+<li>You are allowed to discuss assignments with your friends, but it is not allowed to copy solutions directly from other students or from internet.</li>
+<li>You can copy, e.g., plotting code from the course demos, but really try to solve the actual assignment problems with your own code and explanations.</li>
+<li>Do not share your answers publicly.</li>
+<li>Do not copy answers from the internet or from previous years. We compare the answers to the answers from previous years and to the answers from other students this year.</li>
+<li>Use of AI is allowed on the course, but the most of the work needs to by the student, and you need to report whether you used AI and in which way you used them (See <a href="https://www.aalto.fi/en/services/guidance-for-the-use-of-artificial-intelligence-in-teaching-and-learning-at-aalto-university">points 5 and 6 in Aalto guidelines for use of AI in teaching</a>).</li>
+<li>All suspected plagiarism will be reported and investigated. See more about the <a href="https://into.aalto.fi/display/ensaannot/Aalto+University+Code+of+Academic+Integrity+and+Handling+Violations+Thereof"><strong>Aalto University Code of Academic Integrity and Handling Violations Thereof</strong></a>.</li>
+<li>Do not submit empty PDFs, almost empty PDFs, copy of the questions, nonsense generated by yourself or AI, as these are just harming the other students as they can’t do peergrading for the empty or nonsense submissions. Violations of this rule will be reported and investigated in the same way was plagiarism.</li>
+<li>If you have any suggestions or improvements to the course material, please post in the course chat feedback channel, create an issue, or submit a pull request to the public repository!</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Can you open the PDF and it’s not blank nor nonsense? If the pdf is blank, nonsense, or something like only a copy of the questions, 1) report it as problematic in Peergrade-interface to get another report to review, and 2) send a message to TAs.</li>
+<li>Is the report anonymous?</li>
+</ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Setup
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>This is the template for <a href="assignment4.html">assignment 4</a>. You can download the <a href="https://avehtari.github.io/BDA_course_Aalto/assignments/template4.qmd">qmd-file</a> or copy the code from this rendered document after clicking on <code>&lt;/&gt; Code</code> in the top right corner.</p>
+<p><strong>Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.</strong></p>
+<p>The following will set-up <a href="https://github.com/MansMeg/markmyassignment"><code>markmyassignment</code></a> to check your functions at the end of the notebook:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(markmyassignment)){</span>
+<span id="cb2-2"><a href="#cb2-2"></a>    <span class="fu">install.packages</span>(<span class="st">"markmyassignment"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3"></a>    <span class="fu">library</span>(markmyassignment)</span>
+<span id="cb2-4"><a href="#cb2-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: markmyassignment</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>assignment_path <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">"https://github.com/avehtari/BDA_course_Aalto/"</span>,</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="st">"blob/master/assignments/tests/assignment4.yml"</span>, <span class="at">sep=</span><span class="st">""</span>)</span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="fu">set_assignment</span>(assignment_path)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in get_file.path_github(path = path, dest = temp_file): Not Found (HTTP 404).</code></pre>
+</div>
+</div>
+<p>The following installs and loads the <code>aaltobda</code> package:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(aaltobda)){</span>
+<span id="cb6-2"><a href="#cb6-2"></a>    <span class="fu">install.packages</span>(<span class="st">"aaltobda"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://avehtari.github.io/BDA_course_Aalto/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span>
+<span id="cb6-3"><a href="#cb6-3"></a>    <span class="fu">library</span>(aaltobda)</span>
+<span id="cb6-4"><a href="#cb6-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: aaltobda</code></pre>
+</div>
+</div>
+<p>The following installs and loads the <a href="https://github.com/stefano-meschiari/latex2exp"><code>latex2exp</code> package</a>, which allows us to use LaTeX in plots:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(latex2exp)){</span>
+<span id="cb8-2"><a href="#cb8-2"></a>    <span class="fu">install.packages</span>(<span class="st">"latex2exp"</span>)</span>
+<span id="cb8-3"><a href="#cb8-3"></a>    <span class="fu">library</span>(latex2exp)</span>
+<span id="cb8-4"><a href="#cb8-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: latex2exp</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="bioassay-model" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Bioassay model</h1>
+<p>In this exercise, you will use a dose-response relation model that is used in BDA3 Section 3.7 and in <a href="../BDA3_notes.html#ch3"><strong>the chapter reading instructions</strong></a>. The used likelihood is the same, but instead of uniform priors, we will use a bivariate normal distribution as the joint prior distribution of the parameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>.</p>
+<p>In the prior distribution for <span class="math inline">\((\alpha,\beta)\)</span>, the marginal distributions are <span class="math inline">\(\alpha \sim N(0,2^2)\)</span> and <span class="math inline">\(\beta \sim N(10,10^2)\)</span>, and the correlation between them is <span class="math inline">\(\mathrm{corr}(\alpha, \beta)=0.6\)</span>.</p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 2.a)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 2.a)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Report the mean (vector of two values) and covariance (two by two matrix) of the bivariate normal distribution.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>The mean and covariance of the bivariate normal distribution are a length–<span class="math inline">\(2\)</span> vector and a <span class="math inline">\(2 \times 2\)</span> matrix. The elements of the covariance matrix can be computed using the relation of correlation and covariance.</p>
+</div>
+</div>
+</div>
+<p>You are given 4000 independent draws from the posterior distribution of the model in the dataset <code>bioassay_posterior</code> in the <code>aaltobda</code> package.</p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 2.b)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 2.b)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Report</p>
+<ul>
+<li>the mean as well as</li>
+<li>5 <span class="math inline">\(\%\)</span> and 95 <span class="math inline">\(\%\)</span> quantiles separately</li>
+</ul>
+<p>for both</p>
+<ul>
+<li><span class="math inline">\(\alpha\)</span> and</li>
+<li><span class="math inline">\(\beta\)</span>.</li>
+</ul>
+<p>Report also the Monte Carlo standard errors (MCSEs) for the mean and quantile estimates and explain in text what does Monte Carlo standard error mean and how you decided the number of digits to show.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>The answer is graded as correct only if the number of digits reported is correct. The number of significant digits can be different for the mean and quantile estimates. In some other cases, the number of digits reported can be less than MCSE allows for practical reasons as discussed in the lecture.</p>
+<p><strong>Hint</strong>:</p>
+<p>Quantiles can be computed with the <code>quantile</code> function. With <span class="math inline">\(S\)</span> draws, the MCSE for <span class="math inline">\(\text{E}[\theta]\)</span> is <span class="math inline">\(\sqrt{\text{Var} [\theta]/S}\)</span>. MCSE for the quantile estimates can be computed with the <code>mcse_quantile</code> function from the <code>aaltobda</code> package.</p>
+</div>
+</div>
+</div>
+<p>Loading the library and the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># Useful functions: quantile()</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="co"># and mcse_quantile() (from aaltobda)</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="fu">data</span>(<span class="st">"bioassay_posterior"</span>)</span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="co"># The 4000 draws are now stored in the variable `bioassay_posterior`.</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="co"># The below displays the first rows of the data:</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="fu">head</span>(bioassay_posterior)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        alpha      beta
+1 -0.02050577 10.032841
+2  1.21738518  4.504546
+3  3.04829407 16.239424
+4  1.32272770  4.924268
+5  1.36274817 12.880561
+6  1.08593225  5.943731</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Are the mean and covariance of the prior in a) reported? The correct answers are :
+<ul>
+<li>Not reported</li>
+<li>Yes, but they are not correct</li>
+<li>Yes, and they are correct</li>
+</ul></li>
+<li>Are the means and their MCSEs of alpha and beta in b) reported? Note that the number of digits reported for the means must follow the rule given in the assignment. The correct answers are alpha: mean and beta: mean .
+<ul>
+<li>Not reported</li>
+<li>Yes, but one or both means are incorrect</li>
+<li>Yes, and the means are correct</li>
+</ul></li>
+<li>Are the quantiles and their MCSEs of alpha and beta in b) reported? Note that the number of digits reported for the quantiles must follow the rule given in the assignment. The correct answers are alpha: 5% quantile and beta: 5% quantile , 95% quantile .
+<ul>
+<li>Not reported</li>
+<li>Yes, but one or more quantiles are incorrect</li>
+<li>Yes, and the quantiles are correct</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="importance-sampling" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Importance sampling</h1>
+<p>Now we discard our posterior draws and switch to importance sampling.</p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 3.c)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 3.c)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Implement a function for computing the log importance ratios (log importance weights) when the importance sampling <strong>target distribution</strong> is the posterior distribution, and the <strong>proposal distribution</strong> is the prior distribution from a). Explain in words why it’s better to compute log ratios instead of ratios.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Non-log importance ratios are given by equation (10.3) in the course book. The fact that our proposal distribution is the same as the prior distribution makes this task easier. The <strong>logarithm</strong> of the likelihood can be computed with the <code>bioassaylp</code> function from the <code>aaltobda</code> package. The data required for the likelihood can be loaded with <code>data("bioassay")</code>.</p>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="co"># Useful functions: bioassaylp (from aaltobda)</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a>alpha_test <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">1.896</span>, <span class="sc">-</span><span class="fl">3.6</span>,  <span class="fl">0.374</span>, <span class="fl">0.964</span>, <span class="sc">-</span><span class="fl">3.123</span>, <span class="sc">-</span><span class="fl">1.581</span>)</span>
+<span id="cb12-3"><a href="#cb12-3"></a>beta_test <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">24.76</span>, <span class="fl">20.04</span>, <span class="fl">6.15</span>, <span class="fl">18.65</span>, <span class="fl">8.16</span>, <span class="fl">17.4</span>)</span>
+<span id="cb12-4"><a href="#cb12-4"></a></span>
+<span id="cb12-5"><a href="#cb12-5"></a></span>
+<span id="cb12-6"><a href="#cb12-6"></a>log_importance_weights <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha, beta) {</span>
+<span id="cb12-7"><a href="#cb12-7"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb12-8"><a href="#cb12-8"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb12-9"><a href="#cb12-9"></a>    <span class="fu">c</span>(<span class="sc">-</span><span class="fl">8.95</span>, <span class="sc">-</span><span class="fl">23.47</span>, <span class="sc">-</span><span class="fl">6.02</span>, <span class="sc">-</span><span class="fl">8.13</span>, <span class="sc">-</span><span class="fl">16.61</span>, <span class="sc">-</span><span class="fl">14.57</span>)</span>
+<span id="cb12-10"><a href="#cb12-10"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 3.d)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 3.d)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Implement a function for computing normalized importance ratios from the unnormalized log ratios in c). In other words, exponentiate the log ratios and scale them such that they sum to one. Explain in words what is the effect of exponentiating and scaling so that sum is one.</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>normalized_importance_weights <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha, beta) {</span>
+<span id="cb13-2"><a href="#cb13-2"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb13-3"><a href="#cb13-3"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a>    <span class="fu">c</span>(<span class="fl">0.045</span>, <span class="fl">0.000</span>, <span class="fl">0.852</span>, <span class="fl">0.103</span>, <span class="fl">0.000</span>, <span class="fl">0.000</span>)</span>
+<span id="cb13-5"><a href="#cb13-5"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 3.e)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 3.e)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Sample 4000 draws of <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> from the prior distribution from a). Compute and plot a histogram of the 4000 normalized importance ratios. Use the functions you implemented in c) and d).</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Use the function <code>rmvnorm</code> from the <code>aaltobda</code> package for sampling.</p>
+</div>
+</div>
+</div>
+<p>Write your answers and code here!</p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 3.f)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 3.f)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Using the importance ratios, compute the importance sampling effective sample size <span class="math inline">\(S_{\text{eff}}\)</span> and report it.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-17" class="callout-17-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Equation (10.4) in the course book.</p>
+<p><em>BDA3 1st (2013) and 2nd (2014) printing have an error for <span class="math inline">\(\tilde{w}(\theta^s)\)</span> used in the effective sample size equation (10.4). The normalized weights equation should not have the multiplier S (the normalized weights should sum to one). The later printings, the online version, and the slides have the correct equation.</em></p>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>S_eff <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha, beta) {</span>
+<span id="cb14-2"><a href="#cb14-2"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb14-3"><a href="#cb14-3"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a>    <span class="fl">1.354</span></span>
+<span id="cb14-5"><a href="#cb14-5"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 3.g)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 3.g)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Explain in your own words what the importance sampling effective sample size represents. Also explain how the effective sample size is seen in the histogram of the weights that you plotted in e).</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 3.h)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 3.h)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Implement a function for computing the posterior mean using importance sampling, and compute the mean using your 4000 draws. Explain in your own words the computation for importance sampling. Report the means for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>, and also the Monte Carlo standard errors (MCSEs) for the mean estimates. Report the number of digits for the means based on the MCSEs.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-20" class="callout-20-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>The values below are <em>only</em> a test case, you need to use 4000 draws for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> in the final report.</p>
+<p>Use the same equation for the MCSE of <span class="math inline">\(\text{E}[\theta]\)</span> as earlier (<span class="math inline">\(\sqrt{\text{Var} [\theta]/S}\)</span>), but now replace <span class="math inline">\(S\)</span> with <span class="math inline">\(S_{\text{eff}}\)</span>. To compute <span class="math inline">\(\text{Var} [\theta]\)</span> with importance sampling, use the identity <span class="math inline">\(\text{Var}[\theta] = \text{E}[\theta^2] - \text{E}[\theta]^2\)</span>.</p>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>posterior_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha, beta) {</span>
+<span id="cb15-2"><a href="#cb15-2"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb15-3"><a href="#cb15-3"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb15-4"><a href="#cb15-4"></a>    <span class="fu">c</span>(<span class="fl">0.503</span>, <span class="fl">8.275</span>)</span>
+<span id="cb15-5"><a href="#cb15-5"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Is the source code for the function in c) reported?
+<ul>
+<li>No</li>
+<li>Yes</li>
+</ul></li>
+<li>Is the source code for the function in d) reported?
+<ul>
+<li>No</li>
+<li>Yes</li>
+</ul></li>
+<li>Does the histogram in e) look something like this figure? If it is evident that the normalized importance ratios are computed correctly, but the prior was incorrect, you can still grade “Reported and looks similar”.
+<ul>
+<li>Not reported</li>
+<li>Reported, but looks different</li>
+<li>Reported and looks similar</li>
+</ul></li>
+<li>Is the effective sample size in f) reported? The correct range for the effective sample size is between . However, if it is evident that the effective sample size is computed correctly, but the prior was incorrect, you can still grade “Yes, and it is correct”.
+<ul>
+<li>No</li>
+<li>Yes, but it is not correct</li>
+<li>Yes, and it is correct</li>
+</ul></li>
+<li>The correct explanation for g) is roughly the following: </li>
+<li>What is the connection between S_eff and the histogram of weights: How is the answer?
+<ul>
+<li>Totally wrong/has not tried</li>
+<li>Something is a bit wrong</li>
+<li>Explanation is sensible</li>
+</ul></li>
+<li>Is the source code for the function in h) reported?
+<ul>
+<li>No</li>
+<li>Yes</li>
+</ul></li>
+<li>Are the means and their MCSEs of alpha and beta in h) reported? Note that the number of digits reported for the means must follow the rule given in the assignment. The correct answers should be close to these: alpha: mean
+<ul>
+<li>Not reported</li>
+<li>Yes, but they are incorrect</li>
+<li>Yes, and they are correct</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-22-contents" aria-controls="callout-22" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+markmyassignment
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-22" class="callout-22-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>The following will check the functions for which <code>markmyassignment</code> has been set up:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">mark_my_assignment</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error: No assignment has been set. Please use set_assignment().</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="overall-quality-of-the-report" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Overall quality of the report</h1>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Does the report include comment on whether AI was used, and if AI was used, explanation on how it was used?
+<ul>
+<li>No</li>
+<li>Yes</li>
+</ul></li>
+<li>Does the report follow the formatting instructions?
+<ul>
+<li>Not at all</li>
+<li>Little</li>
+<li>Mostly</li>
+<li>Yes</li>
+</ul></li>
+<li>In case the report doesn’t fully follow the general and formatting instructions, specify the instructions that have not been followed. If applicable, specify the page of the report, where this difference is visible. This will help the other student to improve their reports so that they are easier to read and review. If applicable, specify the page of the report, where this difference in formatting is visible.</li>
+<li>Please also provide feedback on the presentation (e.g.&nbsp;text, layout, flow of the responses, figures, figure captions). Part of the course is practicing making data analysis reports. By providing feedback on the report presentation, other students can learn what they can improve or what they already did well. You should be able to provide constructive or positive feedback for all non-empty and non-nonsense reports. If you think the report is perfect, and you can’t come up with any suggestions how to improve, you can provide feedback on what you liked and why you think some part of the report is better than yours.</li>
+</ul>
+</div>
+</div>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./template3.html" class="pagination-link" aria-label="Assignment 3, 2023">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Assignment 3, 2023</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./template5.html" class="pagination-link" aria-label="Assignment 5, 2023">
+        <span class="nav-page-text">Assignment 5, 2023</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb18" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb18-1"><a href="#cb18-1"></a><span class="co">---</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a><span class="an">title:</span><span class="co"> "Assignment 4, 2023"</span></span>
+<span id="cb18-3"><a href="#cb18-3"></a><span class="an">author:</span><span class="co"> "Aki Vehtari et al."</span></span>
+<span id="cb18-4"><a href="#cb18-4"></a><span class="an">format:</span></span>
+<span id="cb18-5"><a href="#cb18-5"></a><span class="co">  html:</span></span>
+<span id="cb18-6"><a href="#cb18-6"></a><span class="co">    toc: true</span></span>
+<span id="cb18-7"><a href="#cb18-7"></a><span class="co">    code-tools: true</span></span>
+<span id="cb18-8"><a href="#cb18-8"></a><span class="co">    code-line-numbers: true</span></span>
+<span id="cb18-9"><a href="#cb18-9"></a><span class="co">    number-sections: true</span></span>
+<span id="cb18-10"><a href="#cb18-10"></a><span class="co">    mainfont: Georgia, serif</span></span>
+<span id="cb18-11"><a href="#cb18-11"></a><span class="co">    page-layout: article</span></span>
+<span id="cb18-12"><a href="#cb18-12"></a><span class="co">  pdf:</span></span>
+<span id="cb18-13"><a href="#cb18-13"></a><span class="co">    geometry:</span></span>
+<span id="cb18-14"><a href="#cb18-14"></a><span class="co">    - left=1cm,top=1cm,bottom=1cm,right=7cm</span></span>
+<span id="cb18-15"><a href="#cb18-15"></a><span class="co">    number-sections: true</span></span>
+<span id="cb18-16"><a href="#cb18-16"></a><span class="co">    code-annotations: none</span></span>
+<span id="cb18-17"><a href="#cb18-17"></a><span class="an">editor:</span><span class="co"> source</span></span>
+<span id="cb18-18"><a href="#cb18-18"></a><span class="co">---</span></span>
+<span id="cb18-19"><a href="#cb18-19"></a></span>
+<span id="cb18-20"><a href="#cb18-20"></a><span class="fu"># General information</span></span>
+<span id="cb18-21"><a href="#cb18-21"></a></span>
+<span id="cb18-22"><a href="#cb18-22"></a>**This is for BDA 2023**</span>
+<span id="cb18-23"><a href="#cb18-23"></a></span>
+<span id="cb18-24"><a href="#cb18-24"></a>This assignment is related to Lecture 4 and Chapters 3 and 10.</span>
+<span id="cb18-25"><a href="#cb18-25"></a></span>
+<span id="cb18-26"><a href="#cb18-26"></a>**The maximum amount of points from this assignment is 6.**</span>
+<span id="cb18-27"><a href="#cb18-27"></a></span>
+<span id="cb18-28"><a href="#cb18-28"></a>We have prepared a **quarto template specific for this assignment ([html](template4.html), [qmd](https://avehtari.github.io/BDA_course_Aalto/assignments/template4.qmd), [pdf](template4.pdf))** to help you get started.</span>
+<span id="cb18-29"><a href="#cb18-29"></a></span>
+<span id="cb18-30"><a href="#cb18-30"></a>::: {.callout-tip collapse=false}</span>
+<span id="cb18-31"><a href="#cb18-31"></a>**Reading instructions:**</span>
+<span id="cb18-32"><a href="#cb18-32"></a></span>
+<span id="cb18-33"><a href="#cb18-33"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**The reading instructions for BDA3 Chapter 3**</span><span class="co">](../BDA3_notes.html#ch3)</span>.</span>
+<span id="cb18-34"><a href="#cb18-34"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**The reading instructions for BDA3 Chapter 10**</span><span class="co">](../BDA3_notes.html#ch10)</span>.</span>
+<span id="cb18-35"><a href="#cb18-35"></a></span>
+<span id="cb18-36"><a href="#cb18-36"></a>{{&lt; include includes/_grading_instructions.md &gt;}}</span>
+<span id="cb18-37"><a href="#cb18-37"></a>:::</span>
+<span id="cb18-38"><a href="#cb18-38"></a></span>
+<span id="cb18-39"><a href="#cb18-39"></a>{{&lt; include includes/_reporting_accuracy.md &gt;}}</span>
+<span id="cb18-40"><a href="#cb18-40"></a></span>
+<span id="cb18-41"><a href="#cb18-41"></a>{{&lt; include includes/_general_info.md &gt;}}</span>
+<span id="cb18-42"><a href="#cb18-42"></a></span>
+<span id="cb18-43"><a href="#cb18-43"></a>::: {.callout-warning collapse=false}</span>
+<span id="cb18-44"><a href="#cb18-44"></a><span class="fu">## Setup</span></span>
+<span id="cb18-45"><a href="#cb18-45"></a></span>
+<span id="cb18-46"><a href="#cb18-46"></a>This is the template for <span class="co">[</span><span class="ot">assignment 4</span><span class="co">](assignment4.html)</span>. You can download the <span class="co">[</span><span class="ot">qmd-file</span><span class="co">](https://avehtari.github.io/BDA_course_Aalto/assignments/template4.qmd)</span> or copy the code from this rendered document after clicking on <span class="in">`&lt;/&gt; Code`</span> in the top right corner.</span>
+<span id="cb18-47"><a href="#cb18-47"></a></span>
+<span id="cb18-48"><a href="#cb18-48"></a>**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.**</span>
+<span id="cb18-49"><a href="#cb18-49"></a></span>
+<span id="cb18-50"><a href="#cb18-50"></a>The following will set-up <span class="co">[</span><span class="ot">`markmyassignment`</span><span class="co">](https://github.com/MansMeg/markmyassignment)</span> to check your functions at the end of the notebook:</span>
+<span id="cb18-51"><a href="#cb18-51"></a></span>
+<span id="cb18-54"><a href="#cb18-54"></a><span class="in">```{r}</span></span>
+<span id="cb18-55"><a href="#cb18-55"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(markmyassignment)){</span>
+<span id="cb18-56"><a href="#cb18-56"></a>    <span class="fu">install.packages</span>(<span class="st">"markmyassignment"</span>)</span>
+<span id="cb18-57"><a href="#cb18-57"></a>    <span class="fu">library</span>(markmyassignment)</span>
+<span id="cb18-58"><a href="#cb18-58"></a>}</span>
+<span id="cb18-59"><a href="#cb18-59"></a>assignment_path <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">"https://github.com/avehtari/BDA_course_Aalto/"</span>,</span>
+<span id="cb18-60"><a href="#cb18-60"></a><span class="st">"blob/master/assignments/tests/assignment4.yml"</span>, <span class="at">sep=</span><span class="st">""</span>)</span>
+<span id="cb18-61"><a href="#cb18-61"></a><span class="fu">set_assignment</span>(assignment_path)</span>
+<span id="cb18-62"><a href="#cb18-62"></a><span class="in">```</span></span>
+<span id="cb18-63"><a href="#cb18-63"></a></span>
+<span id="cb18-64"><a href="#cb18-64"></a>The following installs and loads the <span class="in">`aaltobda`</span> package:</span>
+<span id="cb18-67"><a href="#cb18-67"></a><span class="in">```{r}</span></span>
+<span id="cb18-68"><a href="#cb18-68"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(aaltobda)){</span>
+<span id="cb18-69"><a href="#cb18-69"></a>    <span class="fu">install.packages</span>(<span class="st">"aaltobda"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://avehtari.github.io/BDA_course_Aalto/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span>
+<span id="cb18-70"><a href="#cb18-70"></a>    <span class="fu">library</span>(aaltobda)</span>
+<span id="cb18-71"><a href="#cb18-71"></a>}</span>
+<span id="cb18-72"><a href="#cb18-72"></a><span class="in">```</span></span>
+<span id="cb18-73"><a href="#cb18-73"></a>The following installs and loads the <span class="co">[</span><span class="ot">`latex2exp` package</span><span class="co">](https://github.com/stefano-meschiari/latex2exp)</span>, which allows us to use LaTeX in plots:</span>
+<span id="cb18-76"><a href="#cb18-76"></a><span class="in">```{r}</span></span>
+<span id="cb18-77"><a href="#cb18-77"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(latex2exp)){</span>
+<span id="cb18-78"><a href="#cb18-78"></a>    <span class="fu">install.packages</span>(<span class="st">"latex2exp"</span>)</span>
+<span id="cb18-79"><a href="#cb18-79"></a>    <span class="fu">library</span>(latex2exp)</span>
+<span id="cb18-80"><a href="#cb18-80"></a>}</span>
+<span id="cb18-81"><a href="#cb18-81"></a><span class="in">```</span></span>
+<span id="cb18-82"><a href="#cb18-82"></a>:::</span>
+<span id="cb18-83"><a href="#cb18-83"></a></span>
+<span id="cb18-84"><a href="#cb18-84"></a><span class="fu"># Bioassay model</span></span>
+<span id="cb18-85"><a href="#cb18-85"></a></span>
+<span id="cb18-86"><a href="#cb18-86"></a>In this exercise, you will use a dose-response</span>
+<span id="cb18-87"><a href="#cb18-87"></a>relation model that is used in BDA3 Section 3.7 and in</span>
+<span id="cb18-88"><a href="#cb18-88"></a>[**the chapter reading</span>
+<span id="cb18-89"><a href="#cb18-89"></a>instructions**](../BDA3_notes.html#ch3).</span>
+<span id="cb18-90"><a href="#cb18-90"></a>The used likelihood is the same, but instead of uniform priors, we will</span>
+<span id="cb18-91"><a href="#cb18-91"></a>use a bivariate normal distribution as the joint prior distribution of</span>
+<span id="cb18-92"><a href="#cb18-92"></a>the parameters $\alpha$ and $\beta$.</span>
+<span id="cb18-93"><a href="#cb18-93"></a></span>
+<span id="cb18-94"><a href="#cb18-94"></a></span>
+<span id="cb18-95"><a href="#cb18-95"></a>In the prior distribution for $(\alpha,\beta)$, the marginal</span>
+<span id="cb18-96"><a href="#cb18-96"></a>distributions are $\alpha \sim N(0,2^2)$ and</span>
+<span id="cb18-97"><a href="#cb18-97"></a>$\beta \sim N(10,10^2)$, and the correlation between them is</span>
+<span id="cb18-98"><a href="#cb18-98"></a>$\mathrm{corr}(\alpha, \beta)=0.6$.</span>
+<span id="cb18-99"><a href="#cb18-99"></a></span>
+<span id="cb18-100"><a href="#cb18-100"></a>::: {.callout-warning icon=false title="Subtask 2.a)"}</span>
+<span id="cb18-101"><a href="#cb18-101"></a>Report the mean (vector of two</span>
+<span id="cb18-102"><a href="#cb18-102"></a>values) and covariance (two by two matrix) of the bivariate normal</span>
+<span id="cb18-103"><a href="#cb18-103"></a>distribution.</span>
+<span id="cb18-104"><a href="#cb18-104"></a>:::</span>
+<span id="cb18-105"><a href="#cb18-105"></a></span>
+<span id="cb18-106"><a href="#cb18-106"></a>::: {.callout-tip collapse=false}</span>
+<span id="cb18-107"><a href="#cb18-107"></a>The mean and covariance of the bivariate normal</span>
+<span id="cb18-108"><a href="#cb18-108"></a>distribution are a length--$2$ vector and a $2 \times 2$ matrix.</span>
+<span id="cb18-109"><a href="#cb18-109"></a>The elements of the covariance matrix can be computed using the</span>
+<span id="cb18-110"><a href="#cb18-110"></a>relation of correlation and covariance.</span>
+<span id="cb18-111"><a href="#cb18-111"></a>:::</span>
+<span id="cb18-112"><a href="#cb18-112"></a></span>
+<span id="cb18-113"><a href="#cb18-113"></a>You are given 4000 independent draws from the posterior distribution</span>
+<span id="cb18-114"><a href="#cb18-114"></a>of the model in the dataset <span class="in">`bioassay_posterior`</span> in the <span class="in">`aaltobda`</span> package.</span>
+<span id="cb18-115"><a href="#cb18-115"></a></span>
+<span id="cb18-116"><a href="#cb18-116"></a>::: {.callout-warning icon=false title="Subtask 2.b)"}</span>
+<span id="cb18-117"><a href="#cb18-117"></a>Report</span>
+<span id="cb18-118"><a href="#cb18-118"></a></span>
+<span id="cb18-119"><a href="#cb18-119"></a><span class="ss">* </span>the mean as well as</span>
+<span id="cb18-120"><a href="#cb18-120"></a><span class="ss">* </span>5 $\%$ and 95 $\%$ quantiles separately</span>
+<span id="cb18-121"><a href="#cb18-121"></a></span>
+<span id="cb18-122"><a href="#cb18-122"></a>for both</span>
+<span id="cb18-123"><a href="#cb18-123"></a></span>
+<span id="cb18-124"><a href="#cb18-124"></a><span class="ss">* </span>$\alpha$ and</span>
+<span id="cb18-125"><a href="#cb18-125"></a><span class="ss">* </span>$\beta$.</span>
+<span id="cb18-126"><a href="#cb18-126"></a></span>
+<span id="cb18-127"><a href="#cb18-127"></a>Report also the Monte Carlo standard</span>
+<span id="cb18-128"><a href="#cb18-128"></a>errors (MCSEs) for the mean and quantile estimates and explain in text what does</span>
+<span id="cb18-129"><a href="#cb18-129"></a>Monte Carlo standard error mean and how you decided the number of</span>
+<span id="cb18-130"><a href="#cb18-130"></a>digits to show.</span>
+<span id="cb18-131"><a href="#cb18-131"></a>:::</span>
+<span id="cb18-132"><a href="#cb18-132"></a></span>
+<span id="cb18-133"><a href="#cb18-133"></a>::: {.callout-tip collapse=false}</span>
+<span id="cb18-134"><a href="#cb18-134"></a>The answer is graded as correct only if the number of</span>
+<span id="cb18-135"><a href="#cb18-135"></a>digits reported is correct. The number of significant digits can</span>
+<span id="cb18-136"><a href="#cb18-136"></a>be different for the mean and quantile estimates. In some other</span>
+<span id="cb18-137"><a href="#cb18-137"></a>cases, the number of digits reported can be less than MCSE</span>
+<span id="cb18-138"><a href="#cb18-138"></a>allows for practical reasons as discussed in the lecture.</span>
+<span id="cb18-139"><a href="#cb18-139"></a></span>
+<span id="cb18-140"><a href="#cb18-140"></a> **Hint**:</span>
+<span id="cb18-141"><a href="#cb18-141"></a></span>
+<span id="cb18-142"><a href="#cb18-142"></a>Quantiles can be computed with the <span class="in">`quantile`</span></span>
+<span id="cb18-143"><a href="#cb18-143"></a>function. With $S$ draws, the MCSE for $\text{E}<span class="co">[</span><span class="ot">\theta</span><span class="co">]</span>$ is</span>
+<span id="cb18-144"><a href="#cb18-144"></a>$\sqrt{\text{Var} <span class="co">[</span><span class="ot">\theta</span><span class="co">]</span>/S}$. MCSE for the quantile estimates</span>
+<span id="cb18-145"><a href="#cb18-145"></a>can be computed with the <span class="in">`mcse_quantile`</span> function from the</span>
+<span id="cb18-146"><a href="#cb18-146"></a><span class="in">`aaltobda`</span> package.</span>
+<span id="cb18-147"><a href="#cb18-147"></a>:::</span>
+<span id="cb18-148"><a href="#cb18-148"></a></span>
+<span id="cb18-149"><a href="#cb18-149"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb18-150"><a href="#cb18-150"></a>Loading the library and the data.</span>
+<span id="cb18-151"><a href="#cb18-151"></a><span class="in">``` {r}</span></span>
+<span id="cb18-152"><a href="#cb18-152"></a><span class="in"># Useful functions: quantile()</span></span>
+<span id="cb18-153"><a href="#cb18-153"></a><span class="in"># and mcse_quantile() (from aaltobda)</span></span>
+<span id="cb18-154"><a href="#cb18-154"></a></span>
+<span id="cb18-155"><a href="#cb18-155"></a><span class="in">data("bioassay_posterior")</span></span>
+<span id="cb18-156"><a href="#cb18-156"></a><span class="in"># The 4000 draws are now stored in the variable `bioassay_posterior`.</span></span>
+<span id="cb18-157"><a href="#cb18-157"></a><span class="in"># The below displays the first rows of the data:</span></span>
+<span id="cb18-158"><a href="#cb18-158"></a><span class="in">head(bioassay_posterior)</span></span>
+<span id="cb18-159"><a href="#cb18-159"></a><span class="in">```</span></span>
+<span id="cb18-160"><a href="#cb18-160"></a>:::</span>
+<span id="cb18-161"><a href="#cb18-161"></a></span>
+<span id="cb18-162"><a href="#cb18-162"></a></span>
+<span id="cb18-163"><a href="#cb18-163"></a></span>
+<span id="cb18-164"><a href="#cb18-164"></a>::: {.callout-note icon=false title="Rubric"}</span>
+<span id="cb18-165"><a href="#cb18-165"></a></span>
+<span id="cb18-166"><a href="#cb18-166"></a><span class="ss">* </span>Are the mean and covariance of the prior in a) reported? The correct answers are :</span>
+<span id="cb18-167"><a href="#cb18-167"></a><span class="ss">    * </span>Not reported</span>
+<span id="cb18-168"><a href="#cb18-168"></a><span class="ss">    * </span>Yes, but they are not correct</span>
+<span id="cb18-169"><a href="#cb18-169"></a><span class="ss">    * </span>Yes, and they are correct</span>
+<span id="cb18-170"><a href="#cb18-170"></a><span class="ss">* </span>Are the means and their MCSEs of alpha and beta in b) reported? Note that the number of digits</span>
+<span id="cb18-171"><a href="#cb18-171"></a>reported for the means must follow the rule given in the assignment. The correct answers are</span>
+<span id="cb18-172"><a href="#cb18-172"></a>alpha: mean  and</span>
+<span id="cb18-173"><a href="#cb18-173"></a>beta: mean .</span>
+<span id="cb18-174"><a href="#cb18-174"></a><span class="ss">    * </span>Not reported</span>
+<span id="cb18-175"><a href="#cb18-175"></a><span class="ss">    * </span>Yes, but one or both means are incorrect</span>
+<span id="cb18-176"><a href="#cb18-176"></a><span class="ss">    * </span>Yes, and the means are correct</span>
+<span id="cb18-177"><a href="#cb18-177"></a><span class="ss">* </span>Are the quantiles and their MCSEs of alpha and beta in b) reported? Note that the number of digits</span>
+<span id="cb18-178"><a href="#cb18-178"></a>reported for the quantiles must follow the rule given in the assignment. The correct answers are</span>
+<span id="cb18-179"><a href="#cb18-179"></a>alpha: 5% quantile  and</span>
+<span id="cb18-180"><a href="#cb18-180"></a>beta: 5% quantile [4.0 or 4 (MCSE 0.07043125) (here 4 is also accepted, because it can be sensible to use</span>
+<span id="cb18-181"><a href="#cb18-181"></a>same reporting accuracy for both quantiles)]{.content-hidden when-profile="public"}, 95% quantile .</span>
+<span id="cb18-182"><a href="#cb18-182"></a><span class="ss">    * </span>Not reported</span>
+<span id="cb18-183"><a href="#cb18-183"></a><span class="ss">    * </span>Yes, but one or more quantiles are incorrect</span>
+<span id="cb18-184"><a href="#cb18-184"></a><span class="ss">    * </span>Yes, and the quantiles are correct</span>
+<span id="cb18-185"><a href="#cb18-185"></a></span>
+<span id="cb18-186"><a href="#cb18-186"></a>:::</span>
+<span id="cb18-187"><a href="#cb18-187"></a></span>
+<span id="cb18-188"><a href="#cb18-188"></a><span class="fu"># Importance sampling</span></span>
+<span id="cb18-189"><a href="#cb18-189"></a></span>
+<span id="cb18-190"><a href="#cb18-190"></a>Now we discard our posterior draws and switch to importance sampling.</span>
+<span id="cb18-191"><a href="#cb18-191"></a></span>
+<span id="cb18-192"><a href="#cb18-192"></a>::: {.callout-warning icon=false title="Subtask 3.c)"}</span>
+<span id="cb18-193"><a href="#cb18-193"></a>Implement a function for computing the log importance ratios (log</span>
+<span id="cb18-194"><a href="#cb18-194"></a>importance weights) when the importance sampling **target</span>
+<span id="cb18-195"><a href="#cb18-195"></a>distribution** is the posterior distribution, and the **proposal</span>
+<span id="cb18-196"><a href="#cb18-196"></a>distribution** is the prior distribution from a).</span>
+<span id="cb18-197"><a href="#cb18-197"></a>Explain in words why it's better to compute log ratios instead of</span>
+<span id="cb18-198"><a href="#cb18-198"></a>ratios.</span>
+<span id="cb18-199"><a href="#cb18-199"></a>:::</span>
+<span id="cb18-200"><a href="#cb18-200"></a></span>
+<span id="cb18-201"><a href="#cb18-201"></a>::: {.callout-tip collapse=false}</span>
+<span id="cb18-202"><a href="#cb18-202"></a>Non-log importance ratios are given by</span>
+<span id="cb18-203"><a href="#cb18-203"></a>equation (10.3) in the course book. The fact that our proposal</span>
+<span id="cb18-204"><a href="#cb18-204"></a>distribution is the same as the prior distribution makes this</span>
+<span id="cb18-205"><a href="#cb18-205"></a>task easier. The **logarithm** of the likelihood can be computed</span>
+<span id="cb18-206"><a href="#cb18-206"></a>with the <span class="in">`bioassaylp`</span> function from the <span class="in">`aaltobda`</span> package. The</span>
+<span id="cb18-207"><a href="#cb18-207"></a>data required for the likelihood can be loaded with</span>
+<span id="cb18-208"><a href="#cb18-208"></a><span class="in">`data("bioassay")`</span>.</span>
+<span id="cb18-209"><a href="#cb18-209"></a>:::</span>
+<span id="cb18-210"><a href="#cb18-210"></a></span>
+<span id="cb18-211"><a href="#cb18-211"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb18-214"><a href="#cb18-214"></a><span class="in">```{r}</span></span>
+<span id="cb18-215"><a href="#cb18-215"></a><span class="co"># Useful functions: bioassaylp (from aaltobda)</span></span>
+<span id="cb18-216"><a href="#cb18-216"></a>alpha_test <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">1.896</span>, <span class="sc">-</span><span class="fl">3.6</span>,  <span class="fl">0.374</span>, <span class="fl">0.964</span>, <span class="sc">-</span><span class="fl">3.123</span>, <span class="sc">-</span><span class="fl">1.581</span>)</span>
+<span id="cb18-217"><a href="#cb18-217"></a>beta_test <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">24.76</span>, <span class="fl">20.04</span>, <span class="fl">6.15</span>, <span class="fl">18.65</span>, <span class="fl">8.16</span>, <span class="fl">17.4</span>)</span>
+<span id="cb18-218"><a href="#cb18-218"></a></span>
+<span id="cb18-219"><a href="#cb18-219"></a></span>
+<span id="cb18-220"><a href="#cb18-220"></a>log_importance_weights <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha, beta) {</span>
+<span id="cb18-221"><a href="#cb18-221"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb18-222"><a href="#cb18-222"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb18-223"><a href="#cb18-223"></a>    <span class="fu">c</span>(<span class="sc">-</span><span class="fl">8.95</span>, <span class="sc">-</span><span class="fl">23.47</span>, <span class="sc">-</span><span class="fl">6.02</span>, <span class="sc">-</span><span class="fl">8.13</span>, <span class="sc">-</span><span class="fl">16.61</span>, <span class="sc">-</span><span class="fl">14.57</span>)</span>
+<span id="cb18-224"><a href="#cb18-224"></a>}</span>
+<span id="cb18-225"><a href="#cb18-225"></a><span class="in">```</span></span>
+<span id="cb18-226"><a href="#cb18-226"></a>:::</span>
+<span id="cb18-227"><a href="#cb18-227"></a></span>
+<span id="cb18-228"><a href="#cb18-228"></a>::: {.callout-warning icon=false title="Subtask 3.d)"}</span>
+<span id="cb18-229"><a href="#cb18-229"></a>Implement a function for computing normalized importance ratios from</span>
+<span id="cb18-230"><a href="#cb18-230"></a>the unnormalized log ratios in c). In other words, exponentiate the</span>
+<span id="cb18-231"><a href="#cb18-231"></a>log ratios and scale them such that they sum to one. Explain in</span>
+<span id="cb18-232"><a href="#cb18-232"></a>words what is the effect of exponentiating and scaling so that sum</span>
+<span id="cb18-233"><a href="#cb18-233"></a>is one.</span>
+<span id="cb18-234"><a href="#cb18-234"></a>:::</span>
+<span id="cb18-235"><a href="#cb18-235"></a></span>
+<span id="cb18-236"><a href="#cb18-236"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb18-239"><a href="#cb18-239"></a><span class="in">```{r}</span></span>
+<span id="cb18-240"><a href="#cb18-240"></a>normalized_importance_weights <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha, beta) {</span>
+<span id="cb18-241"><a href="#cb18-241"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb18-242"><a href="#cb18-242"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb18-243"><a href="#cb18-243"></a>    <span class="fu">c</span>(<span class="fl">0.045</span>, <span class="fl">0.000</span>, <span class="fl">0.852</span>, <span class="fl">0.103</span>, <span class="fl">0.000</span>, <span class="fl">0.000</span>)</span>
+<span id="cb18-244"><a href="#cb18-244"></a>}</span>
+<span id="cb18-245"><a href="#cb18-245"></a><span class="in">```</span></span>
+<span id="cb18-246"><a href="#cb18-246"></a>:::</span>
+<span id="cb18-247"><a href="#cb18-247"></a></span>
+<span id="cb18-248"><a href="#cb18-248"></a>::: {.callout-warning icon=false title="Subtask 3.e)"}</span>
+<span id="cb18-249"><a href="#cb18-249"></a>Sample 4000 draws of $\alpha$ and $\beta$ from the prior</span>
+<span id="cb18-250"><a href="#cb18-250"></a>distribution from a). Compute and plot a histogram of the 4000</span>
+<span id="cb18-251"><a href="#cb18-251"></a>normalized importance ratios. Use the functions you implemented</span>
+<span id="cb18-252"><a href="#cb18-252"></a>in c) and d).</span>
+<span id="cb18-253"><a href="#cb18-253"></a>:::</span>
+<span id="cb18-254"><a href="#cb18-254"></a></span>
+<span id="cb18-255"><a href="#cb18-255"></a>::: {.callout-tip collapse=false}</span>
+<span id="cb18-256"><a href="#cb18-256"></a>Use the function <span class="in">`rmvnorm`</span> from the <span class="in">`aaltobda`</span></span>
+<span id="cb18-257"><a href="#cb18-257"></a>package for sampling.</span>
+<span id="cb18-258"><a href="#cb18-258"></a>:::</span>
+<span id="cb18-259"><a href="#cb18-259"></a></span>
+<span id="cb18-260"><a href="#cb18-260"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb18-261"><a href="#cb18-261"></a>Write your answers and code here!</span>
+<span id="cb18-262"><a href="#cb18-262"></a>:::</span>
+<span id="cb18-263"><a href="#cb18-263"></a></span>
+<span id="cb18-264"><a href="#cb18-264"></a>::: {.callout-warning icon=false title="Subtask 3.f)"}</span>
+<span id="cb18-265"><a href="#cb18-265"></a>Using the importance ratios, compute the importance sampling</span>
+<span id="cb18-266"><a href="#cb18-266"></a>effective sample size $S_{\text{eff}}$ and report it.</span>
+<span id="cb18-267"><a href="#cb18-267"></a>:::</span>
+<span id="cb18-268"><a href="#cb18-268"></a></span>
+<span id="cb18-269"><a href="#cb18-269"></a>::: {.callout-tip collapse=false}</span>
+<span id="cb18-270"><a href="#cb18-270"></a>Equation (10.4) in the course book.</span>
+<span id="cb18-271"><a href="#cb18-271"></a></span>
+<span id="cb18-272"><a href="#cb18-272"></a>*BDA3 1st (2013) and 2nd (2014) printing have an error</span>
+<span id="cb18-273"><a href="#cb18-273"></a>for $\tilde{w}(\theta^s)$ used in the effective sample size</span>
+<span id="cb18-274"><a href="#cb18-274"></a>equation (10.4). The normalized weights equation should not have</span>
+<span id="cb18-275"><a href="#cb18-275"></a>the multiplier S (the normalized weights should sum to one).</span>
+<span id="cb18-276"><a href="#cb18-276"></a>The later printings, the online version, and the slides have the</span>
+<span id="cb18-277"><a href="#cb18-277"></a>correct equation.*</span>
+<span id="cb18-278"><a href="#cb18-278"></a>:::</span>
+<span id="cb18-279"><a href="#cb18-279"></a></span>
+<span id="cb18-280"><a href="#cb18-280"></a></span>
+<span id="cb18-281"><a href="#cb18-281"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb18-284"><a href="#cb18-284"></a><span class="in">```{r}</span></span>
+<span id="cb18-285"><a href="#cb18-285"></a>S_eff <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha, beta) {</span>
+<span id="cb18-286"><a href="#cb18-286"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb18-287"><a href="#cb18-287"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb18-288"><a href="#cb18-288"></a>    <span class="fl">1.354</span></span>
+<span id="cb18-289"><a href="#cb18-289"></a>}</span>
+<span id="cb18-290"><a href="#cb18-290"></a><span class="in">```</span></span>
+<span id="cb18-291"><a href="#cb18-291"></a>:::</span>
+<span id="cb18-292"><a href="#cb18-292"></a></span>
+<span id="cb18-293"><a href="#cb18-293"></a></span>
+<span id="cb18-294"><a href="#cb18-294"></a>::: {.callout-warning icon=false title="Subtask 3.g)"}</span>
+<span id="cb18-295"><a href="#cb18-295"></a>Explain in your own words what the importance sampling effective</span>
+<span id="cb18-296"><a href="#cb18-296"></a>sample size represents. Also explain how the effective sample size</span>
+<span id="cb18-297"><a href="#cb18-297"></a>is seen in the histogram of the weights that you plotted in e).</span>
+<span id="cb18-298"><a href="#cb18-298"></a>:::</span>
+<span id="cb18-299"><a href="#cb18-299"></a></span>
+<span id="cb18-300"><a href="#cb18-300"></a></span>
+<span id="cb18-301"><a href="#cb18-301"></a>::: {.callout-warning icon=false title="Subtask 3.h)"}</span>
+<span id="cb18-302"><a href="#cb18-302"></a>Implement a function for computing the posterior mean using</span>
+<span id="cb18-303"><a href="#cb18-303"></a>importance sampling, and compute the mean using your 4000 draws.</span>
+<span id="cb18-304"><a href="#cb18-304"></a>Explain in your own words the computation for importance sampling.</span>
+<span id="cb18-305"><a href="#cb18-305"></a>Report the means for $\alpha$ and $\beta$, and also the Monte Carlo standard errors (MCSEs) for the mean</span>
+<span id="cb18-306"><a href="#cb18-306"></a>estimates. Report the number of digits for the means based on the</span>
+<span id="cb18-307"><a href="#cb18-307"></a>MCSEs.</span>
+<span id="cb18-308"><a href="#cb18-308"></a>:::</span>
+<span id="cb18-309"><a href="#cb18-309"></a></span>
+<span id="cb18-310"><a href="#cb18-310"></a>::: {.callout-tip collapse=false}</span>
+<span id="cb18-311"><a href="#cb18-311"></a>The values below are *only* a test case, you need to</span>
+<span id="cb18-312"><a href="#cb18-312"></a>use 4000 draws for $\alpha$ and $\beta$ in the final report.</span>
+<span id="cb18-313"><a href="#cb18-313"></a></span>
+<span id="cb18-314"><a href="#cb18-314"></a>Use the same equation for the MCSE of</span>
+<span id="cb18-315"><a href="#cb18-315"></a>$\text{E}<span class="co">[</span><span class="ot">\theta</span><span class="co">]</span>$ as earlier ($\sqrt{\text{Var} <span class="co">[</span><span class="ot">\theta</span><span class="co">]</span>/S}$),</span>
+<span id="cb18-316"><a href="#cb18-316"></a>but now replace $S$ with $S_{\text{eff}}$. To compute</span>
+<span id="cb18-317"><a href="#cb18-317"></a>$\text{Var} <span class="co">[</span><span class="ot">\theta</span><span class="co">]</span>$ with importance sampling, use the identity</span>
+<span id="cb18-318"><a href="#cb18-318"></a>$\text{Var}<span class="co">[</span><span class="ot">\theta</span><span class="co">]</span> = \text{E}<span class="co">[</span><span class="ot">\theta^2</span><span class="co">]</span> - \text{E}<span class="co">[</span><span class="ot">\theta</span><span class="co">]</span>^2$.</span>
+<span id="cb18-319"><a href="#cb18-319"></a>:::</span>
+<span id="cb18-320"><a href="#cb18-320"></a></span>
+<span id="cb18-321"><a href="#cb18-321"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb18-324"><a href="#cb18-324"></a><span class="in">```{r}</span></span>
+<span id="cb18-325"><a href="#cb18-325"></a>posterior_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha, beta) {</span>
+<span id="cb18-326"><a href="#cb18-326"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb18-327"><a href="#cb18-327"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb18-328"><a href="#cb18-328"></a>    <span class="fu">c</span>(<span class="fl">0.503</span>, <span class="fl">8.275</span>)</span>
+<span id="cb18-329"><a href="#cb18-329"></a>}</span>
+<span id="cb18-330"><a href="#cb18-330"></a><span class="in">```</span></span>
+<span id="cb18-331"><a href="#cb18-331"></a>:::</span>
+<span id="cb18-332"><a href="#cb18-332"></a></span>
+<span id="cb18-333"><a href="#cb18-333"></a></span>
+<span id="cb18-334"><a href="#cb18-334"></a>::: {.callout-note icon=false title="Rubric"}</span>
+<span id="cb18-335"><a href="#cb18-335"></a></span>
+<span id="cb18-336"><a href="#cb18-336"></a><span class="ss">* </span>Is the source code for the function in c) reported?</span>
+<span id="cb18-337"><a href="#cb18-337"></a><span class="ss">    * </span>No</span>
+<span id="cb18-338"><a href="#cb18-338"></a><span class="ss">    * </span>Yes</span>
+<span id="cb18-339"><a href="#cb18-339"></a><span class="ss">* </span>Is the source code for the function in d) reported?</span>
+<span id="cb18-340"><a href="#cb18-340"></a><span class="ss">    * </span>No</span>
+<span id="cb18-341"><a href="#cb18-341"></a><span class="ss">    * </span>Yes</span>
+<span id="cb18-342"><a href="#cb18-342"></a><span class="ss">* </span>Does the histogram in e) look something like this figure?</span>
+<span id="cb18-343"><a href="#cb18-343"></a>If it is evident that the normalized importance ratios are computed correctly, but the prior was incorrect,</span>
+<span id="cb18-344"><a href="#cb18-344"></a>you can still grade "Reported and looks similar".</span>
+<span id="cb18-345"><a href="#cb18-345"></a><span class="ss">    * </span>Not reported</span>
+<span id="cb18-346"><a href="#cb18-346"></a><span class="ss">    * </span>Reported, but looks different</span>
+<span id="cb18-347"><a href="#cb18-347"></a><span class="ss">    * </span>Reported and looks similar</span>
+<span id="cb18-348"><a href="#cb18-348"></a><span class="ss">* </span>Is the effective sample size in f) reported?</span>
+<span id="cb18-349"><a href="#cb18-349"></a>The correct range for the effective sample size is between .</span>
+<span id="cb18-350"><a href="#cb18-350"></a>However, if it is evident that the effective sample size is computed correctly, but the prior was incorrect,</span>
+<span id="cb18-351"><a href="#cb18-351"></a>you can still grade "Yes, and it is correct".</span>
+<span id="cb18-352"><a href="#cb18-352"></a><span class="ss">    * </span>No</span>
+<span id="cb18-353"><a href="#cb18-353"></a><span class="ss">    * </span>Yes, but it is not correct</span>
+<span id="cb18-354"><a href="#cb18-354"></a><span class="ss">    * </span>Yes, and it is correct</span>
+<span id="cb18-355"><a href="#cb18-355"></a><span class="ss">* </span>The correct explanation for g) is roughly the following: [The importance sampling effective sample size</span>
+<span id="cb18-356"><a href="#cb18-356"></a>is a rough measure of how many of the draws have an effect for the importance sampling task. In other</span>
+<span id="cb18-357"><a href="#cb18-357"></a>words, it measures the accuracy of importance sampling.]{.content-hidden when-profile="public"}</span>
+<span id="cb18-358"><a href="#cb18-358"></a><span class="ss">* </span>What is the connection between S_eff and the histogram of weights: [A large number of small weights leads to a small effective sample size. In the histogram of the weights,</span>
+<span id="cb18-359"><a href="#cb18-359"></a>this is seen as a big spike close to zero.</span>
+<span id="cb18-360"><a href="#cb18-360"></a>It is also okay to discuss the variance of the distribution of weights. It is also okay to mention that in</span>
+<span id="cb18-361"><a href="#cb18-361"></a>this assignment, there are no extremely large weights, which indicates that importance sampling can</span>
+<span id="cb18-362"><a href="#cb18-362"></a>be trusted.]{.content-hidden when-profile="public"} How is the answer?</span>
+<span id="cb18-363"><a href="#cb18-363"></a><span class="ss">    * </span>Totally wrong/has not tried</span>
+<span id="cb18-364"><a href="#cb18-364"></a><span class="ss">    * </span>Something is a bit wrong</span>
+<span id="cb18-365"><a href="#cb18-365"></a><span class="ss">    * </span>Explanation is sensible</span>
+<span id="cb18-366"><a href="#cb18-366"></a><span class="ss">* </span>Is the source code for the function in h) reported?</span>
+<span id="cb18-367"><a href="#cb18-367"></a><span class="ss">    * </span>No</span>
+<span id="cb18-368"><a href="#cb18-368"></a><span class="ss">    * </span>Yes</span>
+<span id="cb18-369"><a href="#cb18-369"></a><span class="ss">* </span>Are the means and their MCSEs of alpha and beta in h) reported? Note that the number of digits</span>
+<span id="cb18-370"><a href="#cb18-370"></a>reported for the means must follow the rule given in the assignment. The correct answers should be</span>
+<span id="cb18-371"><a href="#cb18-371"></a>close to these:</span>
+<span id="cb18-372"><a href="#cb18-372"></a>alpha: mean </span>
+<span id="cb18-373"><a href="#cb18-373"></a><span class="ss">    * </span>Not reported</span>
+<span id="cb18-374"><a href="#cb18-374"></a><span class="ss">    * </span>Yes, but they are incorrect</span>
+<span id="cb18-375"><a href="#cb18-375"></a><span class="ss">    * </span>Yes, and they are correct</span>
+<span id="cb18-376"><a href="#cb18-376"></a>:::</span>
+<span id="cb18-377"><a href="#cb18-377"></a></span>
+<span id="cb18-378"><a href="#cb18-378"></a></span>
+<span id="cb18-379"><a href="#cb18-379"></a></span>
+<span id="cb18-380"><a href="#cb18-380"></a>::: {.callout-warning collapse=false}</span>
+<span id="cb18-381"><a href="#cb18-381"></a><span class="fu">## markmyassignment</span></span>
+<span id="cb18-382"><a href="#cb18-382"></a>The following will check the functions for which <span class="in">`markmyassignment`</span> has been set up:</span>
+<span id="cb18-383"><a href="#cb18-383"></a></span>
+<span id="cb18-386"><a href="#cb18-386"></a><span class="in">```{r}</span></span>
+<span id="cb18-387"><a href="#cb18-387"></a><span class="fu">mark_my_assignment</span>()</span>
+<span id="cb18-388"><a href="#cb18-388"></a><span class="in">```</span></span>
+<span id="cb18-389"><a href="#cb18-389"></a>:::</span>
+<span id="cb18-390"><a href="#cb18-390"></a></span>
+<span id="cb18-391"><a href="#cb18-391"></a>{{&lt; include includes/_overall_quality.md &gt;}}</span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

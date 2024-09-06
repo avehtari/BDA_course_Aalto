@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.550">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Aki Vehtari et al.">
+
+<title>Bayesian Data Analysis Assignments 2023 - Assignment 2, 2023</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./template3.html" rel="next">
+<link href="./template1.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./template1.html">Templates</a></li><li class="breadcrumb-item"><a href="./template2.html">Assignment 2, 2023</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Bayesian Data Analysis Assignments 2023</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">General instructions</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment_instructions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment instructions</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Assignments</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 1, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 2, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 3, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 4, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 5, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 6, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 7, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 8, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 9, 2023</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Templates</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 1, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template2.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Assignment 2, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 3, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 4, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 5, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 6, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 7, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 8, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 9, 2023</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#general-information" id="toc-general-information" class="nav-link active" data-scroll-target="#general-information"><span class="header-section-number">1</span> General information</a></li>
+  <li><a href="#inference-for-binomial-proportion" id="toc-inference-for-binomial-proportion" class="nav-link" data-scroll-target="#inference-for-binomial-proportion"><span class="header-section-number">2</span> Inference for binomial proportion</a></li>
+  <li><a href="#overall-quality-of-the-report" id="toc-overall-quality-of-the-report" class="nav-link" data-scroll-target="#overall-quality-of-the-report"><span class="header-section-number">3</span> Overall quality of the report</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="template2.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./template1.html">Templates</a></li><li class="breadcrumb-item"><a href="./template2.html">Assignment 2, 2023</a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Assignment 2, 2023</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Aki Vehtari et al. </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="general-information" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> General information</h1>
+<p><strong>This is for BDA 2023</strong></p>
+<p>This assignment is related to Lecture 2 and BDA3 Chapters 1 and 2. You may find an additional discussion about choosing priors in a <a href="http://andrewgelman.com/2017/10/04/worry-rigged-priors/"><strong>blog post by Andrew Gelman</strong></a>.</p>
+<p><strong>The maximum amount of points from this assignment is 3.</strong></p>
+<p>We prepared a <strong>quarto template specific to this assignment (<a href="template2.html">html</a>, <a href="https://avehtari.github.io/BDA_course_Aalto/assignments/template2.qmd">qmd</a>, <a href="template2.pdf">pdf</a>)</strong> to help you get started.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p><strong>Reading instructions</strong>:</p>
+<ul>
+<li><a href="../BDA3_notes.html#ch1"><strong>The reading instructions for BDA3 Chapter 1</strong></a>.</li>
+<li><a href="../BDA3_notes.html#ch2"><strong>The reading instructions for BDA3 Chapter 2</strong></a>.</li>
+</ul>
+<p><strong>Grading instructions:</strong></p>
+<p>The grading will be done in peergrade. All grading questions and evaluations for this assignment are contained within this document in the collapsible <strong>Rubric</strong> blocks.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Further information
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li>The recommended tool in this course is R (with the IDE RStudio).</li>
+<li>Instead of installing R and RStudio on you own computer, see <a href="https://avehtari.github.io/BDA_course_Aalto/FAQ.html#How_to_use_R_and_RStudio_remotely"><strong>how to use R and RStudio remotely</strong></a>.</li>
+<li>If you want to install R and RStudio locally, download <a href="https://posit.co/download/rstudio-desktop/">R and RStudio</a>.</li>
+<li>There are tons of tutorials, videos and introductions to R and RStudio online. You can find some initial hints from <a href="https://education.rstudio.com/"><strong>RStudio Education pages</strong></a>.</li>
+<li>When working with R, we recommend writing the report using <code>quarto</code> and the provided template. The template includes the formatting instructions and how to include code and figures.</li>
+<li>Instead of <code>quarto</code>, you can use other software to make the PDF report, but the the same instructions for formatting should be used.</li>
+<li>Report all results in a single, <strong>anonymous</strong> *.pdf -file and submit it in <a href="peergrade.io"><strong>peergrade.io</strong></a>.</li>
+<li>The course has its own R package <code>aaltobda</code> with data and functionality to simplify coding. The package is pre-installed in JupyterHub. To install the package on your own system, run the following code (upgrade="never" skips question about updating other packages):</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">install.packages</span>(<span class="st">"aaltobda"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://avehtari.github.io/BDA_course_Aalto/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Many of the exercises can be checked automatically using the R package <code>markmyassignment</code> (pre-installed in JupyterHub). Information on how to install and use the package can be found in <a href="https://cran.r-project.org/web/packages/markmyassignment/vignettes/markmyassignment.html">the <code>markmyassignment</code> documentation</a>. There is no need to include <code>markmyassignment</code> results in the report.</li>
+<li>Recommended additional self study exercises for each chapter in BDA3 are listed in the course web page. These will help to gain deeper understanding of the topic.</li>
+<li>Common questions and answers regarding installation and technical problems can be found in <a href="https://avehtari.github.io/BDA_course_Aalto/FAQ.html">Frequently Asked Questions (FAQ)</a>.</li>
+<li>Deadlines for all assignments can be found on the course web page and in Peergrade. You can set email alerts for the deadlines in Peergrade settings.</li>
+<li>You are allowed to discuss assignments with your friends, but it is not allowed to copy solutions directly from other students or from internet.</li>
+<li>You can copy, e.g., plotting code from the course demos, but really try to solve the actual assignment problems with your own code and explanations.</li>
+<li>Do not share your answers publicly.</li>
+<li>Do not copy answers from the internet or from previous years. We compare the answers to the answers from previous years and to the answers from other students this year.</li>
+<li>Use of AI is allowed on the course, but the most of the work needs to by the student, and you need to report whether you used AI and in which way you used them (See <a href="https://www.aalto.fi/en/services/guidance-for-the-use-of-artificial-intelligence-in-teaching-and-learning-at-aalto-university">points 5 and 6 in Aalto guidelines for use of AI in teaching</a>).</li>
+<li>All suspected plagiarism will be reported and investigated. See more about the <a href="https://into.aalto.fi/display/ensaannot/Aalto+University+Code+of+Academic+Integrity+and+Handling+Violations+Thereof"><strong>Aalto University Code of Academic Integrity and Handling Violations Thereof</strong></a>.</li>
+<li>Do not submit empty PDFs, almost empty PDFs, copy of the questions, nonsense generated by yourself or AI, as these are just harming the other students as they can’t do peergrading for the empty or nonsense submissions. Violations of this rule will be reported and investigated in the same way was plagiarism.</li>
+<li>If you have any suggestions or improvements to the course material, please post in the course chat feedback channel, create an issue, or submit a pull request to the public repository!</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Can you open the PDF and it’s not blank nor nonsense? If the pdf is blank, nonsense, or something like only a copy of the questions, 1) report it as problematic in Peergrade-interface to get another report to review, and 2) send a message to TAs.</li>
+<li>Is the report anonymous?</li>
+</ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Setup
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>This is the template for <a href="assignment2.html">assignment 2</a>. You can download the <a href="https://avehtari.github.io/BDA_course_Aalto/assignments/template2.qmd">qmd-file</a> or copy the code from this rendered document after clicking on <code>&lt;/&gt; Code</code> in the top right corner.</p>
+<p><strong>Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.</strong></p>
+<p>The following will set-up <code>markmyassignment</code> to check your functions at the end of the notebook:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">library</span>(markmyassignment)</span>
+<span id="cb2-2"><a href="#cb2-2"></a>assignment_path <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">"https://github.com/avehtari/BDA_course_Aalto/"</span>,</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="st">"blob/master/assignments/tests/assignment2.yml"</span>, <span class="at">sep=</span><span class="st">""</span>)</span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="fu">set_assignment</span>(assignment_path)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The following installs the <code>aaltobda</code> package:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co">#| cache: true</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="co"># Caching should be fine here</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="fu">install.packages</span>(<span class="st">"aaltobda"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://avehtari.github.io/BDA_course_Aalto/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="inference-for-binomial-proportion" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Inference for binomial proportion</h1>
+<p>Algae status is monitored in 274 sites at Finnish lakes and rivers. The observations for the 2008 algae status at each site are presented in the dataset <code>algae</code> in the <code>aaltobda</code> package (‘0’: no algae, ‘1’: algae present).</p>
+<p>Loading the library and the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">library</span>(aaltobda)</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="fu">data</span>(<span class="st">"algae"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="co"># The data are now stored in the variable `algae`.</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co"># These are the values for the prior required in the assignment</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a>prior_alpha <span class="ot">=</span> <span class="dv">2</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a>prior_beta <span class="ot">=</span> <span class="dv">10</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The below data is <strong>only for the tests</strong>, you need to change to the full data <code>algae</code> when reporting your results.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>algae_test <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Let <span class="math inline">\(\pi\)</span> be the probability of a monitoring site having detectable blue-green algae levels and <span class="math inline">\(y\)</span> the observations in <code>algae</code>. Use a binomial model for the observations <span class="math inline">\(y\)</span> and a <span class="math inline">\(Beta(2,10)\)</span> prior for binomial model parameter <span class="math inline">\(\pi\)</span> to formulate a Bayesian model. Here it is not necessary to derive the posterior distribution for <span class="math inline">\(\pi\)</span> as it has already been done in the book and it suffices to refer to that derivation. Also, it is not necessary to write out the distributions; it is sufficient to use label-parameter format, e.g.&nbsp;<span class="math inline">\(Beta(\alpha,\beta)\)</span>.</p>
+<p>Your task is to perform Bayesian inference for a binomial model and answer questions based on it:</p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 2.a)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 2.a)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Formulate</p>
+<ol type="1">
+<li>the likelihood <span class="math inline">\(p(y|\pi)\)</span> as a function of <span class="math inline">\(\pi\)</span>,</li>
+<li>the prior <span class="math inline">\(p(\pi)\)</span>, and</li>
+<li>the resulting posterior <span class="math inline">\(p(\pi|y)\)</span>.</li>
+</ol>
+<p>Report the posterior in the format <span class="math inline">\(Beta(\alpha,\beta)\)</span>, where you replace <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> with the correct numerical values.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>With a conjugate prior, a closed-form posterior has Beta form (see equations in BDA3 and in the slides).</p>
+</div>
+</div>
+</div>
+<p>Write the likelihood, the prior and the posterior here!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># These are not the actual values for the posterior!</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="co"># You will have to compute those from the data!</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a>posterior_alpha <span class="ot">=</span> <span class="dv">2</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a>posterior_beta <span class="ot">=</span> <span class="dv">10</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You can do <a href="https://en.wikipedia.org/wiki/String_interpolation">string interpolation</a> using <a href="https://quarto.org/docs/computations/execution-options.html#knitr">R inline code execution in quarto</a> as such:</p>
+<p><span class="math inline">\(\alpha_\text{prior}\)</span> is <strong>2</strong> and <span class="math inline">\(\beta_\text{prior}\)</span> is <strong>10</strong>. Or string interpolation within math: <span class="math inline">\(Beta(2,10)\)</span></p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 2.b)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 2.b)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>What can you say about the value of the unknown <span class="math inline">\(\pi\)</span> according to the observations and your prior knowledge? Summarize your results with a point estimate (i.e.&nbsp;<span class="math inline">\(E(\pi|y)\)</span>) and a 90% posterior interval.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Posterior intervals are also called credible intervals and are different from confidence intervals.</p>
+</div>
+</div>
+</div>
+<p>Keep the below name and format for the functions to work with <code>markmyassignment</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># Useful function: qbeta()</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a></span>
+<span id="cb7-3"><a href="#cb7-3"></a>beta_point_est <span class="ot">&lt;-</span> <span class="cf">function</span>(prior_alpha, prior_beta, data) {</span>
+<span id="cb7-4"><a href="#cb7-4"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a>    <span class="co"># This is the correct return value for the test data provided above,</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a>    <span class="co"># combined with the prior provided above.</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a>    <span class="fl">0.2222222</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a>}</span>
+<span id="cb7-9"><a href="#cb7-9"></a>beta_interval <span class="ot">&lt;-</span> <span class="cf">function</span>(prior_alpha, prior_beta, data, <span class="at">prob=</span><span class="fl">0.9</span>) {</span>
+<span id="cb7-10"><a href="#cb7-10"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a>    <span class="co"># This is the correct return value for the test data provided above,</span></span>
+<span id="cb7-12"><a href="#cb7-12"></a>    <span class="co"># combined with the prior provided above.</span></span>
+<span id="cb7-13"><a href="#cb7-13"></a>    <span class="fu">c</span>(<span class="fl">0.0846451</span>, <span class="fl">0.3956414</span>)</span>
+<span id="cb7-14"><a href="#cb7-14"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 2.c)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 2.c)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>What is the probability that the proportion of monitoring sites with detectable algae levels <span class="math inline">\(\pi\)</span> is smaller than <span class="math inline">\(\pi_0=0.2\)</span> that is known from historical records?</p>
+</div>
+</div>
+<p>Keep the below name and format for the function to work with <code>markmyassignment</code>:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># Useful function: pbeta()</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a></span>
+<span id="cb8-3"><a href="#cb8-3"></a>beta_low <span class="ot">&lt;-</span> <span class="cf">function</span>(prior_alpha, prior_beta, data, <span class="at">pi_0=</span><span class="fl">0.2</span>) {</span>
+<span id="cb8-4"><a href="#cb8-4"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a>    <span class="co"># This is the correct return value for the test data provided above,</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a>    <span class="co"># combined with the correct prior.</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a>    <span class="fl">0.4511238</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 2.d)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 2.d)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>What assumptions are required in order to use this kind of a model with this type of data?</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>No need to discuss exchangeability yet, as it is discussed in more detail in BDA3 Chapter 5 and Lecture 7.</p>
+</div>
+</div>
+</div>
+<p>Write your answer here!</p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 2.e)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 2.e)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Make prior sensitivity analysis by testing a couple of different reasonable priors and plot the different posteriors. Summarize the results by one or two sentences.</p>
+</div>
+</div>
+<p>Plot the PDFs here. Explain shortly what you do.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># Useful function: dbeta()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric" data-weight="85">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Is source code included?</li>
+<li>Are the prior, likelihood and posterior forms in a) reported (derivation of posterior not necessary)?
+<ul>
+<li>No</li>
+<li>Some missing</li>
+<li>Yes</li>
+</ul></li>
+<li>Is the reported resulting posterior correct ?
+<ul>
+<li>It is not reported, that the posterior distribution is a distribution.</li>
+<li>It is reported, that the posterior distribution is , but the numerical values for the parameters are incorrect</li>
+<li>It is reported, that the posterior distribution is , and the numerical values for the parameters are correct.</li>
+</ul></li>
+<li>In part b), is there at least one point estimate reported. Sample based estimates are also OK. Points should be given if the method is right, even if the result is wrong due to a wrong posterior distribution being used. With the right posterior, mean, median, and mode are all approximately .</li>
+<li>For the b) part, is the 90% posterior interval reported? Sample based estimate is also OK. Points should be given if the method is right, even if the result is wrong because the posterior was wrong in the first place. If the posterior was right, the 90% posterior interval is roughly .</li>
+<li>For the c) part, is the posterior probability Pr(π&lt;0.2|y) reported? Points should be given if the method is right, even if the result is wrong because the posterior was wrong. If the posterior was right, the result should be approximately .</li>
+<li>For the d) part, does the report discuss
+<ul>
+<li>No</li>
+<li>No, but other reasonable assumptions are discussed</li>
+<li>Yes, but not quite right or some missing</li>
+<li>Yes</li>
+</ul></li>
+<li>For the e) part, is there some comparison and discussion of results obtained with alternative prior parameters?
+<ul>
+<li>No</li>
+<li>Yes, but the results and conclusions are clearly wrong</li>
+<li>Yes</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+markmyassignment
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>The following will check the functions for which <code>markmyassignment</code> has been set up:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">mark_my_assignment</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="overall-quality-of-the-report" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Overall quality of the report</h1>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Does the report include comment on whether AI was used, and if AI was used, explanation on how it was used?
+<ul>
+<li>No</li>
+<li>Yes</li>
+</ul></li>
+<li>Does the report follow the formatting instructions?
+<ul>
+<li>Not at all</li>
+<li>Little</li>
+<li>Mostly</li>
+<li>Yes</li>
+</ul></li>
+<li>In case the report doesn’t fully follow the general and formatting instructions, specify the instructions that have not been followed. If applicable, specify the page of the report, where this difference is visible. This will help the other student to improve their reports so that they are easier to read and review. If applicable, specify the page of the report, where this difference in formatting is visible.</li>
+<li>Please also provide feedback on the presentation (e.g.&nbsp;text, layout, flow of the responses, figures, figure captions). Part of the course is practicing making data analysis reports. By providing feedback on the report presentation, other students can learn what they can improve or what they already did well. You should be able to provide constructive or positive feedback for all non-empty and non-nonsense reports. If you think the report is perfect, and you can’t come up with any suggestions how to improve, you can provide feedback on what you liked and why you think some part of the report is better than yours.</li>
+</ul>
+</div>
+</div>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./template1.html" class="pagination-link" aria-label="Assignment 1, 2023">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Assignment 1, 2023</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./template3.html" class="pagination-link" aria-label="Assignment 3, 2023">
+        <span class="nav-page-text">Assignment 3, 2023</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb11" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb11-1"><a href="#cb11-1"></a><span class="co">---</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="an">title:</span><span class="co"> "Assignment 2, 2023"</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="an">author:</span><span class="co"> "Aki Vehtari et al."</span></span>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="an">format:</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a><span class="co">  html:</span></span>
+<span id="cb11-6"><a href="#cb11-6"></a><span class="co">    toc: true</span></span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="co">    code-tools: true</span></span>
+<span id="cb11-8"><a href="#cb11-8"></a><span class="co">    code-line-numbers: true</span></span>
+<span id="cb11-9"><a href="#cb11-9"></a><span class="co">    number-sections: true</span></span>
+<span id="cb11-10"><a href="#cb11-10"></a><span class="co">    mainfont: Georgia, serif</span></span>
+<span id="cb11-11"><a href="#cb11-11"></a><span class="co">  pdf:</span></span>
+<span id="cb11-12"><a href="#cb11-12"></a><span class="co">    geometry:</span></span>
+<span id="cb11-13"><a href="#cb11-13"></a><span class="co">    - left=1cm,top=1cm,bottom=1cm,right=7cm</span></span>
+<span id="cb11-14"><a href="#cb11-14"></a><span class="co">    number-sections: true</span></span>
+<span id="cb11-15"><a href="#cb11-15"></a><span class="co">    code-annotations: none</span></span>
+<span id="cb11-16"><a href="#cb11-16"></a><span class="an">editor:</span><span class="co"> source</span></span>
+<span id="cb11-17"><a href="#cb11-17"></a><span class="co">---</span></span>
+<span id="cb11-18"><a href="#cb11-18"></a></span>
+<span id="cb11-19"><a href="#cb11-19"></a></span>
+<span id="cb11-20"><a href="#cb11-20"></a><span class="fu"># General information</span></span>
+<span id="cb11-21"><a href="#cb11-21"></a></span>
+<span id="cb11-22"><a href="#cb11-22"></a>**This is for BDA 2023**</span>
+<span id="cb11-23"><a href="#cb11-23"></a></span>
+<span id="cb11-24"><a href="#cb11-24"></a>This assignment is related to Lecture 2 and BDA3 Chapters 1 and 2.</span>
+<span id="cb11-25"><a href="#cb11-25"></a>You may find an additional discussion</span>
+<span id="cb11-26"><a href="#cb11-26"></a>about choosing priors in a [**blog post by Andrew</span>
+<span id="cb11-27"><a href="#cb11-27"></a>Gelman**](http://andrewgelman.com/2017/10/04/worry-rigged-priors/).</span>
+<span id="cb11-28"><a href="#cb11-28"></a></span>
+<span id="cb11-29"><a href="#cb11-29"></a>**The maximum amount of points from this assignment is 3.**</span>
+<span id="cb11-30"><a href="#cb11-30"></a></span>
+<span id="cb11-31"><a href="#cb11-31"></a>We prepared a **quarto template specific to this assignment ([html](template2.html), [qmd](https://avehtari.github.io/BDA_course_Aalto/assignments/template2.qmd), [pdf](template2.pdf))** to help you get started.</span>
+<span id="cb11-32"><a href="#cb11-32"></a></span>
+<span id="cb11-33"><a href="#cb11-33"></a>::: {.callout-tip collapse=false}</span>
+<span id="cb11-34"><a href="#cb11-34"></a>**Reading instructions**:</span>
+<span id="cb11-35"><a href="#cb11-35"></a></span>
+<span id="cb11-36"><a href="#cb11-36"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**The reading instructions for BDA3 Chapter 1**</span><span class="co">](../BDA3_notes.html#ch1)</span>.</span>
+<span id="cb11-37"><a href="#cb11-37"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**The reading instructions for BDA3 Chapter 2**</span><span class="co">](../BDA3_notes.html#ch2)</span>.</span>
+<span id="cb11-38"><a href="#cb11-38"></a></span>
+<span id="cb11-39"><a href="#cb11-39"></a>{{&lt; include includes/_grading_instructions.md &gt;}}</span>
+<span id="cb11-40"><a href="#cb11-40"></a>:::</span>
+<span id="cb11-41"><a href="#cb11-41"></a></span>
+<span id="cb11-42"><a href="#cb11-42"></a></span>
+<span id="cb11-43"><a href="#cb11-43"></a>{{&lt; include includes/_general_info.md &gt;}}</span>
+<span id="cb11-44"><a href="#cb11-44"></a></span>
+<span id="cb11-45"><a href="#cb11-45"></a>::: {.callout-warning collapse=false}</span>
+<span id="cb11-46"><a href="#cb11-46"></a><span class="fu">## Setup</span></span>
+<span id="cb11-47"><a href="#cb11-47"></a></span>
+<span id="cb11-48"><a href="#cb11-48"></a>This is the template for <span class="co">[</span><span class="ot">assignment 2</span><span class="co">](assignment2.html)</span>. You can download the <span class="co">[</span><span class="ot">qmd-file</span><span class="co">](https://avehtari.github.io/BDA_course_Aalto/assignments/template2.qmd)</span> or copy the code from this rendered document after clicking on <span class="in">`&lt;/&gt; Code`</span> in the top right corner.</span>
+<span id="cb11-49"><a href="#cb11-49"></a></span>
+<span id="cb11-50"><a href="#cb11-50"></a>**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.**</span>
+<span id="cb11-51"><a href="#cb11-51"></a></span>
+<span id="cb11-52"><a href="#cb11-52"></a>The following will set-up <span class="in">`markmyassignment`</span> to check your functions at the end of the notebook:</span>
+<span id="cb11-53"><a href="#cb11-53"></a></span>
+<span id="cb11-54"><a href="#cb11-54"></a><span class="in">```{.r}</span></span>
+<span id="cb11-55"><a href="#cb11-55"></a><span class="in">library(markmyassignment)</span></span>
+<span id="cb11-56"><a href="#cb11-56"></a><span class="in">assignment_path = paste("https://github.com/avehtari/BDA_course_Aalto/",</span></span>
+<span id="cb11-57"><a href="#cb11-57"></a><span class="in">"blob/master/assignments/tests/assignment2.yml", sep="")</span></span>
+<span id="cb11-58"><a href="#cb11-58"></a><span class="in">set_assignment(assignment_path)</span></span>
+<span id="cb11-59"><a href="#cb11-59"></a><span class="in">```</span></span>
+<span id="cb11-60"><a href="#cb11-60"></a></span>
+<span id="cb11-61"><a href="#cb11-61"></a>The following installs the <span class="in">`aaltobda`</span> package:</span>
+<span id="cb11-62"><a href="#cb11-62"></a><span class="in">```{.r}</span></span>
+<span id="cb11-63"><a href="#cb11-63"></a><span class="in">#| cache: true</span></span>
+<span id="cb11-64"><a href="#cb11-64"></a><span class="in"># Caching should be fine here</span></span>
+<span id="cb11-65"><a href="#cb11-65"></a><span class="in">install.packages("aaltobda", repos = c("https://avehtari.github.io/BDA_course_Aalto/", getOption("repos")))</span></span>
+<span id="cb11-66"><a href="#cb11-66"></a><span class="in">```</span></span>
+<span id="cb11-67"><a href="#cb11-67"></a>:::</span>
+<span id="cb11-68"><a href="#cb11-68"></a></span>
+<span id="cb11-69"><a href="#cb11-69"></a><span class="fu"># Inference for binomial proportion</span></span>
+<span id="cb11-70"><a href="#cb11-70"></a></span>
+<span id="cb11-71"><a href="#cb11-71"></a>Algae status is monitored in 274 sites at Finnish lakes and rivers. The</span>
+<span id="cb11-72"><a href="#cb11-72"></a>observations for the 2008 algae status at each site are presented in</span>
+<span id="cb11-73"><a href="#cb11-73"></a>the dataset <span class="in">`algae`</span> in the <span class="in">`aaltobda`</span> package ('0': no algae, '1': algae present).</span>
+<span id="cb11-74"><a href="#cb11-74"></a></span>
+<span id="cb11-75"><a href="#cb11-75"></a></span>
+<span id="cb11-76"><a href="#cb11-76"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb11-77"><a href="#cb11-77"></a>Loading the library and the data.</span>
+<span id="cb11-80"><a href="#cb11-80"></a><span class="in">```{r}</span></span>
+<span id="cb11-81"><a href="#cb11-81"></a><span class="fu">library</span>(aaltobda)</span>
+<span id="cb11-82"><a href="#cb11-82"></a><span class="fu">data</span>(<span class="st">"algae"</span>)</span>
+<span id="cb11-83"><a href="#cb11-83"></a><span class="co"># The data are now stored in the variable `algae`.</span></span>
+<span id="cb11-84"><a href="#cb11-84"></a><span class="co"># These are the values for the prior required in the assignment</span></span>
+<span id="cb11-85"><a href="#cb11-85"></a>prior_alpha <span class="ot">=</span> <span class="dv">2</span></span>
+<span id="cb11-86"><a href="#cb11-86"></a>prior_beta <span class="ot">=</span> <span class="dv">10</span></span>
+<span id="cb11-87"><a href="#cb11-87"></a><span class="in">```</span></span>
+<span id="cb11-88"><a href="#cb11-88"></a></span>
+<span id="cb11-89"><a href="#cb11-89"></a>The below data is **only for the tests**, you need to change to the</span>
+<span id="cb11-90"><a href="#cb11-90"></a>full data <span class="in">`algae`</span> when reporting your results.</span>
+<span id="cb11-91"><a href="#cb11-91"></a><span class="in">```{.r}</span></span>
+<span id="cb11-92"><a href="#cb11-92"></a><span class="in">algae_test &lt;- c(0, 1, 1, 0, 0, 0)</span></span>
+<span id="cb11-93"><a href="#cb11-93"></a><span class="in">```</span></span>
+<span id="cb11-94"><a href="#cb11-94"></a>:::</span>
+<span id="cb11-95"><a href="#cb11-95"></a></span>
+<span id="cb11-96"><a href="#cb11-96"></a>Let $\pi$ be the probability of a monitoring site having detectable</span>
+<span id="cb11-97"><a href="#cb11-97"></a>blue-green algae levels and $y$ the observations in <span class="in">`algae`</span>. Use a</span>
+<span id="cb11-98"><a href="#cb11-98"></a>binomial model for the observations $y$ and a $Beta(2,10)$ prior for</span>
+<span id="cb11-99"><a href="#cb11-99"></a>binomial model parameter $\pi$ to formulate a Bayesian model. Here it is</span>
+<span id="cb11-100"><a href="#cb11-100"></a>not necessary to derive the posterior distribution for $\pi$ as it has</span>
+<span id="cb11-101"><a href="#cb11-101"></a>already been done in the book and it suffices to refer to that</span>
+<span id="cb11-102"><a href="#cb11-102"></a>derivation. Also, it is not necessary to write out the distributions; it</span>
+<span id="cb11-103"><a href="#cb11-103"></a>is sufficient to use label-parameter format, e.g.&nbsp;$Beta(\alpha,\beta)$.</span>
+<span id="cb11-104"><a href="#cb11-104"></a></span>
+<span id="cb11-105"><a href="#cb11-105"></a>Your task is to perform Bayesian inference for a binomial model and answer</span>
+<span id="cb11-106"><a href="#cb11-106"></a>questions based on it:</span>
+<span id="cb11-107"><a href="#cb11-107"></a></span>
+<span id="cb11-108"><a href="#cb11-108"></a>::: {.callout-warning icon=false title="Subtask 2.a)"}</span>
+<span id="cb11-109"><a href="#cb11-109"></a>Formulate</span>
+<span id="cb11-110"><a href="#cb11-110"></a></span>
+<span id="cb11-111"><a href="#cb11-111"></a><span class="ss">1. </span>the likelihood $p(y|\pi)$ as a function of $\pi$,</span>
+<span id="cb11-112"><a href="#cb11-112"></a><span class="ss">2. </span>the prior $p(\pi)$, and</span>
+<span id="cb11-113"><a href="#cb11-113"></a><span class="ss">3. </span>the resulting posterior $p(\pi|y)$.</span>
+<span id="cb11-114"><a href="#cb11-114"></a></span>
+<span id="cb11-115"><a href="#cb11-115"></a>Report the posterior in the format $Beta(\alpha,\beta)$, where you</span>
+<span id="cb11-116"><a href="#cb11-116"></a>replace $\alpha$ and $\beta$ with the correct numerical values.</span>
+<span id="cb11-117"><a href="#cb11-117"></a>:::</span>
+<span id="cb11-118"><a href="#cb11-118"></a></span>
+<span id="cb11-119"><a href="#cb11-119"></a>::: {.callout-tip collapse=false}</span>
+<span id="cb11-120"><a href="#cb11-120"></a>With a conjugate prior, a closed-form posterior has Beta form</span>
+<span id="cb11-121"><a href="#cb11-121"></a>(see equations in BDA3 and in the slides).</span>
+<span id="cb11-122"><a href="#cb11-122"></a>:::</span>
+<span id="cb11-123"><a href="#cb11-123"></a></span>
+<span id="cb11-124"><a href="#cb11-124"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb11-125"><a href="#cb11-125"></a>Write the likelihood, the prior and the posterior here!</span>
+<span id="cb11-128"><a href="#cb11-128"></a><span class="in">```{r}</span></span>
+<span id="cb11-129"><a href="#cb11-129"></a><span class="co"># These are not the actual values for the posterior!</span></span>
+<span id="cb11-130"><a href="#cb11-130"></a><span class="co"># You will have to compute those from the data!</span></span>
+<span id="cb11-131"><a href="#cb11-131"></a>posterior_alpha <span class="ot">=</span> <span class="dv">2</span></span>
+<span id="cb11-132"><a href="#cb11-132"></a>posterior_beta <span class="ot">=</span> <span class="dv">10</span></span>
+<span id="cb11-133"><a href="#cb11-133"></a><span class="in">```</span></span>
+<span id="cb11-134"><a href="#cb11-134"></a></span>
+<span id="cb11-135"><a href="#cb11-135"></a>You can do <span class="co">[</span><span class="ot">string interpolation</span><span class="co">](https://en.wikipedia.org/wiki/String_interpolation)</span> using <span class="co">[</span><span class="ot">R inline code execution in quarto</span><span class="co">](https://quarto.org/docs/computations/execution-options.html#knitr)</span> as such:</span>
+<span id="cb11-136"><a href="#cb11-136"></a></span>
+<span id="cb11-137"><a href="#cb11-137"></a>$\alpha_\text{prior}$ is **`r prior_alpha`** and $\beta_\text{prior}$ is **`r prior_beta`**.</span>
+<span id="cb11-138"><a href="#cb11-138"></a>Or string interpolation within math: $Beta(<span class="in">`r prior_alpha`</span>,<span class="in">`r prior_beta`</span>)$</span>
+<span id="cb11-139"><a href="#cb11-139"></a>:::</span>
+<span id="cb11-140"><a href="#cb11-140"></a></span>
+<span id="cb11-141"><a href="#cb11-141"></a>::: {.callout-warning icon=false title="Subtask 2.b)"}</span>
+<span id="cb11-142"><a href="#cb11-142"></a>What can you say about the value of the unknown $\pi$ according to</span>
+<span id="cb11-143"><a href="#cb11-143"></a>the observations and your prior knowledge? Summarize your results</span>
+<span id="cb11-144"><a href="#cb11-144"></a>with a point estimate (i.e. $E(\pi|y)$) and a 90% posterior</span>
+<span id="cb11-145"><a href="#cb11-145"></a>interval.</span>
+<span id="cb11-146"><a href="#cb11-146"></a>:::</span>
+<span id="cb11-147"><a href="#cb11-147"></a></span>
+<span id="cb11-148"><a href="#cb11-148"></a>::: {.callout-tip collapse=false}</span>
+<span id="cb11-149"><a href="#cb11-149"></a>Posterior intervals are also called credible</span>
+<span id="cb11-150"><a href="#cb11-150"></a>intervals and are different from confidence intervals.</span>
+<span id="cb11-151"><a href="#cb11-151"></a>:::</span>
+<span id="cb11-152"><a href="#cb11-152"></a></span>
+<span id="cb11-153"><a href="#cb11-153"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb11-154"><a href="#cb11-154"></a>Keep the below name and format for the functions to work with <span class="in">`markmyassignment`</span>:</span>
+<span id="cb11-155"><a href="#cb11-155"></a><span class="in">```{.r}</span></span>
+<span id="cb11-156"><a href="#cb11-156"></a><span class="in"># Useful function: qbeta()</span></span>
+<span id="cb11-157"><a href="#cb11-157"></a></span>
+<span id="cb11-158"><a href="#cb11-158"></a><span class="in">beta_point_est &lt;- function(prior_alpha, prior_beta, data) {</span></span>
+<span id="cb11-159"><a href="#cb11-159"></a><span class="in">    # Do computation here, and return as below.</span></span>
+<span id="cb11-160"><a href="#cb11-160"></a><span class="in">    # This is the correct return value for the test data provided above,</span></span>
+<span id="cb11-161"><a href="#cb11-161"></a><span class="in">    # combined with the prior provided above.</span></span>
+<span id="cb11-162"><a href="#cb11-162"></a><span class="in">    0.2222222</span></span>
+<span id="cb11-163"><a href="#cb11-163"></a><span class="in">}</span></span>
+<span id="cb11-164"><a href="#cb11-164"></a><span class="in">beta_interval &lt;- function(prior_alpha, prior_beta, data, prob=0.9) {</span></span>
+<span id="cb11-165"><a href="#cb11-165"></a><span class="in">    # Do computation here, and return as below.</span></span>
+<span id="cb11-166"><a href="#cb11-166"></a><span class="in">    # This is the correct return value for the test data provided above,</span></span>
+<span id="cb11-167"><a href="#cb11-167"></a><span class="in">    # combined with the prior provided above.</span></span>
+<span id="cb11-168"><a href="#cb11-168"></a><span class="in">    c(0.0846451, 0.3956414)</span></span>
+<span id="cb11-169"><a href="#cb11-169"></a><span class="in">}</span></span>
+<span id="cb11-170"><a href="#cb11-170"></a><span class="in">```</span></span>
+<span id="cb11-171"><a href="#cb11-171"></a>:::</span>
+<span id="cb11-172"><a href="#cb11-172"></a></span>
+<span id="cb11-173"><a href="#cb11-173"></a>::: {.callout-warning icon=false title="Subtask 2.c)"}</span>
+<span id="cb11-174"><a href="#cb11-174"></a>What is the probability that the proportion of monitoring sites with</span>
+<span id="cb11-175"><a href="#cb11-175"></a>detectable algae levels $\pi$ is smaller than $\pi_0=0.2$ that is</span>
+<span id="cb11-176"><a href="#cb11-176"></a>known from historical records?</span>
+<span id="cb11-177"><a href="#cb11-177"></a>:::</span>
+<span id="cb11-178"><a href="#cb11-178"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb11-179"><a href="#cb11-179"></a>Keep the below name and format for the function to work with <span class="in">`markmyassignment`</span>:</span>
+<span id="cb11-180"><a href="#cb11-180"></a><span class="in">```{.r}</span></span>
+<span id="cb11-181"><a href="#cb11-181"></a><span class="in"># Useful function: pbeta()</span></span>
+<span id="cb11-182"><a href="#cb11-182"></a></span>
+<span id="cb11-183"><a href="#cb11-183"></a><span class="in">beta_low &lt;- function(prior_alpha, prior_beta, data, pi_0=0.2) {</span></span>
+<span id="cb11-184"><a href="#cb11-184"></a><span class="in">    # Do computation here, and return as below.</span></span>
+<span id="cb11-185"><a href="#cb11-185"></a><span class="in">    # This is the correct return value for the test data provided above,</span></span>
+<span id="cb11-186"><a href="#cb11-186"></a><span class="in">    # combined with the correct prior.</span></span>
+<span id="cb11-187"><a href="#cb11-187"></a><span class="in">    0.4511238</span></span>
+<span id="cb11-188"><a href="#cb11-188"></a><span class="in">}</span></span>
+<span id="cb11-189"><a href="#cb11-189"></a><span class="in">```</span></span>
+<span id="cb11-190"><a href="#cb11-190"></a>:::</span>
+<span id="cb11-191"><a href="#cb11-191"></a></span>
+<span id="cb11-192"><a href="#cb11-192"></a>::: {.callout-warning icon=false title="Subtask 2.d)"}</span>
+<span id="cb11-193"><a href="#cb11-193"></a>What assumptions are required in order to use this kind of a model</span>
+<span id="cb11-194"><a href="#cb11-194"></a>with this type of data?</span>
+<span id="cb11-195"><a href="#cb11-195"></a>:::</span>
+<span id="cb11-196"><a href="#cb11-196"></a></span>
+<span id="cb11-197"><a href="#cb11-197"></a>::: {.callout-tip collapse=false}</span>
+<span id="cb11-198"><a href="#cb11-198"></a>No need to discuss exchangeability yet, as</span>
+<span id="cb11-199"><a href="#cb11-199"></a>it is discussed in more detail in BDA3 Chapter 5 and Lecture 7.</span>
+<span id="cb11-200"><a href="#cb11-200"></a>:::</span>
+<span id="cb11-201"><a href="#cb11-201"></a></span>
+<span id="cb11-202"><a href="#cb11-202"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb11-203"><a href="#cb11-203"></a>Write your answer here!</span>
+<span id="cb11-204"><a href="#cb11-204"></a>:::</span>
+<span id="cb11-205"><a href="#cb11-205"></a></span>
+<span id="cb11-206"><a href="#cb11-206"></a>::: {.callout-warning icon=false title="Subtask 2.e)"}</span>
+<span id="cb11-207"><a href="#cb11-207"></a>Make prior sensitivity analysis by testing a couple of different</span>
+<span id="cb11-208"><a href="#cb11-208"></a>reasonable priors and plot the different posteriors. Summarize the</span>
+<span id="cb11-209"><a href="#cb11-209"></a>results by one or two sentences.</span>
+<span id="cb11-210"><a href="#cb11-210"></a>:::</span>
+<span id="cb11-211"><a href="#cb11-211"></a></span>
+<span id="cb11-212"><a href="#cb11-212"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb11-213"><a href="#cb11-213"></a>Plot the PDFs here. Explain shortly what you do.</span>
+<span id="cb11-214"><a href="#cb11-214"></a><span class="in">```{.r}</span></span>
+<span id="cb11-215"><a href="#cb11-215"></a><span class="in"># Useful function: dbeta()</span></span>
+<span id="cb11-216"><a href="#cb11-216"></a><span class="in">```</span></span>
+<span id="cb11-217"><a href="#cb11-217"></a>:::</span>
+<span id="cb11-218"><a href="#cb11-218"></a></span>
+<span id="cb11-219"><a href="#cb11-219"></a></span>
+<span id="cb11-220"><a href="#cb11-220"></a>::: {.callout-note icon=false title="Rubric" weight=85}</span>
+<span id="cb11-221"><a href="#cb11-221"></a></span>
+<span id="cb11-222"><a href="#cb11-222"></a><span class="ss">* </span>Is source code included?</span>
+<span id="cb11-223"><a href="#cb11-223"></a><span class="ss">* </span>Are the prior, likelihood and posterior forms in a) reported (derivation of posterior not necessary)?</span>
+<span id="cb11-224"><a href="#cb11-224"></a><span class="ss">    * </span>No</span>
+<span id="cb11-225"><a href="#cb11-225"></a><span class="ss">    * </span>Some missing</span>
+<span id="cb11-226"><a href="#cb11-226"></a><span class="ss">    * </span>Yes</span>
+<span id="cb11-227"><a href="#cb11-227"></a><span class="ss">* </span>Is the reported resulting posterior correct ?</span>
+<span id="cb11-228"><a href="#cb11-228"></a><span class="ss">  * </span>It is not reported, that the posterior distribution is a  distribution.</span>
+<span id="cb11-229"><a href="#cb11-229"></a><span class="ss">  * </span>It is reported, that the posterior distribution is , but the numerical values for the</span>
+<span id="cb11-230"><a href="#cb11-230"></a>  parameters are incorrect</span>
+<span id="cb11-231"><a href="#cb11-231"></a><span class="ss">  * </span>It is reported, that the posterior distribution is , and the numerical values for the</span>
+<span id="cb11-232"><a href="#cb11-232"></a>parameters are correct.</span>
+<span id="cb11-233"><a href="#cb11-233"></a><span class="ss">* </span>In part b), is there at least one point estimate reported. Sample based estimates are also OK. Points</span>
+<span id="cb11-234"><a href="#cb11-234"></a>should be given if the method is right, even if the result is wrong due to a wrong posterior distribution</span>
+<span id="cb11-235"><a href="#cb11-235"></a>being used. With the right posterior, mean, median, and mode are all approximately .</span>
+<span id="cb11-236"><a href="#cb11-236"></a><span class="ss">* </span>For the b) part, is the 90% posterior interval reported? Sample based estimate is also OK. Points</span>
+<span id="cb11-237"><a href="#cb11-237"></a>should be given if the method is right, even if the result is wrong because the posterior was wrong in</span>
+<span id="cb11-238"><a href="#cb11-238"></a>the first place. If the posterior was right, the 90% posterior interval is roughly .</span>
+<span id="cb11-239"><a href="#cb11-239"></a><span class="ss">* </span>For the c) part, is the posterior probability Pr(π&lt;0.2|y) reported? Points should be given if the method</span>
+<span id="cb11-240"><a href="#cb11-240"></a>is right, even if the result is wrong because the posterior was wrong. If the posterior was right, the</span>
+<span id="cb11-241"><a href="#cb11-241"></a>result should be approximately .</span>
+<span id="cb11-242"><a href="#cb11-242"></a><span class="ss">* </span>For the d) part, does the report discuss [somehow the assumption of independence given the shared</span>
+<span id="cb11-243"><a href="#cb11-243"></a>success probability π (i.i.d. or independent and exchangeable trials is also OK)?]{.content-hidden when-profile="public"}</span>
+<span id="cb11-244"><a href="#cb11-244"></a><span class="ss">    * </span>No</span>
+<span id="cb11-245"><a href="#cb11-245"></a><span class="ss">    * </span>No, but other reasonable assumptions are discussed</span>
+<span id="cb11-246"><a href="#cb11-246"></a><span class="ss">    * </span>Yes, but not quite right or some missing</span>
+<span id="cb11-247"><a href="#cb11-247"></a><span class="ss">    * </span>Yes</span>
+<span id="cb11-248"><a href="#cb11-248"></a><span class="ss">* </span>For the e) part, is there some comparison and discussion of results obtained with alternative prior</span>
+<span id="cb11-249"><a href="#cb11-249"></a>parameters?</span>
+<span id="cb11-250"><a href="#cb11-250"></a><span class="ss">    * </span>No</span>
+<span id="cb11-251"><a href="#cb11-251"></a><span class="ss">    * </span>Yes, but the results and conclusions are clearly wrong</span>
+<span id="cb11-252"><a href="#cb11-252"></a><span class="ss">    * </span>Yes</span>
+<span id="cb11-253"><a href="#cb11-253"></a></span>
+<span id="cb11-254"><a href="#cb11-254"></a>:::</span>
+<span id="cb11-255"><a href="#cb11-255"></a></span>
+<span id="cb11-256"><a href="#cb11-256"></a>::: {.callout-warning collapse=false}</span>
+<span id="cb11-257"><a href="#cb11-257"></a><span class="fu">## markmyassignment</span></span>
+<span id="cb11-258"><a href="#cb11-258"></a>The following will check the functions for which <span class="in">`markmyassignment`</span> has been set up:</span>
+<span id="cb11-259"><a href="#cb11-259"></a></span>
+<span id="cb11-260"><a href="#cb11-260"></a><span class="in">```{.r}</span></span>
+<span id="cb11-261"><a href="#cb11-261"></a><span class="in">mark_my_assignment()</span></span>
+<span id="cb11-262"><a href="#cb11-262"></a><span class="in">```</span></span>
+<span id="cb11-263"><a href="#cb11-263"></a>:::</span>
+<span id="cb11-264"><a href="#cb11-264"></a></span>
+<span id="cb11-265"><a href="#cb11-265"></a>{{&lt; include includes/_overall_quality.md &gt;}}</span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
