@@ -1,0 +1,1813 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.550">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Aki Vehtari et al.">
+
+<title>Bayesian Data Analysis Assignments 2023 - Assignment 1, 2023</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./template2.html" rel="next">
+<link href="./assignment9.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./template1.html">Templates</a></li><li class="breadcrumb-item"><a href="./template1.html">Assignment 1, 2023</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Bayesian Data Analysis Assignments 2023</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">General instructions</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment_instructions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment instructions</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Assignments</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 1, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 2, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 3, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 4, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 5, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 6, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 7, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 8, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 9, 2023</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Templates</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template1.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Assignment 1, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 2, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 3, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 4, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 5, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 6, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 7, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 8, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 9, 2023</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#general-information" id="toc-general-information" class="nav-link active" data-scroll-target="#general-information"><span class="header-section-number">1</span> General information</a></li>
+  <li><a href="#basic-probability-theory-notation-and-terms" id="toc-basic-probability-theory-notation-and-terms" class="nav-link" data-scroll-target="#basic-probability-theory-notation-and-terms"><span class="header-section-number">2</span> Basic probability theory notation and terms</a></li>
+  <li><a href="#basic-computer-skills" id="toc-basic-computer-skills" class="nav-link" data-scroll-target="#basic-computer-skills"><span class="header-section-number">3</span> Basic computer skills</a></li>
+  <li><a href="#bayes-theorem-1" id="toc-bayes-theorem-1" class="nav-link" data-scroll-target="#bayes-theorem-1"><span class="header-section-number">4</span> Bayes’ theorem 1</a></li>
+  <li><a href="#bayes-theorem-2" id="toc-bayes-theorem-2" class="nav-link" data-scroll-target="#bayes-theorem-2"><span class="header-section-number">5</span> Bayes’ theorem 2</a></li>
+  <li><a href="#bayes-theorem-3" id="toc-bayes-theorem-3" class="nav-link" data-scroll-target="#bayes-theorem-3"><span class="header-section-number">6</span> Bayes’ theorem 3</a></li>
+  <li><a href="#the-three-steps-of-bayesian-data-analysis" id="toc-the-three-steps-of-bayesian-data-analysis" class="nav-link" data-scroll-target="#the-three-steps-of-bayesian-data-analysis"><span class="header-section-number">7</span> The three steps of Bayesian data analysis</a></li>
+  <li><a href="#overall-quality-of-the-report" id="toc-overall-quality-of-the-report" class="nav-link" data-scroll-target="#overall-quality-of-the-report"><span class="header-section-number">8</span> Overall quality of the report</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="template1.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./template1.html">Templates</a></li><li class="breadcrumb-item"><a href="./template1.html">Assignment 1, 2023</a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Assignment 1, 2023</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Aki Vehtari et al. </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="general-information" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> General information</h1>
+<p><strong>This is for BDA 2023</strong></p>
+<p>The exercises of this assignment are meant to test whether or not you have sufficient knowledge to participate in the course. The first question checks that you remember basic terms of probability calculus. The second exercise checks your basic computer skills and guides you to learn some R functions. In the last three ones you will first write the math for solving the problems (you can, for example, write the equations in markdown or include a photo of hand written answers), and then implement the final equations in R (and then you can use <code>markmyassignment</code> to check your results). The last question checks that you have found the course book.</p>
+<p><strong>The maximum amount of points from this assignment is 3.</strong></p>
+<p>We prepared a quarto template specific to this assignment to help you get started. You can inspect this and future templates</p>
+<ul>
+<li>as a <a href="https://avehtari.github.io/BDA_course_Aalto/assignments/template1.qmd">qmd file</a>,</li>
+<li>as a <a href="template1.html">rendered html file</a></li>
+<li>or as a <a href="template1.pdf">rendered pdf file</a></li>
+</ul>
+<p>or you can download all template <code>qmd</code> files and some additional files at <a href="https://avehtari.github.io/BDA_course_Aalto/assignments/templates.zip">templates.zip</a> (also available on Aalto JupyterHub under <code>/coursedata</code>).</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p><strong>Reading instructions</strong>:</p>
+<ul>
+<li><a href="../BDA3_notes.html#ch1"><strong>The reading instructions for BDA3 Chapter 1</strong></a>.</li>
+</ul>
+<p><strong>Grading instructions:</strong></p>
+<p>The grading will be done in peergrade. All grading questions and evaluations for this assignment are contained within this document in the collapsible <strong>Rubric</strong> blocks.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Further information
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li>The recommended tool in this course is R (with the IDE RStudio).</li>
+<li>Instead of installing R and RStudio on you own computer, see <a href="https://avehtari.github.io/BDA_course_Aalto/FAQ.html#How_to_use_R_and_RStudio_remotely"><strong>how to use R and RStudio remotely</strong></a>.</li>
+<li>If you want to install R and RStudio locally, download <a href="https://posit.co/download/rstudio-desktop/">R and RStudio</a>.</li>
+<li>There are tons of tutorials, videos and introductions to R and RStudio online. You can find some initial hints from <a href="https://education.rstudio.com/"><strong>RStudio Education pages</strong></a>.</li>
+<li>When working with R, we recommend writing the report using <code>quarto</code> and the provided template. The template includes the formatting instructions and how to include code and figures.</li>
+<li>Instead of <code>quarto</code>, you can use other software to make the PDF report, but the the same instructions for formatting should be used.</li>
+<li>Report all results in a single, <strong>anonymous</strong> *.pdf -file and submit it in <a href="peergrade.io"><strong>peergrade.io</strong></a>.</li>
+<li>The course has its own R package <code>aaltobda</code> with data and functionality to simplify coding. The package is pre-installed in JupyterHub. To install the package on your own system, run the following code (upgrade="never" skips question about updating other packages):</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">install.packages</span>(<span class="st">"aaltobda"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://avehtari.github.io/BDA_course_Aalto/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Many of the exercises can be checked automatically using the R package <code>markmyassignment</code> (pre-installed in JupyterHub). Information on how to install and use the package can be found in <a href="https://cran.r-project.org/web/packages/markmyassignment/vignettes/markmyassignment.html">the <code>markmyassignment</code> documentation</a>. There is no need to include <code>markmyassignment</code> results in the report.</li>
+<li>Recommended additional self study exercises for each chapter in BDA3 are listed in the course web page. These will help to gain deeper understanding of the topic.</li>
+<li>Common questions and answers regarding installation and technical problems can be found in <a href="https://avehtari.github.io/BDA_course_Aalto/FAQ.html">Frequently Asked Questions (FAQ)</a>.</li>
+<li>Deadlines for all assignments can be found on the course web page and in Peergrade. You can set email alerts for the deadlines in Peergrade settings.</li>
+<li>You are allowed to discuss assignments with your friends, but it is not allowed to copy solutions directly from other students or from internet.</li>
+<li>You can copy, e.g., plotting code from the course demos, but really try to solve the actual assignment problems with your own code and explanations.</li>
+<li>Do not share your answers publicly.</li>
+<li>Do not copy answers from the internet or from previous years. We compare the answers to the answers from previous years and to the answers from other students this year.</li>
+<li>Use of AI is allowed on the course, but the most of the work needs to by the student, and you need to report whether you used AI and in which way you used them (See <a href="https://www.aalto.fi/en/services/guidance-for-the-use-of-artificial-intelligence-in-teaching-and-learning-at-aalto-university">points 5 and 6 in Aalto guidelines for use of AI in teaching</a>).</li>
+<li>All suspected plagiarism will be reported and investigated. See more about the <a href="https://into.aalto.fi/display/ensaannot/Aalto+University+Code+of+Academic+Integrity+and+Handling+Violations+Thereof"><strong>Aalto University Code of Academic Integrity and Handling Violations Thereof</strong></a>.</li>
+<li>Do not submit empty PDFs, almost empty PDFs, copy of the questions, nonsense generated by yourself or AI, as these are just harming the other students as they can’t do peergrading for the empty or nonsense submissions. Violations of this rule will be reported and investigated in the same way was plagiarism.</li>
+<li>If you have any suggestions or improvements to the course material, please post in the course chat feedback channel, create an issue, or submit a pull request to the public repository!</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Can you open the PDF and it’s not blank nor nonsense? If the pdf is blank, nonsense, or something like only a copy of the questions, 1) report it as problematic in Peergrade-interface to get another report to review, and 2) send a message to TAs.</li>
+<li>Is the report anonymous?</li>
+</ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Setup
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>This is the template for <a href="assignment1.html">assignment 1</a>. You can download the <a href="https://avehtari.github.io/BDA_course_Aalto/assignments/template1.qmd">qmd-file</a> or copy the code from this rendered document after clicking on <code>&lt;/&gt; Code</code> in the top right corner.</p>
+<p><strong>Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.</strong></p>
+<p>The following will set-up <code>markmyassignment</code> to check your functions at the end of the notebook:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">library</span>(markmyassignment)</span>
+<span id="cb2-2"><a href="#cb2-2"></a>assignment_path <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">"https://github.com/avehtari/BDA_course_Aalto/"</span>,</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="st">"blob/master/assignments/tests/assignment1.yml"</span>, <span class="at">sep=</span><span class="st">""</span>)</span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="fu">set_assignment</span>(assignment_path)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in get_file.path_github(path = path, dest = temp_file): Not Found (HTTP 404).</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="basic-probability-theory-notation-and-terms" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Basic probability theory notation and terms</h1>
+<p>This can be trivial or you may need to refresh your memory on these concepts (see, e.g.&nbsp;Aalto course <em>First Course in Probability and Statistics</em>). Explain each of the following terms with one sentence:</p>
+<ul>
+<li>probability</li>
+<li>probability mass (function)</li>
+<li>probability density (function)</li>
+<li>probability distribution</li>
+<li>discrete probability distribution</li>
+<li>continuous probability distribution</li>
+<li>cumulative distribution function (cdf)</li>
+<li>likelihood</li>
+</ul>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>How is the answer?
+<ul>
+<li>Totally wrong/has not tried</li>
+<li>Something sensible written</li>
+<li>All/almost all are correct (&gt;=70% correct)</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="basic-computer-skills" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Basic computer skills</h1>
+<p>This task deals with elementary plotting and computing skills needed during the rest of the course. You can use either R or Python, although R is the recommended language in this course and we will only guarantee support in R. For documentation in R, just type <code>?{function name here}</code>.</p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 3.a)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 3.a)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Plot the density function of the Beta-distribution, with mean <span class="math inline">\(\mu = 0.2\)</span> and variance <span class="math inline">\(\sigma^2=0.01\)</span>. The parameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> of the Beta-distribution are related to the mean and variance according to the following equations <span class="math display">\[\begin{aligned}
+    \alpha = \mu \left( \frac{\mu(1-\mu)}{\sigma^2} - 1 \right), \quad
+    \beta = \frac{\alpha (1-\mu) }{\mu} \,.\end{aligned}\]</span></p>
+</div>
+</div>
+<p>Plot the PDF here. Explain in text what you do.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Useful functions: seq(), plot() and dbeta()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 3.b)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 3.b)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Take a sample of 1000 random numbers from the above distribution and plot a histogram of the results. Compare visually to the density function.</p>
+</div>
+</div>
+<p>Sample and plot the histogram here. Explain in text what you do.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Useful functions: rbeta() and hist()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 3.c)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 3.c)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Compute the sample mean and variance from the drawn sample. Verify that they match (roughly) to the true mean and variance of the distribution.</p>
+</div>
+</div>
+<p>Compute the sample mean and variance here. Explain in text what you do.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Useful functions: mean() and var()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 3.d)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 3.d)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Estimate the central 95% probability interval of the distribution from the drawn sample.</p>
+</div>
+</div>
+<p>Compute the central interval here. Explain in text what you do.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># Useful functions: quantile()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Is the source code for the solutions included?</li>
+<li>Does the plot in a) look something like this:</li>
+<li>Does the plot in b) look something like this:</li>
+<li>Is the computed mean in c) close to ?</li>
+<li>Is the variance in c) close to ?</li>
+<li>Is the probability interval in d) roughly ? Remember that since the interval is computed from random sample, there can be small variation, but the answers should be roughly the same!</li>
+</ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Further formatting recommendations
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Please try to include as much code and output as needed, but as little as possible.</li>
+<li>Please make sure that the plots are properly labeled and are easily legible and understandable. This means
+<ul>
+<li>they should have x- and y-labels,</li>
+<li>the text within should be of a size comparable to the size of the surrounding text and</li>
+<li>each plot should have a concise but descriptive caption or title.</li>
+</ul></li>
+<li>Please make sure to report a sensible number of digits when reporting numbers. You will get more precise instructions later on, but for now think independently about how many digits of your results are important for the assignment.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="bayes-theorem-1" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Bayes’ theorem 1</h1>
+<p>A group of researchers has designed a new inexpensive and painless test for detecting lung cancer. The test is intended to be an initial screening test for the population in general. A positive result (presence of lung cancer) from the test would be followed up immediately with medication, surgery or more extensive and expensive test. The researchers know from their studies the following facts:</p>
+<ul>
+<li>Test gives a positive result in <span class="math inline">\(98\%\)</span> of the time when the test subject has lung cancer.</li>
+<li>Test gives a negative result in <span class="math inline">\(96\%\)</span> of the time when the test subject does not have lung cancer.</li>
+<li>In general population approximately one person in 1000 has lung cancer.</li>
+</ul>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 4.a)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 4.a)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The researchers are happy with these preliminary results (about <span class="math inline">\(97\%\)</span> success rate), and wish to get the test to market as soon as possible. How would you advise them? Base your answer on Bayes’ rule computations.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Relatively high false negative (cancer doesn’t get detected) or high false positive (unnecessarily administer medication) rates are typically bad and undesirable in tests.</p>
+</div>
+</div>
+</div>
+<p>Compute the quantities needed to justify your recommendation here. Explain in text what you do. You can do the computation with pen and paper or in R. Either way, you have to explain why you compute what you compute.</p>
+<p>If you use pen and paper, you can include scans or pictures as follows (see also <a href="assignment_instructions#fig-workflow">assignment_instructions#fig-workflow</a>):</p>
+<div id="fig-workflow" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-workflow-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="additional_files/bayes_workflow.jpg" class="img-fluid figure-img" width="350">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-workflow-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Parts of Bayesian workflow
+</figcaption>
+</figure>
+</div>
+<p>See <a href="#fig-workflow" class="quarto-xref">Figure&nbsp;1</a> for illustration of parts of Bayesian workflow.</p>
+<p>Here are some probability values that can help you figure out if you copied the right conditional probabilities from the question.</p>
+<ul>
+<li>P(Test gives positive | Subject does not have lung cancer) = <span class="math inline">\(4\%\)</span></li>
+<li>P(Test gives positive <strong>and</strong> Subject has lung cancer) = <span class="math inline">\(0.098\%\)</span> this is also referred to as the <strong>joint probability</strong> of <em>test being positive</em> and the <em>subject having lung cancer</em>.</li>
+</ul>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Is p(has cancer|test result is positive) computed using Bayes’ formula (or its complement p(does not have cancer|test result is positive))?</li>
+<li>Is the result p(has cancer|test result is positive)= (or p(does not have cancer|test result is positive)=)</li>
+<li>Is the result motivated with something like </li>
+</ul>
+</div>
+</div>
+</section>
+<section id="bayes-theorem-2" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Bayes’ theorem 2</h1>
+<p>We have three boxes, A, B, and C. There are</p>
+<ul>
+<li>2 red balls and 5 white balls in the box A,</li>
+<li>4 red balls and 1 white ball in the box B, and</li>
+<li>1 red ball and 3 white balls in the box C.</li>
+</ul>
+<p>Consider a random experiment in which one of the boxes is randomly selected and from that box, one ball is randomly picked up. After observing the color of the ball it is replaced in the box it came from. Suppose also that on average box A is selected 40% of the time and box B <span class="math inline">\(10\%\)</span> of the time (i.e.&nbsp;<span class="math inline">\(P(A) = 0.4\)</span>).</p>
+<p>You will need to change the numbers to the numbers in the exercise.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>boxes_test <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>), <span class="at">ncol =</span> <span class="dv">2</span>,</span>
+<span id="cb8-2"><a href="#cb8-2"></a>    <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>), <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"white"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 5.a)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 5.a)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>What is the probability of picking a red ball? Implement an R function to compute that probability.</p>
+</div>
+</div>
+<p>Keep the below name and format for the function to work with <code>markmyassignment</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>p_red <span class="ot">&lt;-</span> <span class="cf">function</span>(boxes) {</span>
+<span id="cb9-2"><a href="#cb9-2"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a>    <span class="fl">0.3928571</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 5.b)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 5.b)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If a red ball was picked, from which box did it most probably come from? Implement an R function to compute the probabilities for each box.</p>
+</div>
+</div>
+<p>Keep the below name and format for the function to work with <code>markmyassignment</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>p_box <span class="ot">&lt;-</span> <span class="cf">function</span>(boxes) {</span>
+<span id="cb10-2"><a href="#cb10-2"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a>    <span class="fu">c</span>(<span class="fl">0.29090909</span>,<span class="fl">0.07272727</span>,<span class="fl">0.63636364</span>)</span>
+<span id="cb10-5"><a href="#cb10-5"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Is the source code available?</li>
+<li>How is the answer for probability of picking a red ball?
+<ul>
+<li>No answer</li>
+<li>Probability rules</li>
+<li>Probability rules</li>
+</ul></li>
+<li>How is the answer for what box is most probable?
+<ul>
+<li>No answer</li>
+<li>Bayes rule used to compute probabilities for all boxes given that the picked ball is red, but the answers are not</li>
+<li>Bayes rule used to compute probabilities for all boxes given that the picked ball is red, the answers are p</li>
+<li>Bayes rule used to compute probabilities for all boxes given that the picked ball is red, the answers are</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="bayes-theorem-3" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Bayes’ theorem 3</h1>
+<p>Assume that on average fraternal twins (two fertilized eggs and then could be of different sex) occur once in 150 births and identical twins (single egg divides into two separate embryos, so both have the same sex) once in 400 births (<strong>Note!</strong> This is not the true value, see Exercise 1.6, page 28, in BDA3). American male singer-actor Elvis Presley (1935 – 1977) had a twin brother who died in birth. Assume that an equal number of boys and girls are born on average.</p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 6.a)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 6.a)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>What is the probability that Elvis was an identical twin? Show the steps how you derived the equations to compute that probability and implement a function in R that computes the probability.</p>
+</div>
+</div>
+<p>You will need to change the numbers to the numbers in the exercise.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>fraternal_prob <span class="ot">=</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">125</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a>identical_prob <span class="ot">=</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">300</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Keep the below name and format for the function to work with <code>markmyassignment</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>p_identical_twin <span class="ot">&lt;-</span> <span class="cf">function</span>(fraternal_prob, identical_prob) {</span>
+<span id="cb12-2"><a href="#cb12-2"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb12-4"><a href="#cb12-4"></a>    <span class="fl">0.4545455</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>How is the answer for probability of Elvis having had an identical twin brother?
+<ul>
+<li>No answer</li>
+<li>Probability that Elvis had an identical twin brother is computed using Bayes rule, but the result is not roughly</li>
+<li>Probability that Elvis had an identical twin brother is computed using Bayes rule, and the result is roughly</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="the-three-steps-of-bayesian-data-analysis" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> The three steps of Bayesian data analysis</h1>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 7.a)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 7.a)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Fill in the three steps of Bayesian data analysis (see BDA3 section 1.1):</p>
+<ol type="1">
+<li></li>
+<li></li>
+<li></li>
+</ol>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Are the three steps listed as follows:
+<ol type="1">
+<li></li>
+<li></li>
+<li></li>
+</ol></li>
+</ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-22-contents" aria-controls="callout-22" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+markmyassignment
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-22" class="callout-22-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>The following will check the functions for which <code>markmyassignment</code> has been set up:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">mark_my_assignment</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error: No assignment has been set. Please use set_assignment().</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="overall-quality-of-the-report" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Overall quality of the report</h1>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Does the report include comment on whether AI was used, and if AI was used, explanation on how it was used?
+<ul>
+<li>No</li>
+<li>Yes</li>
+</ul></li>
+<li>Does the report follow the formatting instructions?
+<ul>
+<li>Not at all</li>
+<li>Little</li>
+<li>Mostly</li>
+<li>Yes</li>
+</ul></li>
+<li>In case the report doesn’t fully follow the general and formatting instructions, specify the instructions that have not been followed. If applicable, specify the page of the report, where this difference is visible. This will help the other student to improve their reports so that they are easier to read and review. If applicable, specify the page of the report, where this difference in formatting is visible.</li>
+<li>Please also provide feedback on the presentation (e.g.&nbsp;text, layout, flow of the responses, figures, figure captions). Part of the course is practicing making data analysis reports. By providing feedback on the report presentation, other students can learn what they can improve or what they already did well. You should be able to provide constructive or positive feedback for all non-empty and non-nonsense reports. If you think the report is perfect, and you can’t come up with any suggestions how to improve, you can provide feedback on what you liked and why you think some part of the report is better than yours.</li>
+</ul>
+</div>
+</div>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./assignment9.html" class="pagination-link" aria-label="Assignment 9, 2023">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Assignment 9, 2023</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./template2.html" class="pagination-link" aria-label="Assignment 2, 2023">
+        <span class="nav-page-text">Assignment 2, 2023</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb15" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb15-1"><a href="#cb15-1"></a><span class="co">---</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a><span class="an">title:</span><span class="co"> "Assignment 1, 2023"</span></span>
+<span id="cb15-3"><a href="#cb15-3"></a><span class="an">author:</span><span class="co"> "Aki Vehtari et al."</span></span>
+<span id="cb15-4"><a href="#cb15-4"></a><span class="an">format:</span></span>
+<span id="cb15-5"><a href="#cb15-5"></a><span class="co">  html:</span></span>
+<span id="cb15-6"><a href="#cb15-6"></a><span class="co">    toc: true</span></span>
+<span id="cb15-7"><a href="#cb15-7"></a><span class="co">    code-tools: true</span></span>
+<span id="cb15-8"><a href="#cb15-8"></a><span class="co">    code-line-numbers: true</span></span>
+<span id="cb15-9"><a href="#cb15-9"></a><span class="co">    number-sections: true</span></span>
+<span id="cb15-10"><a href="#cb15-10"></a><span class="co">    mainfont: Georgia, serif</span></span>
+<span id="cb15-11"><a href="#cb15-11"></a><span class="co">  pdf:</span></span>
+<span id="cb15-12"><a href="#cb15-12"></a><span class="co">    geometry:</span></span>
+<span id="cb15-13"><a href="#cb15-13"></a><span class="co">    - left=1cm,top=1cm,bottom=1cm,right=7cm</span></span>
+<span id="cb15-14"><a href="#cb15-14"></a><span class="co">    number-sections: true</span></span>
+<span id="cb15-15"><a href="#cb15-15"></a><span class="co">    code-annotations: none</span></span>
+<span id="cb15-16"><a href="#cb15-16"></a><span class="an">editor:</span><span class="co"> source</span></span>
+<span id="cb15-17"><a href="#cb15-17"></a><span class="co">---</span></span>
+<span id="cb15-18"><a href="#cb15-18"></a></span>
+<span id="cb15-19"><a href="#cb15-19"></a><span class="fu"># General information</span></span>
+<span id="cb15-20"><a href="#cb15-20"></a></span>
+<span id="cb15-21"><a href="#cb15-21"></a>**This is for BDA 2023**</span>
+<span id="cb15-22"><a href="#cb15-22"></a></span>
+<span id="cb15-23"><a href="#cb15-23"></a>The exercises of this assignment are meant to test whether or not you have sufficient knowledge</span>
+<span id="cb15-24"><a href="#cb15-24"></a>to participate in the course. The first question checks that you</span>
+<span id="cb15-25"><a href="#cb15-25"></a>remember basic terms of probability calculus. The second exercise checks</span>
+<span id="cb15-26"><a href="#cb15-26"></a>your basic computer skills and guides you to learn some R functions. In</span>
+<span id="cb15-27"><a href="#cb15-27"></a>the last three ones you will first write the math for solving the</span>
+<span id="cb15-28"><a href="#cb15-28"></a>problems (you can, for example, write the equations in markdown or</span>
+<span id="cb15-29"><a href="#cb15-29"></a>include a photo of hand written answers), and then implement the final</span>
+<span id="cb15-30"><a href="#cb15-30"></a>equations in R (and then you can use <span class="in">`markmyassignment`</span> to check your</span>
+<span id="cb15-31"><a href="#cb15-31"></a>results). The last question checks that you have found the course book.</span>
+<span id="cb15-32"><a href="#cb15-32"></a></span>
+<span id="cb15-33"><a href="#cb15-33"></a>**The maximum amount of points from this assignment is 3.**</span>
+<span id="cb15-34"><a href="#cb15-34"></a></span>
+<span id="cb15-35"><a href="#cb15-35"></a>We prepared a quarto template specific to this assignment to help you get started. You can inspect this and future templates</span>
+<span id="cb15-36"><a href="#cb15-36"></a></span>
+<span id="cb15-37"><a href="#cb15-37"></a><span class="ss">* </span>as a <span class="co">[</span><span class="ot">qmd file</span><span class="co">](https://avehtari.github.io/BDA_course_Aalto/assignments/template1.qmd)</span>,</span>
+<span id="cb15-38"><a href="#cb15-38"></a><span class="ss">* </span>as a <span class="co">[</span><span class="ot">rendered html file</span><span class="co">](template1.html)</span></span>
+<span id="cb15-39"><a href="#cb15-39"></a><span class="ss">* </span>or as a <span class="co">[</span><span class="ot">rendered pdf file</span><span class="co">](template1.pdf)</span></span>
+<span id="cb15-40"><a href="#cb15-40"></a></span>
+<span id="cb15-41"><a href="#cb15-41"></a>or you can download all template <span class="in">`qmd`</span> files and some additional files at <span class="co">[</span><span class="ot">templates.zip</span><span class="co">](https://avehtari.github.io/BDA_course_Aalto/assignments/templates.zip)</span> (also available on Aalto JupyterHub under <span class="in">`/coursedata`</span>).</span>
+<span id="cb15-42"><a href="#cb15-42"></a></span>
+<span id="cb15-43"><a href="#cb15-43"></a>::: {.callout-tip collapse=false}</span>
+<span id="cb15-44"><a href="#cb15-44"></a>**Reading instructions**:</span>
+<span id="cb15-45"><a href="#cb15-45"></a></span>
+<span id="cb15-46"><a href="#cb15-46"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**The reading instructions for BDA3 Chapter 1**</span><span class="co">](../BDA3_notes.html#ch1)</span>.</span>
+<span id="cb15-47"><a href="#cb15-47"></a></span>
+<span id="cb15-48"><a href="#cb15-48"></a>{{&lt; include includes/_grading_instructions.md &gt;}}</span>
+<span id="cb15-49"><a href="#cb15-49"></a>:::</span>
+<span id="cb15-50"><a href="#cb15-50"></a></span>
+<span id="cb15-51"><a href="#cb15-51"></a></span>
+<span id="cb15-52"><a href="#cb15-52"></a>{{&lt; include includes/_general_info.md &gt;}}</span>
+<span id="cb15-53"><a href="#cb15-53"></a></span>
+<span id="cb15-54"><a href="#cb15-54"></a></span>
+<span id="cb15-55"><a href="#cb15-55"></a>::: {.callout-warning collapse=false}</span>
+<span id="cb15-56"><a href="#cb15-56"></a><span class="fu">## Setup</span></span>
+<span id="cb15-57"><a href="#cb15-57"></a></span>
+<span id="cb15-58"><a href="#cb15-58"></a>This is the template for <span class="co">[</span><span class="ot">assignment 1</span><span class="co">](assignment1.html)</span>. You can download the <span class="co">[</span><span class="ot">qmd-file</span><span class="co">](https://avehtari.github.io/BDA_course_Aalto/assignments/template1.qmd)</span> or copy the code from this rendered document after clicking on <span class="in">`&lt;/&gt; Code`</span> in the top right corner.</span>
+<span id="cb15-59"><a href="#cb15-59"></a></span>
+<span id="cb15-60"><a href="#cb15-60"></a>**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.**</span>
+<span id="cb15-61"><a href="#cb15-61"></a></span>
+<span id="cb15-62"><a href="#cb15-62"></a>The following will set-up <span class="in">`markmyassignment`</span> to check your functions at the end of the notebook:</span>
+<span id="cb15-63"><a href="#cb15-63"></a></span>
+<span id="cb15-66"><a href="#cb15-66"></a><span class="in">```{r}</span></span>
+<span id="cb15-67"><a href="#cb15-67"></a><span class="fu">library</span>(markmyassignment)</span>
+<span id="cb15-68"><a href="#cb15-68"></a>assignment_path <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">"https://github.com/avehtari/BDA_course_Aalto/"</span>,</span>
+<span id="cb15-69"><a href="#cb15-69"></a><span class="st">"blob/master/assignments/tests/assignment1.yml"</span>, <span class="at">sep=</span><span class="st">""</span>)</span>
+<span id="cb15-70"><a href="#cb15-70"></a><span class="fu">set_assignment</span>(assignment_path)</span>
+<span id="cb15-71"><a href="#cb15-71"></a><span class="in">```</span></span>
+<span id="cb15-72"><a href="#cb15-72"></a>:::</span>
+<span id="cb15-73"><a href="#cb15-73"></a></span>
+<span id="cb15-74"><a href="#cb15-74"></a><span class="fu"># Basic probability theory notation and terms</span></span>
+<span id="cb15-75"><a href="#cb15-75"></a></span>
+<span id="cb15-76"><a href="#cb15-76"></a>This can be trivial or you may need to refresh your memory on these concepts (see, e.g. Aalto course *First Course in Probability and</span>
+<span id="cb15-77"><a href="#cb15-77"></a>Statistics*). Explain each of the following terms with one sentence:</span>
+<span id="cb15-78"><a href="#cb15-78"></a></span>
+<span id="cb15-79"><a href="#cb15-79"></a><span class="ss">-   </span>probability</span>
+<span id="cb15-80"><a href="#cb15-80"></a><span class="ss">-   </span>probability mass (function)</span>
+<span id="cb15-81"><a href="#cb15-81"></a><span class="ss">-   </span>probability density (function)</span>
+<span id="cb15-82"><a href="#cb15-82"></a><span class="ss">-   </span>probability distribution</span>
+<span id="cb15-83"><a href="#cb15-83"></a><span class="ss">-   </span>discrete probability distribution</span>
+<span id="cb15-84"><a href="#cb15-84"></a><span class="ss">-   </span>continuous probability distribution</span>
+<span id="cb15-85"><a href="#cb15-85"></a><span class="ss">-   </span>cumulative distribution function (cdf)</span>
+<span id="cb15-86"><a href="#cb15-86"></a><span class="ss">-   </span>likelihood</span>
+<span id="cb15-87"><a href="#cb15-87"></a></span>
+<span id="cb15-88"><a href="#cb15-88"></a></span>
+<span id="cb15-89"><a href="#cb15-89"></a></span>
+<span id="cb15-90"><a href="#cb15-90"></a>::: {.callout-note icon=false title="Rubric"}</span>
+<span id="cb15-91"><a href="#cb15-91"></a></span>
+<span id="cb15-92"><a href="#cb15-92"></a><span class="ss">* </span>How is the answer?</span>
+<span id="cb15-93"><a href="#cb15-93"></a><span class="ss">    - </span>Totally wrong/has not tried</span>
+<span id="cb15-94"><a href="#cb15-94"></a><span class="ss">    - </span>Something sensible written</span>
+<span id="cb15-95"><a href="#cb15-95"></a><span class="ss">    - </span>All/almost all are correct (&gt;=70% correct)</span>
+<span id="cb15-96"><a href="#cb15-96"></a>:::</span>
+<span id="cb15-97"><a href="#cb15-97"></a></span>
+<span id="cb15-98"><a href="#cb15-98"></a><span class="fu"># Basic computer skills</span></span>
+<span id="cb15-99"><a href="#cb15-99"></a></span>
+<span id="cb15-100"><a href="#cb15-100"></a></span>
+<span id="cb15-101"><a href="#cb15-101"></a>This task deals with elementary plotting</span>
+<span id="cb15-102"><a href="#cb15-102"></a>and computing skills needed during the rest of the course. You can</span>
+<span id="cb15-103"><a href="#cb15-103"></a>use either R or Python, although R is the recommended language in this course and</span>
+<span id="cb15-104"><a href="#cb15-104"></a>we will only guarantee support in R. For documentation in R, just</span>
+<span id="cb15-105"><a href="#cb15-105"></a>type <span class="in">`?{function name here}`</span>.</span>
+<span id="cb15-106"><a href="#cb15-106"></a></span>
+<span id="cb15-107"><a href="#cb15-107"></a></span>
+<span id="cb15-108"><a href="#cb15-108"></a>::: {.callout-warning icon=false title="Subtask 3.a)"}</span>
+<span id="cb15-109"><a href="#cb15-109"></a>Plot the density function of the Beta-distribution, with mean</span>
+<span id="cb15-110"><a href="#cb15-110"></a>$\mu = 0.2$ and variance $\sigma^2=0.01$. The parameters</span>
+<span id="cb15-111"><a href="#cb15-111"></a>$\alpha$ and $\beta$ of the Beta-distribution are related to the</span>
+<span id="cb15-112"><a href="#cb15-112"></a>mean and variance according to the following equations</span>
+<span id="cb15-113"><a href="#cb15-113"></a>$$\begin{aligned}</span>
+<span id="cb15-114"><a href="#cb15-114"></a>    \alpha = \mu \left( \frac{\mu(1-\mu)}{\sigma^2} - 1 \right), \quad</span>
+<span id="cb15-115"><a href="#cb15-115"></a>    \beta = \frac{\alpha (1-\mu) }{\mu} \,.\end{aligned}$$</span>
+<span id="cb15-116"><a href="#cb15-116"></a></span>
+<span id="cb15-117"><a href="#cb15-117"></a>:::</span>
+<span id="cb15-118"><a href="#cb15-118"></a></span>
+<span id="cb15-119"><a href="#cb15-119"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb15-120"><a href="#cb15-120"></a>Plot the PDF here. Explain in text what you do.</span>
+<span id="cb15-123"><a href="#cb15-123"></a><span class="in">```{r}</span></span>
+<span id="cb15-124"><a href="#cb15-124"></a><span class="co"># Useful functions: seq(), plot() and dbeta()</span></span>
+<span id="cb15-125"><a href="#cb15-125"></a><span class="in">```</span></span>
+<span id="cb15-126"><a href="#cb15-126"></a>:::</span>
+<span id="cb15-127"><a href="#cb15-127"></a></span>
+<span id="cb15-128"><a href="#cb15-128"></a></span>
+<span id="cb15-129"><a href="#cb15-129"></a></span>
+<span id="cb15-130"><a href="#cb15-130"></a></span>
+<span id="cb15-131"><a href="#cb15-131"></a></span>
+<span id="cb15-132"><a href="#cb15-132"></a>::: {.callout-warning icon=false title="Subtask 3.b)"}</span>
+<span id="cb15-133"><a href="#cb15-133"></a>Take a sample of 1000 random numbers from the above distribution</span>
+<span id="cb15-134"><a href="#cb15-134"></a>and plot a histogram of the results. Compare visually to the</span>
+<span id="cb15-135"><a href="#cb15-135"></a>density function.</span>
+<span id="cb15-136"><a href="#cb15-136"></a>:::</span>
+<span id="cb15-137"><a href="#cb15-137"></a></span>
+<span id="cb15-138"><a href="#cb15-138"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb15-139"><a href="#cb15-139"></a>Sample and plot the histogram here. Explain in text what you do.</span>
+<span id="cb15-142"><a href="#cb15-142"></a><span class="in">```{r}</span></span>
+<span id="cb15-143"><a href="#cb15-143"></a><span class="co"># Useful functions: rbeta() and hist()</span></span>
+<span id="cb15-144"><a href="#cb15-144"></a><span class="in">```</span></span>
+<span id="cb15-145"><a href="#cb15-145"></a>:::</span>
+<span id="cb15-146"><a href="#cb15-146"></a></span>
+<span id="cb15-147"><a href="#cb15-147"></a></span>
+<span id="cb15-148"><a href="#cb15-148"></a></span>
+<span id="cb15-149"><a href="#cb15-149"></a>::: {.callout-warning icon=false title="Subtask 3.c)"}</span>
+<span id="cb15-150"><a href="#cb15-150"></a></span>
+<span id="cb15-151"><a href="#cb15-151"></a>Compute the sample mean and variance from the drawn sample.</span>
+<span id="cb15-152"><a href="#cb15-152"></a>Verify that they match (roughly) to the true mean and variance</span>
+<span id="cb15-153"><a href="#cb15-153"></a>of the distribution.</span>
+<span id="cb15-154"><a href="#cb15-154"></a></span>
+<span id="cb15-155"><a href="#cb15-155"></a>:::</span>
+<span id="cb15-156"><a href="#cb15-156"></a></span>
+<span id="cb15-157"><a href="#cb15-157"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb15-158"><a href="#cb15-158"></a>Compute the sample mean and variance here. Explain in text what you do.</span>
+<span id="cb15-161"><a href="#cb15-161"></a><span class="in">```{r}</span></span>
+<span id="cb15-162"><a href="#cb15-162"></a><span class="co"># Useful functions: mean() and var()</span></span>
+<span id="cb15-163"><a href="#cb15-163"></a><span class="in">```</span></span>
+<span id="cb15-164"><a href="#cb15-164"></a>:::</span>
+<span id="cb15-165"><a href="#cb15-165"></a></span>
+<span id="cb15-166"><a href="#cb15-166"></a></span>
+<span id="cb15-167"><a href="#cb15-167"></a></span>
+<span id="cb15-168"><a href="#cb15-168"></a>::: {.callout-warning icon=false title="Subtask 3.d)"}</span>
+<span id="cb15-169"><a href="#cb15-169"></a>Estimate the central 95% probability interval of the distribution from the drawn sample.</span>
+<span id="cb15-170"><a href="#cb15-170"></a>:::</span>
+<span id="cb15-171"><a href="#cb15-171"></a></span>
+<span id="cb15-172"><a href="#cb15-172"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb15-173"><a href="#cb15-173"></a>Compute the central interval here. Explain in text what you do.</span>
+<span id="cb15-176"><a href="#cb15-176"></a><span class="in">```{r}</span></span>
+<span id="cb15-177"><a href="#cb15-177"></a><span class="co"># Useful functions: quantile()</span></span>
+<span id="cb15-178"><a href="#cb15-178"></a><span class="in">```</span></span>
+<span id="cb15-179"><a href="#cb15-179"></a>:::</span>
+<span id="cb15-180"><a href="#cb15-180"></a></span>
+<span id="cb15-181"><a href="#cb15-181"></a></span>
+<span id="cb15-182"><a href="#cb15-182"></a></span>
+<span id="cb15-183"><a href="#cb15-183"></a></span>
+<span id="cb15-184"><a href="#cb15-184"></a>::: {.callout-note icon=false title="Rubric"}</span>
+<span id="cb15-185"><a href="#cb15-185"></a></span>
+<span id="cb15-186"><a href="#cb15-186"></a><span class="ss">* </span>Is the source code for the solutions included?</span>
+<span id="cb15-187"><a href="#cb15-187"></a><span class="ss">* </span>Does the plot in a) look something like this: </span>
+<span id="cb15-188"><a href="#cb15-188"></a><span class="ss">* </span>Does the plot in b) look something like this: </span>
+<span id="cb15-189"><a href="#cb15-189"></a><span class="ss">* </span>Is the computed mean in c) close to ?</span>
+<span id="cb15-190"><a href="#cb15-190"></a><span class="ss">* </span>Is the variance in c) close to ?</span>
+<span id="cb15-191"><a href="#cb15-191"></a><span class="ss">* </span>Is the probability interval in d) roughly ? Remember that since the interval is computed from random sample, there can be small variation, but the answers should be roughly the same!</span>
+<span id="cb15-192"><a href="#cb15-192"></a></span>
+<span id="cb15-193"><a href="#cb15-193"></a>:::</span>
+<span id="cb15-194"><a href="#cb15-194"></a></span>
+<span id="cb15-195"><a href="#cb15-195"></a>::: {.callout-tip}</span>
+<span id="cb15-196"><a href="#cb15-196"></a><span class="fu">## Further formatting recommendations</span></span>
+<span id="cb15-197"><a href="#cb15-197"></a></span>
+<span id="cb15-198"><a href="#cb15-198"></a><span class="ss">* </span>Please try to include as much code and output as needed, but as little as possible.</span>
+<span id="cb15-199"><a href="#cb15-199"></a><span class="ss">* </span>Please make sure that the plots are properly labeled and are easily legible and understandable. This means</span>
+<span id="cb15-200"><a href="#cb15-200"></a><span class="ss">    * </span>they should have x- and y-labels,</span>
+<span id="cb15-201"><a href="#cb15-201"></a><span class="ss">    * </span>the text within should be of a size comparable to the size of the surrounding text and</span>
+<span id="cb15-202"><a href="#cb15-202"></a><span class="ss">    * </span>each plot should have a concise but descriptive caption or title.</span>
+<span id="cb15-203"><a href="#cb15-203"></a><span class="ss">* </span>Please make sure to report a sensible number of digits when reporting numbers. You will get more precise instructions later on, but for now think independently about how many digits of your results are important for the assignment.</span>
+<span id="cb15-204"><a href="#cb15-204"></a></span>
+<span id="cb15-205"><a href="#cb15-205"></a>:::</span>
+<span id="cb15-206"><a href="#cb15-206"></a></span>
+<span id="cb15-207"><a href="#cb15-207"></a><span class="fu"># Bayes' theorem 1</span></span>
+<span id="cb15-208"><a href="#cb15-208"></a></span>
+<span id="cb15-209"><a href="#cb15-209"></a>A group of researchers has designed a new</span>
+<span id="cb15-210"><a href="#cb15-210"></a>inexpensive and painless test for detecting lung cancer. The test is</span>
+<span id="cb15-211"><a href="#cb15-211"></a>intended to be an initial screening test for the population in</span>
+<span id="cb15-212"><a href="#cb15-212"></a>general. A positive result (presence of lung cancer) from the test</span>
+<span id="cb15-213"><a href="#cb15-213"></a>would be followed up immediately with medication, surgery or more</span>
+<span id="cb15-214"><a href="#cb15-214"></a>extensive and expensive test. The researchers know from their</span>
+<span id="cb15-215"><a href="#cb15-215"></a>studies the following facts:</span>
+<span id="cb15-216"><a href="#cb15-216"></a></span>
+<span id="cb15-217"><a href="#cb15-217"></a><span class="ss">-   </span>Test gives a positive result in $98\%$ of the time when the test</span>
+<span id="cb15-218"><a href="#cb15-218"></a>    subject has lung cancer.</span>
+<span id="cb15-219"><a href="#cb15-219"></a><span class="ss">-   </span>Test gives a negative result in $96\%$ of the time when the</span>
+<span id="cb15-220"><a href="#cb15-220"></a>    test subject does not have lung cancer.</span>
+<span id="cb15-221"><a href="#cb15-221"></a><span class="ss">-   </span>In general population approximately one person in 1000 has lung</span>
+<span id="cb15-222"><a href="#cb15-222"></a>    cancer.</span>
+<span id="cb15-223"><a href="#cb15-223"></a></span>
+<span id="cb15-224"><a href="#cb15-224"></a>::: {.callout-warning icon=false title="Subtask 4.a)"}</span>
+<span id="cb15-225"><a href="#cb15-225"></a></span>
+<span id="cb15-226"><a href="#cb15-226"></a>The researchers are happy with these preliminary results (about</span>
+<span id="cb15-227"><a href="#cb15-227"></a>$97\%$ success rate), and wish to get the test to market as soon as</span>
+<span id="cb15-228"><a href="#cb15-228"></a>possible. How would you advise them? Base your answer on Bayes' rule</span>
+<span id="cb15-229"><a href="#cb15-229"></a>computations.</span>
+<span id="cb15-230"><a href="#cb15-230"></a></span>
+<span id="cb15-231"><a href="#cb15-231"></a>:::</span>
+<span id="cb15-232"><a href="#cb15-232"></a></span>
+<span id="cb15-233"><a href="#cb15-233"></a>::: {.callout-tip collapse=false}</span>
+<span id="cb15-234"><a href="#cb15-234"></a>Relatively high false negative (cancer doesn't get</span>
+<span id="cb15-235"><a href="#cb15-235"></a>detected) or high false positive (unnecessarily administer</span>
+<span id="cb15-236"><a href="#cb15-236"></a>medication) rates are typically bad and undesirable in tests.</span>
+<span id="cb15-237"><a href="#cb15-237"></a>:::</span>
+<span id="cb15-238"><a href="#cb15-238"></a></span>
+<span id="cb15-239"><a href="#cb15-239"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb15-240"><a href="#cb15-240"></a>Compute the quantities needed to justify your recommendation here. Explain in text what you do.</span>
+<span id="cb15-241"><a href="#cb15-241"></a>You can do the computation with pen and paper or in R.</span>
+<span id="cb15-242"><a href="#cb15-242"></a>Either way, you have to explain why you compute what you compute.</span>
+<span id="cb15-243"><a href="#cb15-243"></a></span>
+<span id="cb15-244"><a href="#cb15-244"></a>If you use pen and paper, you can include scans or pictures as follows (see also <span class="co">[</span><span class="ot">assignment_instructions#fig-workflow</span><span class="co">](assignment_instructions#fig-workflow)</span>):</span>
+<span id="cb15-245"><a href="#cb15-245"></a></span>
+<span id="cb15-246"><a href="#cb15-246"></a><span class="al">![Parts of Bayesian workflow](additional_files/bayes_workflow.jpg)</span>{#fig-workflow width="350"}</span>
+<span id="cb15-247"><a href="#cb15-247"></a></span>
+<span id="cb15-248"><a href="#cb15-248"></a>See @fig-workflow for illustration of parts of Bayesian workflow.</span>
+<span id="cb15-249"><a href="#cb15-249"></a>:::</span>
+<span id="cb15-250"><a href="#cb15-250"></a></span>
+<span id="cb15-251"><a href="#cb15-251"></a></span>
+<span id="cb15-252"><a href="#cb15-252"></a>Here are some probability values that can help you figure</span>
+<span id="cb15-253"><a href="#cb15-253"></a>out if you copied the right conditional probabilities from the</span>
+<span id="cb15-254"><a href="#cb15-254"></a>question.</span>
+<span id="cb15-255"><a href="#cb15-255"></a></span>
+<span id="cb15-256"><a href="#cb15-256"></a><span class="ss">-   </span>P(Test gives positive \| Subject does not have lung cancer) =</span>
+<span id="cb15-257"><a href="#cb15-257"></a>    $4\%$</span>
+<span id="cb15-258"><a href="#cb15-258"></a><span class="ss">-   </span>P(Test gives positive **and** Subject has lung cancer) =</span>
+<span id="cb15-259"><a href="#cb15-259"></a>    $0.098\%$ this is also referred to as the **joint probability**</span>
+<span id="cb15-260"><a href="#cb15-260"></a>    of *test being positive* and the *subject having lung cancer*.</span>
+<span id="cb15-261"><a href="#cb15-261"></a></span>
+<span id="cb15-262"><a href="#cb15-262"></a></span>
+<span id="cb15-263"><a href="#cb15-263"></a></span>
+<span id="cb15-264"><a href="#cb15-264"></a></span>
+<span id="cb15-265"><a href="#cb15-265"></a>::: {.callout-note icon=false title="Rubric"}</span>
+<span id="cb15-266"><a href="#cb15-266"></a></span>
+<span id="cb15-267"><a href="#cb15-267"></a><span class="ss">* </span>Is p(has cancer|test result is positive) computed using Bayes' formula</span>
+<span id="cb15-268"><a href="#cb15-268"></a>(or its complement p(does not have cancer|test result is positive))?</span>
+<span id="cb15-269"><a href="#cb15-269"></a><span class="ss">* </span>Is the result p(has cancer|test result is positive)= (or p(does not have cancer|test result</span>
+<span id="cb15-270"><a href="#cb15-270"></a>is positive)=)</span>
+<span id="cb15-271"><a href="#cb15-271"></a><span class="ss">* </span>Is the result motivated with something like ["The test should not be used as even if the test result is</span>
+<span id="cb15-272"><a href="#cb15-272"></a>positive, it is very unlikely that the person has a cancer" (or "The test should not be used as even if the</span>
+<span id="cb15-273"><a href="#cb15-273"></a>test gives positive result, it is very likely that the patient does not have a cancer")]{.content-hidden when-profile="public"}</span>
+<span id="cb15-274"><a href="#cb15-274"></a></span>
+<span id="cb15-275"><a href="#cb15-275"></a>:::</span>
+<span id="cb15-276"><a href="#cb15-276"></a></span>
+<span id="cb15-277"><a href="#cb15-277"></a><span class="fu"># Bayes' theorem 2</span></span>
+<span id="cb15-278"><a href="#cb15-278"></a></span>
+<span id="cb15-279"><a href="#cb15-279"></a>We have three boxes, A, B, and C. There are</span>
+<span id="cb15-280"><a href="#cb15-280"></a></span>
+<span id="cb15-281"><a href="#cb15-281"></a><span class="ss">-   </span>2 red balls and 5 white balls in the box A,</span>
+<span id="cb15-282"><a href="#cb15-282"></a><span class="ss">-   </span>4 red balls and 1 white ball in the box B, and</span>
+<span id="cb15-283"><a href="#cb15-283"></a><span class="ss">-   </span>1 red ball and 3 white balls in the box C.</span>
+<span id="cb15-284"><a href="#cb15-284"></a></span>
+<span id="cb15-285"><a href="#cb15-285"></a>Consider a random experiment in which one of the boxes is randomly</span>
+<span id="cb15-286"><a href="#cb15-286"></a>selected and from that box, one ball is randomly picked up. After</span>
+<span id="cb15-287"><a href="#cb15-287"></a>observing the color of the ball it is replaced in the box it came</span>
+<span id="cb15-288"><a href="#cb15-288"></a>from. Suppose also that on average box A is selected 40% of the time</span>
+<span id="cb15-289"><a href="#cb15-289"></a>and box B $10\%$ of the time (i.e. $P(A) = 0.4$).</span>
+<span id="cb15-290"><a href="#cb15-290"></a></span>
+<span id="cb15-291"><a href="#cb15-291"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb15-292"><a href="#cb15-292"></a>You will need to change the numbers to the numbers in the exercise.</span>
+<span id="cb15-295"><a href="#cb15-295"></a><span class="in">```{r}</span></span>
+<span id="cb15-296"><a href="#cb15-296"></a>boxes_test <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>), <span class="at">ncol =</span> <span class="dv">2</span>,</span>
+<span id="cb15-297"><a href="#cb15-297"></a>    <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>), <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"white"</span>)))</span>
+<span id="cb15-298"><a href="#cb15-298"></a><span class="in">```</span></span>
+<span id="cb15-299"><a href="#cb15-299"></a>:::</span>
+<span id="cb15-300"><a href="#cb15-300"></a></span>
+<span id="cb15-301"><a href="#cb15-301"></a>::: {.callout-warning icon=false title="Subtask 5.a)"}</span>
+<span id="cb15-302"><a href="#cb15-302"></a>What is the probability of picking a red ball?</span>
+<span id="cb15-303"><a href="#cb15-303"></a>Implement an R function to compute that probability.</span>
+<span id="cb15-304"><a href="#cb15-304"></a>:::</span>
+<span id="cb15-305"><a href="#cb15-305"></a></span>
+<span id="cb15-306"><a href="#cb15-306"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb15-307"><a href="#cb15-307"></a>Keep the below name and format for the function to work with <span class="in">`markmyassignment`</span>:</span>
+<span id="cb15-310"><a href="#cb15-310"></a><span class="in">```{r}</span></span>
+<span id="cb15-311"><a href="#cb15-311"></a>p_red <span class="ot">&lt;-</span> <span class="cf">function</span>(boxes) {</span>
+<span id="cb15-312"><a href="#cb15-312"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb15-313"><a href="#cb15-313"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb15-314"><a href="#cb15-314"></a>    <span class="fl">0.3928571</span></span>
+<span id="cb15-315"><a href="#cb15-315"></a>}</span>
+<span id="cb15-316"><a href="#cb15-316"></a><span class="in">```</span></span>
+<span id="cb15-317"><a href="#cb15-317"></a>:::</span>
+<span id="cb15-318"><a href="#cb15-318"></a></span>
+<span id="cb15-319"><a href="#cb15-319"></a></span>
+<span id="cb15-320"><a href="#cb15-320"></a></span>
+<span id="cb15-321"><a href="#cb15-321"></a></span>
+<span id="cb15-322"><a href="#cb15-322"></a>::: {.callout-warning icon=false title="Subtask 5.b)"}</span>
+<span id="cb15-323"><a href="#cb15-323"></a>If a red ball was picked, from which box did it most probably come from?</span>
+<span id="cb15-324"><a href="#cb15-324"></a>Implement an R function to compute the probabilities for each box.</span>
+<span id="cb15-325"><a href="#cb15-325"></a>:::</span>
+<span id="cb15-326"><a href="#cb15-326"></a></span>
+<span id="cb15-327"><a href="#cb15-327"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb15-328"><a href="#cb15-328"></a>Keep the below name and format for the function to work with <span class="in">`markmyassignment`</span>:</span>
+<span id="cb15-331"><a href="#cb15-331"></a><span class="in">```{r}</span></span>
+<span id="cb15-332"><a href="#cb15-332"></a>p_box <span class="ot">&lt;-</span> <span class="cf">function</span>(boxes) {</span>
+<span id="cb15-333"><a href="#cb15-333"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb15-334"><a href="#cb15-334"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb15-335"><a href="#cb15-335"></a>    <span class="fu">c</span>(<span class="fl">0.29090909</span>,<span class="fl">0.07272727</span>,<span class="fl">0.63636364</span>)</span>
+<span id="cb15-336"><a href="#cb15-336"></a>}</span>
+<span id="cb15-337"><a href="#cb15-337"></a><span class="in">```</span></span>
+<span id="cb15-338"><a href="#cb15-338"></a>:::</span>
+<span id="cb15-339"><a href="#cb15-339"></a></span>
+<span id="cb15-340"><a href="#cb15-340"></a></span>
+<span id="cb15-341"><a href="#cb15-341"></a></span>
+<span id="cb15-342"><a href="#cb15-342"></a>::: {.callout-note icon=false title="Rubric"}</span>
+<span id="cb15-343"><a href="#cb15-343"></a></span>
+<span id="cb15-344"><a href="#cb15-344"></a></span>
+<span id="cb15-345"><a href="#cb15-345"></a><span class="ss">* </span>Is the source code available?</span>
+<span id="cb15-346"><a href="#cb15-346"></a><span class="ss">* </span>How is the answer for probability of picking a red ball?</span>
+<span id="cb15-347"><a href="#cb15-347"></a><span class="ss">    - </span>No answer</span>
+<span id="cb15-348"><a href="#cb15-348"></a><span class="ss">    - </span>Probability rules </span>
+<span id="cb15-349"><a href="#cb15-349"></a><span class="ss">    - </span>Probability rules </span>
+<span id="cb15-350"><a href="#cb15-350"></a><span class="ss">* </span>How is the answer for what box is most probable?</span>
+<span id="cb15-351"><a href="#cb15-351"></a><span class="ss">    - </span>No answer</span>
+<span id="cb15-352"><a href="#cb15-352"></a><span class="ss">    - </span>Bayes rule used to compute probabilities for all boxes given that the picked ball is red, but the answers are not </span>
+<span id="cb15-353"><a href="#cb15-353"></a><span class="ss">    - </span>Bayes rule used to compute probabilities for all boxes given that the picked ball is red, the answers are p</span>
+<span id="cb15-354"><a href="#cb15-354"></a><span class="ss">    - </span>Bayes rule used to compute probabilities for all boxes given that the picked ball is red, the answers are </span>
+<span id="cb15-355"><a href="#cb15-355"></a></span>
+<span id="cb15-356"><a href="#cb15-356"></a>:::</span>
+<span id="cb15-357"><a href="#cb15-357"></a></span>
+<span id="cb15-358"><a href="#cb15-358"></a><span class="fu"># Bayes' theorem 3</span></span>
+<span id="cb15-359"><a href="#cb15-359"></a></span>
+<span id="cb15-360"><a href="#cb15-360"></a>Assume that on average fraternal twins (two</span>
+<span id="cb15-361"><a href="#cb15-361"></a>fertilized eggs and then could be of different sex) occur once in</span>
+<span id="cb15-362"><a href="#cb15-362"></a>150 births and identical twins (single egg divides into two separate</span>
+<span id="cb15-363"><a href="#cb15-363"></a>embryos, so both have the same sex) once in 400 births (**Note!**</span>
+<span id="cb15-364"><a href="#cb15-364"></a>This is not the true value, see Exercise 1.6, page 28, in BDA3).</span>
+<span id="cb15-365"><a href="#cb15-365"></a>American male singer-actor Elvis Presley (1935 -- 1977) had a twin</span>
+<span id="cb15-366"><a href="#cb15-366"></a>brother who died in birth. Assume that an equal number of boys and</span>
+<span id="cb15-367"><a href="#cb15-367"></a>girls are born on average.</span>
+<span id="cb15-368"><a href="#cb15-368"></a></span>
+<span id="cb15-369"><a href="#cb15-369"></a>::: {.callout-warning icon=false title="Subtask 6.a)"}</span>
+<span id="cb15-370"><a href="#cb15-370"></a>What is the probability that Elvis was an</span>
+<span id="cb15-371"><a href="#cb15-371"></a>identical twin? Show the steps how you derived the equations to</span>
+<span id="cb15-372"><a href="#cb15-372"></a>compute that probability and implement a function in R that computes the probability.</span>
+<span id="cb15-373"><a href="#cb15-373"></a>:::</span>
+<span id="cb15-374"><a href="#cb15-374"></a></span>
+<span id="cb15-375"><a href="#cb15-375"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb15-376"><a href="#cb15-376"></a>You will need to change the numbers to the numbers in the exercise.</span>
+<span id="cb15-379"><a href="#cb15-379"></a><span class="in">```{r}</span></span>
+<span id="cb15-380"><a href="#cb15-380"></a>fraternal_prob <span class="ot">=</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">125</span></span>
+<span id="cb15-381"><a href="#cb15-381"></a>identical_prob <span class="ot">=</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">300</span></span>
+<span id="cb15-382"><a href="#cb15-382"></a><span class="in">```</span></span>
+<span id="cb15-383"><a href="#cb15-383"></a>Keep the below name and format for the function to work with <span class="in">`markmyassignment`</span>:</span>
+<span id="cb15-386"><a href="#cb15-386"></a><span class="in">```{r}</span></span>
+<span id="cb15-387"><a href="#cb15-387"></a>p_identical_twin <span class="ot">&lt;-</span> <span class="cf">function</span>(fraternal_prob, identical_prob) {</span>
+<span id="cb15-388"><a href="#cb15-388"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb15-389"><a href="#cb15-389"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb15-390"><a href="#cb15-390"></a>    <span class="fl">0.4545455</span></span>
+<span id="cb15-391"><a href="#cb15-391"></a>}</span>
+<span id="cb15-392"><a href="#cb15-392"></a><span class="in">```</span></span>
+<span id="cb15-393"><a href="#cb15-393"></a>:::</span>
+<span id="cb15-394"><a href="#cb15-394"></a></span>
+<span id="cb15-395"><a href="#cb15-395"></a></span>
+<span id="cb15-396"><a href="#cb15-396"></a></span>
+<span id="cb15-397"><a href="#cb15-397"></a></span>
+<span id="cb15-398"><a href="#cb15-398"></a>::: {.callout-note icon=false title="Rubric"}</span>
+<span id="cb15-399"><a href="#cb15-399"></a><span class="ss">* </span>How is the answer for probability of Elvis having had an identical twin brother?</span>
+<span id="cb15-400"><a href="#cb15-400"></a><span class="ss">    - </span>No answer</span>
+<span id="cb15-401"><a href="#cb15-401"></a><span class="ss">    - </span>Probability that Elvis had an identical twin brother is computed using Bayes rule, but the result is not roughly </span>
+<span id="cb15-402"><a href="#cb15-402"></a><span class="ss">    - </span>Probability that Elvis had an identical twin brother is computed using Bayes rule, and the result is roughly </span>
+<span id="cb15-403"><a href="#cb15-403"></a>:::</span>
+<span id="cb15-404"><a href="#cb15-404"></a></span>
+<span id="cb15-405"><a href="#cb15-405"></a><span class="fu"># The three steps of Bayesian data analysis</span></span>
+<span id="cb15-406"><a href="#cb15-406"></a></span>
+<span id="cb15-407"><a href="#cb15-407"></a>::: {.callout-warning icon=false title="Subtask 7.a)"}</span>
+<span id="cb15-408"><a href="#cb15-408"></a>Fill in the three steps of Bayesian data analysis (see BDA3 section 1.1):</span>
+<span id="cb15-409"><a href="#cb15-409"></a></span>
+<span id="cb15-410"><a href="#cb15-410"></a><span class="ss">1. </span></span>
+<span id="cb15-411"><a href="#cb15-411"></a><span class="ss">2. </span></span>
+<span id="cb15-412"><a href="#cb15-412"></a><span class="ss">3. </span></span>
+<span id="cb15-413"><a href="#cb15-413"></a>:::</span>
+<span id="cb15-414"><a href="#cb15-414"></a></span>
+<span id="cb15-415"><a href="#cb15-415"></a>::: {.callout-note icon=false title="Rubric"}</span>
+<span id="cb15-416"><a href="#cb15-416"></a><span class="ss">* </span>Are the three steps listed as follows:</span>
+<span id="cb15-417"><a href="#cb15-417"></a><span class="ss">    1. </span></span>
+<span id="cb15-418"><a href="#cb15-418"></a><span class="ss">    2. </span></span>
+<span id="cb15-419"><a href="#cb15-419"></a><span class="ss">    3. </span></span>
+<span id="cb15-420"><a href="#cb15-420"></a>:::</span>
+<span id="cb15-421"><a href="#cb15-421"></a></span>
+<span id="cb15-422"><a href="#cb15-422"></a>::: {.callout-warning collapse=false}</span>
+<span id="cb15-423"><a href="#cb15-423"></a><span class="fu">## markmyassignment</span></span>
+<span id="cb15-424"><a href="#cb15-424"></a>The following will check the functions for which <span class="in">`markmyassignment`</span> has been set up:</span>
+<span id="cb15-425"><a href="#cb15-425"></a></span>
+<span id="cb15-428"><a href="#cb15-428"></a><span class="in">```{r}</span></span>
+<span id="cb15-429"><a href="#cb15-429"></a><span class="fu">mark_my_assignment</span>()</span>
+<span id="cb15-430"><a href="#cb15-430"></a><span class="in">```</span></span>
+<span id="cb15-431"><a href="#cb15-431"></a>:::</span>
+<span id="cb15-432"><a href="#cb15-432"></a></span>
+<span id="cb15-433"><a href="#cb15-433"></a>{{&lt; include includes/_overall_quality.md &gt;}}</span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,656 @@
+---
+title: "Assignment 3, 2023"
+author: "Aki Vehtari et al."
+format:
+  html:
+    toc: true
+    code-tools: true
+    code-line-numbers: true
+    number-sections: true
+    mainfont: Georgia, serif
+    page-layout: article
+  pdf:
+    geometry:
+    - left=1cm,top=1cm,bottom=1cm,right=7cm
+    number-sections: true
+    code-annotations: none
+editor: source
+---
+
+
+# General information
+
+**This is for BDA 2023**
+
+This assignment is related to Lecture 3 and BDA3 Chapters 2 and 3.  Use [Frank Harrell's
+recommendations](https://hbiostat.org/blog/post/bayes-freq-stmts/) on
+how to state results in Bayesian two group comparisons (and note that
+there is no *point null hypothesis testing* in this assignment).
+
+**The maximum amount of points from this assignment is 9.**
+
+We have prepared **two quarto templates specific to this assignment** to help you get started:
+
+- A recommended template ([html](template3.html), [qmd](https://avehtari.github.io/BDA_course_Aalto/assignments/template3.qmd), [pdf](template3.pdf)) which uses some additional packages,
+which however requires a bit more set-up work to run and
+- a simple template ([html](simple_template3.html), [qmd](https://avehtari.github.io/BDA_course_Aalto/assignments/simple_template3.qmd), [pdf](simple_template3.pdf)) which doesn't use those additional packages and
+is therefore easier to get to run.
+
+::: {.callout-tip collapse=false}
+**Reading instructions:**
+
+- [**The reading instructions for BDA3 Chapter 1**](../BDA3_notes.html#ch2).
+- [**The reading instructions for BDA3 Chapter 2**](../BDA3_notes.html#ch3).
+
+{{< include includes/_grading_instructions.md >}}
+:::
+
+
+{{< include includes/_general_info.md >}}
+
+::: {.callout-warning collapse=false}
+## Setup
+
+This is the template for [assignment 3](assignment3.html). You can download qmd-files ([full](https://avehtari.github.io/BDA_course_Aalto/assignments/template3.qmd), [simple](https://avehtari.github.io/BDA_course_Aalto/assignments/simple_template3.qmd)) or copy the code from this rendered document after clicking on `</> Code` in the top right corner.
+
+**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.**
+
+The following will set-up [`markmyassignment`](https://github.com/MansMeg/markmyassignment) to check your functions at the end of the notebook:
+
+```{r}
+if(!require(markmyassignment)){
+    install.packages("markmyassignment")
+    library(markmyassignment)
+}
+assignment_path = paste("https://github.com/avehtari/BDA_course_Aalto/",
+"blob/master/assignments/tests/assignment3.yml", sep="")
+set_assignment(assignment_path)
+```
+
+The following installs and loads the `aaltobda` package:
+```{r}
+if(!require(aaltobda)){
+    install.packages("aaltobda", repos = c("https://avehtari.github.io/BDA_course_Aalto/", getOption("repos")))
+    library(aaltobda)
+}
+```
+The following installs and loads the [`latex2exp` package](https://github.com/stefano-meschiari/latex2exp), which allows us to use LaTeX in plots:
+```{r}
+if(!require(latex2exp)){
+    install.packages("latex2exp")
+    library(latex2exp)
+}
+```
+:::
+::: {.callout-tip collapse=true}
+## Setting up advanced packages (`posterior` and `ggdist`)
+
+The following installs and loads the [`posterior` package](https://mc-stan.org/posterior/index.html),
+which allows us to use its [`rvar` Random Variable Datatype
+](https://mc-stan.org/posterior/articles/rvar.html):
+```{r}
+if(!require(posterior)){
+    install.packages("posterior")
+    library(posterior)
+}
+```
+
+The following installs and loads the [`ggdist` package](https://mjskay.github.io/ggdist/)
+for advanced plotting functions:
+```{r}
+if(!require(ggplot2)){
+    install.packages("ggplot2")
+    library(ggplot2)
+}
+ggplot2::theme_set(theme_minimal(base_size = 14))
+if(!require(ggdist)){
+    install.packages("ggdist")
+    library(ggdist)
+}
+```
+:::
+
+# Inference for normal mean and deviation (3 points)
+
+A factory has a production line for manufacturing car windshields. A
+sample of windshields has been taken for testing hardness.
+The observed hardness values $\mathbf{y}_1$ can be found in
+the dataset `windshieldy1` in the `aaltobda` package.
+
+We may assume that the observations follow a normal distribution with an
+unknown standard deviation $\sigma$. We wish to obtain information about
+the unknown average hardness $\mu$. For simplicity we assume standard
+uninformative prior discussed in the book, that is,
+$p(\mu, \sigma) \propto \sigma^{-1}$. It is not necessary to derive the
+posterior distribution in the report, as it has already been done in the
+book (see section 3.2).
+
+::: {.content-visible when-profile="public"}
+Loading the library and the data.
+``` {r}
+data("windshieldy1")
+# The data are now stored in the variable `windshieldy1`.
+# The below displays the data:
+windshieldy1
+```
+The below data is **only for the tests**, you need to change to the
+full data `windshieldy1` when reporting your results.
+``` {r}
+windshieldy_test <- c(13.357, 14.928, 14.896, 14.820)
+```
+:::
+::: {.callout-warning icon=false title="Subtask 2.a)"}
+Formulate
+
+1. the likelihood,
+2. the prior, and
+3. the resulting posterior.
+:::
+
+::: {.content-visible when-profile="public"}
+Write your answers here!
+:::
+
+
+
+
+::: {.callout-warning icon=false title="Subtask 2.b)"}
+What can you say about the unknown $\mu$?
+
+* Compute and report the point estimate $E(\mu|y)$,
+* compute and report a posterior 95%-interval,
+* plot the density, and
+* write interpretation of the result in text.
+:::
+
+::: {.callout-tip collapse=false}
+Posterior intervals are also called credible
+intervals and are different from confidence intervals.
+:::
+
+::: {.content-visible when-profile="public"}
+Write your answers and code here!
+
+**Keep the below name and format for the functions to work with `markmyassignment`:**
+```{r}
+# Useful functions: mean(), length(), sqrt(), sum()
+# and qtnew(), dtnew() (from aaltobda)
+
+mu_point_est <- function(data) {
+    # Do computation here, and return as below.
+    # This is the correct return value for the test data provided above.
+    14.5
+    ### {.content-hidden when-profile="public"}
+    mean(data)
+    ###
+}
+mu_interval <- function(data, prob = 0.95) {
+    # Do computation here, and return as below.
+    # This is the correct return value for the test data provided above.
+    c(13.3, 15.7)
+    ### {.content-hidden when-profile="public"}
+    n = length(data)
+    df = n-1
+    location = mean(data)
+    scale = sqrt((
+        1/(n-1) * sum((data-location)^2)
+    )/n)
+    ql = (1-prob)/2
+    qu = prob + (1-prob)/2
+    qtnew(c(ql, qu), df, location, scale)
+    ###
+}
+```
+
+You can plot the density as below if you implement `mu_pdf` to compute the PDF of the posterior $p(\mu|y)$ of the average hardness $\mu$.
+
+```{r}
+#| label: fig-2b-density
+#| fig-cap: PDF of the posterior $p(\mu|y)$ of the average hardness $\mu$
+mu_pdf <- function(data, x){
+    # Compute necessary parameters here.
+    # These are the correct parameters for `windshieldy_test`
+    # with the provided uninformative prior.
+    df = 3
+    location = 14.5
+    scale = 0.3817557
+    # Use the computed parameters as below to compute the PDF:
+    ### {.content-hidden when-profile="public"}
+    n = length(data)
+    df = n-1
+    location = mean(data)
+    scale = sqrt((
+        1/(n-1) * sum((data-location)^2)
+    )/n)
+    ###
+    dtnew(x, df, location, scale)
+}
+
+x_interval = mu_interval(windshieldy1, .999)
+lower_x = x_interval[1]
+upper_x = x_interval[2]
+x = seq(lower_x, upper_x, length.out=1000)
+plot(
+    x, mu_pdf(windshieldy1, x), type="l",
+    xlab=TeX(r'(average hardness $\mu$)'),
+    ylab=TeX(r'(PDF of the posterior $p(\mu|y)$)')
+)
+```
+:::
+
+::: {.callout-warning icon=false title="Subtask 2.c)"}
+What can you say about the hardness of the next windshield coming
+from the production line before actually measuring the hardness?
+
+
+
+* Compute and report the point estimate $E(\tilde{y}|y)$,
+* compute and report a posterior **predictive** 95%-interval,
+* plot the density, and
+* write interpretation of the result in text.
+:::
+
+::: {.callout-tip collapse=false}
+Predictive intervals are different from posterior
+intervals.
+
+With a conjugate prior a closed form posterior is Student's $t$
+form (see equations in the book).
+:::
+
+::: {.content-visible when-profile="public"}
+Write your answers and code here!
+
+**Keep the below name and format for the functions to work with `markmyassignment`:**
+```{r}
+# Useful functions: mean(), length(), sqrt(), sum()
+# and qtnew(), dtnew() (from aaltobda)
+
+mu_pred_point_est <- function(data) {
+    # Do computation here, and return as below.
+    # This is the correct return value for the test data provided above.
+    14.5
+    ### {.content-hidden when-profile="public"}
+    mean(data)
+    ###
+}
+mu_pred_interval <- function(data, prob = 0.95) {
+    # Do computation here, and return as below.
+    # This is the correct return value for the test data provided above.
+    c(11.8, 17.2)
+    ### {.content-hidden when-profile="public"}
+    n = length(data)
+    df = n-1
+    location = mean(data)
+    scale = sqrt((
+        1/(n-1) * sum((data-location)^2)
+    )*(1+1/n))
+    ql = (1-prob)/2
+    qu = prob + (1-prob)/2
+    qtnew(c(ql, qu), df, location, scale)
+    ###
+}
+```
+
+You can plot the density as below if you implement `mu_pred_pdf` to compute the PDF of the posterior predictive $p(\tilde{y}|y)$ of a new hardness observation $\tilde{y}$.
+
+```{r}
+#| label: fig-2c-density
+#| fig-cap: PDF of the posterior predictive $p(\tilde{y}|y)$ of a new hardness observation $\tilde{y}$
+mu_pred_pdf <- function(data, x){
+    # Compute necessary parameters here.
+    # These are the correct parameters for `windshieldy_test`
+    # with the provided uninformative prior.
+    df = 3
+    location = 14.5
+    scale = 0.8536316
+    # Use the computed parameters as below to compute the PDF:
+    ### {.content-hidden when-profile="public"}
+    n = length(data)
+    df = n-1
+    location = mean(data)
+    scale = sqrt((
+        1/(n-1) * sum((data-mean(data))^2)
+    )*(1+1/n))
+    ###
+    dtnew(x, df, location, scale)
+}
+
+x_interval = mu_pred_interval(windshieldy1, .999)
+lower_x = x_interval[1]
+upper_x = x_interval[2]
+x = seq(lower_x, upper_x, length.out=1000)
+plot(
+    x, mu_pred_pdf(windshieldy1, x), type="l",
+    xlab=TeX(r'(new hardness observation $\tilde{y}$)'),
+    ylab=TeX(r'(PDF of the posterior predictive $p(\tilde{y}|y)$)')
+)
+```
+:::
+
+::: {.callout-note icon=false title="Rubric"}
+
+* Is the source code included?
+    * No
+    * Yes
+* Are the likelihood, prior and the posterior for computing the average hardness value reported? It is ok
+to refer to the book instead of deriving the distributions.
+    * No
+    * Yes, but some are missing
+    * Yes
+* In part a), were the point estimates and posterior interval provided? (The posterior mean should be
+close to )
+    * No
+    * Yes, but seem incorrect or only one estimate was reported
+    * Yes, and the reported values seem plausible
+* In part b), was the density plotted?
+    * No
+    * Yes, but seem incorrect
+    * Yes, and the plot seems plausible
+* For b)-part, was a formula or a simulation method presented for computing the posterior predictive
+distribution? It is ok to refer to the book.
+    * No
+    * Yes, but seems incorrect
+    * Yes
+* For c)-part, were the point estimate and predictive interval provided? (95% predictive interval should
+be around  and the mean the same as in a)-part).
+    * No
+    * Yes, but seems incorrect
+    * Yes, and the reported values seem plausible
+* For c)-part, was the density plotted?
+    * No
+    * Yes, but seems incorrect
+    * Yes, and the plot seem plausible
+
+:::
+
+# Inference for the difference between proportions (3 points)
+
+An experiment was performed to estimate the effect of beta-blockers on
+mortality of cardiac patients. A group of patients was randomly assigned
+to treatment and control groups: out of 674 patients receiving the
+control, 39 died, and out of 680 receiving the treatment, 22 died.
+Assume that the outcomes are independent and binomially distributed,
+with probabilities of death of $p_0$ and $p_1$ under the control and
+treatment, respectively. Set up a noninformative or weakly informative
+prior distribution on $(p_0,p_1)$.
+
+
+::: {.callout-warning icon=false title="Subtask 3.a)"}
+Formulate
+
+1. the likelihood,
+2. the prior, and
+3. the resulting posterior.
+:::
+
+::: {.content-visible when-profile="public"}
+Write your answers here!
+:::
+
+::: {.callout-warning icon=false title="Subtask 3.b)"}
+Summarize the posterior distribution for the [odds ratio](https://en.wikipedia.org/wiki/Odds_ratio),
+$$
+\mathrm{OR} = (p_1/(1-p_1))/(p_0/(1-p_0)).
+$$
+
+* Compute and report the point estimate $E(\mathrm{OR}|y_0,y_1)$,
+* compute and report a posterior 95%-interval,
+* plot the histogram, and
+* write interpretation of the result in text.
+
+Use [Frank Harrell's recommendations](https://hbiostat.org/blog/post/bayes-freq-stmts/)
+how to state results in Bayesian two group comparison.
+:::
+
+::: {.callout-tip collapse=false}
+With a conjugate prior, a closed-form posterior is the Beta
+form for each group separately (see equations in the book). You can use
+`rbeta()` to sample from the posterior distributions of $p_0$ and $p_1$,
+and use this sample and odds ratio equation to get a sample from the
+distribution of the odds ratio.
+:::
+
+::: {.content-visible when-profile="public"}
+Write your answers and code here!
+
+The below data is **only for the tests**:
+``` {r}
+set.seed(4711)
+ndraws = 1000
+p0 = rbeta(ndraws, 5, 95)
+p1 = rbeta(ndraws, 10, 90)
+### {.content-hidden when-profile="public"}
+set.seed(4711)
+p0 = rbeta(ndraws, 40, 675)
+p1 = rbeta(ndraws, 23, 681)
+###
+```
+
+**Keep the below name and format for the functions to work with `markmyassignment`:**
+
+```{r}
+# Useful function: mean(), quantile()
+
+posterior_odds_ratio_point_est <- function(p0, p1) {
+    # Do computation here, and return as below.
+    # This is the correct return value for the test data provided above.
+    2.650172
+    ### {.content-hidden when-profile="public"}
+    odds_ratios = p1/(1-p1)/(p0/(1-p0))
+    mean(odds_ratios)
+    ###
+}
+posterior_odds_ratio_interval <- function(p0, p1, prob = 0.95) {
+    # Do computation here, and return as below.
+    # This is the correct return value for the test data provided above.
+    c(0.6796942,7.3015964)
+    ### {.content-hidden when-profile="public"}
+    odds_ratios = p1/(1-p1)/(p0/(1-p0))
+    ql = (1-prob)/2
+    qu = prob + (1-prob)/2
+    quantile(odds_ratios, c(ql, qu))
+    ###
+}
+```
+:::
+
+::: {.callout-tip collapse=true}
+## advanced tools (`posterior`'s `rvar`, `ggdist`'s `stat_dotsinterval`)
+
+The `posterior` package's random variable datatype `rvar` is a
+["sample-based representation of random variables"](https://mc-stan.org/posterior/articles/rvar.html#:~:text=sample%2Dbased%20representation%20of%20random%20variables)
+which makes handling of random samples (of draws) such as the ones contained in the above variables `p0` and `p1` easier.
+[By default, it prints as the mean and standard deviation of the draws](https://mc-stan.org/posterior/articles/rvar.html#:~:text=The%20default%20display%20of%20an%20rvar%20shows%20the%20mean%20and%20standard%20deviation%20of%20each%20element%20of%20the%20array.), **such that `rvar(p0)` prints as `r rvar(p0)` and `rvar(p1)` prints as `r rvar(p1)`**.
+
+The datatype is ["designed to [...] be able to be used inside `data.frame()`s and `tibble()`s, and to be used with distribution visualizations in the ggdist package."](https://mc-stan.org/posterior/articles/rvar.html#:~:text=designed%20to%20interoperate%20with%20vectorized%20distributions%20in%20the%20distributional%20package%2C%20to%20be%20able%20to%20be%20used%20inside%20data.frame()s%20and%20tibble()s%2C%20and%20to%20be%20used%20with%20distribution%20visualizations%20in%20the%20ggdist%20package.)
+The code below sets up an [R `data.frame()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/data.frame) with the draws in `p0` and `p1` wrapped in an `rvar`, and uses that data frame to visualize the draws using [`ggdist`](https://mjskay.github.io/ggdist/index.html), an R package building on [`ggplot2`](https://ggplot2.tidyverse.org/) and ["designed for both frequentist and Bayesian uncertainty visualization"](https://mjskay.github.io/ggdist/index.html#:~:text=designed%20for%20both%20frequentist%20and%20Bayesian%20uncertainty%20visualization).
+
+The below plot, @fig-showcase-probabilities uses `ggdist`'s [`stat_dotsinterval()`](https://mjskay.github.io/ggdist/articles/dotsinterval.html), which by default visualizes
+
+* [an `rvar`'s median and central 66% and 95% intervals](https://mjskay.github.io/ggdist/reference/stat_dotsinterval.html#:~:text=point_interval%20%3D%20%22median_qi%22%2C%0A%20%20.width%20%3D%20c(0.66%2C%200.95)%2C) using a black dot and lines of varying thicknesses as when using `ggdist`'s [`stat_pointinterval()`](https://mjskay.github.io/ggdist/reference/stat_pointinterval.html#examples) and
+* an `rvar`'s draws using grey dots as when using `ggdist`'s [`stat_dots()`](https://mjskay.github.io/ggdist/reference/stat_dots.html#examples):
+
+```{r}
+#| label: fig-showcase-probabilities
+#| fig-cap: Probabilities of death for the two patient groups.
+r0 = rvar(p0)
+r1 = rvar(p1)
+ggplot(data.frame(
+    rv_name=c("control", "treatment"), rv=c(r0, r1)
+)) +
+    aes(xdist=rv, y=rv_name) +
+    labs(x="probabilities of death", y="patient group") +
+    stat_dotsinterval()
+```
+
+`rvar`s make it easy to compute functions of random variables, such as
+
+* differences, e.g. $p_0 - p_1$: `r0 - r1` computes an `rvar` which prints as `r r0 - r1`, indicating the **sample mean** and the **sample standard deviation** of the difference of the probabilities of death,
+* products, e.g. $p_0 \, p_1$: `r0 * r1` computes an `rvar` which prints as `r r0 * r1` which in this case
+has no great interpretation, or
+* the odds ratios needed in task 3.b).
+
+Below, in @fig-showcase-odds-ratios, we compute the odds ratios using the `rvar`s and visualize its median, central intervals and draws, as above in @fig-showcase-probabilities:
+```{r}
+#| label: fig-showcase-odds-ratios
+#| fig-cap: Odds ratios of the two patient groups.
+rodds_ratio = (r1/(1-r1))/(r0/(1-r0))
+ggplot(data.frame(
+    rv=c(rodds_ratio)
+)) +
+    aes(xdist=rv) +
+    labs(x="odds ratio", y="relative amount of draws") +
+    stat_dotsinterval()
+```
+
+You can use @fig-showcase-odds-ratios to visually check whether the answers you computed for 3.b) make sense.
+:::
+
+::: {.callout-warning icon=false title="Subtask 3.c)"}
+Use at least two different priors, and discuss the sensitivity of
+your inference to your choice of prior density with a couple of
+sentences.
+:::
+
+::: {.content-visible when-profile="public"}
+Write your answers and code here!
+:::
+
+::: {.callout-note icon=false title="Rubric"}
+* Is the source code included?
+    * No
+    * Yes
+* Are the likelihood, prior and the posterior for the death probabilities reported? It is ok to refer to the
+book instead of deriving the distributions.
+    * No
+    * Yes, but some are missing
+    * Yes
+* In part a), was the simulation algorithm for computing the posterior of the odds ratio presented or
+implemented?
+    * No
+    * Yes, but seems incorrect
+    * Yes
+* In part a), was the odds ratio summarized with a point estimate and a posterior interval? (The mean
+should be close to )
+    * No
+    * Yes, but results seem incorrect
+    * Yes, and the results seem plausible
+* In part b), was some discussion about testing alternative priors provided? (For example, one could
+have repeated the computations in a)-part with a couple of alternative priors and reported these
+results or some related general conclusions briefly)
+    * Not at all
+    * Some analysis was provided but it was lacking or did not make sense
+    * Some alternative priors were tested and some sensible discussion provided
+:::
+
+# Inference for the difference between normal means (3 points)
+
+Consider a case where the same factory has two production lines for
+manufacturing car windshields. Independent samples from the two
+production lines were tested for hardness. The hardness measurements for
+the two samples $\mathbf{y}_1$ and $\mathbf{y}_2$ be found in
+the datasets `windshieldy1` and  `windshieldy2` in the `aaltobda` package.
+
+We assume that the samples have unknown standard deviations $\sigma_1$
+and $\sigma_2$. Use uninformative or weakly informative priors and answer the following
+questions:
+
+::: {.content-visible when-profile="public"}
+Loading the library and the data.
+``` {r}
+data("windshieldy2")
+# The new data are now stored in the variable `windshieldy2`.
+# The below displays the first few rows of the new data:
+head(windshieldy2)
+```
+:::
+
+::: {.callout-warning icon=false title="Subtask 4.a)"}
+Formulate
+
+1. the likelihood,
+2. the prior, and
+3. the resulting posterior.
+:::
+
+::: {.content-visible when-profile="public"}
+Write your answers here!
+:::
+
+::: {.callout-warning icon=false title="Subtask 4.b)"}
+What can you say about $\mu_d = \mu_1 - \mu_2$?
+
+* Compute and report the point estimate $E(\mu_d|y_1, y_2)$,
+* compute and report a posterior 95%-interval,
+* plot the histogram, and
+* write interpretation of the result in text.
+
+Use [Frank Harrell's recommendations](https://hbiostat.org/blog/post/bayes-freq-stmts/)
+how to state results in Bayesian two group comparison.
+:::
+
+::: {.callout-tip collapse=false}
+With a conjugate prior, a closed-form posterior is Student's
+$t$ form for each group separately (see equations in the book). You can
+use the `rtnew()` function to sample from the posterior distributions of
+$\mu_1$ and $\mu_2$, and use this sample to get a sample from the
+distribution of the difference $\mu_d = \mu_1 - \mu_2$.
+:::
+
+::: {.content-visible when-profile="public"}
+Write your answers and code here!
+```{r}
+# Useful functions: mean(), length(), sqrt(), sum(),
+# rtnew() (from aaltobda), quantile() and hist().
+```
+:::
+
+
+
+::: {.callout-warning icon=false title="Subtask 4.c)"}
+Given this specific model, what is the probability that the means
+are exactly the same ($\mu_1 = \mu_2$)? Explain your reasoning.
+:::
+::: {.content-visible when-profile="public"}
+Write your answers here!
+:::
+
+::: {.callout-note icon=false title="Rubric"}
+
+* Is source code included?
+    * No
+    * Yes
+* Are the likelihood, prior and the posterior for the windshield hardness values reported? (It is also ok to
+refer to the book or related formulas from exercise 1)
+    * No
+    * Yes, but some are missing
+    * Yes
+* In part a), was the simulation algorithm for computing the difference in the means presented or
+implemented?
+    * No
+    * Yes, but seems to be incorrect
+    * Yes
+* In part a), was the posterior for the difference between the means summarized with point and interval
+estimates? (The mean should be close to  or something
+close to it)
+    * No answer
+    * Yes, but results seem incorrect or only one estimate was given
+    * Yes, and results seem reasonable
+* Were some analysis or discussion provided for assessing whether the means could be the same? 
+    * No analysis or explanation is given
+    * Yes, but the analysis or explanation seems incorrect
+    * Yes, and the analysis or explanation seems plausible
+
+:::
+
+::: {.callout-warning collapse=false}
+## markmyassignment
+The following will check the functions for which `markmyassignment` has been set up:
+
+```{r}
+mark_my_assignment()
+```
+:::
+
+{{< include includes/_overall_quality.md >}}

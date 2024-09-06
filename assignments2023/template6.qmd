@@ -1,0 +1,499 @@
+---
+title: "Assignment 6, 2023"
+author: "Aki Vehtari et al."
+format:
+  html:
+    toc: true
+    code-tools: true
+    code-line-numbers: true
+    number-sections: true
+    mainfont: Georgia, serif
+    page-layout: article
+  pdf:
+    geometry:
+    - left=1cm,top=1cm,bottom=1cm,right=7cm
+    number-sections: true
+    code-annotations: none
+editor: source
+---
+
+# General information
+
+**The maximum amount of points from this assignment is 6.**
+
+**This is for BDA 2023**
+
+We have prepared a **quarto template specific to this assignment ([html](template6.html), [qmd](https://avehtari.github.io/BDA_course_Aalto/assignments/template6.qmd), [pdf](template6.pdf))** to help you get started.
+
+::: {.callout-warning icon=false title="Setup" collapse=true}
+We recommend Aalto students use [jupyter.cs.aalto.fi](https://jupyter.cs.aalto.fi), for all others we also provide a [docker container](docker.html).
+:::
+
+::: {.callout-tip collapse=false}
+**Reading instructions:**
+
+- [**The reading instructions for BDA3 Chapter 10**](../BDA3_notes.html#ch10).
+- [**The reading instructions for BDA3 Chapter 11**](../BDA3_notes.html#ch11).
+
+{{< include includes/_grading_instructions.md >}}
+
+{{< include includes/_cmdstanr.md >}}
+:::
+
+{{< include includes/_reporting_accuracy.md >}}
+
+{{< include includes/_general_info.md >}}
+::: {.content-visible when-profile="public"}
+This is the template for [assignment 6](assignment6.html). You can download the [broken stan-file](./additional_files/assignment6_linear_model.stan) and the [qmd-file](https://avehtari.github.io/BDA_course_Aalto/assignments/template6.qmd) or copy the code from this rendered document after clicking on `</> Code` in the top right corner.
+
+**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.**
+:::
+::: {.callout-tip collapse=true}
+## Setup
+
+JupyterHub has all the needed packages pre-installed.
+
+The following installs and loads the `aaltobda` package:
+```{r}
+if(!require(aaltobda)){
+    install.packages("aaltobda", repos = c("https://avehtari.github.io/BDA_course_Aalto/", getOption("repos")))
+    library(aaltobda)
+}
+```
+The following installs and loads the [`latex2exp` package](https://github.com/stefano-meschiari/latex2exp), which allows us to use LaTeX in plots:
+```{r}
+if(!require(latex2exp)){
+    install.packages("latex2exp")
+    library(latex2exp)
+}
+```
+The following installs and loads the [`posterior` package](https://github.com/stan-dev/posterior) which imports the `rhat_basic()` function:
+```{r}
+if(!require(posterior)){
+    install.packages("posterior")
+    library(posterior)
+}
+```
+The following installs and loads the [`ggplot2` package](https://ggplot2.tidyverse.org/), the [`bayesplot` package](https://mc-stan.org/bayesplot/index.html) and the [`dplyr` package](https://dplyr.tidyverse.org/)
+```{r}
+if(!require(ggplot2)){
+    install.packages("ggplot2")
+    library(ggplot2)
+}
+if(!require(bayesplot)){
+    install.packages("bayesplot")
+    library(bayesplot)
+}
+if(!require(dplyr)){
+    install.packages("dplyr")
+    library(dplyr)
+}
+if(!require(tidyr)){
+    install.packages("tidyr")
+    library(tidyr)
+}
+# Some additional set-up to make plots legible
+ggplot2::theme_set(theme_minimal(base_size = 14))
+bayesplot::bayesplot_theme_set(theme_minimal(base_size = 14))
+# register_knitr_engine()
+```
+The following installs and loads the [`cmdstanr` package](https://mc-stan.org/cmdstanr/) and tries to install `cmdstan`.
+```{r}
+if(!require(cmdstanr)){
+    install.packages("cmdstanr", repos = c("https://mc-stan.org/r-packages/", getOption("repos")))
+    library(cmdstanr)
+}
+cmdstan_installed <- function(){
+  res <- try(out <- cmdstanr::cmdstan_path(), silent = TRUE)
+  !inherits(res, "try-error")
+}
+if(!cmdstan_installed()){
+    install_cmdstan()
+}
+```
+:::
+
+# Stan warm-up: linear model of BDA retention with Stan (2 points)
+
+From 2018 to 2022, we have been keeping track of assignment submissions for the BDA course given the number of submissions for the 1st assignment. We will fit a simple linear model to answer two questions of interest:
+
+- What is the trend of student retention as measured by assignment submissions?
+- Given the submission rates for assignments 1--8, how many students will complete the final 9th assignment (and potentially pass the course)?
+
+The author has given you the broken Stan code below, which they intend to encode the following linear model:
+$$
+\begin{aligned}
+p(\alpha,\beta,\sigma) &= \mathrm{const.}
+      & \text{(improper flat prior)}&\text{ and}\\
+p(y|x,\alpha,\beta,\sigma) &= p_\mathrm{normal}(y|\alpha + \beta x, \sigma)
+      & \text{(normal likelihood)} &\text{.}
+\end{aligned}
+$$
+In both the statistical model above and in the Stan model below, $x \in \mathbb{R}^N$ and $y \in \mathbb{R}^N$ are vectors of the covariates / predictors (the assignment number) and vectors of the observation (proportions of students who have handed in the respective assignment). $\alpha \in \mathbb{R}$ is the unknown scalar intercept, $\beta \in \mathbb{R}$ is the unknown scalar slope and $\sigma \in \mathbb{R}_{>0}$ is the unknown scalar observation standard deviation. The statistical model further implies
+$$
+p(y_\mathrm{pred.}|x_\mathrm{pred.},\alpha,\beta,\sigma) = p_\mathrm{normal}(y_\mathrm{pred.}|\alpha + \beta x_\mathrm{pred.}, \sigma)
+$$
+as the predictive distribution for a new observation $y_\mathrm{pred.}$ at a given new covariate value $x_\mathrm{pred.}$.
+
+You can download [the broken stan file from github](./additional_files/assignment6/linear_model.stan).
+
+```{.stan}
+data { #<1>
+    // number of data points
+    int<lower=0> N;
+    // covariate / predictor
+    vector[N] x;
+    // observations
+    vector[N] y;
+    // number of covariate values to make predictions at
+    int<lower=0> no_predictions;
+    // covariate values to make predictions at
+    vector[no_predictions] x_predictions;
+} #<1>
+parameters { #<2>
+    // intercept
+    real alpha;
+    // slope
+    real beta;
+    // the standard deviation should be constrained to be positive
+    real<upper=0> sigma;
+} #<2>
+transformed parameters { #<3>
+    // deterministic transformation of parameters and data
+    vector[N] mu = alpha + beta * x // linear model
+} #<3>
+model { #<4>
+    // observation model / likelihood
+    y ~ normal(mu, sigma);
+} #<4>
+generated quantities { #<5>
+    // compute the means for the covariate values at which to make predictions
+    vector[no_predictions] mu_pred = alpha + beta * x_predictions;
+    // sample from the predictive distribution, a normal(mu_pred, sigma).
+    array[no_predictions] real y_pred = normal_rng(mu, sigma);
+} #<5>
+```
+
+1. This is [Stan's data block](https://mc-stan.org/docs/reference-manual/program-block-data.html):
+"*The `data` block is for the declaration of variables that are read in as data. [...] Each variable’s value is validated against its declaration as it is read. For example, if a variable sigma is declared as `real<lower=0>`, then trying to assign it a negative value will raise an error. As a result, data type errors will be caught as early as possible. Similarly, attempts to provide data of the wrong size for a compound data structure will also raise an error.*" For more information, follow the link.
+
+2. This is [Stan's parameters block](https://mc-stan.org/docs/reference-manual/program-block-parameters.html):
+"*The variables declared in the `parameters` program block correspond directly to the variables being sampled by Stan’s samplers (HMC and NUTS). From a user’s perspective, the parameters in the program block are the parameters being sampled by Stan.*" For more information, follow the link.
+
+3. This is [Stan's transformed parameters block](https://mc-stan.org/docs/reference-manual/program-block-transformed-parameters.html):
+"*The `transformed parameters` program block consists of optional variable declarations followed by statements. After the statements are executed, the constraints on the transformed parameters are validated. Any variable declared as a transformed parameter is part of the output produced for draws.*" For more information, follow the link.
+
+4. This is [Stan's model block](https://mc-stan.org/docs/reference-manual/program-block-model.html):
+"*The `model` program block consists of optional variable declarations followed by statements. The variables in the `model` block are local variables and are not written as part of the output. [...] The statements in the `model` block typically define the model. This is the block in which probability (sampling notation) statements are allowed.*" For more information, follow the link.
+
+5. This is [Stan's generated quantities block](https://mc-stan.org/docs/reference-manual/program-block-generated-quantities.html):
+"*The `generated quantities` program block is rather different than the other blocks. Nothing in the `generated quantities` block affects the sampled parameter values. The block is executed only after a sample has been generated.*" For more information, follow the link.
+
+::: {.callout-tip collapse=false}
+A normal linear model is actually **not** the best model to use for this type of data, but we will use it here to illustrate the first step in building up to more appropriate, complicated models.
+:::
+
+::: {.callout-warning icon=false title="Subtask 2.a"}
+<!-- ### Find mistakes in the code -->
+Find the ***three mistakes*** in the code and fix them. Report the original mistakes and your fixes clearly in your report. Include the **full** corrected Stan code in your report. Verify that sampling was successful.
+:::
+
+::: {.callout-tip collapse=false}
+You may find some of the mistakes in the code using Stan syntax checker. If you copy the Stan code to a file ending `.stan` and open it in RStudio (you can also choose from RStudio menu File$\rightarrow$New File$\rightarrow$Stan file to create a new Stan file), the editor will show you some syntax errors. More syntax errors might be detected by clicking `Check' in the bar just above the Stan file in the RStudio editor. Note that some of the errors in the presented Stan code may not be syntax errors.
+:::
+::: {.content-visible when-profile="public"}
+Write your answers/code here!
+:::
+
+
+<!-- ### Interpret the results -->
+The author runs the corrected Stan file using the following R code and plots the returned MCMC sample. Read through the code below to understand what is being plotted.
+
+::: {.callout-tip collapse=true}
+## Data preparation and sampling from the posterior
+
+**Data assembly happens here**:
+```{r}
+#| warning: false
+# These are our observations y: the proportion of students handing in each assignment (1-8),
+# sorted by year (row-wise) and assignment (column-wise).
+# While the code suggest a matrix structure,
+# the result will actually be a vector of length N = no_years * no_assignments
+propstudents<-c(c(176, 174, 158, 135, 138, 129, 126, 123)/176,
+                c(242, 212, 184, 177, 174, 172, 163, 156)/242,
+                c(332, 310, 278, 258, 243, 242, 226, 224)/332,
+                c(301, 269, 231, 232, 217, 208, 193, 191)/301,
+                c(245, 240, 228, 217, 206, 199, 191, 182)/245)
+# These are our predictors x: for each observation, the corresponding assignment number.
+assignment <- rep(1:8, 5)
+# These are in some sense our test data: the proportion of students handing in the last assignment (9),
+# sorted by year.
+# Usually, we would not want to split our data like that and instead
+# use e.g. Leave-One-Out Cross-Validation (LOO-CV, see e.g. http://mc-stan.org/loo/index.html)
+# to evaluate model performance.
+propstudents9 = c(121/176, 153/242, 218/332, 190/301, 175/245)
+# The total number of assignments
+no_assignments = 9
+# The assignment numbers for which we want to generate predictions
+x_predictions = 1:no_assignments
+# (Cmd)Stan(R) expects the data to be passed in the below format:
+model_data = list(N=length(assignment),
+                 x=assignment,
+                 y=propstudents,
+                 no_predictions=no_assignments,
+                 x_predictions=x_predictions)
+```
+**Sampling from the posterior distribution happens here**:
+```{r}
+#| warning: false
+# This reads the file at the specified path and tries to compile it.
+# If it fails, an error is thrown.
+retention_model = cmdstan_model("./additional_files/assignment6_linear_model.stan")
+# This "out <- capture.output(...)" construction suppresses output from cmdstanr
+# See also https://github.com/stan-dev/cmdstanr/issues/646
+out <- capture.output(
+    # Sampling from the posterior distribution happens here:
+    fit <- retention_model$sample(data=model_data, refresh=0, show_messages=FALSE)
+)
+```
+**Draws postprocessing happens here**:
+```{r}
+
+# This extracts the draws from the sampling result as a data.frame.
+draws_df = fit$draws(format="draws_df")
+
+# This does some data/draws wrangling to compute the 5, 50 and 95 percentiles of
+# the mean at the specified covariate values (x_predictions).
+# It can be instructive to play around with each of the data processing steps
+# to find out what each step does, e.g. by removing parts from the back like "|>  gather(pct,y,-x)"
+# and printing the resulting data.frame.
+mu_quantiles_df = draws_df |>
+      subset_draws(variable = c("mu_pred")) |>
+      summarise_draws(~quantile2(.x, probs = c(0.05, .5, 0.95))) |>
+      mutate(x = 1:9) |>
+      pivot_longer(c(q5, q50, q95), names_to = c("pct"))
+# Same as above, but for the predictions.
+y_quantiles_df = draws_df |>
+      subset_draws(variable = c("y_pred")) |>
+      summarise_draws(~quantile2(.x, probs = c(0.05, .5, 0.95))) |>
+      mutate(x = 1:9) |>
+      pivot_longer(c(q5, q50, q95), names_to = c("pct"))
+```
+:::
+
+**Plotting happens here**:
+```{r}
+#| label: fig-posterior
+#| fig-cap: Describe me in your submission!
+ggplot() +
+  # scatter plot of the training data:
+  geom_point(
+    aes(x, y, color=assignment),
+    data=data.frame(x=assignment, y=propstudents, assignment="1-8")
+) +
+  # scatter plot of the test data:
+  geom_point(
+    aes(x, y, color=assignment),
+    data=data.frame(x=no_assignments, y=propstudents9, assignment="9")
+) +
+  # you have to tell us what this plots:
+  geom_line(aes(x,y=value,linetype=pct), data=mu_quantiles_df, color='grey', linewidth=1.5) +
+  # you have to tell us what this plots:
+  geom_line(aes(x,y=value,linetype=pct), data=y_quantiles_df, color='red') +
+  # adding xticks for each assignment:
+  scale_x_continuous(breaks=1:no_assignments) +
+  # adding labels to the plot:
+  labs(y="assignment submission %", x="assignment number") +
+  # specifying that line types repeat:
+  scale_linetype_manual(values=c(2,1,2)) +
+  # Specify colours of the observations:
+  scale_colour_manual(values = c("1-8"="black", "9"="blue")) +
+  # remove the legend for the linetypes:
+  guides(linetype="none")
+```
+::: {.callout-tip collapse=true}
+## Quick check for sampling convergence
+
+If your model is correctly implemented, sampling from the posterior distribution should have been successful.
+You can check whether Stan thinks that sampling succeeded by inspecting the output of the below command,
+which you should be able to interpret with a little help from the [CmdStan User's Guide](https://mc-stan.org/docs/cmdstan-guide/diagnose.html).
+```{r}
+fit$cmdstan_diagnose()
+```
+:::
+
+Based on the above plot, answer the following questions:
+
+::: {.callout-warning icon=false title="Subtask 2.b"}
+- What is the solid red line plotting? What are the dashed red lines? How and why are these different from the corresponding grey lines?
+- What is the general trend of student retention as measured by assignment submissions?
+- Given a model fitted to the submission data for assignments 1-8, does it do a good job predicting the proportion of students who submit the final 9th assignment?
+- Name one different modeling choice you could make to improve the prediction.
+:::
+::: {.content-visible when-profile="public"}
+Write your answers/code here!
+:::
+
+::: {.callout-note icon=false title="Rubric"}
+* Is the source code included?
+    * No
+    * Yes
+* Is the full resulting modified Stan model code presented in the report?
+    * No
+    * Yes, but partially
+    * Yes, with a few mistakes
+    * Yes, and it is correct
+* Has the sampling success been verified/summarized (e.g. by inspecting and summarizing the output of [`CmdStan`'s `diagnose` method](https://mc-stan.org/docs/cmdstan-guide/diagnose.html)).
+    * No
+    * Yes, but partially
+    * Yes, and it is correctly verified
+* Fix #1: Is there a fix for line .
+    * It has not been discussed, that this line should be fixed.
+    * It has been discussed, that this line should be fixed, but there is no fix presented for it or the fix is clearly wrong.
+    * There is a fix presented for this line, that clearly solves the problem.
+* Fix #2: Is there a fix for line .
+    * It has not been discussed, that this line should be fixed.
+    * It has been discussed, that this line should be fixed, but there is no fix presented for it or the fix is clearly wrong.
+    * There is a fix presented for this line, that clearly solves the problem.
+* Fix #3: Is there a fix for line .
+    * It has not been discussed, that this line should be fixed.
+    * It has been discussed, that this line should be fixed, but there is no fix presented for it or the fix is clearly wrong.
+    * There is a fix presented for this line, that clearly solves the problem.
+* Have the red lines been correctly described ()?
+* Have the grey lines been correctly described ()?
+* Has the difference between the red and grey lines been explained ()?
+* Has the student retention trend been described ()
+* Has the predictive performance for the held out data been discussed and assessed satisfactorily ()?
+    * No
+    * Somewhat
+    * Yes
+* Has at least one way to improve the model been mentioned (E.g. )?
+:::
+
+# Generalized linear model: Bioassay with Stan (4 points)
+
+Replicate the computations for the bioassay example of section 3.7
+(BDA3) using Stan.
+
+::: {.callout-warning icon=false title="Subtask 3.a"}
+Write down the model for the bioassay data in Stan syntax. For
+instructions in reporting your implementation, you can refer to
+parts 2c.3 - 2c.6 in Assignment 5. Use the Gaussian prior as in Assignment 4 and 5, that is
+$$
+\begin{aligned}
+    \begin{bmatrix}
+    \alpha \\ \beta
+    \end{bmatrix}
+    \sim
+    \text{N} \left( \mu_0,  \Sigma_0 \right), \qquad
+    \text{where} \quad
+     \mu_0 = \begin{bmatrix} 0 \\ 10 \end{bmatrix} \quad \text{and} \quad
+     \Sigma_0 = \begin{bmatrix} 2^2 & 12 \\ 12 & 10^2 \end{bmatrix}.
+\end{aligned}
+$$
+:::
+
+::: {.callout-tip collapse=false}
+You will need Stan functions `multi_normal` and
+`binomial_logit` for implementing the prior and observation model,
+respectively. In Stan code, it is easiest to declare a variable (say
+`theta`) which is a two-element vector so that the first value
+denotes $\alpha$ and latter one $\beta$. This is because the
+`multi_normal` function that you need for implementing the prior
+requires a vector as an input.
+:::
+::: {.content-visible when-profile="public"}
+Write your answers/code here!
+```{r}
+data("bioassay")
+```
+:::
+
+::: {.callout-warning icon=false title="Subtask 3.b"}
+Use $\widehat{R}$ for convergence analysis. You can either use Eq.
+(11.4) in BDA3 or the later version that can be found in [**a recent
+article**](https://arxiv.org/abs/1903.08008). You should specify
+which $\widehat{R}$ you used. In R the best choice is to use
+function `rhat_basic()` or `rhat()` from the `posterior` package
+(see `?posterior::rhat_basic`). To check $\widehat{R}$ and other
+diagnostics, you can also call `fit$summary()`, where `fit` is the
+fit object returned by Stan's sampling function. Report the
+$\widehat{R}$ values both for $\alpha$ and $\beta$ and discuss the
+convergence of the chains. **Briefly explain in your own words how
+to interpret the obtained** $\widehat{R}$ **values**.
+:::
+
+::: {.content-visible when-profile="public"}
+Write your answers/code here!
+:::
+
+::: {.callout-warning icon=false title="Subtask 3.c"}
+Plot the draws for $\alpha$ and $\beta$ (scatter plot) and include
+this plot in your report. You can compare the results to Figure 3.3b
+in BDA3 to verify that your code gives sensible results. Notice
+though that the results in Figure 3.3b are generated from posterior
+with a uniform prior, so even when your algorithm works perfectly,
+the results will look slightly different (although fairly similar).
+:::
+
+::: {.content-visible when-profile="public"}
+Write your answers/code here!
+:::
+
+::: {.callout-warning icon=false title="Subtask 3.d"}
+To develop the course and provide feedback to Stan developers, we
+collect information on which Stan setup you used and whether you had
+any problems in setting it up or using it. Please report,
+
+-   Operating system (Linux, Mac, Windows) or jupyter.cs.aalto.fi?
+
+-   Programming environment used: R or Python?
+
+-   Interface used: RStan, CmdStanR, PyStan, or CmdStanPy?
+
+-   Did you have installation or compilation problems? Did you try first installing locally, but switched to
+    jupyter.cs.aalto.fi?
+
+-   In addition of these you can write what other things you found
+    out difficult (or even frustrating) when making this assignment
+    with Stan.
+:::
+
+::: {.content-visible when-profile="public"}
+Write your answers/code here!
+:::
+
+
+::: {.callout-note icon=false title="Rubric"}
+* Is the Stan model code included?
+    * No
+    * Yes
+* Does the implemented Stan-model seem to be working?
+    * No implementation
+    * Model implemented but results not visualized/reported
+    * Model implemented, but the results seem weird
+    * Model seems to work correctly
+* Are the R_hat-values reported (potential scale reduction factor, Eq. (11.4) in the BDA3)?
+    * No
+    * Yes, but only for alpha or beta
+    * Yes, single values both for alpha and beta
+* Is the interpretation of R_hat values correct ([R_hat values close to one => chains probably converged
+and estimates reliable]{.content-hidden when-profile="public"})?
+    * No interpretation or discussion about the R_hat-values, or conclusions clearly wrong
+    * Somewhat correct
+    * Interpretation correct
+* Does the report contain a scatter plot about the draws? Do the results look reasonable, that is, roughly
+like in the Figure below ?
+    * No plot included
+    * Plot included, but the results do not look like in the figure above
+    * Plot included, and the results look roughly like in the figure above
+* Does the report contain description of Stan setup used and whether there were any problems in setting
+it up or using it?
+    * No
+    * Yes
+* Even if the Stan model code is correct, there might be ways to give improve the layout or write the
+model in more elegant ways. This optional feedback box can be used to give additional suggestions for
+better Stan code.
+:::
+
+{{< include includes/_overall_quality.md >}}
