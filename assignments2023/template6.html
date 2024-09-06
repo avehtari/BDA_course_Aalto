@@ -1,0 +1,2153 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.550">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Aki Vehtari et al.">
+
+<title>Bayesian Data Analysis Assignments 2023 - Assignment 6, 2023</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./template7.html" rel="next">
+<link href="./template5.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./template1.html">Templates</a></li><li class="breadcrumb-item"><a href="./template6.html">Assignment 6, 2023</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Bayesian Data Analysis Assignments 2023</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">General instructions</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment_instructions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment instructions</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Assignments</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 1, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 2, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 3, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 4, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 5, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 6, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 7, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 8, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 9, 2023</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Templates</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 1, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 2, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 3, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 4, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 5, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template6.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Assignment 6, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 7, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 8, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 9, 2023</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#general-information" id="toc-general-information" class="nav-link active" data-scroll-target="#general-information"><span class="header-section-number">1</span> General information</a></li>
+  <li><a href="#stan-warm-up-linear-model-of-bda-retention-with-stan-2-points" id="toc-stan-warm-up-linear-model-of-bda-retention-with-stan-2-points" class="nav-link" data-scroll-target="#stan-warm-up-linear-model-of-bda-retention-with-stan-2-points"><span class="header-section-number">2</span> Stan warm-up: linear model of BDA retention with Stan (2 points)</a></li>
+  <li><a href="#generalized-linear-model-bioassay-with-stan-4-points" id="toc-generalized-linear-model-bioassay-with-stan-4-points" class="nav-link" data-scroll-target="#generalized-linear-model-bioassay-with-stan-4-points"><span class="header-section-number">3</span> Generalized linear model: Bioassay with Stan (4 points)</a></li>
+  <li><a href="#overall-quality-of-the-report" id="toc-overall-quality-of-the-report" class="nav-link" data-scroll-target="#overall-quality-of-the-report"><span class="header-section-number">4</span> Overall quality of the report</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="template6.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./template1.html">Templates</a></li><li class="breadcrumb-item"><a href="./template6.html">Assignment 6, 2023</a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Assignment 6, 2023</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Aki Vehtari et al. </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="general-information" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> General information</h1>
+<p><strong>The maximum amount of points from this assignment is 6.</strong></p>
+<p><strong>This is for BDA 2023</strong></p>
+<p>We have prepared a <strong>quarto template specific to this assignment (<a href="template6.html">html</a>, <a href="https://avehtari.github.io/BDA_course_Aalto/assignments/template6.qmd">qmd</a>, <a href="template6.pdf">pdf</a>)</strong> to help you get started.</p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Setup">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Setup
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>We recommend Aalto students use <a href="https://jupyter.cs.aalto.fi">jupyter.cs.aalto.fi</a>, for all others we also provide a <a href="docker.html">docker container</a>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p><strong>Reading instructions:</strong></p>
+<ul>
+<li><a href="../BDA3_notes.html#ch10"><strong>The reading instructions for BDA3 Chapter 10</strong></a>.</li>
+<li><a href="../BDA3_notes.html#ch11"><strong>The reading instructions for BDA3 Chapter 11</strong></a>.</li>
+</ul>
+<p><strong>Grading instructions:</strong></p>
+<p>The grading will be done in peergrade. All grading questions and evaluations for this assignment are contained within this document in the collapsible <strong>Rubric</strong> blocks.</p>
+<p><strong>Installing and using <code>CmdStanR</code>:</strong></p>
+<p>See the <a href="https://avehtari.github.io/BDA_course_Aalto/demos.html">Stan demos</a> on how to use Stan in R (or Python). <a href="https://Aalto%20JupyterHub">Aalto JupyterHub</a> has working R and CmdStanR/RStan environment and is probably the easiest way to use Stan. * To use CmdStanR in <a href="https://Aalto%20JupyterHub">Aalto JupyterHub</a>:<br> <code>library(cmdstanr)</code><br> <code>set_cmdstan_path('/coursedata/cmdstan')</code></p>
+<p>The Aalto Ubuntu desktops also have the necessary libraries installed.</p>
+<p>To install Stan on your laptop, run ‘install.packages("cmdstanr", repos = c("https://mc-stan.org/r-packages/", getOption("repos")))’ in R. If you encounter problems, see additional answers in <a href="https://avehtari.github.io/BDA_course_Aalto/FAQ.html"><strong>FAQ</strong></a>. For Aalto students, if you don’t succeed in short amount of time, it is probably easier to use <a href="https://Aalto%20JupyterHub">Aalto JupyterHub</a>.</p>
+<p>If you use <code>Aalto JupyterHub</code>, all necessary packages have been pre-installed. In your laptop, install package <code>cmdstanr</code>. Installation instructions on Linux, Mac and Windows can be found at <a href="https://mc-stan.org/cmdstanr/" class="uri">https://mc-stan.org/cmdstanr/</a>. Additional useful packages are <code>loo</code>, <code>bayesplot</code> and <code>posterior</code> (but you don’t need these in this assignment). For Python users, <code>PyStan</code>, <code>CmdStanPy</code>, and <code>ArviZ</code> packages are useful.</p>
+<p>Stan manual can be found at <a href="https://mc-stan.org/users/documentation/" class="uri">https://mc-stan.org/users/documentation/</a>. From this website, you can also find a lot of other useful material about Stan.</p>
+<p>If you edit files ending <code>.stan</code> in RStudio, you can click “Check” in the editor toolbar to make syntax check. This can significantly speed-up writing a working Stan model.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Reporting accuracy
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p><strong>For posterior statistics of interest, only report digits that are not completely random based on the Monte Carlo standard error (MCSE).</strong></p>
+<p><em>Example:</em> If you estimate <span class="math inline">\(E(\mu) \approx 1.234\)</span> with MCSE(<span class="math inline">\(E(\mu)\)</span>) = 0.01, then the true expectation is likely to be between <span class="math inline">\(1.204\)</span> and <span class="math inline">\(1.264\)</span>, it makes sense to report <span class="math inline">\(E(\mu) \approx 1.2\)</span>.</p>
+<p>See Lecture video 4.1, <a href="../BDA3_notes.html#ch10">the chapter notes</a>, and <a href="https://avehtari.github.io/casestudies/Digits/digits.html">a case study</a> for more information.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Further information
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li>The recommended tool in this course is R (with the IDE RStudio).</li>
+<li>Instead of installing R and RStudio on you own computer, see <a href="https://avehtari.github.io/BDA_course_Aalto/FAQ.html#How_to_use_R_and_RStudio_remotely"><strong>how to use R and RStudio remotely</strong></a>.</li>
+<li>If you want to install R and RStudio locally, download <a href="https://posit.co/download/rstudio-desktop/">R and RStudio</a>.</li>
+<li>There are tons of tutorials, videos and introductions to R and RStudio online. You can find some initial hints from <a href="https://education.rstudio.com/"><strong>RStudio Education pages</strong></a>.</li>
+<li>When working with R, we recommend writing the report using <code>quarto</code> and the provided template. The template includes the formatting instructions and how to include code and figures.</li>
+<li>Instead of <code>quarto</code>, you can use other software to make the PDF report, but the the same instructions for formatting should be used.</li>
+<li>Report all results in a single, <strong>anonymous</strong> *.pdf -file and submit it in <a href="peergrade.io"><strong>peergrade.io</strong></a>.</li>
+<li>The course has its own R package <code>aaltobda</code> with data and functionality to simplify coding. The package is pre-installed in JupyterHub. To install the package on your own system, run the following code (upgrade="never" skips question about updating other packages):</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">install.packages</span>(<span class="st">"aaltobda"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://avehtari.github.io/BDA_course_Aalto/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Many of the exercises can be checked automatically using the R package <code>markmyassignment</code> (pre-installed in JupyterHub). Information on how to install and use the package can be found in <a href="https://cran.r-project.org/web/packages/markmyassignment/vignettes/markmyassignment.html">the <code>markmyassignment</code> documentation</a>. There is no need to include <code>markmyassignment</code> results in the report.</li>
+<li>Recommended additional self study exercises for each chapter in BDA3 are listed in the course web page. These will help to gain deeper understanding of the topic.</li>
+<li>Common questions and answers regarding installation and technical problems can be found in <a href="https://avehtari.github.io/BDA_course_Aalto/FAQ.html">Frequently Asked Questions (FAQ)</a>.</li>
+<li>Deadlines for all assignments can be found on the course web page and in Peergrade. You can set email alerts for the deadlines in Peergrade settings.</li>
+<li>You are allowed to discuss assignments with your friends, but it is not allowed to copy solutions directly from other students or from internet.</li>
+<li>You can copy, e.g., plotting code from the course demos, but really try to solve the actual assignment problems with your own code and explanations.</li>
+<li>Do not share your answers publicly.</li>
+<li>Do not copy answers from the internet or from previous years. We compare the answers to the answers from previous years and to the answers from other students this year.</li>
+<li>Use of AI is allowed on the course, but the most of the work needs to by the student, and you need to report whether you used AI and in which way you used them (See <a href="https://www.aalto.fi/en/services/guidance-for-the-use-of-artificial-intelligence-in-teaching-and-learning-at-aalto-university">points 5 and 6 in Aalto guidelines for use of AI in teaching</a>).</li>
+<li>All suspected plagiarism will be reported and investigated. See more about the <a href="https://into.aalto.fi/display/ensaannot/Aalto+University+Code+of+Academic+Integrity+and+Handling+Violations+Thereof"><strong>Aalto University Code of Academic Integrity and Handling Violations Thereof</strong></a>.</li>
+<li>Do not submit empty PDFs, almost empty PDFs, copy of the questions, nonsense generated by yourself or AI, as these are just harming the other students as they can’t do peergrading for the empty or nonsense submissions. Violations of this rule will be reported and investigated in the same way was plagiarism.</li>
+<li>If you have any suggestions or improvements to the course material, please post in the course chat feedback channel, create an issue, or submit a pull request to the public repository!</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Can you open the PDF and it’s not blank nor nonsense? If the pdf is blank, nonsense, or something like only a copy of the questions, 1) report it as problematic in Peergrade-interface to get another report to review, and 2) send a message to TAs.</li>
+<li>Is the report anonymous?</li>
+</ul>
+</div>
+</div>
+<p>This is the template for <a href="assignment6.html">assignment 6</a>. You can download the <a href="./additional_files/assignment6_linear_model.stan">broken stan-file</a> and the <a href="https://avehtari.github.io/BDA_course_Aalto/assignments/template6.qmd">qmd-file</a> or copy the code from this rendered document after clicking on <code>&lt;/&gt; Code</code> in the top right corner.</p>
+<p><strong>Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.</strong></p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Setup
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>JupyterHub has all the needed packages pre-installed.</p>
+<p>The following installs and loads the <code>aaltobda</code> package:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(aaltobda)){</span>
+<span id="cb2-2"><a href="#cb2-2"></a>    <span class="fu">install.packages</span>(<span class="st">"aaltobda"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://avehtari.github.io/BDA_course_Aalto/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span>
+<span id="cb2-3"><a href="#cb2-3"></a>    <span class="fu">library</span>(aaltobda)</span>
+<span id="cb2-4"><a href="#cb2-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: aaltobda</code></pre>
+</div>
+</div>
+<p>The following installs and loads the <a href="https://github.com/stefano-meschiari/latex2exp"><code>latex2exp</code> package</a>, which allows us to use LaTeX in plots:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(latex2exp)){</span>
+<span id="cb4-2"><a href="#cb4-2"></a>    <span class="fu">install.packages</span>(<span class="st">"latex2exp"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3"></a>    <span class="fu">library</span>(latex2exp)</span>
+<span id="cb4-4"><a href="#cb4-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: latex2exp</code></pre>
+</div>
+</div>
+<p>The following installs and loads the <a href="https://github.com/stan-dev/posterior"><code>posterior</code> package</a> which imports the <code>rhat_basic()</code> function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(posterior)){</span>
+<span id="cb6-2"><a href="#cb6-2"></a>    <span class="fu">install.packages</span>(<span class="st">"posterior"</span>)</span>
+<span id="cb6-3"><a href="#cb6-3"></a>    <span class="fu">library</span>(posterior)</span>
+<span id="cb6-4"><a href="#cb6-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: posterior</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>This is posterior version 1.6.0</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'posterior'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:aaltobda':
+
+    mcse_quantile</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    mad, sd, var</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    %in%, match</code></pre>
+</div>
+</div>
+<p>The following installs and loads the <a href="https://ggplot2.tidyverse.org/"><code>ggplot2</code> package</a>, the <a href="https://mc-stan.org/bayesplot/index.html"><code>bayesplot</code> package</a> and the <a href="https://dplyr.tidyverse.org/"><code>dplyr</code> package</a></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(ggplot2)){</span>
+<span id="cb13-2"><a href="#cb13-2"></a>    <span class="fu">install.packages</span>(<span class="st">"ggplot2"</span>)</span>
+<span id="cb13-3"><a href="#cb13-3"></a>    <span class="fu">library</span>(ggplot2)</span>
+<span id="cb13-4"><a href="#cb13-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: ggplot2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(bayesplot)){</span>
+<span id="cb15-2"><a href="#cb15-2"></a>    <span class="fu">install.packages</span>(<span class="st">"bayesplot"</span>)</span>
+<span id="cb15-3"><a href="#cb15-3"></a>    <span class="fu">library</span>(bayesplot)</span>
+<span id="cb15-4"><a href="#cb15-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: bayesplot</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>This is bayesplot version 1.11.1.9000</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>- Online documentation and vignettes at mc-stan.org/bayesplot</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>- bayesplot theme set to bayesplot::theme_default()</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>   * Does _not_ affect other ggplot2 plots</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>   * See ?bayesplot_theme_set for details on theme setting</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'bayesplot'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:posterior':
+
+    rhat</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(dplyr)){</span>
+<span id="cb24-2"><a href="#cb24-2"></a>    <span class="fu">install.packages</span>(<span class="st">"dplyr"</span>)</span>
+<span id="cb24-3"><a href="#cb24-3"></a>    <span class="fu">library</span>(dplyr)</span>
+<span id="cb24-4"><a href="#cb24-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: dplyr</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(tidyr)){</span>
+<span id="cb29-2"><a href="#cb29-2"></a>    <span class="fu">install.packages</span>(<span class="st">"tidyr"</span>)</span>
+<span id="cb29-3"><a href="#cb29-3"></a>    <span class="fu">library</span>(tidyr)</span>
+<span id="cb29-4"><a href="#cb29-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: tidyr</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="co"># Some additional set-up to make plots legible</span></span>
+<span id="cb31-2"><a href="#cb31-2"></a>ggplot2<span class="sc">::</span><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
+<span id="cb31-3"><a href="#cb31-3"></a>bayesplot<span class="sc">::</span><span class="fu">bayesplot_theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
+<span id="cb31-4"><a href="#cb31-4"></a><span class="co"># register_knitr_engine()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The following installs and loads the <a href="https://mc-stan.org/cmdstanr/"><code>cmdstanr</code> package</a> and tries to install <code>cmdstan</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(cmdstanr)){</span>
+<span id="cb32-2"><a href="#cb32-2"></a>    <span class="fu">install.packages</span>(<span class="st">"cmdstanr"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://mc-stan.org/r-packages/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span>
+<span id="cb32-3"><a href="#cb32-3"></a>    <span class="fu">library</span>(cmdstanr)</span>
+<span id="cb32-4"><a href="#cb32-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: cmdstanr</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>This is cmdstanr version 0.8.1.9000</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>- CmdStanR documentation and vignettes: mc-stan.org/cmdstanr</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>- CmdStan path: /u/77/ave/unix/.cmdstan/cmdstan-2.35.0-rc3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>- CmdStan version: 2.35.0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a>cmdstan_installed <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
+<span id="cb38-2"><a href="#cb38-2"></a>  res <span class="ot">&lt;-</span> <span class="fu">try</span>(out <span class="ot">&lt;-</span> cmdstanr<span class="sc">::</span><span class="fu">cmdstan_path</span>(), <span class="at">silent =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb38-3"><a href="#cb38-3"></a>  <span class="sc">!</span><span class="fu">inherits</span>(res, <span class="st">"try-error"</span>)</span>
+<span id="cb38-4"><a href="#cb38-4"></a>}</span>
+<span id="cb38-5"><a href="#cb38-5"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">cmdstan_installed</span>()){</span>
+<span id="cb38-6"><a href="#cb38-6"></a>    <span class="fu">install_cmdstan</span>()</span>
+<span id="cb38-7"><a href="#cb38-7"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="stan-warm-up-linear-model-of-bda-retention-with-stan-2-points" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Stan warm-up: linear model of BDA retention with Stan (2 points)</h1>
+<p>From 2018 to 2022, we have been keeping track of assignment submissions for the BDA course given the number of submissions for the 1st assignment. We will fit a simple linear model to answer two questions of interest:</p>
+<ul>
+<li>What is the trend of student retention as measured by assignment submissions?</li>
+<li>Given the submission rates for assignments 1–8, how many students will complete the final 9th assignment (and potentially pass the course)?</li>
+</ul>
+<p>The author has given you the broken Stan code below, which they intend to encode the following linear model: <span class="math display">\[
+\begin{aligned}
+p(\alpha,\beta,\sigma) &amp;= \mathrm{const.}
+      &amp; \text{(improper flat prior)}&amp;\text{ and}\\
+p(y|x,\alpha,\beta,\sigma) &amp;= p_\mathrm{normal}(y|\alpha + \beta x, \sigma)
+      &amp; \text{(normal likelihood)} &amp;\text{.}
+\end{aligned}
+\]</span> In both the statistical model above and in the Stan model below, <span class="math inline">\(x \in \mathbb{R}^N\)</span> and <span class="math inline">\(y \in \mathbb{R}^N\)</span> are vectors of the covariates / predictors (the assignment number) and vectors of the observation (proportions of students who have handed in the respective assignment). <span class="math inline">\(\alpha \in \mathbb{R}\)</span> is the unknown scalar intercept, <span class="math inline">\(\beta \in \mathbb{R}\)</span> is the unknown scalar slope and <span class="math inline">\(\sigma \in \mathbb{R}_{&gt;0}\)</span> is the unknown scalar observation standard deviation. The statistical model further implies <span class="math display">\[
+p(y_\mathrm{pred.}|x_\mathrm{pred.},\alpha,\beta,\sigma) = p_\mathrm{normal}(y_\mathrm{pred.}|\alpha + \beta x_\mathrm{pred.}, \sigma)
+\]</span> as the predictive distribution for a new observation <span class="math inline">\(y_\mathrm{pred.}\)</span> at a given new covariate value <span class="math inline">\(x_\mathrm{pred.}\)</span>.</p>
+<p>You can download <a href="./additional_files/assignment6/linear_model.stan">the broken stan file from github</a>.</p>
+<div class="sourceCode" id="annotated-cell-1"><pre class="sourceCode numberSource stan code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode stan"><a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-1-1" class="code-annotation-target"><a href="#annotated-cell-1-1"></a><span class="kw">data</span> {</span>
+<span id="annotated-cell-1-2"><a href="#annotated-cell-1-2"></a>    <span class="co">// number of data points</span></span>
+<span id="annotated-cell-1-3"><a href="#annotated-cell-1-3"></a>    <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; N;</span>
+<span id="annotated-cell-1-4"><a href="#annotated-cell-1-4"></a>    <span class="co">// covariate / predictor</span></span>
+<span id="annotated-cell-1-5"><a href="#annotated-cell-1-5"></a>    <span class="dt">vector</span>[N] x;</span>
+<span id="annotated-cell-1-6"><a href="#annotated-cell-1-6"></a>    <span class="co">// observations</span></span>
+<span id="annotated-cell-1-7"><a href="#annotated-cell-1-7"></a>    <span class="dt">vector</span>[N] y;</span>
+<span id="annotated-cell-1-8"><a href="#annotated-cell-1-8"></a>    <span class="co">// number of covariate values to make predictions at</span></span>
+<span id="annotated-cell-1-9"><a href="#annotated-cell-1-9"></a>    <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; no_predictions;</span>
+<span id="annotated-cell-1-10"><a href="#annotated-cell-1-10"></a>    <span class="co">// covariate values to make predictions at</span></span>
+<span id="annotated-cell-1-11"><a href="#annotated-cell-1-11"></a>    <span class="dt">vector</span>[no_predictions] x_predictions;</span>
+<span id="annotated-cell-1-12"><a href="#annotated-cell-1-12"></a>}</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-1-13" class="code-annotation-target"><a href="#annotated-cell-1-13"></a><span class="kw">parameters</span> {</span>
+<span id="annotated-cell-1-14"><a href="#annotated-cell-1-14"></a>    <span class="co">// intercept</span></span>
+<span id="annotated-cell-1-15"><a href="#annotated-cell-1-15"></a>    <span class="dt">real</span> alpha;</span>
+<span id="annotated-cell-1-16"><a href="#annotated-cell-1-16"></a>    <span class="co">// slope</span></span>
+<span id="annotated-cell-1-17"><a href="#annotated-cell-1-17"></a>    <span class="dt">real</span> beta;</span>
+<span id="annotated-cell-1-18"><a href="#annotated-cell-1-18"></a>    <span class="co">// the standard deviation should be constrained to be positive</span></span>
+<span id="annotated-cell-1-19"><a href="#annotated-cell-1-19"></a>    <span class="dt">real</span>&lt;<span class="kw">upper</span>=<span class="dv">0</span>&gt; sigma;</span>
+<span id="annotated-cell-1-20"><a href="#annotated-cell-1-20"></a>}</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-1-21" class="code-annotation-target"><a href="#annotated-cell-1-21"></a><span class="kw">transformed parameters</span> {</span>
+<span id="annotated-cell-1-22"><a href="#annotated-cell-1-22"></a>    <span class="co">// deterministic transformation of parameters and data</span></span>
+<span id="annotated-cell-1-23"><a href="#annotated-cell-1-23"></a>    <span class="dt">vector</span>[N] mu = alpha + beta * x <span class="co">// linear model</span></span>
+<span id="annotated-cell-1-24"><a href="#annotated-cell-1-24"></a>}</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="4" onclick="event.preventDefault();">4</a><span id="annotated-cell-1-25" class="code-annotation-target"><a href="#annotated-cell-1-25"></a><span class="kw">model</span> {</span>
+<span id="annotated-cell-1-26"><a href="#annotated-cell-1-26"></a>    <span class="co">// observation model / likelihood</span></span>
+<span id="annotated-cell-1-27"><a href="#annotated-cell-1-27"></a>    y ~ normal(mu, sigma);</span>
+<span id="annotated-cell-1-28"><a href="#annotated-cell-1-28"></a>}</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="5" onclick="event.preventDefault();">5</a><span id="annotated-cell-1-29" class="code-annotation-target"><a href="#annotated-cell-1-29"></a><span class="kw">generated quantities</span> {</span>
+<span id="annotated-cell-1-30"><a href="#annotated-cell-1-30"></a>    <span class="co">// compute the means for the covariate values at which to make predictions</span></span>
+<span id="annotated-cell-1-31"><a href="#annotated-cell-1-31"></a>    <span class="dt">vector</span>[no_predictions] mu_pred = alpha + beta * x_predictions;</span>
+<span id="annotated-cell-1-32"><a href="#annotated-cell-1-32"></a>    <span class="co">// sample from the predictive distribution, a normal(mu_pred, sigma).</span></span>
+<span id="annotated-cell-1-33"><a href="#annotated-cell-1-33"></a>    <span class="dt">array</span>[no_predictions] <span class="dt">real</span> y_pred = normal_rng(mu, sigma);</span>
+<span id="annotated-cell-1-34"><a href="#annotated-cell-1-34"></a>}</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-1" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-1" data-code-lines="1,12" data-code-annotation="1">This is <a href="https://mc-stan.org/docs/reference-manual/program-block-data.html">Stan’s data block</a>: “<em>The <code>data</code> block is for the declaration of variables that are read in as data. […] Each variable’s value is validated against its declaration as it is read. For example, if a variable sigma is declared as <code>real&lt;lower=0&gt;</code>, then trying to assign it a negative value will raise an error. As a result, data type errors will be caught as early as possible. Similarly, attempts to provide data of the wrong size for a compound data structure will also raise an error.</em>” For more information, follow the link.</span>
+</dd>
+<dt data-target-cell="annotated-cell-1" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-1" data-code-lines="13,20" data-code-annotation="2">This is <a href="https://mc-stan.org/docs/reference-manual/program-block-parameters.html">Stan’s parameters block</a>: “<em>The variables declared in the <code>parameters</code> program block correspond directly to the variables being sampled by Stan’s samplers (HMC and NUTS). From a user’s perspective, the parameters in the program block are the parameters being sampled by Stan.</em>” For more information, follow the link.</span>
+</dd>
+<dt data-target-cell="annotated-cell-1" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-1" data-code-lines="21,24" data-code-annotation="3">This is <a href="https://mc-stan.org/docs/reference-manual/program-block-transformed-parameters.html">Stan’s transformed parameters block</a>: “<em>The <code>transformed parameters</code> program block consists of optional variable declarations followed by statements. After the statements are executed, the constraints on the transformed parameters are validated. Any variable declared as a transformed parameter is part of the output produced for draws.</em>” For more information, follow the link.</span>
+</dd>
+<dt data-target-cell="annotated-cell-1" data-target-annotation="4">4</dt>
+<dd>
+<span data-code-cell="annotated-cell-1" data-code-lines="25,28" data-code-annotation="4">This is <a href="https://mc-stan.org/docs/reference-manual/program-block-model.html">Stan’s model block</a>: “<em>The <code>model</code> program block consists of optional variable declarations followed by statements. The variables in the <code>model</code> block are local variables and are not written as part of the output. […] The statements in the <code>model</code> block typically define the model. This is the block in which probability (sampling notation) statements are allowed.</em>” For more information, follow the link.</span>
+</dd>
+<dt data-target-cell="annotated-cell-1" data-target-annotation="5">5</dt>
+<dd>
+<span data-code-cell="annotated-cell-1" data-code-lines="29,34" data-code-annotation="5">This is <a href="https://mc-stan.org/docs/reference-manual/program-block-generated-quantities.html">Stan’s generated quantities block</a>: “<em>The <code>generated quantities</code> program block is rather different than the other blocks. Nothing in the <code>generated quantities</code> block affects the sampled parameter values. The block is executed only after a sample has been generated.</em>” For more information, follow the link.</span>
+</dd>
+</dl>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>A normal linear model is actually <strong>not</strong> the best model to use for this type of data, but we will use it here to illustrate the first step in building up to more appropriate, complicated models.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 2.a">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 2.a
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<!-- ### Find mistakes in the code -->
+<p>Find the <strong><em>three mistakes</em></strong> in the code and fix them. Report the original mistakes and your fixes clearly in your report. Include the <strong>full</strong> corrected Stan code in your report. Verify that sampling was successful.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>You may find some of the mistakes in the code using Stan syntax checker. If you copy the Stan code to a file ending <code>.stan</code> and open it in RStudio (you can also choose from RStudio menu File<span class="math inline">\(\rightarrow\)</span>New File<span class="math inline">\(\rightarrow\)</span>Stan file to create a new Stan file), the editor will show you some syntax errors. More syntax errors might be detected by clicking `Check’ in the bar just above the Stan file in the RStudio editor. Note that some of the errors in the presented Stan code may not be syntax errors.</p>
+</div>
+</div>
+</div>
+<p>Write your answers/code here!</p>
+<!-- ### Interpret the results -->
+<p>The author runs the corrected Stan file using the following R code and plots the returned MCMC sample. Read through the code below to understand what is being plotted.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Data preparation and sampling from the posterior
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Data assembly happens here</strong>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a><span class="co"># These are our observations y: the proportion of students handing in each assignment (1-8),</span></span>
+<span id="cb39-2"><a href="#cb39-2"></a><span class="co"># sorted by year (row-wise) and assignment (column-wise).</span></span>
+<span id="cb39-3"><a href="#cb39-3"></a><span class="co"># While the code suggest a matrix structure,</span></span>
+<span id="cb39-4"><a href="#cb39-4"></a><span class="co"># the result will actually be a vector of length N = no_years * no_assignments</span></span>
+<span id="cb39-5"><a href="#cb39-5"></a>propstudents<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="fu">c</span>(<span class="dv">176</span>, <span class="dv">174</span>, <span class="dv">158</span>, <span class="dv">135</span>, <span class="dv">138</span>, <span class="dv">129</span>, <span class="dv">126</span>, <span class="dv">123</span>)<span class="sc">/</span><span class="dv">176</span>,</span>
+<span id="cb39-6"><a href="#cb39-6"></a>                <span class="fu">c</span>(<span class="dv">242</span>, <span class="dv">212</span>, <span class="dv">184</span>, <span class="dv">177</span>, <span class="dv">174</span>, <span class="dv">172</span>, <span class="dv">163</span>, <span class="dv">156</span>)<span class="sc">/</span><span class="dv">242</span>,</span>
+<span id="cb39-7"><a href="#cb39-7"></a>                <span class="fu">c</span>(<span class="dv">332</span>, <span class="dv">310</span>, <span class="dv">278</span>, <span class="dv">258</span>, <span class="dv">243</span>, <span class="dv">242</span>, <span class="dv">226</span>, <span class="dv">224</span>)<span class="sc">/</span><span class="dv">332</span>,</span>
+<span id="cb39-8"><a href="#cb39-8"></a>                <span class="fu">c</span>(<span class="dv">301</span>, <span class="dv">269</span>, <span class="dv">231</span>, <span class="dv">232</span>, <span class="dv">217</span>, <span class="dv">208</span>, <span class="dv">193</span>, <span class="dv">191</span>)<span class="sc">/</span><span class="dv">301</span>,</span>
+<span id="cb39-9"><a href="#cb39-9"></a>                <span class="fu">c</span>(<span class="dv">245</span>, <span class="dv">240</span>, <span class="dv">228</span>, <span class="dv">217</span>, <span class="dv">206</span>, <span class="dv">199</span>, <span class="dv">191</span>, <span class="dv">182</span>)<span class="sc">/</span><span class="dv">245</span>)</span>
+<span id="cb39-10"><a href="#cb39-10"></a><span class="co"># These are our predictors x: for each observation, the corresponding assignment number.</span></span>
+<span id="cb39-11"><a href="#cb39-11"></a>assignment <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>, <span class="dv">5</span>)</span>
+<span id="cb39-12"><a href="#cb39-12"></a><span class="co"># These are in some sense our test data: the proportion of students handing in the last assignment (9),</span></span>
+<span id="cb39-13"><a href="#cb39-13"></a><span class="co"># sorted by year.</span></span>
+<span id="cb39-14"><a href="#cb39-14"></a><span class="co"># Usually, we would not want to split our data like that and instead</span></span>
+<span id="cb39-15"><a href="#cb39-15"></a><span class="co"># use e.g. Leave-One-Out Cross-Validation (LOO-CV, see e.g. http://mc-stan.org/loo/index.html)</span></span>
+<span id="cb39-16"><a href="#cb39-16"></a><span class="co"># to evaluate model performance.</span></span>
+<span id="cb39-17"><a href="#cb39-17"></a>propstudents9 <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">121</span><span class="sc">/</span><span class="dv">176</span>, <span class="dv">153</span><span class="sc">/</span><span class="dv">242</span>, <span class="dv">218</span><span class="sc">/</span><span class="dv">332</span>, <span class="dv">190</span><span class="sc">/</span><span class="dv">301</span>, <span class="dv">175</span><span class="sc">/</span><span class="dv">245</span>)</span>
+<span id="cb39-18"><a href="#cb39-18"></a><span class="co"># The total number of assignments</span></span>
+<span id="cb39-19"><a href="#cb39-19"></a>no_assignments <span class="ot">=</span> <span class="dv">9</span></span>
+<span id="cb39-20"><a href="#cb39-20"></a><span class="co"># The assignment numbers for which we want to generate predictions</span></span>
+<span id="cb39-21"><a href="#cb39-21"></a>x_predictions <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span>no_assignments</span>
+<span id="cb39-22"><a href="#cb39-22"></a><span class="co"># (Cmd)Stan(R) expects the data to be passed in the below format:</span></span>
+<span id="cb39-23"><a href="#cb39-23"></a>model_data <span class="ot">=</span> <span class="fu">list</span>(<span class="at">N=</span><span class="fu">length</span>(assignment),</span>
+<span id="cb39-24"><a href="#cb39-24"></a>                 <span class="at">x=</span>assignment,</span>
+<span id="cb39-25"><a href="#cb39-25"></a>                 <span class="at">y=</span>propstudents,</span>
+<span id="cb39-26"><a href="#cb39-26"></a>                 <span class="at">no_predictions=</span>no_assignments,</span>
+<span id="cb39-27"><a href="#cb39-27"></a>                 <span class="at">x_predictions=</span>x_predictions)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Sampling from the posterior distribution happens here</strong>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a><span class="co"># This reads the file at the specified path and tries to compile it.</span></span>
+<span id="cb40-2"><a href="#cb40-2"></a><span class="co"># If it fails, an error is thrown.</span></span>
+<span id="cb40-3"><a href="#cb40-3"></a>retention_model <span class="ot">=</span> <span class="fu">cmdstan_model</span>(<span class="st">"./additional_files/assignment6_linear_model.stan"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in initialize(...): Assertion on 'stan_file' failed: File does not exist: './additional_files/assignment6_linear_model.stan'.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a><span class="co"># This "out &lt;- capture.output(...)" construction suppresses output from cmdstanr</span></span>
+<span id="cb42-2"><a href="#cb42-2"></a><span class="co"># See also https://github.com/stan-dev/cmdstanr/issues/646</span></span>
+<span id="cb42-3"><a href="#cb42-3"></a>out <span class="ot">&lt;-</span> <span class="fu">capture.output</span>(</span>
+<span id="cb42-4"><a href="#cb42-4"></a>    <span class="co"># Sampling from the posterior distribution happens here:</span></span>
+<span id="cb42-5"><a href="#cb42-5"></a>    fit <span class="ot">&lt;-</span> retention_model<span class="sc">$</span><span class="fu">sample</span>(<span class="at">data=</span>model_data, <span class="at">refresh=</span><span class="dv">0</span>, <span class="at">show_messages=</span><span class="cn">FALSE</span>)</span>
+<span id="cb42-6"><a href="#cb42-6"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in eval(expr, envir, enclos): object 'retention_model' not found</code></pre>
+</div>
+</div>
+<p><strong>Draws postprocessing happens here</strong>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a><span class="co"># This extracts the draws from the sampling result as a data.frame.</span></span>
+<span id="cb44-2"><a href="#cb44-2"></a>draws_df <span class="ot">=</span> fit<span class="sc">$</span><span class="fu">draws</span>(<span class="at">format=</span><span class="st">"draws_df"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in eval(expr, envir, enclos): object 'fit' not found</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a><span class="co"># This does some data/draws wrangling to compute the 5, 50 and 95 percentiles of</span></span>
+<span id="cb46-2"><a href="#cb46-2"></a><span class="co"># the mean at the specified covariate values (x_predictions).</span></span>
+<span id="cb46-3"><a href="#cb46-3"></a><span class="co"># It can be instructive to play around with each of the data processing steps</span></span>
+<span id="cb46-4"><a href="#cb46-4"></a><span class="co"># to find out what each step does, e.g. by removing parts from the back like "|&gt;  gather(pct,y,-x)"</span></span>
+<span id="cb46-5"><a href="#cb46-5"></a><span class="co"># and printing the resulting data.frame.</span></span>
+<span id="cb46-6"><a href="#cb46-6"></a>mu_quantiles_df <span class="ot">=</span> draws_df <span class="sc">|&gt;</span></span>
+<span id="cb46-7"><a href="#cb46-7"></a>      <span class="fu">subset_draws</span>(<span class="at">variable =</span> <span class="fu">c</span>(<span class="st">"mu_pred"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb46-8"><a href="#cb46-8"></a>      <span class="fu">summarise_draws</span>(<span class="sc">~</span><span class="fu">quantile2</span>(.x, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.05</span>, .<span class="dv">5</span>, <span class="fl">0.95</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb46-9"><a href="#cb46-9"></a>      <span class="fu">mutate</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>) <span class="sc">|&gt;</span></span>
+<span id="cb46-10"><a href="#cb46-10"></a>      <span class="fu">pivot_longer</span>(<span class="fu">c</span>(q5, q50, q95), <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">"pct"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in UseMethod("subset_draws"): no applicable method for 'subset_draws' applied to an object of class "function"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a><span class="co"># Same as above, but for the predictions.</span></span>
+<span id="cb48-2"><a href="#cb48-2"></a>y_quantiles_df <span class="ot">=</span> draws_df <span class="sc">|&gt;</span></span>
+<span id="cb48-3"><a href="#cb48-3"></a>      <span class="fu">subset_draws</span>(<span class="at">variable =</span> <span class="fu">c</span>(<span class="st">"y_pred"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb48-4"><a href="#cb48-4"></a>      <span class="fu">summarise_draws</span>(<span class="sc">~</span><span class="fu">quantile2</span>(.x, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.05</span>, .<span class="dv">5</span>, <span class="fl">0.95</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb48-5"><a href="#cb48-5"></a>      <span class="fu">mutate</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>) <span class="sc">|&gt;</span></span>
+<span id="cb48-6"><a href="#cb48-6"></a>      <span class="fu">pivot_longer</span>(<span class="fu">c</span>(q5, q50, q95), <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">"pct"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in UseMethod("subset_draws"): no applicable method for 'subset_draws' applied to an object of class "function"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><strong>Plotting happens here</strong>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb50-2"><a href="#cb50-2"></a>  <span class="co"># scatter plot of the training data:</span></span>
+<span id="cb50-3"><a href="#cb50-3"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb50-4"><a href="#cb50-4"></a>    <span class="fu">aes</span>(x, y, <span class="at">color=</span>assignment),</span>
+<span id="cb50-5"><a href="#cb50-5"></a>    <span class="at">data=</span><span class="fu">data.frame</span>(<span class="at">x=</span>assignment, <span class="at">y=</span>propstudents, <span class="at">assignment=</span><span class="st">"1-8"</span>)</span>
+<span id="cb50-6"><a href="#cb50-6"></a>) <span class="sc">+</span></span>
+<span id="cb50-7"><a href="#cb50-7"></a>  <span class="co"># scatter plot of the test data:</span></span>
+<span id="cb50-8"><a href="#cb50-8"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb50-9"><a href="#cb50-9"></a>    <span class="fu">aes</span>(x, y, <span class="at">color=</span>assignment),</span>
+<span id="cb50-10"><a href="#cb50-10"></a>    <span class="at">data=</span><span class="fu">data.frame</span>(<span class="at">x=</span>no_assignments, <span class="at">y=</span>propstudents9, <span class="at">assignment=</span><span class="st">"9"</span>)</span>
+<span id="cb50-11"><a href="#cb50-11"></a>) <span class="sc">+</span></span>
+<span id="cb50-12"><a href="#cb50-12"></a>  <span class="co"># you have to tell us what this plots:</span></span>
+<span id="cb50-13"><a href="#cb50-13"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(x,<span class="at">y=</span>value,<span class="at">linetype=</span>pct), <span class="at">data=</span>mu_quantiles_df, <span class="at">color=</span><span class="st">'grey'</span>, <span class="at">linewidth=</span><span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb50-14"><a href="#cb50-14"></a>  <span class="co"># you have to tell us what this plots:</span></span>
+<span id="cb50-15"><a href="#cb50-15"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(x,<span class="at">y=</span>value,<span class="at">linetype=</span>pct), <span class="at">data=</span>y_quantiles_df, <span class="at">color=</span><span class="st">'red'</span>) <span class="sc">+</span></span>
+<span id="cb50-16"><a href="#cb50-16"></a>  <span class="co"># adding xticks for each assignment:</span></span>
+<span id="cb50-17"><a href="#cb50-17"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks=</span><span class="dv">1</span><span class="sc">:</span>no_assignments) <span class="sc">+</span></span>
+<span id="cb50-18"><a href="#cb50-18"></a>  <span class="co"># adding labels to the plot:</span></span>
+<span id="cb50-19"><a href="#cb50-19"></a>  <span class="fu">labs</span>(<span class="at">y=</span><span class="st">"assignment submission %"</span>, <span class="at">x=</span><span class="st">"assignment number"</span>) <span class="sc">+</span></span>
+<span id="cb50-20"><a href="#cb50-20"></a>  <span class="co"># specifying that line types repeat:</span></span>
+<span id="cb50-21"><a href="#cb50-21"></a>  <span class="fu">scale_linetype_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">2</span>)) <span class="sc">+</span></span>
+<span id="cb50-22"><a href="#cb50-22"></a>  <span class="co"># Specify colours of the observations:</span></span>
+<span id="cb50-23"><a href="#cb50-23"></a>  <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"1-8"</span><span class="ot">=</span><span class="st">"black"</span>, <span class="st">"9"</span><span class="ot">=</span><span class="st">"blue"</span>)) <span class="sc">+</span></span>
+<span id="cb50-24"><a href="#cb50-24"></a>  <span class="co"># remove the legend for the linetypes:</span></span>
+<span id="cb50-25"><a href="#cb50-25"></a>  <span class="fu">guides</span>(<span class="at">linetype=</span><span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in eval(expr, envir, enclos): object 'mu_quantiles_df' not found</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Quick check for sampling convergence
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>If your model is correctly implemented, sampling from the posterior distribution should have been successful. You can check whether Stan thinks that sampling succeeded by inspecting the output of the below command, which you should be able to interpret with a little help from the <a href="https://mc-stan.org/docs/cmdstan-guide/diagnose.html">CmdStan User’s Guide</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1"></a>fit<span class="sc">$</span><span class="fu">cmdstan_diagnose</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in eval(expr, envir, enclos): object 'fit' not found</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Based on the above plot, answer the following questions:</p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 2.b">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 2.b
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>What is the solid red line plotting? What are the dashed red lines? How and why are these different from the corresponding grey lines?</li>
+<li>What is the general trend of student retention as measured by assignment submissions?</li>
+<li>Given a model fitted to the submission data for assignments 1-8, does it do a good job predicting the proportion of students who submit the final 9th assignment?</li>
+<li>Name one different modeling choice you could make to improve the prediction.</li>
+</ul>
+</div>
+</div>
+<p>Write your answers/code here!</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Is the source code included?
+<ul>
+<li>No</li>
+<li>Yes</li>
+</ul></li>
+<li>Is the full resulting modified Stan model code presented in the report?
+<ul>
+<li>No</li>
+<li>Yes, but partially</li>
+<li>Yes, with a few mistakes</li>
+<li>Yes, and it is correct</li>
+</ul></li>
+<li>Has the sampling success been verified/summarized (e.g.&nbsp;by inspecting and summarizing the output of <a href="https://mc-stan.org/docs/cmdstan-guide/diagnose.html"><code>CmdStan</code>’s <code>diagnose</code> method</a>).
+<ul>
+<li>No</li>
+<li>Yes, but partially</li>
+<li>Yes, and it is correctly verified</li>
+</ul></li>
+<li>Fix #1: Is there a fix for line .
+<ul>
+<li>It has not been discussed, that this line should be fixed.</li>
+<li>It has been discussed, that this line should be fixed, but there is no fix presented for it or the fix is clearly wrong.</li>
+<li>There is a fix presented for this line, that clearly solves the problem.</li>
+</ul></li>
+<li>Fix #2: Is there a fix for line .
+<ul>
+<li>It has not been discussed, that this line should be fixed.</li>
+<li>It has been discussed, that this line should be fixed, but there is no fix presented for it or the fix is clearly wrong.</li>
+<li>There is a fix presented for this line, that clearly solves the problem.</li>
+</ul></li>
+<li>Fix #3: Is there a fix for line .
+<ul>
+<li>It has not been discussed, that this line should be fixed.</li>
+<li>It has been discussed, that this line should be fixed, but there is no fix presented for it or the fix is clearly wrong.</li>
+<li>There is a fix presented for this line, that clearly solves the problem.</li>
+</ul></li>
+<li>Have the red lines been correctly described ()?</li>
+<li>Have the grey lines been correctly described ()?</li>
+<li>Has the difference between the red and grey lines been explained ()?</li>
+<li>Has the student retention trend been described ()</li>
+<li>Has the predictive performance for the held out data been discussed and assessed satisfactorily ()?
+<ul>
+<li>No</li>
+<li>Somewhat</li>
+<li>Yes</li>
+</ul></li>
+<li>Has at least one way to improve the model been mentioned (E.g. )?</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="generalized-linear-model-bioassay-with-stan-4-points" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Generalized linear model: Bioassay with Stan (4 points)</h1>
+<p>Replicate the computations for the bioassay example of section 3.7 (BDA3) using Stan.</p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 3.a">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 3.a
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Write down the model for the bioassay data in Stan syntax. For instructions in reporting your implementation, you can refer to parts 2c.3 - 2c.6 in Assignment 5. Use the Gaussian prior as in Assignment 4 and 5, that is <span class="math display">\[
+\begin{aligned}
+    \begin{bmatrix}
+    \alpha \\ \beta
+    \end{bmatrix}
+    \sim
+    \text{N} \left( \mu_0,  \Sigma_0 \right), \qquad
+    \text{where} \quad
+     \mu_0 = \begin{bmatrix} 0 \\ 10 \end{bmatrix} \quad \text{and} \quad
+     \Sigma_0 = \begin{bmatrix} 2^2 &amp; 12 \\ 12 &amp; 10^2 \end{bmatrix}.
+\end{aligned}
+\]</span></p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>You will need Stan functions <code>multi_normal</code> and <code>binomial_logit</code> for implementing the prior and observation model, respectively. In Stan code, it is easiest to declare a variable (say <code>theta</code>) which is a two-element vector so that the first value denotes <span class="math inline">\(\alpha\)</span> and latter one <span class="math inline">\(\beta\)</span>. This is because the <code>multi_normal</code> function that you need for implementing the prior requires a vector as an input.</p>
+</div>
+</div>
+</div>
+<p>Write your answers/code here!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1"></a><span class="fu">data</span>(<span class="st">"bioassay"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 3.b">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 3.b
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Use <span class="math inline">\(\widehat{R}\)</span> for convergence analysis. You can either use Eq. (11.4) in BDA3 or the later version that can be found in <a href="https://arxiv.org/abs/1903.08008"><strong>a recent article</strong></a>. You should specify which <span class="math inline">\(\widehat{R}\)</span> you used. In R the best choice is to use function <code>rhat_basic()</code> or <code>rhat()</code> from the <code>posterior</code> package (see <code>?posterior::rhat_basic</code>). To check <span class="math inline">\(\widehat{R}\)</span> and other diagnostics, you can also call <code>fit$summary()</code>, where <code>fit</code> is the fit object returned by Stan’s sampling function. Report the <span class="math inline">\(\widehat{R}\)</span> values both for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> and discuss the convergence of the chains. <strong>Briefly explain in your own words how to interpret the obtained</strong> <span class="math inline">\(\widehat{R}\)</span> <strong>values</strong>.</p>
+</div>
+</div>
+<p>Write your answers/code here!</p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 3.c">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 3.c
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Plot the draws for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> (scatter plot) and include this plot in your report. You can compare the results to Figure&nbsp;3.3b in BDA3 to verify that your code gives sensible results. Notice though that the results in Figure&nbsp;3.3b are generated from posterior with a uniform prior, so even when your algorithm works perfectly, the results will look slightly different (although fairly similar).</p>
+</div>
+</div>
+<p>Write your answers/code here!</p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 3.d">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 3.d
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>To develop the course and provide feedback to Stan developers, we collect information on which Stan setup you used and whether you had any problems in setting it up or using it. Please report,</p>
+<ul>
+<li><p>Operating system (Linux, Mac, Windows) or jupyter.cs.aalto.fi?</p></li>
+<li><p>Programming environment used: R or Python?</p></li>
+<li><p>Interface used: RStan, CmdStanR, PyStan, or CmdStanPy?</p></li>
+<li><p>Did you have installation or compilation problems? Did you try first installing locally, but switched to jupyter.cs.aalto.fi?</p></li>
+<li><p>In addition of these you can write what other things you found out difficult (or even frustrating) when making this assignment with Stan.</p></li>
+</ul>
+</div>
+</div>
+<p>Write your answers/code here!</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Is the Stan model code included?
+<ul>
+<li>No</li>
+<li>Yes</li>
+</ul></li>
+<li>Does the implemented Stan-model seem to be working?
+<ul>
+<li>No implementation</li>
+<li>Model implemented but results not visualized/reported</li>
+<li>Model implemented, but the results seem weird</li>
+<li>Model seems to work correctly</li>
+</ul></li>
+<li>Are the R_hat-values reported (potential scale reduction factor, Eq. (11.4) in the BDA3)?
+<ul>
+<li>No</li>
+<li>Yes, but only for alpha or beta</li>
+<li>Yes, single values both for alpha and beta</li>
+</ul></li>
+<li>Is the interpretation of R_hat values correct ()?
+<ul>
+<li>No interpretation or discussion about the R_hat-values, or conclusions clearly wrong</li>
+<li>Somewhat correct</li>
+<li>Interpretation correct</li>
+</ul></li>
+<li>Does the report contain a scatter plot about the draws? Do the results look reasonable, that is, roughly like in the Figure below ?
+<ul>
+<li>No plot included</li>
+<li>Plot included, but the results do not look like in the figure above</li>
+<li>Plot included, and the results look roughly like in the figure above</li>
+</ul></li>
+<li>Does the report contain description of Stan setup used and whether there were any problems in setting it up or using it?
+<ul>
+<li>No</li>
+<li>Yes</li>
+</ul></li>
+<li>Even if the Stan model code is correct, there might be ways to give improve the layout or write the model in more elegant ways. This optional feedback box can be used to give additional suggestions for better Stan code.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="overall-quality-of-the-report" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Overall quality of the report</h1>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Does the report include comment on whether AI was used, and if AI was used, explanation on how it was used?
+<ul>
+<li>No</li>
+<li>Yes</li>
+</ul></li>
+<li>Does the report follow the formatting instructions?
+<ul>
+<li>Not at all</li>
+<li>Little</li>
+<li>Mostly</li>
+<li>Yes</li>
+</ul></li>
+<li>In case the report doesn’t fully follow the general and formatting instructions, specify the instructions that have not been followed. If applicable, specify the page of the report, where this difference is visible. This will help the other student to improve their reports so that they are easier to read and review. If applicable, specify the page of the report, where this difference in formatting is visible.</li>
+<li>Please also provide feedback on the presentation (e.g.&nbsp;text, layout, flow of the responses, figures, figure captions). Part of the course is practicing making data analysis reports. By providing feedback on the report presentation, other students can learn what they can improve or what they already did well. You should be able to provide constructive or positive feedback for all non-empty and non-nonsense reports. If you think the report is perfect, and you can’t come up with any suggestions how to improve, you can provide feedback on what you liked and why you think some part of the report is better than yours.</li>
+</ul>
+</div>
+</div>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./template5.html" class="pagination-link" aria-label="Assignment 5, 2023">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Assignment 5, 2023</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./template7.html" class="pagination-link" aria-label="Assignment 7, 2023">
+        <span class="nav-page-text">Assignment 7, 2023</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb55" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb55-1"><a href="#cb55-1"></a><span class="co">---</span></span>
+<span id="cb55-2"><a href="#cb55-2"></a><span class="an">title:</span><span class="co"> "Assignment 6, 2023"</span></span>
+<span id="cb55-3"><a href="#cb55-3"></a><span class="an">author:</span><span class="co"> "Aki Vehtari et al."</span></span>
+<span id="cb55-4"><a href="#cb55-4"></a><span class="an">format:</span></span>
+<span id="cb55-5"><a href="#cb55-5"></a><span class="co">  html:</span></span>
+<span id="cb55-6"><a href="#cb55-6"></a><span class="co">    toc: true</span></span>
+<span id="cb55-7"><a href="#cb55-7"></a><span class="co">    code-tools: true</span></span>
+<span id="cb55-8"><a href="#cb55-8"></a><span class="co">    code-line-numbers: true</span></span>
+<span id="cb55-9"><a href="#cb55-9"></a><span class="co">    number-sections: true</span></span>
+<span id="cb55-10"><a href="#cb55-10"></a><span class="co">    mainfont: Georgia, serif</span></span>
+<span id="cb55-11"><a href="#cb55-11"></a><span class="co">    page-layout: article</span></span>
+<span id="cb55-12"><a href="#cb55-12"></a><span class="co">  pdf:</span></span>
+<span id="cb55-13"><a href="#cb55-13"></a><span class="co">    geometry:</span></span>
+<span id="cb55-14"><a href="#cb55-14"></a><span class="co">    - left=1cm,top=1cm,bottom=1cm,right=7cm</span></span>
+<span id="cb55-15"><a href="#cb55-15"></a><span class="co">    number-sections: true</span></span>
+<span id="cb55-16"><a href="#cb55-16"></a><span class="co">    code-annotations: none</span></span>
+<span id="cb55-17"><a href="#cb55-17"></a><span class="an">editor:</span><span class="co"> source</span></span>
+<span id="cb55-18"><a href="#cb55-18"></a><span class="co">---</span></span>
+<span id="cb55-19"><a href="#cb55-19"></a></span>
+<span id="cb55-20"><a href="#cb55-20"></a><span class="fu"># General information</span></span>
+<span id="cb55-21"><a href="#cb55-21"></a></span>
+<span id="cb55-22"><a href="#cb55-22"></a>**The maximum amount of points from this assignment is 6.**</span>
+<span id="cb55-23"><a href="#cb55-23"></a></span>
+<span id="cb55-24"><a href="#cb55-24"></a>**This is for BDA 2023**</span>
+<span id="cb55-25"><a href="#cb55-25"></a></span>
+<span id="cb55-26"><a href="#cb55-26"></a>We have prepared a **quarto template specific to this assignment ([html](template6.html), [qmd](https://avehtari.github.io/BDA_course_Aalto/assignments/template6.qmd), [pdf](template6.pdf))** to help you get started.</span>
+<span id="cb55-27"><a href="#cb55-27"></a></span>
+<span id="cb55-28"><a href="#cb55-28"></a>::: {.callout-warning icon=false title="Setup" collapse=true}</span>
+<span id="cb55-29"><a href="#cb55-29"></a>We recommend Aalto students use <span class="co">[</span><span class="ot">jupyter.cs.aalto.fi</span><span class="co">](https://jupyter.cs.aalto.fi)</span>, for all others we also provide a <span class="co">[</span><span class="ot">docker container</span><span class="co">](docker.html)</span>.</span>
+<span id="cb55-30"><a href="#cb55-30"></a>:::</span>
+<span id="cb55-31"><a href="#cb55-31"></a></span>
+<span id="cb55-32"><a href="#cb55-32"></a>::: {.callout-tip collapse=false}</span>
+<span id="cb55-33"><a href="#cb55-33"></a>**Reading instructions:**</span>
+<span id="cb55-34"><a href="#cb55-34"></a></span>
+<span id="cb55-35"><a href="#cb55-35"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**The reading instructions for BDA3 Chapter 10**</span><span class="co">](../BDA3_notes.html#ch10)</span>.</span>
+<span id="cb55-36"><a href="#cb55-36"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**The reading instructions for BDA3 Chapter 11**</span><span class="co">](../BDA3_notes.html#ch11)</span>.</span>
+<span id="cb55-37"><a href="#cb55-37"></a></span>
+<span id="cb55-38"><a href="#cb55-38"></a>{{&lt; include includes/_grading_instructions.md &gt;}}</span>
+<span id="cb55-39"><a href="#cb55-39"></a></span>
+<span id="cb55-40"><a href="#cb55-40"></a>{{&lt; include includes/_cmdstanr.md &gt;}}</span>
+<span id="cb55-41"><a href="#cb55-41"></a>:::</span>
+<span id="cb55-42"><a href="#cb55-42"></a></span>
+<span id="cb55-43"><a href="#cb55-43"></a>{{&lt; include includes/_reporting_accuracy.md &gt;}}</span>
+<span id="cb55-44"><a href="#cb55-44"></a></span>
+<span id="cb55-45"><a href="#cb55-45"></a>{{&lt; include includes/_general_info.md &gt;}}</span>
+<span id="cb55-46"><a href="#cb55-46"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb55-47"><a href="#cb55-47"></a>This is the template for <span class="co">[</span><span class="ot">assignment 6</span><span class="co">](assignment6.html)</span>. You can download the <span class="co">[</span><span class="ot">broken stan-file</span><span class="co">](./additional_files/assignment6_linear_model.stan)</span> and the <span class="co">[</span><span class="ot">qmd-file</span><span class="co">](https://avehtari.github.io/BDA_course_Aalto/assignments/template6.qmd)</span> or copy the code from this rendered document after clicking on <span class="in">`&lt;/&gt; Code`</span> in the top right corner.</span>
+<span id="cb55-48"><a href="#cb55-48"></a></span>
+<span id="cb55-49"><a href="#cb55-49"></a>**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.**</span>
+<span id="cb55-50"><a href="#cb55-50"></a>:::</span>
+<span id="cb55-51"><a href="#cb55-51"></a>::: {.callout-tip collapse=true}</span>
+<span id="cb55-52"><a href="#cb55-52"></a><span class="fu">## Setup</span></span>
+<span id="cb55-53"><a href="#cb55-53"></a></span>
+<span id="cb55-54"><a href="#cb55-54"></a>JupyterHub has all the needed packages pre-installed.</span>
+<span id="cb55-55"><a href="#cb55-55"></a></span>
+<span id="cb55-56"><a href="#cb55-56"></a>The following installs and loads the <span class="in">`aaltobda`</span> package:</span>
+<span id="cb55-59"><a href="#cb55-59"></a><span class="in">```{r}</span></span>
+<span id="cb55-60"><a href="#cb55-60"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(aaltobda)){</span>
+<span id="cb55-61"><a href="#cb55-61"></a>    <span class="fu">install.packages</span>(<span class="st">"aaltobda"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://avehtari.github.io/BDA_course_Aalto/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span>
+<span id="cb55-62"><a href="#cb55-62"></a>    <span class="fu">library</span>(aaltobda)</span>
+<span id="cb55-63"><a href="#cb55-63"></a>}</span>
+<span id="cb55-64"><a href="#cb55-64"></a><span class="in">```</span></span>
+<span id="cb55-65"><a href="#cb55-65"></a>The following installs and loads the <span class="co">[</span><span class="ot">`latex2exp` package</span><span class="co">](https://github.com/stefano-meschiari/latex2exp)</span>, which allows us to use LaTeX in plots:</span>
+<span id="cb55-68"><a href="#cb55-68"></a><span class="in">```{r}</span></span>
+<span id="cb55-69"><a href="#cb55-69"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(latex2exp)){</span>
+<span id="cb55-70"><a href="#cb55-70"></a>    <span class="fu">install.packages</span>(<span class="st">"latex2exp"</span>)</span>
+<span id="cb55-71"><a href="#cb55-71"></a>    <span class="fu">library</span>(latex2exp)</span>
+<span id="cb55-72"><a href="#cb55-72"></a>}</span>
+<span id="cb55-73"><a href="#cb55-73"></a><span class="in">```</span></span>
+<span id="cb55-74"><a href="#cb55-74"></a>The following installs and loads the <span class="co">[</span><span class="ot">`posterior` package</span><span class="co">](https://github.com/stan-dev/posterior)</span> which imports the <span class="in">`rhat_basic()`</span> function:</span>
+<span id="cb55-77"><a href="#cb55-77"></a><span class="in">```{r}</span></span>
+<span id="cb55-78"><a href="#cb55-78"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(posterior)){</span>
+<span id="cb55-79"><a href="#cb55-79"></a>    <span class="fu">install.packages</span>(<span class="st">"posterior"</span>)</span>
+<span id="cb55-80"><a href="#cb55-80"></a>    <span class="fu">library</span>(posterior)</span>
+<span id="cb55-81"><a href="#cb55-81"></a>}</span>
+<span id="cb55-82"><a href="#cb55-82"></a><span class="in">```</span></span>
+<span id="cb55-83"><a href="#cb55-83"></a>The following installs and loads the <span class="co">[</span><span class="ot">`ggplot2` package</span><span class="co">](https://ggplot2.tidyverse.org/)</span>, the <span class="co">[</span><span class="ot">`bayesplot` package</span><span class="co">](https://mc-stan.org/bayesplot/index.html)</span> and the <span class="co">[</span><span class="ot">`dplyr` package</span><span class="co">](https://dplyr.tidyverse.org/)</span></span>
+<span id="cb55-86"><a href="#cb55-86"></a><span class="in">```{r}</span></span>
+<span id="cb55-87"><a href="#cb55-87"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(ggplot2)){</span>
+<span id="cb55-88"><a href="#cb55-88"></a>    <span class="fu">install.packages</span>(<span class="st">"ggplot2"</span>)</span>
+<span id="cb55-89"><a href="#cb55-89"></a>    <span class="fu">library</span>(ggplot2)</span>
+<span id="cb55-90"><a href="#cb55-90"></a>}</span>
+<span id="cb55-91"><a href="#cb55-91"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(bayesplot)){</span>
+<span id="cb55-92"><a href="#cb55-92"></a>    <span class="fu">install.packages</span>(<span class="st">"bayesplot"</span>)</span>
+<span id="cb55-93"><a href="#cb55-93"></a>    <span class="fu">library</span>(bayesplot)</span>
+<span id="cb55-94"><a href="#cb55-94"></a>}</span>
+<span id="cb55-95"><a href="#cb55-95"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(dplyr)){</span>
+<span id="cb55-96"><a href="#cb55-96"></a>    <span class="fu">install.packages</span>(<span class="st">"dplyr"</span>)</span>
+<span id="cb55-97"><a href="#cb55-97"></a>    <span class="fu">library</span>(dplyr)</span>
+<span id="cb55-98"><a href="#cb55-98"></a>}</span>
+<span id="cb55-99"><a href="#cb55-99"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(tidyr)){</span>
+<span id="cb55-100"><a href="#cb55-100"></a>    <span class="fu">install.packages</span>(<span class="st">"tidyr"</span>)</span>
+<span id="cb55-101"><a href="#cb55-101"></a>    <span class="fu">library</span>(tidyr)</span>
+<span id="cb55-102"><a href="#cb55-102"></a>}</span>
+<span id="cb55-103"><a href="#cb55-103"></a><span class="co"># Some additional set-up to make plots legible</span></span>
+<span id="cb55-104"><a href="#cb55-104"></a>ggplot2<span class="sc">::</span><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
+<span id="cb55-105"><a href="#cb55-105"></a>bayesplot<span class="sc">::</span><span class="fu">bayesplot_theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
+<span id="cb55-106"><a href="#cb55-106"></a><span class="co"># register_knitr_engine()</span></span>
+<span id="cb55-107"><a href="#cb55-107"></a><span class="in">```</span></span>
+<span id="cb55-108"><a href="#cb55-108"></a>The following installs and loads the <span class="co">[</span><span class="ot">`cmdstanr` package</span><span class="co">](https://mc-stan.org/cmdstanr/)</span> and tries to install <span class="in">`cmdstan`</span>.</span>
+<span id="cb55-111"><a href="#cb55-111"></a><span class="in">```{r}</span></span>
+<span id="cb55-112"><a href="#cb55-112"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(cmdstanr)){</span>
+<span id="cb55-113"><a href="#cb55-113"></a>    <span class="fu">install.packages</span>(<span class="st">"cmdstanr"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://mc-stan.org/r-packages/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span>
+<span id="cb55-114"><a href="#cb55-114"></a>    <span class="fu">library</span>(cmdstanr)</span>
+<span id="cb55-115"><a href="#cb55-115"></a>}</span>
+<span id="cb55-116"><a href="#cb55-116"></a>cmdstan_installed <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
+<span id="cb55-117"><a href="#cb55-117"></a>  res <span class="ot">&lt;-</span> <span class="fu">try</span>(out <span class="ot">&lt;-</span> cmdstanr<span class="sc">::</span><span class="fu">cmdstan_path</span>(), <span class="at">silent =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb55-118"><a href="#cb55-118"></a>  <span class="sc">!</span><span class="fu">inherits</span>(res, <span class="st">"try-error"</span>)</span>
+<span id="cb55-119"><a href="#cb55-119"></a>}</span>
+<span id="cb55-120"><a href="#cb55-120"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">cmdstan_installed</span>()){</span>
+<span id="cb55-121"><a href="#cb55-121"></a>    <span class="fu">install_cmdstan</span>()</span>
+<span id="cb55-122"><a href="#cb55-122"></a>}</span>
+<span id="cb55-123"><a href="#cb55-123"></a><span class="in">```</span></span>
+<span id="cb55-124"><a href="#cb55-124"></a>:::</span>
+<span id="cb55-125"><a href="#cb55-125"></a></span>
+<span id="cb55-126"><a href="#cb55-126"></a><span class="fu"># Stan warm-up: linear model of BDA retention with Stan (2 points)</span></span>
+<span id="cb55-127"><a href="#cb55-127"></a></span>
+<span id="cb55-128"><a href="#cb55-128"></a>From 2018 to 2022, we have been keeping track of assignment submissions for the BDA course given the number of submissions for the 1st assignment. We will fit a simple linear model to answer two questions of interest:</span>
+<span id="cb55-129"><a href="#cb55-129"></a></span>
+<span id="cb55-130"><a href="#cb55-130"></a><span class="ss">- </span>What is the trend of student retention as measured by assignment submissions?</span>
+<span id="cb55-131"><a href="#cb55-131"></a><span class="ss">- </span>Given the submission rates for assignments 1--8, how many students will complete the final 9th assignment (and potentially pass the course)?</span>
+<span id="cb55-132"><a href="#cb55-132"></a></span>
+<span id="cb55-133"><a href="#cb55-133"></a>The author has given you the broken Stan code below, which they intend to encode the following linear model:</span>
+<span id="cb55-134"><a href="#cb55-134"></a>$$</span>
+<span id="cb55-135"><a href="#cb55-135"></a>\begin{aligned}</span>
+<span id="cb55-136"><a href="#cb55-136"></a>p(\alpha,\beta,\sigma) &amp;= \mathrm{const.}</span>
+<span id="cb55-137"><a href="#cb55-137"></a>      &amp; \text{(improper flat prior)}&amp;\text{ and}<span class="sc">\\</span></span>
+<span id="cb55-138"><a href="#cb55-138"></a>p(y|x,\alpha,\beta,\sigma) &amp;= p_\mathrm{normal}(y|\alpha + \beta x, \sigma)</span>
+<span id="cb55-139"><a href="#cb55-139"></a>      &amp; \text{(normal likelihood)} &amp;\text{.}</span>
+<span id="cb55-140"><a href="#cb55-140"></a>\end{aligned}</span>
+<span id="cb55-141"><a href="#cb55-141"></a>$$</span>
+<span id="cb55-142"><a href="#cb55-142"></a>In both the statistical model above and in the Stan model below, $x \in \mathbb{R}^N$ and $y \in \mathbb{R}^N$ are vectors of the covariates / predictors (the assignment number) and vectors of the observation (proportions of students who have handed in the respective assignment). $\alpha \in \mathbb{R}$ is the unknown scalar intercept, $\beta \in \mathbb{R}$ is the unknown scalar slope and $\sigma \in \mathbb{R}_{&gt;0}$ is the unknown scalar observation standard deviation. The statistical model further implies</span>
+<span id="cb55-143"><a href="#cb55-143"></a>$$</span>
+<span id="cb55-144"><a href="#cb55-144"></a>p(y_\mathrm{pred.}|x_\mathrm{pred.},\alpha,\beta,\sigma) = p_\mathrm{normal}(y_\mathrm{pred.}|\alpha + \beta x_\mathrm{pred.}, \sigma)</span>
+<span id="cb55-145"><a href="#cb55-145"></a>$$</span>
+<span id="cb55-146"><a href="#cb55-146"></a>as the predictive distribution for a new observation $y_\mathrm{pred.}$ at a given new covariate value $x_\mathrm{pred.}$.</span>
+<span id="cb55-147"><a href="#cb55-147"></a></span>
+<span id="cb55-148"><a href="#cb55-148"></a>You can download <span class="co">[</span><span class="ot">the broken stan file from github</span><span class="co">](./additional_files/assignment6/linear_model.stan)</span>.</span>
+<span id="cb55-149"><a href="#cb55-149"></a></span>
+<span id="cb55-150"><a href="#cb55-150"></a><span class="in">```{.stan}</span></span>
+<span id="cb55-151"><a href="#cb55-151"></a><span class="in">data { #&lt;1&gt;</span></span>
+<span id="cb55-152"><a href="#cb55-152"></a><span class="in">    // number of data points</span></span>
+<span id="cb55-153"><a href="#cb55-153"></a><span class="in">    int&lt;lower=0&gt; N;</span></span>
+<span id="cb55-154"><a href="#cb55-154"></a><span class="in">    // covariate / predictor</span></span>
+<span id="cb55-155"><a href="#cb55-155"></a><span class="in">    vector[N] x;</span></span>
+<span id="cb55-156"><a href="#cb55-156"></a><span class="in">    // observations</span></span>
+<span id="cb55-157"><a href="#cb55-157"></a><span class="in">    vector[N] y;</span></span>
+<span id="cb55-158"><a href="#cb55-158"></a><span class="in">    // number of covariate values to make predictions at</span></span>
+<span id="cb55-159"><a href="#cb55-159"></a><span class="in">    int&lt;lower=0&gt; no_predictions;</span></span>
+<span id="cb55-160"><a href="#cb55-160"></a><span class="in">    // covariate values to make predictions at</span></span>
+<span id="cb55-161"><a href="#cb55-161"></a><span class="in">    vector[no_predictions] x_predictions;</span></span>
+<span id="cb55-162"><a href="#cb55-162"></a><span class="in">} #&lt;1&gt;</span></span>
+<span id="cb55-163"><a href="#cb55-163"></a><span class="in">parameters { #&lt;2&gt;</span></span>
+<span id="cb55-164"><a href="#cb55-164"></a><span class="in">    // intercept</span></span>
+<span id="cb55-165"><a href="#cb55-165"></a><span class="in">    real alpha;</span></span>
+<span id="cb55-166"><a href="#cb55-166"></a><span class="in">    // slope</span></span>
+<span id="cb55-167"><a href="#cb55-167"></a><span class="in">    real beta;</span></span>
+<span id="cb55-168"><a href="#cb55-168"></a><span class="in">    // the standard deviation should be constrained to be positive</span></span>
+<span id="cb55-169"><a href="#cb55-169"></a><span class="in">    real&lt;upper=0&gt; sigma;</span></span>
+<span id="cb55-170"><a href="#cb55-170"></a><span class="in">} #&lt;2&gt;</span></span>
+<span id="cb55-171"><a href="#cb55-171"></a><span class="in">transformed parameters { #&lt;3&gt;</span></span>
+<span id="cb55-172"><a href="#cb55-172"></a><span class="in">    // deterministic transformation of parameters and data</span></span>
+<span id="cb55-173"><a href="#cb55-173"></a><span class="in">    vector[N] mu = alpha + beta * x // linear model</span></span>
+<span id="cb55-174"><a href="#cb55-174"></a><span class="in">} #&lt;3&gt;</span></span>
+<span id="cb55-175"><a href="#cb55-175"></a><span class="in">model { #&lt;4&gt;</span></span>
+<span id="cb55-176"><a href="#cb55-176"></a><span class="in">    // observation model / likelihood</span></span>
+<span id="cb55-177"><a href="#cb55-177"></a><span class="in">    y ~ normal(mu, sigma);</span></span>
+<span id="cb55-178"><a href="#cb55-178"></a><span class="in">} #&lt;4&gt;</span></span>
+<span id="cb55-179"><a href="#cb55-179"></a><span class="in">generated quantities { #&lt;5&gt;</span></span>
+<span id="cb55-180"><a href="#cb55-180"></a><span class="in">    // compute the means for the covariate values at which to make predictions</span></span>
+<span id="cb55-181"><a href="#cb55-181"></a><span class="in">    vector[no_predictions] mu_pred = alpha + beta * x_predictions;</span></span>
+<span id="cb55-182"><a href="#cb55-182"></a><span class="in">    // sample from the predictive distribution, a normal(mu_pred, sigma).</span></span>
+<span id="cb55-183"><a href="#cb55-183"></a><span class="in">    array[no_predictions] real y_pred = normal_rng(mu, sigma);</span></span>
+<span id="cb55-184"><a href="#cb55-184"></a><span class="in">} #&lt;5&gt;</span></span>
+<span id="cb55-185"><a href="#cb55-185"></a><span class="in">```</span></span>
+<span id="cb55-186"><a href="#cb55-186"></a></span>
+<span id="cb55-187"><a href="#cb55-187"></a><span class="ss">1. </span>This is <span class="co">[</span><span class="ot">Stan's data block</span><span class="co">](https://mc-stan.org/docs/reference-manual/program-block-data.html)</span>:</span>
+<span id="cb55-188"><a href="#cb55-188"></a>"*The `data` block is for the declaration of variables that are read in as data. [...] Each variable’s value is validated against its declaration as it is read. For example, if a variable sigma is declared as `real&lt;lower=0&gt;`, then trying to assign it a negative value will raise an error. As a result, data type errors will be caught as early as possible. Similarly, attempts to provide data of the wrong size for a compound data structure will also raise an error.*" For more information, follow the link.</span>
+<span id="cb55-189"><a href="#cb55-189"></a></span>
+<span id="cb55-190"><a href="#cb55-190"></a><span class="ss">2. </span>This is <span class="co">[</span><span class="ot">Stan's parameters block</span><span class="co">](https://mc-stan.org/docs/reference-manual/program-block-parameters.html)</span>:</span>
+<span id="cb55-191"><a href="#cb55-191"></a>"*The variables declared in the `parameters` program block correspond directly to the variables being sampled by Stan’s samplers (HMC and NUTS). From a user’s perspective, the parameters in the program block are the parameters being sampled by Stan.*" For more information, follow the link.</span>
+<span id="cb55-192"><a href="#cb55-192"></a></span>
+<span id="cb55-193"><a href="#cb55-193"></a><span class="ss">3. </span>This is <span class="co">[</span><span class="ot">Stan's transformed parameters block</span><span class="co">](https://mc-stan.org/docs/reference-manual/program-block-transformed-parameters.html)</span>:</span>
+<span id="cb55-194"><a href="#cb55-194"></a>"*The `transformed parameters` program block consists of optional variable declarations followed by statements. After the statements are executed, the constraints on the transformed parameters are validated. Any variable declared as a transformed parameter is part of the output produced for draws.*" For more information, follow the link.</span>
+<span id="cb55-195"><a href="#cb55-195"></a></span>
+<span id="cb55-196"><a href="#cb55-196"></a><span class="ss">4. </span>This is <span class="co">[</span><span class="ot">Stan's model block</span><span class="co">](https://mc-stan.org/docs/reference-manual/program-block-model.html)</span>:</span>
+<span id="cb55-197"><a href="#cb55-197"></a>"*The `model` program block consists of optional variable declarations followed by statements. The variables in the `model` block are local variables and are not written as part of the output. [...] The statements in the `model` block typically define the model. This is the block in which probability (sampling notation) statements are allowed.*" For more information, follow the link.</span>
+<span id="cb55-198"><a href="#cb55-198"></a></span>
+<span id="cb55-199"><a href="#cb55-199"></a><span class="ss">5. </span>This is <span class="co">[</span><span class="ot">Stan's generated quantities block</span><span class="co">](https://mc-stan.org/docs/reference-manual/program-block-generated-quantities.html)</span>:</span>
+<span id="cb55-200"><a href="#cb55-200"></a>"*The `generated quantities` program block is rather different than the other blocks. Nothing in the `generated quantities` block affects the sampled parameter values. The block is executed only after a sample has been generated.*" For more information, follow the link.</span>
+<span id="cb55-201"><a href="#cb55-201"></a></span>
+<span id="cb55-202"><a href="#cb55-202"></a>::: {.callout-tip collapse=false}</span>
+<span id="cb55-203"><a href="#cb55-203"></a>A normal linear model is actually **not** the best model to use for this type of data, but we will use it here to illustrate the first step in building up to more appropriate, complicated models.</span>
+<span id="cb55-204"><a href="#cb55-204"></a>:::</span>
+<span id="cb55-205"><a href="#cb55-205"></a></span>
+<span id="cb55-206"><a href="#cb55-206"></a>::: {.callout-warning icon=false title="Subtask 2.a"}</span>
+<span id="cb55-207"><a href="#cb55-207"></a><span class="co">&lt;!-- </span><span class="al">###</span><span class="co"> Find mistakes in the code --&gt;</span></span>
+<span id="cb55-208"><a href="#cb55-208"></a>Find the ***three mistakes*** in the code and fix them. Report the original mistakes and your fixes clearly in your report. Include the **full** corrected Stan code in your report. Verify that sampling was successful.</span>
+<span id="cb55-209"><a href="#cb55-209"></a>:::</span>
+<span id="cb55-210"><a href="#cb55-210"></a></span>
+<span id="cb55-211"><a href="#cb55-211"></a>::: {.callout-tip collapse=false}</span>
+<span id="cb55-212"><a href="#cb55-212"></a>You may find some of the mistakes in the code using Stan syntax checker. If you copy the Stan code to a file ending <span class="in">`.stan`</span> and open it in RStudio (you can also choose from RStudio menu File$\rightarrow$New File$\rightarrow$Stan file to create a new Stan file), the editor will show you some syntax errors. More syntax errors might be detected by clicking `Check' in the bar just above the Stan file in the RStudio editor. Note that some of the errors in the presented Stan code may not be syntax errors.</span>
+<span id="cb55-213"><a href="#cb55-213"></a>:::</span>
+<span id="cb55-214"><a href="#cb55-214"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb55-215"><a href="#cb55-215"></a>Write your answers/code here!</span>
+<span id="cb55-216"><a href="#cb55-216"></a>:::</span>
+<span id="cb55-217"><a href="#cb55-217"></a></span>
+<span id="cb55-218"><a href="#cb55-218"></a></span>
+<span id="cb55-219"><a href="#cb55-219"></a><span class="co">&lt;!-- </span><span class="al">###</span><span class="co"> Interpret the results --&gt;</span></span>
+<span id="cb55-220"><a href="#cb55-220"></a>The author runs the corrected Stan file using the following R code and plots the returned MCMC sample. Read through the code below to understand what is being plotted.</span>
+<span id="cb55-221"><a href="#cb55-221"></a></span>
+<span id="cb55-222"><a href="#cb55-222"></a>::: {.callout-tip collapse=true}</span>
+<span id="cb55-223"><a href="#cb55-223"></a><span class="fu">## Data preparation and sampling from the posterior</span></span>
+<span id="cb55-224"><a href="#cb55-224"></a></span>
+<span id="cb55-225"><a href="#cb55-225"></a>**Data assembly happens here**:</span>
+<span id="cb55-228"><a href="#cb55-228"></a><span class="in">```{r}</span></span>
+<span id="cb55-229"><a href="#cb55-229"></a><span class="co">#| warning: false</span></span>
+<span id="cb55-230"><a href="#cb55-230"></a><span class="co"># These are our observations y: the proportion of students handing in each assignment (1-8),</span></span>
+<span id="cb55-231"><a href="#cb55-231"></a><span class="co"># sorted by year (row-wise) and assignment (column-wise).</span></span>
+<span id="cb55-232"><a href="#cb55-232"></a><span class="co"># While the code suggest a matrix structure,</span></span>
+<span id="cb55-233"><a href="#cb55-233"></a><span class="co"># the result will actually be a vector of length N = no_years * no_assignments</span></span>
+<span id="cb55-234"><a href="#cb55-234"></a>propstudents<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="fu">c</span>(<span class="dv">176</span>, <span class="dv">174</span>, <span class="dv">158</span>, <span class="dv">135</span>, <span class="dv">138</span>, <span class="dv">129</span>, <span class="dv">126</span>, <span class="dv">123</span>)<span class="sc">/</span><span class="dv">176</span>,</span>
+<span id="cb55-235"><a href="#cb55-235"></a>                <span class="fu">c</span>(<span class="dv">242</span>, <span class="dv">212</span>, <span class="dv">184</span>, <span class="dv">177</span>, <span class="dv">174</span>, <span class="dv">172</span>, <span class="dv">163</span>, <span class="dv">156</span>)<span class="sc">/</span><span class="dv">242</span>,</span>
+<span id="cb55-236"><a href="#cb55-236"></a>                <span class="fu">c</span>(<span class="dv">332</span>, <span class="dv">310</span>, <span class="dv">278</span>, <span class="dv">258</span>, <span class="dv">243</span>, <span class="dv">242</span>, <span class="dv">226</span>, <span class="dv">224</span>)<span class="sc">/</span><span class="dv">332</span>,</span>
+<span id="cb55-237"><a href="#cb55-237"></a>                <span class="fu">c</span>(<span class="dv">301</span>, <span class="dv">269</span>, <span class="dv">231</span>, <span class="dv">232</span>, <span class="dv">217</span>, <span class="dv">208</span>, <span class="dv">193</span>, <span class="dv">191</span>)<span class="sc">/</span><span class="dv">301</span>,</span>
+<span id="cb55-238"><a href="#cb55-238"></a>                <span class="fu">c</span>(<span class="dv">245</span>, <span class="dv">240</span>, <span class="dv">228</span>, <span class="dv">217</span>, <span class="dv">206</span>, <span class="dv">199</span>, <span class="dv">191</span>, <span class="dv">182</span>)<span class="sc">/</span><span class="dv">245</span>)</span>
+<span id="cb55-239"><a href="#cb55-239"></a><span class="co"># These are our predictors x: for each observation, the corresponding assignment number.</span></span>
+<span id="cb55-240"><a href="#cb55-240"></a>assignment <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>, <span class="dv">5</span>)</span>
+<span id="cb55-241"><a href="#cb55-241"></a><span class="co"># These are in some sense our test data: the proportion of students handing in the last assignment (9),</span></span>
+<span id="cb55-242"><a href="#cb55-242"></a><span class="co"># sorted by year.</span></span>
+<span id="cb55-243"><a href="#cb55-243"></a><span class="co"># Usually, we would not want to split our data like that and instead</span></span>
+<span id="cb55-244"><a href="#cb55-244"></a><span class="co"># use e.g. Leave-One-Out Cross-Validation (LOO-CV, see e.g. http://mc-stan.org/loo/index.html)</span></span>
+<span id="cb55-245"><a href="#cb55-245"></a><span class="co"># to evaluate model performance.</span></span>
+<span id="cb55-246"><a href="#cb55-246"></a>propstudents9 <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">121</span><span class="sc">/</span><span class="dv">176</span>, <span class="dv">153</span><span class="sc">/</span><span class="dv">242</span>, <span class="dv">218</span><span class="sc">/</span><span class="dv">332</span>, <span class="dv">190</span><span class="sc">/</span><span class="dv">301</span>, <span class="dv">175</span><span class="sc">/</span><span class="dv">245</span>)</span>
+<span id="cb55-247"><a href="#cb55-247"></a><span class="co"># The total number of assignments</span></span>
+<span id="cb55-248"><a href="#cb55-248"></a>no_assignments <span class="ot">=</span> <span class="dv">9</span></span>
+<span id="cb55-249"><a href="#cb55-249"></a><span class="co"># The assignment numbers for which we want to generate predictions</span></span>
+<span id="cb55-250"><a href="#cb55-250"></a>x_predictions <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span>no_assignments</span>
+<span id="cb55-251"><a href="#cb55-251"></a><span class="co"># (Cmd)Stan(R) expects the data to be passed in the below format:</span></span>
+<span id="cb55-252"><a href="#cb55-252"></a>model_data <span class="ot">=</span> <span class="fu">list</span>(<span class="at">N=</span><span class="fu">length</span>(assignment),</span>
+<span id="cb55-253"><a href="#cb55-253"></a>                 <span class="at">x=</span>assignment,</span>
+<span id="cb55-254"><a href="#cb55-254"></a>                 <span class="at">y=</span>propstudents,</span>
+<span id="cb55-255"><a href="#cb55-255"></a>                 <span class="at">no_predictions=</span>no_assignments,</span>
+<span id="cb55-256"><a href="#cb55-256"></a>                 <span class="at">x_predictions=</span>x_predictions)</span>
+<span id="cb55-257"><a href="#cb55-257"></a><span class="in">```</span></span>
+<span id="cb55-258"><a href="#cb55-258"></a>**Sampling from the posterior distribution happens here**:</span>
+<span id="cb55-261"><a href="#cb55-261"></a><span class="in">```{r}</span></span>
+<span id="cb55-262"><a href="#cb55-262"></a><span class="co">#| warning: false</span></span>
+<span id="cb55-263"><a href="#cb55-263"></a><span class="co"># This reads the file at the specified path and tries to compile it.</span></span>
+<span id="cb55-264"><a href="#cb55-264"></a><span class="co"># If it fails, an error is thrown.</span></span>
+<span id="cb55-265"><a href="#cb55-265"></a>retention_model <span class="ot">=</span> <span class="fu">cmdstan_model</span>(<span class="st">"./additional_files/assignment6_linear_model.stan"</span>)</span>
+<span id="cb55-266"><a href="#cb55-266"></a><span class="co"># This "out &lt;- capture.output(...)" construction suppresses output from cmdstanr</span></span>
+<span id="cb55-267"><a href="#cb55-267"></a><span class="co"># See also https://github.com/stan-dev/cmdstanr/issues/646</span></span>
+<span id="cb55-268"><a href="#cb55-268"></a>out <span class="ot">&lt;-</span> <span class="fu">capture.output</span>(</span>
+<span id="cb55-269"><a href="#cb55-269"></a>    <span class="co"># Sampling from the posterior distribution happens here:</span></span>
+<span id="cb55-270"><a href="#cb55-270"></a>    fit <span class="ot">&lt;-</span> retention_model<span class="sc">$</span><span class="fu">sample</span>(<span class="at">data=</span>model_data, <span class="at">refresh=</span><span class="dv">0</span>, <span class="at">show_messages=</span><span class="cn">FALSE</span>)</span>
+<span id="cb55-271"><a href="#cb55-271"></a>)</span>
+<span id="cb55-272"><a href="#cb55-272"></a><span class="in">```</span></span>
+<span id="cb55-273"><a href="#cb55-273"></a>**Draws postprocessing happens here**:</span>
+<span id="cb55-276"><a href="#cb55-276"></a><span class="in">```{r}</span></span>
+<span id="cb55-277"><a href="#cb55-277"></a><span class="co"># This extracts the draws from the sampling result as a data.frame.</span></span>
+<span id="cb55-278"><a href="#cb55-278"></a>draws_df <span class="ot">=</span> fit<span class="sc">$</span><span class="fu">draws</span>(<span class="at">format=</span><span class="st">"draws_df"</span>)</span>
+<span id="cb55-279"><a href="#cb55-279"></a></span>
+<span id="cb55-280"><a href="#cb55-280"></a><span class="co"># This does some data/draws wrangling to compute the 5, 50 and 95 percentiles of</span></span>
+<span id="cb55-281"><a href="#cb55-281"></a><span class="co"># the mean at the specified covariate values (x_predictions).</span></span>
+<span id="cb55-282"><a href="#cb55-282"></a><span class="co"># It can be instructive to play around with each of the data processing steps</span></span>
+<span id="cb55-283"><a href="#cb55-283"></a><span class="co"># to find out what each step does, e.g. by removing parts from the back like "|&gt;  gather(pct,y,-x)"</span></span>
+<span id="cb55-284"><a href="#cb55-284"></a><span class="co"># and printing the resulting data.frame.</span></span>
+<span id="cb55-285"><a href="#cb55-285"></a>mu_quantiles_df <span class="ot">=</span> draws_df <span class="sc">|&gt;</span></span>
+<span id="cb55-286"><a href="#cb55-286"></a>      <span class="fu">subset_draws</span>(<span class="at">variable =</span> <span class="fu">c</span>(<span class="st">"mu_pred"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb55-287"><a href="#cb55-287"></a>      <span class="fu">summarise_draws</span>(<span class="sc">~</span><span class="fu">quantile2</span>(.x, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.05</span>, .<span class="dv">5</span>, <span class="fl">0.95</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb55-288"><a href="#cb55-288"></a>      <span class="fu">mutate</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>) <span class="sc">|&gt;</span></span>
+<span id="cb55-289"><a href="#cb55-289"></a>      <span class="fu">pivot_longer</span>(<span class="fu">c</span>(q5, q50, q95), <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">"pct"</span>))</span>
+<span id="cb55-290"><a href="#cb55-290"></a><span class="co"># Same as above, but for the predictions.</span></span>
+<span id="cb55-291"><a href="#cb55-291"></a>y_quantiles_df <span class="ot">=</span> draws_df <span class="sc">|&gt;</span></span>
+<span id="cb55-292"><a href="#cb55-292"></a>      <span class="fu">subset_draws</span>(<span class="at">variable =</span> <span class="fu">c</span>(<span class="st">"y_pred"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb55-293"><a href="#cb55-293"></a>      <span class="fu">summarise_draws</span>(<span class="sc">~</span><span class="fu">quantile2</span>(.x, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.05</span>, .<span class="dv">5</span>, <span class="fl">0.95</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb55-294"><a href="#cb55-294"></a>      <span class="fu">mutate</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>) <span class="sc">|&gt;</span></span>
+<span id="cb55-295"><a href="#cb55-295"></a>      <span class="fu">pivot_longer</span>(<span class="fu">c</span>(q5, q50, q95), <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">"pct"</span>))</span>
+<span id="cb55-296"><a href="#cb55-296"></a><span class="in">```</span></span>
+<span id="cb55-297"><a href="#cb55-297"></a>:::</span>
+<span id="cb55-298"><a href="#cb55-298"></a></span>
+<span id="cb55-299"><a href="#cb55-299"></a>**Plotting happens here**:</span>
+<span id="cb55-302"><a href="#cb55-302"></a><span class="in">```{r}</span></span>
+<span id="cb55-303"><a href="#cb55-303"></a><span class="co">#| label: fig-posterior</span></span>
+<span id="cb55-304"><a href="#cb55-304"></a><span class="co">#| fig-cap: Describe me in your submission!</span></span>
+<span id="cb55-305"><a href="#cb55-305"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb55-306"><a href="#cb55-306"></a>  <span class="co"># scatter plot of the training data:</span></span>
+<span id="cb55-307"><a href="#cb55-307"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb55-308"><a href="#cb55-308"></a>    <span class="fu">aes</span>(x, y, <span class="at">color=</span>assignment),</span>
+<span id="cb55-309"><a href="#cb55-309"></a>    <span class="at">data=</span><span class="fu">data.frame</span>(<span class="at">x=</span>assignment, <span class="at">y=</span>propstudents, <span class="at">assignment=</span><span class="st">"1-8"</span>)</span>
+<span id="cb55-310"><a href="#cb55-310"></a>) <span class="sc">+</span></span>
+<span id="cb55-311"><a href="#cb55-311"></a>  <span class="co"># scatter plot of the test data:</span></span>
+<span id="cb55-312"><a href="#cb55-312"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb55-313"><a href="#cb55-313"></a>    <span class="fu">aes</span>(x, y, <span class="at">color=</span>assignment),</span>
+<span id="cb55-314"><a href="#cb55-314"></a>    <span class="at">data=</span><span class="fu">data.frame</span>(<span class="at">x=</span>no_assignments, <span class="at">y=</span>propstudents9, <span class="at">assignment=</span><span class="st">"9"</span>)</span>
+<span id="cb55-315"><a href="#cb55-315"></a>) <span class="sc">+</span></span>
+<span id="cb55-316"><a href="#cb55-316"></a>  <span class="co"># you have to tell us what this plots:</span></span>
+<span id="cb55-317"><a href="#cb55-317"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(x,<span class="at">y=</span>value,<span class="at">linetype=</span>pct), <span class="at">data=</span>mu_quantiles_df, <span class="at">color=</span><span class="st">'grey'</span>, <span class="at">linewidth=</span><span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb55-318"><a href="#cb55-318"></a>  <span class="co"># you have to tell us what this plots:</span></span>
+<span id="cb55-319"><a href="#cb55-319"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(x,<span class="at">y=</span>value,<span class="at">linetype=</span>pct), <span class="at">data=</span>y_quantiles_df, <span class="at">color=</span><span class="st">'red'</span>) <span class="sc">+</span></span>
+<span id="cb55-320"><a href="#cb55-320"></a>  <span class="co"># adding xticks for each assignment:</span></span>
+<span id="cb55-321"><a href="#cb55-321"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks=</span><span class="dv">1</span><span class="sc">:</span>no_assignments) <span class="sc">+</span></span>
+<span id="cb55-322"><a href="#cb55-322"></a>  <span class="co"># adding labels to the plot:</span></span>
+<span id="cb55-323"><a href="#cb55-323"></a>  <span class="fu">labs</span>(<span class="at">y=</span><span class="st">"assignment submission %"</span>, <span class="at">x=</span><span class="st">"assignment number"</span>) <span class="sc">+</span></span>
+<span id="cb55-324"><a href="#cb55-324"></a>  <span class="co"># specifying that line types repeat:</span></span>
+<span id="cb55-325"><a href="#cb55-325"></a>  <span class="fu">scale_linetype_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">2</span>)) <span class="sc">+</span></span>
+<span id="cb55-326"><a href="#cb55-326"></a>  <span class="co"># Specify colours of the observations:</span></span>
+<span id="cb55-327"><a href="#cb55-327"></a>  <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"1-8"</span><span class="ot">=</span><span class="st">"black"</span>, <span class="st">"9"</span><span class="ot">=</span><span class="st">"blue"</span>)) <span class="sc">+</span></span>
+<span id="cb55-328"><a href="#cb55-328"></a>  <span class="co"># remove the legend for the linetypes:</span></span>
+<span id="cb55-329"><a href="#cb55-329"></a>  <span class="fu">guides</span>(<span class="at">linetype=</span><span class="st">"none"</span>)</span>
+<span id="cb55-330"><a href="#cb55-330"></a><span class="in">```</span></span>
+<span id="cb55-331"><a href="#cb55-331"></a>::: {.callout-tip collapse=true}</span>
+<span id="cb55-332"><a href="#cb55-332"></a><span class="fu">## Quick check for sampling convergence</span></span>
+<span id="cb55-333"><a href="#cb55-333"></a></span>
+<span id="cb55-334"><a href="#cb55-334"></a>If your model is correctly implemented, sampling from the posterior distribution should have been successful.</span>
+<span id="cb55-335"><a href="#cb55-335"></a>You can check whether Stan thinks that sampling succeeded by inspecting the output of the below command,</span>
+<span id="cb55-336"><a href="#cb55-336"></a>which you should be able to interpret with a little help from the <span class="co">[</span><span class="ot">CmdStan User's Guide</span><span class="co">](https://mc-stan.org/docs/cmdstan-guide/diagnose.html)</span>.</span>
+<span id="cb55-339"><a href="#cb55-339"></a><span class="in">```{r}</span></span>
+<span id="cb55-340"><a href="#cb55-340"></a>fit<span class="sc">$</span><span class="fu">cmdstan_diagnose</span>()</span>
+<span id="cb55-341"><a href="#cb55-341"></a><span class="in">```</span></span>
+<span id="cb55-342"><a href="#cb55-342"></a>:::</span>
+<span id="cb55-343"><a href="#cb55-343"></a></span>
+<span id="cb55-344"><a href="#cb55-344"></a>Based on the above plot, answer the following questions:</span>
+<span id="cb55-345"><a href="#cb55-345"></a></span>
+<span id="cb55-346"><a href="#cb55-346"></a>::: {.callout-warning icon=false title="Subtask 2.b"}</span>
+<span id="cb55-347"><a href="#cb55-347"></a><span class="ss">- </span>What is the solid red line plotting? What are the dashed red lines? How and why are these different from the corresponding grey lines?</span>
+<span id="cb55-348"><a href="#cb55-348"></a><span class="ss">- </span>What is the general trend of student retention as measured by assignment submissions?</span>
+<span id="cb55-349"><a href="#cb55-349"></a><span class="ss">- </span>Given a model fitted to the submission data for assignments 1-8, does it do a good job predicting the proportion of students who submit the final 9th assignment?</span>
+<span id="cb55-350"><a href="#cb55-350"></a><span class="ss">- </span>Name one different modeling choice you could make to improve the prediction.</span>
+<span id="cb55-351"><a href="#cb55-351"></a>:::</span>
+<span id="cb55-352"><a href="#cb55-352"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb55-353"><a href="#cb55-353"></a>Write your answers/code here!</span>
+<span id="cb55-354"><a href="#cb55-354"></a>:::</span>
+<span id="cb55-355"><a href="#cb55-355"></a></span>
+<span id="cb55-356"><a href="#cb55-356"></a>::: {.callout-note icon=false title="Rubric"}</span>
+<span id="cb55-357"><a href="#cb55-357"></a><span class="ss">* </span>Is the source code included?</span>
+<span id="cb55-358"><a href="#cb55-358"></a><span class="ss">    * </span>No</span>
+<span id="cb55-359"><a href="#cb55-359"></a><span class="ss">    * </span>Yes</span>
+<span id="cb55-360"><a href="#cb55-360"></a><span class="ss">* </span>Is the full resulting modified Stan model code presented in the report?</span>
+<span id="cb55-361"><a href="#cb55-361"></a><span class="ss">    * </span>No</span>
+<span id="cb55-362"><a href="#cb55-362"></a><span class="ss">    * </span>Yes, but partially</span>
+<span id="cb55-363"><a href="#cb55-363"></a><span class="ss">    * </span>Yes, with a few mistakes</span>
+<span id="cb55-364"><a href="#cb55-364"></a><span class="ss">    * </span>Yes, and it is correct</span>
+<span id="cb55-365"><a href="#cb55-365"></a><span class="ss">* </span>Has the sampling success been verified/summarized (e.g. by inspecting and summarizing the output of <span class="co">[</span><span class="ot">`CmdStan`'s `diagnose` method</span><span class="co">](https://mc-stan.org/docs/cmdstan-guide/diagnose.html)</span>).</span>
+<span id="cb55-366"><a href="#cb55-366"></a><span class="ss">    * </span>No</span>
+<span id="cb55-367"><a href="#cb55-367"></a><span class="ss">    * </span>Yes, but partially</span>
+<span id="cb55-368"><a href="#cb55-368"></a><span class="ss">    * </span>Yes, and it is correctly verified</span>
+<span id="cb55-369"><a href="#cb55-369"></a><span class="ss">* </span>Fix #1: Is there a fix for line .</span>
+<span id="cb55-370"><a href="#cb55-370"></a><span class="ss">    * </span>It has not been discussed, that this line should be fixed.</span>
+<span id="cb55-371"><a href="#cb55-371"></a><span class="ss">    * </span>It has been discussed, that this line should be fixed, but there is no fix presented for it or the fix is clearly wrong.</span>
+<span id="cb55-372"><a href="#cb55-372"></a><span class="ss">    * </span>There is a fix presented for this line, that clearly solves the problem.</span>
+<span id="cb55-373"><a href="#cb55-373"></a><span class="ss">* </span>Fix #2: Is there a fix for line .</span>
+<span id="cb55-374"><a href="#cb55-374"></a><span class="ss">    * </span>It has not been discussed, that this line should be fixed.</span>
+<span id="cb55-375"><a href="#cb55-375"></a><span class="ss">    * </span>It has been discussed, that this line should be fixed, but there is no fix presented for it or the fix is clearly wrong.</span>
+<span id="cb55-376"><a href="#cb55-376"></a><span class="ss">    * </span>There is a fix presented for this line, that clearly solves the problem.</span>
+<span id="cb55-377"><a href="#cb55-377"></a><span class="ss">* </span>Fix #3: Is there a fix for line .</span>
+<span id="cb55-378"><a href="#cb55-378"></a><span class="ss">    * </span>It has not been discussed, that this line should be fixed.</span>
+<span id="cb55-379"><a href="#cb55-379"></a><span class="ss">    * </span>It has been discussed, that this line should be fixed, but there is no fix presented for it or the fix is clearly wrong.</span>
+<span id="cb55-380"><a href="#cb55-380"></a><span class="ss">    * </span>There is a fix presented for this line, that clearly solves the problem.</span>
+<span id="cb55-381"><a href="#cb55-381"></a><span class="ss">* </span>Have the red lines been correctly described ()?</span>
+<span id="cb55-382"><a href="#cb55-382"></a><span class="ss">* </span>Have the grey lines been correctly described ()?</span>
+<span id="cb55-383"><a href="#cb55-383"></a><span class="ss">* </span>Has the difference between the red and grey lines been explained ()?</span>
+<span id="cb55-384"><a href="#cb55-384"></a><span class="ss">* </span>Has the student retention trend been described ()</span>
+<span id="cb55-385"><a href="#cb55-385"></a><span class="ss">* </span>Has the predictive performance for the held out data been discussed and assessed satisfactorily ()?</span>
+<span id="cb55-386"><a href="#cb55-386"></a><span class="ss">    * </span>No</span>
+<span id="cb55-387"><a href="#cb55-387"></a><span class="ss">    * </span>Somewhat</span>
+<span id="cb55-388"><a href="#cb55-388"></a><span class="ss">    * </span>Yes</span>
+<span id="cb55-389"><a href="#cb55-389"></a><span class="ss">* </span>Has at least one way to improve the model been mentioned (E.g. )?</span>
+<span id="cb55-390"><a href="#cb55-390"></a>:::</span>
+<span id="cb55-391"><a href="#cb55-391"></a></span>
+<span id="cb55-392"><a href="#cb55-392"></a><span class="fu"># Generalized linear model: Bioassay with Stan (4 points)</span></span>
+<span id="cb55-393"><a href="#cb55-393"></a></span>
+<span id="cb55-394"><a href="#cb55-394"></a>Replicate the computations for the bioassay example of section 3.7</span>
+<span id="cb55-395"><a href="#cb55-395"></a>(BDA3) using Stan.</span>
+<span id="cb55-396"><a href="#cb55-396"></a></span>
+<span id="cb55-397"><a href="#cb55-397"></a>::: {.callout-warning icon=false title="Subtask 3.a"}</span>
+<span id="cb55-398"><a href="#cb55-398"></a>Write down the model for the bioassay data in Stan syntax. For</span>
+<span id="cb55-399"><a href="#cb55-399"></a>instructions in reporting your implementation, you can refer to</span>
+<span id="cb55-400"><a href="#cb55-400"></a>parts 2c.3 - 2c.6 in Assignment 5. Use the Gaussian prior as in Assignment 4 and 5, that is</span>
+<span id="cb55-401"><a href="#cb55-401"></a>$$</span>
+<span id="cb55-402"><a href="#cb55-402"></a>\begin{aligned}</span>
+<span id="cb55-403"><a href="#cb55-403"></a>    \begin{bmatrix}</span>
+<span id="cb55-404"><a href="#cb55-404"></a>    \alpha <span class="sc">\\</span> \beta</span>
+<span id="cb55-405"><a href="#cb55-405"></a>    \end{bmatrix}</span>
+<span id="cb55-406"><a href="#cb55-406"></a>    \sim</span>
+<span id="cb55-407"><a href="#cb55-407"></a>    \text{N} \left( \mu_0,  \Sigma_0 \right), \qquad</span>
+<span id="cb55-408"><a href="#cb55-408"></a>    \text{where} \quad</span>
+<span id="cb55-409"><a href="#cb55-409"></a>     \mu_0 = \begin{bmatrix} 0 <span class="sc">\\</span> 10 \end{bmatrix} \quad \text{and} \quad</span>
+<span id="cb55-410"><a href="#cb55-410"></a>     \Sigma_0 = \begin{bmatrix} 2^2 &amp; 12 <span class="sc">\\</span> 12 &amp; 10^2 \end{bmatrix}.</span>
+<span id="cb55-411"><a href="#cb55-411"></a>\end{aligned}</span>
+<span id="cb55-412"><a href="#cb55-412"></a>$$</span>
+<span id="cb55-413"><a href="#cb55-413"></a>:::</span>
+<span id="cb55-414"><a href="#cb55-414"></a></span>
+<span id="cb55-415"><a href="#cb55-415"></a>::: {.callout-tip collapse=false}</span>
+<span id="cb55-416"><a href="#cb55-416"></a>You will need Stan functions <span class="in">`multi_normal`</span> and</span>
+<span id="cb55-417"><a href="#cb55-417"></a><span class="in">`binomial_logit`</span> for implementing the prior and observation model,</span>
+<span id="cb55-418"><a href="#cb55-418"></a>respectively. In Stan code, it is easiest to declare a variable (say</span>
+<span id="cb55-419"><a href="#cb55-419"></a><span class="in">`theta`</span>) which is a two-element vector so that the first value</span>
+<span id="cb55-420"><a href="#cb55-420"></a>denotes $\alpha$ and latter one $\beta$. This is because the</span>
+<span id="cb55-421"><a href="#cb55-421"></a><span class="in">`multi_normal`</span> function that you need for implementing the prior</span>
+<span id="cb55-422"><a href="#cb55-422"></a>requires a vector as an input.</span>
+<span id="cb55-423"><a href="#cb55-423"></a>:::</span>
+<span id="cb55-424"><a href="#cb55-424"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb55-425"><a href="#cb55-425"></a>Write your answers/code here!</span>
+<span id="cb55-428"><a href="#cb55-428"></a><span class="in">```{r}</span></span>
+<span id="cb55-429"><a href="#cb55-429"></a><span class="fu">data</span>(<span class="st">"bioassay"</span>)</span>
+<span id="cb55-430"><a href="#cb55-430"></a><span class="in">```</span></span>
+<span id="cb55-431"><a href="#cb55-431"></a>:::</span>
+<span id="cb55-432"><a href="#cb55-432"></a></span>
+<span id="cb55-433"><a href="#cb55-433"></a>::: {.callout-warning icon=false title="Subtask 3.b"}</span>
+<span id="cb55-434"><a href="#cb55-434"></a>Use $\widehat{R}$ for convergence analysis. You can either use Eq.</span>
+<span id="cb55-435"><a href="#cb55-435"></a>(11.4) in BDA3 or the later version that can be found in [**a recent</span>
+<span id="cb55-436"><a href="#cb55-436"></a>article**](https://arxiv.org/abs/1903.08008). You should specify</span>
+<span id="cb55-437"><a href="#cb55-437"></a>which $\widehat{R}$ you used. In R the best choice is to use</span>
+<span id="cb55-438"><a href="#cb55-438"></a>function <span class="in">`rhat_basic()`</span> or <span class="in">`rhat()`</span> from the <span class="in">`posterior`</span> package</span>
+<span id="cb55-439"><a href="#cb55-439"></a>(see <span class="in">`?posterior::rhat_basic`</span>). To check $\widehat{R}$ and other</span>
+<span id="cb55-440"><a href="#cb55-440"></a>diagnostics, you can also call <span class="in">`fit$summary()`</span>, where <span class="in">`fit`</span> is the</span>
+<span id="cb55-441"><a href="#cb55-441"></a>fit object returned by Stan's sampling function. Report the</span>
+<span id="cb55-442"><a href="#cb55-442"></a>$\widehat{R}$ values both for $\alpha$ and $\beta$ and discuss the</span>
+<span id="cb55-443"><a href="#cb55-443"></a>convergence of the chains. **Briefly explain in your own words how</span>
+<span id="cb55-444"><a href="#cb55-444"></a>to interpret the obtained** $\widehat{R}$ **values**.</span>
+<span id="cb55-445"><a href="#cb55-445"></a>:::</span>
+<span id="cb55-446"><a href="#cb55-446"></a></span>
+<span id="cb55-447"><a href="#cb55-447"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb55-448"><a href="#cb55-448"></a>Write your answers/code here!</span>
+<span id="cb55-449"><a href="#cb55-449"></a>:::</span>
+<span id="cb55-450"><a href="#cb55-450"></a></span>
+<span id="cb55-451"><a href="#cb55-451"></a>::: {.callout-warning icon=false title="Subtask 3.c"}</span>
+<span id="cb55-452"><a href="#cb55-452"></a>Plot the draws for $\alpha$ and $\beta$ (scatter plot) and include</span>
+<span id="cb55-453"><a href="#cb55-453"></a>this plot in your report. You can compare the results to Figure&nbsp;3.3b</span>
+<span id="cb55-454"><a href="#cb55-454"></a>in BDA3 to verify that your code gives sensible results. Notice</span>
+<span id="cb55-455"><a href="#cb55-455"></a>though that the results in Figure&nbsp;3.3b are generated from posterior</span>
+<span id="cb55-456"><a href="#cb55-456"></a>with a uniform prior, so even when your algorithm works perfectly,</span>
+<span id="cb55-457"><a href="#cb55-457"></a>the results will look slightly different (although fairly similar).</span>
+<span id="cb55-458"><a href="#cb55-458"></a>:::</span>
+<span id="cb55-459"><a href="#cb55-459"></a></span>
+<span id="cb55-460"><a href="#cb55-460"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb55-461"><a href="#cb55-461"></a>Write your answers/code here!</span>
+<span id="cb55-462"><a href="#cb55-462"></a>:::</span>
+<span id="cb55-463"><a href="#cb55-463"></a></span>
+<span id="cb55-464"><a href="#cb55-464"></a>::: {.callout-warning icon=false title="Subtask 3.d"}</span>
+<span id="cb55-465"><a href="#cb55-465"></a>To develop the course and provide feedback to Stan developers, we</span>
+<span id="cb55-466"><a href="#cb55-466"></a>collect information on which Stan setup you used and whether you had</span>
+<span id="cb55-467"><a href="#cb55-467"></a>any problems in setting it up or using it. Please report,</span>
+<span id="cb55-468"><a href="#cb55-468"></a></span>
+<span id="cb55-469"><a href="#cb55-469"></a><span class="ss">-   </span>Operating system (Linux, Mac, Windows) or jupyter.cs.aalto.fi?</span>
+<span id="cb55-470"><a href="#cb55-470"></a></span>
+<span id="cb55-471"><a href="#cb55-471"></a><span class="ss">-   </span>Programming environment used: R or Python?</span>
+<span id="cb55-472"><a href="#cb55-472"></a></span>
+<span id="cb55-473"><a href="#cb55-473"></a><span class="ss">-   </span>Interface used: RStan, CmdStanR, PyStan, or CmdStanPy?</span>
+<span id="cb55-474"><a href="#cb55-474"></a></span>
+<span id="cb55-475"><a href="#cb55-475"></a><span class="ss">-   </span>Did you have installation or compilation problems? Did you try first installing locally, but switched to</span>
+<span id="cb55-476"><a href="#cb55-476"></a>    jupyter.cs.aalto.fi?</span>
+<span id="cb55-477"><a href="#cb55-477"></a></span>
+<span id="cb55-478"><a href="#cb55-478"></a><span class="ss">-   </span>In addition of these you can write what other things you found</span>
+<span id="cb55-479"><a href="#cb55-479"></a>    out difficult (or even frustrating) when making this assignment</span>
+<span id="cb55-480"><a href="#cb55-480"></a>    with Stan.</span>
+<span id="cb55-481"><a href="#cb55-481"></a>:::</span>
+<span id="cb55-482"><a href="#cb55-482"></a></span>
+<span id="cb55-483"><a href="#cb55-483"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb55-484"><a href="#cb55-484"></a>Write your answers/code here!</span>
+<span id="cb55-485"><a href="#cb55-485"></a>:::</span>
+<span id="cb55-486"><a href="#cb55-486"></a></span>
+<span id="cb55-487"><a href="#cb55-487"></a></span>
+<span id="cb55-488"><a href="#cb55-488"></a>::: {.callout-note icon=false title="Rubric"}</span>
+<span id="cb55-489"><a href="#cb55-489"></a><span class="ss">* </span>Is the Stan model code included?</span>
+<span id="cb55-490"><a href="#cb55-490"></a><span class="ss">    * </span>No</span>
+<span id="cb55-491"><a href="#cb55-491"></a><span class="ss">    * </span>Yes</span>
+<span id="cb55-492"><a href="#cb55-492"></a><span class="ss">* </span>Does the implemented Stan-model seem to be working?</span>
+<span id="cb55-493"><a href="#cb55-493"></a><span class="ss">    * </span>No implementation</span>
+<span id="cb55-494"><a href="#cb55-494"></a><span class="ss">    * </span>Model implemented but results not visualized/reported</span>
+<span id="cb55-495"><a href="#cb55-495"></a><span class="ss">    * </span>Model implemented, but the results seem weird</span>
+<span id="cb55-496"><a href="#cb55-496"></a><span class="ss">    * </span>Model seems to work correctly</span>
+<span id="cb55-497"><a href="#cb55-497"></a><span class="ss">* </span>Are the R_hat-values reported (potential scale reduction factor, Eq. (11.4) in the BDA3)?</span>
+<span id="cb55-498"><a href="#cb55-498"></a><span class="ss">    * </span>No</span>
+<span id="cb55-499"><a href="#cb55-499"></a><span class="ss">    * </span>Yes, but only for alpha or beta</span>
+<span id="cb55-500"><a href="#cb55-500"></a><span class="ss">    * </span>Yes, single values both for alpha and beta</span>
+<span id="cb55-501"><a href="#cb55-501"></a><span class="ss">* </span>Is the interpretation of R_hat values correct ([R_hat values close to one =&gt; chains probably converged</span>
+<span id="cb55-502"><a href="#cb55-502"></a>and estimates reliable]{.content-hidden when-profile="public"})?</span>
+<span id="cb55-503"><a href="#cb55-503"></a><span class="ss">    * </span>No interpretation or discussion about the R_hat-values, or conclusions clearly wrong</span>
+<span id="cb55-504"><a href="#cb55-504"></a><span class="ss">    * </span>Somewhat correct</span>
+<span id="cb55-505"><a href="#cb55-505"></a><span class="ss">    * </span>Interpretation correct</span>
+<span id="cb55-506"><a href="#cb55-506"></a><span class="ss">* </span>Does the report contain a scatter plot about the draws? Do the results look reasonable, that is, roughly</span>
+<span id="cb55-507"><a href="#cb55-507"></a>like in the Figure below ?</span>
+<span id="cb55-508"><a href="#cb55-508"></a><span class="ss">    * </span>No plot included</span>
+<span id="cb55-509"><a href="#cb55-509"></a><span class="ss">    * </span>Plot included, but the results do not look like in the figure above</span>
+<span id="cb55-510"><a href="#cb55-510"></a><span class="ss">    * </span>Plot included, and the results look roughly like in the figure above</span>
+<span id="cb55-511"><a href="#cb55-511"></a><span class="ss">* </span>Does the report contain description of Stan setup used and whether there were any problems in setting</span>
+<span id="cb55-512"><a href="#cb55-512"></a>it up or using it?</span>
+<span id="cb55-513"><a href="#cb55-513"></a><span class="ss">    * </span>No</span>
+<span id="cb55-514"><a href="#cb55-514"></a><span class="ss">    * </span>Yes</span>
+<span id="cb55-515"><a href="#cb55-515"></a><span class="ss">* </span>Even if the Stan model code is correct, there might be ways to give improve the layout or write the</span>
+<span id="cb55-516"><a href="#cb55-516"></a>model in more elegant ways. This optional feedback box can be used to give additional suggestions for</span>
+<span id="cb55-517"><a href="#cb55-517"></a>better Stan code.</span>
+<span id="cb55-518"><a href="#cb55-518"></a>:::</span>
+<span id="cb55-519"><a href="#cb55-519"></a></span>
+<span id="cb55-520"><a href="#cb55-520"></a>{{&lt; include includes/_overall_quality.md &gt;}}</span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

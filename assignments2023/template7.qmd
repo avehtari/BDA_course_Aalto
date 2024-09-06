@@ -1,0 +1,808 @@
+---
+title: "Assignment 7, 2023"
+subtitle: "Hierarchical model in Stan"
+author: "Aki Vehtari et al."
+format:
+  html:
+    toc: true
+    code-tools: true
+    code-line-numbers: true
+    number-sections: true
+    mainfont: Georgia, serif
+    page-layout: article
+  pdf:
+    geometry:
+    - left=1cm,top=1cm,bottom=1cm,right=7cm
+    number-sections: true
+    code-annotations: none
+editor: source
+assignments: ta
+---
+
+::::{.content-visible when-profile="public"}
+
+:::{.callout-warning}
+
+Currently, rendering on github is broken, such that the rendered template at [https://avehtari.github.io/BDA_course_Aalto/assignments/template7.html](https://avehtari.github.io/BDA_course_Aalto/assignments/template7.html)
+looks weird. Rendering should however work on Aalto's JupyterLab, but we will also try to fix rendering on github ASAP.
+
+:::
+
+::::
+
+# General information
+
+**This is for BDA 2023**
+
+**The maximum amount of points from this assignment is 9.**
+
+We have prepared a **quarto template specific to this assignment ([html](template7.html), [qmd](https://avehtari.github.io/BDA_course_Aalto/assignments/template7.qmd), [pdf](template7.pdf))** to help you get started.
+
+:::{.callout-warning icon=false title="Setup" collapse=true}
+We recommend Aalto students use [jupyter.cs.aalto.fi](https://jupyter.cs.aalto.fi), for all others we also provide a [docker container](docker.html).
+:::
+
+:::{.callout-tip collapse=false}
+**Reading instructions**:
+
+- [**The reading instructions for BDA3 Chapter 5**](../BDA3_notes.html#ch5).
+
+{{< include includes/_grading_instructions.md >}}
+
+{{< include includes/_cmdstanr.md >}}
+:::
+
+{{< include includes/_reporting_accuracy.md >}}
+
+{{< include includes/_general_info.md >}}
+:::{.content-visible when-profile="public"}
+This is the template for [assignment 7](assignment7.html). You can download the [separate model with bad priors](./additional_files/assignment7/chickens_separate.stan) and the [qmd-file](https://avehtari.github.io/BDA_course_Aalto/assignments/template7.qmd) or copy the code from this rendered document after clicking on `</> Code` in the top right corner.
+
+**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.**
+:::
+
+:::{.callout-tip collapse=true}
+## Setup
+The following loads several needed packages:
+
+```{r}
+#| label: imports
+
+library(aaltobda)
+library(bayesplot)
+library(cmdstanr)
+library(dplyr)
+library(ggplot2)
+library(ggdist) # for stat_dotsinterval
+library(posterior)
+if(!require(brms)){
+    install.packages("brms")
+    library(brms)
+}
+
+# Set more readable themes with bigger font for plotting packages.
+ggplot2::theme_set(theme_minimal(base_size = 14))
+bayesplot::bayesplot_theme_set(theme_minimal(base_size = 14))
+
+# This registers CmdStan as the backend for compiling cmdstan-chunks.
+check_cmdstan_toolchain(fix = TRUE, quiet = TRUE)
+register_knitr_engine(override = FALSE)
+```
+:::
+
+# Hierarchical Model: Chicken Data with Stan (6p)
+
+**Do not look at the secret dataset until you have defined your priors in section 2.1.**
+
+A secret dataset, included in base `r`, contains weight measurements from 50 chicks from their birth until the age of 21 days. For this task, we are interested in modeling the weight of a chick at the age of 12 days.
+
+## Choosing a weakly informative prior by intuition
+
+We will first guide you through two processes for choosing *weakly* informative priors which you can use in your projects as well (though, if expert knowledge is present, we encourage to use that though instead). Many definitions of *weak* exist, but for our purposes, we intend to set priors in this assignment which don't overwhelm the likelihood contributions to the posterior while still exerting some amount of regularisation.
+
+In the absence of additional information, we will assume that chick weights at 12 days of age ($w$) follow a normal distribution:
+$$
+w\sim\mathcal N (\mu,\sigma).
+$$
+Our task will be to define weakly informative priors for the mean $\mu$ given observation model standard deviation, $\sigma$ (a prior distribution for $\sigma$ will be set in after section 2).
+
+Here, $\mu$ represents the population mean chick weight at 12 days and $\sigma$ represents the standard-deviation of the chick weights $w$ around that population mean. For this exercise, we will be specifying a normal prior for $\mu$:
+
+$$
+\mu\sim\mathcal N (\mu_0,\sigma_0).
+$$
+
+$\mu_0$ represents our prior knowledge of what we believe the population weight to be and $\sigma_0$ represents our level of certainty in this belief. To specify a weakly-informative prior for $\mu$ we need to select values of $\mu_0$ and $\sigma_0$ that imply the range of plausible values that $\mu$ could take.
+
+We can do this by our own intuitive prior knowledge (if such intuition exists), or by searching for external references.
+
+Despite the name, weakly informed priors can be quite subjective ([see for more theoretical discussion here](http://www.stat.columbia.edu/~gelman/research/published/entropy-19-00555-v2.pdf)), such that some justification is always needed. For the subtasks below, you will not be graded on the accuracy or precision of your numbers, but on your justification of them. The numerical choices you make should make sense and be understandable to an external reviewer of your work (even if they may not agree with your choices).
+
+
+::: {.callout-caution collapse="false"}
+## A word of caution on eliciting the priors below
+Please note that in the below, we intend to set a prior on $\mu$ (the *mean* chick weight), but the intuition we ilicit is based on the weight of *individual* chicks. We do so to help create intuition about what the mean could be, however, it would be theoretically more accurate to ilicit priors about *mean* chick weights.
+:::
+
+:::{.callout-important}
+
+We have made changes to the assignment text and some of the rubrics to make it clearer.
+
+:::
+
+
+:::{.callout-warning icon=false title="Subtask 2.a)"}
+Based on your own past experience and estimation skills, what would you guess is a typical weight range of a fully grown chicken in grams? Justify your choice with 1-3 sentences.
+:::
+
+:::{.callout-tip collapse=false}
+Would it make sense if a chicken weighed 1 million grams? 0.005 grams? What about a chicken that weighed more than you? More than a car? Note that is not important to have a very precise or accurate guess here, the key goal is simply to identify the range of plausible (or at least possible) values.
+:::
+
+::::{.callout-note icon=false title="Rubric"}
+### Fully grown chicken weight range by intuition
+
+* Does the chosen range meet the following common sense criteria?
+  * The range is always above .
+* Is the justification based on some sort of logic, even if you may disagree?
+::::
+
+:::{.callout-warning icon=false title="Subtask 2.b"}
+Adjust this range for a 12-day old chick and choose a mean $\mu_0$ for the weakly informed prior of the parameter $\mu.$ Justify your adjustment and choice with 1-3 sentences.
+:::
+
+::::{.callout-note icon=false title="Rubric"}
+### 12-day old chick weight range by intuition
+
+* The range is always above .
+* Is the justification based on some sort of logic, even if you may disagree?
+::::
+
+Choosing the prior standard deviation for $\mu$ requires a little more caution; overconfident (i.e. narrow) priors can have a strong effect on your results,
+whereas less confident priors are more easily overcome with observed data.
+Given that overconfidence is a common human bias, a good intuition-based standard deviation should focus on eliminating the impossible values, rather than including the most likely values.
+
+:::{.callout-warning icon=false title="Subtask 2.c"}
+Choose a conservative lower and upper bound for the weight of any 12-day old chick, with the goal to exclude impossible values. Justify your choice with 1-3 sentences.
+:::
+
+:::{.callout-tip collapse=false}
+Depending on your choice of range above for a "typical" chick, this range excluding the impossible values should be wider.
+:::
+
+::::{.callout-note icon=false title="Rubric"}
+### Prior standard deviation by intuition
+
+* Does the chosen range meet the following common sense criteria?
+  * The range is always above .
+* Is the justification based on some sort of logic, even if you may disagree?
+::::
+
+A common technique to find a weakly informative prior is to have a standard deviation which is an order of magnitude (a factor of 10) larger than a plausible standard deviation of the data.
+
+:::{.callout-warning icon=false title="Subtask 2.d"}
+What do you think is a plausible standard deviation $\sigma_\text{plausible}$ of the weight of 12 days-old chicks, based on your ranges stated above?
+Under the above recommendation, what standard deviation $\sigma_0$ should you use for your prior for the mean weight $\mu$?
+:::
+
+::::{.callout-note icon=false title="Rubric"}
+#### Prior standard deviation by intuition
+
+* Do the two standard deviations meet the following common sense criteria?
+  - Both values are 
+* Given the choice of mean from above, the interval $(\mu_0 - 3\sigma_0, \mu_0 + 3\sigma_0)$ includes .
+::::
+
+
+:::{.callout-warning icon=false title="Subtask 2.e"}
+Write down in mathematical form the final prior for the mean weight $\mu$ you found using this prior definition technique.
+:::
+
+::::{.callout-note icon=false title="Rubric"}
+### Prior by intuition
+
+* Does the final prior exist in mathematical notation?
+* Does the prior reflect the choices made above (i.e. $\mu_0, \sigma_0$)?
+::::
+
+## Choosing a weakly informative prior using external references
+
+Next, we'll use external references to pick the weakly informed prior. This technique is more general and doesn't assume you would have prior knowledge.
+
+:::{.callout-warning icon=false title="Subtask 2.f"}
+Consult a trustworthy source on the weight range of farm chickens, e.g. books, articles, a farmer friend. If the recommended values are for a fully grown chicken, make a reasonable adjustment for a 12-day old chick. What is the weight range of a 12-day old chicken? Cite your source and justify any adjustments you make to the reference range.
+:::
+
+::::{.callout-note icon=false title="Rubric"}
+### Weight range by reference
+* Does the reference range meet the following common sense criteria?
+  * The range is always above .
+* Is there a citation? If an adjustment was made, was it justified by logic, even if you disagree?
+::::
+
+:::{.callout-warning icon=false title="Subtask 2.g"}
+Based on this reference range, what will you choose for the mean of our weakly informed prior? Justify your choice with 1-3 sentences.
+:::
+
+::::{.callout-note icon=false title="Rubric"}
+### Weight range by reference
+
+* Does the mean value meet the following common sense criteria?
+  * The range is always above .
+::::
+
+Next we choose the standard deviation of the prior. We could use the same technique as before, but we'll walk you through another common approach. Assume that $99.7\%$ of all 12-day old chicks fall into the reference range you found. Under our assumption of a normal distribution, this range will encompass values between $\mu_0 \pm 3\sigma_0$.
+
+:::{.callout-warning icon=false title="Subtask 2.h"}
+Assuming symmetry, use the mean you chose and either the upper or lower bound $b$ of your reference range to solve the correct version of the following equations to find your associated choice of $\sigma_0$: (show your work)
+
+- For upper bound $b_u$: $Pr(\mu_0 + 3\sigma_0 < b_u) \approx 0.997$, solving for $\sigma_0$.
+- For lower bound $b_l$: $Pr(\mu_0 - 3\sigma_0 > b_l) \approx 0.997$, solving for $\sigma_0$.
+:::
+
+::::{.callout-note icon=false title="Rubric"}
+### Prior standard deviation by reference
+
+* Does the calculated $\sigma_0$ value meet the following common sense criteria?
+  * The value is above .
+* Did they show their work?
+::::
+
+:::{.callout-warning icon=false title="Subtask 2.i"}
+Write down in mathematical form the final prior for the mean weight $\mu$ you found using this prior definition technique.
+:::
+
+::::{.callout-note icon=false title="Rubric"}
+### Prior by reference
+
+* Does the final prior exist in mathematical notation?
+* Does the prior reflect the choices made above (i.e. $\mu_0, \sigma_0$)?
+::::
+
+## Non-normal priors
+
+The previous steps all assumed we could use a prior which is normally distributed, but this may not always be the correct assumption to make.
+
+:::{.callout-warning icon=false title="Subtask 2.j"}
+Under what mathematical/statistical circumstances would a normal distributed prior not make sense? List at least one circumstance.  Are there values that the normal distribution can take on which would not make sense for some types of variables?
+:::
+
+:::{.callout-tip collapse=false}
+Consider the nature of any variable you are trying to define a prior over.
+:::
+
+::::{.callout-note icon=false title="Rubric"}
+### Non-normal priors
+
+* Example cases include variables that 
+::::
+
+## Modeling diet effects on chicken weight
+
+In addition to chick weights, the data also contains a categorical variable indicating which diet the chick received. In the data file, each column contains the measurements for a single chick at a given point of time.
+
+In addition to the existing diets, we are interested in the quality of another box of feed (the fifth diet), which a farmer happened to find yesterday at a dark corner of his warehouse. To read in the data and select chicks with age of 12 days, and to have a peek at the first 6 rows, just use:
+
+::::{.callout-important collapse=true}
+# Data inside, don't peek before you have set your priors!
+:::{.callout-important collapse=true}
+# Have you set your priors?
+```{r}
+#| message: false
+data("ChickWeight")
+
+Chick12 <- ChickWeight |> filter(Time == 12)
+
+head(Chick12)
+```
+:::
+::::
+
+In the following analysis, we will model the **weight of a chick at the age of 12 days**. We will use the following three Gaussian models:
+
+-   a separate model, in which each diet is modeled individually
+-   a pooled model, in which all measurements are combined and there is no distinction between diets
+-   a hierarchical model, which has a hierarchical structure as described in [BDA3](https://users.aalto.fi/~ave/BDA3.pdf) Section 11.6
+
+As in the model described in the book, use the same weight standard deviation $\sigma$ for all the groups in the hierarchical model. In the separate model, however, use separate weight standard deviation $\sigma_d$ for each diet $d$. You should use weakly informative priors for all your models.
+
+The provided Stan code below is given as an example of a separate model. Note that the author has left a comment expressing uncertainty about their prior choices. This separate model can be summarized mathematically as
+$$
+\begin{aligned}
+    \mu_{d} &\sim \pi(\mu_d)&&\text{(diet-wise mean weight),}\\
+    \sigma_d &\sim \pi(\sigma_d)&&\text{(diet-wise standard deviation of diet-wise chicken weights)},\\
+    w_{i,d} &\sim N(\mu_d,\sigma_d)&&\text{(diet-wise chicken weights)}\\
+\end{aligned}
+$$ {#eq-separate}
+
+with priors
+
+$$
+\begin{aligned}
+    \mu_{d} &\sim N(0,10)&&\text{(adjust this) and}\\
+    \sigma_d &\sim\mathrm{exponential}(.02)&&\text{(you can keep this).}
+\end{aligned}
+$$ {#eq-separate-priors}
+
+For the separate and the pooled models, use one of the weakly informative priors you have derived in 2.1) or 2.2) for the diet-wise mean weights
+$$\mu_d\sim \pi(\mu_d)=N(\mu_0,\sigma_0).$$
+For the hierarchical model, remember that the parameters in the priors for the diet-wise mean weights itself have to be parameters with their own prior distributions, in our case
+$$
+\begin{aligned}
+\mu_d &\sim N(\mu,\tau)&&\text{(diet-wise mean weights)},\\
+\mu &\sim \pi(\mu)&&\text{(mean of prior for diet-wise mean weights) and}\\
+\tau &\sim \pi(\tau)&&\text{(standard deviation of prior for diet-wise mean weights).}
+\end{aligned}
+$$
+
+Use the prior you have used for the diet-wise mean weights $\mu_d$ in the separate and pooled models for the prior on the mean of the prior for the diet-wise mean weights
+$$\mu \sim \pi(\mu) = N(\mu_0,\sigma_0)$$
+in the hierarchical model and use
+$$\tau \sim \pi(\tau) = \mathrm{exponential}(.02)$$
+for the prior on the standard deviation of the prior for the diet-wise mean weights.
+
+```{.stan include="additional_files/assignment7/chickens_separate.stan"}
+```
+
+::: {.callout-warning collapse=false}
+## Sample from the posterior
+
+To sample from the posterior using Stan, use:
+
+```{r}
+#| label: format data for Stan
+stan_data <- list(
+  N_observations = nrow(Chick12),
+  N_diets = length(unique(Chick12$Diet)),
+  diet_idx = Chick12$Diet,
+  weight = Chick12$weight
+)
+
+model_separate <- cmdstan_model(stan_file = "additional_files/assignment7/chickens_separate.stan")
+
+# Sampling from the posterior distribution happens here:
+fit_separate <- model_separate$sample(data = stan_data, refresh=0,
+                                      show_messages=FALSE,
+                                      show_exceptions=FALSE)
+```
+Fit objects returned by the `sample()` method, by default print a summary of the posterior draws.
+These are **NOT** the results you would expect to turn in your report. You will need to change the priors in the code for the separate model.
+```{r}
+fit_separate
+```
+Quick model convergence check (as in assignment 6):
+```{r}
+fit_separate$cmdstan_diagnose()
+```
+
+:::
+
+
+
+:::{.callout-warning icon=false title="Subtask 2.k"}
+Describe the models with mathematical notation (as is done for the separate model above). Also describe in words the difference between the model and the other models.
+:::
+
+
+
+
+
+
+
+
+::::{.callout-note icon=false title="Rubric"}
+
+* Are the models described using mathematical notation and the difference to other models described in words?
+  - No equations and no description
+  - Description but no equations
+  - Equations but no description
+  - Equations and description
+::::
+
+:::{.callout-warning icon=false title="Subtask 2.l"}
+Implement the models in Stan and include the code in the report. Use weakly informative priors for all of your models.
+:::
+
+:::{.callout-tip collapse=false}
+When sampling from the posterior of the hierarchical model, you will very likely get a warning about divergent transitions. This tells you that the sampler is having difficulties in sampling the joint posterior and this may lead to biased inference. We will return to this in the next task.
+:::
+
+:::{.content-visible when-profile="public"}
+**For the figures below, we use the earlier draws for the separate model with bad priors.
+When you have implemented the pooled and hierarchical models, edit the code below to
+include draws from your model posterior into the figures.**
+:::
+
+:::{.callout-warning collapse=false}
+### Data preparation and sampling from the posterior
+
+```{r}
+#| label: draws for pooled and hierarchical
+#| code-summary: Sampling from the posteriors given the pooled and hierarhical models
+
+fit_pooled <- fit_separate
+fit_hierarchical <- fit_separate
+
+
+```
+
+Below, we collect the corresponding posterior draws from the three models into a shared
+data frame using the `extract_variable` function. This makes plotting the posterior
+in a single plot easier.
+```{r}
+#| label: prepare data for plots
+#| code-summary: Prepare data for plots
+
+# Expect the same number of posterior draws from each model.
+ndraws <- nrow(fit_hierarchical$sampler_diagnostics(format = "matrix"))
+
+# Collect posterior draws and the model used to a data frame.
+mean_diet_4_separate = extract_variable(fit_separate, "mean_diet[4]")
+mean_diet_4_pooled = extract_variable(fit_pooled, "mean_diet[4]")
+mean_diet_4_hierarchical = extract_variable(fit_hierarchical, "mean_diet[4]")
+posterior_mean_diet_4 <- data.frame(
+  model_name = rep(c("Separate", "Pooled", "Hierarchical"),
+              each = ndraws),
+  mean_diet_4 = c(
+   mean_diet_4_separate, mean_diet_4_pooled, mean_diet_4_hierarchical
+  ))
+
+predicted_weight_diet_4 <- data.frame(
+  model_name = rep(c("Separate", "Pooled", "Hierarchical"),
+              each = ndraws),
+  predicted_weight = c(
+   extract_variable(fit_separate, "weight_pred"),
+   extract_variable(fit_pooled, "weight_pred"),
+   extract_variable(fit_hierarchical, "weight_pred")
+  ))
+
+# Collect posterior draws and the model used to a long data frame.
+posterior_mean_diet_5 <- data.frame(
+  model_name = rep(c("Separate", "Pooled", "Hierarchical"),
+    each = ndraws
+  ),
+  mean_diet_5 = c(
+    extract_variable(fit_separate, "mean_five"),
+    extract_variable(fit_pooled, "mean_five"),
+    extract_variable(fit_hierarchical, "mean_five")
+  )
+)
+
+# Mean observed weight per diet, these help to compare the posteriors to data.
+diet_means <- sapply(
+  1:4, function(diet) mean(Chick12[Chick12$Diet == diet, "weight"])
+)
+```
+:::
+
+::::{.callout-note icon=false title="Rubric"}
+### All models
+
+* Is there a related Stan implementation?
+  - No Stan model implemented
+  - Stan model implemented, but it seems clearly wrong or broken
+  - Seemingly valid Stan model implemented
+::::
+
+
+
+
+
+:::{.callout-warning icon=false title="Subtask 2.m"}
+Use the provided code in the template to
+plot the **posterior distribution of the mean of the weight measurements of the fourth diet** and comment on the possible differences you observe
+between the models.
+:::
+
+:::{.content-visible when-profile="public"}
+```{r}
+#| label: figure - posterior of mean 4
+#| fig-cap: Posterior distribution of the mean weight of chicks consuming diet 4.
+ggplot(posterior_mean_diet_4, aes(x = mean_diet_4, y = model_name)) +
+  stat_dotsinterval(quantiles = 100, scale = .9) +
+  vline_at(diet_means[4], size = 1, linetype = "dashed") +
+  # Annotate the vline from above.
+  annotate("text", label = "Observation mean", x = diet_means[4] - 5, y = .7,
+           hjust = "right", size = 6) +
+  # Add title and axis labels. One line to make everything so much more clear!
+  labs(
+    title = "Mean of diet 4",
+    x = "Weight (g)",
+    y = "Model"
+  )
+```
+:::
+
+::::{.callout-note icon=false title="Rubric"}
+* Is there a comparison plotted for the posteriors of the mean of diet 4? Does it look something like the model solution plot?
+  -   No comparison plotted
+  -   Comparison plotted but it clearly differs from the example
+  -   Comparison plotted and it approximately matches the example
+* Separate model: Is the result for the separate model discussed?
+  -   The result is not discussed.
+  -   There is some discussion, but it is not mentioned that .
+  -   The result is discussed and the separate model is recognised as .
+* Pooled model: Is the result for the pooled model discussed?
+  -   The result is not discussed.
+  -   There is some discussion, but it is not mentioned that .
+  -   The result is discussed and the pooled model is recognised as .
+* Hierarchical model: Is the result for the hierarchical model discussed?
+  -   The result is not discussed.
+  -   There is some discussion, but it is not mentioned that .
+  -   The result is discussed and the hierarchical model is recognised as .
+::::
+
+:::{.callout-warning icon=false title="Subtask 2.n"}
+Use the provided code in the template to
+plot the **predictive distribution for another weight measurement from a chick having the fourth diet** and comment on the possible differences you observe
+between the models.
+:::
+
+:::{.content-visible when-profile="public"}
+```{r}
+#| label: figure - predicted weight of for diet 4
+#| fig-cap: The (posterior) predictive distribution of the weigth of a chick consuming diet 4.
+ggplot(predicted_weight_diet_4, aes(x = predicted_weight, y = model_name)) +
+  stat_dotsinterval(quantiles = 100, scale = .9) +
+  vline_at(diet_means[4], size = 1, linetype = "dashed") +
+  # Annotate the vline from above.
+  annotate("text", label = "Observation mean", x = diet_means[4] - 5, y = .7,
+           hjust = "right", size = 6) +
+  # Add title and axis labels. One line to make everything so much more clear!
+  labs(
+    title = "Weigth of a chick with diet 4",
+    x = "Weight (g)",
+    y = "Model"
+  )
+```
+:::
+
+::::{.callout-note icon=false title="Rubric"}
+
+* Is there a comparison plotted for the predictive distributions of the weight of a chick with diet 4? Does it look something like the model solution plot?
+  -   No comparison plotted
+  -   Comparison plotted but it clearly differs from the example
+  -   Comparison plotted and it approximately matches the example
+* Separate model: Is the result for the separate model discussed?
+  -   The result is not discussed.
+  -   There is some discussion, but it is not mentioned that .
+  -   The result is discussed and the separate model is recognised as .
+* Pooled model: Is the result for the pooled model discussed?
+  -   The result is not discussed.
+  -   There is some discussion, but it is not mentioned that .
+  -   The result is discussed and the pooled model is recognised as .
+* Hierarchical model: Is the result for the hierarchical model discussed?
+  -   The result is not discussed.
+  -   There is some discussion, but it is not mentioned that .
+  -   The result is discussed and the hierarchical model is recognised as .
+::::
+
+::: {.callout-warning icon=false title="Subtask 2.o"}
+Use the provided code in the template to
+plot the **posterior distribution of the mean of the weight measurements of a new fifth diet** and comment on the possible differences you observe
+between the models.
+:::
+
+:::{.content-visible when-profile="public"}
+```{r}
+#| label: figure - posterior of mean 5
+#| fig-cap: Posterior distribution of the mean weight of chicks consuming the new diet 5 not seen before.
+
+ggplot(posterior_mean_diet_5, aes(x = mean_diet_5, y = model_name)) +
+  # Draw the mean of each diet from the data as a dashed vertical line.
+  vline_at(diet_means, size = .5, linetype = "dashed") +
+  # dotsinterval gives mean, 50%, and 90% intervals + dotsplot with each dot
+  # representing 1% of data (quantiles = 100).
+  stat_dotsinterval(quantiles = 100, scale = .9) +
+  # Annotate the vline from above.
+  annotate(geom = "text", label = "Means of observed diets", y = .7, x = 100,
+           hjust = "right", size = 5, family = "sans") +
+  # Add title and axis labels. One line to make everything so much more clear!
+  labs(title = "Mean of a new diet",
+       x = "Weight (g)",
+       y = "Model")
+```
+:::
+
+::::{.callout-note icon=false title="Rubric"}
+* Is there a comparison plotted for the posterior distributions of the mean weight with a new diet? Does it look something like the model solution plot?
+  -   No comparison plotted
+  -   Comparison plotted but it clearly differs from the example
+  -   Comparison plotted and it approximately matches the example
+* Separate model: Is the result for the separate model discussed?
+  -   The result is not discussed.
+  -   There is some discussion, but it is not mentioned that .
+  -   The result is discussed and the separate model is recognised as .
+  -   In addition to the previous option, it is recognised that .
+* Pooled model: Is the result for the pooled model discussed?
+  -   The result is not discussed.
+  -   There is some discussion, but it is not mentioned that .
+    -   The result is discussed and the pooled model is recognised as .
+    -   In addition to the previous option, it is mentioned that .
+* Hierarchical model: Is the result for the hierarchical model discussed?
+  -   The result is not discussed.
+    -   There is some discussion, but it is not mentioned that .
+    -   The result is discussed and the hierarchical model is recognised as .
+::::
+
+:::{.callout-warning icon=false title="Subtask 2.p"}
+For each model, report the **posterior expectation for the mean weight of diet 4 with a 90% credible interval**.
+:::
+
+:::{.callout-tip collapse=false}
+See the example Stan codes in the demo [Bayesian data analysis - CmdStanR demos: Comparison of $k$ groups with hierarchical models](http://avehtari.github.io/BDA_R_demos/demos_rstan/cmdstanr_demo.html#8_Comparison_of_(k)_groups_with_hierarchical_models) for the comparison of $k$ groups with and without the hierarchical structure.
+:::
+
+::::{.callout-note icon=false title="Rubric"}
+* For the separate model, is the posterior 90% credible interval for the mean of the fourth diet close to:  (small/medium deviation is fine).
+  - No or incorrect answer
+  - Answer is only partially correct
+  - Answers look correct
+* For the pooled model, is the posterior 90% credible interval for the mean of the fourth diet close to:  (small/medium deviation is fine).
+  - No answer
+  - Answer is only partially correct
+  - Answer looks correct
+* For the hierarchical model, is the posterior 90% credible interval for the mean of the fourth diet close to:  (small/medium deviation is fine).
+  - No answer
+  - Answer is only partially correct.
+  - Answers look correct.
+
+::::
+
+# Hierarchical model with BRMS (3p)
+
+
+:::{.callout-important}
+
+We have made changes to the assignment text and some of the rubrics to make it clearer.
+
+:::
+
+The goal of this task is to discuss an alternative parameterisation of hierarchical models and introduce the `brms`-package.
+
+[`brms`](https://paul-buerkner.github.io/brms/) is a high-level interface for Stan providing tools to create a wide range of Bayesian models, including hierarchical ones. In the previous section, you might have noted that with the hierarchical implementation of the model there may be divergent transitions during the sampling from the posterior. This is related to [Neal's funnel](https://mc-stan.org/docs/stan-users-guide/reparameterization.html), where the sampling algorithm would need to change the step size in order to effectively sample the posterior. One trick to improve sampling is to use an alternative parameterisation for the model. This parameterisation is called the non-centered parameterisation (@eq-non-centered) and often it can help with the divergent transitions.
+
+In short, we sample parameters from a distribution with a potentially easier geometry for the sampler to explore efficiently and then transform those values to the joint distribution of interest.
+
+The noncentered parameterisation for the hierarchical model using the diet-wise helper parameter $z_d$ becomes
+
+$$
+\begin{aligned}
+z_d &\sim \operatorname{normal}(0, 1)&&\text{(diet-wise helper parameter)},\\
+\mu_d &= \mu + z_d \tau&&\text{(diet-wise mean weight)},\\
+\mu &\sim \pi(\mu)&&\text{(mean of prior for diet-wise mean weights),}\\
+\tau &\sim \pi(\tau)&&\text{(standard deviation of prior for diet-wise mean weights),}\\
+\sigma &\sim \pi(\sigma)&&\text{(standard deviation of diet-wise chicken weights) and},\\
+w_{i, d} &\sim \operatorname{normal}(\mu_d, \sigma)&&\text{(chicken weights)}.\\
+\end{aligned}
+$$ {#eq-non-centered}
+
+The hierarchical models made with `brms` use this non-centered parameterisation. Your tasks are the following:
+
+:::{.callout-warning icon=false title="Subtask 3.a)"}
+Use the function in the template to make a scatter plot of the posterior draws given the hierarchical model of the population level standard deviation parameter $\tau$ and the mean parameter of the fourth diet, $\mu_4$. The possible divergent transitions are highlighted in red. In the report show the plot and comment if there are any divergent transitions.
+:::
+
+:::{.content-visible when-profile="public"}
+```{r}
+#| label: plot scatter centered parameterisation
+
+bayesplot::mcmc_scatter(x = fit_hierarchical$draws(variables = c("mean_diet[4]", "sd_diets")),
+                        np = nuts_params(fit_hierarchical)) +
+  scale_y_log10() +
+  labs(x = expression(mean_diet[4]), y = expression(sd_diets)) +
+  ylim(c(0,NA))
+```
+:::
+
+:::{.callout-note icon=false title="Rubric"}
+* Is there a scatter plot of $\sigma_0$ and $\mu_4$ and some comments provided in the report?
+  - No scatter plot or comments
+  - The scatter plot is included, and divergent transitions are visible, but not commented on.
+  - The scatter plot and comments on the divergences are included.
+:::
+
+To sample from the posterior given the same model using `brms`, in the template set the weakly informative priors for the hierarchical model you used in the previous task. `brms` has an internal convention to name model parameters and the parameter names from @eq-non-centered map into `brms` names with the following logic:
+
+ - $\mu$ corresponds to `class="Intercept"`
+ - $\tau$ corresponds to `class="sd"`,
+ - $\sigma$ corresponds to `class="sigma"`.
+
+
+:::{.callout-warning icon=false title="Subtask 3.b"}
+Replace `normal(0,10)` in the `brm` call in the template with your prior for the population mean
+$$\mu \sim \pi(\mu) = N(\mu_0,\sigma_0)$$
+you have derived in 2). Then, run the code chunk to sample from the posterior of the hierarchical model using `brms`.
+:::
+
+:::{.content-visible when-profile="public"}
+**Create a brms model and sample from the posterior**
+
+```{r}
+#| label: fit brms model
+#| output: false
+brms_fit = brm(
+  weight ~ 1 + (1 | Diet),
+  data=Chick12,
+  prior=c(
+    # REPLACE WITH YOUR PRIOR DERIVED in 2)
+    prior(normal(0,10), class="Intercept"),
+    # YOU CAN LEAVE THE BELOW PRIORS
+    prior(exponential(.02), class="sd"),
+    prior(exponential(.02), class="sigma")
+  ),
+  backend = "cmdstanr",
+  save_pars = save_pars(manual = c("z_1[1,4]"))
+)
+```
+:::
+
+::: {.callout-note icon=false title="Rubric"}
+* Is the `brms` code shown and do the priors agree with the priors specified above?
+:::
+
+:::{.callout-warning icon=false title="Subtask 3.c"}
+Report the **posterior expectation for the mean weight of diet 4 $\mu_4$ with a 90% credible interval**, using the code block in the template. How does it compare with your results from the first task?
+:::
+
+:::{.content-visible when-profile="public"}
+```{r}
+#| label: transformed posterior draws from brms
+# Draws for mu_4
+mu_4 = posterior_epred(brms_fit, newdata = data.frame(Diet=4))
+
+# Compute the mean, and quantiles. Remember to round your answers accordingly.
+# ...
+```
+:::
+
+::: {.callout-note icon=false title="Rubric"}
+* Given the `brms` model, is the posterior 90% credible interval for the mean of the fourth diet close to: (small/medium deviation is fine).
+  - No answer
+  - Answer is only partially correct.
+  - Answers look correct.
+:::
+
+:::{.callout-warning icon=false title="Subtask 3.d"}
+Use the code in the template to make a **scatter plot of the group standard deviation parameter $\tau$ and group specific mean parameter**.
+:::
+
+:::{.content-visible when-profile="public"}
+Due the non-centered parametrization, we need to transform compute the $\mu_d$ term as the sum of the population intercept and the group specific deviation from the intercept. You can choose which diet to plot by modifying the `d` integer in `r_Diet[d,Intercept]`.
+```{r}
+#| label: plot scatter non-centered parameterisation
+
+draws = as_draws_df(brms_fit) |>
+  posterior::mutate_variables(mean_diet_4 = `r_Diet[4,Intercept]` + b_Intercept)
+
+bayesplot::mcmc_scatter(draws,
+                        pars = c("mean_diet_4", "sd_Diet__Intercept"),
+                        np = nuts_params(brms_fit)) +
+  scale_y_log10() +
+  xlab(expression(mean_diet[4])) +
+  ylab(expression(sd_diets))
+
+```
+:::
+
+::: {.callout-note icon=false title="Rubric"}
+* Is there a scatter plot of $\tau$ and $\mu_4$ and some comments provided in the report?
+  - No scatter plot or comments
+  - The scatter plot is included, and divergent transitions are visible, but not commented on.
+  - The scatter plot and comments on the divergences are included.
+:::
+
+:::{.callout-warning icon=false title="Subtask 3.e"}
+In your report, address the following questions based on the plots you made for both parameterisations:
+
+ - Which of the parameterisations resulted in fewer divergent transitions?
+ - Comment for both parameterisations: for which kind of values of $\tau$, do the divergent transitions occur (if there are any)? It also might be that no clear pattern can be seen.
+ - Does centered parameterisation have problems sampling from some specific region of the parameter space compared to the non-centered parameterisation.
+:::
+::: {.callout-note icon=false title="Rubric"}
+* Has it been discussed which parameterisation resulted in fewer divergent transitions?
+* Has it been discussed for which values of $\tau$ the divergences occurred?
+* Has it been discussed whether/where the centered parameterisation has problems sampling?
+:::
+
+{{< include includes/_overall_quality.md >}}

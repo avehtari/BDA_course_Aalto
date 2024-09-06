@@ -1,0 +1,242 @@
+---
+title: "Assignment 9, 2023"
+subtitle: "Decision analysis"
+author: "Aki Vehtari et al."
+format:
+  html:
+    toc: true
+    code-tools: true
+    code-line-numbers: true
+    number-sections: true
+    mainfont: Georgia, serif
+    page-layout: article
+  pdf:
+    geometry:
+    - left=1cm,top=1cm,bottom=1cm,right=7cm
+    number-sections: true
+    code-annotations: none
+editor: source
+---
+
+# General information
+
+**This is for BDA 2023**
+
+**The maximum amount of points from this assignment is 3.**
+
+We have prepared a **quarto template specific to this assignment ([html](template9.html), [qmd](https://avehtari.github.io/BDA_course_Aalto/assignments/template9.qmd), [pdf](template9.pdf))** to help you get started.
+
+:::{.callout-warning icon=false title="Setup" collapse=true}
+We recommend Aalto students use [jupyter.cs.aalto.fi](https://jupyter.cs.aalto.fi), for all others we also provide a [docker container](docker.html).
+:::
+
+
+:::{.callout-tip collapse=false}
+**Reading instructions**:
+
+- [**The reading instructions for BDA3 Chapter 9**](../BDA3_notes.html#ch6) (decision analysis).
+
+{{< include includes/_grading_instructions.md >}}
+
+{{< include includes/_cmdstanr.md >}}
+:::
+
+{{< include includes/_reporting_accuracy.md >}}
+
+{{< include includes/_general_info.md >}}
+::: {.content-visible when-profile="public"}
+This is the template for [assignment 9](assignment9.html). You can download the [qmd-file](https://avehtari.github.io/BDA_course_Aalto/assignments/template9.qmd) or copy the code from this rendered document after clicking on `</> Code` in the top right corner.
+
+**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.**
+:::
+::: {.callout-warning collapse=false}
+## Setup
+
+The following loads several needed packages:
+
+```{r}
+#| label: imports
+library(bayesplot)
+library(cmdstanr)
+library(dplyr)
+library(ggplot2)
+library(ggdist) # for stat_dotsinterval
+library(posterior)
+library(brms)
+# Globally specfiy cmdstan backend for brms
+options(brms.backend="cmdstanr")
+# Tell brms to cache results if possible
+options(brms.file_refit="on_change")
+
+# Set more readable themes with bigger font for plotting packages
+ggplot2::theme_set(theme_minimal(base_size = 14))
+bayesplot::bayesplot_theme_set(theme_minimal(base_size = 14))
+```
+:::
+
+
+
+
+This exercise is an example of a decision analysis (DA). In a broad context, this means optimizing over different decisions that lead to different outcomes that all have different utilities. In a Bayesian context, this means using posterior distributions to make decisions.
+
+# Escaping from the chicken coop
+
+You are an adult chicken living in an organic chicken commune, where life is great, if a bit boring.
+You have settled in comfortably, but you want something more for your offspring.
+Your traveling corvid friends tell you of places where chickens eat corn all day,
+get ferried around in [mobile chicken coops to see the world](https://www.chicken-trailer.de/en/chicken-trailer-en/chicken-trailer-330) or [get mental stimulation by being trained humanely to perform
+tricks](https://en.wikipedia.org/wiki/Marian_Breland_Bailey#:~:text=Popular%20acts%20included,that%20played%20basketball.).
+The chicken elders have gained access to the computers of your human caretakers
+and have found the results of a complicated statistical analysis of the growth curves
+of your relatives. Because you are a chicken, you don't care about convergence diagnostics or priors.
+
+**Your task is to maximizes the chance of escape for your offspring.**
+
+::: {.callout-warning icon=false title="Subtask 2.c"}
+Compute and visualize the **expected chicken weight for days 1--40 per diet**, according to the
+model provided in the template. Do the predictions look reasonable? Why/why not?
+:::
+::: {.callout-tip collapse=false}
+To sample a "new chicken" from the posterior, use [posterior_predict](https://rdrr.io/cran/brms/man/posterior_epred.brmsfit.html) with options `newdata=..., allow_new_levels=TRUE, sample_new_levels="gaussian"`, where you pass a dataframe as `newdata` which has a "new" chicken ID `Chick` and appropriate values for `Time` and `Diet`.
+:::
+:::{.callout-warning collapse=false}
+### A simple GP model
+
+The below fits a GP model to the chicken growth curves. It may take a few minutes to fit, but you
+can also [download the fit `.rds`-file](./additional_files/assignment9/gp_chicken_fit.rds) and work with that fit object.
+
+```{r fit}
+
+fit <- brm(
+  weight ~ gp(Time) + (0+Time|Diet) + (0+Time|Chick),
+  data = ChickWeight,
+  family = "lognormal",
+  file="additional_files/assignment9/gp_chicken_fit",
+  cores = parallel::detectCores(),
+  # For the template only, remove the below from your code!
+  iter = 500
+)
+brms::pp_check(fit, type = "intervals_grouped", group = "Diet")
+```
+:::
+:::{.content-visible when-profile="public"}
+```{r}
+# Useful r functions:
+#   rep(..., each=...), cbind, colMeans,
+#   posterior_predict(..., newdata=..., allow_new_levels=TRUE, sample_new_levels="gaussian")
+#   ggplot, geom_line, aes(..., group=..., color=...)
+```
+:::
+:::{.callout-note icon=false title="Rubric"}
+* Does the plot look right and is it readable? It should be quite close to the reference plot below:
+* Has it been recognized that the prediction time ?
+:::
+
+Your chicken elders have been meticulously collecting data on what kind of characteristics have allowed
+previous chickens to escape. They have found out that both the age and the weight influence the (daily)
+probability of escape for a chicken:
+
+* If the chicken is too young, it is not yet mature enough to venture out into the world.
+* If the chicken is too old, it will not try to escape anymore.
+* If the chicken is small and has just the right size, it can try to squeze through a tiny crack in the fence.
+* If the chicken is big enough, it is strong enough to try to fly over the fence.
+* No matter the size, there is always a small residual probability that the chicken can escape.
+
+Every day, chickens will try to escape if they are of the right age.
+Their daily escape probability $e(\text{day}, \text{weight})$ is implemented in the `daily_probability_of_escape(day, weight)` function.
+The probability that a chicken with daily weights $w = (w_1,\dots,w_N)$ **has not escaped** after $i+1$ days can be computed as follows:
+$$
+  f_{i+1} = f_i \, (1 - e(i, w_i))
+$$
+The `chickenwise_probability_of_escape(weights)` computes the probability that a chicken **has escaped** after `length(weights)` days.
+
+
+:::{.callout-tip collapse=true}
+###  Chickenwise probability of escape function
+
+```{r}
+bump <- function(x, loc=0, scale=1){
+  xi = (x - loc) / scale
+  ifelse(abs(xi) < 1, exp(-1/(1-xi^2)), 0.)
+}
+daily_probability_of_escape <- function(day, weight){
+  # Expects a day and a weight and computes the daily probability of escape
+  bump(day, 30, 10) * (1e-2 + bump(weight, 200, 150)+bump(weight, 700, 150))
+}
+chickenwise_probability_of_escape <- function(weights){
+  # Expects a vector of daily weights from day 1 to N and computes the probability of
+  # escape at the end of the time series
+  prob_of_failure = 1
+  for(day in 1:length(weights)){
+    prob_of_failure = prob_of_failure * (1-daily_probability_of_escape(day, weights[day]))
+  }
+  return(1 - prob_of_failure)
+}
+```
+:::
+
+```{r}
+#| fig-cap: Daily probability of escape for a given day and weight
+#| label: fig-prob
+days = 1:40
+weights = 1:900
+heatmap_matrix = outer(days,weights,daily_probability_of_escape)
+image(days, weights, heatmap_matrix, xlab="day", ylab="weight", main="Daily probability of escape")
+```
+
+::: {.callout-warning icon=false title="Subtask 2.a"}
+Compute and visualize the **distribution of the chickenwise probabilities of escape per diet**,
+according to the model provided in the template.
+:::
+::: {.callout-tip collapse=false}
+You can reuse the predictions you created in the previous subtask.
+**Work with the draws to compute the chickenwise probability of escape first, and then take the expectation!**
+:::
+:::{.content-visible when-profile="public"}
+```{r}
+# Useful r functions: chickenwise_probability_of_escape (see above)
+# rep(..., each=...), apply,
+# ggplot, stat_dotsinterval
+```
+:::
+:::{.callout-note icon=false title="Rubric"}
+* Does the plot look right and is it readable? It should be quite close to the reference plot below:
+:::
+
+::: {.callout-warning icon=false title="Subtask 2.b"}
+Compute the **expected probability of escape for each diet**.
+Why would it be wrong to compute the expected probability of escape by
+applying the `chickenwise_probability_of_escape` function in the template to the
+*daily expected chicken weights per diet* computed in subtask 2.a?
+How does the correctly calculated value compare to the incorrectly calculated value?
+Why is one higher than the other?
+:::
+:::{.content-visible when-profile="public"}
+```{r}
+# Useful r functions: chickenwise_probability_of_escape (see above)
+# apply, aggregate,
+```
+:::
+:::{.callout-note icon=false title="Rubric"}
+* Do the results look correct and have they been presented in a readable way? They should be roughly the first column below for the correct calculation and the second column below for the wrong calculation: [
+
+diet chickenwise_loss meanwise_loss
+  1       0.55           0.83
+  2       0.57           0.67
+  3       0.50           0.10
+  4       0.52           0.15
+]{.content-hidden when-profile="public"}
+* Has it been explained that the expected probability of escape depends on ?
+* Has it been explained that
+
+?
+
+[AND/OR
+
+for some diets the “incorrect” computation (meanwise_loss) is lower because the mean growth curve (used in the incorrect meanwise_loss) “by chance” passes through the region of low probability of escape, even though due to high within-population variation most chickens’ growth curve won’t pass through that region of low probability of escape?
+
+(Due to a slightly misleading public rubric, either of the above answers would be sufficient)]{.content-hidden when-profile="public"}
+
+:::
+
+{{< include includes/_overall_quality.md >}}

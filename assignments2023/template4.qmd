@@ -1,0 +1,375 @@
+---
+title: "Assignment 4, 2023"
+author: "Aki Vehtari et al."
+format:
+  html:
+    toc: true
+    code-tools: true
+    code-line-numbers: true
+    number-sections: true
+    mainfont: Georgia, serif
+    page-layout: article
+  pdf:
+    geometry:
+    - left=1cm,top=1cm,bottom=1cm,right=7cm
+    number-sections: true
+    code-annotations: none
+editor: source
+---
+
+# General information
+
+**This is for BDA 2023**
+
+This assignment is related to Lecture 4 and Chapters 3 and 10.
+
+**The maximum amount of points from this assignment is 6.**
+
+We have prepared a **quarto template specific for this assignment ([html](template4.html), [qmd](https://avehtari.github.io/BDA_course_Aalto/assignments/template4.qmd), [pdf](template4.pdf))** to help you get started.
+
+::: {.callout-tip collapse=false}
+**Reading instructions:**
+
+- [**The reading instructions for BDA3 Chapter 3**](../BDA3_notes.html#ch3).
+- [**The reading instructions for BDA3 Chapter 10**](../BDA3_notes.html#ch10).
+
+{{< include includes/_grading_instructions.md >}}
+:::
+
+{{< include includes/_reporting_accuracy.md >}}
+
+{{< include includes/_general_info.md >}}
+
+::: {.callout-warning collapse=false}
+## Setup
+
+This is the template for [assignment 4](assignment4.html). You can download the [qmd-file](https://avehtari.github.io/BDA_course_Aalto/assignments/template4.qmd) or copy the code from this rendered document after clicking on `</> Code` in the top right corner.
+
+**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.**
+
+The following will set-up [`markmyassignment`](https://github.com/MansMeg/markmyassignment) to check your functions at the end of the notebook:
+
+```{r}
+if(!require(markmyassignment)){
+    install.packages("markmyassignment")
+    library(markmyassignment)
+}
+assignment_path = paste("https://github.com/avehtari/BDA_course_Aalto/",
+"blob/master/assignments/tests/assignment4.yml", sep="")
+set_assignment(assignment_path)
+```
+
+The following installs and loads the `aaltobda` package:
+```{r}
+if(!require(aaltobda)){
+    install.packages("aaltobda", repos = c("https://avehtari.github.io/BDA_course_Aalto/", getOption("repos")))
+    library(aaltobda)
+}
+```
+The following installs and loads the [`latex2exp` package](https://github.com/stefano-meschiari/latex2exp), which allows us to use LaTeX in plots:
+```{r}
+if(!require(latex2exp)){
+    install.packages("latex2exp")
+    library(latex2exp)
+}
+```
+:::
+
+# Bioassay model
+
+In this exercise, you will use a dose-response
+relation model that is used in BDA3 Section 3.7 and in
+[**the chapter reading
+instructions**](../BDA3_notes.html#ch3).
+The used likelihood is the same, but instead of uniform priors, we will
+use a bivariate normal distribution as the joint prior distribution of
+the parameters $\alpha$ and $\beta$.
+
+
+In the prior distribution for $(\alpha,\beta)$, the marginal
+distributions are $\alpha \sim N(0,2^2)$ and
+$\beta \sim N(10,10^2)$, and the correlation between them is
+$\mathrm{corr}(\alpha, \beta)=0.6$.
+
+::: {.callout-warning icon=false title="Subtask 2.a)"}
+Report the mean (vector of two
+values) and covariance (two by two matrix) of the bivariate normal
+distribution.
+:::
+
+::: {.callout-tip collapse=false}
+The mean and covariance of the bivariate normal
+distribution are a length--$2$ vector and a $2 \times 2$ matrix.
+The elements of the covariance matrix can be computed using the
+relation of correlation and covariance.
+:::
+
+You are given 4000 independent draws from the posterior distribution
+of the model in the dataset `bioassay_posterior` in the `aaltobda` package.
+
+::: {.callout-warning icon=false title="Subtask 2.b)"}
+Report
+
+* the mean as well as
+* 5 $\%$ and 95 $\%$ quantiles separately
+
+for both
+
+* $\alpha$ and
+* $\beta$.
+
+Report also the Monte Carlo standard
+errors (MCSEs) for the mean and quantile estimates and explain in text what does
+Monte Carlo standard error mean and how you decided the number of
+digits to show.
+:::
+
+::: {.callout-tip collapse=false}
+The answer is graded as correct only if the number of
+digits reported is correct. The number of significant digits can
+be different for the mean and quantile estimates. In some other
+cases, the number of digits reported can be less than MCSE
+allows for practical reasons as discussed in the lecture.
+
+ **Hint**:
+
+Quantiles can be computed with the `quantile`
+function. With $S$ draws, the MCSE for $\text{E}[\theta]$ is
+$\sqrt{\text{Var} [\theta]/S}$. MCSE for the quantile estimates
+can be computed with the `mcse_quantile` function from the
+`aaltobda` package.
+:::
+
+::: {.content-visible when-profile="public"}
+Loading the library and the data.
+``` {r}
+# Useful functions: quantile()
+# and mcse_quantile() (from aaltobda)
+
+data("bioassay_posterior")
+# The 4000 draws are now stored in the variable `bioassay_posterior`.
+# The below displays the first rows of the data:
+head(bioassay_posterior)
+```
+:::
+
+
+
+::: {.callout-note icon=false title="Rubric"}
+
+* Are the mean and covariance of the prior in a) reported? The correct answers are :
+    * Not reported
+    * Yes, but they are not correct
+    * Yes, and they are correct
+* Are the means and their MCSEs of alpha and beta in b) reported? Note that the number of digits
+reported for the means must follow the rule given in the assignment. The correct answers are
+alpha: mean  and
+beta: mean .
+    * Not reported
+    * Yes, but one or both means are incorrect
+    * Yes, and the means are correct
+* Are the quantiles and their MCSEs of alpha and beta in b) reported? Note that the number of digits
+reported for the quantiles must follow the rule given in the assignment. The correct answers are
+alpha: 5% quantile  and
+beta: 5% quantile [4.0 or 4 (MCSE 0.07043125) (here 4 is also accepted, because it can be sensible to use
+same reporting accuracy for both quantiles)]{.content-hidden when-profile="public"}, 95% quantile .
+    * Not reported
+    * Yes, but one or more quantiles are incorrect
+    * Yes, and the quantiles are correct
+
+:::
+
+# Importance sampling
+
+Now we discard our posterior draws and switch to importance sampling.
+
+::: {.callout-warning icon=false title="Subtask 3.c)"}
+Implement a function for computing the log importance ratios (log
+importance weights) when the importance sampling **target
+distribution** is the posterior distribution, and the **proposal
+distribution** is the prior distribution from a).
+Explain in words why it's better to compute log ratios instead of
+ratios.
+:::
+
+::: {.callout-tip collapse=false}
+Non-log importance ratios are given by
+equation (10.3) in the course book. The fact that our proposal
+distribution is the same as the prior distribution makes this
+task easier. The **logarithm** of the likelihood can be computed
+with the `bioassaylp` function from the `aaltobda` package. The
+data required for the likelihood can be loaded with
+`data("bioassay")`.
+:::
+
+::: {.content-visible when-profile="public"}
+```{r}
+# Useful functions: bioassaylp (from aaltobda)
+alpha_test = c(1.896, -3.6,  0.374, 0.964, -3.123, -1.581)
+beta_test = c(24.76, 20.04, 6.15, 18.65, 8.16, 17.4)
+
+
+log_importance_weights <- function(alpha, beta) {
+    # Do computation here, and return as below.
+    # This is the correct return value for the test data provided above.
+    c(-8.95, -23.47, -6.02, -8.13, -16.61, -14.57)
+}
+```
+:::
+
+::: {.callout-warning icon=false title="Subtask 3.d)"}
+Implement a function for computing normalized importance ratios from
+the unnormalized log ratios in c). In other words, exponentiate the
+log ratios and scale them such that they sum to one. Explain in
+words what is the effect of exponentiating and scaling so that sum
+is one.
+:::
+
+::: {.content-visible when-profile="public"}
+```{r}
+normalized_importance_weights <- function(alpha, beta) {
+    # Do computation here, and return as below.
+    # This is the correct return value for the test data provided above.
+    c(0.045, 0.000, 0.852, 0.103, 0.000, 0.000)
+}
+```
+:::
+
+::: {.callout-warning icon=false title="Subtask 3.e)"}
+Sample 4000 draws of $\alpha$ and $\beta$ from the prior
+distribution from a). Compute and plot a histogram of the 4000
+normalized importance ratios. Use the functions you implemented
+in c) and d).
+:::
+
+::: {.callout-tip collapse=false}
+Use the function `rmvnorm` from the `aaltobda`
+package for sampling.
+:::
+
+::: {.content-visible when-profile="public"}
+Write your answers and code here!
+:::
+
+::: {.callout-warning icon=false title="Subtask 3.f)"}
+Using the importance ratios, compute the importance sampling
+effective sample size $S_{\text{eff}}$ and report it.
+:::
+
+::: {.callout-tip collapse=false}
+Equation (10.4) in the course book.
+
+*BDA3 1st (2013) and 2nd (2014) printing have an error
+for $\tilde{w}(\theta^s)$ used in the effective sample size
+equation (10.4). The normalized weights equation should not have
+the multiplier S (the normalized weights should sum to one).
+The later printings, the online version, and the slides have the
+correct equation.*
+:::
+
+
+::: {.content-visible when-profile="public"}
+```{r}
+S_eff <- function(alpha, beta) {
+    # Do computation here, and return as below.
+    # This is the correct return value for the test data provided above.
+    1.354
+}
+```
+:::
+
+
+::: {.callout-warning icon=false title="Subtask 3.g)"}
+Explain in your own words what the importance sampling effective
+sample size represents. Also explain how the effective sample size
+is seen in the histogram of the weights that you plotted in e).
+:::
+
+
+::: {.callout-warning icon=false title="Subtask 3.h)"}
+Implement a function for computing the posterior mean using
+importance sampling, and compute the mean using your 4000 draws.
+Explain in your own words the computation for importance sampling.
+Report the means for $\alpha$ and $\beta$, and also the Monte Carlo standard errors (MCSEs) for the mean
+estimates. Report the number of digits for the means based on the
+MCSEs.
+:::
+
+::: {.callout-tip collapse=false}
+The values below are *only* a test case, you need to
+use 4000 draws for $\alpha$ and $\beta$ in the final report.
+
+Use the same equation for the MCSE of
+$\text{E}[\theta]$ as earlier ($\sqrt{\text{Var} [\theta]/S}$),
+but now replace $S$ with $S_{\text{eff}}$. To compute
+$\text{Var} [\theta]$ with importance sampling, use the identity
+$\text{Var}[\theta] = \text{E}[\theta^2] - \text{E}[\theta]^2$.
+:::
+
+::: {.content-visible when-profile="public"}
+```{r}
+posterior_mean <- function(alpha, beta) {
+    # Do computation here, and return as below.
+    # This is the correct return value for the test data provided above.
+    c(0.503, 8.275)
+}
+```
+:::
+
+
+::: {.callout-note icon=false title="Rubric"}
+
+* Is the source code for the function in c) reported?
+    * No
+    * Yes
+* Is the source code for the function in d) reported?
+    * No
+    * Yes
+* Does the histogram in e) look something like this figure?
+If it is evident that the normalized importance ratios are computed correctly, but the prior was incorrect,
+you can still grade "Reported and looks similar".
+    * Not reported
+    * Reported, but looks different
+    * Reported and looks similar
+* Is the effective sample size in f) reported?
+The correct range for the effective sample size is between .
+However, if it is evident that the effective sample size is computed correctly, but the prior was incorrect,
+you can still grade "Yes, and it is correct".
+    * No
+    * Yes, but it is not correct
+    * Yes, and it is correct
+* The correct explanation for g) is roughly the following: [The importance sampling effective sample size
+is a rough measure of how many of the draws have an effect for the importance sampling task. In other
+words, it measures the accuracy of importance sampling.]{.content-hidden when-profile="public"}
+* What is the connection between S_eff and the histogram of weights: [A large number of small weights leads to a small effective sample size. In the histogram of the weights,
+this is seen as a big spike close to zero.
+It is also okay to discuss the variance of the distribution of weights. It is also okay to mention that in
+this assignment, there are no extremely large weights, which indicates that importance sampling can
+be trusted.]{.content-hidden when-profile="public"} How is the answer?
+    * Totally wrong/has not tried
+    * Something is a bit wrong
+    * Explanation is sensible
+* Is the source code for the function in h) reported?
+    * No
+    * Yes
+* Are the means and their MCSEs of alpha and beta in h) reported? Note that the number of digits
+reported for the means must follow the rule given in the assignment. The correct answers should be
+close to these:
+alpha: mean 
+    * Not reported
+    * Yes, but they are incorrect
+    * Yes, and they are correct
+:::
+
+
+
+::: {.callout-warning collapse=false}
+## markmyassignment
+The following will check the functions for which `markmyassignment` has been set up:
+
+```{r}
+mark_my_assignment()
+```
+:::
+
+{{< include includes/_overall_quality.md >}}

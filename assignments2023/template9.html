@@ -1,0 +1,1670 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.550">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Aki Vehtari et al.">
+
+<title>Bayesian Data Analysis Assignments 2023 - Assignment 9, 2023</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./template8.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./template1.html">Templates</a></li><li class="breadcrumb-item"><a href="./template9.html">Assignment 9, 2023</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Bayesian Data Analysis Assignments 2023</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">General instructions</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment_instructions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment instructions</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Assignments</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 1, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 2, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 3, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 4, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 5, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 6, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 7, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 8, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./assignment9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 9, 2023</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Templates</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 1, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 2, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 3, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 4, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 5, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 6, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 7, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 8, 2023</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./template9.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Assignment 9, 2023</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#general-information" id="toc-general-information" class="nav-link active" data-scroll-target="#general-information"><span class="header-section-number">1</span> General information</a></li>
+  <li><a href="#escaping-from-the-chicken-coop" id="toc-escaping-from-the-chicken-coop" class="nav-link" data-scroll-target="#escaping-from-the-chicken-coop"><span class="header-section-number">2</span> Escaping from the chicken coop</a></li>
+  <li><a href="#overall-quality-of-the-report" id="toc-overall-quality-of-the-report" class="nav-link" data-scroll-target="#overall-quality-of-the-report"><span class="header-section-number">3</span> Overall quality of the report</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="template9.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./template1.html">Templates</a></li><li class="breadcrumb-item"><a href="./template9.html">Assignment 9, 2023</a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Assignment 9, 2023</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<p class="subtitle lead">Decision analysis</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Aki Vehtari et al. </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="general-information" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> General information</h1>
+<p><strong>This is for BDA 2023</strong></p>
+<p><strong>The maximum amount of points from this assignment is 3.</strong></p>
+<p>We have prepared a <strong>quarto template specific to this assignment (<a href="template9.html">html</a>, <a href="https://avehtari.github.io/BDA_course_Aalto/assignments/template9.qmd">qmd</a>, <a href="template9.pdf">pdf</a>)</strong> to help you get started.</p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Setup">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Setup
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>We recommend Aalto students use <a href="https://jupyter.cs.aalto.fi">jupyter.cs.aalto.fi</a>, for all others we also provide a <a href="docker.html">docker container</a>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p><strong>Reading instructions</strong>:</p>
+<ul>
+<li><a href="../BDA3_notes.html#ch6"><strong>The reading instructions for BDA3 Chapter 9</strong></a> (decision analysis).</li>
+</ul>
+<p><strong>Grading instructions:</strong></p>
+<p>The grading will be done in peergrade. All grading questions and evaluations for this assignment are contained within this document in the collapsible <strong>Rubric</strong> blocks.</p>
+<p><strong>Installing and using <code>CmdStanR</code>:</strong></p>
+<p>See the <a href="https://avehtari.github.io/BDA_course_Aalto/demos.html">Stan demos</a> on how to use Stan in R (or Python). <a href="https://Aalto%20JupyterHub">Aalto JupyterHub</a> has working R and CmdStanR/RStan environment and is probably the easiest way to use Stan. * To use CmdStanR in <a href="https://Aalto%20JupyterHub">Aalto JupyterHub</a>:<br> <code>library(cmdstanr)</code><br> <code>set_cmdstan_path('/coursedata/cmdstan')</code></p>
+<p>The Aalto Ubuntu desktops also have the necessary libraries installed.</p>
+<p>To install Stan on your laptop, run ‘install.packages("cmdstanr", repos = c("https://mc-stan.org/r-packages/", getOption("repos")))’ in R. If you encounter problems, see additional answers in <a href="https://avehtari.github.io/BDA_course_Aalto/FAQ.html"><strong>FAQ</strong></a>. For Aalto students, if you don’t succeed in short amount of time, it is probably easier to use <a href="https://Aalto%20JupyterHub">Aalto JupyterHub</a>.</p>
+<p>If you use <code>Aalto JupyterHub</code>, all necessary packages have been pre-installed. In your laptop, install package <code>cmdstanr</code>. Installation instructions on Linux, Mac and Windows can be found at <a href="https://mc-stan.org/cmdstanr/" class="uri">https://mc-stan.org/cmdstanr/</a>. Additional useful packages are <code>loo</code>, <code>bayesplot</code> and <code>posterior</code> (but you don’t need these in this assignment). For Python users, <code>PyStan</code>, <code>CmdStanPy</code>, and <code>ArviZ</code> packages are useful.</p>
+<p>Stan manual can be found at <a href="https://mc-stan.org/users/documentation/" class="uri">https://mc-stan.org/users/documentation/</a>. From this website, you can also find a lot of other useful material about Stan.</p>
+<p>If you edit files ending <code>.stan</code> in RStudio, you can click “Check” in the editor toolbar to make syntax check. This can significantly speed-up writing a working Stan model.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Reporting accuracy
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p><strong>For posterior statistics of interest, only report digits that are not completely random based on the Monte Carlo standard error (MCSE).</strong></p>
+<p><em>Example:</em> If you estimate <span class="math inline">\(E(\mu) \approx 1.234\)</span> with MCSE(<span class="math inline">\(E(\mu)\)</span>) = 0.01, then the true expectation is likely to be between <span class="math inline">\(1.204\)</span> and <span class="math inline">\(1.264\)</span>, it makes sense to report <span class="math inline">\(E(\mu) \approx 1.2\)</span>.</p>
+<p>See Lecture video 4.1, <a href="../BDA3_notes.html#ch10">the chapter notes</a>, and <a href="https://avehtari.github.io/casestudies/Digits/digits.html">a case study</a> for more information.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Further information
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li>The recommended tool in this course is R (with the IDE RStudio).</li>
+<li>Instead of installing R and RStudio on you own computer, see <a href="https://avehtari.github.io/BDA_course_Aalto/FAQ.html#How_to_use_R_and_RStudio_remotely"><strong>how to use R and RStudio remotely</strong></a>.</li>
+<li>If you want to install R and RStudio locally, download <a href="https://posit.co/download/rstudio-desktop/">R and RStudio</a>.</li>
+<li>There are tons of tutorials, videos and introductions to R and RStudio online. You can find some initial hints from <a href="https://education.rstudio.com/"><strong>RStudio Education pages</strong></a>.</li>
+<li>When working with R, we recommend writing the report using <code>quarto</code> and the provided template. The template includes the formatting instructions and how to include code and figures.</li>
+<li>Instead of <code>quarto</code>, you can use other software to make the PDF report, but the the same instructions for formatting should be used.</li>
+<li>Report all results in a single, <strong>anonymous</strong> *.pdf -file and submit it in <a href="peergrade.io"><strong>peergrade.io</strong></a>.</li>
+<li>The course has its own R package <code>aaltobda</code> with data and functionality to simplify coding. The package is pre-installed in JupyterHub. To install the package on your own system, run the following code (upgrade="never" skips question about updating other packages):</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">install.packages</span>(<span class="st">"aaltobda"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://avehtari.github.io/BDA_course_Aalto/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Many of the exercises can be checked automatically using the R package <code>markmyassignment</code> (pre-installed in JupyterHub). Information on how to install and use the package can be found in <a href="https://cran.r-project.org/web/packages/markmyassignment/vignettes/markmyassignment.html">the <code>markmyassignment</code> documentation</a>. There is no need to include <code>markmyassignment</code> results in the report.</li>
+<li>Recommended additional self study exercises for each chapter in BDA3 are listed in the course web page. These will help to gain deeper understanding of the topic.</li>
+<li>Common questions and answers regarding installation and technical problems can be found in <a href="https://avehtari.github.io/BDA_course_Aalto/FAQ.html">Frequently Asked Questions (FAQ)</a>.</li>
+<li>Deadlines for all assignments can be found on the course web page and in Peergrade. You can set email alerts for the deadlines in Peergrade settings.</li>
+<li>You are allowed to discuss assignments with your friends, but it is not allowed to copy solutions directly from other students or from internet.</li>
+<li>You can copy, e.g., plotting code from the course demos, but really try to solve the actual assignment problems with your own code and explanations.</li>
+<li>Do not share your answers publicly.</li>
+<li>Do not copy answers from the internet or from previous years. We compare the answers to the answers from previous years and to the answers from other students this year.</li>
+<li>Use of AI is allowed on the course, but the most of the work needs to by the student, and you need to report whether you used AI and in which way you used them (See <a href="https://www.aalto.fi/en/services/guidance-for-the-use-of-artificial-intelligence-in-teaching-and-learning-at-aalto-university">points 5 and 6 in Aalto guidelines for use of AI in teaching</a>).</li>
+<li>All suspected plagiarism will be reported and investigated. See more about the <a href="https://into.aalto.fi/display/ensaannot/Aalto+University+Code+of+Academic+Integrity+and+Handling+Violations+Thereof"><strong>Aalto University Code of Academic Integrity and Handling Violations Thereof</strong></a>.</li>
+<li>Do not submit empty PDFs, almost empty PDFs, copy of the questions, nonsense generated by yourself or AI, as these are just harming the other students as they can’t do peergrading for the empty or nonsense submissions. Violations of this rule will be reported and investigated in the same way was plagiarism.</li>
+<li>If you have any suggestions or improvements to the course material, please post in the course chat feedback channel, create an issue, or submit a pull request to the public repository!</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Can you open the PDF and it’s not blank nor nonsense? If the pdf is blank, nonsense, or something like only a copy of the questions, 1) report it as problematic in Peergrade-interface to get another report to review, and 2) send a message to TAs.</li>
+<li>Is the report anonymous?</li>
+</ul>
+</div>
+</div>
+<p>This is the template for <a href="assignment9.html">assignment 9</a>. You can download the <a href="https://avehtari.github.io/BDA_course_Aalto/assignments/template9.qmd">qmd-file</a> or copy the code from this rendered document after clicking on <code>&lt;/&gt; Code</code> in the top right corner.</p>
+<p><strong>Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.</strong></p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Setup
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>The following loads several needed packages:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">library</span>(bayesplot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>This is bayesplot version 1.11.1.9000</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>- Online documentation and vignettes at mc-stan.org/bayesplot</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>- bayesplot theme set to bayesplot::theme_default()</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>   * Does _not_ affect other ggplot2 plots</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>   * See ?bayesplot_theme_set for details on theme setting</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">library</span>(cmdstanr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>This is cmdstanr version 0.8.1.9000</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>- CmdStanR documentation and vignettes: mc-stan.org/cmdstanr</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>- CmdStan path: /u/77/ave/unix/.cmdstan/cmdstan-2.35.0-rc3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>- CmdStan version: 2.35.0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="fu">library</span>(ggdist) <span class="co"># for stat_dotsinterval</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a><span class="fu">library</span>(posterior)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>This is posterior version 1.6.0</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'posterior'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:bayesplot':
+
+    rhat</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    mad, sd, var</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    %in%, match</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">library</span>(brms)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: Rcpp</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading 'brms' package (version 2.21.6). Useful instructions
+can be found by typing help('brms'). A more detailed introduction
+to the package is available through vignette('brms_overview').</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'brms'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:ggdist':
+
+    dstudent_t, pstudent_t, qstudent_t, rstudent_t</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:bayesplot':
+
+    rhat</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:stats':
+
+    ar</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="co"># Globally specfiy cmdstan backend for brms</span></span>
+<span id="cb30-2"><a href="#cb30-2"></a><span class="fu">options</span>(<span class="at">brms.backend=</span><span class="st">"cmdstanr"</span>)</span>
+<span id="cb30-3"><a href="#cb30-3"></a><span class="co"># Tell brms to cache results if possible</span></span>
+<span id="cb30-4"><a href="#cb30-4"></a><span class="fu">options</span>(<span class="at">brms.file_refit=</span><span class="st">"on_change"</span>)</span>
+<span id="cb30-5"><a href="#cb30-5"></a></span>
+<span id="cb30-6"><a href="#cb30-6"></a><span class="co"># Set more readable themes with bigger font for plotting packages</span></span>
+<span id="cb30-7"><a href="#cb30-7"></a>ggplot2<span class="sc">::</span><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
+<span id="cb30-8"><a href="#cb30-8"></a>bayesplot<span class="sc">::</span><span class="fu">bayesplot_theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>This exercise is an example of a decision analysis (DA). In a broad context, this means optimizing over different decisions that lead to different outcomes that all have different utilities. In a Bayesian context, this means using posterior distributions to make decisions.</p>
+</section>
+<section id="escaping-from-the-chicken-coop" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Escaping from the chicken coop</h1>
+<p>You are an adult chicken living in an organic chicken commune, where life is great, if a bit boring. You have settled in comfortably, but you want something more for your offspring. Your traveling corvid friends tell you of places where chickens eat corn all day, get ferried around in <a href="https://www.chicken-trailer.de/en/chicken-trailer-en/chicken-trailer-330">mobile chicken coops to see the world</a> or <a href="https://en.wikipedia.org/wiki/Marian_Breland_Bailey#:~:text=Popular%20acts%20included,that%20played%20basketball.">get mental stimulation by being trained humanely to perform tricks</a>. The chicken elders have gained access to the computers of your human caretakers and have found the results of a complicated statistical analysis of the growth curves of your relatives. Because you are a chicken, you don’t care about convergence diagnostics or priors.</p>
+<p><strong>Your task is to maximizes the chance of escape for your offspring.</strong></p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 2.c">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 2.c
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Compute and visualize the <strong>expected chicken weight for days 1–40 per diet</strong>, according to the model provided in the template. Do the predictions look reasonable? Why/why not?</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>To sample a “new chicken” from the posterior, use <a href="https://rdrr.io/cran/brms/man/posterior_epred.brmsfit.html">posterior_predict</a> with options <code>newdata=..., allow_new_levels=TRUE, sample_new_levels="gaussian"</code>, where you pass a dataframe as <code>newdata</code> which has a “new” chicken ID <code>Chick</code> and appropriate values for <code>Time</code> and <code>Diet</code>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+A simple GP model
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>The below fits a GP model to the chicken growth curves. It may take a few minutes to fit, but you can also <a href="./additional_files/assignment9/gp_chicken_fit.rds">download the fit <code>.rds</code>-file</a> and work with that fit object.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
+<span id="cb31-2"><a href="#cb31-2"></a>  weight <span class="sc">~</span> <span class="fu">gp</span>(Time) <span class="sc">+</span> (<span class="dv">0</span><span class="sc">+</span>Time<span class="sc">|</span>Diet) <span class="sc">+</span> (<span class="dv">0</span><span class="sc">+</span>Time<span class="sc">|</span>Chick),</span>
+<span id="cb31-3"><a href="#cb31-3"></a>  <span class="at">data =</span> ChickWeight,</span>
+<span id="cb31-4"><a href="#cb31-4"></a>  <span class="at">family =</span> <span class="st">"lognormal"</span>,</span>
+<span id="cb31-5"><a href="#cb31-5"></a>  <span class="at">file=</span><span class="st">"additional_files/assignment9/gp_chicken_fit"</span>,</span>
+<span id="cb31-6"><a href="#cb31-6"></a>  <span class="at">cores =</span> parallel<span class="sc">::</span><span class="fu">detectCores</span>(),</span>
+<span id="cb31-7"><a href="#cb31-7"></a>  <span class="co"># For the template only, remove the below from your code!</span></span>
+<span id="cb31-8"><a href="#cb31-8"></a>  <span class="at">iter =</span> <span class="dv">500</span></span>
+<span id="cb31-9"><a href="#cb31-9"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Start sampling</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Running MCMC with 4 chains, at most 12 in parallel...
+
+Chain 1 Iteration:   1 / 500 [  0%]  (Warmup) 
+Chain 2 Iteration:   1 / 500 [  0%]  (Warmup) 
+Chain 3 Iteration:   1 / 500 [  0%]  (Warmup) 
+Chain 4 Iteration:   1 / 500 [  0%]  (Warmup) 
+Chain 2 Iteration: 100 / 500 [ 20%]  (Warmup) 
+Chain 4 Iteration: 100 / 500 [ 20%]  (Warmup) 
+Chain 3 Iteration: 100 / 500 [ 20%]  (Warmup) 
+Chain 1 Iteration: 100 / 500 [ 20%]  (Warmup) 
+Chain 2 Iteration: 200 / 500 [ 40%]  (Warmup) 
+Chain 4 Iteration: 200 / 500 [ 40%]  (Warmup) 
+Chain 3 Iteration: 200 / 500 [ 40%]  (Warmup) 
+Chain 2 Iteration: 251 / 500 [ 50%]  (Sampling) 
+Chain 4 Iteration: 251 / 500 [ 50%]  (Sampling) 
+Chain 3 Iteration: 251 / 500 [ 50%]  (Sampling) 
+Chain 1 Iteration: 200 / 500 [ 40%]  (Warmup) 
+Chain 2 Iteration: 350 / 500 [ 70%]  (Sampling) 
+Chain 1 Iteration: 251 / 500 [ 50%]  (Sampling) 
+Chain 3 Iteration: 350 / 500 [ 70%]  (Sampling) 
+Chain 4 Iteration: 350 / 500 [ 70%]  (Sampling) 
+Chain 2 Iteration: 450 / 500 [ 90%]  (Sampling) 
+Chain 3 Iteration: 450 / 500 [ 90%]  (Sampling) 
+Chain 2 Iteration: 500 / 500 [100%]  (Sampling) 
+Chain 2 finished in 16.4 seconds.
+Chain 4 Iteration: 450 / 500 [ 90%]  (Sampling) 
+Chain 3 Iteration: 500 / 500 [100%]  (Sampling) 
+Chain 1 Iteration: 350 / 500 [ 70%]  (Sampling) 
+Chain 3 finished in 16.8 seconds.
+Chain 4 Iteration: 500 / 500 [100%]  (Sampling) 
+Chain 4 finished in 18.2 seconds.
+Chain 1 Iteration: 450 / 500 [ 90%]  (Sampling) 
+Chain 1 Iteration: 500 / 500 [100%]  (Sampling) 
+Chain 1 finished in 21.8 seconds.
+
+All 4 chains finished successfully.
+Mean chain execution time: 18.3 seconds.
+Total execution time: 21.9 seconds.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: 47 of 1000 (5.0%) transitions ended with a divergence.
+See https://mc-stan.org/misc/warnings for details.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: 819 of 1000 (82.0%) transitions hit the maximum treedepth limit of 10.
+See https://mc-stan.org/misc/warnings for details.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: rstan</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: StanHeaders</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+rstan version 2.35.0.9000 (Stan version 2.35.0)</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>For execution on a local, multicore CPU with excess RAM we recommend calling
+options(mc.cores = parallel::detectCores()).
+To avoid recompilation of unchanged Stan programs, we recommend calling
+rstan_options(auto_write = TRUE)
+For within-chain threading using `reduce_sum()` or `map_rect()` Stan functions,
+change `threads_per_chain` option:
+rstan_options(threads_per_chain = 1)</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'rstan'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:posterior':
+
+    ess_bulk, ess_tail</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a>brms<span class="sc">::</span><span class="fu">pp_check</span>(fit, <span class="at">type =</span> <span class="st">"intervals_grouped"</span>, <span class="at">group =</span> <span class="st">"Diet"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Using all posterior draws for ppc type 'intervals_grouped' by default.</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="template9_files/figure-html/fit-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a><span class="co"># Useful r functions:</span></span>
+<span id="cb44-2"><a href="#cb44-2"></a><span class="co">#   rep(..., each=...), cbind, colMeans,</span></span>
+<span id="cb44-3"><a href="#cb44-3"></a><span class="co">#   posterior_predict(..., newdata=..., allow_new_levels=TRUE, sample_new_levels="gaussian")</span></span>
+<span id="cb44-4"><a href="#cb44-4"></a><span class="co">#   ggplot, geom_line, aes(..., group=..., color=...)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Does the plot look right and is it readable? It should be quite close to the reference plot below:</li>
+<li>Has it been recognized that the prediction time ?</li>
+</ul>
+</div>
+</div>
+<p>Your chicken elders have been meticulously collecting data on what kind of characteristics have allowed previous chickens to escape. They have found out that both the age and the weight influence the (daily) probability of escape for a chicken:</p>
+<ul>
+<li>If the chicken is too young, it is not yet mature enough to venture out into the world.</li>
+<li>If the chicken is too old, it will not try to escape anymore.</li>
+<li>If the chicken is small and has just the right size, it can try to squeze through a tiny crack in the fence.</li>
+<li>If the chicken is big enough, it is strong enough to try to fly over the fence.</li>
+<li>No matter the size, there is always a small residual probability that the chicken can escape.</li>
+</ul>
+<p>Every day, chickens will try to escape if they are of the right age. Their daily escape probability <span class="math inline">\(e(\text{day}, \text{weight})\)</span> is implemented in the <code>daily_probability_of_escape(day, weight)</code> function. The probability that a chicken with daily weights <span class="math inline">\(w = (w_1,\dots,w_N)\)</span> <strong>has not escaped</strong> after <span class="math inline">\(i+1\)</span> days can be computed as follows: <span class="math display">\[
+  f_{i+1} = f_i \, (1 - e(i, w_i))
+\]</span> The <code>chickenwise_probability_of_escape(weights)</code> computes the probability that a chicken <strong>has escaped</strong> after <code>length(weights)</code> days.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Chickenwise probability of escape function
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a>bump <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">loc=</span><span class="dv">0</span>, <span class="at">scale=</span><span class="dv">1</span>){</span>
+<span id="cb45-2"><a href="#cb45-2"></a>  xi <span class="ot">=</span> (x <span class="sc">-</span> loc) <span class="sc">/</span> scale</span>
+<span id="cb45-3"><a href="#cb45-3"></a>  <span class="fu">ifelse</span>(<span class="fu">abs</span>(xi) <span class="sc">&lt;</span> <span class="dv">1</span>, <span class="fu">exp</span>(<span class="sc">-</span><span class="dv">1</span><span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>xi<span class="sc">^</span><span class="dv">2</span>)), <span class="fl">0.</span>)</span>
+<span id="cb45-4"><a href="#cb45-4"></a>}</span>
+<span id="cb45-5"><a href="#cb45-5"></a>daily_probability_of_escape <span class="ot">&lt;-</span> <span class="cf">function</span>(day, weight){</span>
+<span id="cb45-6"><a href="#cb45-6"></a>  <span class="co"># Expects a day and a weight and computes the daily probability of escape</span></span>
+<span id="cb45-7"><a href="#cb45-7"></a>  <span class="fu">bump</span>(day, <span class="dv">30</span>, <span class="dv">10</span>) <span class="sc">*</span> (<span class="fl">1e-2</span> <span class="sc">+</span> <span class="fu">bump</span>(weight, <span class="dv">200</span>, <span class="dv">150</span>)<span class="sc">+</span><span class="fu">bump</span>(weight, <span class="dv">700</span>, <span class="dv">150</span>))</span>
+<span id="cb45-8"><a href="#cb45-8"></a>}</span>
+<span id="cb45-9"><a href="#cb45-9"></a>chickenwise_probability_of_escape <span class="ot">&lt;-</span> <span class="cf">function</span>(weights){</span>
+<span id="cb45-10"><a href="#cb45-10"></a>  <span class="co"># Expects a vector of daily weights from day 1 to N and computes the probability of</span></span>
+<span id="cb45-11"><a href="#cb45-11"></a>  <span class="co"># escape at the end of the time series</span></span>
+<span id="cb45-12"><a href="#cb45-12"></a>  prob_of_failure <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb45-13"><a href="#cb45-13"></a>  <span class="cf">for</span>(day <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(weights)){</span>
+<span id="cb45-14"><a href="#cb45-14"></a>    prob_of_failure <span class="ot">=</span> prob_of_failure <span class="sc">*</span> (<span class="dv">1</span><span class="sc">-</span><span class="fu">daily_probability_of_escape</span>(day, weights[day]))</span>
+<span id="cb45-15"><a href="#cb45-15"></a>  }</span>
+<span id="cb45-16"><a href="#cb45-16"></a>  <span class="fu">return</span>(<span class="dv">1</span> <span class="sc">-</span> prob_of_failure)</span>
+<span id="cb45-17"><a href="#cb45-17"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a>days <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">40</span></span>
+<span id="cb46-2"><a href="#cb46-2"></a>weights <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">900</span></span>
+<span id="cb46-3"><a href="#cb46-3"></a>heatmap_matrix <span class="ot">=</span> <span class="fu">outer</span>(days,weights,daily_probability_of_escape)</span>
+<span id="cb46-4"><a href="#cb46-4"></a><span class="fu">image</span>(days, weights, heatmap_matrix, <span class="at">xlab=</span><span class="st">"day"</span>, <span class="at">ylab=</span><span class="st">"weight"</span>, <span class="at">main=</span><span class="st">"Daily probability of escape"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-prob" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-prob-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="template9_files/figure-html/fig-prob-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-prob-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Daily probability of escape for a given day and weight
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 2.a">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 2.a
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Compute and visualize the <strong>distribution of the chickenwise probabilities of escape per diet</strong>, according to the model provided in the template.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>You can reuse the predictions you created in the previous subtask. <strong>Work with the draws to compute the chickenwise probability of escape first, and then take the expectation!</strong></p>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a><span class="co"># Useful r functions: chickenwise_probability_of_escape (see above)</span></span>
+<span id="cb47-2"><a href="#cb47-2"></a><span class="co"># rep(..., each=...), apply,</span></span>
+<span id="cb47-3"><a href="#cb47-3"></a><span class="co"># ggplot, stat_dotsinterval</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Does the plot look right and is it readable? It should be quite close to the reference plot below:</li>
+</ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 2.b">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Subtask 2.b
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Compute the <strong>expected probability of escape for each diet</strong>. Why would it be wrong to compute the expected probability of escape by applying the <code>chickenwise_probability_of_escape</code> function in the template to the <em>daily expected chicken weights per diet</em> computed in subtask 2.a? How does the correctly calculated value compare to the incorrectly calculated value? Why is one higher than the other?</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a><span class="co"># Useful r functions: chickenwise_probability_of_escape (see above)</span></span>
+<span id="cb48-2"><a href="#cb48-2"></a><span class="co"># apply, aggregate,</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Do the results look correct and have they been presented in a readable way? They should be roughly the first column below for the correct calculation and the second column below for the wrong calculation: [</li>
+</ul>
+<p>diet chickenwise_loss meanwise_loss 1 0.55 0.83 2 0.57 0.67 3 0.50 0.10 4 0.52 0.15 ]{.content-hidden when-profile=“public”} * Has it been explained that the expected probability of escape depends on ? * Has it been explained that</p>
+<p>?</p>
+<p>[AND/OR</p>
+<p>for some diets the “incorrect” computation (meanwise_loss) is lower because the mean growth curve (used in the incorrect meanwise_loss) “by chance” passes through the region of low probability of escape, even though due to high within-population variation most chickens’ growth curve won’t pass through that region of low probability of escape?</p>
+<p>(Due to a slightly misleading public rubric, either of the above answers would be sufficient)]{.content-hidden when-profile=“public”}</p>
+</div>
+</div>
+</section>
+<section id="overall-quality-of-the-report" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Overall quality of the report</h1>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Rubric
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Does the report include comment on whether AI was used, and if AI was used, explanation on how it was used?
+<ul>
+<li>No</li>
+<li>Yes</li>
+</ul></li>
+<li>Does the report follow the formatting instructions?
+<ul>
+<li>Not at all</li>
+<li>Little</li>
+<li>Mostly</li>
+<li>Yes</li>
+</ul></li>
+<li>In case the report doesn’t fully follow the general and formatting instructions, specify the instructions that have not been followed. If applicable, specify the page of the report, where this difference is visible. This will help the other student to improve their reports so that they are easier to read and review. If applicable, specify the page of the report, where this difference in formatting is visible.</li>
+<li>Please also provide feedback on the presentation (e.g.&nbsp;text, layout, flow of the responses, figures, figure captions). Part of the course is practicing making data analysis reports. By providing feedback on the report presentation, other students can learn what they can improve or what they already did well. You should be able to provide constructive or positive feedback for all non-empty and non-nonsense reports. If you think the report is perfect, and you can’t come up with any suggestions how to improve, you can provide feedback on what you liked and why you think some part of the report is better than yours.</li>
+</ul>
+</div>
+</div>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./template8.html" class="pagination-link" aria-label="Assignment 8, 2023">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Assignment 8, 2023</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb49" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb49-1"><a href="#cb49-1"></a><span class="co">---</span></span>
+<span id="cb49-2"><a href="#cb49-2"></a><span class="an">title:</span><span class="co"> "Assignment 9, 2023"</span></span>
+<span id="cb49-3"><a href="#cb49-3"></a><span class="an">subtitle:</span><span class="co"> "Decision analysis"</span></span>
+<span id="cb49-4"><a href="#cb49-4"></a><span class="an">author:</span><span class="co"> "Aki Vehtari et al."</span></span>
+<span id="cb49-5"><a href="#cb49-5"></a><span class="an">format:</span></span>
+<span id="cb49-6"><a href="#cb49-6"></a><span class="co">  html:</span></span>
+<span id="cb49-7"><a href="#cb49-7"></a><span class="co">    toc: true</span></span>
+<span id="cb49-8"><a href="#cb49-8"></a><span class="co">    code-tools: true</span></span>
+<span id="cb49-9"><a href="#cb49-9"></a><span class="co">    code-line-numbers: true</span></span>
+<span id="cb49-10"><a href="#cb49-10"></a><span class="co">    number-sections: true</span></span>
+<span id="cb49-11"><a href="#cb49-11"></a><span class="co">    mainfont: Georgia, serif</span></span>
+<span id="cb49-12"><a href="#cb49-12"></a><span class="co">    page-layout: article</span></span>
+<span id="cb49-13"><a href="#cb49-13"></a><span class="co">  pdf:</span></span>
+<span id="cb49-14"><a href="#cb49-14"></a><span class="co">    geometry:</span></span>
+<span id="cb49-15"><a href="#cb49-15"></a><span class="co">    - left=1cm,top=1cm,bottom=1cm,right=7cm</span></span>
+<span id="cb49-16"><a href="#cb49-16"></a><span class="co">    number-sections: true</span></span>
+<span id="cb49-17"><a href="#cb49-17"></a><span class="co">    code-annotations: none</span></span>
+<span id="cb49-18"><a href="#cb49-18"></a><span class="an">editor:</span><span class="co"> source</span></span>
+<span id="cb49-19"><a href="#cb49-19"></a><span class="co">---</span></span>
+<span id="cb49-20"><a href="#cb49-20"></a></span>
+<span id="cb49-21"><a href="#cb49-21"></a><span class="fu"># General information</span></span>
+<span id="cb49-22"><a href="#cb49-22"></a></span>
+<span id="cb49-23"><a href="#cb49-23"></a>**This is for BDA 2023**</span>
+<span id="cb49-24"><a href="#cb49-24"></a></span>
+<span id="cb49-25"><a href="#cb49-25"></a>**The maximum amount of points from this assignment is 3.**</span>
+<span id="cb49-26"><a href="#cb49-26"></a></span>
+<span id="cb49-27"><a href="#cb49-27"></a>We have prepared a **quarto template specific to this assignment ([html](template9.html), [qmd](https://avehtari.github.io/BDA_course_Aalto/assignments/template9.qmd), [pdf](template9.pdf))** to help you get started.</span>
+<span id="cb49-28"><a href="#cb49-28"></a></span>
+<span id="cb49-29"><a href="#cb49-29"></a>:::{.callout-warning icon=false title="Setup" collapse=true}</span>
+<span id="cb49-30"><a href="#cb49-30"></a>We recommend Aalto students use <span class="co">[</span><span class="ot">jupyter.cs.aalto.fi</span><span class="co">](https://jupyter.cs.aalto.fi)</span>, for all others we also provide a <span class="co">[</span><span class="ot">docker container</span><span class="co">](docker.html)</span>.</span>
+<span id="cb49-31"><a href="#cb49-31"></a>:::</span>
+<span id="cb49-32"><a href="#cb49-32"></a></span>
+<span id="cb49-33"><a href="#cb49-33"></a></span>
+<span id="cb49-34"><a href="#cb49-34"></a>:::{.callout-tip collapse=false}</span>
+<span id="cb49-35"><a href="#cb49-35"></a>**Reading instructions**:</span>
+<span id="cb49-36"><a href="#cb49-36"></a></span>
+<span id="cb49-37"><a href="#cb49-37"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**The reading instructions for BDA3 Chapter 9**</span><span class="co">](../BDA3_notes.html#ch6)</span> (decision analysis).</span>
+<span id="cb49-38"><a href="#cb49-38"></a></span>
+<span id="cb49-39"><a href="#cb49-39"></a>{{&lt; include includes/_grading_instructions.md &gt;}}</span>
+<span id="cb49-40"><a href="#cb49-40"></a></span>
+<span id="cb49-41"><a href="#cb49-41"></a>{{&lt; include includes/_cmdstanr.md &gt;}}</span>
+<span id="cb49-42"><a href="#cb49-42"></a>:::</span>
+<span id="cb49-43"><a href="#cb49-43"></a></span>
+<span id="cb49-44"><a href="#cb49-44"></a>{{&lt; include includes/_reporting_accuracy.md &gt;}}</span>
+<span id="cb49-45"><a href="#cb49-45"></a></span>
+<span id="cb49-46"><a href="#cb49-46"></a>{{&lt; include includes/_general_info.md &gt;}}</span>
+<span id="cb49-47"><a href="#cb49-47"></a>::: {.content-visible when-profile="public"}</span>
+<span id="cb49-48"><a href="#cb49-48"></a>This is the template for <span class="co">[</span><span class="ot">assignment 9</span><span class="co">](assignment9.html)</span>. You can download the <span class="co">[</span><span class="ot">qmd-file</span><span class="co">](https://avehtari.github.io/BDA_course_Aalto/assignments/template9.qmd)</span> or copy the code from this rendered document after clicking on <span class="in">`&lt;/&gt; Code`</span> in the top right corner.</span>
+<span id="cb49-49"><a href="#cb49-49"></a></span>
+<span id="cb49-50"><a href="#cb49-50"></a>**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.**</span>
+<span id="cb49-51"><a href="#cb49-51"></a>:::</span>
+<span id="cb49-52"><a href="#cb49-52"></a>::: {.callout-warning collapse=false}</span>
+<span id="cb49-53"><a href="#cb49-53"></a><span class="fu">## Setup</span></span>
+<span id="cb49-54"><a href="#cb49-54"></a></span>
+<span id="cb49-55"><a href="#cb49-55"></a>The following loads several needed packages:</span>
+<span id="cb49-56"><a href="#cb49-56"></a></span>
+<span id="cb49-59"><a href="#cb49-59"></a><span class="in">```{r}</span></span>
+<span id="cb49-60"><a href="#cb49-60"></a><span class="co">#| label: imports</span></span>
+<span id="cb49-61"><a href="#cb49-61"></a><span class="fu">library</span>(bayesplot)</span>
+<span id="cb49-62"><a href="#cb49-62"></a><span class="fu">library</span>(cmdstanr)</span>
+<span id="cb49-63"><a href="#cb49-63"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb49-64"><a href="#cb49-64"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb49-65"><a href="#cb49-65"></a><span class="fu">library</span>(ggdist) <span class="co"># for stat_dotsinterval</span></span>
+<span id="cb49-66"><a href="#cb49-66"></a><span class="fu">library</span>(posterior)</span>
+<span id="cb49-67"><a href="#cb49-67"></a><span class="fu">library</span>(brms)</span>
+<span id="cb49-68"><a href="#cb49-68"></a><span class="co"># Globally specfiy cmdstan backend for brms</span></span>
+<span id="cb49-69"><a href="#cb49-69"></a><span class="fu">options</span>(<span class="at">brms.backend=</span><span class="st">"cmdstanr"</span>)</span>
+<span id="cb49-70"><a href="#cb49-70"></a><span class="co"># Tell brms to cache results if possible</span></span>
+<span id="cb49-71"><a href="#cb49-71"></a><span class="fu">options</span>(<span class="at">brms.file_refit=</span><span class="st">"on_change"</span>)</span>
+<span id="cb49-72"><a href="#cb49-72"></a></span>
+<span id="cb49-73"><a href="#cb49-73"></a><span class="co"># Set more readable themes with bigger font for plotting packages</span></span>
+<span id="cb49-74"><a href="#cb49-74"></a>ggplot2<span class="sc">::</span><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
+<span id="cb49-75"><a href="#cb49-75"></a>bayesplot<span class="sc">::</span><span class="fu">bayesplot_theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
+<span id="cb49-76"><a href="#cb49-76"></a><span class="in">```</span></span>
+<span id="cb49-77"><a href="#cb49-77"></a>:::</span>
+<span id="cb49-78"><a href="#cb49-78"></a></span>
+<span id="cb49-79"><a href="#cb49-79"></a></span>
+<span id="cb49-80"><a href="#cb49-80"></a></span>
+<span id="cb49-81"><a href="#cb49-81"></a></span>
+<span id="cb49-82"><a href="#cb49-82"></a>This exercise is an example of a decision analysis (DA). In a broad context, this means optimizing over different decisions that lead to different outcomes that all have different utilities. In a Bayesian context, this means using posterior distributions to make decisions.</span>
+<span id="cb49-83"><a href="#cb49-83"></a></span>
+<span id="cb49-84"><a href="#cb49-84"></a><span class="fu"># Escaping from the chicken coop</span></span>
+<span id="cb49-85"><a href="#cb49-85"></a></span>
+<span id="cb49-86"><a href="#cb49-86"></a>You are an adult chicken living in an organic chicken commune, where life is great, if a bit boring.</span>
+<span id="cb49-87"><a href="#cb49-87"></a>You have settled in comfortably, but you want something more for your offspring.</span>
+<span id="cb49-88"><a href="#cb49-88"></a>Your traveling corvid friends tell you of places where chickens eat corn all day,</span>
+<span id="cb49-89"><a href="#cb49-89"></a>get ferried around in <span class="co">[</span><span class="ot">mobile chicken coops to see the world</span><span class="co">](https://www.chicken-trailer.de/en/chicken-trailer-en/chicken-trailer-330)</span> or [get mental stimulation by being trained humanely to perform</span>
+<span id="cb49-90"><a href="#cb49-90"></a>tricks](https://en.wikipedia.org/wiki/Marian_Breland_Bailey#:~:text=Popular%20acts%20included,that%20played%20basketball.).</span>
+<span id="cb49-91"><a href="#cb49-91"></a>The chicken elders have gained access to the computers of your human caretakers</span>
+<span id="cb49-92"><a href="#cb49-92"></a>and have found the results of a complicated statistical analysis of the growth curves</span>
+<span id="cb49-93"><a href="#cb49-93"></a>of your relatives. Because you are a chicken, you don't care about convergence diagnostics or priors.</span>
+<span id="cb49-94"><a href="#cb49-94"></a></span>
+<span id="cb49-95"><a href="#cb49-95"></a>**Your task is to maximizes the chance of escape for your offspring.**</span>
+<span id="cb49-96"><a href="#cb49-96"></a></span>
+<span id="cb49-97"><a href="#cb49-97"></a>::: {.callout-warning icon=false title="Subtask 2.c"}</span>
+<span id="cb49-98"><a href="#cb49-98"></a>Compute and visualize the **expected chicken weight for days 1--40 per diet**, according to the</span>
+<span id="cb49-99"><a href="#cb49-99"></a>model provided in the template. Do the predictions look reasonable? Why/why not?</span>
+<span id="cb49-100"><a href="#cb49-100"></a>:::</span>
+<span id="cb49-101"><a href="#cb49-101"></a>::: {.callout-tip collapse=false}</span>
+<span id="cb49-102"><a href="#cb49-102"></a>To sample a "new chicken" from the posterior, use <span class="co">[</span><span class="ot">posterior_predict</span><span class="co">](https://rdrr.io/cran/brms/man/posterior_epred.brmsfit.html)</span> with options <span class="in">`newdata=..., allow_new_levels=TRUE, sample_new_levels="gaussian"`</span>, where you pass a dataframe as <span class="in">`newdata`</span> which has a "new" chicken ID <span class="in">`Chick`</span> and appropriate values for <span class="in">`Time`</span> and <span class="in">`Diet`</span>.</span>
+<span id="cb49-103"><a href="#cb49-103"></a>:::</span>
+<span id="cb49-104"><a href="#cb49-104"></a>:::{.callout-warning collapse=false}</span>
+<span id="cb49-105"><a href="#cb49-105"></a><span class="fu">### A simple GP model</span></span>
+<span id="cb49-106"><a href="#cb49-106"></a></span>
+<span id="cb49-107"><a href="#cb49-107"></a>The below fits a GP model to the chicken growth curves. It may take a few minutes to fit, but you</span>
+<span id="cb49-108"><a href="#cb49-108"></a>can also <span class="co">[</span><span class="ot">download the fit `.rds`-file</span><span class="co">](./additional_files/assignment9/gp_chicken_fit.rds)</span> and work with that fit object.</span>
+<span id="cb49-109"><a href="#cb49-109"></a></span>
+<span id="cb49-110"><a href="#cb49-110"></a><span class="in">```{r fit}</span></span>
+<span id="cb49-111"><a href="#cb49-111"></a></span>
+<span id="cb49-112"><a href="#cb49-112"></a><span class="in">fit &lt;- brm(</span></span>
+<span id="cb49-113"><a href="#cb49-113"></a><span class="in">  weight ~ gp(Time) + (0+Time|Diet) + (0+Time|Chick),</span></span>
+<span id="cb49-114"><a href="#cb49-114"></a><span class="in">  data = ChickWeight,</span></span>
+<span id="cb49-115"><a href="#cb49-115"></a><span class="in">  family = "lognormal",</span></span>
+<span id="cb49-116"><a href="#cb49-116"></a><span class="in">  file="additional_files/assignment9/gp_chicken_fit",</span></span>
+<span id="cb49-117"><a href="#cb49-117"></a><span class="in">  cores = parallel::detectCores(),</span></span>
+<span id="cb49-118"><a href="#cb49-118"></a><span class="in">  # For the template only, remove the below from your code!</span></span>
+<span id="cb49-119"><a href="#cb49-119"></a><span class="in">  iter = 500</span></span>
+<span id="cb49-120"><a href="#cb49-120"></a><span class="in">)</span></span>
+<span id="cb49-121"><a href="#cb49-121"></a><span class="in">brms::pp_check(fit, type = "intervals_grouped", group = "Diet")</span></span>
+<span id="cb49-122"><a href="#cb49-122"></a><span class="in">```</span></span>
+<span id="cb49-123"><a href="#cb49-123"></a>:::</span>
+<span id="cb49-124"><a href="#cb49-124"></a>:::{.content-visible when-profile="public"}</span>
+<span id="cb49-127"><a href="#cb49-127"></a><span class="in">```{r}</span></span>
+<span id="cb49-128"><a href="#cb49-128"></a><span class="co"># Useful r functions:</span></span>
+<span id="cb49-129"><a href="#cb49-129"></a><span class="co">#   rep(..., each=...), cbind, colMeans,</span></span>
+<span id="cb49-130"><a href="#cb49-130"></a><span class="co">#   posterior_predict(..., newdata=..., allow_new_levels=TRUE, sample_new_levels="gaussian")</span></span>
+<span id="cb49-131"><a href="#cb49-131"></a><span class="co">#   ggplot, geom_line, aes(..., group=..., color=...)</span></span>
+<span id="cb49-132"><a href="#cb49-132"></a><span class="in">```</span></span>
+<span id="cb49-133"><a href="#cb49-133"></a>:::</span>
+<span id="cb49-134"><a href="#cb49-134"></a>:::{.callout-note icon=false title="Rubric"}</span>
+<span id="cb49-135"><a href="#cb49-135"></a><span class="ss">* </span>Does the plot look right and is it readable? It should be quite close to the reference plot below:</span>
+<span id="cb49-136"><a href="#cb49-136"></a><span class="ss">* </span>Has it been recognized that the prediction time ?</span>
+<span id="cb49-137"><a href="#cb49-137"></a>:::</span>
+<span id="cb49-138"><a href="#cb49-138"></a></span>
+<span id="cb49-139"><a href="#cb49-139"></a>Your chicken elders have been meticulously collecting data on what kind of characteristics have allowed</span>
+<span id="cb49-140"><a href="#cb49-140"></a>previous chickens to escape. They have found out that both the age and the weight influence the (daily)</span>
+<span id="cb49-141"><a href="#cb49-141"></a>probability of escape for a chicken:</span>
+<span id="cb49-142"><a href="#cb49-142"></a></span>
+<span id="cb49-143"><a href="#cb49-143"></a><span class="ss">* </span>If the chicken is too young, it is not yet mature enough to venture out into the world.</span>
+<span id="cb49-144"><a href="#cb49-144"></a><span class="ss">* </span>If the chicken is too old, it will not try to escape anymore.</span>
+<span id="cb49-145"><a href="#cb49-145"></a><span class="ss">* </span>If the chicken is small and has just the right size, it can try to squeze through a tiny crack in the fence.</span>
+<span id="cb49-146"><a href="#cb49-146"></a><span class="ss">* </span>If the chicken is big enough, it is strong enough to try to fly over the fence.</span>
+<span id="cb49-147"><a href="#cb49-147"></a><span class="ss">* </span>No matter the size, there is always a small residual probability that the chicken can escape.</span>
+<span id="cb49-148"><a href="#cb49-148"></a></span>
+<span id="cb49-149"><a href="#cb49-149"></a>Every day, chickens will try to escape if they are of the right age.</span>
+<span id="cb49-150"><a href="#cb49-150"></a>Their daily escape probability $e(\text{day}, \text{weight})$ is implemented in the <span class="in">`daily_probability_of_escape(day, weight)`</span> function.</span>
+<span id="cb49-151"><a href="#cb49-151"></a>The probability that a chicken with daily weights $w = (w_1,\dots,w_N)$ **has not escaped** after $i+1$ days can be computed as follows:</span>
+<span id="cb49-152"><a href="#cb49-152"></a>$$</span>
+<span id="cb49-153"><a href="#cb49-153"></a>  f_{i+1} = f_i \, (1 - e(i, w_i))</span>
+<span id="cb49-154"><a href="#cb49-154"></a>$$</span>
+<span id="cb49-155"><a href="#cb49-155"></a>The <span class="in">`chickenwise_probability_of_escape(weights)`</span> computes the probability that a chicken **has escaped** after <span class="in">`length(weights)`</span> days.</span>
+<span id="cb49-156"><a href="#cb49-156"></a></span>
+<span id="cb49-157"><a href="#cb49-157"></a></span>
+<span id="cb49-158"><a href="#cb49-158"></a>:::{.callout-tip collapse=true}</span>
+<span id="cb49-159"><a href="#cb49-159"></a><span class="fu">###  Chickenwise probability of escape function</span></span>
+<span id="cb49-160"><a href="#cb49-160"></a></span>
+<span id="cb49-163"><a href="#cb49-163"></a><span class="in">```{r}</span></span>
+<span id="cb49-164"><a href="#cb49-164"></a>bump <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">loc=</span><span class="dv">0</span>, <span class="at">scale=</span><span class="dv">1</span>){</span>
+<span id="cb49-165"><a href="#cb49-165"></a>  xi <span class="ot">=</span> (x <span class="sc">-</span> loc) <span class="sc">/</span> scale</span>
+<span id="cb49-166"><a href="#cb49-166"></a>  <span class="fu">ifelse</span>(<span class="fu">abs</span>(xi) <span class="sc">&lt;</span> <span class="dv">1</span>, <span class="fu">exp</span>(<span class="sc">-</span><span class="dv">1</span><span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>xi<span class="sc">^</span><span class="dv">2</span>)), <span class="fl">0.</span>)</span>
+<span id="cb49-167"><a href="#cb49-167"></a>}</span>
+<span id="cb49-168"><a href="#cb49-168"></a>daily_probability_of_escape <span class="ot">&lt;-</span> <span class="cf">function</span>(day, weight){</span>
+<span id="cb49-169"><a href="#cb49-169"></a>  <span class="co"># Expects a day and a weight and computes the daily probability of escape</span></span>
+<span id="cb49-170"><a href="#cb49-170"></a>  <span class="fu">bump</span>(day, <span class="dv">30</span>, <span class="dv">10</span>) <span class="sc">*</span> (<span class="fl">1e-2</span> <span class="sc">+</span> <span class="fu">bump</span>(weight, <span class="dv">200</span>, <span class="dv">150</span>)<span class="sc">+</span><span class="fu">bump</span>(weight, <span class="dv">700</span>, <span class="dv">150</span>))</span>
+<span id="cb49-171"><a href="#cb49-171"></a>}</span>
+<span id="cb49-172"><a href="#cb49-172"></a>chickenwise_probability_of_escape <span class="ot">&lt;-</span> <span class="cf">function</span>(weights){</span>
+<span id="cb49-173"><a href="#cb49-173"></a>  <span class="co"># Expects a vector of daily weights from day 1 to N and computes the probability of</span></span>
+<span id="cb49-174"><a href="#cb49-174"></a>  <span class="co"># escape at the end of the time series</span></span>
+<span id="cb49-175"><a href="#cb49-175"></a>  prob_of_failure <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb49-176"><a href="#cb49-176"></a>  <span class="cf">for</span>(day <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(weights)){</span>
+<span id="cb49-177"><a href="#cb49-177"></a>    prob_of_failure <span class="ot">=</span> prob_of_failure <span class="sc">*</span> (<span class="dv">1</span><span class="sc">-</span><span class="fu">daily_probability_of_escape</span>(day, weights[day]))</span>
+<span id="cb49-178"><a href="#cb49-178"></a>  }</span>
+<span id="cb49-179"><a href="#cb49-179"></a>  <span class="fu">return</span>(<span class="dv">1</span> <span class="sc">-</span> prob_of_failure)</span>
+<span id="cb49-180"><a href="#cb49-180"></a>}</span>
+<span id="cb49-181"><a href="#cb49-181"></a><span class="in">```</span></span>
+<span id="cb49-182"><a href="#cb49-182"></a>:::</span>
+<span id="cb49-183"><a href="#cb49-183"></a></span>
+<span id="cb49-186"><a href="#cb49-186"></a><span class="in">```{r}</span></span>
+<span id="cb49-187"><a href="#cb49-187"></a><span class="co">#| fig-cap: Daily probability of escape for a given day and weight</span></span>
+<span id="cb49-188"><a href="#cb49-188"></a><span class="co">#| label: fig-prob</span></span>
+<span id="cb49-189"><a href="#cb49-189"></a>days <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">40</span></span>
+<span id="cb49-190"><a href="#cb49-190"></a>weights <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">900</span></span>
+<span id="cb49-191"><a href="#cb49-191"></a>heatmap_matrix <span class="ot">=</span> <span class="fu">outer</span>(days,weights,daily_probability_of_escape)</span>
+<span id="cb49-192"><a href="#cb49-192"></a><span class="fu">image</span>(days, weights, heatmap_matrix, <span class="at">xlab=</span><span class="st">"day"</span>, <span class="at">ylab=</span><span class="st">"weight"</span>, <span class="at">main=</span><span class="st">"Daily probability of escape"</span>)</span>
+<span id="cb49-193"><a href="#cb49-193"></a><span class="in">```</span></span>
+<span id="cb49-194"><a href="#cb49-194"></a></span>
+<span id="cb49-195"><a href="#cb49-195"></a>::: {.callout-warning icon=false title="Subtask 2.a"}</span>
+<span id="cb49-196"><a href="#cb49-196"></a>Compute and visualize the **distribution of the chickenwise probabilities of escape per diet**,</span>
+<span id="cb49-197"><a href="#cb49-197"></a>according to the model provided in the template.</span>
+<span id="cb49-198"><a href="#cb49-198"></a>:::</span>
+<span id="cb49-199"><a href="#cb49-199"></a>::: {.callout-tip collapse=false}</span>
+<span id="cb49-200"><a href="#cb49-200"></a>You can reuse the predictions you created in the previous subtask.</span>
+<span id="cb49-201"><a href="#cb49-201"></a>**Work with the draws to compute the chickenwise probability of escape first, and then take the expectation!**</span>
+<span id="cb49-202"><a href="#cb49-202"></a>:::</span>
+<span id="cb49-203"><a href="#cb49-203"></a>:::{.content-visible when-profile="public"}</span>
+<span id="cb49-206"><a href="#cb49-206"></a><span class="in">```{r}</span></span>
+<span id="cb49-207"><a href="#cb49-207"></a><span class="co"># Useful r functions: chickenwise_probability_of_escape (see above)</span></span>
+<span id="cb49-208"><a href="#cb49-208"></a><span class="co"># rep(..., each=...), apply,</span></span>
+<span id="cb49-209"><a href="#cb49-209"></a><span class="co"># ggplot, stat_dotsinterval</span></span>
+<span id="cb49-210"><a href="#cb49-210"></a><span class="in">```</span></span>
+<span id="cb49-211"><a href="#cb49-211"></a>:::</span>
+<span id="cb49-212"><a href="#cb49-212"></a>:::{.callout-note icon=false title="Rubric"}</span>
+<span id="cb49-213"><a href="#cb49-213"></a><span class="ss">* </span>Does the plot look right and is it readable? It should be quite close to the reference plot below:</span>
+<span id="cb49-214"><a href="#cb49-214"></a>:::</span>
+<span id="cb49-215"><a href="#cb49-215"></a></span>
+<span id="cb49-216"><a href="#cb49-216"></a>::: {.callout-warning icon=false title="Subtask 2.b"}</span>
+<span id="cb49-217"><a href="#cb49-217"></a>Compute the **expected probability of escape for each diet**.</span>
+<span id="cb49-218"><a href="#cb49-218"></a>Why would it be wrong to compute the expected probability of escape by</span>
+<span id="cb49-219"><a href="#cb49-219"></a>applying the <span class="in">`chickenwise_probability_of_escape`</span> function in the template to the</span>
+<span id="cb49-220"><a href="#cb49-220"></a>*daily expected chicken weights per diet* computed in subtask 2.a?</span>
+<span id="cb49-221"><a href="#cb49-221"></a>How does the correctly calculated value compare to the incorrectly calculated value?</span>
+<span id="cb49-222"><a href="#cb49-222"></a>Why is one higher than the other?</span>
+<span id="cb49-223"><a href="#cb49-223"></a>:::</span>
+<span id="cb49-224"><a href="#cb49-224"></a>:::{.content-visible when-profile="public"}</span>
+<span id="cb49-227"><a href="#cb49-227"></a><span class="in">```{r}</span></span>
+<span id="cb49-228"><a href="#cb49-228"></a><span class="co"># Useful r functions: chickenwise_probability_of_escape (see above)</span></span>
+<span id="cb49-229"><a href="#cb49-229"></a><span class="co"># apply, aggregate,</span></span>
+<span id="cb49-230"><a href="#cb49-230"></a><span class="in">```</span></span>
+<span id="cb49-231"><a href="#cb49-231"></a>:::</span>
+<span id="cb49-232"><a href="#cb49-232"></a>:::{.callout-note icon=false title="Rubric"}</span>
+<span id="cb49-233"><a href="#cb49-233"></a><span class="ss">* </span>Do the results look correct and have they been presented in a readable way? They should be roughly the first column below for the correct calculation and the second column below for the wrong calculation: [</span>
+<span id="cb49-234"><a href="#cb49-234"></a></span>
+<span id="cb49-235"><a href="#cb49-235"></a>diet chickenwise_loss meanwise_loss</span>
+<span id="cb49-236"><a href="#cb49-236"></a>  1       0.55           0.83</span>
+<span id="cb49-237"><a href="#cb49-237"></a>  2       0.57           0.67</span>
+<span id="cb49-238"><a href="#cb49-238"></a>  3       0.50           0.10</span>
+<span id="cb49-239"><a href="#cb49-239"></a>  4       0.52           0.15</span>
+<span id="cb49-240"><a href="#cb49-240"></a>]{.content-hidden when-profile="public"}</span>
+<span id="cb49-241"><a href="#cb49-241"></a><span class="ss">* </span>Has it been explained that the expected probability of escape depends on ?</span>
+<span id="cb49-242"><a href="#cb49-242"></a><span class="ss">* </span>Has it been explained that</span>
+<span id="cb49-243"><a href="#cb49-243"></a></span>
+<span id="cb49-244"><a href="#cb49-244"></a>?</span>
+<span id="cb49-245"><a href="#cb49-245"></a></span>
+<span id="cb49-246"><a href="#cb49-246"></a>[AND/OR</span>
+<span id="cb49-247"><a href="#cb49-247"></a></span>
+<span id="cb49-248"><a href="#cb49-248"></a>for some diets the “incorrect” computation (meanwise_loss) is lower because the mean growth curve (used in the incorrect meanwise_loss) “by chance” passes through the region of low probability of escape, even though due to high within-population variation most chickens’ growth curve won’t pass through that region of low probability of escape?</span>
+<span id="cb49-249"><a href="#cb49-249"></a></span>
+<span id="cb49-250"><a href="#cb49-250"></a>(Due to a slightly misleading public rubric, either of the above answers would be sufficient)]{.content-hidden when-profile="public"}</span>
+<span id="cb49-251"><a href="#cb49-251"></a></span>
+<span id="cb49-252"><a href="#cb49-252"></a>:::</span>
+<span id="cb49-253"><a href="#cb49-253"></a></span>
+<span id="cb49-254"><a href="#cb49-254"></a>{{&lt; include includes/_overall_quality.md &gt;}}</span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

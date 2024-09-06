@@ -1,0 +1,372 @@
+---
+title: "Assignment 5, 2023"
+author: "Aki Vehtari et al."
+format:
+  html:
+    toc: true
+    code-tools: true
+    code-line-numbers: true
+    number-sections: true
+    mainfont: Georgia, serif
+    page-layout: article
+  pdf:
+    geometry:
+    - left=1cm,top=1cm,bottom=1cm,right=7cm
+    number-sections: true
+    code-annotations: none
+editor: source
+---
+
+# General information
+
+**This is for BDA 2023**
+
+This assignment is related to Lecture 5 and Chapters 10 and 11.
+
+**The maximum amount of points from this assignment is 6.**
+
+We have prepared a *quarto template specific to this assignment ([html](template5.html), [qmd](https://avehtari.github.io/BDA_course_Aalto/assignments/template5.qmd), [pdf](template5.pdf))** to help you get started.
+
+If you are not using [JupyterHub](https://jupyter.cs.aalto.fi) (which has all the needed packages pre-installed), and want to make the assignment on your own computer, you may use a [docker container](docker.html) that includes all the necessary software packages, too.
+
+::: {.callout-tip collapse=false}
+
+**Reading instructions:**
+
+- [**The reading instructions for BDA3 Chapter 10**](../BDA3_notes.html#ch10).
+- [**The reading instructions for BDA3 Chapter 11**](../BDA3_notes.html#ch11).
+
+{{< include includes/_grading_instructions.md >}}
+:::
+
+{{< include includes/_reporting_accuracy.md >}}
+
+{{< include includes/_general_info.md >}}
+
+::: {.callout-warning collapse=false}
+## Setup
+
+This is the template for [assignment 5](assignment5.html). You can download the [qmd-file](https://avehtari.github.io/BDA_course_Aalto/assignments/template5.qmd) or copy the code from this rendered document after clicking on `</> Code` in the top right corner.
+
+**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.**
+
+The following will set-up [`markmyassignment`](https://github.com/MansMeg/markmyassignment) to check your functions at the end of the notebook:
+
+```{r}
+if(!require(markmyassignment)){
+    install.packages("markmyassignment")
+    library(markmyassignment)
+}
+assignment_path = paste("https://github.com/avehtari/BDA_course_Aalto/",
+"blob/master/assignments/tests/assignment5.yml", sep="")
+set_assignment(assignment_path)
+```
+
+The following installs and loads the `aaltobda` package:
+```{r}
+if(!require(aaltobda)){
+    install.packages("aaltobda", repos = c("https://avehtari.github.io/BDA_course_Aalto/", getOption("repos")))
+    library(aaltobda)
+}
+```
+The following installs and loads the [`latex2exp` package](https://github.com/stefano-meschiari/latex2exp), which allows us to use LaTeX in plots:
+```{r}
+if(!require(latex2exp)){
+    install.packages("latex2exp")
+    library(latex2exp)
+}
+```
+The following installs and loads the [`posterior` package](https://github.com/stan-dev/posterior) which imports the `rhat_basic()` function:
+```{r}
+if(!require(posterior)){
+    install.packages("posterior")
+    library(posterior)
+}
+```
+The following installs and loads the [`ggplot2` package](https://ggplot2.tidyverse.org/) and the [`bayesplot` package](https://mc-stan.org/bayesplot/index.html)
+```{r}
+if(!require(ggplot2)){
+    install.packages("ggplot2")
+    library(ggplot2)
+}
+if(!require(bayesplot)){
+    install.packages("bayesplot")
+    library(bayesplot)
+}
+```
+:::
+
+# Generalized linear model: Bioassay model with Metropolis algorithm
+
+Metropolis algorithm: Replicate the computations for the bioassay
+example of BDA3 Section 3.7 using the Metropolis algorithm. The
+Metropolis algorithm is described in BDA3 Chapter 11.2. More information
+on the bioassay data can be found in Section 3.7 in BDA3, and in
+[**Chapter 3
+notes**](../BDA3_notes.html#ch3).
+
+
+::: {.callout-warning icon=false title="Subtask 2.a)"}
+Implement the Metropolis algorithm as an R function for the bioassay
+data. Use the Gaussian prior as in Assignment 4, that is
+$$
+\begin{aligned}
+    \begin{bmatrix}
+    \alpha \\ \beta
+    \end{bmatrix}
+    \sim
+    \text{N} \left( \mu_0,  \Sigma_0 \right), \qquad
+    \text{where} \quad
+     \mu_0 = \begin{bmatrix} 0 \\ 10 \end{bmatrix} \quad \text{and} \quad
+     \Sigma_0 = \begin{bmatrix} 2^2 & 12 \\ 12 & 10^2 \end{bmatrix}.
+\end{aligned}
+$$
+:::
+
+::: {.callout-tip collapse=false}
+Compute with log-densities. Reasons are explained on
+BDA3 page 261 and Lecture video 4.1. Remember that
+$p_1/p_0=\exp(\log(p_1)-\log(p_0))$. For your convenience we
+have provided functions that will evaluate the log-likelihood
+for given $\alpha$ and $\beta$ (see `bioassaylp()` in the
+`aaltobda` package). Notice that you still need to add the prior
+yourself and remember the unnormalized log posterior is simply
+the sum of log-likelihood and log-prior. For evaluating the log
+of the Gaussian prior you can use the function `dmvnorm` from
+package `aaltobda`.
+
+Use a simple (normal) proposal distribution. Example
+proposals are $\alpha^* \sim N(\alpha_{t-1}, \sigma = 1)$ and
+$\beta^* \sim N(\beta_{t-1}, \sigma = 5)$. There is no need to
+try to find optimal proposal but test some different values for
+the jump scale ($\sigma$). Remember to report the one you used.
+Efficient proposals are discussed in BDA3 p. 295--297 (not part
+of the course). In real-life a pre-run could be made with an
+automatic adaptive control to adapt the proposal distribution.
+:::
+::: {.content-visible when-profile="public"}
+Write your answers/code here!
+```{r}
+# Useful functions: runif, rnorm
+# bioassaylp, dmvnorm (from aaltobda)
+
+data("bioassay")
+# Start by implementing a function called `density_ratio` to
+# compute the density ratio function, $r$ in Eq. (11.1) in BDA3:
+density_ratio <- function(alpha_propose, alpha_previous, beta_propose, beta_previous, x, y, n){
+    # Do computation here, and return as below.
+    # Below are the correct return values for two different calls of this function:
+
+    # alpha_propose = 1.89, alpha_previous = 0.374,
+    # beta_propose = 24.76, beta_previous = 20.04,
+    # x = bioassay$x, y = bioassay$y, n = bioassay$n
+    1.305179
+
+    # alpha_propose = 0.374, alpha_previous = 1.89,
+    # beta_propose = 20.04, beta_previous = 24.76,
+    # x = bioassay$x, y = bioassay$y, n = bioassay$n
+    0.7661784
+    ### {.content-hidden when-profile="public"}
+    prior_mean = c(0, 10)
+    prior_sigma = cbind(c(4, 12), c(12, 100))
+    exp(
+        bioassaylp(alpha_propose, beta_propose, x, y, n)
+        - bioassaylp(alpha_previous, beta_previous, x, y, n)
+        + dmvnorm(c(alpha_propose, beta_propose), prior_mean, prior_sigma, TRUE)
+        - dmvnorm(c(alpha_previous, beta_previous), prior_mean, prior_sigma, TRUE)
+    )
+    ###
+}
+# Then implement a function called `metropolis_bioassay()` which
+# implements the Metropolis algorithm using the `density_ratio()`:
+metropolis_bioassay <- function(alpha_initial, beta_initial, alpha_sigma, beta_sigma, no_draws, x, y, n){
+    # Do computation here, and return as below.
+    # Below are "wrong" values (unlikely to actually occur)
+    # in the "correct" format (such that they work with the plotting functions further down).
+    data.frame(
+        alpha=c(alpha_initial, alpha_initial+alpha_sigma, alpha_initial-alpha_sigma),
+        beta=c(beta_initial, beta_initial+beta_sigma, beta_initial-beta_sigma)
+    )
+    ### {.content-hidden when-profile="public"}
+    alpha_previous = alpha_initial
+    beta_previous = beta_initial
+    alpha_rv = c()
+    beta_rv = c()
+    for(draw in 1:no_draws){
+        alpha_propose = rnorm(1, alpha_previous, alpha_sigma)
+        beta_propose = rnorm(1, beta_previous, beta_sigma)
+        if(runif(1) < density_ratio(alpha_propose, alpha_previous, beta_propose, beta_previous, x, y, n)){
+            alpha_previous = alpha_propose
+            beta_previous = beta_propose
+        }
+        alpha_rv = c(alpha_rv, alpha_previous)
+        beta_rv = c(beta_rv, beta_previous)
+    }
+    data.frame(alpha=alpha_rv, beta=beta_rv)
+    ###
+}
+df = metropolis_bioassay(0, 0, 1, 1, 1000, bioassay$x, bioassay$y, bioassay$n)
+```
+:::
+
+
+::: {.callout-warning icon=false title="Subtask 2.b)"}
+Include in the report the following:
+
+1.  Describe in your own words in one paragraph the basic idea of
+    the Metropolis algorithm (see BDA3 Section 11.2, and Lecture
+    video 5.1).
+2.  The proposal distribution (related to *jumping rule*) you used.
+    Describe briefly in words how you chose the final proposal
+    distribution you used for the reported results.
+3.  The initial points of your Metropolis chains (or the explicit
+    mechanism for generating them).
+4.  Report the chain length or the number of iterations for each
+    chain. Run the simulations long enough for approximate
+    convergence (see BDA Section 11.4, and Lecture 5.2).
+5.  Report the warm-up length (see BDA Section 11.4, and Lecture
+    5.2).
+6.  The number of Metropolis chains used. It is important that
+    multiple Metropolis chains are run for evaluating convergence
+    (see BDA Section 11.4, and Lecture 5.2).
+7.  Plot all chains for $\alpha$ in a single line-plot. Overlapping
+    the chains in this way helps in visually assessing whether
+    chains have converged or not.
+8.  Do the same for $\beta$.
+:::
+::: {.content-visible when-profile="public"}
+Write your answers/code here!
+
+Have a look at [`bayesplot` trace plot examples](http://mc-stan.org/bayesplot/reference/MCMC-traces.html#examples) and tune your plot if wanted/needed. Don't forget to include a title/caption/description.
+
+**The below example plot only includes a single chain, but your report should include a plot with multiple chains overlayed!**
+```{r}
+# Useful functions: mcmc_trace (from bayesplot)
+mcmc_trace(df, pars=c("alpha", "beta"))
+```
+:::
+
+::: {.callout-warning icon=false title="Subtask 2.c)"}
+In complex scenarios, visual assessment is not sufficient and
+$\widehat{R}$ is a more robust indicator of convergence of the
+Markov chains. Use $\widehat{R}$ for convergence analysis. You can
+either use Eq. (11.4) in BDA3 or the more recent version described
+in the article [*Rank-normalization, folding, and localization: An improved $\widehat{R}$
+ for assessing convergence of MCMC*](https://doi.org/10.1214/20-BA1221). You
+should specify which $\widehat{R}$ you used. In R the best choice is
+to use function `rhat_basic()` from the package `posterior` (this function implements the version described in the above mentioned article).
+Remember to remove the warm-up sample before computing
+$\widehat{R}$. Report the $\widehat{R}$ values for $\alpha$ and
+$\beta$ separately. Report the values for the proposal distribution
+you finally used.
+
+1.  Describe briefly in your own words the basic idea of
+    $\widehat{R}$ and how to to interpret the obtained $\widehat{R}$
+    values.
+2.  Tell whether you obtained good $\widehat{R}$ with first try,
+    or whether you needed to run more iterations or how did you
+    modify the proposal distribution.
+:::
+::: {.content-visible when-profile="public"}
+Write your answers/code here!
+```{r}
+# Useful functions: rhat_basic (from posterior)
+```
+:::
+
+::: {.callout-warning icon=false title="Subtask 2.d)"}
+Plot the draws for $\alpha$ and $\beta$ (scatter plot) and include
+this plot in your report. You can compare the results to BDA3 Figure 3.3b
+to verify that your code gives sensible results. Notice
+though that the results in Figure 3.3b are generated from the posterior
+with a uniform prior, so even when if your algorithm works
+perfectly, the results will look slightly different (although fairly
+similar).
+:::
+::: {.content-visible when-profile="public"}
+Write your answers/code here!
+
+Have a look at [`bayesplot` scatter plot examples](https://mc-stan.org/bayesplot/reference/MCMC-scatterplots.html#examples) and tune your plot if wanted/needed. Don't forget to include a title/caption/description.
+```{r}
+# Useful functions: mcmc_scatter (from bayesplot)
+mcmc_scatter(df, pars=c("alpha", "beta"))
+```
+:::
+
+::: {.callout-note icon=false title="Rubric"}
+* Is the implementation of `density_ratio` function included ?
+    * No
+    * Yes
+* Is the implementation of `metropolis_bioassay` function included ?
+    * No
+    * Yes
+* 2 a) Is the brief description of Metropolis-Hastings algorithm included (and it's not complete nonsense)?
+Provide also a brief comment on how clear you think that description is (and potentially mention errors
+if you see them).
+    * No
+    * Yes
+* 2 b) Is the proposal/jumping distribution reported?
+    * No
+    * Yes
+* 2 c) Are the starting points or the mechanism how they are generated reported?
+    * No
+    * Yes
+* 2 d) Is the number of draws per chain reported?
+    * No
+    * Yes
+* 2 e) Is the warm-up length reported?
+    * No
+    * Yes
+* 2 f) Is the number of chains reported?
+    * No
+    * Yes
+* 2 g) and 2 h) Are line plots of the chains included? (Separate plots for alpha and beta)
+    * No plots are included
+    * Yes, but both plots are in a single figure, or the plots are scatter plots (scatter plots aren't useful for visual convergence evaluation).
+    * Yes, but only a plot for alpha or beta is included.
+    * Yes, separate line plots for both alpha and beta are included.
+* Is there a discussion on the convergence of the chains?
+    * No discussion on convergence.
+    * Yes, but the discussion is not convincing.
+    * Yes, discussed in the report.
+* Is it mentioned which implementation of Rhat is used?
+    Two possible ways to compute R-hat would be:
+    1. 
+    2. [Use Rhat function provided in rstan which will compute the rank normalized R-hat (as suggested
+    in the exercise PDF and discussed further in Vehtari et.al 2019, arXiv:1903.08008)]{.content-hidden when-profile="public"}
+
+    It is OK as long as it is mentioned (or evident from the code) which of the above is used.
+    * No
+    * Yes
+* Is the brief description of Rhat included (and it's not complete nonsense)? Provide also a brief
+comment on how clear you think that description is (and potentially mention errors if you see them).
+    * No
+    * Yes
+* Are the Rhat-values for alpha and beta reported?
+    * No
+    * Yes, but incorrectly computed
+    * Yes, but computed separately for each chain
+    * Yes, but only for alpha or beta
+    * Yes, single values both for alpha and beta
+* Is the interpretation of R-hat values correct ([R-hat values close to one => chains probably converged
+and estimates reliable]{.content-hidden when-profile="public"})?
+    * No interpretation or discussion about the R-hat values, or conclusions clearly wrong
+    * Interpretation somewhat correct
+    * Interpretation correct
+* Does the report contain a scatter plot about the draws? Do the results look reasonable, that is, roughly
+like in the Figure below ?
+    * No plot included
+    * Plot included, but the results do not look like in the figure above
+    * Plot included, and the results look roughly like in the figure above
+:::
+
+::: {.callout-warning collapse=false}
+## markmyassignment
+The following will check the functions for which `markmyassignment` has been set up:
+
+```{r}
+mark_my_assignment()
+```
+:::
+
+{{< include includes/_overall_quality.md >}}
