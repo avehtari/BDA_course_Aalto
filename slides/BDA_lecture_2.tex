@@ -290,7 +290,12 @@
     {\scriptsize\texttt{y<-6;n<-10;\\integrate(function(theta) theta\^{}y*(1-theta)\^{}(n-y), 0, 1)} $\approx 0.0004329$}\\
     \uncover<2->{{\scriptsize\texttt{gamma(6+1)*gamma(10-6+1)/gamma(10+2)} $\approx 0.0004329$}}\\
     \uncover<3->{\scriptsize usually computed via $\log \Gamma(\cdot)$ due to the
-      limitations of floating point representation}
+      limitations of floating point representation\\~}
+  \item<4-> Normalization term in closed form is not in general available
+    \begin{itemize}
+    \item later you learn approximate integration methods that work
+      without knowing the normalization term
+    \end{itemize}
     % \item<3-> Normalisation term has \emph{Beta} function form 
     %   \begin{itemize}
     %   \item when integrated over $(0,1)$
@@ -370,7 +375,7 @@
   \item For example, {\tt pbeta} in R uses a continued fraction with
     weighting factors and asymptotic expansion
   \item Laplace developed normal approximation (Laplace
-    approximation), because he didn't know how to compute Beta CDF
+    approximation, BDA3 Ch 4), because he didn't know how to compute Beta CDF
   \end{itemize}
   % Lagandre, Gamma function
 
@@ -452,6 +457,10 @@
     \begin{itemize}
     \item related to consumer behavior analysis and A/B testing
   \end{itemize}
+\item<+-> Make a guess of how many left handed there are now
+  \begin{itemize}
+  \item<+-> tell your guess to the next one
+  \end{itemize}
 \end{itemize}  
 
 \end{frame}
@@ -475,13 +484,13 @@
     \item We define $L=l+\tilde{l}$, where $\tilde{l}$ is the
       unobserved number of left handed students among those who we did
       not yet ask
+    \item We know $l$, $r$, and $N$, and want to predict $\tilde{l}$ and $L$
     \end{itemize}
   \item<+-> {\color{blue} Posterior} distribution for
     $\theta$ is $\Beta(\alpha+l, \beta+r)$
   \item<+-> {\color{red} Posterior predictive} distribution for
-    $\tilde{l}$ is\\
+    $\displaystyle\tilde{l}$ is\\
     $\BetaBinomial(\tilde{l} | N-n, \alpha+l, \beta+r)=\int_0^1\Bin(\tilde{l} | N-n, \theta)\Beta(\theta | \alpha+l, \beta+r)d\theta$
-  \item<+-> {\small Demo: \url{https://huggingface.co/spaces/Madhav/Handedness}}
   \end{itemize}
   
 \end{frame}
@@ -507,6 +516,36 @@
 
 \end{frame}
 
+\begin{frame}{Left handedness}
+
+  \vspace{-0.5\baselineskip}
+  \begin{itemize}
+  \item What we know and don't know
+    \begin{itemize}
+    \item $N=L+R$ is the total number of students in the lecture hall,
+      $N$ is known in the beginning
+    \item $L$ and $R$ are the number of left and right handed students, not known before we start asking
+    \item $n=l+r$ is the number of students we have asked
+    \item $l$ and $r$ are the numbers of left and right handed students from the students we asked
+    \item we also know that $l \leq L \leq (N-r)$ and $r \leq R \leq (N-l)$
+    \end{itemize}
+  \item After observing $n$ students with $l$ left handed, what we
+    know about $L$?
+    \begin{itemize}
+    \item We define $L=l+\tilde{l}$, where $\tilde{l}$ is the
+      unobserved number of left handed students among those who we did
+      not yet ask
+    \item We know $l$, $r$, and $N$, and want to predict $\tilde{l}$ and $L$
+    \end{itemize}
+  \item {\color{blue} Posterior} distribution for
+    $\theta$ is $\Beta(\alpha+l, \beta+r)$
+  \item {\color{red} Posterior predictive} distribution for
+    $\displaystyle\tilde{l}$ is\\
+    $\BetaBinomial(\tilde{l} | N-n, \alpha+l, \beta+r)=\int_0^1\Bin(\tilde{l} | N-n, \theta)\Beta(\theta | \alpha+l, \beta+r)d\theta$
+  \item {\small Demo: \url{https://huggingface.co/spaces/Madhav/Handedness}}
+  \end{itemize}
+  
+\end{frame}
 %%% priors
 
 \begin{frame}{Priors}
@@ -534,7 +573,7 @@
     sometimes used for special models to allow partial analytic
     marginalization (Ch 3)
     \begin{itemize}
-    \item with dynamic Hamiltonian Monte Carlo used e.g. in Stan no
+    \item with Hamiltonian Monte Carlo / NUTS used e.g. in Stan no
       computational benefit
     \end{itemize}
   \end{itemize}
@@ -724,10 +763,41 @@
   
 \end{frame}
 
+\begin{frame}{Left handedness}
+
+  \vspace{-0.5\baselineskip}
+  \begin{itemize}
+  \item What we know and don't know
+    \begin{itemize}
+    \item $N=L+R$ is the total number of students in the lecture hall,
+      $N$ is known in the beginning
+    \item $L$ and $R$ are the number of left and right handed students, not known before we start asking
+    \item $n=l+r$ is the number of students we have asked
+    \item $l$ and $r$ are the numbers of left and right handed students from the students we asked
+    \item we also know that $l \leq L \leq (N-r)$ and $r \leq R \leq (N-l)$
+    \end{itemize}
+  \item After observing $n$ students with $l$ left handed, what we
+    know about $L$?
+    \begin{itemize}
+    \item We define $L=l+\tilde{l}$, where $\tilde{l}$ is the
+      unobserved number of left handed students among those who we did
+      not yet ask
+    \item We know $l$, $r$, and $N$, and want to predict $\tilde{l}$ and $L$
+    \end{itemize}
+  \item {\color{blue} Posterior} distribution for
+    $\theta$ is $\Beta(\alpha+l, \beta+r)$
+  \item {\color{red} Posterior predictive} distribution for
+    $\displaystyle\tilde{l}$ is\\
+    $\BetaBinomial(\tilde{l} | N-n, \alpha+l, \beta+r)=\int_0^1\Bin(\tilde{l} | N-n, \theta)\Beta(\theta | \alpha+l, \beta+r)d\theta$
+  \item {\small Demo: \url{https://huggingface.co/spaces/Madhav/Handedness}}
+  \end{itemize}
+  
+\end{frame}
+
 \begin{frame}{Benefits of integration and prior}
 
   \begin{itemize}
-  \item Left handed simulation with 30 left handed and 300 total
+  \item Left handed simulation with $L=30$ left handed and $N=300$ total
   \end{itemize}
   
   \only<1>{\hspace{-1cm}\includegraphics[width=11.5cm]{figs/lefthand_simulation_phat.pdf}}
@@ -735,17 +805,31 @@
 
 \end{frame}
 
+% \begin{frame}{Benefits of integration and prior}
+
+%   \begin{itemize}
+%   \item Left handed simulation with true $\theta=0.1$ and $N=300$
+%     \begin{itemize}
+%     \item repeated 10\,000 times
+%     \item average predictive density for guessing $L$ after $n \leq N$ observations
+%     \end{itemize}
+%   \end{itemize}
+  
+%   \hspace{-1cm}\includegraphics[width=11.5cm]{figs/lefthand_simulation_epp_new.pdf}
+
+% \end{frame}
+
 \begin{frame}{Benefits of integration and prior}
 
   \begin{itemize}
-  \item Left handed simulation with 30 left handed and 300 total
+  \item Left handed simulation with true $\theta=0.1$ and $N=300$
     \begin{itemize}
     \item repeated 10\,000 times
-    \item average log predictive density for 30 left handed in total
+    \item average log predictive density for guessing $L$ after $n \leq N$ observations
     \end{itemize}
   \end{itemize}
   
-  \hspace{-1cm}\includegraphics[width=11.5cm]{figs/lefthand_simulation_logscore.pdf}
+  \hspace{-1cm}\includegraphics[width=11.5cm]{figs/lefthand_simulation_logscore_new.pdf}
 
 \end{frame}
 
@@ -885,14 +969,14 @@
 
   Algae status is monitored in 274 sites at Finnish lakes and rivers. 
   The observations for the 2008 algae status at each site are presented
-  in file \emph{algae.mat} ('0': no algae, '1': algae present). 
+  in file \emph{algae.(rda|txt)} ('0': no algae, '1': algae present). 
         %         In year 2008 blue-green algae was observed at 44 sites. 
-  Let $\pi$ be the probability of a monitoring site having detectable
+  Let $\theta$ be the probability of a monitoring site having detectable
   blue-green algae levels. 
 
   \begin{itemize}
-  \item Use a binomial model for observations and a \emph{beta}(2,10) prior.
-  \item What can you say about the value of the unknown $\pi$?
+  \item Use a binomial model for observations and a $\Beta(2,10)$ prior.
+  \item What can you say about the value of the unknown $\theta$?
   \item Experiment how the result changes if you change the prior.
   \end{itemize}
 
@@ -1108,8 +1192,12 @@
   \end{itemize}
 
   \vspace{\baselineskip}
-  \only<1>{\includegraphics[height=7cm]{figs/traffic_deaths_data.pdf}}
-  \only<2>{\includegraphics[height=7cm]{figs/traffic_deaths_glm_poisson.pdf}}
+  
+  \only<+>{\includegraphics[height=7cm]{figs/traffic1.pdf}}
+  \only<+>{\includegraphics[height=7cm]{figs/traffic2.pdf}}
+  \only<+>{\includegraphics[height=7cm]{figs/traffic3.pdf}}
+  \only<+>{\includegraphics[height=7cm]{figs/traffic4.pdf}}
+  \only<+>{\includegraphics[height=7cm]{figs/traffic5.pdf}}
   
 \end{frame}
 
