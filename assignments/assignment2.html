@@ -21,40 +21,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -103,36 +69,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<script type="text/javascript" id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"> </script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 </head>
 
@@ -328,9 +266,10 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#general-information" id="toc-general-information" class="nav-link active" data-scroll-target="#general-information"><span class="header-section-number">1</span> General information</a></li>
-  <li><a href="#inference-for-binomial-proportion" id="toc-inference-for-binomial-proportion" class="nav-link" data-scroll-target="#inference-for-binomial-proportion"><span class="header-section-number">2</span> Inference for binomial proportion</a></li>
-  <li><a href="#overall-quality-of-the-report" id="toc-overall-quality-of-the-report" class="nav-link" data-scroll-target="#overall-quality-of-the-report"><span class="header-section-number">3</span> Overall quality of the report</a></li>
+  <li><a href="#general-information" id="toc-general-information" class="nav-link active" data-scroll-target="#general-information"><span class="header-section-number">1</span> General information</a>
+  <ul class="collapse">
+  <li><a href="#assignment-questions" id="toc-assignment-questions" class="nav-link" data-scroll-target="#assignment-questions"><span class="header-section-number">1.1</span> Assignment questions</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -339,7 +278,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./assignment1.html">Assignments</a></li><li class="breadcrumb-item"><a href="./assignment2.html">Assignment 2</a></li></ol></nav>
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">Assignment 2</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<h1 class="title">Assignment 2</h1>
 </div>
 
 
@@ -364,380 +303,151 @@ window.Quarto = {
 
 <section id="general-information" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> General information</h1>
-<p>This assignment is related to Lecture 2 and BDA3 Chapters 1 and 2. You may find an additional discussion about choosing priors in a <a href="http://andrewgelman.com/2017/10/04/worry-rigged-priors/"><strong>blog post by Andrew Gelman</strong></a>.</p>
-<p><strong>The maximum amount of points from this assignment is 3.</strong></p>
-<p>We prepared a <strong>quarto template specific to this assignment (<a href="template2.html">html</a>, <a href="https://avehtari.github.io/BDA_course_Aalto/assignments/template2.qmd">qmd</a>, <a href="template2.pdf">pdf</a>)</strong> to help you get started.</p>
+<p>The exercises here refer to the lecture 2/BDA chapters 1-2 content. All questions check your understanding of a simple posterior analysis using the a binomial model for the observations and a beta prior.</p>
+<p><strong>The exercises constitute 90% of the Quiz 2 grade.</strong></p>
+<p>We prepared a quarto notebook specific to this assignment to help you get started. <u>You still need to fill in your answers on Mycourses!</u> You can inspect this and future templates</p>
+<ul>
+<li>as a <a href="https://avehtari.github.io/BDA_course_Aalto/assignments/template2.qmd">qmd file</a>,</li>
+<li>as a <a href="template2.html">rendered html file</a></li>
+</ul>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Tip
+General Instructions for Answering the Assignment Questions
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
-<p><strong>Reading instructions</strong>:</p>
 <ul>
-<li><a href="../BDA3_notes.html#ch1"><strong>The reading instructions for BDA3 Chapter 1</strong></a>.</li>
-<li><a href="../BDA3_notes.html#ch2"><strong>The reading instructions for BDA3 Chapter 2</strong></a>.</li>
-</ul>
-<p><strong>Grading instructions:</strong></p>
-<p>The grading will be done in peergrade. All grading questions and evaluations for this assignment are contained within this document in the collapsible <strong>Rubric</strong> blocks.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Further information
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<ul>
-<li>The recommended tool in this course is R (with the IDE RStudio).</li>
-<li>Instead of installing R and RStudio on you own computer, see <a href="https://avehtari.github.io/BDA_course_Aalto/FAQ.html#How_to_use_R_and_RStudio_remotely"><strong>how to use R and RStudio remotely</strong></a>.</li>
-<li>If you want to install R and RStudio locally, download <a href="https://posit.co/download/rstudio-desktop/">R and RStudio</a>.</li>
-<li>There are tons of tutorials, videos and introductions to R and RStudio online. You can find some initial hints from <a href="https://education.rstudio.com/"><strong>RStudio Education pages</strong></a>.</li>
-<li>When working with R, we recommend writing the report using <code>quarto</code> and the provided template. The template includes the formatting instructions and how to include code and figures.</li>
-<li>Instead of <code>quarto</code>, you can use other software to make the PDF report, but the the same instructions for formatting should be used.</li>
-<li>Report all results in a single, <strong>anonymous</strong> *.pdf -file and submit it in <a href="peergrade.io"><strong>peergrade.io</strong></a>.</li>
-<li>The course has its own R package <code>aaltobda</code> with data and functionality to simplify coding. The package is pre-installed in JupyterHub. To install the package on your own system, run the following code (upgrade="never" skips question about updating other packages):</li>
-</ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">install.packages</span>(<span class="st">"aaltobda"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://avehtari.github.io/BDA_course_Aalto/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<ul>
-<li>Many of the exercises can be checked automatically using the R package <code>markmyassignment</code> (pre-installed in JupyterHub). Information on how to install and use the package can be found in <a href="https://cran.r-project.org/web/packages/markmyassignment/vignettes/markmyassignment.html">the <code>markmyassignment</code> documentation</a>. There is no need to include <code>markmyassignment</code> results in the report.</li>
+<li>Questions below are exact copies of the text found in the MyCourses quiz and should serve as a notebook where you can store notes and code.</li>
+<li>We recommend opening these notebooks in the Aalto JupyterHub, see <a href="https://avehtari.github.io/BDA_course_Aalto/FAQ.html#How_to_use_R_and_RStudio_remotely"><strong>how to use R and RStudio remotely</strong></a>.</li>
+<li>For inspiration for code, have a look at the <a href="https://avehtari.github.io/BDA_course_Aalto/demos.html"><strong>BDA R Demos</strong></a> and the specific Assignment code notebooks</li>
 <li>Recommended additional self study exercises for each chapter in BDA3 are listed in the course web page. These will help to gain deeper understanding of the topic.</li>
 <li>Common questions and answers regarding installation and technical problems can be found in <a href="https://avehtari.github.io/BDA_course_Aalto/FAQ.html">Frequently Asked Questions (FAQ)</a>.</li>
-<li>Deadlines for all assignments can be found on the course web page and in Peergrade. You can set email alerts for the deadlines in Peergrade settings.</li>
+<li>Deadlines for all assignments can be found on the course web page and in MyCourses.</li>
 <li>You are allowed to discuss assignments with your friends, but it is not allowed to copy solutions directly from other students or from internet.</li>
-<li>You can copy, e.g., plotting code from the course demos, but really try to solve the actual assignment problems with your own code and explanations.</li>
 <li>Do not share your answers publicly.</li>
 <li>Do not copy answers from the internet or from previous years. We compare the answers to the answers from previous years and to the answers from other students this year.</li>
 <li>Use of AI is allowed on the course, but the most of the work needs to by the student, and you need to report whether you used AI and in which way you used them (See <a href="https://www.aalto.fi/en/services/guidance-for-the-use-of-artificial-intelligence-in-teaching-and-learning-at-aalto-university">points 5 and 6 in Aalto guidelines for use of AI in teaching</a>).</li>
 <li>All suspected plagiarism will be reported and investigated. See more about the <a href="https://into.aalto.fi/display/ensaannot/Aalto+University+Code+of+Academic+Integrity+and+Handling+Violations+Thereof"><strong>Aalto University Code of Academic Integrity and Handling Violations Thereof</strong></a>.</li>
-<li>Do not submit empty PDFs, almost empty PDFs, copy of the questions, nonsense generated by yourself or AI, as these are just harming the other students as they can’t do peergrading for the empty or nonsense submissions. Violations of this rule will be reported and investigated in the same way was plagiarism.</li>
 <li>If you have any suggestions or improvements to the course material, please post in the course chat feedback channel, create an issue, or submit a pull request to the public repository!</li>
 </ul>
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Rubric
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<section id="assignment-questions" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="assignment-questions"><span class="header-section-number">1.1</span> Assignment questions</h2>
+<p>For convenience the assignment questions are copied below. Answer the questions in MyCourses.</p>
+
+<h3 class="anchored"><strong>Inference for binomial proportion</strong></h3>
+<h3 class="anchored"><br></h3>
+<p>Algae
+    status is monitored in 274 sites at Finnish lakes and rivers. The
+    observations for the 2008 algae status at each site are presented in the
+    dataset <code>algae</code> in the <code>aaltobda</code> package ('0': no algae, '1': algae
+    present).</p>
+<p>Let \( \theta \) be the probability of a monitoring site having
+    detectable blue-green algae levels, \( y \) the number of observed sites with algae detected, and \( n \) be total number sites surveyed.
+    Use a binomial model for the observations and a \( \text{Beta}(2,10) \) prior for binomial model parameter \( \theta \) to formulate a Bayesian model.
+    Here we will not test you on the individual mathematical operations needed in order to derive the posterior distribution for \( \theta \) as it has already been done in the book (and lecture) so make sure to look that up.</p>
+<p>Your task is to perform Bayesian
+    inference for a binomial model and fill in the quiz below based on it.&nbsp;</p>
+<p>For questions with checkboxes, more than one answer may be
+    correct.<br><br></p>
+<h5 class="anchored">1. Formulating Probabilities</h5>
+<p>The <code>algae</code> dataset contains the results of 274 measurements from Finnish lakes, with the following results:</p>
 <ul>
-<li>Can you open the PDF and it’s not blank nor nonsense? If the pdf is blank, nonsense, or something like only a copy of the questions, 1) report it as problematic in Peergrade-interface to get another report to review, and 2) send a message to TAs.</li>
-<li>Is the report anonymous?</li>
+    <li>No Algae: 230 sites</li>
+    <li>Algae: 44 sites<br></li>
 </ul>
-</div>
-</div>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="true" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Setup
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse show">
-<div class="callout-body-container callout-body">
-<p>This is the template for <a href="assignment2.html">assignment 2</a>. You can download the <a href="https://avehtari.github.io/BDA_course_Aalto/assignments/template2.qmd">qmd-file</a> or copy the code from this rendered document after clicking on <code>&lt;/&gt; Code</code> in the top right corner.</p>
-<p><strong>Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.</strong></p>
-<p>The following will set-up <code>markmyassignment</code> to check your functions at the end of the notebook:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">library</span>(markmyassignment)</span>
-<span id="cb2-2"><a href="#cb2-2"></a>assignment_path <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">"https://github.com/avehtari/BDA_course_Aalto/"</span>,</span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="st">"blob/master/tests/assignment2.yml"</span>, <span class="at">sep=</span><span class="st">""</span>)</span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="fu">set_assignment</span>(assignment_path)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The following installs the <code>aaltobda</code> package:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co">#| cache: true</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="co"># Caching should be fine here</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="fu">install.packages</span>(<span class="st">"aaltobda"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://avehtari.github.io/BDA_course_Aalto/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-</div>
+<p>Our goal for the following set of questions is to find the formulation of the posterior using a binomial likeliood and a beta prior on the unknown probability parameter \( \theta \)</p><br>
+<p></p>
+<ul>
+    <li>1.1 The prior \(p(\theta)\) can be expressed&nbsp;as: (2,10) \) ~=&amp;nbsp;\( \frac&amp;#123;\Gamma(12)&amp;#125;&amp;#123;\Gamma(2)\Gamma(10)&amp;#125;\theta(1-\theta)^9 \) ~&amp;nbsp;\( \frac&amp;#123;\Gamma(2)\Gamma(10)&amp;#125;&amp;#123;\Gamma(12)&amp;#125;\theta(1-\theta)^9 \) ~&amp;nbsp;\( \frac&amp;#123;\Gamma(12)&amp;#125;&amp;#123;\Gamma(10)\Gamma(2)&amp;#125;\theta^9(1-\theta) \) }</li>
+</ul>
+<ul>
+    <li>1.2 The likelihood \( p(y = 44 | \theta, n = 274) \) as a function of \( \theta \) can be expressed as: <br></li>
+</ul>
+<ul>
+</ul>
+<ul>
+    <li>1.3 The resulting posterior \( p(\theta|y = 44, n = 274) \) can be expressed&nbsp;as : (46,240)\) ~\(\text{Beta\}(47,241)\) ~\(\text{Beta\}(2,10)\) ~\(\text{Beta\}(44,274)\)}</li>
+</ul>
+<p><br></p>
+<h5 class="anchored">2. Summary of the posterior distribution of \( \theta \)</h5>
+<p><br></p>
+<p>The posterior distribution \( p(\theta|y) \) is analytically available as \( \text{Beta}(\alpha, \beta) \), so we can use the properties of that distribution to summarise what we know about \( \theta \).&nbsp; And in particular, we can make probability statements about ranges of values for \( \theta \). Let's however start with the average value of&nbsp;\( \theta \) you expect after having conditioned on the data.&nbsp;<br></p>
+<ul>
+    <li>2.1 Which of the following is the correct formula for the mean (\( E[\cdot] \)) of a \( \text{Beta}(\alpha, \beta) \) distribution: </li>
+</ul>
+<ul>
+    <li>2.2 Using your answer above, what is the mean of our posterior (i.e.,&nbsp; \( E(\theta|y) \))? Report the result in decimals with two decimal digits. <br></li>
+</ul>
+
+<p>Posterior intervals are sometimes called credible intervals and are different from confidence intervals&nbsp;<a href="https://avehtari.github.io/BDA_course_Aalto/BDA3_notes.html">(for more on this, see here)</a>. These are computed using the quantile function of the posterior distribution. As the quantiles of a \( \text{Beta}(\alpha, \beta) \) distribution do not have a simple analytical form like the expectation, you can use R to compute the posterior intervals.<br></p>
+
+<ul>
+    <li>2.3 What R function would you use here to compute posterior intervals? </li>
+</ul>
+<p>Using your answer above, calculate (report the results in decimals with two decimal digits): <br></p>
+<ul>
+</ul>
+<ul>
+    <li>2.4 90% posterior interval lower bound: <br></li>
+</ul>
+<ul>
+    <li>2.5 90% posterior interval upper bound: <br></li>
+</ul><br>
+<h5 class="anchored"><span>3. Comparison to historical records</span></h5><br>We are interested in using our posterior distribution to estimate the probability that the proportion of detected algae samples (\( \theta \)) is smaller than the historical detection rate \( \theta_0 = 0.2 \), i.e. \( p(\theta \leq \theta_0 \mid y) \).&nbsp;<br>
+<ul>
+    <li>3.1 Which of the following approaches would we take? </li>
+</ul>
+<ul>
+    <li>3.2 What statistical function computes this probability for us? <br></li>
+</ul>
+<ul>
+    <li>3.3 Which R function does this for you?&nbsp;<br></li>
+</ul>
+<ul>
+    <li>3.4 Using your answers above, report this probability (report the result in decimals with two decimal digits): </li>
+</ul>
+<p><br></p>
+<h5 class="anchored">4. Prior sensitivity analysis</h5>
+<p><span style="font-weight: normal;">Redo the analysis using a uniform prior, \( \text{Beta}( 1,1 \)).&nbsp;</span></p>
+<ul>
+    <li>4.1&nbsp;What is the mean of our posterior (i.e.,&nbsp; \( E(\theta|y) \))? Report the result in decimals with two decimal digits. <br></li>
+    <li>4.2 90% posterior interval lower bound. Report the result in decimals with two decimal digits. </li>
+    <li>4.3 90% posterior interval upper bound. Report the result in decimals with two decimal digits. </li>
+    <li>4.4 Probability \( p(\theta \leq \theta_0 \mid y) \).&nbsp;Report the result in decimals with two decimal digits.&nbsp;</li>
+</ul>
+<p>Redo the analysis using as prior \( \text{Beta}(0.5,0.5) \).</p>
+<p></p>
+<ul>
+    <li>4.5&nbsp;What is the mean of our posterior (i.e.,&nbsp; \( E(\theta|y) \))? Report the result in decimals with two decimal digits. <br></li>
+    <li>4.6 90% posterior interval lower bound. Report the result in decimals with two decimal digits. </li>
+    <li>4.7 90% posterior interval upper bound. Report the result in decimals with two decimal digits. </li>
+    <li>4.8 Probability \( p(\theta \leq \theta_0 \mid y) \).&nbsp;Report the result in decimals with two decimal digits.&nbsp;</li>
+</ul>
+<p></p>
+<p>Redo the analysis using as prior \( \text{Beta}(100,2) \).</p>
+<p></p>
+<ul>
+    <li>4.9&nbsp;What is the mean of our posterior (i.e.,&nbsp; \( E(\theta|y) \))? Report the result in decimals with two decimal digits. <br></li>
+    <li>4.10 90% posterior interval lower bound. Report the result in decimals with two decimal digits. </li>
+    <li>4.11 90% posterior interval upper bound. Report the result in decimals with two decimal digits. </li>
+    <li>4.12 Probability \( p(\theta \leq \theta_0 \mid y) \).&nbsp;Report the result in decimals with two decimal digits.&nbsp;</li>
+</ul>
+<p><br></p><span>4.13 Based on testing different priors, would you consider the posterior results believe and defensible (w.r.t. to this data set). In order to help your reasoning you can plot the prior and posteriors used with the code template for Assignment 2? &nbsp;</span><br>
+
+
+
+
+
 </section>
-<section id="inference-for-binomial-proportion" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Inference for binomial proportion</h1>
-<p>Algae status is monitored in 274 sites at Finnish lakes and rivers. The observations for the 2008 algae status at each site are presented in the dataset <code>algae</code> in the <code>aaltobda</code> package (‘0’: no algae, ‘1’: algae present).</p>
-<p>Loading the library and the data.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">library</span>(aaltobda)</span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="fu">data</span>(<span class="st">"algae"</span>)</span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="co"># The data are now stored in the variable `algae`.</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="co"># These are the values for the prior required in the assignment</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a>prior_alpha <span class="ot">=</span> <span class="dv">2</span></span>
-<span id="cb4-6"><a href="#cb4-6"></a>prior_beta <span class="ot">=</span> <span class="dv">10</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>The below data is <strong>only for the tests</strong>, you need to change to the full data <code>algae</code> when reporting your results.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>algae_test <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Let <span class="math inline">\(\pi\)</span> be the probability of a monitoring site having detectable blue-green algae levels and <span class="math inline">\(y\)</span> the observations in <code>algae</code>. Use a binomial model for the observations <span class="math inline">\(y\)</span> and a <span class="math inline">\(Beta(2,10)\)</span> prior for binomial model parameter <span class="math inline">\(\pi\)</span> to formulate a Bayesian model. Here it is not necessary to derive the posterior distribution for <span class="math inline">\(\pi\)</span> as it has already been done in the book and it suffices to refer to that derivation. Also, it is not necessary to write out the distributions; it is sufficient to use label-parameter format, e.g.&nbsp;<span class="math inline">\(Beta(\alpha,\beta)\)</span>.</p>
-<p>Your task is to perform Bayesian inference for a binomial model and answer questions based on it:</p>
-<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 2.a)">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Subtask 2.a)
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Formulate</p>
-<ol type="1">
-<li>the likelihood <span class="math inline">\(p(y|\pi)\)</span> as a function of <span class="math inline">\(\pi\)</span>,</li>
-<li>the prior <span class="math inline">\(p(\pi)\)</span>, and</li>
-<li>the resulting posterior <span class="math inline">\(p(\pi|y)\)</span>.</li>
-</ol>
-<p>Report the posterior in the format <span class="math inline">\(Beta(\alpha,\beta)\)</span>, where you replace <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> with the correct numerical values.</p>
-</div>
-</div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="true" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Tip
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse show">
-<div class="callout-body-container callout-body">
-<p>With a conjugate prior, a closed-form posterior has Beta form (see equations in BDA3 and in the slides).</p>
-</div>
-</div>
-</div>
-<p>Write the likelihood, the prior and the posterior here!</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># These are not the actual values for the posterior!</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="co"># You will have to compute those from the data!</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a>posterior_alpha <span class="ot">=</span> <span class="dv">2</span></span>
-<span id="cb6-4"><a href="#cb6-4"></a>posterior_beta <span class="ot">=</span> <span class="dv">10</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>You can do <a href="https://en.wikipedia.org/wiki/String_interpolation">string interpolation</a> using <a href="https://quarto.org/docs/computations/execution-options.html#knitr">R inline code execution in quarto</a> as such:</p>
-<p><span class="math inline">\(\alpha_\text{prior}\)</span> is <strong>2</strong> and <span class="math inline">\(\beta_\text{prior}\)</span> is <strong>10</strong>. Or string interpolation within math: <span class="math inline">\(Beta(2,10)\)</span></p>
-<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 2.b)">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Subtask 2.b)
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>What can you say about the value of the unknown <span class="math inline">\(\pi\)</span> according to the observations and your prior knowledge? Summarize your results with a point estimate (i.e.&nbsp;<span class="math inline">\(E(\pi|y)\)</span>) and a 90% posterior interval.</p>
-</div>
-</div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="true" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Tip
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse show">
-<div class="callout-body-container callout-body">
-<p>Posterior intervals are also called credible intervals and are different from confidence intervals.</p>
-</div>
-</div>
-</div>
-<p>Keep the below name and format for the functions to work with <code>markmyassignment</code>:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># Useful function: qbeta()</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a></span>
-<span id="cb7-3"><a href="#cb7-3"></a>beta_point_est <span class="ot">&lt;-</span> <span class="cf">function</span>(prior_alpha, prior_beta, data) {</span>
-<span id="cb7-4"><a href="#cb7-4"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb7-5"><a href="#cb7-5"></a>    <span class="co"># This is the correct return value for the test data provided above,</span></span>
-<span id="cb7-6"><a href="#cb7-6"></a>    <span class="co"># combined with the prior provided above.</span></span>
-<span id="cb7-7"><a href="#cb7-7"></a>    <span class="fl">0.2222222</span></span>
-<span id="cb7-8"><a href="#cb7-8"></a>}</span>
-<span id="cb7-9"><a href="#cb7-9"></a>beta_interval <span class="ot">&lt;-</span> <span class="cf">function</span>(prior_alpha, prior_beta, data, <span class="at">prob=</span><span class="fl">0.9</span>) {</span>
-<span id="cb7-10"><a href="#cb7-10"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb7-11"><a href="#cb7-11"></a>    <span class="co"># This is the correct return value for the test data provided above,</span></span>
-<span id="cb7-12"><a href="#cb7-12"></a>    <span class="co"># combined with the prior provided above.</span></span>
-<span id="cb7-13"><a href="#cb7-13"></a>    <span class="fu">c</span>(<span class="fl">0.0846451</span>, <span class="fl">0.3956414</span>)</span>
-<span id="cb7-14"><a href="#cb7-14"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 2.c)">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Subtask 2.c)
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>What is the probability that the proportion of monitoring sites with detectable algae levels <span class="math inline">\(\pi\)</span> is smaller than <span class="math inline">\(\pi_0=0.2\)</span> that is known from historical records?</p>
-</div>
-</div>
-<p>Keep the below name and format for the function to work with <code>markmyassignment</code>:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># Useful function: pbeta()</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a></span>
-<span id="cb8-3"><a href="#cb8-3"></a>beta_low <span class="ot">&lt;-</span> <span class="cf">function</span>(prior_alpha, prior_beta, data, <span class="at">pi_0=</span><span class="fl">0.2</span>) {</span>
-<span id="cb8-4"><a href="#cb8-4"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb8-5"><a href="#cb8-5"></a>    <span class="co"># This is the correct return value for the test data provided above,</span></span>
-<span id="cb8-6"><a href="#cb8-6"></a>    <span class="co"># combined with the correct prior.</span></span>
-<span id="cb8-7"><a href="#cb8-7"></a>    <span class="fl">0.4511238</span></span>
-<span id="cb8-8"><a href="#cb8-8"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 2.d)">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Subtask 2.d)
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>What assumptions are required in order to use this kind of a model with this type of data?</p>
-</div>
-</div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="true" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Tip
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-11" class="callout-11-contents callout-collapse collapse show">
-<div class="callout-body-container callout-body">
-<p>No need to discuss exchangeability yet, as it is discussed in more detail in BDA3 Chapter 5 and Lecture 7.</p>
-</div>
-</div>
-</div>
-<p>Write your answer here!</p>
-<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Subtask 2.e)">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Subtask 2.e)
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Make prior sensitivity analysis by testing a couple of different reasonable priors and plot the different posteriors. Summarize the results by one or two sentences.</p>
-</div>
-</div>
-<p>Plot the PDFs here. Explain shortly what you do.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># Useful function: dbeta()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric" data-weight="85">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Rubric
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<ul>
-<li>Is source code included?</li>
-<li>Are the prior, likelihood and posterior forms in a) reported (derivation of posterior not necessary)?
-<ul>
-<li>No</li>
-<li>Some missing</li>
-<li>Yes</li>
-</ul></li>
-<li>Is the reported resulting posterior correct ?
-<ul>
-<li>It is not reported, that the posterior distribution is a distribution.</li>
-<li>It is reported, that the posterior distribution is , but the numerical values for the parameters are incorrect</li>
-<li>It is reported, that the posterior distribution is , and the numerical values for the parameters are correct.</li>
-</ul></li>
-<li>In part b), is there at least one point estimate reported. Sample based estimates are also OK. Points should be given if the method is right, even if the result is wrong due to a wrong posterior distribution being used. With the right posterior, mean, median, and mode are all approximately .</li>
-<li>For the b) part, is the 90% posterior interval reported? Sample based estimate is also OK. Points should be given if the method is right, even if the result is wrong because the posterior was wrong in the first place. If the posterior was right, the 90% posterior interval is roughly .</li>
-<li>For the c) part, is the posterior probability Pr(π&lt;0.2|y) reported? Points should be given if the method is right, even if the result is wrong because the posterior was wrong. If the posterior was right, the result should be approximately .</li>
-<li>For the d) part, does the report discuss
-<ul>
-<li>No</li>
-<li>No, but other reasonable assumptions are discussed</li>
-<li>Yes, but not quite right or some missing</li>
-<li>Yes</li>
-</ul></li>
-<li>For the e) part, is there some comparison and discussion of results obtained with alternative prior parameters?
-<ul>
-<li>No</li>
-<li>Yes, but the results and conclusions are clearly wrong</li>
-<li>Yes</li>
-</ul></li>
-</ul>
-</div>
-</div>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="true" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-markmyassignment
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-14" class="callout-14-contents callout-collapse collapse show">
-<div class="callout-body-container callout-body">
-<p>The following will check the functions for which <code>markmyassignment</code> has been set up:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">mark_my_assignment</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="overall-quality-of-the-report" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Overall quality of the report</h1>
-<div class="callout callout-style-default callout-note no-icon callout-titled" title="Rubric">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Rubric
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<ul>
-<li>Does the report include comment on whether AI was used, and if AI was used, explanation on how it was used?
-<ul>
-<li>No</li>
-<li>Yes</li>
-</ul></li>
-<li>Does the report follow the formatting instructions?
-<ul>
-<li>Not at all</li>
-<li>Little</li>
-<li>Mostly</li>
-<li>Yes</li>
-</ul></li>
-<li>In case the report doesn’t fully follow the general and formatting instructions, specify the instructions that have not been followed. If applicable, specify the page of the report, where this difference is visible. This will help the other student to improve their reports so that they are easier to read and review. If applicable, specify the page of the report, where this difference in formatting is visible.</li>
-<li>Please also provide feedback on the presentation (e.g.&nbsp;text, layout, flow of the responses, figures, figure captions). Part of the course is practicing making data analysis reports. By providing feedback on the report presentation, other students can learn what they can improve or what they already did well. You should be able to provide constructive or positive feedback for all non-empty and non-nonsense reports. If you think the report is perfect, and you can’t come up with any suggestions how to improve, you can provide feedback on what you liked and why you think some part of the report is better than yours.</li>
-</ul>
-</div>
-</div>
-
-
-<!-- -->
-
 </section>
 
 </main> <!-- /main -->
@@ -830,57 +540,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       container: window.document.getElementById('quarto-embedded-source-code-modal')
     });
     clipboardModal.on('success', onCopySuccess);
-  }
-  const viewSource = window.document.getElementById('quarto-view-source') ||
-                     window.document.getElementById('quarto-code-tools-source');
-  if (viewSource) {
-    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
-    viewSource.addEventListener("click", function(e) {
-      if (sourceUrl) {
-        // rstudio viewer pane
-        if (/\bcapabilities=\b/.test(window.location)) {
-          window.open(sourceUrl);
-        } else {
-          window.location.href = sourceUrl;
-        }
-      } else {
-        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
-        modal.show();
-      }
-      return false;
-    });
-  }
-  function toggleCodeHandler(show) {
-    return function(e) {
-      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
-      for (let i=0; i<detailsSrc.length; i++) {
-        const details = detailsSrc[i].parentElement;
-        if (show) {
-          details.open = true;
-        } else {
-          details.removeAttribute("open");
-        }
-      }
-      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
-      const fromCls = show ? "hidden" : "unhidden";
-      const toCls = show ? "unhidden" : "hidden";
-      for (let i=0; i<cellCodeDivs.length; i++) {
-        const codeDiv = cellCodeDivs[i];
-        if (codeDiv.classList.contains(fromCls)) {
-          codeDiv.classList.remove(fromCls);
-          codeDiv.classList.add(toCls);
-        } 
-      }
-      return false;
-    }
-  }
-  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
-  if (hideAllCode) {
-    hideAllCode.addEventListener("click", toggleCodeHandler(false));
-  }
-  const showAllCode = window.document.getElementById("quarto-show-all-code");
-  if (showAllCode) {
-    showAllCode.addEventListener("click", toggleCodeHandler(true));
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
@@ -1223,263 +882,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         <span class="nav-page-text">Assignment 3</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
-</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb11" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb11-1"><a href="#cb11-1"></a><span class="co">---</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a><span class="an">title:</span><span class="co"> "Assignment 2"</span></span>
-<span id="cb11-3"><a href="#cb11-3"></a><span class="an">author:</span><span class="co"> "Aki Vehtari et al."</span></span>
-<span id="cb11-4"><a href="#cb11-4"></a><span class="an">format:</span></span>
-<span id="cb11-5"><a href="#cb11-5"></a><span class="co">  html:</span></span>
-<span id="cb11-6"><a href="#cb11-6"></a><span class="co">    toc: true</span></span>
-<span id="cb11-7"><a href="#cb11-7"></a><span class="co">    code-tools: true</span></span>
-<span id="cb11-8"><a href="#cb11-8"></a><span class="co">    code-line-numbers: true</span></span>
-<span id="cb11-9"><a href="#cb11-9"></a><span class="co">    number-sections: true</span></span>
-<span id="cb11-10"><a href="#cb11-10"></a><span class="co">    mainfont: Georgia, serif</span></span>
-<span id="cb11-11"><a href="#cb11-11"></a><span class="an">editor:</span><span class="co"> source</span></span>
-<span id="cb11-12"><a href="#cb11-12"></a><span class="co">---</span></span>
-<span id="cb11-13"><a href="#cb11-13"></a></span>
-<span id="cb11-14"><a href="#cb11-14"></a></span>
-<span id="cb11-15"><a href="#cb11-15"></a><span class="fu"># General information</span></span>
-<span id="cb11-16"><a href="#cb11-16"></a></span>
-<span id="cb11-17"><a href="#cb11-17"></a>This assignment is related to Lecture 2 and BDA3 Chapters 1 and 2.</span>
-<span id="cb11-18"><a href="#cb11-18"></a>You may find an additional discussion</span>
-<span id="cb11-19"><a href="#cb11-19"></a>about choosing priors in a [**blog post by Andrew</span>
-<span id="cb11-20"><a href="#cb11-20"></a>Gelman**](http://andrewgelman.com/2017/10/04/worry-rigged-priors/).</span>
-<span id="cb11-21"><a href="#cb11-21"></a></span>
-<span id="cb11-22"><a href="#cb11-22"></a>**The maximum amount of points from this assignment is 3.**</span>
-<span id="cb11-23"><a href="#cb11-23"></a></span>
-<span id="cb11-24"><a href="#cb11-24"></a>We prepared a **quarto template specific to this assignment ([html](template2.html), [qmd](https://avehtari.github.io/BDA_course_Aalto/assignments/template2.qmd), [pdf](template2.pdf))** to help you get started.</span>
-<span id="cb11-25"><a href="#cb11-25"></a></span>
-<span id="cb11-26"><a href="#cb11-26"></a>::: {.callout-tip collapse=false}</span>
-<span id="cb11-27"><a href="#cb11-27"></a>**Reading instructions**:</span>
-<span id="cb11-28"><a href="#cb11-28"></a></span>
-<span id="cb11-29"><a href="#cb11-29"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**The reading instructions for BDA3 Chapter 1**</span><span class="co">](../BDA3_notes.html#ch1)</span>.</span>
-<span id="cb11-30"><a href="#cb11-30"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**The reading instructions for BDA3 Chapter 2**</span><span class="co">](../BDA3_notes.html#ch2)</span>.</span>
-<span id="cb11-31"><a href="#cb11-31"></a></span>
-<span id="cb11-32"><a href="#cb11-32"></a>{{&lt; include includes/_grading_instructions.md &gt;}}</span>
-<span id="cb11-33"><a href="#cb11-33"></a>:::</span>
-<span id="cb11-34"><a href="#cb11-34"></a></span>
-<span id="cb11-35"><a href="#cb11-35"></a></span>
-<span id="cb11-36"><a href="#cb11-36"></a>{{&lt; include includes/_general_info.md &gt;}}</span>
-<span id="cb11-37"><a href="#cb11-37"></a></span>
-<span id="cb11-38"><a href="#cb11-38"></a>::: {.callout-warning collapse=false}</span>
-<span id="cb11-39"><a href="#cb11-39"></a><span class="fu">## Setup</span></span>
-<span id="cb11-40"><a href="#cb11-40"></a></span>
-<span id="cb11-41"><a href="#cb11-41"></a>This is the template for <span class="co">[</span><span class="ot">assignment 2</span><span class="co">](assignment2.html)</span>. You can download the <span class="co">[</span><span class="ot">qmd-file</span><span class="co">](https://avehtari.github.io/BDA_course_Aalto/assignments/template2.qmd)</span> or copy the code from this rendered document after clicking on <span class="in">`&lt;/&gt; Code`</span> in the top right corner.</span>
-<span id="cb11-42"><a href="#cb11-42"></a></span>
-<span id="cb11-43"><a href="#cb11-43"></a>**Please replace the instructions in this template by your own text, explaining what you are doing in each exercise.**</span>
-<span id="cb11-44"><a href="#cb11-44"></a></span>
-<span id="cb11-45"><a href="#cb11-45"></a>The following will set-up <span class="in">`markmyassignment`</span> to check your functions at the end of the notebook:</span>
-<span id="cb11-46"><a href="#cb11-46"></a></span>
-<span id="cb11-47"><a href="#cb11-47"></a><span class="in">```{.r}</span></span>
-<span id="cb11-48"><a href="#cb11-48"></a><span class="in">library(markmyassignment)</span></span>
-<span id="cb11-49"><a href="#cb11-49"></a><span class="in">assignment_path = paste("https://github.com/avehtari/BDA_course_Aalto/",</span></span>
-<span id="cb11-50"><a href="#cb11-50"></a><span class="in">"blob/master/tests/assignment2.yml", sep="")</span></span>
-<span id="cb11-51"><a href="#cb11-51"></a><span class="in">set_assignment(assignment_path)</span></span>
-<span id="cb11-52"><a href="#cb11-52"></a><span class="in">```</span></span>
-<span id="cb11-53"><a href="#cb11-53"></a></span>
-<span id="cb11-54"><a href="#cb11-54"></a>The following installs the <span class="in">`aaltobda`</span> package:</span>
-<span id="cb11-55"><a href="#cb11-55"></a><span class="in">```{.r}</span></span>
-<span id="cb11-56"><a href="#cb11-56"></a><span class="in">#| cache: true</span></span>
-<span id="cb11-57"><a href="#cb11-57"></a><span class="in"># Caching should be fine here</span></span>
-<span id="cb11-58"><a href="#cb11-58"></a><span class="in">install.packages("aaltobda", repos = c("https://avehtari.github.io/BDA_course_Aalto/", getOption("repos")))</span></span>
-<span id="cb11-59"><a href="#cb11-59"></a><span class="in">```</span></span>
-<span id="cb11-60"><a href="#cb11-60"></a>:::</span>
-<span id="cb11-61"><a href="#cb11-61"></a></span>
-<span id="cb11-62"><a href="#cb11-62"></a><span class="fu"># Inference for binomial proportion</span></span>
-<span id="cb11-63"><a href="#cb11-63"></a></span>
-<span id="cb11-64"><a href="#cb11-64"></a>Algae status is monitored in 274 sites at Finnish lakes and rivers. The</span>
-<span id="cb11-65"><a href="#cb11-65"></a>observations for the 2008 algae status at each site are presented in</span>
-<span id="cb11-66"><a href="#cb11-66"></a>the dataset <span class="in">`algae`</span> in the <span class="in">`aaltobda`</span> package ('0': no algae, '1': algae present).</span>
-<span id="cb11-67"><a href="#cb11-67"></a></span>
-<span id="cb11-68"><a href="#cb11-68"></a></span>
-<span id="cb11-69"><a href="#cb11-69"></a>::: {.content-visible when-profile="public"}</span>
-<span id="cb11-70"><a href="#cb11-70"></a>Loading the library and the data.</span>
-<span id="cb11-73"><a href="#cb11-73"></a><span class="in">```{r}</span></span>
-<span id="cb11-74"><a href="#cb11-74"></a><span class="fu">library</span>(aaltobda)</span>
-<span id="cb11-75"><a href="#cb11-75"></a><span class="fu">data</span>(<span class="st">"algae"</span>)</span>
-<span id="cb11-76"><a href="#cb11-76"></a><span class="co"># The data are now stored in the variable `algae`.</span></span>
-<span id="cb11-77"><a href="#cb11-77"></a><span class="co"># These are the values for the prior required in the assignment</span></span>
-<span id="cb11-78"><a href="#cb11-78"></a>prior_alpha <span class="ot">=</span> <span class="dv">2</span></span>
-<span id="cb11-79"><a href="#cb11-79"></a>prior_beta <span class="ot">=</span> <span class="dv">10</span></span>
-<span id="cb11-80"><a href="#cb11-80"></a><span class="in">```</span></span>
-<span id="cb11-81"><a href="#cb11-81"></a></span>
-<span id="cb11-82"><a href="#cb11-82"></a>The below data is **only for the tests**, you need to change to the</span>
-<span id="cb11-83"><a href="#cb11-83"></a>full data <span class="in">`algae`</span> when reporting your results.</span>
-<span id="cb11-84"><a href="#cb11-84"></a><span class="in">```{.r}</span></span>
-<span id="cb11-85"><a href="#cb11-85"></a><span class="in">algae_test &lt;- c(0, 1, 1, 0, 0, 0)</span></span>
-<span id="cb11-86"><a href="#cb11-86"></a><span class="in">```</span></span>
-<span id="cb11-87"><a href="#cb11-87"></a>:::</span>
-<span id="cb11-88"><a href="#cb11-88"></a></span>
-<span id="cb11-89"><a href="#cb11-89"></a>Let $\pi$ be the probability of a monitoring site having detectable</span>
-<span id="cb11-90"><a href="#cb11-90"></a>blue-green algae levels and $y$ the observations in <span class="in">`algae`</span>. Use a</span>
-<span id="cb11-91"><a href="#cb11-91"></a>binomial model for the observations $y$ and a $Beta(2,10)$ prior for</span>
-<span id="cb11-92"><a href="#cb11-92"></a>binomial model parameter $\pi$ to formulate a Bayesian model. Here it is</span>
-<span id="cb11-93"><a href="#cb11-93"></a>not necessary to derive the posterior distribution for $\pi$ as it has</span>
-<span id="cb11-94"><a href="#cb11-94"></a>already been done in the book and it suffices to refer to that</span>
-<span id="cb11-95"><a href="#cb11-95"></a>derivation. Also, it is not necessary to write out the distributions; it</span>
-<span id="cb11-96"><a href="#cb11-96"></a>is sufficient to use label-parameter format, e.g.&nbsp;$Beta(\alpha,\beta)$.</span>
-<span id="cb11-97"><a href="#cb11-97"></a></span>
-<span id="cb11-98"><a href="#cb11-98"></a>Your task is to perform Bayesian inference for a binomial model and answer</span>
-<span id="cb11-99"><a href="#cb11-99"></a>questions based on it:</span>
-<span id="cb11-100"><a href="#cb11-100"></a></span>
-<span id="cb11-101"><a href="#cb11-101"></a>::: {.callout-warning icon=false title="Subtask 2.a)"}</span>
-<span id="cb11-102"><a href="#cb11-102"></a>Formulate</span>
-<span id="cb11-103"><a href="#cb11-103"></a></span>
-<span id="cb11-104"><a href="#cb11-104"></a><span class="ss">1. </span>the likelihood $p(y|\pi)$ as a function of $\pi$,</span>
-<span id="cb11-105"><a href="#cb11-105"></a><span class="ss">2. </span>the prior $p(\pi)$, and</span>
-<span id="cb11-106"><a href="#cb11-106"></a><span class="ss">3. </span>the resulting posterior $p(\pi|y)$.</span>
-<span id="cb11-107"><a href="#cb11-107"></a></span>
-<span id="cb11-108"><a href="#cb11-108"></a>Report the posterior in the format $Beta(\alpha,\beta)$, where you</span>
-<span id="cb11-109"><a href="#cb11-109"></a>replace $\alpha$ and $\beta$ with the correct numerical values.</span>
-<span id="cb11-110"><a href="#cb11-110"></a>:::</span>
-<span id="cb11-111"><a href="#cb11-111"></a></span>
-<span id="cb11-112"><a href="#cb11-112"></a>::: {.callout-tip collapse=false}</span>
-<span id="cb11-113"><a href="#cb11-113"></a>With a conjugate prior, a closed-form posterior has Beta form</span>
-<span id="cb11-114"><a href="#cb11-114"></a>(see equations in BDA3 and in the slides).</span>
-<span id="cb11-115"><a href="#cb11-115"></a>:::</span>
-<span id="cb11-116"><a href="#cb11-116"></a></span>
-<span id="cb11-117"><a href="#cb11-117"></a>::: {.content-visible when-profile="public"}</span>
-<span id="cb11-118"><a href="#cb11-118"></a>Write the likelihood, the prior and the posterior here!</span>
-<span id="cb11-121"><a href="#cb11-121"></a><span class="in">```{r}</span></span>
-<span id="cb11-122"><a href="#cb11-122"></a><span class="co"># These are not the actual values for the posterior!</span></span>
-<span id="cb11-123"><a href="#cb11-123"></a><span class="co"># You will have to compute those from the data!</span></span>
-<span id="cb11-124"><a href="#cb11-124"></a>posterior_alpha <span class="ot">=</span> <span class="dv">2</span></span>
-<span id="cb11-125"><a href="#cb11-125"></a>posterior_beta <span class="ot">=</span> <span class="dv">10</span></span>
-<span id="cb11-126"><a href="#cb11-126"></a><span class="in">```</span></span>
-<span id="cb11-127"><a href="#cb11-127"></a></span>
-<span id="cb11-128"><a href="#cb11-128"></a>You can do <span class="co">[</span><span class="ot">string interpolation</span><span class="co">](https://en.wikipedia.org/wiki/String_interpolation)</span> using <span class="co">[</span><span class="ot">R inline code execution in quarto</span><span class="co">](https://quarto.org/docs/computations/execution-options.html#knitr)</span> as such:</span>
-<span id="cb11-129"><a href="#cb11-129"></a></span>
-<span id="cb11-130"><a href="#cb11-130"></a>$\alpha_\text{prior}$ is **`r prior_alpha`** and $\beta_\text{prior}$ is **`r prior_beta`**.</span>
-<span id="cb11-131"><a href="#cb11-131"></a>Or string interpolation within math: $Beta(<span class="in">`r prior_alpha`</span>,<span class="in">`r prior_beta`</span>)$</span>
-<span id="cb11-132"><a href="#cb11-132"></a>:::</span>
-<span id="cb11-133"><a href="#cb11-133"></a></span>
-<span id="cb11-134"><a href="#cb11-134"></a>::: {.callout-warning icon=false title="Subtask 2.b)"}</span>
-<span id="cb11-135"><a href="#cb11-135"></a>What can you say about the value of the unknown $\pi$ according to</span>
-<span id="cb11-136"><a href="#cb11-136"></a>the observations and your prior knowledge? Summarize your results</span>
-<span id="cb11-137"><a href="#cb11-137"></a>with a point estimate (i.e. $E(\pi|y)$) and a 90% posterior</span>
-<span id="cb11-138"><a href="#cb11-138"></a>interval.</span>
-<span id="cb11-139"><a href="#cb11-139"></a>:::</span>
-<span id="cb11-140"><a href="#cb11-140"></a></span>
-<span id="cb11-141"><a href="#cb11-141"></a>::: {.callout-tip collapse=false}</span>
-<span id="cb11-142"><a href="#cb11-142"></a>Posterior intervals are also called credible</span>
-<span id="cb11-143"><a href="#cb11-143"></a>intervals and are different from confidence intervals.</span>
-<span id="cb11-144"><a href="#cb11-144"></a>:::</span>
-<span id="cb11-145"><a href="#cb11-145"></a></span>
-<span id="cb11-146"><a href="#cb11-146"></a>::: {.content-visible when-profile="public"}</span>
-<span id="cb11-147"><a href="#cb11-147"></a>Keep the below name and format for the functions to work with <span class="in">`markmyassignment`</span>:</span>
-<span id="cb11-148"><a href="#cb11-148"></a><span class="in">```{.r}</span></span>
-<span id="cb11-149"><a href="#cb11-149"></a><span class="in"># Useful function: qbeta()</span></span>
-<span id="cb11-150"><a href="#cb11-150"></a></span>
-<span id="cb11-151"><a href="#cb11-151"></a><span class="in">beta_point_est &lt;- function(prior_alpha, prior_beta, data) {</span></span>
-<span id="cb11-152"><a href="#cb11-152"></a><span class="in">    # Do computation here, and return as below.</span></span>
-<span id="cb11-153"><a href="#cb11-153"></a><span class="in">    # This is the correct return value for the test data provided above,</span></span>
-<span id="cb11-154"><a href="#cb11-154"></a><span class="in">    # combined with the prior provided above.</span></span>
-<span id="cb11-155"><a href="#cb11-155"></a><span class="in">    0.2222222</span></span>
-<span id="cb11-156"><a href="#cb11-156"></a><span class="in">}</span></span>
-<span id="cb11-157"><a href="#cb11-157"></a><span class="in">beta_interval &lt;- function(prior_alpha, prior_beta, data, prob=0.9) {</span></span>
-<span id="cb11-158"><a href="#cb11-158"></a><span class="in">    # Do computation here, and return as below.</span></span>
-<span id="cb11-159"><a href="#cb11-159"></a><span class="in">    # This is the correct return value for the test data provided above,</span></span>
-<span id="cb11-160"><a href="#cb11-160"></a><span class="in">    # combined with the prior provided above.</span></span>
-<span id="cb11-161"><a href="#cb11-161"></a><span class="in">    c(0.0846451, 0.3956414)</span></span>
-<span id="cb11-162"><a href="#cb11-162"></a><span class="in">}</span></span>
-<span id="cb11-163"><a href="#cb11-163"></a><span class="in">```</span></span>
-<span id="cb11-164"><a href="#cb11-164"></a>:::</span>
-<span id="cb11-165"><a href="#cb11-165"></a></span>
-<span id="cb11-166"><a href="#cb11-166"></a>::: {.callout-warning icon=false title="Subtask 2.c)"}</span>
-<span id="cb11-167"><a href="#cb11-167"></a>What is the probability that the proportion of monitoring sites with</span>
-<span id="cb11-168"><a href="#cb11-168"></a>detectable algae levels $\pi$ is smaller than $\pi_0=0.2$ that is</span>
-<span id="cb11-169"><a href="#cb11-169"></a>known from historical records?</span>
-<span id="cb11-170"><a href="#cb11-170"></a>:::</span>
-<span id="cb11-171"><a href="#cb11-171"></a>::: {.content-visible when-profile="public"}</span>
-<span id="cb11-172"><a href="#cb11-172"></a>Keep the below name and format for the function to work with <span class="in">`markmyassignment`</span>:</span>
-<span id="cb11-173"><a href="#cb11-173"></a><span class="in">```{.r}</span></span>
-<span id="cb11-174"><a href="#cb11-174"></a><span class="in"># Useful function: pbeta()</span></span>
-<span id="cb11-175"><a href="#cb11-175"></a></span>
-<span id="cb11-176"><a href="#cb11-176"></a><span class="in">beta_low &lt;- function(prior_alpha, prior_beta, data, pi_0=0.2) {</span></span>
-<span id="cb11-177"><a href="#cb11-177"></a><span class="in">    # Do computation here, and return as below.</span></span>
-<span id="cb11-178"><a href="#cb11-178"></a><span class="in">    # This is the correct return value for the test data provided above,</span></span>
-<span id="cb11-179"><a href="#cb11-179"></a><span class="in">    # combined with the correct prior.</span></span>
-<span id="cb11-180"><a href="#cb11-180"></a><span class="in">    0.4511238</span></span>
-<span id="cb11-181"><a href="#cb11-181"></a><span class="in">}</span></span>
-<span id="cb11-182"><a href="#cb11-182"></a><span class="in">```</span></span>
-<span id="cb11-183"><a href="#cb11-183"></a>:::</span>
-<span id="cb11-184"><a href="#cb11-184"></a></span>
-<span id="cb11-185"><a href="#cb11-185"></a>::: {.callout-warning icon=false title="Subtask 2.d)"}</span>
-<span id="cb11-186"><a href="#cb11-186"></a>What assumptions are required in order to use this kind of a model</span>
-<span id="cb11-187"><a href="#cb11-187"></a>with this type of data?</span>
-<span id="cb11-188"><a href="#cb11-188"></a>:::</span>
-<span id="cb11-189"><a href="#cb11-189"></a></span>
-<span id="cb11-190"><a href="#cb11-190"></a>::: {.callout-tip collapse=false}</span>
-<span id="cb11-191"><a href="#cb11-191"></a>No need to discuss exchangeability yet, as</span>
-<span id="cb11-192"><a href="#cb11-192"></a>it is discussed in more detail in BDA3 Chapter 5 and Lecture 7.</span>
-<span id="cb11-193"><a href="#cb11-193"></a>:::</span>
-<span id="cb11-194"><a href="#cb11-194"></a></span>
-<span id="cb11-195"><a href="#cb11-195"></a>::: {.content-visible when-profile="public"}</span>
-<span id="cb11-196"><a href="#cb11-196"></a>Write your answer here!</span>
-<span id="cb11-197"><a href="#cb11-197"></a>:::</span>
-<span id="cb11-198"><a href="#cb11-198"></a></span>
-<span id="cb11-199"><a href="#cb11-199"></a>::: {.callout-warning icon=false title="Subtask 2.e)"}</span>
-<span id="cb11-200"><a href="#cb11-200"></a>Make prior sensitivity analysis by testing a couple of different</span>
-<span id="cb11-201"><a href="#cb11-201"></a>reasonable priors and plot the different posteriors. Summarize the</span>
-<span id="cb11-202"><a href="#cb11-202"></a>results by one or two sentences.</span>
-<span id="cb11-203"><a href="#cb11-203"></a>:::</span>
-<span id="cb11-204"><a href="#cb11-204"></a></span>
-<span id="cb11-205"><a href="#cb11-205"></a>::: {.content-visible when-profile="public"}</span>
-<span id="cb11-206"><a href="#cb11-206"></a>Plot the PDFs here. Explain shortly what you do.</span>
-<span id="cb11-207"><a href="#cb11-207"></a><span class="in">```{.r}</span></span>
-<span id="cb11-208"><a href="#cb11-208"></a><span class="in"># Useful function: dbeta()</span></span>
-<span id="cb11-209"><a href="#cb11-209"></a><span class="in">```</span></span>
-<span id="cb11-210"><a href="#cb11-210"></a>:::</span>
-<span id="cb11-211"><a href="#cb11-211"></a></span>
-<span id="cb11-212"><a href="#cb11-212"></a></span>
-<span id="cb11-213"><a href="#cb11-213"></a>::: {.callout-note icon=false title="Rubric" weight=85}</span>
-<span id="cb11-214"><a href="#cb11-214"></a></span>
-<span id="cb11-215"><a href="#cb11-215"></a><span class="ss">* </span>Is source code included?</span>
-<span id="cb11-216"><a href="#cb11-216"></a><span class="ss">* </span>Are the prior, likelihood and posterior forms in a) reported (derivation of posterior not necessary)?</span>
-<span id="cb11-217"><a href="#cb11-217"></a><span class="ss">    * </span>No</span>
-<span id="cb11-218"><a href="#cb11-218"></a><span class="ss">    * </span>Some missing</span>
-<span id="cb11-219"><a href="#cb11-219"></a><span class="ss">    * </span>Yes</span>
-<span id="cb11-220"><a href="#cb11-220"></a><span class="ss">* </span>Is the reported resulting posterior correct <span class="co">[</span><span class="ot">Beta(46, 240)</span><span class="co">]</span>{.content-hidden when-profile="public"}?</span>
-<span id="cb11-221"><a href="#cb11-221"></a><span class="ss">  * </span>It is not reported, that the posterior distribution is a <span class="co">[</span><span class="ot">Beta</span><span class="co">]</span>{.content-hidden when-profile="public"} distribution.</span>
-<span id="cb11-222"><a href="#cb11-222"></a><span class="ss">  * </span>It is reported, that the posterior distribution is <span class="co">[</span><span class="ot">Beta(α, β)</span><span class="co">]</span>{.content-hidden when-profile="public"}, but the numerical values for the</span>
-<span id="cb11-223"><a href="#cb11-223"></a>  parameters are incorrect</span>
-<span id="cb11-224"><a href="#cb11-224"></a><span class="ss">  * </span>It is reported, that the posterior distribution is <span class="co">[</span><span class="ot">Beta(α, β)</span><span class="co">]</span>{.content-hidden when-profile="public"}, and the numerical values for the</span>
-<span id="cb11-225"><a href="#cb11-225"></a>parameters are correct.</span>
-<span id="cb11-226"><a href="#cb11-226"></a><span class="ss">* </span>In part b), is there at least one point estimate reported. Sample based estimates are also OK. Points</span>
-<span id="cb11-227"><a href="#cb11-227"></a>should be given if the method is right, even if the result is wrong due to a wrong posterior distribution</span>
-<span id="cb11-228"><a href="#cb11-228"></a>being used. With the right posterior, mean, median, and mode are all approximately <span class="co">[</span><span class="ot">0.16</span><span class="co">]</span>{.content-hidden when-profile="public"}.</span>
-<span id="cb11-229"><a href="#cb11-229"></a><span class="ss">* </span>For the b) part, is the 90% posterior interval reported? Sample based estimate is also OK. Points</span>
-<span id="cb11-230"><a href="#cb11-230"></a>should be given if the method is right, even if the result is wrong because the posterior was wrong in</span>
-<span id="cb11-231"><a href="#cb11-231"></a>the first place. If the posterior was right, the 90% posterior interval is roughly <span class="co">[</span><span class="ot">(0.13,0.20)</span><span class="co">]</span>{.content-hidden when-profile="public"}.</span>
-<span id="cb11-232"><a href="#cb11-232"></a><span class="ss">* </span>For the c) part, is the posterior probability Pr(π&lt;0.2|y) reported? Points should be given if the method</span>
-<span id="cb11-233"><a href="#cb11-233"></a>is right, even if the result is wrong because the posterior was wrong. If the posterior was right, the</span>
-<span id="cb11-234"><a href="#cb11-234"></a>result should be approximately <span class="co">[</span><span class="ot">0.959</span><span class="co">]</span>{.content-hidden when-profile="public"}.</span>
-<span id="cb11-235"><a href="#cb11-235"></a><span class="ss">* </span>For the d) part, does the report discuss [somehow the assumption of independence given the shared</span>
-<span id="cb11-236"><a href="#cb11-236"></a>success probability π (i.i.d. or independent and exchangeable trials is also OK)?]{.content-hidden when-profile="public"}</span>
-<span id="cb11-237"><a href="#cb11-237"></a><span class="ss">    * </span>No</span>
-<span id="cb11-238"><a href="#cb11-238"></a><span class="ss">    * </span>No, but other reasonable assumptions are discussed</span>
-<span id="cb11-239"><a href="#cb11-239"></a><span class="ss">    * </span>Yes, but not quite right or some missing</span>
-<span id="cb11-240"><a href="#cb11-240"></a><span class="ss">    * </span>Yes</span>
-<span id="cb11-241"><a href="#cb11-241"></a><span class="ss">* </span>For the e) part, is there some comparison and discussion of results obtained with alternative prior</span>
-<span id="cb11-242"><a href="#cb11-242"></a>parameters?</span>
-<span id="cb11-243"><a href="#cb11-243"></a><span class="ss">    * </span>No</span>
-<span id="cb11-244"><a href="#cb11-244"></a><span class="ss">    * </span>Yes, but the results and conclusions are clearly wrong</span>
-<span id="cb11-245"><a href="#cb11-245"></a><span class="ss">    * </span>Yes</span>
-<span id="cb11-246"><a href="#cb11-246"></a></span>
-<span id="cb11-247"><a href="#cb11-247"></a>:::</span>
-<span id="cb11-248"><a href="#cb11-248"></a></span>
-<span id="cb11-249"><a href="#cb11-249"></a>::: {.callout-warning collapse=false}</span>
-<span id="cb11-250"><a href="#cb11-250"></a><span class="fu">## markmyassignment</span></span>
-<span id="cb11-251"><a href="#cb11-251"></a>The following will check the functions for which <span class="in">`markmyassignment`</span> has been set up:</span>
-<span id="cb11-252"><a href="#cb11-252"></a></span>
-<span id="cb11-253"><a href="#cb11-253"></a><span class="in">```{.r}</span></span>
-<span id="cb11-254"><a href="#cb11-254"></a><span class="in">mark_my_assignment()</span></span>
-<span id="cb11-255"><a href="#cb11-255"></a><span class="in">```</span></span>
-<span id="cb11-256"><a href="#cb11-256"></a>:::</span>
-<span id="cb11-257"><a href="#cb11-257"></a></span>
-<span id="cb11-258"><a href="#cb11-258"></a>{{&lt; include includes/_overall_quality.md &gt;}}</span>
-</code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
-</div></div></div></div></div>
+</nav>
 </div> <!-- /content -->
 
 
