@@ -1,60 +1,5 @@
 [
   {
-    "objectID": "assignment5.html",
-    "href": "assignment5.html",
-    "title": "Assignment 5",
-    "section": "",
-    "text": "1 General information\nThis assignment will be published later!",
-    "crumbs": [
-      "Assignments",
-      "Assignment 5"
-    ]
-  },
-  {
-    "objectID": "template2.html",
-    "href": "template2.html",
-    "title": "Notebook for Assignment 2",
-    "section": "",
-    "text": "1 General information\nThis assignment is related to Lecture 2 and BDA3 Chapters 1 and 2. You may find an additional discussion about choosing priors in a blog post by Andrew Gelman.\n\n\n\n\n\n\nTip\n\n\n\n\n\nReading instructions:\n\nThe reading instructions for BDA3 Chapter 1.\nThe reading instructions for BDA3 Chapter 2.\n\n\n\n\n\n\n\n\n\n\nGeneral Instructions for Answering the Assignment Questions\n\n\n\n\n\n\nQuestions below are exact copies of the text found in the MyCourses quiz and should serve as a notebook where you can store notes and code.\nWe recommend opening these notebooks in the Aalto JupyterHub, see how to use R and RStudio remotely.\nFor inspiration for code, have a look at the BDA R Demos and the specific Assignment code notebooks\nRecommended additional self study exercises for each chapter in BDA3 are listed in the course web page. These will help to gain deeper understanding of the topic.\nCommon questions and answers regarding installation and technical problems can be found in Frequently Asked Questions (FAQ).\nDeadlines for all assignments can be found on the course web page and in MyCourses.\nYou are allowed to discuss assignments with your friends, but it is not allowed to copy solutions directly from other students or from internet.\nDo not share your answers publicly.\nDo not copy answers from the internet or from previous years. We compare the answers to the answers from previous years and to the answers from other students this year.\nUse of AI is allowed on the course, but the most of the work needs to by the student, and you need to report whether you used AI and in which way you used them (See points 5 and 6 in Aalto guidelines for use of AI in teaching).\nAll suspected plagiarism will be reported and investigated. See more about the Aalto University Code of Academic Integrity and Handling Violations Thereof.\nIf you have any suggestions or improvements to the course material, please post in the course chat feedback channel, create an issue, or submit a pull request to the public repository!\n\n\n\n\n\n\n\n\n\n\nSetup\n\n\n\n\n\nThe following installs the aaltobda package:\n#| cache: true\n# Caching should be fine here\ninstall.packages(\"aaltobda\", repos = c(\"https://avehtari.github.io/BDA_course_Aalto/\", getOption(\"repos\")))\n\n\n\n\n\n2 Inference for binomial proportion\nAlgae status is monitored in 274 sites at Finnish lakes and rivers. The observations for the 2008 algae status at each site are presented in the dataset algae in the aaltobda package (‘0’: no algae, ‘1’: algae present).\nLoading the library and the data.\n\nlibrary(aaltobda)\nlibrary(ggplot2)\nlibrary(dplyr)\n\n\nAttaching package: 'dplyr'\n\n\nThe following objects are masked from 'package:stats':\n\n    filter, lag\n\n\nThe following objects are masked from 'package:base':\n\n    intersect, setdiff, setequal, union\n\nlibrary(latex2exp)\ndata(\"algae\")\n# The data are now stored in the variable `algae`.\n# These are the values for the prior required in the assignment\nprior_alpha = 2\nprior_beta = 10\n\nLet \\(\\pi\\) be the probability of a monitoring site having detectable blue-green algae levels and \\(y\\) the observations in algae. Use a binomial model for the observations \\(y\\) and a \\(Beta(2,10)\\) prior for binomial model parameter \\(\\pi\\) to formulate a Bayesian model. Here it is not necessary to derive the posterior distribution for \\(\\pi\\) as it has already been done in the book and it suffices to refer to that derivation. Also, it is not necessary to write out the distributions; it is sufficient to use label-parameter format, e.g. \\(Beta(\\alpha,\\beta)\\).\nYour task is to perform Bayesian inference for a binomial model and answer questions based on it.\n\n\n3 Formulating probabilities\n\n\n4 Summary of the posterior distribution of \\(\\theta\\)\nKeep the below name and format for the functions to work with markmyassignment:\n\n# Useful function: qbeta()\n\nbeta_point_est &lt;- function(prior_alpha, prior_beta, data) {\n    # Do computation here, and return as below.\n    \n}\nbeta_interval &lt;- function(prior_alpha, prior_beta, data, prob=0.9) {\n    # Do computation here, and return as below.\n\n\n}\n\n\n\n5 Comparison to historical records\nKeep the below name and format for the function to work with markmyassignment:\n\n# Useful function: pbeta()\n\nbeta_low &lt;- function(prior_alpha, prior_beta, data, pi_0=0.2) {\n    # Do computation here, and return as below.\n\n}\n\n\n\n6 Prior sensitivity analysis\nMake prior sensitivity analysis by testing a couple of different reasonable priors and plot the different posteriors. Try to summarise the results by one or two sentences.\n# Useful function: dbeta()\nAmend the code below to help you.\n\n# Beta distribution density function\nbeta_density &lt;- function(x, shape1, shape2) {\n  dbeta(x, shape1, shape2)\n}\n\n# Binomial likelihood density function\nbinomial_likelihood &lt;- function(x, n, k) {\n  choose(n, k) * x^k * (1 - x)^(n - k)\n}\n\n# Parameters for the Beta prior distributions\npriors &lt;- list(c(#alpha, #beta), c(#alpha, #beta), c(#alpha, #beta)) # Define three different priors here priors, (alpha, beta)\n\n# Parameters for the binomial likelihood (number of trials and successes)\nn &lt;-  # number of trials\nk &lt;-  # number of successes\n\n# Create a sequence of x values from 0 to 1\nx &lt;- seq(0, 1, length.out = 100)\n\n\n# Create a data frame with densities\ndensities_list &lt;- lapply(priors, function(prior) {\n  alpha_prior &lt;- prior[1]\n  beta_prior &lt;- prior[2]\n  alpha_posterior &lt;- alpha_prior + k\n  beta_posterior &lt;- beta_prior + n - k\n  \n  data.frame(\n    x = rep(x, 2),\n    density = c(beta_density(x, alpha_prior, beta_prior),\n                beta_density(x, alpha_posterior, beta_posterior)),\n    distribution = factor(rep(c(\"Prior\", \"Posterior\"), each = length(x))),\n    prior = paste(\"Prior: Alpha =\", alpha_prior, \"Beta =\", beta_prior)\n  )\n})\n\ndf &lt;- bind_rows(densities_list)\n\n# Plot the densities using ggplot2\nggplot(df, aes(x = x, y = density, color = distribution)) +\n  geom_line(size = 1) +\n  facet_wrap(~ prior, scales = \"fixed\", nrow = 3) +\n  labs(title = \"Prior and Posterior Densities for Different Priors\", \n       x = TeX(\"$\\\\theta$\"), \n       y = \"Density\", \n       color = \"Distribution\") +\n  theme_minimal()",
-    "crumbs": [
-      "Templates",
-      "Notebook for Assignment 2"
-    ]
-  },
-  {
-    "objectID": "assignment4.html",
-    "href": "assignment4.html",
-    "title": "Assignment 4",
-    "section": "",
-    "text": "1 General information\nThis assignment will be published later!",
-    "crumbs": [
-      "Assignments",
-      "Assignment 4"
-    ]
-  },
-  {
-    "objectID": "template6.html",
-    "href": "template6.html",
-    "title": "Notebook for Assignment 6",
-    "section": "",
-    "text": "1 General information\nThis notebook will be published later!",
-    "crumbs": [
-      "Templates",
-      "Notebook for Assignment 6"
-    ]
-  },
-  {
-    "objectID": "template3.html",
-    "href": "template3.html",
-    "title": "Notebook for Assignment 3",
-    "section": "",
-    "text": "1 General information\nThis notebook will be published later!",
-    "crumbs": [
-      "Templates",
-      "Notebook for Assignment 3"
-    ]
-  },
-  {
     "objectID": "assignment_instructions.html",
     "href": "assignment_instructions.html",
     "title": "Assignment instructions",
@@ -77,17 +22,6 @@
     ]
   },
   {
-    "objectID": "assignment3.html",
-    "href": "assignment3.html",
-    "title": "Assignment 3",
-    "section": "",
-    "text": "1 General information\nThis assignment will be published later!",
-    "crumbs": [
-      "Assignments",
-      "Assignment 3"
-    ]
-  },
-  {
     "objectID": "template7.html",
     "href": "template7.html",
     "title": "Notebook for Assignment 7",
@@ -96,94 +30,6 @@
     "crumbs": [
       "Templates",
       "Notebook for Assignment 7"
-    ]
-  },
-  {
-    "objectID": "template4.html",
-    "href": "template4.html",
-    "title": "Notebook for Assignment 4",
-    "section": "",
-    "text": "1 General information\nThis notebook will be published later!",
-    "crumbs": [
-      "Templates",
-      "Notebook for Assignment 4"
-    ]
-  },
-  {
-    "objectID": "assignment6.html",
-    "href": "assignment6.html",
-    "title": "Assignment 6",
-    "section": "",
-    "text": "1 General information\nThis assignment will be published later!",
-    "crumbs": [
-      "Assignments",
-      "Assignment 6"
-    ]
-  },
-  {
-    "objectID": "assignment8.html",
-    "href": "assignment8.html",
-    "title": "Assignment 8",
-    "section": "",
-    "text": "1 General information\nThis assignment will be published later!",
-    "crumbs": [
-      "Assignments",
-      "Assignment 8"
-    ]
-  },
-  {
-    "objectID": "assignment7.html",
-    "href": "assignment7.html",
-    "title": "Assignment 7",
-    "section": "",
-    "text": "1 General information\nThis assignment will be published later!",
-    "crumbs": [
-      "Assignments",
-      "Assignment 7"
-    ]
-  },
-  {
-    "objectID": "template9.html",
-    "href": "template9.html",
-    "title": "Notebook for Assignment 9",
-    "section": "",
-    "text": "1 General information\nThis notebook will be published later!",
-    "crumbs": [
-      "Templates",
-      "Notebook for Assignment 9"
-    ]
-  },
-  {
-    "objectID": "template1.html",
-    "href": "template1.html",
-    "title": "Notebook for Assignment 1",
-    "section": "",
-    "text": "1 General information\nThe exercises here refer to the lecture 1/BDA chapter 1 content, not the course infrastructure quiz. This assignment is meant to test whether or not you have sufficient knowledge to participate in the course. The first question checks that you remember basic terms of probability calculus. The second exercise checks you recognise the most important notation used throughout the course and used in BDA3. The third-fifth exercise you will solve some basic Bayes theorem questions to check your understanding on the basics of probability theory. The 6th exercise checks on whether you recall the three steps of Bayesian Data Ananlysis as mentioned in chapter 1 of BDA3. The last exercise walks you through an example of how we can use models to generate distributions for outcomes of interest, applied to a setting of a simplified Roulette table.\nThis quarto document is not intended to be submitted, but to render the questions as they appear on Mycourses to be available also outside of it. The following will set-up markmyassignment to check your functions at the end of the notebook:\n\nlibrary(markmyassignment)\nassignment_path = paste(\"https://github.com/avehtari/BDA_course_Aalto/\",\n\"blob/master/tests/assignment1.yml\", sep=\"\")\nset_assignment(assignment_path)\n\nAssignment set:\nassignment1: Bayesian Data Analysis: Assignment 1\nThe assignment contain the following (3) tasks:\n- p_red\n- p_box\n- p_identical_twin\n\n\n\n\n2 1. Basic probability theory notation and terms\n\n\n3 2. Notation\n\n\n4 3. Bayes’ theorem 1\nIf you use pen and paper, it may help to draw pictures as follows (see also assignment_instructions#fig-workflow):\n\n\n\n\n\n\nFigure 1: Parts of Bayesian workflow\n\n\n\nSee Figure 1 for illustration of parts of Bayesian workflow.\n\n\n5 4. Bayes’ theorem 2\nThe following will help you implementing a function to calculate the required probabilities for this exercise. Keep the below name and format for the function to work with markmyassignment:\n\nboxes_test &lt;- matrix(c(2,2,1,5,5,1), ncol = 2,\n    dimnames = list(c(\"A\", \"B\", \"C\"), c(\"red\", \"white\")))\n\np_red &lt;- function(boxes) {\n    # Do computation here, and return as below.\n    # This is the correct return value for the test data provided above.\n    0.3928571\n}\n\np_box &lt;- function(boxes) {\n    # Do computation here, and return as below.\n    # This is the correct return value for the test data provided above.\n    c(0.29090909,0.07272727,0.63636364)\n}\n\n\n\n6 5. Bayes’ theorem 3\nThe R functions below might help you calculating the requited probabilities.\n\nfraternal_prob = 1/125\nidentical_prob = 1/300\n\nKeep the below name and format for the function to work with markmyassignment:\n\np_identical_twin &lt;- function(fraternal_prob, identical_prob) {\n    # Do computation here, and return as below.\n    # This is the correct return value for the test data provided above.\n    0.4545455\n}\n\n\n\n7 6. The three steps of Bayesian data analysis\n\n\n8 7. A Binomial Model for the Roulette Table\nIncomplete code can be found below.\n\n# Ratio of red/black\ntheta &lt;- # declare probability parameter for the binomial model\n\n# Sequence of trials\n\ntrials &lt;- seq(#start value of sequence,#end value of sequence,#value for spacing)\n\n# Number of simulation draws from the model\nnsims &lt;- # number of of simulations from the binomial model\n\n# Helper function for getting the ratios\nbinom_gen &lt;- function(trials,theta,nsims){\n    df &lt;-  as.data.frame(rbinom(nsims,trials,theta)/trials) |&gt; mutate(nsims = nsims,trials = trials)\n    colnames(df) &lt;- c(\"Ratios\",\"Nsims\",\"Trials\")\n  return(df)\n}\n\n# Create a data frame containing the draws for each number of trials\nratio_60 &lt;- do.call(rbind, lapply(trials, binom_gen, theta, nsims)) # lapply applies elements in trials column to binom_gen function, which is then rowbound via do.call\n\nNow plot a histogram of the computed ratios for 10, 50 and 1000 trials, using the code below\n\n# Plot the Distributions\nsubset_df60 &lt;- ratio_60[ratio_60$Trials %in% c(#trial values), ] # Subset your dataframe\n\nsubset_df60 |&gt; ggplot(aes(Ratios)) +\n  geom_histogram(position = \"identity\" ,bins = 40) +\n  facet_grid(cols = vars(Trials))  +\n  ggtitle(\"Ratios for specific trials\")\n\nSuppose you are now certain that theta = 0.6, plot the probability density given 1000 trials using the code below.\n\nsize =  # number of trials\nprob =  # probability of success\n\nbinom_data &lt;- data.frame(\n  Success = 0:size,\n  Probability = dbinom(0:size, size = size, prob = prob)\n)\n\nggplot(binom_data, aes(x = Success, y = Probability)) +\n  geom_point() +\n  geom_line() +\n  labs(title = \"PMF of Binomial Distribution\", x = \"Number of Successes\", y = \"PDF\")\n\n\n\n\n\n\n\nmarkmyassignment\n\n\n\n\n\nThe following will check the functions for which markmyassignment has been set up:\n\nmark_my_assignment()\n\n✔ | F W  S  OK | Context\n\n⠏ |          0 | task-1-subtask-1-tests                                         \n⠏ |          0 | p_red()                                                        \n✖ | 1        3 | p_red()\n────────────────────────────────────────────────────────────────────────────────\nFailure ('test-task-1-subtask-1-tests.R:21:3'): p_red()\np_red(boxes = boxes) not equivalent to 0.5.\n1/1 mismatches\n[1] 0.393 - 0.5 == -0.107\nError: Incorrect result for matrix(c(1,1,1,1,1,1), ncol = 2)\n────────────────────────────────────────────────────────────────────────────────\n\n⠏ |          0 | task-2-subtask-1-tests                                         \n⠏ |          0 | p_box()                                                        \n✖ | 1        3 | p_box()\n────────────────────────────────────────────────────────────────────────────────\nFailure ('test-task-2-subtask-1-tests.R:19:3'): p_box()\np_box(boxes = boxes) not equivalent to c(0.4, 0.1, 0.5).\n3/3 mismatches (average diff: 0.0909)\n[1] 0.2909 - 0.4 == -0.1091\n[2] 0.0727 - 0.1 == -0.0273\n[3] 0.6364 - 0.5 ==  0.1364\nError: Incorrect result for matrix(c(1,1,1,1,1,1), ncol = 2)\n────────────────────────────────────────────────────────────────────────────────\n\n⠏ |          0 | task-3-subtask-1-tests                                         \n⠏ |          0 | p_identical_twin()                                             \n✖ | 2        3 | p_identical_twin()\n────────────────────────────────────────────────────────────────────────────────\nFailure ('test-task-3-subtask-1-tests.R:16:3'): p_identical_twin()\np_identical_twin(fraternal_prob = 1/100, identical_prob = 1/500) not equivalent to 0.2857143.\n1/1 mismatches\n[1] 0.455 - 0.286 == 0.169\nError: Incorrect result for fraternal_prob = 1/100 and identical_prob = 1/500\n\nFailure ('test-task-3-subtask-1-tests.R:19:3'): p_identical_twin()\np_identical_twin(fraternal_prob = 1/10, identical_prob = 1/20) not equivalent to 0.5.\n1/1 mismatches\n[1] 0.455 - 0.5 == -0.0455\nError: Incorrect result for fraternal_prob = 1/10 and identical_prob = 1/20\n────────────────────────────────────────────────────────────────────────────────\n\n══ Results ═════════════════════════════════════════════════════════════════════\n── Failed tests ────────────────────────────────────────────────────────────────\nFailure ('test-task-1-subtask-1-tests.R:21:3'): p_red()\np_red(boxes = boxes) not equivalent to 0.5.\n1/1 mismatches\n[1] 0.393 - 0.5 == -0.107\nError: Incorrect result for matrix(c(1,1,1,1,1,1), ncol = 2)\n\nFailure ('test-task-2-subtask-1-tests.R:19:3'): p_box()\np_box(boxes = boxes) not equivalent to c(0.4, 0.1, 0.5).\n3/3 mismatches (average diff: 0.0909)\n[1] 0.2909 - 0.4 == -0.1091\n[2] 0.0727 - 0.1 == -0.0273\n[3] 0.6364 - 0.5 ==  0.1364\nError: Incorrect result for matrix(c(1,1,1,1,1,1), ncol = 2)\n\nFailure ('test-task-3-subtask-1-tests.R:16:3'): p_identical_twin()\np_identical_twin(fraternal_prob = 1/100, identical_prob = 1/500) not equivalent to 0.2857143.\n1/1 mismatches\n[1] 0.455 - 0.286 == 0.169\nError: Incorrect result for fraternal_prob = 1/100 and identical_prob = 1/500\n\nFailure ('test-task-3-subtask-1-tests.R:19:3'): p_identical_twin()\np_identical_twin(fraternal_prob = 1/10, identical_prob = 1/20) not equivalent to 0.5.\n1/1 mismatches\n[1] 0.455 - 0.5 == -0.0455\nError: Incorrect result for fraternal_prob = 1/10 and identical_prob = 1/20\n\n[ FAIL 4 | WARN 0 | SKIP 0 | PASS 9 ]",
-    "crumbs": [
-      "Templates",
-      "Notebook for Assignment 1"
-    ]
-  },
-  {
-    "objectID": "assignment2.html",
-    "href": "assignment2.html",
-    "title": "Assignment 2",
-    "section": "",
-    "text": "The exercises here refer to the lecture 2/BDA chapters 1-2 content. All questions check your understanding of a simple posterior analysis using a binomial model for the observations and a beta prior.\nThe exercises constitute 90% of the Quiz 2 grade.\nWe prepared a quarto notebook specific to this assignment to help you get started. You still need to fill in your answers on Mycourses! You can inspect this and future templates\n\nas a qmd file,\nas a rendered html file\n\n\n\n\n\n\n\nGeneral Instructions for Answering the Assignment Questions\n\n\n\n\n\n\nQuestions below are exact copies of the text found in the MyCourses quiz and should serve as a notebook where you can store notes and code.\nWe recommend opening these notebooks in the Aalto JupyterHub, see how to use R and RStudio remotely.\nFor inspiration for code, have a look at the BDA R Demos and the specific Assignment code notebooks\nRecommended additional self study exercises for each chapter in BDA3 are listed in the course web page. These will help to gain deeper understanding of the topic.\nCommon questions and answers regarding installation and technical problems can be found in Frequently Asked Questions (FAQ).\nDeadlines for all assignments can be found on the course web page and in MyCourses.\nYou are allowed to discuss assignments with your friends, but it is not allowed to copy solutions directly from other students or from internet.\nDo not share your answers publicly.\nDo not copy answers from the internet or from previous years. We compare the answers to the answers from previous years and to the answers from other students this year.\nUse of AI is allowed on the course, but the most of the work needs to by the student, and you need to report whether you used AI and in which way you used them (See points 5 and 6 in Aalto guidelines for use of AI in teaching).\nAll suspected plagiarism will be reported and investigated. See more about the Aalto University Code of Academic Integrity and Handling Violations Thereof.\nIf you have any suggestions or improvements to the course material, please post in the course chat feedback channel, create an issue, or submit a pull request to the public repository!\n\n\n\n\n\n\nFor convenience the assignment questions are copied below. Answer the questions in MyCourses.\n\n\n\nAlgae\n    status is monitored in 274 sites at Finnish lakes and rivers. The\n    observations for the 2008 algae status at each site are presented in the\n    dataset algae in the aaltobda package ('0': no algae, '1': algae\n    present).\nLet \\( \\theta \\) be the probability of a monitoring site having\n    detectable blue-green algae levels, \\( y \\) the number of observed sites with algae detected, and \\( n \\) be total number sites surveyed.\n    Use a binomial model for the observations and a \\( \\text{Beta}(2,10) \\) prior for binomial model parameter \\( \\theta \\) to formulate a Bayesian model.\n    Here we will not test you on the individual mathematical operations needed in order to derive the posterior distribution for \\( \\theta \\) as it has already been done in the book (and lecture) so make sure to look that up.\nYour task is to perform Bayesian\n    inference for a binomial model and fill in the quiz below based on it. \nFor questions with checkboxes, more than one answer may be\n    correct.\n\nThe algae dataset contains the results of 274 measurements from Finnish lakes, with the following results:\n\n    No Algae: 230 sites\n    Algae: 44 sites\n\nOur goal for the following set of questions is to find the formulation of the posterior using a binomial likeliood and a beta prior on the unknown probability parameter \\( \\theta \\)\n\n\n    1.1 The prior \\(p(\\theta)\\) can be expressed as: \n\n\n    1.2 The likelihood \\( p(y = 44 | \\theta, n = 274) \\) as a function of \\( \\theta \\) can be expressed as: \n\n\n\n\n    1.3 The resulting posterior \\( p(\\theta|y = 44, n = 274) \\) can be expressed as : \n\n\n\n\nThe posterior distribution \\( p(\\theta|y) \\) is analytically available as \\( \\text{Beta}(\\alpha, \\beta) \\), so we can use the properties of that distribution to summarise what we know about \\( \\theta \\).  And in particular, we can make probability statements about ranges of values for \\( \\theta \\). Let's however start with the average value of \\( \\theta \\) you expect after having conditioned on the data. \n\n    2.1 Which of the following is the correct formula for the mean (\\( E[\\cdot] \\)) of a \\( \\text{Beta}(\\alpha, \\beta) \\) distribution: \n\n\n    2.2 Using your answer above, what is the mean of our posterior (i.e.,  \\( E(\\theta|y) \\))? Report the result in decimals with two decimal digits. \n\n\nPosterior intervals are sometimes called credible intervals and are different from confidence intervals (for more on this, see here). These are computed using the quantile function of the posterior distribution. As the quantiles of a \\( \\text{Beta}(\\alpha, \\beta) \\) distribution do not have a simple analytical form like the expectation, you can use R to compute the posterior intervals.\n\n\n    2.3 What R function would you use here to compute posterior intervals? \n\nUsing your answer above, calculate (report the results in decimals with two decimal digits): \n\n\n\n    2.4 90% posterior interval lower bound: \n\n\n    2.5 90% posterior interval upper bound: \n\nWe are interested in using our posterior distribution to estimate the probability that the proportion of detected algae samples (\\( \\theta \\)) is smaller than the historical detection rate \\( \\theta_0 = 0.2 \\), i.e. \\( p(\\theta \\leq \\theta_0 \\mid y) \\). \n\n    3.1 Which of the following approaches would we take? \n\n\n    3.2 What statistical function computes this probability for us? \n\n\n    3.3 Which R function does this for you? \n\n\n    3.4 Using your answers above, report this probability (report the result in decimals with two decimal digits): \n\n\n\nRedo the analysis using a uniform prior, \\( \\text{Beta}( 1,1 \\)). \n\n    4.1 What is the mean of our posterior (i.e.,  \\( E(\\theta|y) \\))? Report the result in decimals with two decimal digits. \n    4.2 90% posterior interval lower bound. Report the result in decimals with two decimal digits. \n    4.3 90% posterior interval upper bound. Report the result in decimals with two decimal digits. \n    4.4 Probability \\( p(\\theta \\leq \\theta_0 \\mid y) \\). Report the result in decimals with two decimal digits. \n\nRedo the analysis using as prior \\( \\text{Beta}(0.5,0.5) \\).\n\n\n    4.5 What is the mean of our posterior (i.e.,  \\( E(\\theta|y) \\))? Report the result in decimals with two decimal digits. \n    4.6 90% posterior interval lower bound. Report the result in decimals with two decimal digits. \n    4.7 90% posterior interval upper bound. Report the result in decimals with two decimal digits. \n    4.8 Probability \\( p(\\theta \\leq \\theta_0 \\mid y) \\). Report the result in decimals with two decimal digits. \n\n\nRedo the analysis using as prior \\( \\text{Beta}(100,2) \\).\n\n\n    4.9 What is the mean of our posterior (i.e.,  \\( E(\\theta|y) \\))? Report the result in decimals with two decimal digits. \n    4.10 90% posterior interval lower bound. Report the result in decimals with two decimal digits. \n    4.11 90% posterior interval upper bound. Report the result in decimals with two decimal digits. \n    4.12 Probability \\( p(\\theta \\leq \\theta_0 \\mid y) \\). Report the result in decimals with two decimal digits. \n\n4.13 Based on testing different priors, would you consider the posterior results believe and defensible (w.r.t. to this data set). In order to help your reasoning you can plot the prior and posteriors used with the code template for Assignment 2?",
-    "crumbs": [
-      "Assignments",
-      "Assignment 2"
-    ]
-  },
-  {
-    "objectID": "assignment2.html#assignment-questions",
-    "href": "assignment2.html#assignment-questions",
-    "title": "Assignment 2",
-    "section": "",
-    "text": "For convenience the assignment questions are copied below. Answer the questions in MyCourses.\n\n\n\nAlgae\n    status is monitored in 274 sites at Finnish lakes and rivers. The\n    observations for the 2008 algae status at each site are presented in the\n    dataset algae in the aaltobda package ('0': no algae, '1': algae\n    present).\nLet \\( \\theta \\) be the probability of a monitoring site having\n    detectable blue-green algae levels, \\( y \\) the number of observed sites with algae detected, and \\( n \\) be total number sites surveyed.\n    Use a binomial model for the observations and a \\( \\text{Beta}(2,10) \\) prior for binomial model parameter \\( \\theta \\) to formulate a Bayesian model.\n    Here we will not test you on the individual mathematical operations needed in order to derive the posterior distribution for \\( \\theta \\) as it has already been done in the book (and lecture) so make sure to look that up.\nYour task is to perform Bayesian\n    inference for a binomial model and fill in the quiz below based on it. \nFor questions with checkboxes, more than one answer may be\n    correct.\n\nThe algae dataset contains the results of 274 measurements from Finnish lakes, with the following results:\n\n    No Algae: 230 sites\n    Algae: 44 sites\n\nOur goal for the following set of questions is to find the formulation of the posterior using a binomial likeliood and a beta prior on the unknown probability parameter \\( \\theta \\)\n\n\n    1.1 The prior \\(p(\\theta)\\) can be expressed as: \n\n\n    1.2 The likelihood \\( p(y = 44 | \\theta, n = 274) \\) as a function of \\( \\theta \\) can be expressed as: \n\n\n\n\n    1.3 The resulting posterior \\( p(\\theta|y = 44, n = 274) \\) can be expressed as : \n\n\n\n\nThe posterior distribution \\( p(\\theta|y) \\) is analytically available as \\( \\text{Beta}(\\alpha, \\beta) \\), so we can use the properties of that distribution to summarise what we know about \\( \\theta \\).  And in particular, we can make probability statements about ranges of values for \\( \\theta \\). Let's however start with the average value of \\( \\theta \\) you expect after having conditioned on the data. \n\n    2.1 Which of the following is the correct formula for the mean (\\( E[\\cdot] \\)) of a \\( \\text{Beta}(\\alpha, \\beta) \\) distribution: \n\n\n    2.2 Using your answer above, what is the mean of our posterior (i.e.,  \\( E(\\theta|y) \\))? Report the result in decimals with two decimal digits. \n\n\nPosterior intervals are sometimes called credible intervals and are different from confidence intervals (for more on this, see here). These are computed using the quantile function of the posterior distribution. As the quantiles of a \\( \\text{Beta}(\\alpha, \\beta) \\) distribution do not have a simple analytical form like the expectation, you can use R to compute the posterior intervals.\n\n\n    2.3 What R function would you use here to compute posterior intervals? \n\nUsing your answer above, calculate (report the results in decimals with two decimal digits): \n\n\n\n    2.4 90% posterior interval lower bound: \n\n\n    2.5 90% posterior interval upper bound: \n\nWe are interested in using our posterior distribution to estimate the probability that the proportion of detected algae samples (\\( \\theta \\)) is smaller than the historical detection rate \\( \\theta_0 = 0.2 \\), i.e. \\( p(\\theta \\leq \\theta_0 \\mid y) \\). \n\n    3.1 Which of the following approaches would we take? \n\n\n    3.2 What statistical function computes this probability for us? \n\n\n    3.3 Which R function does this for you? \n\n\n    3.4 Using your answers above, report this probability (report the result in decimals with two decimal digits): \n\n\n\nRedo the analysis using a uniform prior, \\( \\text{Beta}( 1,1 \\)). \n\n    4.1 What is the mean of our posterior (i.e.,  \\( E(\\theta|y) \\))? Report the result in decimals with two decimal digits. \n    4.2 90% posterior interval lower bound. Report the result in decimals with two decimal digits. \n    4.3 90% posterior interval upper bound. Report the result in decimals with two decimal digits. \n    4.4 Probability \\( p(\\theta \\leq \\theta_0 \\mid y) \\). Report the result in decimals with two decimal digits. \n\nRedo the analysis using as prior \\( \\text{Beta}(0.5,0.5) \\).\n\n\n    4.5 What is the mean of our posterior (i.e.,  \\( E(\\theta|y) \\))? Report the result in decimals with two decimal digits. \n    4.6 90% posterior interval lower bound. Report the result in decimals with two decimal digits. \n    4.7 90% posterior interval upper bound. Report the result in decimals with two decimal digits. \n    4.8 Probability \\( p(\\theta \\leq \\theta_0 \\mid y) \\). Report the result in decimals with two decimal digits. \n\n\nRedo the analysis using as prior \\( \\text{Beta}(100,2) \\).\n\n\n    4.9 What is the mean of our posterior (i.e.,  \\( E(\\theta|y) \\))? Report the result in decimals with two decimal digits. \n    4.10 90% posterior interval lower bound. Report the result in decimals with two decimal digits. \n    4.11 90% posterior interval upper bound. Report the result in decimals with two decimal digits. \n    4.12 Probability \\( p(\\theta \\leq \\theta_0 \\mid y) \\). Report the result in decimals with two decimal digits. \n\n4.13 Based on testing different priors, would you consider the posterior results believe and defensible (w.r.t. to this data set). In order to help your reasoning you can plot the prior and posteriors used with the code template for Assignment 2?",
-    "crumbs": [
-      "Assignments",
-      "Assignment 2"
     ]
   },
   {
@@ -198,6 +44,127 @@
     ]
   },
   {
+    "objectID": "assignment7.html",
+    "href": "assignment7.html",
+    "title": "Assignment 7",
+    "section": "",
+    "text": "1 General information\nThis assignment will be published later!",
+    "crumbs": [
+      "Assignments",
+      "Assignment 7"
+    ]
+  },
+  {
+    "objectID": "template1.html",
+    "href": "template1.html",
+    "title": "Notebook for Assignment 1",
+    "section": "",
+    "text": "1 General information\nThe exercises here refer to the lecture 1/BDA chapter 1 content, not the course infrastructure quiz. This assignment is meant to test whether or not you have sufficient knowledge to participate in the course. The first question checks that you remember basic terms of probability calculus. The second exercise checks you recognise the most important notation used throughout the course and used in BDA3. The third-fifth exercise you will solve some basic Bayes theorem questions to check your understanding on the basics of probability theory. The 6th exercise checks on whether you recall the three steps of Bayesian Data Ananlysis as mentioned in chapter 1 of BDA3. The last exercise walks you through an example of how we can use models to generate distributions for outcomes of interest, applied to a setting of a simplified Roulette table.\nThis quarto document is not intended to be submitted, but to render the questions as they appear on Mycourses to be available also outside of it. The following will set-up markmyassignment to check your functions at the end of the notebook:\n\nlibrary(markmyassignment)\nassignment_path = paste(\"https://github.com/avehtari/BDA_course_Aalto/\",\n\"blob/master/tests/assignment1.yml\", sep=\"\")\nset_assignment(assignment_path)\n\nAssignment set:\nassignment1: Bayesian Data Analysis: Assignment 1\nThe assignment contain the following (3) tasks:\n- p_red\n- p_box\n- p_identical_twin\n\n\n\n\n2 1. Basic probability theory notation and terms\n\n\n3 2. Notation\n\n\n4 3. Bayes’ theorem 1\nIf you use pen and paper, it may help to draw pictures as follows (see also assignment_instructions#fig-workflow):\n\n\n\n\n\n\nFigure 1: Parts of Bayesian workflow\n\n\n\nSee Figure 1 for illustration of parts of Bayesian workflow.\n\n\n5 4. Bayes’ theorem 2\nThe following will help you implementing a function to calculate the required probabilities for this exercise. Keep the below name and format for the function to work with markmyassignment:\n\nboxes_test &lt;- matrix(c(2,2,1,5,5,1), ncol = 2,\n    dimnames = list(c(\"A\", \"B\", \"C\"), c(\"red\", \"white\")))\n\np_red &lt;- function(boxes) {\n    # Do computation here, and return as below.\n    # This is the correct return value for the test data provided above.\n    0.3928571\n}\n\np_box &lt;- function(boxes) {\n    # Do computation here, and return as below.\n    # This is the correct return value for the test data provided above.\n    c(0.29090909,0.07272727,0.63636364)\n}\n\n\n\n6 5. Bayes’ theorem 3\nThe R functions below might help you calculating the requited probabilities.\n\nfraternal_prob = 1/125\nidentical_prob = 1/300\n\nKeep the below name and format for the function to work with markmyassignment:\n\np_identical_twin &lt;- function(fraternal_prob, identical_prob) {\n    # Do computation here, and return as below.\n    # This is the correct return value for the test data provided above.\n    0.4545455\n}\n\n\n\n7 6. The three steps of Bayesian data analysis\n\n\n8 7. A Binomial Model for the Roulette Table\nIncomplete code can be found below.\n\n# Ratio of red/black\ntheta &lt;- # declare probability parameter for the binomial model\n\n# Sequence of trials\n\ntrials &lt;- seq(#start value of sequence,#end value of sequence,#value for spacing)\n\n# Number of simulation draws from the model\nnsims &lt;- # number of of simulations from the binomial model\n\n# Helper function for getting the ratios\nbinom_gen &lt;- function(trials,theta,nsims){\n    df &lt;-  as.data.frame(rbinom(nsims,trials,theta)/trials) |&gt; mutate(nsims = nsims,trials = trials)\n    colnames(df) &lt;- c(\"Ratios\",\"Nsims\",\"Trials\")\n  return(df)\n}\n\n# Create a data frame containing the draws for each number of trials\nratio_60 &lt;- do.call(rbind, lapply(trials, binom_gen, theta, nsims)) # lapply applies elements in trials column to binom_gen function, which is then rowbound via do.call\n\nNow plot a histogram of the computed ratios for 10, 50 and 1000 trials, using the code below\n\n# Plot the Distributions\nsubset_df60 &lt;- ratio_60[ratio_60$Trials %in% c(#trial values), ] # Subset your dataframe\n\nsubset_df60 |&gt; ggplot(aes(Ratios)) +\n  geom_histogram(position = \"identity\" ,bins = 40) +\n  facet_grid(cols = vars(Trials))  +\n  ggtitle(\"Ratios for specific trials\")\n\nSuppose you are now certain that theta = 0.6, plot the probability density given 1000 trials using the code below.\n\nsize =  # number of trials\nprob =  # probability of success\n\nbinom_data &lt;- data.frame(\n  Success = 0:size,\n  Probability = dbinom(0:size, size = size, prob = prob)\n)\n\nggplot(binom_data, aes(x = Success, y = Probability)) +\n  geom_point() +\n  geom_line() +\n  labs(title = \"PMF of Binomial Distribution\", x = \"Number of Successes\", y = \"PDF\")\n\n\n\n\n\n\n\nmarkmyassignment\n\n\n\n\n\nThe following will check the functions for which markmyassignment has been set up:\n\nmark_my_assignment()\n\n✔ | F W  S  OK | Context\n\n⠏ |          0 | task-1-subtask-1-tests                                         \n⠏ |          0 | p_red()                                                        \n✖ | 1        3 | p_red()\n────────────────────────────────────────────────────────────────────────────────\nFailure ('test-task-1-subtask-1-tests.R:21:3'): p_red()\np_red(boxes = boxes) not equivalent to 0.5.\n1/1 mismatches\n[1] 0.393 - 0.5 == -0.107\nError: Incorrect result for matrix(c(1,1,1,1,1,1), ncol = 2)\n────────────────────────────────────────────────────────────────────────────────\n\n⠏ |          0 | task-2-subtask-1-tests                                         \n⠏ |          0 | p_box()                                                        \n✖ | 1        3 | p_box()\n────────────────────────────────────────────────────────────────────────────────\nFailure ('test-task-2-subtask-1-tests.R:19:3'): p_box()\np_box(boxes = boxes) not equivalent to c(0.4, 0.1, 0.5).\n3/3 mismatches (average diff: 0.0909)\n[1] 0.2909 - 0.4 == -0.1091\n[2] 0.0727 - 0.1 == -0.0273\n[3] 0.6364 - 0.5 ==  0.1364\nError: Incorrect result for matrix(c(1,1,1,1,1,1), ncol = 2)\n────────────────────────────────────────────────────────────────────────────────\n\n⠏ |          0 | task-3-subtask-1-tests                                         \n⠏ |          0 | p_identical_twin()                                             \n✖ | 2        3 | p_identical_twin()\n────────────────────────────────────────────────────────────────────────────────\nFailure ('test-task-3-subtask-1-tests.R:16:3'): p_identical_twin()\np_identical_twin(fraternal_prob = 1/100, identical_prob = 1/500) not equivalent to 0.2857143.\n1/1 mismatches\n[1] 0.455 - 0.286 == 0.169\nError: Incorrect result for fraternal_prob = 1/100 and identical_prob = 1/500\n\nFailure ('test-task-3-subtask-1-tests.R:19:3'): p_identical_twin()\np_identical_twin(fraternal_prob = 1/10, identical_prob = 1/20) not equivalent to 0.5.\n1/1 mismatches\n[1] 0.455 - 0.5 == -0.0455\nError: Incorrect result for fraternal_prob = 1/10 and identical_prob = 1/20\n────────────────────────────────────────────────────────────────────────────────\n\n══ Results ═════════════════════════════════════════════════════════════════════\n── Failed tests ────────────────────────────────────────────────────────────────\nFailure ('test-task-1-subtask-1-tests.R:21:3'): p_red()\np_red(boxes = boxes) not equivalent to 0.5.\n1/1 mismatches\n[1] 0.393 - 0.5 == -0.107\nError: Incorrect result for matrix(c(1,1,1,1,1,1), ncol = 2)\n\nFailure ('test-task-2-subtask-1-tests.R:19:3'): p_box()\np_box(boxes = boxes) not equivalent to c(0.4, 0.1, 0.5).\n3/3 mismatches (average diff: 0.0909)\n[1] 0.2909 - 0.4 == -0.1091\n[2] 0.0727 - 0.1 == -0.0273\n[3] 0.6364 - 0.5 ==  0.1364\nError: Incorrect result for matrix(c(1,1,1,1,1,1), ncol = 2)\n\nFailure ('test-task-3-subtask-1-tests.R:16:3'): p_identical_twin()\np_identical_twin(fraternal_prob = 1/100, identical_prob = 1/500) not equivalent to 0.2857143.\n1/1 mismatches\n[1] 0.455 - 0.286 == 0.169\nError: Incorrect result for fraternal_prob = 1/100 and identical_prob = 1/500\n\nFailure ('test-task-3-subtask-1-tests.R:19:3'): p_identical_twin()\np_identical_twin(fraternal_prob = 1/10, identical_prob = 1/20) not equivalent to 0.5.\n1/1 mismatches\n[1] 0.455 - 0.5 == -0.0455\nError: Incorrect result for fraternal_prob = 1/10 and identical_prob = 1/20\n\n[ FAIL 4 | WARN 0 | SKIP 0 | PASS 9 ]",
+    "crumbs": [
+      "Templates",
+      "Notebook for Assignment 1"
+    ]
+  },
+  {
+    "objectID": "assignment6.html",
+    "href": "assignment6.html",
+    "title": "Assignment 6",
+    "section": "",
+    "text": "1 General information\nThis assignment will be published later!",
+    "crumbs": [
+      "Assignments",
+      "Assignment 6"
+    ]
+  },
+  {
+    "objectID": "template9.html",
+    "href": "template9.html",
+    "title": "Notebook for Assignment 9",
+    "section": "",
+    "text": "1 General information\nThis notebook will be published later!",
+    "crumbs": [
+      "Templates",
+      "Notebook for Assignment 9"
+    ]
+  },
+  {
+    "objectID": "assignment3.html",
+    "href": "assignment3.html",
+    "title": "Assignment 3",
+    "section": "",
+    "text": "1 General information\nThis assignment will be published later!",
+    "crumbs": [
+      "Assignments",
+      "Assignment 3"
+    ]
+  },
+  {
+    "objectID": "assignment5.html",
+    "href": "assignment5.html",
+    "title": "Assignment 5",
+    "section": "",
+    "text": "1 General information\nThis assignment will be published later!",
+    "crumbs": [
+      "Assignments",
+      "Assignment 5"
+    ]
+  },
+  {
+    "objectID": "template3.html",
+    "href": "template3.html",
+    "title": "Notebook for Assignment 3",
+    "section": "",
+    "text": "1 General information\nThis notebook will be published later!",
+    "crumbs": [
+      "Templates",
+      "Notebook for Assignment 3"
+    ]
+  },
+  {
+    "objectID": "template2.html",
+    "href": "template2.html",
+    "title": "Notebook for Assignment 2",
+    "section": "",
+    "text": "1 General information\nThis assignment is related to Lecture 2 and BDA3 Chapters 1 and 2. You may find an additional discussion about choosing priors in a blog post by Andrew Gelman.\n\n\n\n\n\n\nTip\n\n\n\n\n\nReading instructions:\n\nThe reading instructions for BDA3 Chapter 1.\nThe reading instructions for BDA3 Chapter 2.\n\n\n\n\n\n\n\n\n\n\nGeneral Instructions for Answering the Assignment Questions\n\n\n\n\n\n\nQuestions below are exact copies of the text found in the MyCourses quiz and should serve as a notebook where you can store notes and code.\nWe recommend opening these notebooks in the Aalto JupyterHub, see how to use R and RStudio remotely.\nFor inspiration for code, have a look at the BDA R Demos and the specific Assignment code notebooks\nRecommended additional self study exercises for each chapter in BDA3 are listed in the course web page. These will help to gain deeper understanding of the topic.\nCommon questions and answers regarding installation and technical problems can be found in Frequently Asked Questions (FAQ).\nDeadlines for all assignments can be found on the course web page and in MyCourses.\nYou are allowed to discuss assignments with your friends, but it is not allowed to copy solutions directly from other students or from internet.\nDo not share your answers publicly.\nDo not copy answers from the internet or from previous years. We compare the answers to the answers from previous years and to the answers from other students this year.\nUse of AI is allowed on the course, but the most of the work needs to by the student, and you need to report whether you used AI and in which way you used them (See points 5 and 6 in Aalto guidelines for use of AI in teaching).\nAll suspected plagiarism will be reported and investigated. See more about the Aalto University Code of Academic Integrity and Handling Violations Thereof.\nIf you have any suggestions or improvements to the course material, please post in the course chat feedback channel, create an issue, or submit a pull request to the public repository!\n\n\n\n\n\n\n\n\n\n\nSetup\n\n\n\n\n\nThe following installs the aaltobda package:\n#| cache: true\n# Caching should be fine here\ninstall.packages(\"aaltobda\", repos = c(\"https://avehtari.github.io/BDA_course_Aalto/\", getOption(\"repos\")))\n\n\n\n\n\n2 Inference for binomial proportion\nAlgae status is monitored in 274 sites at Finnish lakes and rivers. The observations for the 2008 algae status at each site are presented in the dataset algae in the aaltobda package (‘0’: no algae, ‘1’: algae present).\nLoading the library and the data.\n\nlibrary(aaltobda)\nlibrary(ggplot2)\nlibrary(dplyr)\n\n\nAttaching package: 'dplyr'\n\n\nThe following objects are masked from 'package:stats':\n\n    filter, lag\n\n\nThe following objects are masked from 'package:base':\n\n    intersect, setdiff, setequal, union\n\nlibrary(latex2exp)\ndata(\"algae\")\n# The data are now stored in the variable `algae`.\n# These are the values for the prior required in the assignment\nprior_alpha = 2\nprior_beta = 10\n\nLet \\(\\pi\\) be the probability of a monitoring site having detectable blue-green algae levels and \\(y\\) the observations in algae. Use a binomial model for the observations \\(y\\) and a \\(Beta(2,10)\\) prior for binomial model parameter \\(\\pi\\) to formulate a Bayesian model. Here it is not necessary to derive the posterior distribution for \\(\\pi\\) as it has already been done in the book and it suffices to refer to that derivation. Also, it is not necessary to write out the distributions; it is sufficient to use label-parameter format, e.g. \\(Beta(\\alpha,\\beta)\\).\nYour task is to perform Bayesian inference for a binomial model and answer questions based on it.\n\n\n3 Formulating probabilities\n\n\n4 Summary of the posterior distribution of \\(\\theta\\)\nKeep the below name and format for the functions to work with markmyassignment:\n\n# Useful function: qbeta()\n\nbeta_point_est &lt;- function(prior_alpha, prior_beta, data) {\n    # Do computation here, and return as below.\n    \n}\nbeta_interval &lt;- function(prior_alpha, prior_beta, data, prob=0.9) {\n    # Do computation here, and return as below.\n\n\n}\n\n\n\n5 Comparison to historical records\nKeep the below name and format for the function to work with markmyassignment:\n\n# Useful function: pbeta()\n\nbeta_low &lt;- function(prior_alpha, prior_beta, data, pi_0=0.2) {\n    # Do computation here, and return as below.\n\n}\n\n\n\n6 Prior sensitivity analysis\nMake prior sensitivity analysis by testing a couple of different reasonable priors and plot the different posteriors. Try to summarise the results by one or two sentences.\n# Useful function: dbeta()\nAmend the code below to help you.\n\n# Beta distribution density function\nbeta_density &lt;- function(x, shape1, shape2) {\n  dbeta(x, shape1, shape2)\n}\n\n# Binomial likelihood density function\nbinomial_likelihood &lt;- function(x, n, k) {\n  choose(n, k) * x^k * (1 - x)^(n - k)\n}\n\n# Parameters for the Beta prior distributions\npriors &lt;- list(c(#alpha, #beta), c(#alpha, #beta), c(#alpha, #beta)) # Define three different priors here priors, (alpha, beta)\n\n# Parameters for the binomial likelihood (number of trials and successes)\nn &lt;-  # number of trials\nk &lt;-  # number of successes\n\n# Create a sequence of x values from 0 to 1\nx &lt;- seq(0, 1, length.out = 100)\n\n\n# Create a data frame with densities\ndensities_list &lt;- lapply(priors, function(prior) {\n  alpha_prior &lt;- prior[1]\n  beta_prior &lt;- prior[2]\n  alpha_posterior &lt;- alpha_prior + k\n  beta_posterior &lt;- beta_prior + n - k\n  \n  data.frame(\n    x = rep(x, 2),\n    density = c(beta_density(x, alpha_prior, beta_prior),\n                beta_density(x, alpha_posterior, beta_posterior)),\n    distribution = factor(rep(c(\"Prior\", \"Posterior\"), each = length(x))),\n    prior = paste(\"Prior: Alpha =\", alpha_prior, \"Beta =\", beta_prior)\n  )\n})\n\ndf &lt;- bind_rows(densities_list)\n\n# Plot the densities using ggplot2\nggplot(df, aes(x = x, y = density, color = distribution)) +\n  geom_line(size = 1) +\n  facet_wrap(~ prior, scales = \"fixed\", nrow = 3) +\n  labs(title = \"Prior and Posterior Densities for Different Priors\", \n       x = TeX(\"$\\\\theta$\"), \n       y = \"Density\", \n       color = \"Distribution\") +\n  theme_minimal()",
+    "crumbs": [
+      "Templates",
+      "Notebook for Assignment 2"
+    ]
+  },
+  {
+    "objectID": "template4.html",
+    "href": "template4.html",
+    "title": "Notebook for Assignment 4",
+    "section": "",
+    "text": "1 General information\nThis notebook will be published later!",
+    "crumbs": [
+      "Templates",
+      "Notebook for Assignment 4"
+    ]
+  },
+  {
+    "objectID": "assignment4.html",
+    "href": "assignment4.html",
+    "title": "Assignment 4",
+    "section": "",
+    "text": "1 General information\nThis assignment will be published later!",
+    "crumbs": [
+      "Assignments",
+      "Assignment 4"
+    ]
+  },
+  {
+    "objectID": "assignment8.html",
+    "href": "assignment8.html",
+    "title": "Assignment 8",
+    "section": "",
+    "text": "1 General information\nThis assignment will be published later!",
+    "crumbs": [
+      "Assignments",
+      "Assignment 8"
+    ]
+  },
+  {
     "objectID": "template8.html",
     "href": "template8.html",
     "title": "Notebook for Assignment 8",
@@ -209,14 +176,14 @@
     ]
   },
   {
-    "objectID": "template5.html",
-    "href": "template5.html",
-    "title": "Notebook for Assignment 5",
+    "objectID": "template6.html",
+    "href": "template6.html",
+    "title": "Notebook for Assignment 6",
     "section": "",
     "text": "1 General information\nThis notebook will be published later!",
     "crumbs": [
       "Templates",
-      "Notebook for Assignment 5"
+      "Notebook for Assignment 6"
     ]
   },
   {
@@ -239,6 +206,39 @@
     "crumbs": [
       "Assignments",
       "Assignment 1"
+    ]
+  },
+  {
+    "objectID": "template5.html",
+    "href": "template5.html",
+    "title": "Notebook for Assignment 5",
+    "section": "",
+    "text": "1 General information\nThis notebook will be published later!",
+    "crumbs": [
+      "Templates",
+      "Notebook for Assignment 5"
+    ]
+  },
+  {
+    "objectID": "assignment2.html",
+    "href": "assignment2.html",
+    "title": "Assignment 2",
+    "section": "",
+    "text": "The exercises here refer to the lecture 2/BDA chapters 1-2 content. All questions check your understanding of a simple posterior analysis using a binomial model for the observations and a beta prior.\nThe exercises constitute 90% of the Quiz 2 grade.\nWe prepared a quarto notebook specific to this assignment to help you get started. You still need to fill in your answers on Mycourses! You can inspect this and future templates\n\nas a qmd file,\nas a rendered html file\n\n\n\n\n\n\n\nGeneral Instructions for Answering the Assignment Questions\n\n\n\n\n\n\nQuestions below are exact copies of the text found in the MyCourses quiz and should serve as a notebook where you can store notes and code.\nWe recommend opening these notebooks in the Aalto JupyterHub, see how to use R and RStudio remotely.\nFor inspiration for code, have a look at the BDA R Demos and the specific Assignment code notebooks\nRecommended additional self study exercises for each chapter in BDA3 are listed in the course web page. These will help to gain deeper understanding of the topic.\nCommon questions and answers regarding installation and technical problems can be found in Frequently Asked Questions (FAQ).\nDeadlines for all assignments can be found on the course web page and in MyCourses.\nYou are allowed to discuss assignments with your friends, but it is not allowed to copy solutions directly from other students or from internet.\nDo not share your answers publicly.\nDo not copy answers from the internet or from previous years. We compare the answers to the answers from previous years and to the answers from other students this year.\nUse of AI is allowed on the course, but the most of the work needs to by the student, and you need to report whether you used AI and in which way you used them (See points 5 and 6 in Aalto guidelines for use of AI in teaching).\nAll suspected plagiarism will be reported and investigated. See more about the Aalto University Code of Academic Integrity and Handling Violations Thereof.\nIf you have any suggestions or improvements to the course material, please post in the course chat feedback channel, create an issue, or submit a pull request to the public repository!\n\n\n\n\n\n\nFor convenience the assignment questions are copied below. Answer the questions in MyCourses.\n\n\n\nAlgae\n    status is monitored in 274 sites at Finnish lakes and rivers. The\n    observations for the 2008 algae status at each site are presented in the\n    dataset algae in the aaltobda package ('0': no algae, '1': algae\n    present).\nLet \\( \\theta \\) be the probability of a monitoring site having\n    detectable blue-green algae levels, \\( y \\) the number of observed sites with algae detected, and \\( n \\) be total number sites surveyed.\n    Use a binomial model for the observations and a \\( \\text{Beta}(2,10) \\) prior for binomial model parameter \\( \\theta \\) to formulate a Bayesian model.\n    Here we will not test you on the individual mathematical operations needed in order to derive the posterior distribution for \\( \\theta \\) as it has already been done in the book (and lecture) so make sure to look that up.\nYour task is to perform Bayesian\n    inference for a binomial model and fill in the quiz below based on it. \nFor questions with checkboxes, more than one answer may be\n    correct.\n\nThe algae dataset contains the results of 274 measurements from Finnish lakes, with the following results:\n\n    No Algae: 230 sites\n    Algae: 44 sites\n\nOur goal for the following set of questions is to find the formulation of the posterior using a binomial likeliood and a beta prior on the unknown probability parameter \\( \\theta \\)\n\n\n    1.1 The prior \\(p(\\theta)\\) can be expressed as: \n\n\n    1.2 The likelihood \\( p(y = 44 | \\theta, n = 274) \\) as a function of \\( \\theta \\) can be expressed as: \n\n\n\n\n    1.3 The resulting posterior \\( p(\\theta|y = 44, n = 274) \\) can be expressed as : \n\n\n\n\nThe posterior distribution \\( p(\\theta|y) \\) is analytically available as \\( \\text{Beta}(\\alpha, \\beta) \\), so we can use the properties of that distribution to summarise what we know about \\( \\theta \\).  And in particular, we can make probability statements about ranges of values for \\( \\theta \\). Let's however start with the average value of \\( \\theta \\) you expect after having conditioned on the data. \n\n    2.1 Which of the following is the correct formula for the mean (\\( E[\\cdot] \\)) of a \\( \\text{Beta}(\\alpha, \\beta) \\) distribution: \n\n\n    2.2 Using your answer above, what is the mean of our posterior (i.e.,  \\( E(\\theta|y) \\))? Report the result in decimals with two decimal digits. \n\n\nPosterior intervals are sometimes called credible intervals and are different from confidence intervals (for more on this, see here). These are computed using the quantile function of the posterior distribution. As the quantiles of a \\( \\text{Beta}(\\alpha, \\beta) \\) distribution do not have a simple analytical form like the expectation, you can use R to compute the posterior intervals.\n\n\n    2.3 What R function would you use here to compute posterior intervals? \n\nUsing your answer above, calculate (report the results in decimals with two decimal digits): \n\n\n\n    2.4 90% posterior interval lower bound: \n\n\n    2.5 90% posterior interval upper bound: \n\nWe are interested in using our posterior distribution to estimate the probability that the proportion of detected algae samples (\\( \\theta \\)) is smaller than the historical detection rate \\( \\theta_0 = 0.2 \\), i.e. \\( p(\\theta \\leq \\theta_0 \\mid y) \\). \n\n    3.1 Which of the following approaches would we take? \n\n\n    3.2 What statistical function computes this probability for us? \n\n\n    3.3 Which R function does this for you? \n\n\n    3.4 Using your answers above, report this probability (report the result in decimals with two decimal digits): \n\n\n\nRedo the analysis using a uniform prior, \\( \\text{Beta}( 1,1 \\)). \n\n    4.1 What is the mean of our posterior (i.e.,  \\( E(\\theta|y) \\))? Report the result in decimals with two decimal digits. \n    4.2 90% posterior interval lower bound. Report the result in decimals with two decimal digits. \n    4.3 90% posterior interval upper bound. Report the result in decimals with two decimal digits. \n    4.4 Probability \\( p(\\theta \\leq \\theta_0 \\mid y) \\). Report the result in decimals with two decimal digits. \n\nRedo the analysis using as prior \\( \\text{Beta}(0.5,0.5) \\).\n\n\n    4.5 What is the mean of our posterior (i.e.,  \\( E(\\theta|y) \\))? Report the result in decimals with two decimal digits. \n    4.6 90% posterior interval lower bound. Report the result in decimals with two decimal digits. \n    4.7 90% posterior interval upper bound. Report the result in decimals with two decimal digits. \n    4.8 Probability \\( p(\\theta \\leq \\theta_0 \\mid y) \\). Report the result in decimals with two decimal digits. \n\n\nRedo the analysis using as prior \\( \\text{Beta}(100,2) \\).\n\n\n    4.9 What is the mean of our posterior (i.e.,  \\( E(\\theta|y) \\))? Report the result in decimals with two decimal digits. \n    4.10 90% posterior interval lower bound. Report the result in decimals with two decimal digits. \n    4.11 90% posterior interval upper bound. Report the result in decimals with two decimal digits. \n    4.12 Probability \\( p(\\theta \\leq \\theta_0 \\mid y) \\). Report the result in decimals with two decimal digits. \n\n4.13 Based on testing different priors, would you consider the posterior results believe and defensible (w.r.t. to this data set). In order to help your reasoning you can plot the prior and posteriors used with the code template for Assignment 2?",
+    "crumbs": [
+      "Assignments",
+      "Assignment 2"
+    ]
+  },
+  {
+    "objectID": "assignment2.html#assignment-questions",
+    "href": "assignment2.html#assignment-questions",
+    "title": "Assignment 2",
+    "section": "",
+    "text": "For convenience the assignment questions are copied below. Answer the questions in MyCourses.\n\n\n\nAlgae\n    status is monitored in 274 sites at Finnish lakes and rivers. The\n    observations for the 2008 algae status at each site are presented in the\n    dataset algae in the aaltobda package ('0': no algae, '1': algae\n    present).\nLet \\( \\theta \\) be the probability of a monitoring site having\n    detectable blue-green algae levels, \\( y \\) the number of observed sites with algae detected, and \\( n \\) be total number sites surveyed.\n    Use a binomial model for the observations and a \\( \\text{Beta}(2,10) \\) prior for binomial model parameter \\( \\theta \\) to formulate a Bayesian model.\n    Here we will not test you on the individual mathematical operations needed in order to derive the posterior distribution for \\( \\theta \\) as it has already been done in the book (and lecture) so make sure to look that up.\nYour task is to perform Bayesian\n    inference for a binomial model and fill in the quiz below based on it. \nFor questions with checkboxes, more than one answer may be\n    correct.\n\nThe algae dataset contains the results of 274 measurements from Finnish lakes, with the following results:\n\n    No Algae: 230 sites\n    Algae: 44 sites\n\nOur goal for the following set of questions is to find the formulation of the posterior using a binomial likeliood and a beta prior on the unknown probability parameter \\( \\theta \\)\n\n\n    1.1 The prior \\(p(\\theta)\\) can be expressed as: \n\n\n    1.2 The likelihood \\( p(y = 44 | \\theta, n = 274) \\) as a function of \\( \\theta \\) can be expressed as: \n\n\n\n\n    1.3 The resulting posterior \\( p(\\theta|y = 44, n = 274) \\) can be expressed as : \n\n\n\n\nThe posterior distribution \\( p(\\theta|y) \\) is analytically available as \\( \\text{Beta}(\\alpha, \\beta) \\), so we can use the properties of that distribution to summarise what we know about \\( \\theta \\).  And in particular, we can make probability statements about ranges of values for \\( \\theta \\). Let's however start with the average value of \\( \\theta \\) you expect after having conditioned on the data. \n\n    2.1 Which of the following is the correct formula for the mean (\\( E[\\cdot] \\)) of a \\( \\text{Beta}(\\alpha, \\beta) \\) distribution: \n\n\n    2.2 Using your answer above, what is the mean of our posterior (i.e.,  \\( E(\\theta|y) \\))? Report the result in decimals with two decimal digits. \n\n\nPosterior intervals are sometimes called credible intervals and are different from confidence intervals (for more on this, see here). These are computed using the quantile function of the posterior distribution. As the quantiles of a \\( \\text{Beta}(\\alpha, \\beta) \\) distribution do not have a simple analytical form like the expectation, you can use R to compute the posterior intervals.\n\n\n    2.3 What R function would you use here to compute posterior intervals? \n\nUsing your answer above, calculate (report the results in decimals with two decimal digits): \n\n\n\n    2.4 90% posterior interval lower bound: \n\n\n    2.5 90% posterior interval upper bound: \n\nWe are interested in using our posterior distribution to estimate the probability that the proportion of detected algae samples (\\( \\theta \\)) is smaller than the historical detection rate \\( \\theta_0 = 0.2 \\), i.e. \\( p(\\theta \\leq \\theta_0 \\mid y) \\). \n\n    3.1 Which of the following approaches would we take? \n\n\n    3.2 What statistical function computes this probability for us? \n\n\n    3.3 Which R function does this for you? \n\n\n    3.4 Using your answers above, report this probability (report the result in decimals with two decimal digits): \n\n\n\nRedo the analysis using a uniform prior, \\( \\text{Beta}( 1,1 \\)). \n\n    4.1 What is the mean of our posterior (i.e.,  \\( E(\\theta|y) \\))? Report the result in decimals with two decimal digits. \n    4.2 90% posterior interval lower bound. Report the result in decimals with two decimal digits. \n    4.3 90% posterior interval upper bound. Report the result in decimals with two decimal digits. \n    4.4 Probability \\( p(\\theta \\leq \\theta_0 \\mid y) \\). Report the result in decimals with two decimal digits. \n\nRedo the analysis using as prior \\( \\text{Beta}(0.5,0.5) \\).\n\n\n    4.5 What is the mean of our posterior (i.e.,  \\( E(\\theta|y) \\))? Report the result in decimals with two decimal digits. \n    4.6 90% posterior interval lower bound. Report the result in decimals with two decimal digits. \n    4.7 90% posterior interval upper bound. Report the result in decimals with two decimal digits. \n    4.8 Probability \\( p(\\theta \\leq \\theta_0 \\mid y) \\). Report the result in decimals with two decimal digits. \n\n\nRedo the analysis using as prior \\( \\text{Beta}(100,2) \\).\n\n\n    4.9 What is the mean of our posterior (i.e.,  \\( E(\\theta|y) \\))? Report the result in decimals with two decimal digits. \n    4.10 90% posterior interval lower bound. Report the result in decimals with two decimal digits. \n    4.11 90% posterior interval upper bound. Report the result in decimals with two decimal digits. \n    4.12 Probability \\( p(\\theta \\leq \\theta_0 \\mid y) \\). Report the result in decimals with two decimal digits. \n\n4.13 Based on testing different priors, would you consider the posterior results believe and defensible (w.r.t. to this data set). In order to help your reasoning you can plot the prior and posteriors used with the code template for Assignment 2?",
+    "crumbs": [
+      "Assignments",
+      "Assignment 2"
     ]
   }
 ]
