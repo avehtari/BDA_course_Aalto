@@ -186,15 +186,36 @@
 
 \end{frame}
 
+\begin{frame}{Paper helicopter flight time}
+\vspace{-2\baselineskip}
+  \only<1>{  \begin{align*}
+    y & \sim \normal(f, \sigma) \\
+    f & \sim GP(0, k(x,\theta)) \\
+    ~ & ~
+  \end{align*}
+\vspace{-1\baselineskip}
+\includegraphics[width=10cm]{helicopter_time_bfit1s.pdf}}
+  \only<2>{  \begin{align*}
+    y & \sim \normal(f, \sigma) \\
+    f & \sim GP(0, k_f(x,\theta_f)) \\
+    \log(\sigma) & \sim GP(0, h_g(x,\theta_g))
+  \end{align*}
+\vspace{-1\baselineskip}
+\includegraphics[width=10cm]{helicopter_time_bfit1sh.pdf}}
+
+\end{frame}
+
+
 \begin{frame}{Monte Carlo and posterior draws}
 
-  \only<1-2>{Density $p(\theta|\mu,\sigma)=\frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}(\theta-\mu)^2\right)$\\
+  \only<1-2>{Density $p(\theta|\mu,\sigma)=\frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}(\theta-\mu)^2\right)\quad$ {\color{gray}(\texttt{dnorm()})}\\
     \includegraphics[width=10cm]{norm1d_1.pdf}
   \uncover<2>{$\E(\theta)=\int \theta p(\theta|\mu,\sigma) d\theta = \mu$}}
   \only<3>{Density $p(\theta|\mu,\sigma)=\frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}(\theta-\mu)^2\right)$\\
     \includegraphics[width=10cm]{norm1d_1b.pdf}
-  {$p(\theta \leq 0)=\int_{-\infty}^{0} p(\theta|\mu,\sigma) d\theta$},\,\, many numerical approximations}
-  \only<4>{In practice evaluate in finite number of locations \uncover<1>{$\frac{1}{\sqrt{2\pi}\sigma}$}\\
+    {$p(\theta \leq 0)=\int_{-\infty}^{0} p(\theta|\mu,\sigma) d\theta$},\,\,\\
+    many numerical approximations {\color{gray}(pnorm())}}
+  \only<4>{In practice evaluate in finite number of locations {\color{gray}(dnorm())} \uncover<1>{$\frac{1}{\sqrt{2\pi}\sigma}$}\\
     \includegraphics[width=10cm]{norm1d_2.pdf}}
   \only<5>{Here evaluated in grid with bin width 0.5 \uncover<1>{$\frac{1}{\sqrt{2\pi}\sigma}$}\\
     \includegraphics[width=10cm]{norm1d_2.pdf}}
@@ -206,11 +227,11 @@
     $p(\theta \leq 0) = \int_{-\infty}^0 p(\theta) d\theta \approx \sum_s^S \I(\theta^{(s)} \leq 0) w_s \approx 0.22$}
   \only<9>{Here evaluated in grid with bin width 0.1 \uncover<1>{$\frac{1}{\sqrt{2\pi}\sigma}$}
     \includegraphics[width=10cm]{norm1d_4.pdf}}
-  \only<10>{Histogram of 200 random draws, bin width 0.5 \uncover<1>{$\frac{1}{\sqrt{2\pi}\sigma}$}
+  \only<10>{Histogram of 200 random draws (\texttt{rnorm()}), bin width 0.5 \uncover<1>{$\frac{1}{\sqrt{2\pi}\sigma}$}
     \includegraphics[width=10cm]{norm1d_5.pdf}}
-  \only<11>{Histogram of 200 random draws, bin width 0.1 \uncover<1>{$\frac{1}{\sqrt{2\pi}\sigma}$}
+  \only<11>{Histogram of 200 random draws (\texttt{rnorm()}), bin width 0.1 \uncover<1>{$\frac{1}{\sqrt{2\pi}\sigma}$}
     \includegraphics[width=10cm]{norm1d_6.pdf}}
-  \only<12-15>{Histogram of 200 random draws, bin width 0 \uncover<1>{$\frac{1}{\sqrt{2\pi}\sigma}$}
+  \only<12-15>{Histogram of 200 random draws (\texttt{rnorm()}), bin width 0 \uncover<1>{$\frac{1}{\sqrt{2\pi}\sigma}$}
     \includegraphics[width=10cm]{norm1d_7.pdf}
     \only<12>{each bin has either 0 or 1 draw (and 0's can be ignored)}
     \only<13>{each bin with 1 draw has weight $1/S$}
@@ -234,10 +255,16 @@
       \begin{align*}
         E_{p(\theta \mid y)}[{\color{blue}\theta}] = \int {\color{blue}\theta} p(\theta \mid y) \approx \frac{1}{S}\sum_{s=1}^{S} {\color{blue}\theta^{(s)}}
       \end{align*}
-    \item<3-> easy to approximate expectations of functions
+    \item<3-> easy to approximate expectations of functions (push forward)
       \begin{align*}
         E_{p(\theta \mid y)}[{\color{blue}g(\theta)}] = \int {\color{blue}g(\theta)} p(\theta \mid y) \approx \frac{1}{S}\sum_{s=1}^{S} {\color{blue}g(\theta^{(s)})}
       \end{align*}
+    \end{itemize}
+  \item<4-> If $p({\color{blue}g(\theta)})$ has finite variance, then
+    the Monte Carlo estimate is unbiased and the error approaches 0
+    with increasing $S$ based on the central limit theorem (CLT)
+    \begin{itemize}
+    \item more about this later
     \end{itemize}
   \end{itemize}
 
@@ -262,10 +289,10 @@
   %   \item future event
   %   \end{itemize}
     \item<+-> Monte Carlo approximation
-          \begin{align*}
-      p(\theta_1 \mid y) \approx  \frac{1}{S}\sum_{s=1}^{S} p(\theta_1 \mid \theta_2^{(s)}, y),
+      \begin{align*}
+        \text{if }\quad & (\theta_1^{(s)},\theta_2^{(s)}) \sim p(\theta_1,\theta_2 \mid y) \\
+        \text{then }\quad & \theta_1^{(s)} \sim p(\theta_1 \mid y)
     \end{align*}
-    where $\theta_2^{(s)}$ are draws from $p(\theta_2 \mid y)$
   \end{itemize}
 
 \end{frame}
@@ -382,6 +409,26 @@
 
 \begin{frame}
 
+  \vspace{-1\baselineskip}
+  {\hfill\includegraphics[width=5cm]{fake3_joint1b.pdf}}\\
+  \vspace{-5.5\baselineskip}
+  Joint posterior\\
+  \vspace{-.75\baselineskip}
+  \begin{align*}
+    {\color{blue} \mu^{(s)}, \sigma^{(s)}} & \sim p(\mu, \sigma  \mid  y) \\
+    \uncover<1->{\text{with } p(\mu,\sigma^2) & \propto \sigma^{-2}\\
+    }
+    \uncover<1->{p(\mu,\sigma^2 \mid y) & \propto  \sigma^{-n-2}\exp\left(-\frac{1}{2\sigma^2}\sum_{i=1}^n(y_i-\mu)^2\right)}\\
+    \uncover<1->{&  = \sigma^{-n-2}\exp\left(-\frac{1}{2\sigma^2}\left[\sum_{i=1}^n(y_i-\bar{y})^2+n(\bar{y}-\mu)^2\right]\right)}\\
+    \uncover<1->{\color{gray} \text{where } \bar{y} & \color{gray} = \frac{1}{n}\sum_{i=1}^n y_i }\\
+    \uncover<1->{&  = \sigma^{-n-2}\exp\left(-\frac{1}{2\sigma^2}\left[(n-1)s^2+n(\bar{y}-\mu)^2\right]\right)}\\
+    \uncover<1->{\color{gray} \text{where }  s^2 & \color{gray} =\frac{1}{n-1}\sum_{i=1}^n(y_i-\bar{y})^2}
+  \end{align*}
+
+\end{frame}
+
+\begin{frame}
+
   {\includegraphics[width=5cm]{fake3_joint1.pdf}}
   \uncover<3->{\includegraphics[width=5cm]{fake3_marginalsigma.pdf}}\\
   \uncover<2->{\vspace{-\baselineskip}
@@ -458,7 +505,7 @@
        \uncover<2->{{\color{blue} p(\sigma^2 \mid y)} & = \Invchi2(\sigma^2 \mid  n-1,s^2)\\
        (\sigma^2)^{(s)} & \sim {\color{blue} p(\sigma^2 \mid y)} \\}
        \uncover<3->{{\color{darkgreen} p(\mu \mid \sigma^2,y)} & = \N(\mu \mid \bar{y},\sigma^2/n)\,} \uncover<4>{ \color{gray} {\textstyle \propto \exp\left(-\frac{n}{2\sigma^2}(\bar{y}-\mu)^2\right)}\\}
-        \only<5->{\mu^{(s)} & \sim {\color{darkgreen} p(\mu \mid \sigma^2,y)}\\}
+        \only<5->{\mu^{(s)} & \sim {\color{darkgreen} p(\mu \mid (\sigma^2)^{(s)},y)}\\}
         \only<6->{{\color{red} \mu^{(s)}, \sigma^{(s)}} & \sim p(\mu, \sigma  \mid  y)}
      \end{align*}
    \end{minipage}
@@ -569,7 +616,7 @@
      \end{align*}
    \end{minipage}
    }
-  \begin{minipage}[b][5cm][t]{5cm}
+  \begin{minipage}[b][6cm][t]{5cm}
   \only<1-2>{~}
   \only<3>{\includegraphics[width=5cm]{fake3_pred1.pdf}}
   \only<4>{\includegraphics[width=5cm]{fake3_pred1s.pdf}}
@@ -710,12 +757,15 @@
   \item The difference of two normally distributed variables is
     normally distributed
   \item The difference of two $t$ distributed variables with different
-    variances and degrees of freedom doesn't have an easy form
+    variances and degrees of freedom doesn't have a closed form
     \begin{itemize}
     \item easy to sample from the two distributions, and obtain
       samples of the differences
       \begin{align*}
-        \delta^{(s)} = \mu_1^{(s)} - \mu_2^{(s)}
+        \text{if }\quad & \mu_1^{(s)} \sim p(\mu_1 \mid y_1) \\
+        & \mu_2^{(s)}  \sim p(\mu_2 \mid y_2) \\
+        & \delta^{(s)} = \mu_1^{(s)} - \mu_2^{(s)} \\
+        \text{then }\quad & \delta^{(s)} \sim p(\delta \mid y_1, y_2)
       \end{align*}
     \end{itemize}
   \end{itemize}
@@ -728,7 +778,7 @@
   \item Observation model
     \begin{align*}
       p(y \mid \mu,\Sigma)\propto  \mid \Sigma \mid ^{-1/2}
-      \exp\left( -\frac{1}{2} (y-\mu)^T \Sigma^{-1} (y-\mu)\right),
+      \exp\left( -\frac{1}{2} (y-\mu)^T \Sigma^{-1} (y-\mu)\right)
     \end{align*}
   \item BDA3 p. 72--
   \item New recommended LKJ-prior mentioned in Appendix A, see more
@@ -756,6 +806,25 @@
     Regression and Other Stories book
   \end{itemize}
   
+\end{frame}
+
+\begin{frame}{Paper helicopter flight time}
+\vspace{-2\baselineskip}
+  \only<1>{  \begin{align*}
+    y & \sim \normal(f, \sigma) \\
+    f & \sim GP(0, K(x,\theta)) \\
+    ~ & ~
+  \end{align*}
+\vspace{-1\baselineskip}
+\includegraphics[width=10cm]{helicopter_time_bfit1s.pdf}}
+  \only<2>{  \begin{align*}
+    y & \sim \normal(f, \sigma) \\
+    f & \sim GP(0, K_f(x,\theta_f)) \\
+    \log(\sigma) & \sim GP(0, K_g(x,\theta_g))
+  \end{align*}
+\vspace{-1\baselineskip}
+\includegraphics[width=10cm]{helicopter_time_bfit1sh.pdf}}
+
 \end{frame}
 
 \begin{frame}{Scale mixture of normals}
@@ -989,7 +1058,7 @@
        94 & 2022
        
     \end{tabular}
-  }~\parbox[t][2cm][b]{3.5cm}{\includegraphics[width=6cm]{slides/figs/drownings_plot.pdf}}
+  }~\parbox[t][2cm][b]{3.5cm}{\includegraphics[width=6cm]{figs/drownings_plot.pdf}}
   \vspace{2mm}
   \pause
 
@@ -1030,8 +1099,8 @@
     }
   \end{minipage}~
      \begin{minipage}[b][5cm][t]{6cm}
-    {\includegraphics[width=6cm]{slides/figs/drownings_fittargetspace.pdf}}
-    {\includegraphics[width=6cm]{slides/figs/drownings_fitlogspace.pdf}}
+    {\includegraphics[width=6cm]{figs/drownings_fittargetspace.pdf}}
+    {\includegraphics[width=6cm]{figs/drownings_fitlogspace.pdf}}
   \end{minipage}
 \end{frame}
 
@@ -1039,22 +1108,27 @@
 \begin{frame}{Example GLM: Gaussian Process Models}
 
   \vspace{-.5\baselineskip}
-  \only<1>{\includegraphics[width=10cm]{slides/figs/drownings_gp_poisson.pdf}
+  \only<1>{\includegraphics[width=10cm]{figs/drownings_gp_poisson.pdf}
   \begin{align*}
       y_i \mid \color{blue} \mu_i & \sim  \Poisson(\color{blue} \mu_i \color{black}) \\
-      \color{blue}\mu_i & \sim e^{f_i}, \; f \sim \text{multi normal}(0,\text{k(Year})) \\ 
+      \color{blue}\mu_i & \sim e^{f_i}, \; f \sim \text{GP}(0,\text{k(Year},\theta)) \\ 
   \end{align*}
   }
-  \only<2>{\includegraphics[width=10cm]{slides/figs/drownings_gp_negbin.pdf}
+  \only<2>{\includegraphics[width=10cm]{figs/drownings_gp_negbin.pdf}
     \begin{align*}
       y_i \mid \color{blue} \mu_i & \sim  \Negbin(\color{blue} \mu_i,\color{black}\phi) \\
-      \color{blue}\mu_i & \sim e^{f_i}, \; f \sim \text{multi normal}(0,\text{k(Year})) \\
+      \color{blue}\mu_i & \sim e^{f_i}, \; f \sim \text{GP}(0,\text{k(Year},\theta)) \\
   \end{align*}
   }
-  \only<3>{\includegraphics[width=10cm]{slides/figs/drownings_gp_negbin.pdf}}
+  \only<3>{\includegraphics[width=10cm]{figs/drownings_gp_negbin.pdf}}
   \only<3->{
+    \vspace{-\baselineskip}
    \begin{itemize}
-    \item[-] Clear overdispersion
+   \item[-] Clear overdispersion
+     \begin{itemize}
+     \item[$\cdot$] later we use posterior predictive
+     checking and cross-validation to confirm this
+     \end{itemize}
     \item[-] Trend interpretations shouldn't be based on one observation
     \end{itemize}
   }
