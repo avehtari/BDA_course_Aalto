@@ -458,11 +458,18 @@ Setup
 <div class="cell-output cell-output-stderr">
 <pre><code>Loading required package: markmyassignment</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>assignment_path <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">"https://github.com/avehtari/BDA_course_Aalto/"</span>,</span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="st">"blob/master/assignments/tests/assignment3.yml"</span>, <span class="at">sep=</span><span class="st">""</span>)</span>
-<span id="cb5-3"><a href="#cb5-3"></a><span class="fu">set_assignment</span>(assignment_path)    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>Error in get_file.path_github(path = path, dest = temp_file): Not Found (HTTP 404).</code></pre>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>assignment_path <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">"https://github.com/avehtari/BDA_course_Aalto/blob/master/tests/assignment3.yml"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="fu">set_assignment</span>(assignment_path)    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Assignment set:
+assignment3: Bayesian Data Analysis: Assignment 3
+The assignment contain the following (6) tasks:
+- mu_point_est
+- mu_interval
+- mu_pred_interval
+- mu_pred_point_est
+- posterior_odds_ratio_point_est
+- posterior_odds_ratio_interval</code></pre>
 </div>
 </div>
 <p>The following installs and loads the <a href="https://github.com/stefano-meschiari/latex2exp"><code>latex2exp</code> package</a>, which allows us to use LaTeX in plots:</p>
@@ -1470,418 +1477,417 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb44-48"><a href="#cb44-48"></a>    <span class="fu">install.packages</span>(<span class="st">"markmyassignment"</span>)</span>
 <span id="cb44-49"><a href="#cb44-49"></a>    <span class="fu">library</span>(markmyassignment)</span>
 <span id="cb44-50"><a href="#cb44-50"></a>}</span>
-<span id="cb44-51"><a href="#cb44-51"></a>assignment_path <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">"https://github.com/avehtari/BDA_course_Aalto/"</span>,</span>
-<span id="cb44-52"><a href="#cb44-52"></a><span class="st">"blob/master/assignments/tests/assignment3.yml"</span>, <span class="at">sep=</span><span class="st">""</span>)</span>
-<span id="cb44-53"><a href="#cb44-53"></a><span class="fu">set_assignment</span>(assignment_path)    </span>
-<span id="cb44-54"><a href="#cb44-54"></a><span class="in">```</span></span>
-<span id="cb44-55"><a href="#cb44-55"></a></span>
-<span id="cb44-56"><a href="#cb44-56"></a>The following installs and loads the <span class="co">[</span><span class="ot">`latex2exp` package</span><span class="co">](https://github.com/stefano-meschiari/latex2exp)</span>, which allows us to use LaTeX in plots:</span>
-<span id="cb44-57"><a href="#cb44-57"></a></span>
-<span id="cb44-60"><a href="#cb44-60"></a><span class="in">```{r}</span></span>
-<span id="cb44-61"><a href="#cb44-61"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(latex2exp)){</span>
-<span id="cb44-62"><a href="#cb44-62"></a>    <span class="fu">install.packages</span>(<span class="st">"latex2exp"</span>)</span>
-<span id="cb44-63"><a href="#cb44-63"></a>    <span class="fu">library</span>(latex2exp)</span>
-<span id="cb44-64"><a href="#cb44-64"></a>}</span>
-<span id="cb44-65"><a href="#cb44-65"></a><span class="in">```</span></span>
-<span id="cb44-66"><a href="#cb44-66"></a>:::</span>
-<span id="cb44-67"><a href="#cb44-67"></a></span>
-<span id="cb44-68"><a href="#cb44-68"></a>::: showcase</span>
-<span id="cb44-69"><a href="#cb44-69"></a><span class="fu">## Setting up advanced packages (`posterior` and `ggdist`)</span></span>
-<span id="cb44-70"><a href="#cb44-70"></a></span>
-<span id="cb44-71"><a href="#cb44-71"></a>The following installs and loads the <span class="co">[</span><span class="ot">`posterior` package</span><span class="co">](https://mc-stan.org/posterior/index.html)</span>, which allows us to use its <span class="co">[</span><span class="ot">`rvar` Random Variable Datatype</span><span class="co">](https://mc-stan.org/posterior/articles/rvar.html)</span>:</span>
-<span id="cb44-72"><a href="#cb44-72"></a></span>
-<span id="cb44-75"><a href="#cb44-75"></a><span class="in">```{r}</span></span>
-<span id="cb44-76"><a href="#cb44-76"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(posterior)){</span>
-<span id="cb44-77"><a href="#cb44-77"></a>    <span class="fu">install.packages</span>(<span class="st">"posterior"</span>)</span>
-<span id="cb44-78"><a href="#cb44-78"></a>    <span class="fu">library</span>(posterior)</span>
-<span id="cb44-79"><a href="#cb44-79"></a>}</span>
-<span id="cb44-80"><a href="#cb44-80"></a><span class="in">```</span></span>
-<span id="cb44-81"><a href="#cb44-81"></a></span>
-<span id="cb44-82"><a href="#cb44-82"></a>The following installs and loads the <span class="co">[</span><span class="ot">`ggdist` package</span><span class="co">](https://mjskay.github.io/ggdist/)</span> along with other packages for advanced plotting functions:</span>
-<span id="cb44-83"><a href="#cb44-83"></a></span>
-<span id="cb44-86"><a href="#cb44-86"></a><span class="in">```{r}</span></span>
-<span id="cb44-87"><a href="#cb44-87"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(ggplot2)){</span>
-<span id="cb44-88"><a href="#cb44-88"></a>    <span class="fu">install.packages</span>(<span class="st">"ggplot2"</span>)</span>
-<span id="cb44-89"><a href="#cb44-89"></a>    <span class="fu">library</span>(ggplot2)</span>
-<span id="cb44-90"><a href="#cb44-90"></a>}</span>
-<span id="cb44-91"><a href="#cb44-91"></a>ggplot2<span class="sc">::</span><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
-<span id="cb44-92"><a href="#cb44-92"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(ggdist)){</span>
-<span id="cb44-93"><a href="#cb44-93"></a>    <span class="fu">install.packages</span>(<span class="st">"ggdist"</span>)</span>
-<span id="cb44-94"><a href="#cb44-94"></a>    <span class="fu">library</span>(ggdist)</span>
-<span id="cb44-95"><a href="#cb44-95"></a>}</span>
-<span id="cb44-96"><a href="#cb44-96"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(grid)){</span>
-<span id="cb44-97"><a href="#cb44-97"></a>  <span class="fu">install.packages</span>(<span class="st">"grid"</span>)</span>
-<span id="cb44-98"><a href="#cb44-98"></a>  <span class="fu">library</span>(grid)</span>
-<span id="cb44-99"><a href="#cb44-99"></a>}</span>
-<span id="cb44-100"><a href="#cb44-100"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(gridExtra)){</span>
-<span id="cb44-101"><a href="#cb44-101"></a>  <span class="fu">install.packages</span>(<span class="st">"gridExtra"</span>)</span>
-<span id="cb44-102"><a href="#cb44-102"></a>  <span class="fu">library</span>(gridExtra)</span>
-<span id="cb44-103"><a href="#cb44-103"></a>}</span>
-<span id="cb44-104"><a href="#cb44-104"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(tidyr)){</span>
-<span id="cb44-105"><a href="#cb44-105"></a>  <span class="fu">install.packages</span>(<span class="st">"tidyr"</span>)</span>
-<span id="cb44-106"><a href="#cb44-106"></a>  <span class="fu">library</span>(tidyr)</span>
-<span id="cb44-107"><a href="#cb44-107"></a>}</span>
-<span id="cb44-108"><a href="#cb44-108"></a></span>
-<span id="cb44-109"><a href="#cb44-109"></a><span class="in">```</span></span>
-<span id="cb44-110"><a href="#cb44-110"></a>:::</span>
-<span id="cb44-111"><a href="#cb44-111"></a></span>
-<span id="cb44-112"><a href="#cb44-112"></a><span class="fu"># Inference for normal mean and deviation</span></span>
-<span id="cb44-113"><a href="#cb44-113"></a></span>
-<span id="cb44-114"><a href="#cb44-114"></a>A factory has a production line for manufacturing car windshields. A sample of windshields has been taken for testing hardness. The observed hardness values $\mathbf{y}_1$ can be found in the dataset <span class="in">`windshieldy1`</span> in the <span class="in">`aaltobda`</span> package.</span>
-<span id="cb44-115"><a href="#cb44-115"></a></span>
-<span id="cb44-116"><a href="#cb44-116"></a>We may assume that the observations follow a normal distribution with an unknown standard deviation $\sigma$. We wish to obtain information about the unknown average hardness $\mu$. For simplicity we assume standard uninformative prior discussed in the book, that is, $p(\mu, \sigma) \propto \sigma^{-1}$. It is not necessary to derive the posterior distribution in the report, as it has already been done in the book (see section 3.2).</span>
-<span id="cb44-117"><a href="#cb44-117"></a></span>
-<span id="cb44-118"><a href="#cb44-118"></a>Loading the library and the data.</span>
-<span id="cb44-119"><a href="#cb44-119"></a></span>
-<span id="cb44-122"><a href="#cb44-122"></a><span class="in">```{r}</span></span>
-<span id="cb44-123"><a href="#cb44-123"></a><span class="fu">data</span>(<span class="st">"windshieldy1"</span>)</span>
-<span id="cb44-124"><a href="#cb44-124"></a><span class="co"># The data are now stored in the variable `windshieldy1`.</span></span>
-<span id="cb44-125"><a href="#cb44-125"></a><span class="co"># The below displays the data:</span></span>
-<span id="cb44-126"><a href="#cb44-126"></a>windshieldy1</span>
-<span id="cb44-127"><a href="#cb44-127"></a><span class="in">```</span></span>
-<span id="cb44-128"><a href="#cb44-128"></a></span>
-<span id="cb44-129"><a href="#cb44-129"></a>The below data is **only for the tests**, you need to change to the full data <span class="in">`windshieldy1`</span> when reporting your results.</span>
-<span id="cb44-130"><a href="#cb44-130"></a></span>
-<span id="cb44-133"><a href="#cb44-133"></a><span class="in">```{r}</span></span>
-<span id="cb44-134"><a href="#cb44-134"></a>windshieldy_test <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">13.357</span>, <span class="fl">14.928</span>, <span class="fl">14.896</span>, <span class="fl">14.820</span>)</span>
-<span id="cb44-135"><a href="#cb44-135"></a><span class="in">```</span></span>
-<span id="cb44-136"><a href="#cb44-136"></a></span>
-<span id="cb44-137"><a href="#cb44-137"></a><span class="fu">## Marginal and probabilities for $\mu$</span></span>
-<span id="cb44-138"><a href="#cb44-138"></a></span>
-<span id="cb44-139"><a href="#cb44-139"></a>Write your answers and code here!</span>
-<span id="cb44-140"><a href="#cb44-140"></a></span>
-<span id="cb44-141"><a href="#cb44-141"></a>**Keep the below name and format for the functions to work with `markmyassignment`:**</span>
-<span id="cb44-142"><a href="#cb44-142"></a></span>
-<span id="cb44-145"><a href="#cb44-145"></a><span class="in">```{r}</span></span>
-<span id="cb44-146"><a href="#cb44-146"></a><span class="co"># Useful functions: mean(), length(), sqrt(), sum()</span></span>
-<span id="cb44-147"><a href="#cb44-147"></a><span class="co"># and qtnew(), dtnew() (from aaltobda)</span></span>
-<span id="cb44-148"><a href="#cb44-148"></a></span>
-<span id="cb44-149"><a href="#cb44-149"></a>mu_point_est <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
-<span id="cb44-150"><a href="#cb44-150"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb44-151"><a href="#cb44-151"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
-<span id="cb44-152"><a href="#cb44-152"></a>    <span class="fl">14.5</span></span>
-<span id="cb44-153"><a href="#cb44-153"></a>    </span>
-<span id="cb44-154"><a href="#cb44-154"></a>}</span>
-<span id="cb44-155"><a href="#cb44-155"></a>mu_interval <span class="ot">&lt;-</span> <span class="cf">function</span>(data, <span class="at">prob =</span> <span class="fl">0.95</span>) {</span>
-<span id="cb44-156"><a href="#cb44-156"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb44-157"><a href="#cb44-157"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
-<span id="cb44-158"><a href="#cb44-158"></a>    <span class="fu">c</span>(<span class="fl">13.3</span>, <span class="fl">15.7</span>)</span>
-<span id="cb44-159"><a href="#cb44-159"></a>    </span>
-<span id="cb44-160"><a href="#cb44-160"></a>}</span>
-<span id="cb44-161"><a href="#cb44-161"></a><span class="in">```</span></span>
-<span id="cb44-162"><a href="#cb44-162"></a></span>
-<span id="cb44-163"><a href="#cb44-163"></a>You can plot the density as below if you implement <span class="in">`mu_pdf`</span> to compute the PDF of the posterior $p(\mu|y)$ of the average hardness $\mu$.</span>
-<span id="cb44-164"><a href="#cb44-164"></a></span>
-<span id="cb44-167"><a href="#cb44-167"></a><span class="in">```{r}</span></span>
-<span id="cb44-168"><a href="#cb44-168"></a><span class="co">#| label: fig-2b-density</span></span>
-<span id="cb44-169"><a href="#cb44-169"></a><span class="co">#| fig-cap: PDF of the posterior $p(\mu|y)$ of the average hardness $\mu$</span></span>
-<span id="cb44-170"><a href="#cb44-170"></a>mu_pdf <span class="ot">&lt;-</span> <span class="cf">function</span>(data, x){</span>
-<span id="cb44-171"><a href="#cb44-171"></a>    <span class="co"># Compute necessary parameters here.</span></span>
-<span id="cb44-172"><a href="#cb44-172"></a>    <span class="co"># These are the correct parameters for `windshieldy_test` </span></span>
-<span id="cb44-173"><a href="#cb44-173"></a>    <span class="co"># with the provided uninformative prior.</span></span>
-<span id="cb44-174"><a href="#cb44-174"></a>    df <span class="ot">=</span> <span class="dv">3</span></span>
-<span id="cb44-175"><a href="#cb44-175"></a>    location <span class="ot">=</span> <span class="fl">14.5</span></span>
-<span id="cb44-176"><a href="#cb44-176"></a>    scale <span class="ot">=</span> <span class="fl">0.3817557</span></span>
-<span id="cb44-177"><a href="#cb44-177"></a>    <span class="co"># Use the computed parameters as below to compute the PDF:</span></span>
-<span id="cb44-178"><a href="#cb44-178"></a>    </span>
-<span id="cb44-179"><a href="#cb44-179"></a>    <span class="fu">dtnew</span>(x, df, location, scale)</span>
-<span id="cb44-180"><a href="#cb44-180"></a>}</span>
-<span id="cb44-181"><a href="#cb44-181"></a></span>
-<span id="cb44-182"><a href="#cb44-182"></a>x_interval <span class="ot">=</span> <span class="fu">mu_interval</span>(windshieldy1, .<span class="dv">999</span>)</span>
-<span id="cb44-183"><a href="#cb44-183"></a>lower_x <span class="ot">=</span> x_interval[<span class="dv">1</span>]</span>
-<span id="cb44-184"><a href="#cb44-184"></a>upper_x <span class="ot">=</span> x_interval[<span class="dv">2</span>]</span>
-<span id="cb44-185"><a href="#cb44-185"></a>x <span class="ot">=</span> <span class="fu">seq</span>(lower_x, upper_x, <span class="at">length.out=</span><span class="dv">1000</span>)</span>
-<span id="cb44-186"><a href="#cb44-186"></a><span class="fu">plot</span>(</span>
-<span id="cb44-187"><a href="#cb44-187"></a>    x, <span class="fu">mu_pdf</span>(windshieldy1, x), <span class="at">type=</span><span class="st">"l"</span>, </span>
-<span id="cb44-188"><a href="#cb44-188"></a>    <span class="at">xlab=</span><span class="fu">TeX</span>(r<span class="st">'(average hardness $\mu$)'</span>), </span>
-<span id="cb44-189"><a href="#cb44-189"></a>    <span class="at">ylab=</span><span class="fu">TeX</span>(r<span class="st">'(PDF of the posterior $p(\mu|y)$)'</span>)</span>
-<span id="cb44-190"><a href="#cb44-190"></a>)</span>
-<span id="cb44-191"><a href="#cb44-191"></a><span class="in">```</span></span>
-<span id="cb44-192"><a href="#cb44-192"></a></span>
-<span id="cb44-193"><a href="#cb44-193"></a><span class="fu">## Joint posterior distribution for $\mu$ and $\sigma$</span></span>
-<span id="cb44-194"><a href="#cb44-194"></a></span>
-<span id="cb44-197"><a href="#cb44-197"></a><span class="in">```{r}</span></span>
-<span id="cb44-198"><a href="#cb44-198"></a><span class="co"># Define the inputs for the below: Sufficient Statistics</span></span>
-<span id="cb44-199"><a href="#cb44-199"></a>y <span class="ot">&lt;-</span> windshieldy1</span>
-<span id="cb44-200"><a href="#cb44-200"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(y)</span>
-<span id="cb44-201"><a href="#cb44-201"></a>s2 <span class="ot">&lt;-</span> <span class="fu">var</span>(y)</span>
-<span id="cb44-202"><a href="#cb44-202"></a>my <span class="ot">&lt;-</span> <span class="fu">mean</span>(y)</span>
-<span id="cb44-203"><a href="#cb44-203"></a></span>
-<span id="cb44-204"><a href="#cb44-204"></a><span class="co"># helper functions to sample from and evaluate</span></span>
-<span id="cb44-205"><a href="#cb44-205"></a><span class="co"># scaled inverse chi-squared distribution</span></span>
-<span id="cb44-206"><a href="#cb44-206"></a>rsinvchisq <span class="ot">&lt;-</span> <span class="cf">function</span>(n, nu, s2, ...) nu<span class="sc">*</span>s2 <span class="sc">/</span> <span class="fu">rchisq</span>(n , nu, ...)</span>
-<span id="cb44-207"><a href="#cb44-207"></a>dsinvchisq <span class="ot">&lt;-</span> <span class="cf">function</span>(x, nu, s2){</span>
-<span id="cb44-208"><a href="#cb44-208"></a>  <span class="fu">exp</span>(<span class="fu">log</span>(nu<span class="sc">/</span><span class="dv">2</span>)<span class="sc">*</span>nu<span class="sc">/</span><span class="dv">2</span> <span class="sc">-</span> <span class="fu">lgamma</span>(nu<span class="sc">/</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">log</span>(s2)<span class="sc">/</span><span class="dv">2</span><span class="sc">*</span>nu <span class="sc">-</span> <span class="fu">log</span>(x)<span class="sc">*</span>(nu<span class="sc">/</span><span class="dv">2</span><span class="sc">+</span><span class="dv">1</span>) <span class="sc">-</span> (nu<span class="sc">*</span>s2<span class="sc">/</span><span class="dv">2</span>)<span class="sc">/</span>x)</span>
-<span id="cb44-209"><a href="#cb44-209"></a>}</span>
+<span id="cb44-51"><a href="#cb44-51"></a>assignment_path <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">"https://github.com/avehtari/BDA_course_Aalto/blob/master/tests/assignment3.yml"</span>)</span>
+<span id="cb44-52"><a href="#cb44-52"></a><span class="fu">set_assignment</span>(assignment_path)    </span>
+<span id="cb44-53"><a href="#cb44-53"></a><span class="in">```</span></span>
+<span id="cb44-54"><a href="#cb44-54"></a></span>
+<span id="cb44-55"><a href="#cb44-55"></a>The following installs and loads the <span class="co">[</span><span class="ot">`latex2exp` package</span><span class="co">](https://github.com/stefano-meschiari/latex2exp)</span>, which allows us to use LaTeX in plots:</span>
+<span id="cb44-56"><a href="#cb44-56"></a></span>
+<span id="cb44-59"><a href="#cb44-59"></a><span class="in">```{r}</span></span>
+<span id="cb44-60"><a href="#cb44-60"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(latex2exp)){</span>
+<span id="cb44-61"><a href="#cb44-61"></a>    <span class="fu">install.packages</span>(<span class="st">"latex2exp"</span>)</span>
+<span id="cb44-62"><a href="#cb44-62"></a>    <span class="fu">library</span>(latex2exp)</span>
+<span id="cb44-63"><a href="#cb44-63"></a>}</span>
+<span id="cb44-64"><a href="#cb44-64"></a><span class="in">```</span></span>
+<span id="cb44-65"><a href="#cb44-65"></a>:::</span>
+<span id="cb44-66"><a href="#cb44-66"></a></span>
+<span id="cb44-67"><a href="#cb44-67"></a>::: showcase</span>
+<span id="cb44-68"><a href="#cb44-68"></a><span class="fu">## Setting up advanced packages (`posterior` and `ggdist`)</span></span>
+<span id="cb44-69"><a href="#cb44-69"></a></span>
+<span id="cb44-70"><a href="#cb44-70"></a>The following installs and loads the <span class="co">[</span><span class="ot">`posterior` package</span><span class="co">](https://mc-stan.org/posterior/index.html)</span>, which allows us to use its <span class="co">[</span><span class="ot">`rvar` Random Variable Datatype</span><span class="co">](https://mc-stan.org/posterior/articles/rvar.html)</span>:</span>
+<span id="cb44-71"><a href="#cb44-71"></a></span>
+<span id="cb44-74"><a href="#cb44-74"></a><span class="in">```{r}</span></span>
+<span id="cb44-75"><a href="#cb44-75"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(posterior)){</span>
+<span id="cb44-76"><a href="#cb44-76"></a>    <span class="fu">install.packages</span>(<span class="st">"posterior"</span>)</span>
+<span id="cb44-77"><a href="#cb44-77"></a>    <span class="fu">library</span>(posterior)</span>
+<span id="cb44-78"><a href="#cb44-78"></a>}</span>
+<span id="cb44-79"><a href="#cb44-79"></a><span class="in">```</span></span>
+<span id="cb44-80"><a href="#cb44-80"></a></span>
+<span id="cb44-81"><a href="#cb44-81"></a>The following installs and loads the <span class="co">[</span><span class="ot">`ggdist` package</span><span class="co">](https://mjskay.github.io/ggdist/)</span> along with other packages for advanced plotting functions:</span>
+<span id="cb44-82"><a href="#cb44-82"></a></span>
+<span id="cb44-85"><a href="#cb44-85"></a><span class="in">```{r}</span></span>
+<span id="cb44-86"><a href="#cb44-86"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(ggplot2)){</span>
+<span id="cb44-87"><a href="#cb44-87"></a>    <span class="fu">install.packages</span>(<span class="st">"ggplot2"</span>)</span>
+<span id="cb44-88"><a href="#cb44-88"></a>    <span class="fu">library</span>(ggplot2)</span>
+<span id="cb44-89"><a href="#cb44-89"></a>}</span>
+<span id="cb44-90"><a href="#cb44-90"></a>ggplot2<span class="sc">::</span><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">14</span>))</span>
+<span id="cb44-91"><a href="#cb44-91"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(ggdist)){</span>
+<span id="cb44-92"><a href="#cb44-92"></a>    <span class="fu">install.packages</span>(<span class="st">"ggdist"</span>)</span>
+<span id="cb44-93"><a href="#cb44-93"></a>    <span class="fu">library</span>(ggdist)</span>
+<span id="cb44-94"><a href="#cb44-94"></a>}</span>
+<span id="cb44-95"><a href="#cb44-95"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(grid)){</span>
+<span id="cb44-96"><a href="#cb44-96"></a>  <span class="fu">install.packages</span>(<span class="st">"grid"</span>)</span>
+<span id="cb44-97"><a href="#cb44-97"></a>  <span class="fu">library</span>(grid)</span>
+<span id="cb44-98"><a href="#cb44-98"></a>}</span>
+<span id="cb44-99"><a href="#cb44-99"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(gridExtra)){</span>
+<span id="cb44-100"><a href="#cb44-100"></a>  <span class="fu">install.packages</span>(<span class="st">"gridExtra"</span>)</span>
+<span id="cb44-101"><a href="#cb44-101"></a>  <span class="fu">library</span>(gridExtra)</span>
+<span id="cb44-102"><a href="#cb44-102"></a>}</span>
+<span id="cb44-103"><a href="#cb44-103"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(tidyr)){</span>
+<span id="cb44-104"><a href="#cb44-104"></a>  <span class="fu">install.packages</span>(<span class="st">"tidyr"</span>)</span>
+<span id="cb44-105"><a href="#cb44-105"></a>  <span class="fu">library</span>(tidyr)</span>
+<span id="cb44-106"><a href="#cb44-106"></a>}</span>
+<span id="cb44-107"><a href="#cb44-107"></a></span>
+<span id="cb44-108"><a href="#cb44-108"></a><span class="in">```</span></span>
+<span id="cb44-109"><a href="#cb44-109"></a>:::</span>
+<span id="cb44-110"><a href="#cb44-110"></a></span>
+<span id="cb44-111"><a href="#cb44-111"></a><span class="fu"># Inference for normal mean and deviation</span></span>
+<span id="cb44-112"><a href="#cb44-112"></a></span>
+<span id="cb44-113"><a href="#cb44-113"></a>A factory has a production line for manufacturing car windshields. A sample of windshields has been taken for testing hardness. The observed hardness values $\mathbf{y}_1$ can be found in the dataset <span class="in">`windshieldy1`</span> in the <span class="in">`aaltobda`</span> package.</span>
+<span id="cb44-114"><a href="#cb44-114"></a></span>
+<span id="cb44-115"><a href="#cb44-115"></a>We may assume that the observations follow a normal distribution with an unknown standard deviation $\sigma$. We wish to obtain information about the unknown average hardness $\mu$. For simplicity we assume standard uninformative prior discussed in the book, that is, $p(\mu, \sigma) \propto \sigma^{-1}$. It is not necessary to derive the posterior distribution in the report, as it has already been done in the book (see section 3.2).</span>
+<span id="cb44-116"><a href="#cb44-116"></a></span>
+<span id="cb44-117"><a href="#cb44-117"></a>Loading the library and the data.</span>
+<span id="cb44-118"><a href="#cb44-118"></a></span>
+<span id="cb44-121"><a href="#cb44-121"></a><span class="in">```{r}</span></span>
+<span id="cb44-122"><a href="#cb44-122"></a><span class="fu">data</span>(<span class="st">"windshieldy1"</span>)</span>
+<span id="cb44-123"><a href="#cb44-123"></a><span class="co"># The data are now stored in the variable `windshieldy1`.</span></span>
+<span id="cb44-124"><a href="#cb44-124"></a><span class="co"># The below displays the data:</span></span>
+<span id="cb44-125"><a href="#cb44-125"></a>windshieldy1</span>
+<span id="cb44-126"><a href="#cb44-126"></a><span class="in">```</span></span>
+<span id="cb44-127"><a href="#cb44-127"></a></span>
+<span id="cb44-128"><a href="#cb44-128"></a>The below data is **only for the tests**, you need to change to the full data <span class="in">`windshieldy1`</span> when reporting your results.</span>
+<span id="cb44-129"><a href="#cb44-129"></a></span>
+<span id="cb44-132"><a href="#cb44-132"></a><span class="in">```{r}</span></span>
+<span id="cb44-133"><a href="#cb44-133"></a>windshieldy_test <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">13.357</span>, <span class="fl">14.928</span>, <span class="fl">14.896</span>, <span class="fl">14.820</span>)</span>
+<span id="cb44-134"><a href="#cb44-134"></a><span class="in">```</span></span>
+<span id="cb44-135"><a href="#cb44-135"></a></span>
+<span id="cb44-136"><a href="#cb44-136"></a><span class="fu">## Marginal and probabilities for $\mu$</span></span>
+<span id="cb44-137"><a href="#cb44-137"></a></span>
+<span id="cb44-138"><a href="#cb44-138"></a>Write your answers and code here!</span>
+<span id="cb44-139"><a href="#cb44-139"></a></span>
+<span id="cb44-140"><a href="#cb44-140"></a>**Keep the below name and format for the functions to work with `markmyassignment`:**</span>
+<span id="cb44-141"><a href="#cb44-141"></a></span>
+<span id="cb44-144"><a href="#cb44-144"></a><span class="in">```{r}</span></span>
+<span id="cb44-145"><a href="#cb44-145"></a><span class="co"># Useful functions: mean(), length(), sqrt(), sum()</span></span>
+<span id="cb44-146"><a href="#cb44-146"></a><span class="co"># and qtnew(), dtnew() (from aaltobda)</span></span>
+<span id="cb44-147"><a href="#cb44-147"></a></span>
+<span id="cb44-148"><a href="#cb44-148"></a>mu_point_est <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
+<span id="cb44-149"><a href="#cb44-149"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb44-150"><a href="#cb44-150"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb44-151"><a href="#cb44-151"></a>    <span class="fl">14.5</span></span>
+<span id="cb44-152"><a href="#cb44-152"></a>    </span>
+<span id="cb44-153"><a href="#cb44-153"></a>}</span>
+<span id="cb44-154"><a href="#cb44-154"></a>mu_interval <span class="ot">&lt;-</span> <span class="cf">function</span>(data, <span class="at">prob =</span> <span class="fl">0.95</span>) {</span>
+<span id="cb44-155"><a href="#cb44-155"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb44-156"><a href="#cb44-156"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb44-157"><a href="#cb44-157"></a>    <span class="fu">c</span>(<span class="fl">13.3</span>, <span class="fl">15.7</span>)</span>
+<span id="cb44-158"><a href="#cb44-158"></a>    </span>
+<span id="cb44-159"><a href="#cb44-159"></a>}</span>
+<span id="cb44-160"><a href="#cb44-160"></a><span class="in">```</span></span>
+<span id="cb44-161"><a href="#cb44-161"></a></span>
+<span id="cb44-162"><a href="#cb44-162"></a>You can plot the density as below if you implement <span class="in">`mu_pdf`</span> to compute the PDF of the posterior $p(\mu|y)$ of the average hardness $\mu$.</span>
+<span id="cb44-163"><a href="#cb44-163"></a></span>
+<span id="cb44-166"><a href="#cb44-166"></a><span class="in">```{r}</span></span>
+<span id="cb44-167"><a href="#cb44-167"></a><span class="co">#| label: fig-2b-density</span></span>
+<span id="cb44-168"><a href="#cb44-168"></a><span class="co">#| fig-cap: PDF of the posterior $p(\mu|y)$ of the average hardness $\mu$</span></span>
+<span id="cb44-169"><a href="#cb44-169"></a>mu_pdf <span class="ot">&lt;-</span> <span class="cf">function</span>(data, x){</span>
+<span id="cb44-170"><a href="#cb44-170"></a>    <span class="co"># Compute necessary parameters here.</span></span>
+<span id="cb44-171"><a href="#cb44-171"></a>    <span class="co"># These are the correct parameters for `windshieldy_test` </span></span>
+<span id="cb44-172"><a href="#cb44-172"></a>    <span class="co"># with the provided uninformative prior.</span></span>
+<span id="cb44-173"><a href="#cb44-173"></a>    df <span class="ot">=</span> <span class="dv">3</span></span>
+<span id="cb44-174"><a href="#cb44-174"></a>    location <span class="ot">=</span> <span class="fl">14.5</span></span>
+<span id="cb44-175"><a href="#cb44-175"></a>    scale <span class="ot">=</span> <span class="fl">0.3817557</span></span>
+<span id="cb44-176"><a href="#cb44-176"></a>    <span class="co"># Use the computed parameters as below to compute the PDF:</span></span>
+<span id="cb44-177"><a href="#cb44-177"></a>    </span>
+<span id="cb44-178"><a href="#cb44-178"></a>    <span class="fu">dtnew</span>(x, df, location, scale)</span>
+<span id="cb44-179"><a href="#cb44-179"></a>}</span>
+<span id="cb44-180"><a href="#cb44-180"></a></span>
+<span id="cb44-181"><a href="#cb44-181"></a>x_interval <span class="ot">=</span> <span class="fu">mu_interval</span>(windshieldy1, .<span class="dv">999</span>)</span>
+<span id="cb44-182"><a href="#cb44-182"></a>lower_x <span class="ot">=</span> x_interval[<span class="dv">1</span>]</span>
+<span id="cb44-183"><a href="#cb44-183"></a>upper_x <span class="ot">=</span> x_interval[<span class="dv">2</span>]</span>
+<span id="cb44-184"><a href="#cb44-184"></a>x <span class="ot">=</span> <span class="fu">seq</span>(lower_x, upper_x, <span class="at">length.out=</span><span class="dv">1000</span>)</span>
+<span id="cb44-185"><a href="#cb44-185"></a><span class="fu">plot</span>(</span>
+<span id="cb44-186"><a href="#cb44-186"></a>    x, <span class="fu">mu_pdf</span>(windshieldy1, x), <span class="at">type=</span><span class="st">"l"</span>, </span>
+<span id="cb44-187"><a href="#cb44-187"></a>    <span class="at">xlab=</span><span class="fu">TeX</span>(r<span class="st">'(average hardness $\mu$)'</span>), </span>
+<span id="cb44-188"><a href="#cb44-188"></a>    <span class="at">ylab=</span><span class="fu">TeX</span>(r<span class="st">'(PDF of the posterior $p(\mu|y)$)'</span>)</span>
+<span id="cb44-189"><a href="#cb44-189"></a>)</span>
+<span id="cb44-190"><a href="#cb44-190"></a><span class="in">```</span></span>
+<span id="cb44-191"><a href="#cb44-191"></a></span>
+<span id="cb44-192"><a href="#cb44-192"></a><span class="fu">## Joint posterior distribution for $\mu$ and $\sigma$</span></span>
+<span id="cb44-193"><a href="#cb44-193"></a></span>
+<span id="cb44-196"><a href="#cb44-196"></a><span class="in">```{r}</span></span>
+<span id="cb44-197"><a href="#cb44-197"></a><span class="co"># Define the inputs for the below: Sufficient Statistics</span></span>
+<span id="cb44-198"><a href="#cb44-198"></a>y <span class="ot">&lt;-</span> windshieldy1</span>
+<span id="cb44-199"><a href="#cb44-199"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(y)</span>
+<span id="cb44-200"><a href="#cb44-200"></a>s2 <span class="ot">&lt;-</span> <span class="fu">var</span>(y)</span>
+<span id="cb44-201"><a href="#cb44-201"></a>my <span class="ot">&lt;-</span> <span class="fu">mean</span>(y)</span>
+<span id="cb44-202"><a href="#cb44-202"></a></span>
+<span id="cb44-203"><a href="#cb44-203"></a><span class="co"># helper functions to sample from and evaluate</span></span>
+<span id="cb44-204"><a href="#cb44-204"></a><span class="co"># scaled inverse chi-squared distribution</span></span>
+<span id="cb44-205"><a href="#cb44-205"></a>rsinvchisq <span class="ot">&lt;-</span> <span class="cf">function</span>(n, nu, s2, ...) nu<span class="sc">*</span>s2 <span class="sc">/</span> <span class="fu">rchisq</span>(n , nu, ...)</span>
+<span id="cb44-206"><a href="#cb44-206"></a>dsinvchisq <span class="ot">&lt;-</span> <span class="cf">function</span>(x, nu, s2){</span>
+<span id="cb44-207"><a href="#cb44-207"></a>  <span class="fu">exp</span>(<span class="fu">log</span>(nu<span class="sc">/</span><span class="dv">2</span>)<span class="sc">*</span>nu<span class="sc">/</span><span class="dv">2</span> <span class="sc">-</span> <span class="fu">lgamma</span>(nu<span class="sc">/</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">log</span>(s2)<span class="sc">/</span><span class="dv">2</span><span class="sc">*</span>nu <span class="sc">-</span> <span class="fu">log</span>(x)<span class="sc">*</span>(nu<span class="sc">/</span><span class="dv">2</span><span class="sc">+</span><span class="dv">1</span>) <span class="sc">-</span> (nu<span class="sc">*</span>s2<span class="sc">/</span><span class="dv">2</span>)<span class="sc">/</span>x)</span>
+<span id="cb44-208"><a href="#cb44-208"></a>}</span>
+<span id="cb44-209"><a href="#cb44-209"></a></span>
 <span id="cb44-210"><a href="#cb44-210"></a></span>
-<span id="cb44-211"><a href="#cb44-211"></a></span>
-<span id="cb44-212"><a href="#cb44-212"></a><span class="co"># Sample 1000 draws from marginal posteriors</span></span>
-<span id="cb44-213"><a href="#cb44-213"></a>ns <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
-<span id="cb44-214"><a href="#cb44-214"></a>sigma2  <span class="ot">&lt;-</span> <span class="fu">rsinvchisq</span>(ns, n<span class="dv">-1</span>, s2)</span>
-<span id="cb44-215"><a href="#cb44-215"></a>mu <span class="ot">&lt;-</span> my <span class="sc">+</span> <span class="fu">sqrt</span>(sigma2<span class="sc">/</span>n)<span class="sc">*</span><span class="fu">rnorm</span>(<span class="fu">length</span>(sigma2))</span>
-<span id="cb44-216"><a href="#cb44-216"></a>sigma <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(sigma2)</span>
-<span id="cb44-217"><a href="#cb44-217"></a></span>
-<span id="cb44-218"><a href="#cb44-218"></a><span class="co"># Compute the density in a grid of ranged for the grids</span></span>
-<span id="cb44-219"><a href="#cb44-219"></a>t1l <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>)</span>
-<span id="cb44-220"><a href="#cb44-220"></a>t2l <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="dv">7</span>)</span>
-<span id="cb44-221"><a href="#cb44-221"></a>nl <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.001</span>, <span class="dv">50</span>)</span>
-<span id="cb44-222"><a href="#cb44-222"></a>t1 <span class="ot">&lt;-</span> <span class="fu">seq</span>(t1l[<span class="dv">1</span>], t1l[<span class="dv">2</span>], <span class="at">length.out =</span> ns)</span>
-<span id="cb44-223"><a href="#cb44-223"></a>t2 <span class="ot">&lt;-</span> <span class="fu">seq</span>(t2l[<span class="dv">1</span>], t2l[<span class="dv">2</span>], <span class="at">length.out =</span> ns)</span>
+<span id="cb44-211"><a href="#cb44-211"></a><span class="co"># Sample 1000 draws from marginal posteriors</span></span>
+<span id="cb44-212"><a href="#cb44-212"></a>ns <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb44-213"><a href="#cb44-213"></a>sigma2  <span class="ot">&lt;-</span> <span class="fu">rsinvchisq</span>(ns, n<span class="dv">-1</span>, s2)</span>
+<span id="cb44-214"><a href="#cb44-214"></a>mu <span class="ot">&lt;-</span> my <span class="sc">+</span> <span class="fu">sqrt</span>(sigma2<span class="sc">/</span>n)<span class="sc">*</span><span class="fu">rnorm</span>(<span class="fu">length</span>(sigma2))</span>
+<span id="cb44-215"><a href="#cb44-215"></a>sigma <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(sigma2)</span>
+<span id="cb44-216"><a href="#cb44-216"></a></span>
+<span id="cb44-217"><a href="#cb44-217"></a><span class="co"># Compute the density in a grid of ranged for the grids</span></span>
+<span id="cb44-218"><a href="#cb44-218"></a>t1l <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>)</span>
+<span id="cb44-219"><a href="#cb44-219"></a>t2l <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="dv">7</span>)</span>
+<span id="cb44-220"><a href="#cb44-220"></a>nl <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.001</span>, <span class="dv">50</span>)</span>
+<span id="cb44-221"><a href="#cb44-221"></a>t1 <span class="ot">&lt;-</span> <span class="fu">seq</span>(t1l[<span class="dv">1</span>], t1l[<span class="dv">2</span>], <span class="at">length.out =</span> ns)</span>
+<span id="cb44-222"><a href="#cb44-222"></a>t2 <span class="ot">&lt;-</span> <span class="fu">seq</span>(t2l[<span class="dv">1</span>], t2l[<span class="dv">2</span>], <span class="at">length.out =</span> ns)</span>
+<span id="cb44-223"><a href="#cb44-223"></a></span>
 <span id="cb44-224"><a href="#cb44-224"></a></span>
-<span id="cb44-225"><a href="#cb44-225"></a></span>
-<span id="cb44-226"><a href="#cb44-226"></a><span class="co"># Compute the exact marginal density of mu:</span></span>
-<span id="cb44-227"><a href="#cb44-227"></a><span class="co"># multiplication by 1./sqrt(s2/n) is due to the transformation of</span></span>
-<span id="cb44-228"><a href="#cb44-228"></a><span class="co"># variable z=(x-mean(y))/sqrt(s2/n), see BDA3 p. 21</span></span>
-<span id="cb44-229"><a href="#cb44-229"></a>pm <span class="ot">&lt;-</span> <span class="fu">dt</span>((t1<span class="sc">-</span>my) <span class="sc">/</span> <span class="fu">sqrt</span>(s2<span class="sc">/</span>n), n<span class="dv">-1</span>) <span class="sc">/</span> <span class="fu">sqrt</span>(s2<span class="sc">/</span>n)</span>
-<span id="cb44-230"><a href="#cb44-230"></a></span>
-<span id="cb44-231"><a href="#cb44-231"></a><span class="co"># Estimate the marginal density using samples and ad hoc Gaussian kernel approximation</span></span>
-<span id="cb44-232"><a href="#cb44-232"></a>pmk <span class="ot">&lt;-</span> <span class="fu">density</span>(mu, <span class="at">adjust =</span> <span class="dv">2</span>, <span class="at">n =</span> ns, <span class="at">from =</span> t1l[<span class="dv">1</span>], <span class="at">to =</span> t1l[<span class="dv">2</span>])<span class="sc">$</span>y</span>
-<span id="cb44-233"><a href="#cb44-233"></a></span>
-<span id="cb44-234"><a href="#cb44-234"></a><span class="co">#Compute the exact marginal density of sigma:</span></span>
-<span id="cb44-235"><a href="#cb44-235"></a><span class="co"># the multiplication by 2*t2 is due to the transformation of</span></span>
-<span id="cb44-236"><a href="#cb44-236"></a><span class="co"># variable z=t2^2, see BDA3 p. 21</span></span>
-<span id="cb44-237"><a href="#cb44-237"></a>ps <span class="ot">&lt;-</span> <span class="fu">dsinvchisq</span>(t2<span class="sc">^</span><span class="dv">2</span>, n<span class="dv">-1</span>, s2) <span class="sc">*</span> <span class="dv">2</span><span class="sc">*</span>t2</span>
-<span id="cb44-238"><a href="#cb44-238"></a></span>
-<span id="cb44-239"><a href="#cb44-239"></a><span class="co"># Estimate the marginal density using samples and ad hoc Gaussian kernel approximation</span></span>
-<span id="cb44-240"><a href="#cb44-240"></a>psk <span class="ot">&lt;-</span> <span class="fu">density</span>(sigma, <span class="at">n =</span> ns, <span class="at">from =</span> t2l[<span class="dv">1</span>], <span class="at">to =</span> t2l[<span class="dv">2</span>])<span class="sc">$</span>y</span>
+<span id="cb44-225"><a href="#cb44-225"></a><span class="co"># Compute the exact marginal density of mu:</span></span>
+<span id="cb44-226"><a href="#cb44-226"></a><span class="co"># multiplication by 1./sqrt(s2/n) is due to the transformation of</span></span>
+<span id="cb44-227"><a href="#cb44-227"></a><span class="co"># variable z=(x-mean(y))/sqrt(s2/n), see BDA3 p. 21</span></span>
+<span id="cb44-228"><a href="#cb44-228"></a>pm <span class="ot">&lt;-</span> <span class="fu">dt</span>((t1<span class="sc">-</span>my) <span class="sc">/</span> <span class="fu">sqrt</span>(s2<span class="sc">/</span>n), n<span class="dv">-1</span>) <span class="sc">/</span> <span class="fu">sqrt</span>(s2<span class="sc">/</span>n)</span>
+<span id="cb44-229"><a href="#cb44-229"></a></span>
+<span id="cb44-230"><a href="#cb44-230"></a><span class="co"># Estimate the marginal density using samples and ad hoc Gaussian kernel approximation</span></span>
+<span id="cb44-231"><a href="#cb44-231"></a>pmk <span class="ot">&lt;-</span> <span class="fu">density</span>(mu, <span class="at">adjust =</span> <span class="dv">2</span>, <span class="at">n =</span> ns, <span class="at">from =</span> t1l[<span class="dv">1</span>], <span class="at">to =</span> t1l[<span class="dv">2</span>])<span class="sc">$</span>y</span>
+<span id="cb44-232"><a href="#cb44-232"></a></span>
+<span id="cb44-233"><a href="#cb44-233"></a><span class="co">#Compute the exact marginal density of sigma:</span></span>
+<span id="cb44-234"><a href="#cb44-234"></a><span class="co"># the multiplication by 2*t2 is due to the transformation of</span></span>
+<span id="cb44-235"><a href="#cb44-235"></a><span class="co"># variable z=t2^2, see BDA3 p. 21</span></span>
+<span id="cb44-236"><a href="#cb44-236"></a>ps <span class="ot">&lt;-</span> <span class="fu">dsinvchisq</span>(t2<span class="sc">^</span><span class="dv">2</span>, n<span class="dv">-1</span>, s2) <span class="sc">*</span> <span class="dv">2</span><span class="sc">*</span>t2</span>
+<span id="cb44-237"><a href="#cb44-237"></a></span>
+<span id="cb44-238"><a href="#cb44-238"></a><span class="co"># Estimate the marginal density using samples and ad hoc Gaussian kernel approximation</span></span>
+<span id="cb44-239"><a href="#cb44-239"></a>psk <span class="ot">&lt;-</span> <span class="fu">density</span>(sigma, <span class="at">n =</span> ns, <span class="at">from =</span> t2l[<span class="dv">1</span>], <span class="at">to =</span> t2l[<span class="dv">2</span>])<span class="sc">$</span>y</span>
+<span id="cb44-240"><a href="#cb44-240"></a></span>
 <span id="cb44-241"><a href="#cb44-241"></a></span>
-<span id="cb44-242"><a href="#cb44-242"></a></span>
-<span id="cb44-243"><a href="#cb44-243"></a><span class="co"># Evaluate the joint density in a grid. Note that the following is not normalized, but for plotting contours it does not matter :</span></span>
-<span id="cb44-244"><a href="#cb44-244"></a><span class="co"># Combine grid points into another data frame</span></span>
-<span id="cb44-245"><a href="#cb44-245"></a><span class="co"># with all pairwise combinations</span></span>
-<span id="cb44-246"><a href="#cb44-246"></a>dfj <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">t1 =</span> <span class="fu">rep</span>(t1, <span class="at">each =</span> <span class="fu">length</span>(t2)),</span>
-<span id="cb44-247"><a href="#cb44-247"></a>                  <span class="at">t2 =</span> <span class="fu">rep</span>(t2, <span class="fu">length</span>(t1)))</span>
-<span id="cb44-248"><a href="#cb44-248"></a>dfj<span class="sc">$</span>z <span class="ot">&lt;-</span> <span class="fu">dsinvchisq</span>(dfj<span class="sc">$</span>t2<span class="sc">^</span><span class="dv">2</span>, n<span class="dv">-1</span>, s2) <span class="sc">*</span> <span class="dv">2</span><span class="sc">*</span>dfj<span class="sc">$</span>t2 <span class="sc">*</span> <span class="fu">dnorm</span>(dfj<span class="sc">$</span>t1, my, dfj<span class="sc">$</span>t2<span class="sc">/</span><span class="fu">sqrt</span>(n))</span>
-<span id="cb44-249"><a href="#cb44-249"></a><span class="co"># breaks for plotting the contours</span></span>
-<span id="cb44-250"><a href="#cb44-250"></a>cl <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">1e-5</span>, <span class="fu">max</span>(dfj<span class="sc">$</span>z), <span class="at">length.out =</span> <span class="dv">6</span>)</span>
+<span id="cb44-242"><a href="#cb44-242"></a><span class="co"># Evaluate the joint density in a grid. Note that the following is not normalized, but for plotting contours it does not matter :</span></span>
+<span id="cb44-243"><a href="#cb44-243"></a><span class="co"># Combine grid points into another data frame</span></span>
+<span id="cb44-244"><a href="#cb44-244"></a><span class="co"># with all pairwise combinations</span></span>
+<span id="cb44-245"><a href="#cb44-245"></a>dfj <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">t1 =</span> <span class="fu">rep</span>(t1, <span class="at">each =</span> <span class="fu">length</span>(t2)),</span>
+<span id="cb44-246"><a href="#cb44-246"></a>                  <span class="at">t2 =</span> <span class="fu">rep</span>(t2, <span class="fu">length</span>(t1)))</span>
+<span id="cb44-247"><a href="#cb44-247"></a>dfj<span class="sc">$</span>z <span class="ot">&lt;-</span> <span class="fu">dsinvchisq</span>(dfj<span class="sc">$</span>t2<span class="sc">^</span><span class="dv">2</span>, n<span class="dv">-1</span>, s2) <span class="sc">*</span> <span class="dv">2</span><span class="sc">*</span>dfj<span class="sc">$</span>t2 <span class="sc">*</span> <span class="fu">dnorm</span>(dfj<span class="sc">$</span>t1, my, dfj<span class="sc">$</span>t2<span class="sc">/</span><span class="fu">sqrt</span>(n))</span>
+<span id="cb44-248"><a href="#cb44-248"></a><span class="co"># breaks for plotting the contours</span></span>
+<span id="cb44-249"><a href="#cb44-249"></a>cl <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">1e-5</span>, <span class="fu">max</span>(dfj<span class="sc">$</span>z), <span class="at">length.out =</span> <span class="dv">6</span>)</span>
+<span id="cb44-250"><a href="#cb44-250"></a></span>
 <span id="cb44-251"><a href="#cb44-251"></a></span>
 <span id="cb44-252"><a href="#cb44-252"></a></span>
-<span id="cb44-253"><a href="#cb44-253"></a></span>
-<span id="cb44-254"><a href="#cb44-254"></a><span class="co"># Now, visualise the joint and marginal densities</span></span>
-<span id="cb44-255"><a href="#cb44-255"></a>dfm <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(t1, <span class="at">Exact =</span> pm, <span class="at">Empirical =</span> pmk) <span class="sc">|&gt;</span></span>
-<span id="cb44-256"><a href="#cb44-256"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">!</span>t1, <span class="at">names_to=</span><span class="st">"grp"</span>, <span class="at">values_to=</span><span class="st">"p"</span>)</span>
-<span id="cb44-257"><a href="#cb44-257"></a>margmu <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(dfm) <span class="sc">+</span></span>
-<span id="cb44-258"><a href="#cb44-258"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(t1, p, <span class="at">color =</span> grp)) <span class="sc">+</span></span>
-<span id="cb44-259"><a href="#cb44-259"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> t1l) <span class="sc">+</span></span>
-<span id="cb44-260"><a href="#cb44-260"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Marginal of mu'</span>, <span class="at">x =</span> <span class="st">''</span>, <span class="at">y =</span> <span class="st">''</span>) <span class="sc">+</span></span>
-<span id="cb44-261"><a href="#cb44-261"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
-<span id="cb44-262"><a href="#cb44-262"></a>  <span class="fu">theme</span>(<span class="at">legend.background =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb44-263"><a href="#cb44-263"></a>        <span class="at">legend.position.inside =</span> <span class="fu">c</span>(<span class="fl">0.75</span>, <span class="fl">0.8</span>),</span>
-<span id="cb44-264"><a href="#cb44-264"></a>        <span class="at">legend.title =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb44-253"><a href="#cb44-253"></a><span class="co"># Now, visualise the joint and marginal densities</span></span>
+<span id="cb44-254"><a href="#cb44-254"></a>dfm <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(t1, <span class="at">Exact =</span> pm, <span class="at">Empirical =</span> pmk) <span class="sc">|&gt;</span></span>
+<span id="cb44-255"><a href="#cb44-255"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">!</span>t1, <span class="at">names_to=</span><span class="st">"grp"</span>, <span class="at">values_to=</span><span class="st">"p"</span>)</span>
+<span id="cb44-256"><a href="#cb44-256"></a>margmu <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(dfm) <span class="sc">+</span></span>
+<span id="cb44-257"><a href="#cb44-257"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(t1, p, <span class="at">color =</span> grp)) <span class="sc">+</span></span>
+<span id="cb44-258"><a href="#cb44-258"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> t1l) <span class="sc">+</span></span>
+<span id="cb44-259"><a href="#cb44-259"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Marginal of mu'</span>, <span class="at">x =</span> <span class="st">''</span>, <span class="at">y =</span> <span class="st">''</span>) <span class="sc">+</span></span>
+<span id="cb44-260"><a href="#cb44-260"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb44-261"><a href="#cb44-261"></a>  <span class="fu">theme</span>(<span class="at">legend.background =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb44-262"><a href="#cb44-262"></a>        <span class="at">legend.position.inside =</span> <span class="fu">c</span>(<span class="fl">0.75</span>, <span class="fl">0.8</span>),</span>
+<span id="cb44-263"><a href="#cb44-263"></a>        <span class="at">legend.title =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb44-264"><a href="#cb44-264"></a></span>
 <span id="cb44-265"><a href="#cb44-265"></a></span>
-<span id="cb44-266"><a href="#cb44-266"></a></span>
-<span id="cb44-267"><a href="#cb44-267"></a>dfs <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(t2, <span class="at">Exact =</span> ps, <span class="at">Empirical =</span> psk) <span class="sc">|&gt;</span> </span>
-<span id="cb44-268"><a href="#cb44-268"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">!</span>t2, <span class="at">names_to=</span><span class="st">"grp"</span>, <span class="at">values_to=</span><span class="st">"p"</span>)</span>
-<span id="cb44-269"><a href="#cb44-269"></a>margsig <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(dfs) <span class="sc">+</span></span>
-<span id="cb44-270"><a href="#cb44-270"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(t2, p, <span class="at">color =</span> grp)) <span class="sc">+</span></span>
-<span id="cb44-271"><a href="#cb44-271"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> t2l) <span class="sc">+</span></span>
-<span id="cb44-272"><a href="#cb44-272"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
-<span id="cb44-273"><a href="#cb44-273"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Marginal of sigma'</span>, <span class="at">x =</span> <span class="st">''</span>, <span class="at">y =</span> <span class="st">''</span>) <span class="sc">+</span></span>
-<span id="cb44-274"><a href="#cb44-274"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
-<span id="cb44-275"><a href="#cb44-275"></a>  <span class="fu">theme</span>(<span class="at">legend.background =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb44-276"><a href="#cb44-276"></a>        <span class="at">legend.position.inside =</span> <span class="fu">c</span>(<span class="fl">0.75</span>, <span class="fl">0.8</span>),</span>
-<span id="cb44-277"><a href="#cb44-277"></a>        <span class="at">legend.title =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb44-266"><a href="#cb44-266"></a>dfs <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(t2, <span class="at">Exact =</span> ps, <span class="at">Empirical =</span> psk) <span class="sc">|&gt;</span> </span>
+<span id="cb44-267"><a href="#cb44-267"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">!</span>t2, <span class="at">names_to=</span><span class="st">"grp"</span>, <span class="at">values_to=</span><span class="st">"p"</span>)</span>
+<span id="cb44-268"><a href="#cb44-268"></a>margsig <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(dfs) <span class="sc">+</span></span>
+<span id="cb44-269"><a href="#cb44-269"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(t2, p, <span class="at">color =</span> grp)) <span class="sc">+</span></span>
+<span id="cb44-270"><a href="#cb44-270"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> t2l) <span class="sc">+</span></span>
+<span id="cb44-271"><a href="#cb44-271"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb44-272"><a href="#cb44-272"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Marginal of sigma'</span>, <span class="at">x =</span> <span class="st">''</span>, <span class="at">y =</span> <span class="st">''</span>) <span class="sc">+</span></span>
+<span id="cb44-273"><a href="#cb44-273"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb44-274"><a href="#cb44-274"></a>  <span class="fu">theme</span>(<span class="at">legend.background =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb44-275"><a href="#cb44-275"></a>        <span class="at">legend.position.inside =</span> <span class="fu">c</span>(<span class="fl">0.75</span>, <span class="fl">0.8</span>),</span>
+<span id="cb44-276"><a href="#cb44-276"></a>        <span class="at">legend.title =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb44-277"><a href="#cb44-277"></a></span>
 <span id="cb44-278"><a href="#cb44-278"></a></span>
 <span id="cb44-279"><a href="#cb44-279"></a></span>
-<span id="cb44-280"><a href="#cb44-280"></a></span>
-<span id="cb44-281"><a href="#cb44-281"></a>joint1labs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'Samples'</span>,<span class="st">'Exact contour'</span>)</span>
-<span id="cb44-282"><a href="#cb44-282"></a>joint1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb44-283"><a href="#cb44-283"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> <span class="fu">data.frame</span>(mu,sigma), <span class="fu">aes</span>(mu, sigma, <span class="at">col =</span> <span class="st">'1'</span>), <span class="at">size =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
-<span id="cb44-284"><a href="#cb44-284"></a>  <span class="fu">geom_contour</span>(<span class="at">data =</span> dfj, <span class="fu">aes</span>(t1, t2, <span class="at">z =</span> z, <span class="at">col =</span> <span class="st">'2'</span>), <span class="at">breaks =</span> cl) <span class="sc">+</span></span>
-<span id="cb44-285"><a href="#cb44-285"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> t1l,<span class="at">ylim =</span> t2l) <span class="sc">+</span></span>
-<span id="cb44-286"><a href="#cb44-286"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Joint posterior'</span>, <span class="at">x =</span> <span class="st">''</span>, <span class="at">y =</span> <span class="st">''</span>) <span class="sc">+</span></span>
-<span id="cb44-287"><a href="#cb44-287"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
-<span id="cb44-288"><a href="#cb44-288"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
-<span id="cb44-289"><a href="#cb44-289"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">'blue'</span>, <span class="st">'black'</span>), <span class="at">labels =</span> joint1labs) <span class="sc">+</span></span>
-<span id="cb44-290"><a href="#cb44-290"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">nrow  =</span> <span class="dv">1</span>, <span class="at">override.aes =</span> <span class="fu">list</span>(</span>
-<span id="cb44-291"><a href="#cb44-291"></a>    <span class="at">shape =</span> <span class="fu">c</span>(<span class="dv">16</span>, <span class="cn">NA</span>), <span class="at">linetype =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">size =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>)))) <span class="sc">+</span></span>
-<span id="cb44-292"><a href="#cb44-292"></a>  <span class="fu">theme</span>(<span class="at">legend.background =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb44-293"><a href="#cb44-293"></a>        <span class="at">legend.position.inside =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.9</span>),</span>
-<span id="cb44-294"><a href="#cb44-294"></a>        <span class="at">legend.title =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb44-280"><a href="#cb44-280"></a>joint1labs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'Samples'</span>,<span class="st">'Exact contour'</span>)</span>
+<span id="cb44-281"><a href="#cb44-281"></a>joint1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb44-282"><a href="#cb44-282"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> <span class="fu">data.frame</span>(mu,sigma), <span class="fu">aes</span>(mu, sigma, <span class="at">col =</span> <span class="st">'1'</span>), <span class="at">size =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb44-283"><a href="#cb44-283"></a>  <span class="fu">geom_contour</span>(<span class="at">data =</span> dfj, <span class="fu">aes</span>(t1, t2, <span class="at">z =</span> z, <span class="at">col =</span> <span class="st">'2'</span>), <span class="at">breaks =</span> cl) <span class="sc">+</span></span>
+<span id="cb44-284"><a href="#cb44-284"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> t1l,<span class="at">ylim =</span> t2l) <span class="sc">+</span></span>
+<span id="cb44-285"><a href="#cb44-285"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Joint posterior'</span>, <span class="at">x =</span> <span class="st">''</span>, <span class="at">y =</span> <span class="st">''</span>) <span class="sc">+</span></span>
+<span id="cb44-286"><a href="#cb44-286"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb44-287"><a href="#cb44-287"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb44-288"><a href="#cb44-288"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">'blue'</span>, <span class="st">'black'</span>), <span class="at">labels =</span> joint1labs) <span class="sc">+</span></span>
+<span id="cb44-289"><a href="#cb44-289"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">nrow  =</span> <span class="dv">1</span>, <span class="at">override.aes =</span> <span class="fu">list</span>(</span>
+<span id="cb44-290"><a href="#cb44-290"></a>    <span class="at">shape =</span> <span class="fu">c</span>(<span class="dv">16</span>, <span class="cn">NA</span>), <span class="at">linetype =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">size =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>)))) <span class="sc">+</span></span>
+<span id="cb44-291"><a href="#cb44-291"></a>  <span class="fu">theme</span>(<span class="at">legend.background =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb44-292"><a href="#cb44-292"></a>        <span class="at">legend.position.inside =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.9</span>),</span>
+<span id="cb44-293"><a href="#cb44-293"></a>        <span class="at">legend.title =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb44-294"><a href="#cb44-294"></a></span>
 <span id="cb44-295"><a href="#cb44-295"></a></span>
-<span id="cb44-296"><a href="#cb44-296"></a></span>
-<span id="cb44-297"><a href="#cb44-297"></a><span class="co"># blank plot for combining the plots</span></span>
-<span id="cb44-298"><a href="#cb44-298"></a>bp <span class="ot">&lt;-</span> <span class="fu">grid.rect</span>(<span class="at">gp =</span> <span class="fu">gpar</span>(<span class="at">col =</span> <span class="st">'white'</span>))</span>
+<span id="cb44-296"><a href="#cb44-296"></a><span class="co"># blank plot for combining the plots</span></span>
+<span id="cb44-297"><a href="#cb44-297"></a>bp <span class="ot">&lt;-</span> <span class="fu">grid.rect</span>(<span class="at">gp =</span> <span class="fu">gpar</span>(<span class="at">col =</span> <span class="st">'white'</span>))</span>
+<span id="cb44-298"><a href="#cb44-298"></a></span>
 <span id="cb44-299"><a href="#cb44-299"></a></span>
-<span id="cb44-300"><a href="#cb44-300"></a></span>
-<span id="cb44-301"><a href="#cb44-301"></a><span class="fu">grid.arrange</span>(joint1, margsig, margmu, bp, <span class="at">nrow =</span> <span class="dv">2</span>)</span>
-<span id="cb44-302"><a href="#cb44-302"></a></span>
-<span id="cb44-303"><a href="#cb44-303"></a><span class="in">```</span></span>
-<span id="cb44-304"><a href="#cb44-304"></a></span>
-<span id="cb44-305"><a href="#cb44-305"></a><span class="fu">## Predictive distribution</span></span>
-<span id="cb44-306"><a href="#cb44-306"></a></span>
-<span id="cb44-307"><a href="#cb44-307"></a>Write your answers and code here!</span>
-<span id="cb44-308"><a href="#cb44-308"></a></span>
-<span id="cb44-309"><a href="#cb44-309"></a>**Keep the below name and format for the functions to work with `markmyassignment`:**</span>
-<span id="cb44-310"><a href="#cb44-310"></a></span>
-<span id="cb44-313"><a href="#cb44-313"></a><span class="in">```{r}</span></span>
-<span id="cb44-314"><a href="#cb44-314"></a><span class="co"># Useful functions: mean(), length(), sqrt(), sum()</span></span>
-<span id="cb44-315"><a href="#cb44-315"></a><span class="co"># and qtnew(), dtnew() (from aaltobda)</span></span>
-<span id="cb44-316"><a href="#cb44-316"></a></span>
-<span id="cb44-317"><a href="#cb44-317"></a>mu_pred_point_est <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
-<span id="cb44-318"><a href="#cb44-318"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb44-319"><a href="#cb44-319"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
-<span id="cb44-320"><a href="#cb44-320"></a>    <span class="fl">14.5</span></span>
-<span id="cb44-321"><a href="#cb44-321"></a>    </span>
-<span id="cb44-322"><a href="#cb44-322"></a>}</span>
-<span id="cb44-323"><a href="#cb44-323"></a>mu_pred_interval <span class="ot">&lt;-</span> <span class="cf">function</span>(data, <span class="at">prob =</span> <span class="fl">0.95</span>) {</span>
-<span id="cb44-324"><a href="#cb44-324"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb44-325"><a href="#cb44-325"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
-<span id="cb44-326"><a href="#cb44-326"></a>    <span class="fu">c</span>(<span class="fl">11.8</span>, <span class="fl">17.2</span>)</span>
-<span id="cb44-327"><a href="#cb44-327"></a>    </span>
-<span id="cb44-328"><a href="#cb44-328"></a>}</span>
-<span id="cb44-329"><a href="#cb44-329"></a><span class="in">```</span></span>
-<span id="cb44-330"><a href="#cb44-330"></a></span>
-<span id="cb44-331"><a href="#cb44-331"></a>You can plot the density as below if you implement <span class="in">`mu_pred_pdf`</span> to compute the PDF of the posterior predictive $p(\tilde{y}|y)$ of a new hardness observation $\tilde{y}$.</span>
-<span id="cb44-332"><a href="#cb44-332"></a></span>
-<span id="cb44-335"><a href="#cb44-335"></a><span class="in">```{r}</span></span>
-<span id="cb44-336"><a href="#cb44-336"></a><span class="co">#| label: fig-2c-density</span></span>
-<span id="cb44-337"><a href="#cb44-337"></a><span class="co">#| fig-cap: PDF of the posterior predictive $p(\tilde{y}|y)$ of a new hardness observation $\tilde{y}$</span></span>
-<span id="cb44-338"><a href="#cb44-338"></a>mu_pred_pdf <span class="ot">&lt;-</span> <span class="cf">function</span>(data, x){</span>
-<span id="cb44-339"><a href="#cb44-339"></a>    <span class="co"># Compute necessary parameters here.</span></span>
-<span id="cb44-340"><a href="#cb44-340"></a>    <span class="co"># These are the correct parameters for `windshieldy_test` </span></span>
-<span id="cb44-341"><a href="#cb44-341"></a>    <span class="co"># with the provided uninformative prior.</span></span>
-<span id="cb44-342"><a href="#cb44-342"></a>    df <span class="ot">=</span> <span class="dv">3</span></span>
-<span id="cb44-343"><a href="#cb44-343"></a>    location <span class="ot">=</span> <span class="fl">14.5</span></span>
-<span id="cb44-344"><a href="#cb44-344"></a>    scale <span class="ot">=</span> <span class="fl">0.8536316</span></span>
-<span id="cb44-345"><a href="#cb44-345"></a>    <span class="co"># Use the computed parameters as below to compute the PDF:</span></span>
-<span id="cb44-346"><a href="#cb44-346"></a>    </span>
-<span id="cb44-347"><a href="#cb44-347"></a>    <span class="fu">dtnew</span>(x, df, location, scale)</span>
-<span id="cb44-348"><a href="#cb44-348"></a>}</span>
-<span id="cb44-349"><a href="#cb44-349"></a></span>
-<span id="cb44-350"><a href="#cb44-350"></a>x_interval <span class="ot">=</span> <span class="fu">mu_pred_interval</span>(windshieldy1, .<span class="dv">999</span>)</span>
-<span id="cb44-351"><a href="#cb44-351"></a>lower_x <span class="ot">=</span> x_interval[<span class="dv">1</span>]</span>
-<span id="cb44-352"><a href="#cb44-352"></a>upper_x <span class="ot">=</span> x_interval[<span class="dv">2</span>]</span>
-<span id="cb44-353"><a href="#cb44-353"></a>x <span class="ot">=</span> <span class="fu">seq</span>(lower_x, upper_x, <span class="at">length.out=</span><span class="dv">1000</span>)</span>
-<span id="cb44-354"><a href="#cb44-354"></a><span class="fu">plot</span>(</span>
-<span id="cb44-355"><a href="#cb44-355"></a>    x, <span class="fu">mu_pred_pdf</span>(windshieldy1, x), <span class="at">type=</span><span class="st">"l"</span>, </span>
-<span id="cb44-356"><a href="#cb44-356"></a>    <span class="at">xlab=</span><span class="fu">TeX</span>(r<span class="st">'(new hardness observation $</span><span class="sc">\t</span><span class="st">ilde{y}$)'</span>), </span>
-<span id="cb44-357"><a href="#cb44-357"></a>    <span class="at">ylab=</span><span class="fu">TeX</span>(r<span class="st">'(PDF of the posterior predictive $p(</span><span class="sc">\t</span><span class="st">ilde{y}|y)$)'</span>)</span>
-<span id="cb44-358"><a href="#cb44-358"></a>)</span>
-<span id="cb44-359"><a href="#cb44-359"></a><span class="in">```</span></span>
-<span id="cb44-360"><a href="#cb44-360"></a></span>
-<span id="cb44-361"><a href="#cb44-361"></a><span class="fu"># Inference for the difference between proportions</span></span>
-<span id="cb44-362"><a href="#cb44-362"></a></span>
-<span id="cb44-363"><a href="#cb44-363"></a>An experiment was performed to estimate the effect of beta-blockers on mortality of cardiac patients. A group of patients was randomly assigned to treatment and control groups: out of 674 patients receiving the control, 39 died, and out of 680 receiving the treatment, 22 died. Assume that the outcomes are independent and binomially distributed, with probabilities of death of $p_0$ and $p_1$ under the control and treatment, respectively. Set up a noninformative or weakly informative prior distribution on $(p_0,p_1)$.</span>
-<span id="cb44-364"><a href="#cb44-364"></a></span>
-<span id="cb44-365"><a href="#cb44-365"></a>Summarize the posterior distribution for the <span class="co">[</span><span class="ot">odds ratio</span><span class="co">](https://en.wikipedia.org/wiki/Odds_ratio)</span>, $$</span>
-<span id="cb44-366"><a href="#cb44-366"></a>\mathrm{OR} = (p_1/(1-p_1))/(p_0/(1-p_0)).</span>
-<span id="cb44-367"><a href="#cb44-367"></a>$$</span>
-<span id="cb44-368"><a href="#cb44-368"></a></span>
-<span id="cb44-369"><a href="#cb44-369"></a>In order to help you answering the quiz questions, we recommend you:</span>
-<span id="cb44-370"><a href="#cb44-370"></a></span>
-<span id="cb44-371"><a href="#cb44-371"></a><span class="ss">-   </span>Compute and report the point estimate $E(\mathrm{OR}|y_0,y_1)$,</span>
-<span id="cb44-372"><a href="#cb44-372"></a><span class="ss">-   </span>compute and report a posterior 95%-interval,</span>
-<span id="cb44-373"><a href="#cb44-373"></a><span class="ss">-   </span>plot the histogram, and</span>
-<span id="cb44-374"><a href="#cb44-374"></a><span class="ss">-   </span>write interpretation of the result in text.</span>
-<span id="cb44-375"><a href="#cb44-375"></a></span>
-<span id="cb44-376"><a href="#cb44-376"></a>Use <span class="co">[</span><span class="ot">Frank Harrell's recommendations</span><span class="co">](https://hbiostat.org/blog/post/bayes-freq-stmts/)</span> how to state results in Bayesian two group comparison.</span>
-<span id="cb44-377"><a href="#cb44-377"></a></span>
-<span id="cb44-378"><a href="#cb44-378"></a>::: hint</span>
-<span id="cb44-379"><a href="#cb44-379"></a>With a conjugate prior, a closed-form posterior is the Beta form for each group separately (see equations in the book). You can use <span class="in">`rbeta()`</span> to sample from the posterior distributions of $p_0$ and $p_1$, and use this sample and odds ratio equation to get a sample from the distribution of the odds ratio.</span>
-<span id="cb44-380"><a href="#cb44-380"></a>:::</span>
-<span id="cb44-381"><a href="#cb44-381"></a></span>
-<span id="cb44-382"><a href="#cb44-382"></a>Write your answers and code here!</span>
-<span id="cb44-383"><a href="#cb44-383"></a></span>
-<span id="cb44-384"><a href="#cb44-384"></a>The below data is **only for the tests**:</span>
-<span id="cb44-385"><a href="#cb44-385"></a></span>
-<span id="cb44-388"><a href="#cb44-388"></a><span class="in">```{r}</span></span>
-<span id="cb44-389"><a href="#cb44-389"></a><span class="fu">set.seed</span>(<span class="dv">4711</span>)</span>
-<span id="cb44-390"><a href="#cb44-390"></a>ndraws <span class="ot">=</span> <span class="dv">1000</span></span>
-<span id="cb44-391"><a href="#cb44-391"></a>p0 <span class="ot">=</span> <span class="fu">rbeta</span>(ndraws, <span class="dv">5</span>, <span class="dv">95</span>)</span>
-<span id="cb44-392"><a href="#cb44-392"></a>p1 <span class="ot">=</span> <span class="fu">rbeta</span>(ndraws, <span class="dv">10</span>, <span class="dv">90</span>)</span>
-<span id="cb44-393"><a href="#cb44-393"></a></span>
-<span id="cb44-394"><a href="#cb44-394"></a><span class="in">```</span></span>
-<span id="cb44-395"><a href="#cb44-395"></a></span>
-<span id="cb44-396"><a href="#cb44-396"></a>**Keep the below name and format for the functions to work with `markmyassignment`:**</span>
-<span id="cb44-397"><a href="#cb44-397"></a></span>
-<span id="cb44-400"><a href="#cb44-400"></a><span class="in">```{r}</span></span>
-<span id="cb44-401"><a href="#cb44-401"></a><span class="co"># Useful function: mean(), quantile()</span></span>
-<span id="cb44-402"><a href="#cb44-402"></a></span>
-<span id="cb44-403"><a href="#cb44-403"></a>posterior_odds_ratio_point_est <span class="ot">&lt;-</span> <span class="cf">function</span>(p0, p1) {</span>
-<span id="cb44-404"><a href="#cb44-404"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb44-405"><a href="#cb44-405"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
-<span id="cb44-406"><a href="#cb44-406"></a>    <span class="fl">2.650172</span></span>
-<span id="cb44-407"><a href="#cb44-407"></a>    </span>
-<span id="cb44-408"><a href="#cb44-408"></a>}</span>
-<span id="cb44-409"><a href="#cb44-409"></a>posterior_odds_ratio_interval <span class="ot">&lt;-</span> <span class="cf">function</span>(p0, p1, <span class="at">prob =</span> <span class="fl">0.95</span>) {</span>
-<span id="cb44-410"><a href="#cb44-410"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb44-411"><a href="#cb44-411"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
-<span id="cb44-412"><a href="#cb44-412"></a>    <span class="fu">c</span>(<span class="fl">0.6796942</span>,<span class="fl">7.3015964</span>)</span>
-<span id="cb44-413"><a href="#cb44-413"></a>    </span>
-<span id="cb44-414"><a href="#cb44-414"></a>}</span>
-<span id="cb44-415"><a href="#cb44-415"></a><span class="in">```</span></span>
-<span id="cb44-416"><a href="#cb44-416"></a></span>
-<span id="cb44-417"><a href="#cb44-417"></a>::: showcase</span>
-<span id="cb44-418"><a href="#cb44-418"></a><span class="fu">## advanced tools (`posterior`'s `rvar`, `ggdist`'s `stat_dotsinterval`)</span></span>
-<span id="cb44-419"><a href="#cb44-419"></a></span>
-<span id="cb44-420"><a href="#cb44-420"></a>The <span class="in">`posterior`</span> package's random variable datatype <span class="in">`rvar`</span> is a <span class="co">[</span><span class="ot">"sample-based representation of random variables"</span><span class="co">](https://mc-stan.org/posterior/articles/rvar.html#:~:text=sample%2Dbased%20representation%20of%20random%20variables)</span> which makes handling of random samples (of draws) such as the ones contained in the above variables <span class="in">`p0`</span> and <span class="in">`p1`</span> easier. <span class="co">[</span><span class="ot">By default, it prints as the mean and standard deviation of the draws</span><span class="co">](https://mc-stan.org/posterior/articles/rvar.html#:~:text=The%20default%20display%20of%20an%20rvar%20shows%20the%20mean%20and%20standard%20deviation%20of%20each%20element%20of%20the%20array.)</span>, **such that `rvar(p0)` prints as `r rvar(p0)` and `rvar(p1)` prints as `r rvar(p1)`**.</span>
-<span id="cb44-421"><a href="#cb44-421"></a></span>
-<span id="cb44-422"><a href="#cb44-422"></a>The datatype is <span class="co">[</span><span class="ot">"designed to \[...\] be able to be used inside `data.frame()`s and `tibble()`s, and to be used with distribution visualizations in the ggdist package."</span><span class="co">]</span>(https://mc-stan.org/posterior/articles/rvar.html#:~:text=designed%20to%20interoperate%20with%20vectorized%20distributions%20in%20the%20distributional%20package%2C%20to%20be%20able%20to%20be%20used%20inside%20data.frame()s%20and%20tibble()s%2C%20and%20to%20be%20used%20with%20distribution%20visualizations%20in%20the%20ggdist%20package.) The code below sets up an <span class="co">[</span><span class="ot">R `data.frame()`</span><span class="co">](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/data.frame)</span> with the draws in <span class="in">`p0`</span> and <span class="in">`p1`</span> wrapped in an <span class="in">`rvar`</span>, and uses that data frame to visualize the draws using <span class="co">[</span><span class="ot">`ggdist`</span><span class="co">](https://mjskay.github.io/ggdist/index.html)</span>, an R package building on <span class="co">[</span><span class="ot">`ggplot2`</span><span class="co">](https://ggplot2.tidyverse.org/)</span> and <span class="co">[</span><span class="ot">"designed for both frequentist and Bayesian uncertainty visualization"</span><span class="co">](https://mjskay.github.io/ggdist/index.html#:~:text=designed%20for%20both%20frequentist%20and%20Bayesian%20uncertainty%20visualization)</span>.</span>
-<span id="cb44-423"><a href="#cb44-423"></a></span>
-<span id="cb44-424"><a href="#cb44-424"></a>The below plot, @fig-showcase-probabilities uses <span class="in">`ggdist`</span>'s <span class="co">[</span><span class="ot">`stat_dotsinterval()`</span><span class="co">](https://mjskay.github.io/ggdist/articles/dotsinterval.html)</span>, which by default visualizes</span>
-<span id="cb44-425"><a href="#cb44-425"></a></span>
-<span id="cb44-426"><a href="#cb44-426"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">an `rvar`'s median and central 66% and 95% intervals</span><span class="co">]</span>(https://mjskay.github.io/ggdist/reference/stat_dotsinterval.html#:~:text=point_interval%20%3D%20%22median_qi%22%2C%0A%20%20.width%20%3D%20c(0.66%2C%200.95)%2C) using a black dot and lines of varying thicknesses as when using <span class="in">`ggdist`</span>'s <span class="co">[</span><span class="ot">`stat_pointinterval()`</span><span class="co">](https://mjskay.github.io/ggdist/reference/stat_pointinterval.html#examples)</span> and</span>
-<span id="cb44-427"><a href="#cb44-427"></a><span class="ss">-   </span>an <span class="in">`rvar`</span>'s draws using grey dots as when using <span class="in">`ggdist`</span>'s <span class="co">[</span><span class="ot">`stat_dots()`</span><span class="co">](https://mjskay.github.io/ggdist/reference/stat_dots.html#examples)</span>:</span>
-<span id="cb44-428"><a href="#cb44-428"></a></span>
-<span id="cb44-431"><a href="#cb44-431"></a><span class="in">```{r}</span></span>
-<span id="cb44-432"><a href="#cb44-432"></a><span class="co">#| label: fig-showcase-probabilities</span></span>
-<span id="cb44-433"><a href="#cb44-433"></a><span class="co">#| fig-cap: Probabilities of death for the two patient groups.</span></span>
-<span id="cb44-434"><a href="#cb44-434"></a>r0 <span class="ot">=</span> <span class="fu">rvar</span>(p0)</span>
-<span id="cb44-435"><a href="#cb44-435"></a>r1 <span class="ot">=</span> <span class="fu">rvar</span>(p1)</span>
-<span id="cb44-436"><a href="#cb44-436"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(</span>
-<span id="cb44-437"><a href="#cb44-437"></a>    <span class="at">rv_name=</span><span class="fu">c</span>(<span class="st">"control"</span>, <span class="st">"treatment"</span>), <span class="at">rv=</span><span class="fu">c</span>(r0, r1)</span>
-<span id="cb44-438"><a href="#cb44-438"></a>)) <span class="sc">+</span></span>
-<span id="cb44-439"><a href="#cb44-439"></a>    <span class="fu">aes</span>(<span class="at">xdist=</span>rv, <span class="at">y=</span>rv_name) <span class="sc">+</span> </span>
-<span id="cb44-440"><a href="#cb44-440"></a>    <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"probabilities of death"</span>, <span class="at">y=</span><span class="st">"patient group"</span>) <span class="sc">+</span> </span>
-<span id="cb44-441"><a href="#cb44-441"></a>    <span class="fu">stat_dotsinterval</span>()</span>
-<span id="cb44-442"><a href="#cb44-442"></a><span class="in">```</span></span>
-<span id="cb44-443"><a href="#cb44-443"></a></span>
-<span id="cb44-444"><a href="#cb44-444"></a><span class="in">`rvar`</span>s make it easy to compute functions of random variables, such as</span>
-<span id="cb44-445"><a href="#cb44-445"></a></span>
-<span id="cb44-446"><a href="#cb44-446"></a><span class="ss">-   </span>differences, e.g. $p_0 - p_1$: <span class="in">`r0 - r1`</span> computes an <span class="in">`rvar`</span> which prints as <span class="in">`r r0 - r1`</span>, indicating the **sample mean** and the **sample standard deviation** of the difference of the probabilities of death,</span>
-<span id="cb44-447"><a href="#cb44-447"></a><span class="ss">-   </span>products, e.g. $p_0 \, p_1$: <span class="in">`r0 * r1`</span> computes an <span class="in">`rvar`</span> which prints as <span class="in">`r r0 * r1`</span> which in this case has no great interpretation</span>
-<span id="cb44-448"><a href="#cb44-448"></a></span>
-<span id="cb44-449"><a href="#cb44-449"></a>Below, in @fig-showcase-odds-ratios, we compute the odds ratios using the <span class="in">`rvar`</span>s and visualize its median, central intervals and draws, as above in @fig-showcase-probabilities:</span>
-<span id="cb44-450"><a href="#cb44-450"></a></span>
-<span id="cb44-453"><a href="#cb44-453"></a><span class="in">```{r}</span></span>
-<span id="cb44-454"><a href="#cb44-454"></a><span class="co">#| label: fig-showcase-odds-ratios</span></span>
-<span id="cb44-455"><a href="#cb44-455"></a><span class="co">#| fig-cap: Odds ratios of the two patient groups.</span></span>
-<span id="cb44-456"><a href="#cb44-456"></a>rodds_ratio <span class="ot">=</span> (r1<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>r1))<span class="sc">/</span>(r0<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>r0))</span>
-<span id="cb44-457"><a href="#cb44-457"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(</span>
-<span id="cb44-458"><a href="#cb44-458"></a>    <span class="at">rv=</span><span class="fu">c</span>(rodds_ratio)</span>
-<span id="cb44-459"><a href="#cb44-459"></a>)) <span class="sc">+</span></span>
-<span id="cb44-460"><a href="#cb44-460"></a>    <span class="fu">aes</span>(<span class="at">xdist=</span>rv) <span class="sc">+</span> </span>
-<span id="cb44-461"><a href="#cb44-461"></a>    <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"odds ratio"</span>, <span class="at">y=</span><span class="st">"relative amount of draws"</span>) <span class="sc">+</span> </span>
-<span id="cb44-462"><a href="#cb44-462"></a>    <span class="fu">stat_dotsinterval</span>()</span>
-<span id="cb44-463"><a href="#cb44-463"></a><span class="in">```</span></span>
-<span id="cb44-464"><a href="#cb44-464"></a></span>
-<span id="cb44-465"><a href="#cb44-465"></a>You can use @fig-showcase-odds-ratios to visually check whether the answers you computed make sense.</span>
-<span id="cb44-466"><a href="#cb44-466"></a>:::</span>
-<span id="cb44-467"><a href="#cb44-467"></a></span>
-<span id="cb44-468"><a href="#cb44-468"></a><span class="fu"># Inference for the difference between normal means</span></span>
-<span id="cb44-469"><a href="#cb44-469"></a></span>
-<span id="cb44-470"><a href="#cb44-470"></a>Consider a case where the same factory has two production lines for manufacturing car windshields. Independent samples from the two production lines were tested for hardness. The hardness measurements for the two samples $\mathbf{y}_1$ and $\mathbf{y}_2$ be found in the datasets <span class="in">`windshieldy1`</span> and <span class="in">`windshieldy2`</span> in the <span class="in">`aaltobda`</span> package.</span>
-<span id="cb44-471"><a href="#cb44-471"></a></span>
-<span id="cb44-472"><a href="#cb44-472"></a>We assume that the samples have unknown standard deviations $\sigma_1$ and $\sigma_2$. Use the uninformative prior.</span>
-<span id="cb44-473"><a href="#cb44-473"></a></span>
-<span id="cb44-476"><a href="#cb44-476"></a><span class="in">```{r}</span></span>
-<span id="cb44-477"><a href="#cb44-477"></a><span class="fu">data</span>(<span class="st">"windshieldy2"</span>)</span>
-<span id="cb44-478"><a href="#cb44-478"></a><span class="co"># The new data are now stored in the variable `windshieldy2`.</span></span>
-<span id="cb44-479"><a href="#cb44-479"></a><span class="co"># The below displays the first few rows of the new data:</span></span>
-<span id="cb44-480"><a href="#cb44-480"></a><span class="fu">head</span>(windshieldy2)</span>
-<span id="cb44-481"><a href="#cb44-481"></a><span class="in">```</span></span>
-<span id="cb44-482"><a href="#cb44-482"></a></span>
-<span id="cb44-483"><a href="#cb44-483"></a>::: hint</span>
-<span id="cb44-484"><a href="#cb44-484"></a>With a conjugate prior, a closed-form posterior is Student's $t$ form for each group separately (see equations in the book). You can use the <span class="in">`rtnew()`</span> function to sample from the posterior distributions of $\mu_1$ and $\mu_2$, and use this sample to get a sample from the distribution of the difference $\mu_d = \mu_1 - \mu_2$.</span>
-<span id="cb44-485"><a href="#cb44-485"></a>:::</span>
-<span id="cb44-486"><a href="#cb44-486"></a></span>
-<span id="cb44-487"><a href="#cb44-487"></a>Write your answers and code here!</span>
-<span id="cb44-488"><a href="#cb44-488"></a></span>
-<span id="cb44-491"><a href="#cb44-491"></a><span class="in">```{r}</span></span>
-<span id="cb44-492"><a href="#cb44-492"></a><span class="co"># Useful functions: mean(), length(), sqrt(), sum(),</span></span>
-<span id="cb44-493"><a href="#cb44-493"></a><span class="co"># rtnew() (from aaltobda), quantile() and hist().</span></span>
-<span id="cb44-494"><a href="#cb44-494"></a><span class="in">```</span></span>
+<span id="cb44-300"><a href="#cb44-300"></a><span class="fu">grid.arrange</span>(joint1, margsig, margmu, bp, <span class="at">nrow =</span> <span class="dv">2</span>)</span>
+<span id="cb44-301"><a href="#cb44-301"></a></span>
+<span id="cb44-302"><a href="#cb44-302"></a><span class="in">```</span></span>
+<span id="cb44-303"><a href="#cb44-303"></a></span>
+<span id="cb44-304"><a href="#cb44-304"></a><span class="fu">## Predictive distribution</span></span>
+<span id="cb44-305"><a href="#cb44-305"></a></span>
+<span id="cb44-306"><a href="#cb44-306"></a>Write your answers and code here!</span>
+<span id="cb44-307"><a href="#cb44-307"></a></span>
+<span id="cb44-308"><a href="#cb44-308"></a>**Keep the below name and format for the functions to work with `markmyassignment`:**</span>
+<span id="cb44-309"><a href="#cb44-309"></a></span>
+<span id="cb44-312"><a href="#cb44-312"></a><span class="in">```{r}</span></span>
+<span id="cb44-313"><a href="#cb44-313"></a><span class="co"># Useful functions: mean(), length(), sqrt(), sum()</span></span>
+<span id="cb44-314"><a href="#cb44-314"></a><span class="co"># and qtnew(), dtnew() (from aaltobda)</span></span>
+<span id="cb44-315"><a href="#cb44-315"></a></span>
+<span id="cb44-316"><a href="#cb44-316"></a>mu_pred_point_est <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
+<span id="cb44-317"><a href="#cb44-317"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb44-318"><a href="#cb44-318"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb44-319"><a href="#cb44-319"></a>    <span class="fl">14.5</span></span>
+<span id="cb44-320"><a href="#cb44-320"></a>    </span>
+<span id="cb44-321"><a href="#cb44-321"></a>}</span>
+<span id="cb44-322"><a href="#cb44-322"></a>mu_pred_interval <span class="ot">&lt;-</span> <span class="cf">function</span>(data, <span class="at">prob =</span> <span class="fl">0.95</span>) {</span>
+<span id="cb44-323"><a href="#cb44-323"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb44-324"><a href="#cb44-324"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb44-325"><a href="#cb44-325"></a>    <span class="fu">c</span>(<span class="fl">11.8</span>, <span class="fl">17.2</span>)</span>
+<span id="cb44-326"><a href="#cb44-326"></a>    </span>
+<span id="cb44-327"><a href="#cb44-327"></a>}</span>
+<span id="cb44-328"><a href="#cb44-328"></a><span class="in">```</span></span>
+<span id="cb44-329"><a href="#cb44-329"></a></span>
+<span id="cb44-330"><a href="#cb44-330"></a>You can plot the density as below if you implement <span class="in">`mu_pred_pdf`</span> to compute the PDF of the posterior predictive $p(\tilde{y}|y)$ of a new hardness observation $\tilde{y}$.</span>
+<span id="cb44-331"><a href="#cb44-331"></a></span>
+<span id="cb44-334"><a href="#cb44-334"></a><span class="in">```{r}</span></span>
+<span id="cb44-335"><a href="#cb44-335"></a><span class="co">#| label: fig-2c-density</span></span>
+<span id="cb44-336"><a href="#cb44-336"></a><span class="co">#| fig-cap: PDF of the posterior predictive $p(\tilde{y}|y)$ of a new hardness observation $\tilde{y}$</span></span>
+<span id="cb44-337"><a href="#cb44-337"></a>mu_pred_pdf <span class="ot">&lt;-</span> <span class="cf">function</span>(data, x){</span>
+<span id="cb44-338"><a href="#cb44-338"></a>    <span class="co"># Compute necessary parameters here.</span></span>
+<span id="cb44-339"><a href="#cb44-339"></a>    <span class="co"># These are the correct parameters for `windshieldy_test` </span></span>
+<span id="cb44-340"><a href="#cb44-340"></a>    <span class="co"># with the provided uninformative prior.</span></span>
+<span id="cb44-341"><a href="#cb44-341"></a>    df <span class="ot">=</span> <span class="dv">3</span></span>
+<span id="cb44-342"><a href="#cb44-342"></a>    location <span class="ot">=</span> <span class="fl">14.5</span></span>
+<span id="cb44-343"><a href="#cb44-343"></a>    scale <span class="ot">=</span> <span class="fl">0.8536316</span></span>
+<span id="cb44-344"><a href="#cb44-344"></a>    <span class="co"># Use the computed parameters as below to compute the PDF:</span></span>
+<span id="cb44-345"><a href="#cb44-345"></a>    </span>
+<span id="cb44-346"><a href="#cb44-346"></a>    <span class="fu">dtnew</span>(x, df, location, scale)</span>
+<span id="cb44-347"><a href="#cb44-347"></a>}</span>
+<span id="cb44-348"><a href="#cb44-348"></a></span>
+<span id="cb44-349"><a href="#cb44-349"></a>x_interval <span class="ot">=</span> <span class="fu">mu_pred_interval</span>(windshieldy1, .<span class="dv">999</span>)</span>
+<span id="cb44-350"><a href="#cb44-350"></a>lower_x <span class="ot">=</span> x_interval[<span class="dv">1</span>]</span>
+<span id="cb44-351"><a href="#cb44-351"></a>upper_x <span class="ot">=</span> x_interval[<span class="dv">2</span>]</span>
+<span id="cb44-352"><a href="#cb44-352"></a>x <span class="ot">=</span> <span class="fu">seq</span>(lower_x, upper_x, <span class="at">length.out=</span><span class="dv">1000</span>)</span>
+<span id="cb44-353"><a href="#cb44-353"></a><span class="fu">plot</span>(</span>
+<span id="cb44-354"><a href="#cb44-354"></a>    x, <span class="fu">mu_pred_pdf</span>(windshieldy1, x), <span class="at">type=</span><span class="st">"l"</span>, </span>
+<span id="cb44-355"><a href="#cb44-355"></a>    <span class="at">xlab=</span><span class="fu">TeX</span>(r<span class="st">'(new hardness observation $</span><span class="sc">\t</span><span class="st">ilde{y}$)'</span>), </span>
+<span id="cb44-356"><a href="#cb44-356"></a>    <span class="at">ylab=</span><span class="fu">TeX</span>(r<span class="st">'(PDF of the posterior predictive $p(</span><span class="sc">\t</span><span class="st">ilde{y}|y)$)'</span>)</span>
+<span id="cb44-357"><a href="#cb44-357"></a>)</span>
+<span id="cb44-358"><a href="#cb44-358"></a><span class="in">```</span></span>
+<span id="cb44-359"><a href="#cb44-359"></a></span>
+<span id="cb44-360"><a href="#cb44-360"></a><span class="fu"># Inference for the difference between proportions</span></span>
+<span id="cb44-361"><a href="#cb44-361"></a></span>
+<span id="cb44-362"><a href="#cb44-362"></a>An experiment was performed to estimate the effect of beta-blockers on mortality of cardiac patients. A group of patients was randomly assigned to treatment and control groups: out of 674 patients receiving the control, 39 died, and out of 680 receiving the treatment, 22 died. Assume that the outcomes are independent and binomially distributed, with probabilities of death of $p_0$ and $p_1$ under the control and treatment, respectively. Set up a noninformative or weakly informative prior distribution on $(p_0,p_1)$.</span>
+<span id="cb44-363"><a href="#cb44-363"></a></span>
+<span id="cb44-364"><a href="#cb44-364"></a>Summarize the posterior distribution for the <span class="co">[</span><span class="ot">odds ratio</span><span class="co">](https://en.wikipedia.org/wiki/Odds_ratio)</span>, $$</span>
+<span id="cb44-365"><a href="#cb44-365"></a>\mathrm{OR} = (p_1/(1-p_1))/(p_0/(1-p_0)).</span>
+<span id="cb44-366"><a href="#cb44-366"></a>$$</span>
+<span id="cb44-367"><a href="#cb44-367"></a></span>
+<span id="cb44-368"><a href="#cb44-368"></a>In order to help you answering the quiz questions, we recommend you:</span>
+<span id="cb44-369"><a href="#cb44-369"></a></span>
+<span id="cb44-370"><a href="#cb44-370"></a><span class="ss">-   </span>Compute and report the point estimate $E(\mathrm{OR}|y_0,y_1)$,</span>
+<span id="cb44-371"><a href="#cb44-371"></a><span class="ss">-   </span>compute and report a posterior 95%-interval,</span>
+<span id="cb44-372"><a href="#cb44-372"></a><span class="ss">-   </span>plot the histogram, and</span>
+<span id="cb44-373"><a href="#cb44-373"></a><span class="ss">-   </span>write interpretation of the result in text.</span>
+<span id="cb44-374"><a href="#cb44-374"></a></span>
+<span id="cb44-375"><a href="#cb44-375"></a>Use <span class="co">[</span><span class="ot">Frank Harrell's recommendations</span><span class="co">](https://hbiostat.org/blog/post/bayes-freq-stmts/)</span> how to state results in Bayesian two group comparison.</span>
+<span id="cb44-376"><a href="#cb44-376"></a></span>
+<span id="cb44-377"><a href="#cb44-377"></a>::: hint</span>
+<span id="cb44-378"><a href="#cb44-378"></a>With a conjugate prior, a closed-form posterior is the Beta form for each group separately (see equations in the book). You can use <span class="in">`rbeta()`</span> to sample from the posterior distributions of $p_0$ and $p_1$, and use this sample and odds ratio equation to get a sample from the distribution of the odds ratio.</span>
+<span id="cb44-379"><a href="#cb44-379"></a>:::</span>
+<span id="cb44-380"><a href="#cb44-380"></a></span>
+<span id="cb44-381"><a href="#cb44-381"></a>Write your answers and code here!</span>
+<span id="cb44-382"><a href="#cb44-382"></a></span>
+<span id="cb44-383"><a href="#cb44-383"></a>The below data is **only for the tests**:</span>
+<span id="cb44-384"><a href="#cb44-384"></a></span>
+<span id="cb44-387"><a href="#cb44-387"></a><span class="in">```{r}</span></span>
+<span id="cb44-388"><a href="#cb44-388"></a><span class="fu">set.seed</span>(<span class="dv">4711</span>)</span>
+<span id="cb44-389"><a href="#cb44-389"></a>ndraws <span class="ot">=</span> <span class="dv">1000</span></span>
+<span id="cb44-390"><a href="#cb44-390"></a>p0 <span class="ot">=</span> <span class="fu">rbeta</span>(ndraws, <span class="dv">5</span>, <span class="dv">95</span>)</span>
+<span id="cb44-391"><a href="#cb44-391"></a>p1 <span class="ot">=</span> <span class="fu">rbeta</span>(ndraws, <span class="dv">10</span>, <span class="dv">90</span>)</span>
+<span id="cb44-392"><a href="#cb44-392"></a></span>
+<span id="cb44-393"><a href="#cb44-393"></a><span class="in">```</span></span>
+<span id="cb44-394"><a href="#cb44-394"></a></span>
+<span id="cb44-395"><a href="#cb44-395"></a>**Keep the below name and format for the functions to work with `markmyassignment`:**</span>
+<span id="cb44-396"><a href="#cb44-396"></a></span>
+<span id="cb44-399"><a href="#cb44-399"></a><span class="in">```{r}</span></span>
+<span id="cb44-400"><a href="#cb44-400"></a><span class="co"># Useful function: mean(), quantile()</span></span>
+<span id="cb44-401"><a href="#cb44-401"></a></span>
+<span id="cb44-402"><a href="#cb44-402"></a>posterior_odds_ratio_point_est <span class="ot">&lt;-</span> <span class="cf">function</span>(p0, p1) {</span>
+<span id="cb44-403"><a href="#cb44-403"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb44-404"><a href="#cb44-404"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb44-405"><a href="#cb44-405"></a>    <span class="fl">2.650172</span></span>
+<span id="cb44-406"><a href="#cb44-406"></a>    </span>
+<span id="cb44-407"><a href="#cb44-407"></a>}</span>
+<span id="cb44-408"><a href="#cb44-408"></a>posterior_odds_ratio_interval <span class="ot">&lt;-</span> <span class="cf">function</span>(p0, p1, <span class="at">prob =</span> <span class="fl">0.95</span>) {</span>
+<span id="cb44-409"><a href="#cb44-409"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb44-410"><a href="#cb44-410"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb44-411"><a href="#cb44-411"></a>    <span class="fu">c</span>(<span class="fl">0.6796942</span>,<span class="fl">7.3015964</span>)</span>
+<span id="cb44-412"><a href="#cb44-412"></a>    </span>
+<span id="cb44-413"><a href="#cb44-413"></a>}</span>
+<span id="cb44-414"><a href="#cb44-414"></a><span class="in">```</span></span>
+<span id="cb44-415"><a href="#cb44-415"></a></span>
+<span id="cb44-416"><a href="#cb44-416"></a>::: showcase</span>
+<span id="cb44-417"><a href="#cb44-417"></a><span class="fu">## advanced tools (`posterior`'s `rvar`, `ggdist`'s `stat_dotsinterval`)</span></span>
+<span id="cb44-418"><a href="#cb44-418"></a></span>
+<span id="cb44-419"><a href="#cb44-419"></a>The <span class="in">`posterior`</span> package's random variable datatype <span class="in">`rvar`</span> is a <span class="co">[</span><span class="ot">"sample-based representation of random variables"</span><span class="co">](https://mc-stan.org/posterior/articles/rvar.html#:~:text=sample%2Dbased%20representation%20of%20random%20variables)</span> which makes handling of random samples (of draws) such as the ones contained in the above variables <span class="in">`p0`</span> and <span class="in">`p1`</span> easier. <span class="co">[</span><span class="ot">By default, it prints as the mean and standard deviation of the draws</span><span class="co">](https://mc-stan.org/posterior/articles/rvar.html#:~:text=The%20default%20display%20of%20an%20rvar%20shows%20the%20mean%20and%20standard%20deviation%20of%20each%20element%20of%20the%20array.)</span>, **such that `rvar(p0)` prints as `r rvar(p0)` and `rvar(p1)` prints as `r rvar(p1)`**.</span>
+<span id="cb44-420"><a href="#cb44-420"></a></span>
+<span id="cb44-421"><a href="#cb44-421"></a>The datatype is <span class="co">[</span><span class="ot">"designed to \[...\] be able to be used inside `data.frame()`s and `tibble()`s, and to be used with distribution visualizations in the ggdist package."</span><span class="co">]</span>(https://mc-stan.org/posterior/articles/rvar.html#:~:text=designed%20to%20interoperate%20with%20vectorized%20distributions%20in%20the%20distributional%20package%2C%20to%20be%20able%20to%20be%20used%20inside%20data.frame()s%20and%20tibble()s%2C%20and%20to%20be%20used%20with%20distribution%20visualizations%20in%20the%20ggdist%20package.) The code below sets up an <span class="co">[</span><span class="ot">R `data.frame()`</span><span class="co">](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/data.frame)</span> with the draws in <span class="in">`p0`</span> and <span class="in">`p1`</span> wrapped in an <span class="in">`rvar`</span>, and uses that data frame to visualize the draws using <span class="co">[</span><span class="ot">`ggdist`</span><span class="co">](https://mjskay.github.io/ggdist/index.html)</span>, an R package building on <span class="co">[</span><span class="ot">`ggplot2`</span><span class="co">](https://ggplot2.tidyverse.org/)</span> and <span class="co">[</span><span class="ot">"designed for both frequentist and Bayesian uncertainty visualization"</span><span class="co">](https://mjskay.github.io/ggdist/index.html#:~:text=designed%20for%20both%20frequentist%20and%20Bayesian%20uncertainty%20visualization)</span>.</span>
+<span id="cb44-422"><a href="#cb44-422"></a></span>
+<span id="cb44-423"><a href="#cb44-423"></a>The below plot, @fig-showcase-probabilities uses <span class="in">`ggdist`</span>'s <span class="co">[</span><span class="ot">`stat_dotsinterval()`</span><span class="co">](https://mjskay.github.io/ggdist/articles/dotsinterval.html)</span>, which by default visualizes</span>
+<span id="cb44-424"><a href="#cb44-424"></a></span>
+<span id="cb44-425"><a href="#cb44-425"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">an `rvar`'s median and central 66% and 95% intervals</span><span class="co">]</span>(https://mjskay.github.io/ggdist/reference/stat_dotsinterval.html#:~:text=point_interval%20%3D%20%22median_qi%22%2C%0A%20%20.width%20%3D%20c(0.66%2C%200.95)%2C) using a black dot and lines of varying thicknesses as when using <span class="in">`ggdist`</span>'s <span class="co">[</span><span class="ot">`stat_pointinterval()`</span><span class="co">](https://mjskay.github.io/ggdist/reference/stat_pointinterval.html#examples)</span> and</span>
+<span id="cb44-426"><a href="#cb44-426"></a><span class="ss">-   </span>an <span class="in">`rvar`</span>'s draws using grey dots as when using <span class="in">`ggdist`</span>'s <span class="co">[</span><span class="ot">`stat_dots()`</span><span class="co">](https://mjskay.github.io/ggdist/reference/stat_dots.html#examples)</span>:</span>
+<span id="cb44-427"><a href="#cb44-427"></a></span>
+<span id="cb44-430"><a href="#cb44-430"></a><span class="in">```{r}</span></span>
+<span id="cb44-431"><a href="#cb44-431"></a><span class="co">#| label: fig-showcase-probabilities</span></span>
+<span id="cb44-432"><a href="#cb44-432"></a><span class="co">#| fig-cap: Probabilities of death for the two patient groups.</span></span>
+<span id="cb44-433"><a href="#cb44-433"></a>r0 <span class="ot">=</span> <span class="fu">rvar</span>(p0)</span>
+<span id="cb44-434"><a href="#cb44-434"></a>r1 <span class="ot">=</span> <span class="fu">rvar</span>(p1)</span>
+<span id="cb44-435"><a href="#cb44-435"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(</span>
+<span id="cb44-436"><a href="#cb44-436"></a>    <span class="at">rv_name=</span><span class="fu">c</span>(<span class="st">"control"</span>, <span class="st">"treatment"</span>), <span class="at">rv=</span><span class="fu">c</span>(r0, r1)</span>
+<span id="cb44-437"><a href="#cb44-437"></a>)) <span class="sc">+</span></span>
+<span id="cb44-438"><a href="#cb44-438"></a>    <span class="fu">aes</span>(<span class="at">xdist=</span>rv, <span class="at">y=</span>rv_name) <span class="sc">+</span> </span>
+<span id="cb44-439"><a href="#cb44-439"></a>    <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"probabilities of death"</span>, <span class="at">y=</span><span class="st">"patient group"</span>) <span class="sc">+</span> </span>
+<span id="cb44-440"><a href="#cb44-440"></a>    <span class="fu">stat_dotsinterval</span>()</span>
+<span id="cb44-441"><a href="#cb44-441"></a><span class="in">```</span></span>
+<span id="cb44-442"><a href="#cb44-442"></a></span>
+<span id="cb44-443"><a href="#cb44-443"></a><span class="in">`rvar`</span>s make it easy to compute functions of random variables, such as</span>
+<span id="cb44-444"><a href="#cb44-444"></a></span>
+<span id="cb44-445"><a href="#cb44-445"></a><span class="ss">-   </span>differences, e.g. $p_0 - p_1$: <span class="in">`r0 - r1`</span> computes an <span class="in">`rvar`</span> which prints as <span class="in">`r r0 - r1`</span>, indicating the **sample mean** and the **sample standard deviation** of the difference of the probabilities of death,</span>
+<span id="cb44-446"><a href="#cb44-446"></a><span class="ss">-   </span>products, e.g. $p_0 \, p_1$: <span class="in">`r0 * r1`</span> computes an <span class="in">`rvar`</span> which prints as <span class="in">`r r0 * r1`</span> which in this case has no great interpretation</span>
+<span id="cb44-447"><a href="#cb44-447"></a></span>
+<span id="cb44-448"><a href="#cb44-448"></a>Below, in @fig-showcase-odds-ratios, we compute the odds ratios using the <span class="in">`rvar`</span>s and visualize its median, central intervals and draws, as above in @fig-showcase-probabilities:</span>
+<span id="cb44-449"><a href="#cb44-449"></a></span>
+<span id="cb44-452"><a href="#cb44-452"></a><span class="in">```{r}</span></span>
+<span id="cb44-453"><a href="#cb44-453"></a><span class="co">#| label: fig-showcase-odds-ratios</span></span>
+<span id="cb44-454"><a href="#cb44-454"></a><span class="co">#| fig-cap: Odds ratios of the two patient groups.</span></span>
+<span id="cb44-455"><a href="#cb44-455"></a>rodds_ratio <span class="ot">=</span> (r1<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>r1))<span class="sc">/</span>(r0<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>r0))</span>
+<span id="cb44-456"><a href="#cb44-456"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(</span>
+<span id="cb44-457"><a href="#cb44-457"></a>    <span class="at">rv=</span><span class="fu">c</span>(rodds_ratio)</span>
+<span id="cb44-458"><a href="#cb44-458"></a>)) <span class="sc">+</span></span>
+<span id="cb44-459"><a href="#cb44-459"></a>    <span class="fu">aes</span>(<span class="at">xdist=</span>rv) <span class="sc">+</span> </span>
+<span id="cb44-460"><a href="#cb44-460"></a>    <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"odds ratio"</span>, <span class="at">y=</span><span class="st">"relative amount of draws"</span>) <span class="sc">+</span> </span>
+<span id="cb44-461"><a href="#cb44-461"></a>    <span class="fu">stat_dotsinterval</span>()</span>
+<span id="cb44-462"><a href="#cb44-462"></a><span class="in">```</span></span>
+<span id="cb44-463"><a href="#cb44-463"></a></span>
+<span id="cb44-464"><a href="#cb44-464"></a>You can use @fig-showcase-odds-ratios to visually check whether the answers you computed make sense.</span>
+<span id="cb44-465"><a href="#cb44-465"></a>:::</span>
+<span id="cb44-466"><a href="#cb44-466"></a></span>
+<span id="cb44-467"><a href="#cb44-467"></a><span class="fu"># Inference for the difference between normal means</span></span>
+<span id="cb44-468"><a href="#cb44-468"></a></span>
+<span id="cb44-469"><a href="#cb44-469"></a>Consider a case where the same factory has two production lines for manufacturing car windshields. Independent samples from the two production lines were tested for hardness. The hardness measurements for the two samples $\mathbf{y}_1$ and $\mathbf{y}_2$ be found in the datasets <span class="in">`windshieldy1`</span> and <span class="in">`windshieldy2`</span> in the <span class="in">`aaltobda`</span> package.</span>
+<span id="cb44-470"><a href="#cb44-470"></a></span>
+<span id="cb44-471"><a href="#cb44-471"></a>We assume that the samples have unknown standard deviations $\sigma_1$ and $\sigma_2$. Use the uninformative prior.</span>
+<span id="cb44-472"><a href="#cb44-472"></a></span>
+<span id="cb44-475"><a href="#cb44-475"></a><span class="in">```{r}</span></span>
+<span id="cb44-476"><a href="#cb44-476"></a><span class="fu">data</span>(<span class="st">"windshieldy2"</span>)</span>
+<span id="cb44-477"><a href="#cb44-477"></a><span class="co"># The new data are now stored in the variable `windshieldy2`.</span></span>
+<span id="cb44-478"><a href="#cb44-478"></a><span class="co"># The below displays the first few rows of the new data:</span></span>
+<span id="cb44-479"><a href="#cb44-479"></a><span class="fu">head</span>(windshieldy2)</span>
+<span id="cb44-480"><a href="#cb44-480"></a><span class="in">```</span></span>
+<span id="cb44-481"><a href="#cb44-481"></a></span>
+<span id="cb44-482"><a href="#cb44-482"></a>::: hint</span>
+<span id="cb44-483"><a href="#cb44-483"></a>With a conjugate prior, a closed-form posterior is Student's $t$ form for each group separately (see equations in the book). You can use the <span class="in">`rtnew()`</span> function to sample from the posterior distributions of $\mu_1$ and $\mu_2$, and use this sample to get a sample from the distribution of the difference $\mu_d = \mu_1 - \mu_2$.</span>
+<span id="cb44-484"><a href="#cb44-484"></a>:::</span>
+<span id="cb44-485"><a href="#cb44-485"></a></span>
+<span id="cb44-486"><a href="#cb44-486"></a>Write your answers and code here!</span>
+<span id="cb44-487"><a href="#cb44-487"></a></span>
+<span id="cb44-490"><a href="#cb44-490"></a><span class="in">```{r}</span></span>
+<span id="cb44-491"><a href="#cb44-491"></a><span class="co"># Useful functions: mean(), length(), sqrt(), sum(),</span></span>
+<span id="cb44-492"><a href="#cb44-492"></a><span class="co"># rtnew() (from aaltobda), quantile() and hist().</span></span>
+<span id="cb44-493"><a href="#cb44-493"></a><span class="in">```</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
