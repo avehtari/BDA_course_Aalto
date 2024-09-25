@@ -102,11 +102,13 @@
 \item 10.1 Numerical integration (overview)
 \item 10.2 Distributional approximations (overview, more in Chapter 4 and 13)
 \item 10.3 Direct simulation and rejection sampling (overview)
-\item 10.4 \textbf{Importance sampling} (used in PSIS-LOO discussed later)
-\item 10.5 \textbf{How many simulation draws are needed?} (Ex 10.1 and 10.2)
+\item 10.4 \textbf{Importance sampling} (used in PSIS-LOO, Lecture 9)
+\item 10.5 \textbf{How many simulation draws are needed?} 
   \begin{itemize}
-  \item see chapter notes and extra slides for how many significant
-    digits to report
+  \item \textbf{see chapter notes for how many significant digits to report}
+  \item \textbf{this week focus on independent draws and importance sampling,
+    next week necessary adjustments needed for Markov chain Monte
+    Carlo}
   \end{itemize}
 \item 10.6 Software (can be skipped)
 \item 10.7 Debugging (can be skipped)
@@ -196,7 +198,7 @@
      = p(y|\theta)p(\theta)} \propto {\color{blue}p(\theta|y)}$, for example, in}
  \begin{itemize}
    \vspace{-0.5\baselineskip}
-    \item<4-> Grid (equal spacing) evaluation with self-normalization
+    \item<4-> Grid (equal spacing) evaluation with self-normalization {\small(lecture 3)}
       \begin{align*}
         E_{\color{blue} p(\theta|y)}[h(\theta)] \approx
         \frac{\sum_{s=1}^S \left[h(\theta^{(s)}){\color{darkgreen}q(\theta^{(s)}|y)}\right]}{\sum_{s=1}^S{\color{darkgreen}q(\theta^{(s)}|y)}}
@@ -221,10 +223,10 @@
    \end{align*}
 
   \begin{itemize}
-  \item Conjugate priors and analytic solutions (Ch 1-5)
-  \item Grid integration and other quadrature rules (Ch 3, 10)
-  \item Independent Monte Carlo, rejection and importance sampling (Ch 10)
-  \item Markov Chain Monte Carlo (Ch 11-12)
+  \item Conjugate priors and analytic solutions (Ch 1-5, Lec 2--3)
+  \item Grid integration and other quadrature rules (Ch 3, 10, Lec 3--4)
+  \item Independent Monte Carlo, rejection and importance sampling (Ch 10, Lec 4)
+  \item Markov Chain Monte Carlo (Ch 11-12, Lec 5--6)
   \item {\color{gray}Distributional approximations (Laplace, VB, EP) (Ch 4, 13)}
   \end{itemize}
    
@@ -359,6 +361,7 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
     \begin{itemize}
     \item requires additional work to estimate the \emph{effective
         sample size}
+    \item next week
     \end{itemize}
   \end{itemize}
 
@@ -371,13 +374,18 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
     \begin{equation*}
       \E(\theta)\approx \frac{1}{S}\sum_{s=1}^S \theta^{(s)}
     \end{equation*}
-    if $S$ is big and $\theta^{(s)}$ are independent, way may assume
+  \item If
+    \begin{itemize}
+    \item $S$ is big
+    \item $\theta^{(s)}$ are independent and 
+    \item $p(\theta)$ has finite variance,
+    \end{itemize}
+    the central limit theorem (CLT) states
     that the distribution of the expectation approaches normal
     distribution (see BDA3 Ch 4) with variance $\sigma^2_\theta/S$
     (asymptotic normality)
     \begin{itemize}
-    \item this variance is independent on dimensionality of $\theta$
-      \pause
+    \item<2-> this variance is independent on dimensionality of $\theta$
     % \item total variance is sum of the epistemic uncertainty in the
     %   posterior and the uncertainty due to using finite number of
     %   Monte Carlo draws
@@ -389,12 +397,11 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
     % \item e.g. if $S=100$, deviation increases by $\sqrt{1+1/S}=1.005$\\
     %   i.e. Monte Carlo error is very small (for the expectation)
     %   \pause
-    \item See BDA3 Ch 4 for counter-examples for asymptotic normality
+    \item<3-> See BDA3 Ch 4 for counter-examples for asymptotic normality
       \pause
-    \item $\sigma_\theta/\sqrt{S}$ is called Monte Carlo standard
+    \item<4-> $\sigma_\theta/\sqrt{S}$ is called Monte Carlo standard
       error (MCSE)
-      \pause
-      \item In practice, $\sigma_{\theta}$ will be estimated by $ \sqrt{1/(S-1)\sum_{s = 1}^S (\theta^{(s)} - \E(\theta))^2}$
+      \item<5-> In practice, $\sigma_{\theta}$ will be estimated by $ \sqrt{1/(S-1)\sum_{s = 1}^S (\theta^{(s)} - \E(\theta))^2}$
     \end{itemize}
 \end{itemize}
 
@@ -510,7 +517,56 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
   
 \end{frame}
 
-\begin{frame}{How many digits to show in reports?}
+\begin{frame}[fragile]{\texttt{posterior} package}
+
+  Posterior mean and 5\% and 95\% quantiles:
+\vspace{-.5\baselineskip}
+  {\small
+\begin{verbatim}
+draws %>%
+  subset_draws("beta100") %>%
+  summarize_draws(mean,
+                  ~quantile(.x, probs = c(0.05, 0.95)))
+\end{verbatim}
+    }
+
+\pause
+The corresponding MCSE estimates:
+\vspace{-.5\baselineskip}
+  {\small
+\begin{verbatim}
+draws %>%
+  subset_draws("beta100") %>%
+  summarize_draws(mcse_mean,
+                  ~mcse_quantile(.x, probs = c(0.05, 0.95)))
+\end{verbatim}
+  }
+
+  \pause
+  These \texttt{\_mcse} functions are for MCMC draws, but if
+  the number of draws is big ($\geq 1000$), then these are accurate
+  enough for independent MC draws, too
+  
+\end{frame}
+
+\begin{frame}[fragile]{\texttt{posterior} package}
+
+  Posterior probability and the corresponding MCSE estimate:
+\vspace{-.5\baselineskip}
+  {\small
+\begin{verbatim}
+draws %>%
+  mutate_variables(beta0p = beta100>0) %>%
+  subset_draws("beta0p") %>%
+  summarize_draws(mean,
+                  mcse = mcse_mean)
+\end{verbatim}
+    }
+
+  
+\end{frame}
+
+\begin{frame}{How many digits reports?}
 
 \vspace{-0.5\baselineskip}  
   \begin{itemize}
@@ -544,24 +600,29 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
    %   many digits is sensible.
   \end{itemize}
 
-\uncover<13>{See also \url{https://avehtari.github.io/casestudies/Digits/digits.html}}
+\uncover<13>{See also \url{https://users.aalto.fi/~ave/casestudies/Digits/digits.html}}
   
 \end{frame}
 
 \begin{frame}{More data}
 
+  \vspace{-0.75\baselineskip}
   \begin{itemize}
-  \item<+-> The analysis I just showed used data from 1952--2013
-  \item<+-> With data data from 1952--2022
+  \item<1-> The analysis I just showed used data from 1952--2013
+  \item<2-> With data data from 1952--2024
     \begin{itemize}
     \item The probability that temp increase is positive:
-      $0.9995 \pm 0.0006$ (90\% interval),\\ which can be reported as more than
-      $99.9\%$ probability
+      $0.99975 \pm 0.00025$ (90\% interval),\\ which can be reported as more than
+      $99.95\%$ probability
     \item With data from other locations we would be even more certain
     \end{itemize}
-  \item<+-> Summer 2023 was the hottest in the recorded history
+  \item<3-> Summer 2023 was the second hottest in the recorded history
+  \item<3-> Summer 2024 was the hottest in the recorded history
   \end{itemize}
-
+  \vspace{-0.5\baselineskip}
+  \uncover<3->{
+    \includegraphics[width=10cm]{kilpis_pred_2024.pdf}}
+  
 \end{frame}
 
 
@@ -586,9 +647,362 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
       instead of the number of draws $S$
     \item Usually ESS$<S$
     \end{itemize}
+  \item<4-> How to check if a distribution has finite mean and variance?
+    \begin{itemize}
+    \item Pareto-$\hat{k}$ diagnostic
+    \end{itemize}
   \end{itemize}
 
 \end{frame}
+
+\begin{frame}{Simple example: $x \sim N, \quad t_4, \quad t_2, \quad t_1, \quad t_{1/2}$}
+
+  \begin{itemize}
+  \item N has all moments finite
+  \item $t_\nu$ has less than $\nu$ fractional moments
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Simple example: $x \sim N$}
+
+    \vspace{-1\baselineskip}
+    \includegraphics[width=8.5cm]{Ex1b.pdf}\\
+  \uncover<2->{
+  \includegraphics[width=8.5cm]{E2x1b.pdf}
+  }
+\end{frame}
+
+\begin{frame}{Simple example: $x \sim t_4, \quad t_2, \quad t_1, \quad t_{1/2}$}
+
+\vspace{-0.5\baselineskip}
+\hspace{-1cm}
+\begin{minipage}[t]{1.0\linewidth}
+\includegraphics[width=3.9cm]{Ex2.pdf}\uncover<3->{\includegraphics[width=3.9cm]{Ex3.pdf}}\uncover<5->{\includegraphics[width=3.9cm]{Ex4.pdf}}\uncover<7->{\includegraphics[width=3.9cm]{Ex5.pdf}}
+\end{minipage}
+
+\hspace{-1cm}
+\uncover<2->{\begin{minipage}[t]{1.0\linewidth}
+\includegraphics[width=3.9cm]{E2x2.pdf}\uncover<4->{\includegraphics[width=3.9cm]{E2x3.pdf}}\uncover<6->{\includegraphics[width=3.9cm]{E2x4.pdf}}\uncover<8->{\includegraphics[width=3.9cm]{E2x5.pdf}}
+\end{minipage}
+}
+
+\end{frame}
+
+% \begin{frame}{Simple example: $\quad t_2, \quad t_1, \quad t_{1/2}$}
+
+% \vspace{-0.5\baselineskip}
+% \hspace{-1cm}
+% \begin{minipage}[t]{1.0\linewidth}
+% \includegraphics[width=4cm]{Ex3.pdf}\includegraphics[width=4cm]{Ex4.pdf}\includegraphics[width=4cm]{Ex5.pdf}
+% \end{minipage}
+
+% \hspace{-1cm}
+% \begin{minipage}[t]{1.0\linewidth}
+% \includegraphics[width=4cm]{E2x3.pdf}\includegraphics[width=4cm]{E2x4.pdf}\includegraphics[width=4cm]{E2x5.pdf}
+% \end{minipage}
+  
+% \end{frame}
+
+\begin{frame}{Pareto-$\hat{k}$ diagnostic}
+
+%  \begin{itemize}
+   Pickands (1975): many distributions have tail ($x > u$) that
+    is well approximated with Generalized Pareto distribution (GPD)
+%  \end{itemize}
+
+    {
+      \vspace{-0.5\baselineskip}
+\only<1>{\includegraphics[width=9.5cm]{bulktail.pdf}}\only<2>{\includegraphics[width=9.5cm]{tail1.pdf}}\only<3>{\includegraphics[width=9.5cm]{tail2.pdf}}\only<4>{\includegraphics[width=9.5cm]{tail3.pdf}}
+}
+
+\end{frame}
+
+\begin{frame}{Pareto-$\hat{k}$ diagnostic}
+
+ GPD has a shape parameter $k$,\\and $1/k$ finite fractional
+    moments
+
+    {
+      \vspace{-0.5\baselineskip}
+  \includegraphics[width=9.5cm]{bulktail.pdf}
+}
+
+\end{frame}
+
+\begin{frame}{Pareto-$\hat{k}$ diagnostic: $x \sim N$}
+
+  \includegraphics[width=8cm]{k1c.pdf}
+
+\end{frame}
+
+\begin{frame}{Pareto-$\hat{k}$ diagnostic: $x \sim t_4$}
+
+  \includegraphics[width=8cm]{k2c.pdf}
+
+\end{frame}
+
+\begin{frame}{Pareto-$\hat{k}$ diagnostic: $x \sim t_2$}
+
+  \includegraphics[width=8cm]{k3c.pdf}
+
+\end{frame}
+
+\begin{frame}{Pareto-$\hat{k}$ diagnostic: $x \sim t_1$}
+
+  \includegraphics[width=8cm]{k4c.pdf}
+
+\end{frame}
+
+\begin{frame}{Pareto-$\hat{k}$ diagnostic: $x \sim t_{1/2}$}
+
+  \includegraphics[width=8cm]{k5c.pdf}
+
+\end{frame}
+
+\begin{frame}{Pareto-$\hat{k}$ diagnostic is pre-asymptotic diagnostic}
+
+  Thick tailed but truncated distribution
+  
+  We can make estimates only based on what we have observed.
+
+  \vspace{-0.5\baselineskip}
+  \includegraphics[width=7cm]{x6.pdf}
+
+\end{frame}
+
+\begin{frame}{Pareto-$\hat{k}$ diagnostic: thick-tailed bounded distribution}
+
+  \includegraphics[width=8cm]{k6c.pdf}
+
+\end{frame}
+
+\begin{frame}{Thick-tailed bounded distributions in practice}
+
+  \begin{itemize}
+  \item Thick-tailed distributions are common in importance sampling
+    and variational divergence estimation
+      \vspace{0.25\baselineskip}
+  %   \begin{list2}
+  %   \item if $g(\theta)$ has thinner tails than $p(\theta)$\\
+  %     $\rightarrow$
+  %     ${\color{darkgreen} w(\theta)}$ is likely to have thick tails
+  %     \vspace{0.25\baselineskip}
+  %   \item if $g(\theta)$ has thicker tails than $p(\theta)$\\
+  %     $\rightarrow$
+  %   ${\color{darkgreen} w(\theta)}$ is bounded, but that bound can be
+  % far
+  %   \end{list2}
+  \end{itemize}
+
+\end{frame}
+
+% \begin{frame}{Pareto smoothing}
+
+%   \begin{itemize}
+%   \item Replace the largest observed ratios with expected order
+%     statistics of the fitted Pareto distribution
+%     \begin{itemize}
+%     \item corresponds to modeling of the tail, and as usual, modeling
+%       reduces the noise
+%     \end{itemize}
+%   \item<2-> Pareto smoothed estimate has finite mean and variance
+%     \begin{itemize}
+%     \item smoothing introduces bias which is negligible if $\hat{k}<0.7$
+%     \end{itemize}
+%   \end{itemize}
+
+% %TODO add figure
+  
+% \end{frame}
+
+% \begin{frame}{Pareto-$\hat{k}$ and minimum sample size}
+
+% % TODO add equations
+  
+%   \begin{itemize}
+%   \item Pareto-$\hat{k}$ can predict the required sample size needed
+%     for CLT to hold for the Pareto smoothed estimate!
+%   \end{itemize}
+%     \includegraphics[width=10cm]{RMSE_minimum_sample_size_PSIS.pdf}
+  
+% \end{frame}
+
+% \begin{frame}{Pareto-$\hat{k}$ and pre-asymptotic convergence rate}
+
+% % TODO add equations
+  
+%   \begin{itemize}
+%   \item<+-> Pareto-$\hat{k}$ can predict the convergence rate for the Pareto smoothed estimate!
+%     \begin{itemize}
+%     \item<+-> CLT says that to half the MCSE, need 4 times bigger S
+%     \item<+-> If Pareto-$\hat{k} \approx 0.7$, to half the MCSE, need $4^{(1/0.7)}\approx 10$ times bigger S
+%     \item<+-> If Pareto-$\hat{k}>1$, to half the MCSE, nothing helps
+%     \end{itemize}
+%   \end{itemize}
+%     \includegraphics[width=8cm]{PSIS_RMSE_convergence_rate.pdf}
+  
+% \end{frame}
+
+% \begin{frame}{Estimating Pareto-$\hat{k}$}
+
+%   \begin{itemize}
+%   \item Fast empirical profile Bayes quadrature estimate by Zhang and
+%     Stephens (2009)
+%     \begin{list2}
+%     \item excellent accuracy compared to exact Bayesian inference
+%     \item see more in \href{https://arxiv.org/abs/1507.02646}{Vehtari, Simpson, Gelman, Yao \& Gabry (2019)}
+%     \end{list2}
+%   \end{itemize}
+
+% \end{frame}
+
+% \begin{frame}{Central limit theorems}
+
+%   \begin{itemize}
+%   \item We would like to have finite variance and CLT
+%     \begin{list2}
+%     \item sometimes these can be guaranteed by construction, e.g., in
+%       importance sampling by choosing $g(\theta)$ so that
+%       ${\color{darkgreen} w(\theta)}$ is bounded
+%     \item generally not trivial
+%     \item<2-> even if the variance is finite, the total number of
+%       fractional moments matters
+%     \end{list2}
+%   % \item<3-> If variance is infinite, but mean is finite\\
+%   %   $\rightarrow$
+%   %   \textit{generalized CLT and asymptotic consistency} 
+%   \item<3-> Pre-asymptotic and asymptotic behavior can be really different!
+%     \begin{itemize}
+%     \item the number of fractional moments matters
+%     \end{itemize}
+%   \end{itemize}
+  
+% \end{frame}
+
+\begin{frame}[fragile]{Pareto-$\hat{k}$ in \texttt{posterior} package}{Thanks to Noa Kallioinen}
+
+  {\color{gray}
+\begin{verbatim}
+> drt |> summarise_draws(mean, mcse_mean)
+\end{verbatim}
+    }
+\begin{verbatim}
+ variable  mean mcse_mean
+ xn       0.010     0.021
+ xt3      0.025     0.033
+ xt2_5    0.031     0.039
+ xt2      0.046     0.054
+ xt1_5    0.092     0.13 
+ xt1      0.33      1.5  
+\end{verbatim}
+
+\end{frame}
+
+\begin{frame}[fragile]{Pareto-$\hat{k}$ in \texttt{posterior} package}
+
+  {\color{gray}
+\begin{verbatim}
+> drt |> summarise_draws(mean, mcse_mean, pareto_khat)
+\end{verbatim}
+    }
+\begin{verbatim}
+ variable  mean mcse_mean    khat
+ xn       0.010     0.021  -0.072
+ xt3      0.025     0.033   0.33 
+ xt2_5    0.031     0.039   0.41 
+ xt2      0.046     0.054   0.52 
+ xt1_5    0.092     0.13    0.69 
+ xt1      0.33      1.5     1.0  
+\end{verbatim}
+
+\end{frame}
+
+% \begin{frame}[fragile]{Pareto-$\hat{k}$ in \texttt{posterior} package}
+
+% \small
+%   {\color{gray}
+% \begin{verbatim}
+% > drt |> summarise_draws(mean, mcse_mean, pareto_khat,
+%                          min_ss=pareto_min_ss,
+%                          convergence_rate=pareto_convergence_rate)
+% \end{verbatim}
+%     }
+% \begin{verbatim}
+%  variable  mean mcse_mean    khat min_ss convergence_rate
+%  xn       0.010     0.021  -0.072    10              1   
+%  xt3      0.025     0.033   0.33     31.             0.98
+%  xt2_5    0.031     0.039   0.41     48.             0.95
+%  xt2      0.046     0.054   0.52    116.             0.86
+%  xt1_5    0.092     0.13    0.69   1735.             0.60
+%  xt1      0.33      1.5     1.0     Inf              0   
+% \end{verbatim}
+
+% \begin{itemize}
+% \item to halve MCSE, need $4^{(1/\texttt{convergence\_rate})}$ times more draws
+% \end{itemize}
+
+% \end{frame}
+
+% \begin{frame}[fragile]{Pareto-$\hat{k}$ in \texttt{posterior} package}
+
+%   \vspace{-0.5\baselineskip}
+% \small
+%   {\color{gray}
+% \begin{verbatim}
+% > drts <- drt |> 
+%   mutate_variables(xt3_s=pareto_smooth(xt3),
+%                    xt2_5_s=pareto_smooth(xt2_5),
+%                    xt2_s=pareto_smooth(xt2),
+%                    xt1_5_s=pareto_smooth(xt1_5),
+%                    xt1_s=pareto_smooth(xt1)) |>
+%   subset_draws(variable="_s", regex=TRUE)
+% > drts |> summarise_draws(mean, mcse_mean, pareto_khat,
+%                           min_ss=pareto_min_ss,
+%                           convergence_rate=pareto_convergence_rate)
+% \end{verbatim}
+%     }
+% \begin{verbatim}
+%  variable  mean mcse_mean   khat  min_ss convergence_rate
+%  xt3_s    0.026     0.033   0.34    31.             0.98
+%  xt2_5_s  0.034     0.038   0.41    48.             0.95
+%  xt2_s    0.053     0.051   0.52   116.             0.86
+%  xt1_5_s  0.13      0.10    0.68  1735.             0.60
+%  xt1_s    1.0       0.79    1.0    Inf              0   
+% \end{verbatim}
+
+% \end{frame}
+
+\begin{frame}{When to use Pareto-$\hat{k}$ diagnostic}
+
+
+  \begin{itemize}
+  \item<+-> To check posterior of any quantity of interest
+    \begin{itemize}
+    \item if high $\hat{k}$, maybe use some other summary than mean
+    \item after this, check my video + case study on how many
+      iterations to run digits to report
+    \end{itemize}
+  \item<+-> Especially useful inside algorithms that rely on
+    expectations
+    \begin{itemize}
+    \item other summaries can't be used
+    \item automated diagnostic as in PSIS-LOO (Lecture 9)
+    \end{itemize}
+  \item<+-> Pareto-smoothing improves the mean estimate
+    \begin{itemize}
+    \item reliable mean and MCSE estimates when Pareto-$k<0.7$
+    \item required minimum sample size and convergence rate estimates
+      for different values of $k$
+    \item more on lecture 9
+    \end{itemize}
+  \end{itemize}
+
+  {\small
+  See more in Vehtari, Simpson, Gelman, Yao, and Gabry (2024). Pareto
+  smoothed importance sampling. \textit{JMLR}, 25(72):1-58.}
+  
+\end{frame}
+
 
 \begin{frame}{Direct simulation}
 
@@ -623,8 +1037,7 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
 
 \end{frame}
 
-\begin{frame}
-{Direct simulation: Example}
+\begin{frame}{Direct simulation: Example}
 
   \begin{itemize}
   \item Box-Muller -method:\\ If $U_1$ and $U_2$ are independent
@@ -788,7 +1201,7 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
   % \item<3-> If variance is infinite, but mean is finite\\
   %   $\rightarrow$
   %   \textit{generalized CLT and asymptotic consistency} 
-  \item<4-> Pre-asymptotic and asymptotic behavior can be really different!
+  \item<3-> Pre-asymptotic and asymptotic behavior can be really different!
   \end{itemize}
   
 \end{frame}
@@ -875,7 +1288,6 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
        \begin{center}
        \only<1>{\includegraphics[width=10cm]{bioassayisw1.pdf}}
        \only<2>{\includegraphics[width=10cm]{bioassayisw2.pdf}}
-       \only<3>{\includegraphics[width=10cm]{bioassayisw3.pdf}}
   \end{center}
 
 \end{frame}
@@ -924,106 +1336,24 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
          \vspace{-2\baselineskip}
          \begin{align*}
            \text{ESS} & = \frac{1}{\sum_{s=1}^S (\tilde{w}(\theta^s))^2}, \quad \text{is based on variance of } \tilde{w}(\theta^s) \\
-           \text{ESS} & \approx 396 \\ \uncover<1->{&\text{Pareto-$k$ diagnostic preferably $<$ 0.7: }}\uncover<2->{ \hat{k} \approx 0.65}
+           \text{ESS} & \approx 396 \\
+                      &\text{Pareto-$\hat{k} \approx 0.65$, CLT does not hold}\\
+                        \uncover<2->{&\text{with Pareto-smoothing the estimate would be fine if } \hat{k}<0.7}
          \end{align*}
   \end{center}
 
 \end{frame}
 
-\begin{frame}{Pareto-$\hat{k}$ diagnostic}
+\begin{frame}{Importance sampling leave-one-out cross-validation}
 
   \begin{itemize}
-  \item Based on extreme value analysis and generalized central limit theorem
+  \item Later in the course you will learn how $p(\theta|y)$ can be
+    used as a proposal distribution for $p(\theta|y_{-i})$
     \begin{itemize}
-    \item<2-> we can estimate tail of a distribution with a Pareto distribution
-    \item<3-> shape parameter $k$ tells the number of \textit{fractional moments} as $1/k$
-    \item<3-> estimate $\hat{k}$ from finite data
-    \item<4-> the statistical behavior of distribution of mean can be
-      predicted by generalized CLT
-      \begin{itemize}
-      \item minimum sample size and convergence rate given $\hat{k}$
-      \end{itemize}
-    \end{itemize}
-  \end{itemize}
-
-  \vspace{5\baselineskip}
-  {\small
-  See more in Vehtari, Simpson, Gelman, Yao, and Gabry (2022). Pareto
-  smoothed importance sampling. arXiv:1507.02646.}
-  
-\end{frame}
-
-\begin{frame}{Pareto-$\hat{k}$ diagnostic}
-
-%  \begin{itemize}
-   Pickands (1975): many distributions have tail ($x > u$) that
-    is well approximated with Generalized Pareto distribution (GPD)
-%  \end{itemize}
-
-    {
-      \vspace{-0.5\baselineskip}
-\only<1>{\includegraphics[width=9.5cm]{bulktail.pdf}}\only<2>{\includegraphics[width=9.5cm]{tail1.pdf}}\only<3>{\includegraphics[width=9.5cm]{tail2.pdf}}\only<4>{\includegraphics[width=9.5cm]{tail3.pdf}}
-}
-
-\end{frame}
-
-\begin{frame}{Pareto-$\hat{k}$ diagnostic}
-
- GPD has a shape parameter $k$,\\and $1/k$ finite fractional
-    moments
-
-    {
-      \vspace{-0.5\baselineskip}
-  \includegraphics[width=9.5cm]{bulktail.pdf}
-}
-
-\end{frame}
-
-\begin{frame}{Example: Importance sampling in Bioassay}
-
-       \begin{center}
-         \vspace{-\baselineskip}
-       \includegraphics[width=8cm]{bioassayisw2.pdf}\\
-         \vspace{-2\baselineskip}
-         \begin{align*}
-           \text{ESS} & = \frac{1}{\sum_{s=1}^S (\tilde{w}(\theta^s))^2}, \quad \text{is based on variance of } \tilde{w}(\theta^s) \\
-           \text{ESS} & \approx 396 \\ \uncover<1->{&\text{Pareto-$k$ diagnostic preferably $<$ 0.7: }}\uncover<1->{ \hat{k} \approx 0.65}
-         \end{align*}
-  \end{center}
-
-\end{frame}
-
-\begin{frame}{Pareto-$\hat{k}$ and convergence rate of PSIS}
-
-  \begin{itemize}
-  \item CLT says that to half the MCSE, need 4 times bigger S
-  \item<2-> If Pareto-$\hat{k} \approx 0.7$, to half the MCSE, need 10 times bigger S
-  \item<3-> If Pareto-$\hat{k}>1$, to half the MCSE, nothing helps
-  \end{itemize}
-  
-\end{frame}
-
-\begin{frame}{Pareto smoothed importance sampling (PSIS)}
-
-  \begin{itemize}
-  \item Replace the largest observed ratios with expected ordered
-    statistics of the fitted Pareto distribution
-    \begin{itemize}
-    \item corresponds to modeling of the tail, and as usual, modeling
-      reduces the noise
-    \end{itemize}
-  \end{itemize}
-
-\end{frame}
-
-\begin{frame}{Estimating Pareto-$\hat{k}$}
-
-  \begin{itemize}
-  \item Fast empirical profile Bayes quadrature estimate by Zhang and
-    Stephens (2009)
-    \begin{itemize}
-    \item excellent accuracy compared to exact Bayesian inference
-    \item see more in \href{https://arxiv.org/abs/1507.02646}{Vehtari, Simpson, Gelman, Yao \& Gabry (2022)}
+    \item which allows fast computation of leave-one-out cross-validation
+      \begin{align*}
+        p(y_i|y_{-i})=\int p(y_i|\theta) p(\theta|y_{-i}) d\theta
+      \end{align*}
     \end{itemize}
   \end{itemize}
 
@@ -1050,26 +1380,11 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
 
 \end{frame}
 
-\begin{frame}{Importance sampling leave-one-out cross-validation}
-
-  \begin{itemize}
-  \item Later in the course you will learn how $p(\theta|y)$ can be
-    used as a proposal distribution for $p(\theta|y_{-i})$
-    \begin{itemize}
-    \item which allows fast computation of leave-one-out cross-validation
-      \begin{align*}
-        p(y_i|y_{-i})=\int p(y_i|\theta) p(\theta|y_{-i}) d\theta
-      \end{align*}
-    \end{itemize}
-  \end{itemize}
-
-\end{frame}
-
 \begin{frame}{Curse of dimensionality}
 
   \begin{itemize}
   \item Number of grid points increases exponentially
-  \item Concentration of the measure, i.e., where is the most of the
+  \item Concentration of the measure, that is , where is the most of the
     mass?
   \end{itemize}
 
