@@ -636,6 +636,15 @@ you report what you have learned to a domain expert.
 [Frank Harrell's recommendations how to state results in two group
 comparisons](https://hbiostat.org/blog/post/bayes-freq-stmts/) are excellent.
 
+### Unimodal and multimodal
+
+From [Wikipedia Unimodality](https://en.wikipedia.org/wiki/Unimodality):
+
+- In statistics, a unimodal probability distribution or unimodal distribution is a probability distribution which has a single peak. The term "mode" in this context refers to any peak of the distribution.
+- If it has more modes it is "bimodal" (2), "trimodal" (3), etc., or in general, "multimodal".
+
+BDA3 Section 2.3 discusses posterior summaries and illustrates bimodal distribution in Figure 2.2.
+
 ## Chapter 4 Asymptotics and connections to non-Bayesian approaches {#ch4}
 
 [Chapter 4](https://users.aalto.fi/~ave/BDA3.pdf#page=93) is related to the Lecture 11 *Normal approximation,
@@ -1276,8 +1285,7 @@ problem.
     and [13](ch13))
 - 10.3 Direct simulation and rejection sampling (overview)
 - 10.4 Importance sampling (used in PSIS-LOO discussed later)
-- 10.5 How many simulation draws are needed? (Important! Ex 10.1 and
-    10.2)
+- 10.5 How many simulation draws are needed? (Important!)
 - 10.6 Software (can be skipped)
 - 10.7 Debugging (can be skipped)
 
@@ -1365,6 +1373,57 @@ and for the group (sample). Sample can also mean a group of
 observations, and thus talking about posterior draws reduces
 ambiguity.
 
+### Monte Carlo standard error
+
+Monte Carlo estimates have some error due to using a finite number of
+random draws. Monte Carlo standard error (MCSE) estimates this
+error. BDA3 Section 10.5 discuss the basics of this. Additional
+information:
+
+- When we know the needed accuracy for reporting posterior summaries,
+  we can estimate how big sample size is needed to get small enough
+  MCSE for the quantity of interest.
+- MCSE is based on central limit theorem which assumes that the
+  distribution has finite variance.
+- Pareto-$k$ diagnostic can be used to estimate whether the draws come
+  from a distribution with finite variance (see below).
+- BDA3 discusses cases for mean (E$(\theta)$) and probability
+  ($p(\theta < \alpha)$). MCSE for quantiles can be derived using MCSE
+  for probability and inverse transform (details in Vehtari et
+  al. (2020). Rank-normalization, folding, and localization: An
+  improved $\widehat{R}$ for assessing convergence of MCMC. *Bayesian
+  analysis*, [Online](https://projecteuclid.org/euclid.ba/1593828229)).
+- [`posterior`](https://mc-stan.org/posterior/) package provides
+  functions `mcse_mean()` and `mcse_quantile()`. MCSE for
+  probabilities is obtained using `mcse_mean()` for indicator function
+  outcome of the logical comparison.
+
+### Pareto-$\hat{k}$ diagnostic
+
+Pareto-$\hat{k}$ diagnostic estimates the tail shape of the
+distribution given the draws from that distribution. The tail shape
+indicates whether the distribution has finite variance and mean.
+
+- If $\hat{k}>1$, it is likely that the distribution does not have
+  finite mean
+- If $\hat{k}>0.5$, it is likely that the distribution does not have
+  finite variance
+- $\hat{k}$ estimate has it's own variation given finite sample size,
+  and if in doubt, get more draws to get more accurate $\hat{k}$
+  estimate.
+- Pareto-$\hat{k}$ diagnostic is pre-asymptotic based on finite sample
+  size, and indicates the stability of empirical mean estimate given
+  the draws so far. Increasing the number of draws, can get more draws
+  far from the tail and may reveal that the tail shape is different
+  further away.
+- [`posterior`](https://mc-stan.org/posterior/) package provides
+  function `pareto_khat()`
+- Monte Carlo estimates (including importance sampling) can be
+  improved using Pareto-smoothing, which will be discussed later.
+- More details in Vehtari et al. (2024). Pareto smoothed importance
+  sampling. *Journal of Machine Learning Research*, 25(72):1-58.
+  [Online](https://jmlr.org/papers/v25/19-556.html).
+
 ### How many digits should be displayed
 
 - Too many digits make reading of the results slower and give false
@@ -1401,6 +1460,7 @@ ambiguity.
 - For your reports: Don't be lazy and settle for the default number of
   digits in R or Python. Think for each reported value how many digits
   is sensible.
+- See [Digits case study](https://users.aalto.fi/~ave/casestudies/Digits/digits.html) for examples and how to use [`posterior`](https://mc-stan.org/posterior/) package functions.
 
 ### Quadrature
 
@@ -1440,11 +1500,12 @@ article
 
 After the book was published, we have developed Pareto smoothed
 importance sampling which is more stable than plain importance sampling
-and has very useful Pareto-$k$ diagnostic to check the reliability
+and has very useful Pareto-$\hat{k}$ diagnostic to check the reliability
 
 - Aki Vehtari, Daniel Simpson, Andrew Gelman, Yuling Yao, and Jonah
-  Gabry (2021). Pareto smoothed importance sampling. [arXiv preprint
-  arXiv:1507.02646](http://arxiv.org/abs/1507.02646).
+  Gabry (2024). Pareto smoothed importance sampling. *Journal of
+  Machine Learning Research*, 25(72):1-58.
+  [Online](https://jmlr.org/papers/v25/19-556.html).
 
 ### Importance resampling with or without replacement
 
@@ -1468,7 +1529,7 @@ take into account also the functional. For example, importance sampling
 effective sample size can be different when estimating
 $\E[\theta]$ or $\E[\theta]^2$. If you
 are interested see more details, for example, [the Pareto smoothed importance
-sampling paper](https://arxiv.org/abs/1507.02646).
+sampling paper](https://jmlr.org/papers/v25/19-556.html).
 
 The derivation for the effective sample size and Monte Carlo standard
 error (MCSE) for importance sampling can be found, for example, in
