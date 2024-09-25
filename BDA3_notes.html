@@ -204,6 +204,7 @@ window.Quarto = {
   <li><a href="#the-number-of-required-monte-carlo-draws" id="toc-the-number-of-required-monte-carlo-draws" class="nav-link" data-scroll-target="#the-number-of-required-monte-carlo-draws">The number of required Monte Carlo draws</a></li>
   <li><a href="#bioassay" id="toc-bioassay" class="nav-link" data-scroll-target="#bioassay">Bioassay</a></li>
   <li><a href="#bayesian-vs.-frequentist-statements-in-two-group-comparisons" id="toc-bayesian-vs.-frequentist-statements-in-two-group-comparisons" class="nav-link" data-scroll-target="#bayesian-vs.-frequentist-statements-in-two-group-comparisons">Bayesian vs.&nbsp;frequentist statements in two group comparisons</a></li>
+  <li><a href="#unimodal-and-multimodal" id="toc-unimodal-and-multimodal" class="nav-link" data-scroll-target="#unimodal-and-multimodal">Unimodal and multimodal</a></li>
   </ul></li>
   <li><a href="#ch4" id="toc-ch4" class="nav-link" data-scroll-target="#ch4">Chapter 4 Asymptotics and connections to non-Bayesian approaches</a>
   <ul class="collapse">
@@ -267,6 +268,8 @@ window.Quarto = {
   <li><a href="#recommended-exercises-5" id="toc-recommended-exercises-5" class="nav-link" data-scroll-target="#recommended-exercises-5">Recommended exercises</a></li>
   <li><a href="#numerical-accuracy-of-computer-arithmetic" id="toc-numerical-accuracy-of-computer-arithmetic" class="nav-link" data-scroll-target="#numerical-accuracy-of-computer-arithmetic">Numerical accuracy of computer arithmetic</a></li>
   <li><a href="#terms-draw-draws-and-sample" id="toc-terms-draw-draws-and-sample" class="nav-link" data-scroll-target="#terms-draw-draws-and-sample">Terms draw, draws and sample</a></li>
+  <li><a href="#monte-carlo-standard-error" id="toc-monte-carlo-standard-error" class="nav-link" data-scroll-target="#monte-carlo-standard-error">Monte Carlo standard error</a></li>
+  <li><a href="#pareto-hatk-diagnostic" id="toc-pareto-hatk-diagnostic" class="nav-link" data-scroll-target="#pareto-hatk-diagnostic">Pareto-<span class="math inline">\(\hat{k}\)</span> diagnostic</a></li>
   <li><a href="#how-many-digits-should-be-displayed" id="toc-how-many-digits-should-be-displayed" class="nav-link" data-scroll-target="#how-many-digits-should-be-displayed">How many digits should be displayed</a></li>
   <li><a href="#quadrature" id="toc-quadrature" class="nav-link" data-scroll-target="#quadrature">Quadrature</a></li>
   <li><a href="#rejection-sampling" id="toc-rejection-sampling" class="nav-link" data-scroll-target="#rejection-sampling">Rejection sampling</a></li>
@@ -798,6 +801,15 @@ attr(,"credMass")
 <p>When asking to compare groups, some students get confused as the frequentist testing is quite different. The frequentist testing is often focusing on a) differently named tests for different models and b) null hypothesis testing. In Bayesian inference a) the same Bayes rule and investigation of posterior is used for all models, b) null hypothesis testing is less common. We come later to decision making given posterior and utility/ cost function (Lecture 10.1) and more about null hypothesis testing (Lecture 12.1). Now it is assumed you will report the posterior (e.g.&nbsp;histogram), possible summaries, and report what you can infer from that. Specifically as in this assignment the group comparisons are based on continuous model parameter, the probability of 0 difference is 0 (later lecture 12.1 covers null hypothesis testing). Instead of forcing dichotomous answer (yes/no) about whether there is difference, report the whole posterior that tells also how big that difference might be. What big means depends on the application, which brings us back to the fact of importance of domain expertise. You are not experts on the application examples used in the assignment, but you can think how would you report what you have learned to a domain expert.</p>
 <p><a href="https://hbiostat.org/blog/post/bayes-freq-stmts/">Frank Harrell’s recommendations how to state results in two group comparisons</a> are excellent.</p>
 </section>
+<section id="unimodal-and-multimodal" class="level3">
+<h3 class="anchored" data-anchor-id="unimodal-and-multimodal">Unimodal and multimodal</h3>
+<p>From <a href="https://en.wikipedia.org/wiki/Unimodality">Wikipedia Unimodality</a>:</p>
+<ul>
+<li>In statistics, a unimodal probability distribution or unimodal distribution is a probability distribution which has a single peak. The term “mode” in this context refers to any peak of the distribution.</li>
+<li>If it has more modes it is “bimodal” (2), “trimodal” (3), etc., or in general, “multimodal”.</li>
+</ul>
+<p>BDA3 Section 2.3 discusses posterior summaries and illustrates bimodal distribution in Figure 2.2.</p>
+</section>
 </section>
 <section id="ch4" class="level2">
 <h2 class="anchored" data-anchor-id="ch4">Chapter 4 Asymptotics and connections to non-Bayesian approaches</h2>
@@ -1251,7 +1263,7 @@ attr(,"credMass")
 <li>10.2 Distributional approximations (overview, more in Chapters <a href="ch4">4</a> and <a href="ch13">13</a>)</li>
 <li>10.3 Direct simulation and rejection sampling (overview)</li>
 <li>10.4 Importance sampling (used in PSIS-LOO discussed later)</li>
-<li>10.5 How many simulation draws are needed? (Important! Ex 10.1 and 10.2)</li>
+<li>10.5 How many simulation draws are needed? (Important!)</li>
 <li>10.6 Software (can be skipped)</li>
 <li>10.7 Debugging (can be skipped)</li>
 </ul>
@@ -1315,6 +1327,30 @@ attr(,"credMass")
 <h3 class="anchored" data-anchor-id="terms-draw-draws-and-sample">Terms draw, draws and sample</h3>
 <p>A group of draws is a sample. A sample can consist of one draw, and thus some people use the word sample for both single item and for the group. For clarity, we prefer separate words for a single item (draw) and for the group (sample). Sample can also mean a group of observations, and thus talking about posterior draws reduces ambiguity.</p>
 </section>
+<section id="monte-carlo-standard-error" class="level3">
+<h3 class="anchored" data-anchor-id="monte-carlo-standard-error">Monte Carlo standard error</h3>
+<p>Monte Carlo estimates have some error due to using a finite number of random draws. Monte Carlo standard error (MCSE) estimates this error. BDA3 Section 10.5 discuss the basics of this. Additional information:</p>
+<ul>
+<li>When we know the needed accuracy for reporting posterior summaries, we can estimate how big sample size is needed to get small enough MCSE for the quantity of interest.</li>
+<li>MCSE is based on central limit theorem which assumes that the distribution has finite variance.</li>
+<li>Pareto-<span class="math inline">\(k\)</span> diagnostic can be used to estimate whether the draws come from a distribution with finite variance (see below).</li>
+<li>BDA3 discusses cases for mean (E<span class="math inline">\((\theta)\)</span>) and probability (<span class="math inline">\(p(\theta &lt; \alpha)\)</span>). MCSE for quantiles can be derived using MCSE for probability and inverse transform (details in Vehtari et al.&nbsp;(2020). Rank-normalization, folding, and localization: An improved <span class="math inline">\(\widehat{R}\)</span> for assessing convergence of MCMC. <em>Bayesian analysis</em>, <a href="https://projecteuclid.org/euclid.ba/1593828229">Online</a>).</li>
+<li><a href="https://mc-stan.org/posterior/"><code>posterior</code></a> package provides functions <code>mcse_mean()</code> and <code>mcse_quantile()</code>. MCSE for probabilities is obtained using <code>mcse_mean()</code> for indicator function outcome of the logical comparison.</li>
+</ul>
+</section>
+<section id="pareto-hatk-diagnostic" class="level3">
+<h3 class="anchored" data-anchor-id="pareto-hatk-diagnostic">Pareto-<span class="math inline">\(\hat{k}\)</span> diagnostic</h3>
+<p>Pareto-<span class="math inline">\(\hat{k}\)</span> diagnostic estimates the tail shape of the distribution given the draws from that distribution. The tail shape indicates whether the distribution has finite variance and mean.</p>
+<ul>
+<li>If <span class="math inline">\(\hat{k}&gt;1\)</span>, it is likely that the distribution does not have finite mean</li>
+<li>If <span class="math inline">\(\hat{k}&gt;0.5\)</span>, it is likely that the distribution does not have finite variance</li>
+<li><span class="math inline">\(\hat{k}\)</span> estimate has it’s own variation given finite sample size, and if in doubt, get more draws to get more accurate <span class="math inline">\(\hat{k}\)</span> estimate.</li>
+<li>Pareto-<span class="math inline">\(\hat{k}\)</span> diagnostic is pre-asymptotic based on finite sample size, and indicates the stability of empirical mean estimate given the draws so far. Increasing the number of draws, can get more draws far from the tail and may reveal that the tail shape is different further away.</li>
+<li><a href="https://mc-stan.org/posterior/"><code>posterior</code></a> package provides function <code>pareto_khat()</code></li>
+<li>Monte Carlo estimates (including importance sampling) can be improved using Pareto-smoothing, which will be discussed later.</li>
+<li>More details in Vehtari et al.&nbsp;(2024). Pareto smoothed importance sampling. <em>Journal of Machine Learning Research</em>, 25(72):1-58. <a href="https://jmlr.org/papers/v25/19-556.html">Online</a>.</li>
+</ul>
+</section>
 <section id="how-many-digits-should-be-displayed" class="level3">
 <h3 class="anchored" data-anchor-id="how-many-digits-should-be-displayed">How many digits should be displayed</h3>
 <ul>
@@ -1337,6 +1373,7 @@ attr(,"credMass")
 <li>When reporting many numbers in table, for aesthetics reasons, it may be sometimes better for some numbers to show one extra or one too few digits compared to the ideal.</li>
 <li>Often it’s better to plot the whole posterior density in addition of any summaries, as summaries always loose some information content.</li>
 <li>For your reports: Don’t be lazy and settle for the default number of digits in R or Python. Think for each reported value how many digits is sensible.</li>
+<li>See <a href="https://users.aalto.fi/~ave/casestudies/Digits/digits.html">Digits case study</a> for examples and how to use <a href="https://mc-stan.org/posterior/"><code>posterior</code></a> package functions.</li>
 </ul>
 </section>
 <section id="quadrature" class="level3">
@@ -1355,9 +1392,9 @@ attr(,"credMass")
 <ul>
 <li>Aki Vehtari, Andrew Gelman and Jonah Gabry (2016). Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC. In Statistics and Computing, 27(5):1413–1432. <a href="http://arxiv.org/abs/1507.04544">arXiv preprint arXiv:1507.04544</a>.</li>
 </ul>
-<p>After the book was published, we have developed Pareto smoothed importance sampling which is more stable than plain importance sampling and has very useful Pareto-<span class="math inline">\(k\)</span> diagnostic to check the reliability</p>
+<p>After the book was published, we have developed Pareto smoothed importance sampling which is more stable than plain importance sampling and has very useful Pareto-<span class="math inline">\(\hat{k}\)</span> diagnostic to check the reliability</p>
 <ul>
-<li>Aki Vehtari, Daniel Simpson, Andrew Gelman, Yuling Yao, and Jonah Gabry (2021). Pareto smoothed importance sampling. <a href="http://arxiv.org/abs/1507.02646">arXiv preprint arXiv:1507.02646</a>.</li>
+<li>Aki Vehtari, Daniel Simpson, Andrew Gelman, Yuling Yao, and Jonah Gabry (2024). Pareto smoothed importance sampling. <em>Journal of Machine Learning Research</em>, 25(72):1-58. <a href="https://jmlr.org/papers/v25/19-556.html">Online</a>.</li>
 </ul>
 </section>
 <section id="importance-resampling-with-or-without-replacement" class="level3">
@@ -1366,7 +1403,7 @@ attr(,"credMass")
 </section>
 <section id="importance-sampling-effective-sample-size" class="level3">
 <h3 class="anchored" data-anchor-id="importance-sampling-effective-sample-size">Importance sampling effective sample size</h3>
-<p>BDA3 1st (2013) and 2nd (2014) printing have an error for <span class="math inline">\(\tilde{w}(\theta^s)\)</span> used in the effective sample size equation 10.4. The normalized weights equation should not have the multiplier S (the normalized weights should sum to one). The effective sample size estimate mentioned in the book is generic approximation, and more accurate effective sample size estimate would take into account also the functional. For example, importance sampling effective sample size can be different when estimating <span class="math inline">\(\operatorname{E}[\theta]\)</span> or <span class="math inline">\(\operatorname{E}[\theta]^2\)</span>. If you are interested see more details, for example, <a href="https://arxiv.org/abs/1507.02646">the Pareto smoothed importance sampling paper</a>.</p>
+<p>BDA3 1st (2013) and 2nd (2014) printing have an error for <span class="math inline">\(\tilde{w}(\theta^s)\)</span> used in the effective sample size equation 10.4. The normalized weights equation should not have the multiplier S (the normalized weights should sum to one). The effective sample size estimate mentioned in the book is generic approximation, and more accurate effective sample size estimate would take into account also the functional. For example, importance sampling effective sample size can be different when estimating <span class="math inline">\(\operatorname{E}[\theta]\)</span> or <span class="math inline">\(\operatorname{E}[\theta]^2\)</span>. If you are interested see more details, for example, <a href="https://jmlr.org/papers/v25/19-556.html">the Pareto smoothed importance sampling paper</a>.</p>
 <p>The derivation for the effective sample size and Monte Carlo standard error (MCSE) for importance sampling can be found, for example, in <a href="https://statweb.stanford.edu/~owen/mc/">Chapter 9 of <em>Monte Carlo theory, methods and examples</em> by Art B. Owen</a>.</p>
 </section>
 <section id="buffons-needles" class="level3">
