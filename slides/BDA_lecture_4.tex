@@ -369,39 +369,68 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
 
 \begin{frame}{How many simulation draws are needed?}
 
+  \vspace{-0.7\baselineskip}
   \begin{itemize}
-  \item Expectation of unknown quantity
-    \begin{equation*}
-      \E(\theta)\approx \frac{1}{S}\sum_{s=1}^S \theta^{(s)}
-    \end{equation*}
-  \item If
+  \item Expectation of unknown quantity $\E(\theta)\approx \frac{1}{S}\sum_{s=1}^S \theta^{(s)}$
     \begin{itemize}
-    \item $S$ is big
-    \item $\theta^{(s)}$ are independent and 
+    \item If $S$ is big,
+    \item $\theta^{(s)}$ are independent, and 
     \item $p(\theta)$ has finite variance,
     \end{itemize}
-    the central limit theorem (CLT) states
+    then the central limit theorem (CLT) states
+    that the distribution of the expectation approaches normal
+    distribution (see BDA3 Ch 4) with variance $\sigma^2_\theta/S$
+    (asymptotic normality)
+    \only<2>{
+      \includegraphics[width=9.5cm]{N1a.pdf}\\
+      \vspace{-0.5\baselineskip}
+      \texttt{rnorm(n=10000, mean=0, sd=1)}
+    }
+    \only<3>{
+      \includegraphics[width=9.5cm]{N1b.pdf}\\
+      \vspace{-0.5\baselineskip}
+      \texttt{cummean(rnorm(n=10000, mean=0, sd=1))}
+    }
+    \only<4>{
+      \includegraphics[width=9.5cm]{N1c.pdf}\\ \vspace{-0.5\baselineskip} ~}
+    \only<5>{
+      \includegraphics[width=9.5cm]{N1d.pdf}\\ \vspace{-0.5\baselineskip} ~}
+    \only<6>{
+      \includegraphics[width=9.5cm]{exp1a.pdf}\\
+      \vspace{-0.5\baselineskip}
+      \texttt{rexp(n=10000, rate=1)}
+    }
+    \only<7>{
+      \includegraphics[width=9.5cm]{exp1c.pdf}\\
+      \vspace{-0.5\baselineskip}
+      \texttt{cummean(rexp(n=10000, rate=1))}
+    }
+    \only<8>{
+      \includegraphics[width=9.5cm]{exp1d.pdf}\\ \vspace{-0.5\baselineskip} ~}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{How many simulation draws are needed?}
+
+  \begin{itemize}
+  \item Expectation of unknown quantity $\E(\theta)\approx \frac{1}{S}\sum_{s=1}^S \theta^{(s)}$
+    \begin{itemize}
+    \item If $S$ is big,
+    \item $\theta^{(s)}$ are independent, and 
+    \item $p(\theta)$ has finite variance,
+    \end{itemize}
+    then the central limit theorem (CLT) states
     that the distribution of the expectation approaches normal
     distribution (see BDA3 Ch 4) with variance $\sigma^2_\theta/S$
     (asymptotic normality)
     \begin{itemize}
-    \item<2-> this variance is independent on dimensionality of $\theta$
-    % \item total variance is sum of the epistemic uncertainty in the
-    %   posterior and the uncertainty due to using finite number of
-    %   Monte Carlo draws
-    %   \begin{equation*}
-    %     \sigma^2_\theta+\sigma^2_\theta/S \pause= \sigma^2_\theta(1+1/S)
-    %   \end{equation*}
-    %   \pause
-    %   \vspace{-5mm}
-    % \item e.g. if $S=100$, deviation increases by $\sqrt{1+1/S}=1.005$\\
-    %   i.e. Monte Carlo error is very small (for the expectation)
-    %   \pause
-    \item<3-> See BDA3 Ch 4 for counter-examples for asymptotic normality
+    \item<1-> this variance is independent on dimensionality of $\theta$
+    \item<2-> See BDA3 Ch 4 for counter-examples for asymptotic normality
       \pause
-    \item<4-> $\sigma_\theta/\sqrt{S}$ is called Monte Carlo standard
+    \item<3-> $\sigma_\theta/\sqrt{S}$ is called Monte Carlo standard
       error (MCSE)
-      \item<5-> In practice, $\sigma_{\theta}$ will be estimated by $ \sqrt{1/(S-1)\sum_{s = 1}^S (\theta^{(s)} - \E(\theta))^2}$
+      \item<4-> In practice, $\sigma_{\theta}$ will be estimated by $ \sqrt{1/(S-1)\sum_{s = 1}^S (\theta^{(s)} - \E(\theta))^2}$
     \end{itemize}
 \end{itemize}
 
@@ -677,12 +706,12 @@ draws %>%
 \vspace{-0.5\baselineskip}
 \hspace{-1cm}
 \begin{minipage}[t]{1.0\linewidth}
-\includegraphics[width=3.9cm]{Ex2.pdf}\uncover<3->{\includegraphics[width=3.9cm]{Ex3.pdf}}\uncover<5->{\includegraphics[width=3.9cm]{Ex4.pdf}}\uncover<7->{\includegraphics[width=3.9cm]{Ex5.pdf}}
+\includegraphics[width=3.9cm]{Ex2.pdf}\uncover<3->{\includegraphics[width=3.9cm]{Ex3.pdf}}\uncover<5->{\includegraphics[width=3.9cm]{Ex4.pdf}}%\uncover<7->{\includegraphics[width=3.9cm]{Ex5.pdf}}
 \end{minipage}
 
 \hspace{-1cm}
 \uncover<2->{\begin{minipage}[t]{1.0\linewidth}
-\includegraphics[width=3.9cm]{E2x2.pdf}\uncover<4->{\includegraphics[width=3.9cm]{E2x3.pdf}}\uncover<6->{\includegraphics[width=3.9cm]{E2x4.pdf}}\uncover<8->{\includegraphics[width=3.9cm]{E2x5.pdf}}
+\includegraphics[width=3.9cm]{E2x2.pdf}\uncover<4->{\includegraphics[width=3.9cm]{E2x3.pdf}}\uncover<6->{\includegraphics[width=3.9cm]{E2x4.pdf}}%\uncover<8->{\includegraphics[width=3.9cm]{E2x5.pdf}}
 \end{minipage}
 }
 
@@ -879,7 +908,7 @@ draws %>%
   
 % \end{frame}
 
-\begin{frame}[fragile]{Pareto-$\hat{k}$ in \texttt{posterior} package}{Thanks to Noa Kallioinen}
+\begin{frame}[fragile]{Pareto-$\hat{k}$ in \texttt{posterior} package}
 
   {\color{gray}
 \begin{verbatim}
@@ -978,9 +1007,8 @@ draws %>%
   \begin{itemize}
   \item<+-> To check posterior of any quantity of interest
     \begin{itemize}
-    \item if high $\hat{k}$, maybe use some other summary than mean
-    \item after this, check my video + case study on how many
-      iterations to run digits to report
+    \item if high $\hat{k}$, maybe use some other summary than mean,
+      e.g., quantiles
     \end{itemize}
   \item<+-> Especially useful inside algorithms that rely on
     expectations
