@@ -830,13 +830,18 @@
 \begin{frame}{MCMC draws are dependent}
 
   \begin{itemize}
-    \item Monte Carlo estimates still valid (central limit theorem holds)
+  \item Monte Carlo estimates still valid\\
+    (central limit theorem holds as proved by Andrey Markov)
       \begin{align*}
         E_{\color{blue} p(\theta \mid y)}[f(\theta)] \approx \frac{1}{S} \sum_{s=1}^S f(\theta^{(s)})
       \end{align*}
     \item Estimation of Monte Carlo error is more difficult
       \begin{itemize}
-      \item evaluation of {\it effective} sample size
+      \item<+-> dependency (due to the Markov process) reduces the efficiency
+      \item<+-> evaluation of {\it effective} sample size (ESS)
+      \item<+-> given finite variance, the distribution of the expectation
+        approaches normal distribution with variance
+        $\sigma^2_\theta/\text{ESS}$
       \end{itemize}
     \end{itemize}  
 
@@ -1022,7 +1027,7 @@
   \end{itemize}  
 
   \vfill
-  {\small
+  {\small\color{gray}
     Vehtari, Gelman, Simpson, Carpenter, Bürkner
   (2020). Rank-normalization, folding, and localization: An improved
   $\widehat{R}$ for assessing convergence of MCMC. Bayesian Analysis, doi:10.1214/20-BA1221. \url{https://projecteuclid.org/euclid.ba/1593828229}.}
@@ -1153,7 +1158,9 @@
     \begin{equation*}
       \hat{\rho}_n=1-\frac{W - \frac{1}{M}\sum_{m=1}^M \hat{\rho}_{n,m}}{2\widehat{\var}^{+}}
     \end{equation*}
-    where $\hat{\rho}_{n,m}$ is autocorrelation at lag $n$ for chain $m$
+    where $\hat{\rho}_{n,m}$ is autocorrelation at lag $n$ for chain
+    $m$,\\ and $W$ and $\widehat{\var}^{+}$ are the same as in
+    $\widehat{R}$
   \item<2-> This combines $\widehat{R}$ and autocorrelation estimates
     \begin{itemize}
     \item takes into account if the chains are not mixing (the chains have not converged)
