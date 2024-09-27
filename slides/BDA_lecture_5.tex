@@ -11,6 +11,7 @@
 \usefonttheme[onlymath]{serif} % beamer font theme
 \usepackage{microtype}
 \usepackage{epic,epsfig}
+\usepackage{svg}
 \usepackage{subfigure,float}
 \usepackage{amsmath,amsfonts,amssymb}
 \usepackage{inputenc}
@@ -218,7 +219,7 @@
     limit theorem for certain dependent-random sequences, which were
     later named Markov chains
     \begin{itemize}
-    \item {\color{gray} CLT saying the sum / mean converges towards normal if the variance is finite (we come back to this in the end of the course)}
+    \item {CLT saying the sum / mean converges towards normal if the variance is finite}
     \end{itemize}
   \item<2-> The probability of each event depends only on the state
     attained in the previous event (or finite number of previous events)
@@ -233,32 +234,57 @@
 \end{frame}  
 
 \begin{frame}{Markov chain}
+% TODO: add Mermaid plots?
 
+  \vspace{-0.5\baselineskip}
   \begin{itemize}
-  \item<+-> Example of a simple Markov chain
-  \item<+-> Given known transition probabilities, we can simulate
-    Markov process and count how often each state is visited
+  \item Example of a simple Markov chain\\
+  \includegraphics[width=6.2cm]{Markov_graphviz.pdf}
+  \item<2-> Given known transition probabilities, we can simulate
+    the Markov process and count how often each state is visited\\
+    \uncover<3->{\footnotesize \textcolor{blue}{a} \textcolor{blue}{a} \textcolor{red}{b} \textcolor{red}{b} \textcolor{blue}{a} \textcolor{blue}{a} \textcolor{red}{b} \textcolor{red}{b} \textcolor{red}{b} \textcolor{red}{b} \textcolor{red}{b} \textcolor{red}{b} \textcolor{blue}{a} \textcolor{blue}{a} \textcolor{blue}{a} \textcolor{blue}{a} \textcolor{blue}{a} \textcolor{blue}{a} \textcolor{blue}{a} \textcolor{blue}{a} \textcolor{blue}{a} \textcolor{blue}{a} \textcolor{red}{b} \textcolor{red}{b} \textcolor{blue}{a} \textcolor{blue}{a} \textcolor{blue}{a} \textcolor{blue}{a} \textcolor{blue}{a} \textcolor{blue}{a} \textcolor{blue}{a} \textcolor{blue}{a} \textcolor{blue}{a} \textcolor{red}{b} \textcolor{blue}{a} \textcolor{blue}{a} \textcolor{blue}{a} \textcolor{blue}{a} \textcolor{blue}{a} \textcolor{red}{b}}
+      \uncover<4->{\normalsize
+      \begin{align*}
+        p(\text{\textcolor{blue}{a}}) \approx \frac{1}{S}\sum_{s=1}^S I(\text{state}=\text{\textcolor{blue}{a}}) \uncover<5->{ = 0.7}
+      \end{align*}}
+  \item<6-> In discrete case we can also find the marginal probabilities by examining the transition probability matrix
+    \begin{align*}
+      A = \begin{pmatrix}
+        0.8 & 0.2 \\
+        0.6 & 0.4
+      \end{pmatrix} \quad
+      \uncover<7->{
+      A^s = \begin{pmatrix}
+        \textcolor{blue}{0.75} & 0.75 \\
+        0.25 & \textcolor{red}{0.25}
+      \end{pmatrix},}\uncover<8->{ \text{where } S\geq 3 \text{ for 2 digit accuracy}}
+    \end{align*}
+  \item<9-> From $A^s$ we get $p(\text{\textcolor{blue}{a}})=0.75$ and $p(\text{\textcolor{red}{b}})=0.25$
   \end{itemize}
 
+  
 \end{frame}  
 
   
 \begin{frame}{Markov chain Monte Carlo (MCMC)}
 
-  \vspace{-0.5\baselineskip}
+  \vspace{-\baselineskip}
   \begin{itemize}
-  \item Produce draws $\theta^{(t)}$, given $\theta^{(t-1)}$, from a
-    Markov chain, which has been constructed so that its equilibrium
+  \item In continuos case, we can't compute the full transition
+    matrix, but we can use conditional transition probabilities to
+    simulate
+  \item<2-> Produce draws $\theta^{(t)}$, given $\theta^{(t-1)}$, from a
+    Markov chain, constructed so that the equilibrium
     distribution is $p(\theta \mid y)$
     \begin{itemize}
-    \item<2->[+] generic
-    \item<2->[+] combine sequence of easier Monte Carlo draws to form a Markov chain
-    \item<3->[+] chain goes where most of the posterior mass is
-    \item<3->[+] asymptotically chain spends the $\alpha$\% of time where
-      $\alpha$\% posterior mass is\only<3>{\\\includegraphics[width=6.5cm]{Gibbs1.pdf}}
-    \item<4->[+] central limit theorem holds for expectations 
-    \item<5->[-] draws are dependent
-    \item<5->[-] construction of efficient Markov chains is not always
+    \item<3->[+] generic
+    \item<3->[+] combine sequence of easier Monte Carlo draws to form a Markov chain
+    \item<4->[+] chain goes where most of the posterior mass is
+    \item<4->[+] asymptotically chain spends the $\alpha$\% of time where
+      $\alpha$\% posterior mass is\only<4>{\\\vspace{-3mm}\hspace{15mm}\includegraphics[width=5.5cm]{Gibbs1.pdf}}
+    \item<5->[+] central limit theorem holds for expectations 
+    \item<6->[-] draws are dependent
+    \item<6->[-] construction of efficient Markov chains is not always
       easy
     \end{itemize}
 \end{itemize}
@@ -995,9 +1021,11 @@
   \item<+-> Notation updated compared to BDA3 
   \end{itemize}  
 
+  \vfill
+  {\small
     Vehtari, Gelman, Simpson, Carpenter, Bürkner
   (2020). Rank-normalization, folding, and localization: An improved
-  $\widehat{R}$ for assessing convergence of MCMC. Bayesian Analysis, doi:10.1214/20-BA1221. \url{https://projecteuclid.org/euclid.ba/1593828229}.
+  $\widehat{R}$ for assessing convergence of MCMC. Bayesian Analysis, doi:10.1214/20-BA1221. \url{https://projecteuclid.org/euclid.ba/1593828229}.}
 
 \end{frame}
 
