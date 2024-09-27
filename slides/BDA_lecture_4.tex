@@ -22,6 +22,7 @@
 \usepackage[noend]{algpseudocode}
 \usepackage{booktabs}
 \usepackage{listings}
+\usepackage{fancyvrb}
 \usepackage{lstbayes}
 \graphicspath{{/home/ave/doc/images/}{}{../teranaloppu/}{../metodi/}{../slides/Hartikainen/}{../gphealth/}{../2008_09_RSS2008/}{../gphealth/}{../jyvaskyla2009/}{../nbbc2009/}{../gphealth/hippics/}{../euroheis2010/}{../pubgensens2011/}{../reykjavik2013/}{../liverpool2013/}{../../gpstuff/doc/}{./images/}{../aalto_stochastic/}{figs/}{../Stancon2018Helsinki/figs/}{../../paper/cvapprox/}{../gppa2017/}{../valencia2017/}{../../paper/combine_predictive_distribution/tex/}{../venice2018/figs/}{./figs/}}
 
@@ -928,37 +929,36 @@ draws %>%
 
   {\color{gray}
 \begin{verbatim}
-> drt |> summarise_draws(mean, mcse_mean)
+> drt |> summarise_draws(mean, sd, mcse_mean)
 \end{verbatim}
     }
-\begin{verbatim}
- variable  mean mcse_mean
- xn       0.010     0.021
- xt3      0.025     0.033
- xt2_5    0.031     0.039
- xt2      0.046     0.054
- xt1_5    0.092     0.13 
- xt1      0.33      1.5  
-\end{verbatim}
-
+\begin{Verbatim}
+ variable   mean     sd mcse_mean
+ xn        0.007   0.99      0.01
+ xt3       0.004   1.66      0.02 
+ xt2_5     0.002   2.01      0.02 
+ xt2      -0.008   3.00      0.03
+ xt1_5    -0.067   8.14      0.08
+ xt1      -1.57    122.      1.21   
+\end{Verbatim}
 \end{frame}
 
 \begin{frame}[fragile]{Pareto-$\hat{k}$ in \texttt{posterior} package}
 
   {\color{gray}
 \begin{verbatim}
-> drt |> summarise_draws(mean, mcse_mean, pareto_khat)
+> drt |> summarise_draws(mean, sd, mcse_mean, pareto_khat)
 \end{verbatim}
     }
-\begin{verbatim}
- variable  mean mcse_mean    khat
- xn       0.010     0.021  -0.072
- xt3      0.025     0.033   0.33 
- xt2_5    0.031     0.039   0.41 
- xt2      0.046     0.054   0.52 
- xt1_5    0.092     0.13    0.69 
- xt1      0.33      1.5     1.0  
-\end{verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+ variable   mean     sd mcse_mean pareto_khat
+ xn        0.007   0.99      0.01       -0.02
+ xt3       0.004   1.66      0.02        0.36
+ xt2_5     0.002   2.01      0.02        0.43
+ xt2      -0.008   3.00      0.03        \textcolor{red}{0.53}
+ xt1_5    -0.067   8.14      0.08        \textcolor{red}{0.72}
+ xt1      -1.57    122.      1.21        \textcolor{red}{1.08}  
+\end{Verbatim}
 
 \end{frame}
 
