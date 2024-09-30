@@ -103,7 +103,10 @@
 \item 10.1 Numerical integration (overview)
 \item 10.2 Distributional approximations (overview, more in Chapter 4 and 13)
 \item 10.3 Direct simulation and rejection sampling (overview)
-\item 10.4 \textbf{Importance sampling} (used in PSIS-LOO, Lecture 9)
+\item 10.4 \textbf{Importance sampling}
+  \begin{itemize}
+  \item used in PSIS-LOO (Lecture 9) and prior sensitivity analysis (Lecture ?)
+  \end{itemize}
 \item 10.5 \textbf{How many simulation draws are needed?} 
   \begin{itemize}
   \item \textbf{see chapter notes for how many significant digits to report}
@@ -180,7 +183,7 @@
   \item<8-> convenience functions
     \begin{itemize}
     \item \texttt{matrixStats::logSumExp(lx)} computes
-      \texttt{log(sum(exp(lx)))} using above rule
+      \texttt{log(sum(exp(lx)))} using the above rule
     \item \texttt{log1p(x)} computes \texttt{log(1+x)} accurately also for $|x| \ll 1$
     \item \texttt{expm1(x)} computes \texttt{exp(x) - 1} accurately also for $|x| \ll 1$
     \end{itemize}
@@ -189,9 +192,7 @@
 
 \end{frame}
 
-\begin{frame}
-
-  {\Large\color{navyblue} It's all about expectations}
+\begin{frame}{It's all about expectations}
 
   \vspace{-1.5\baselineskip}
    \begin{align*}
@@ -222,9 +223,7 @@
    
 \end{frame}
 
- \begin{frame}
-   
-  {\Large\color{navyblue} It's all about expectations}
+ \begin{frame}{It's all about expectations}
 
    \begin{align*}
    E_{\theta}[h(\theta)] = \int h(\theta) p(\theta|y) d\theta
@@ -242,9 +241,7 @@
  \end{frame}
 
 
-\begin{frame}
-   
-  {\Large\color{navyblue} Quadrature integration}
+\begin{frame}{Quadrature integration}
 
   \begin{itemize}
   \item The simplest quadrature integration is grid integration\\
@@ -271,7 +268,35 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
   \end{itemize}
   \end{itemize}
   
+\end{frame}
 
+\begin{frame}{Grid sampling and curse of dimensionality}
+
+  \begin{itemize}
+  \item In general the number of evaluations increase exponentially $c^D$
+      \item if we don't know beforehand where the posterior mass is
+        \begin{itemize}
+          \item need to choose wide box for the grid
+          \item need to have enough grid points to get some of them
+            where essential mass is
+          \end{itemize}
+          \pause
+      \item e.g. 50 or 1000 grid points per dimension, and 10 dimensions
+        \begin{itemize}
+        \item[$\rightarrow$] 50$^{10} \approx$ 1e17 grid points
+        \item[$\rightarrow$] 1000$^{10} \approx$ 1e30 grid points
+        \end{itemize}
+      \item R and my current laptop can compute density of normal
+        distribution about 50 million times per second
+        \begin{itemize}
+        \item[$\rightarrow$] evaluation in 1e17 grid points would take
+           60 years %triljoona vuotta
+        \item[$\rightarrow$] evaluation in 1e30 grid points would take
+           600 billion years %triljoona vuotta
+        \end{itemize}
+ \end{itemize}
+\vfill
+ 
 \end{frame}
 
 
@@ -297,7 +322,11 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
      \begin{itemize}
      \item BUGS project started 1989 (last OpenBUGS release 2014)
      \item Gelfand \& Smith, 1990
+       \pause
      \item Stan initial release 2012
+     \item JAGS, Nimble, Tensorflow probability, PyMC, Pyro, BlackJAX
+       Turing.jl, ...
+     \item  Štrumbelj et al. (2024). Past, Present, and Future of Software for Bayesian Inference. \textit{Statistical Science}, 39(1):46-61. \url{https://doi.org/10.1214/23-STS907}
      \end{itemize}
      % \begin{itemize}
      %   \item tätä ennen käyttö vähäistä, vaikka bayesilaisiakin
@@ -468,8 +497,8 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
     \end{itemize}
   \item<+-> 3Blue1Brown YouTube videos with nice visualisations
     \begin{itemize}
-    \item CLT with discrete distributions: ``But what is the Central Limit Theorem?'' \url{https://www.youtube.com/watch?v=zeJD6dqJ5lo}
-    \item CLT with continuous distributions: ``Convolutions | Why X+Y in probability is a beautiful mess``  \url{https://www.youtube.com/watch?v=IaSGqQa5O-M}
+    \item CLT with discrete distributions: \textit{But what is the Central Limit Theorem?} \url{https://www.youtube.com/watch?v=zeJD6dqJ5lo}
+    \item CLT with continuous distributions: \textit{Convolutions | Why X+Y in probability is a beautiful mess}  \url{https://www.youtube.com/watch?v=IaSGqQa5O-M}
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -589,24 +618,24 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
   Posterior mean and 5\% and 95\% quantiles:
 \vspace{-.5\baselineskip}
   {\small
-\begin{verbatim}
-draws %>%
-  subset_draws("beta100") %>%
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{gray}{draws |>}
+\textcolor{gray}{  subset_draws("beta100") |>}
   summarize_draws(mean,
                   ~quantile(.x, probs = c(0.05, 0.95)))
-\end{verbatim}
+\end{Verbatim}
     }
 
 \pause
 The corresponding MCSE estimates:
 \vspace{-.5\baselineskip}
   {\small
-\begin{verbatim}
-draws %>%
-  subset_draws("beta100") %>%
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{gray}{draws |>}
+\textcolor{gray}{  subset_draws("beta100") |>}
   summarize_draws(mcse_mean,
                   ~mcse_quantile(.x, probs = c(0.05, 0.95)))
-\end{verbatim}
+\end{Verbatim}
   }
 
   \pause
@@ -621,13 +650,13 @@ draws %>%
   Posterior probability and the corresponding MCSE estimate:
 \vspace{-.5\baselineskip}
   {\small
-\begin{verbatim}
-draws %>%
-  mutate_variables(beta0p = beta100>0) %>%
-  subset_draws("beta0p") %>%
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{gray}{draws |>}
+  mutate_variables(beta0p = beta100>0) |>
+\textcolor{gray}{  subset_draws("beta0p") |>}
   summarize_draws(mean,
                   mcse = mcse_mean)
-\end{verbatim}
+\end{Verbatim}
     }
 
   
@@ -1055,7 +1084,7 @@ draws %>%
     expectations
     \begin{itemize}
     \item other summaries can't be used
-    \item automated diagnostic as in PSIS-LOO (Lecture 9)
+    \item automated diagnostic as in PSIS-LOO (Lecture 9) and \texttt{priorsense} (Lecture ?)
     \end{itemize}
   \item<+-> $\hat{k}$ estimate has it's own variation given finite sample size
     \begin{itemize}
@@ -1094,9 +1123,7 @@ draws %>%
 
 \end{frame}
 
-\begin{frame}
-
-  {\Large\color{navyblue} Random number generators}
+\begin{frame}{Random number generators}
 
   \begin{itemize}
   \item Good pseudo random number generators are sufficient for
@@ -1130,33 +1157,6 @@ draws %>%
       \item e.g. R uses inverse-CDF
     \end{itemize}
   \end{itemize}
-
-\end{frame}
-
-\begin{frame}{Grid sampling and curse of dimensionality}
-
-  \begin{itemize}
-      \item 10 parameters
-      \item if we don't know beforehand where the posterior mass is
-        \begin{itemize}
-          \item need to choose wide box for the grid
-          \item need to have enough grid points to get some of them
-            where essential mass is
-        \end{itemize}
-      \item e.g. 50 or 1000 grid points per dimension
-        \begin{itemize}
-        \item[$\rightarrow$] 50$^{10} \approx$ 1e17 grid points
-        \item[$\rightarrow$] 1000$^{10} \approx$ 1e30 grid points
-        \end{itemize}
-      \item R and my current laptop can compute density of normal
-        distribution about 50 million times per second
-        \begin{itemize}
-        \item[$\rightarrow$] evaluation in 1e17 grid points would take
-           60 years %triljoona vuotta
-        \item[$\rightarrow$] evaluation in 1e30 grid points would take
-           600 billion years %triljoona vuotta
-        \end{itemize}
- \end{itemize}
 
 \end{frame}
 
@@ -1247,12 +1247,12 @@ draws %>%
 
   \uncover<2->{
   \begin{itemize}
-  \item Fast leave-one-out cross-validation
+  \item Fast leave-one-out cross-validation (\texttt{loo})
   \item Fast bootstrapping
-  \item Fast prior and likelihood sensitivity analysis
+  \item Fast prior and likelihood sensitivity analysis (\texttt{priorsense})
   \item Conformal Bayesian computation
   \item Particle filtering
-  \item Improving distributional approximations (e.g Laplace, VI)
+  \item Improving distributional approximations (e.g Laplace, Pathfinder, VI)
   \end{itemize}
 }
 
