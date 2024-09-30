@@ -177,6 +177,13 @@
       \item<7-> e.g. in Metropolis-algorithm (Assignment 5) compute the log of ratio of densities using the identity\\
         $\log(a/b)=\log(a)-\log(b)$
     \end{itemize}
+  \item<8-> convenience functions
+    \begin{itemize}
+    \item \texttt{matrixStats::logSumExp(lx)} computes
+      \texttt{log(sum(exp(lx)))} using above rule
+    \item \texttt{log1p(x)} computes \texttt{log(1+x)} accurately also for $|x| \ll 1$
+    \item \texttt{expm1(x)} computes \texttt{exp(x) - 1} accurately also for $|x| \ll 1$
+    \end{itemize}
     \end{itemize}
   \end{itemize}
 
@@ -331,8 +338,7 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
 
 \end{frame}
 
-\begin{frame}
-{Monte Carlo vs. deterministic}
+\begin{frame}{Monte Carlo vs. deterministic}
 
   \begin{itemize}
   \item Monte Carlo = simulation methods
@@ -342,14 +348,13 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
   \item Deterministic methods (e.g. grid)
     \begin{itemize}
     \item evaluation points are selected by some deterministic rule
-    \item good deterministic methods converge faster (need less function evaluations)
+    \item good deterministic methods converge faster (need less function evaluations for the same accuracy)
     \end{itemize}
   \end{itemize}
 
 \end{frame}
 
-\begin{frame}
-{How many simulation draws are needed?}
+\begin{frame}{How many simulation draws are needed?}
 
   \begin{itemize}
   \item How many draws or how big sample size?
@@ -375,13 +380,12 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
   \item Expectation of unknown quantity $\E(\theta)\approx \frac{1}{S}\sum_{s=1}^S \theta^{(s)}$
     \begin{itemize}
     \item If $S$ is big,
-    \item $\theta^{(s)}$ are independent, and 
+    \item $\theta^{(s)}$ are independent,  
     \item $p(\theta)$ has finite variance,
     \end{itemize}
     then the central limit theorem (CLT) states
     that the distribution of the expectation approaches normal
     distribution (see BDA3 Ch 4) with variance $\sigma^2_\theta/S$
-    (asymptotic normality)
     \only<2>{
       \includegraphics[width=9.5cm]{N1a.pdf}\\
       \vspace{-0.5\baselineskip}\footnotesize
@@ -422,7 +426,8 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
       \texttt{rt(n=10000, df=1)}
     }
     \only<12>{
-      \includegraphics[width=9.5cm]{C1c.pdf}\\ \vspace{-0.5\baselineskip}\footnotesize ~
+      \includegraphics[width=9.5cm]{C1c.pdf}\\ \vspace{-0.5\baselineskip}\footnotesize
+      \texttt{cummean(rt(n=10000, df=1))}
     }
 \end{itemize}
 
@@ -440,7 +445,6 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
     then the central limit theorem (CLT) states
     that the distribution of the expectation approaches normal
     distribution (see BDA3 Ch 4) with variance $\sigma^2_\theta/S$
-    (asymptotic normality)
     \begin{itemize}
     \item<1-> this variance is independent on dimensionality of $\theta$
     \item<2-> See BDA3 Ch 4 for counter-examples for asymptotic normality
@@ -451,6 +455,23 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
     \end{itemize}
 \end{itemize}
 
+\end{frame}
+
+\begin{frame}{Central limit theorem}
+
+  \begin{itemize}
+  \item<+-> Valid also when $p(\theta)$ discrete
+    \begin{itemize}
+    \item the distribution of mean is discrete, but the comparison to
+      continuous normal is done using cumalative distribution
+      functions
+    \end{itemize}
+  \item<+-> 3Blue1Brown YouTube videos with nice visualisations
+    \begin{itemize}
+    \item CLT with discrete distributions: ``But what is the Central Limit Theorem?'' \url{https://www.youtube.com/watch?v=zeJD6dqJ5lo}
+    \item CLT with continuous distributions: ``Convolutions | Why X+Y in probability is a beautiful mess``  \url{https://www.youtube.com/watch?v=IaSGqQa5O-M}
+    \end{itemize}
+  \end{itemize}
 \end{frame}
 
 \begin{frame}{Example: Kilpisjärvi summer temperature}
@@ -960,7 +981,11 @@ draws %>%
  xt1      -1.57    122.      1.21        \textcolor{red}{1.08}  
 \end{Verbatim}
 
+% \vfill
+% {\small\href{https://mc-stan.org/posterior/articles/pareto_diagnostics.html}{\textcolor{gray}{https://mc-stan.org/posterior/articles/pareto\_diagnostics.html}}}
+
 \end{frame}
+
 
 % \begin{frame}[fragile]{Pareto-$\hat{k}$ in \texttt{posterior} package}
 
