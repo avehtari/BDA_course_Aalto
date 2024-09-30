@@ -1398,16 +1398,26 @@ information:
   probabilities is obtained using `mcse_mean()` for indicator function
   outcome of the logical comparison.
 
+### Central limit theorem
+
+- "In probability theory, the central limit theorem (CLT) states that, under appropriate conditions, the distribution of a normalized version of the sample mean converges to a standard normal distribution. This holds even if the original variables themselves are not normally distributed. There are several versions of the CLT, each applying in the context of different conditions." [Wikipedia Central limit theorem](https://en.wikipedia.org/wiki/Central_limit_theorem)
+- [Wikipedia Central limit theorem](https://en.wikipedia.org/wiki/Central_limit_theorem) article has good summary of the topic and variants with links to further information
+- 3Blue1Brown YouTube videos with nice visualizations
+    - CLT with discrete distributions: "But what is the Central Limit Theorem?" \url{https://www.youtube.com/watch?v=zeJD6dqJ5lo}
+    - CLT with continuous distributions: "Convolutions | Why X+Y in probability is a beautiful mess"  \url{https://www.youtube.com/watch?v=IaSGqQa5O-M}
+
 ### Pareto-$\hat{k}$ diagnostic
 
 Pareto-$\hat{k}$ diagnostic estimates the tail shape of the
-distribution given the draws from that distribution. The tail shape
-indicates whether the distribution has finite variance and mean.
+distribution $p(\theta)$ given draws $\theta^{(s)}$ from that
+distribution. The tail shape indicates whether the distribution has
+finite variance and mean.
 
 - If $\hat{k}>1$, it is likely that the distribution does not have
-  finite mean
+  finite mean, and trying to estimate the mean does not make sense.
 - If $\hat{k}>0.5$, it is likely that the distribution does not have
-  finite variance
+  finite variance, and Monte Carlo standard error estimate based on the
+  variance does not make sense.
 - $\hat{k}$ estimate has it's own variation given finite sample size,
   and if in doubt, get more draws to get more accurate $\hat{k}$
   estimate.
@@ -1419,7 +1429,10 @@ indicates whether the distribution has finite variance and mean.
 - [`posterior`](https://mc-stan.org/posterior/) package provides
   function `pareto_khat()`
 - Monte Carlo estimates (including importance sampling) can be
-  improved using Pareto-smoothing, which will be discussed later.
+  improved using Pareto-smoothing. Pareto smoothed Monte Carlo
+  estimate has finite variance even if $p(\theta)$ does not, and the
+  corresponding Monte Carlo standard error estimate can be useful if
+  $\hat{k}<0.7$. More about this later in the course.
 - More details in Vehtari et al. (2024). Pareto smoothed importance
   sampling. *Journal of Machine Learning Research*, 25(72):1-58.
   [Online](https://jmlr.org/papers/v25/19-556.html).
@@ -1435,6 +1448,13 @@ indicates whether the distribution has finite variance and mean.
 - Don't ever show digits which are just random noise. You can use Monte
   Carlo standard error estimates to check how many digits are likely
   to stay the same if the sampling would be continued.
+- The advise considers the number of significant digits, which is
+  different from the number of decimal digits. For example, the
+  numbers $12$, $1.2$, $0.12$, and $0.012$ all have two significant
+  digits. It is common that even if 2 significant digits would be
+  sufficient, numbers like $123.4$ and $1234.5$ would be shown as
+  rounded to integers $123$ and $1234$ (using the round to nearest
+  even integer rule used by R).
 - Example: The mean and 90% central posterior interval for temperature
   increase C$^\circ$/century (see the slides for the example) based on
   posterior draws:
@@ -1459,7 +1479,8 @@ indicates whether the distribution has finite variance and mean.
   any summaries, as summaries always loose some information content.
 - For your reports: Don't be lazy and settle for the default number of
   digits in R or Python. Think for each reported value how many digits
-  is sensible.
+  is sensible. If the Quiz asks certain number of digits, this overrules
+  other advise.
 - See [Digits case study](https://users.aalto.fi/~ave/casestudies/Digits/digits.html) for examples and how to use [`posterior`](https://mc-stan.org/posterior/) package functions.
 
 ### Quadrature
