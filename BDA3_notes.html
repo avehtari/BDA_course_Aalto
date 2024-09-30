@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2024-09-29">
+<meta name="dcterms.date" content="2024-09-30">
 
 <title>Bayesian Data Analysis course - BDA3 notes – Bayesian Data Analysis course</title>
 <style>
@@ -269,6 +269,7 @@ window.Quarto = {
   <li><a href="#numerical-accuracy-of-computer-arithmetic" id="toc-numerical-accuracy-of-computer-arithmetic" class="nav-link" data-scroll-target="#numerical-accuracy-of-computer-arithmetic">Numerical accuracy of computer arithmetic</a></li>
   <li><a href="#terms-draw-draws-and-sample" id="toc-terms-draw-draws-and-sample" class="nav-link" data-scroll-target="#terms-draw-draws-and-sample">Terms draw, draws and sample</a></li>
   <li><a href="#monte-carlo-standard-error" id="toc-monte-carlo-standard-error" class="nav-link" data-scroll-target="#monte-carlo-standard-error">Monte Carlo standard error</a></li>
+  <li><a href="#central-limit-theorem" id="toc-central-limit-theorem" class="nav-link" data-scroll-target="#central-limit-theorem">Central limit theorem</a></li>
   <li><a href="#pareto-hatk-diagnostic" id="toc-pareto-hatk-diagnostic" class="nav-link" data-scroll-target="#pareto-hatk-diagnostic">Pareto-<span class="math inline">\(\hat{k}\)</span> diagnostic</a></li>
   <li><a href="#how-many-digits-should-be-displayed" id="toc-how-many-digits-should-be-displayed" class="nav-link" data-scroll-target="#how-many-digits-should-be-displayed">How many digits should be displayed</a></li>
   <li><a href="#quadrature" id="toc-quadrature" class="nav-link" data-scroll-target="#quadrature">Quadrature</a></li>
@@ -348,7 +349,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 29, 2024</p>
+      <p class="date">September 30, 2024</p>
     </div>
   </div>
   
@@ -1338,16 +1339,28 @@ attr(,"credMass")
 <li><a href="https://mc-stan.org/posterior/"><code>posterior</code></a> package provides functions <code>mcse_mean()</code> and <code>mcse_quantile()</code>. MCSE for probabilities is obtained using <code>mcse_mean()</code> for indicator function outcome of the logical comparison.</li>
 </ul>
 </section>
+<section id="central-limit-theorem" class="level3">
+<h3 class="anchored" data-anchor-id="central-limit-theorem">Central limit theorem</h3>
+<ul>
+<li>“In probability theory, the central limit theorem (CLT) states that, under appropriate conditions, the distribution of a normalized version of the sample mean converges to a standard normal distribution. This holds even if the original variables themselves are not normally distributed. There are several versions of the CLT, each applying in the context of different conditions.” <a href="https://en.wikipedia.org/wiki/Central_limit_theorem">Wikipedia Central limit theorem</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Central_limit_theorem">Wikipedia Central limit theorem</a> article has good summary of the topic and variants with links to further information</li>
+<li>3Blue1Brown YouTube videos with nice visualizations
+<ul>
+<li>CLT with discrete distributions: “But what is the Central Limit Theorem?” </li>
+<li>CLT with continuous distributions: “Convolutions | Why X+Y in probability is a beautiful mess” </li>
+</ul></li>
+</ul>
+</section>
 <section id="pareto-hatk-diagnostic" class="level3">
 <h3 class="anchored" data-anchor-id="pareto-hatk-diagnostic">Pareto-<span class="math inline">\(\hat{k}\)</span> diagnostic</h3>
-<p>Pareto-<span class="math inline">\(\hat{k}\)</span> diagnostic estimates the tail shape of the distribution given the draws from that distribution. The tail shape indicates whether the distribution has finite variance and mean.</p>
+<p>Pareto-<span class="math inline">\(\hat{k}\)</span> diagnostic estimates the tail shape of the distribution <span class="math inline">\(p(\theta)\)</span> given draws <span class="math inline">\(\theta^{(s)}\)</span> from that distribution. The tail shape indicates whether the distribution has finite variance and mean.</p>
 <ul>
-<li>If <span class="math inline">\(\hat{k}&gt;1\)</span>, it is likely that the distribution does not have finite mean</li>
-<li>If <span class="math inline">\(\hat{k}&gt;0.5\)</span>, it is likely that the distribution does not have finite variance</li>
+<li>If <span class="math inline">\(\hat{k}&gt;1\)</span>, it is likely that the distribution does not have finite mean, and trying to estimate the mean does not make sense.</li>
+<li>If <span class="math inline">\(\hat{k}&gt;0.5\)</span>, it is likely that the distribution does not have finite variance, and Monte Carlo standard error estimate based on the variance does not make sense.</li>
 <li><span class="math inline">\(\hat{k}\)</span> estimate has it’s own variation given finite sample size, and if in doubt, get more draws to get more accurate <span class="math inline">\(\hat{k}\)</span> estimate.</li>
 <li>Pareto-<span class="math inline">\(\hat{k}\)</span> diagnostic is pre-asymptotic based on finite sample size, and indicates the stability of empirical mean estimate given the draws so far. Increasing the number of draws, can get more draws far from the tail and may reveal that the tail shape is different further away.</li>
 <li><a href="https://mc-stan.org/posterior/"><code>posterior</code></a> package provides function <code>pareto_khat()</code></li>
-<li>Monte Carlo estimates (including importance sampling) can be improved using Pareto-smoothing, which will be discussed later.</li>
+<li>Monte Carlo estimates (including importance sampling) can be improved using Pareto-smoothing. Pareto smoothed Monte Carlo estimate has finite variance even if <span class="math inline">\(p(\theta)\)</span> does not, and the corresponding Monte Carlo standard error estimate can be useful if <span class="math inline">\(\hat{k}&lt;0.7\)</span>. More about this later in the course.</li>
 <li>More details in Vehtari et al.&nbsp;(2024). Pareto smoothed importance sampling. <em>Journal of Machine Learning Research</em>, 25(72):1-58. <a href="https://jmlr.org/papers/v25/19-556.html">Online</a>.</li>
 </ul>
 </section>
@@ -1357,6 +1370,7 @@ attr(,"credMass")
 <li>Too many digits make reading of the results slower and give false impression of the accuracy.</li>
 <li>Show meaningful digits given the posterior uncertainty. You can compare posterior standard error or posterior intervals to the mean value. Posterior interval length can be used to determine also how many digits to show for the interval endpoints.</li>
 <li>Don’t ever show digits which are just random noise. You can use Monte Carlo standard error estimates to check how many digits are likely to stay the same if the sampling would be continued.</li>
+<li>The advise considers the number of significant digits, which is different from the number of decimal digits. For example, the numbers <span class="math inline">\(12\)</span>, <span class="math inline">\(1.2\)</span>, <span class="math inline">\(0.12\)</span>, and <span class="math inline">\(0.012\)</span> all have two significant digits. It is common that even if 2 significant digits would be sufficient, numbers like <span class="math inline">\(123.4\)</span> and <span class="math inline">\(1234.5\)</span> would be shown as rounded to integers <span class="math inline">\(123\)</span> and <span class="math inline">\(1234\)</span> (using the round to nearest even integer rule used by R).</li>
 <li>Example: The mean and 90% central posterior interval for temperature increase C<span class="math inline">\(^\circ\)</span>/century (see the slides for the example) based on posterior draws:
 <ul>
 <li><span class="math inline">\(2.050774\)</span> and <span class="math inline">\([0.7472868 3.3017524]\)</span> (too many digits)</li>
@@ -1372,7 +1386,7 @@ attr(,"credMass")
 </ul></li>
 <li>When reporting many numbers in table, for aesthetics reasons, it may be sometimes better for some numbers to show one extra or one too few digits compared to the ideal.</li>
 <li>Often it’s better to plot the whole posterior density in addition of any summaries, as summaries always loose some information content.</li>
-<li>For your reports: Don’t be lazy and settle for the default number of digits in R or Python. Think for each reported value how many digits is sensible.</li>
+<li>For your reports: Don’t be lazy and settle for the default number of digits in R or Python. Think for each reported value how many digits is sensible. If the Quiz asks certain number of digits, this overrules other advise.</li>
 <li>See <a href="https://users.aalto.fi/~ave/casestudies/Digits/digits.html">Digits case study</a> for examples and how to use <a href="https://mc-stan.org/posterior/"><code>posterior</code></a> package functions.</li>
 </ul>
 </section>
