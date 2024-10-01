@@ -13,14 +13,14 @@
 \usepackage{epic,epsfig}
 \usepackage{svg}
 \usepackage{subfigure,float}
-\usepackage{amsmath,amsfonts,amssymb}
-\usepackage{inputenc}
+\usepackage{amsfonts,amssymb}
 \usepackage{babel}
 \usepackage{afterpage}
 \usepackage{url}
 \urlstyle{same}
 \usepackage{natbib}
 \bibliographystyle{apalike}
+\usepackage{fancyvrb}
 
 \mode<presentation>
 {
@@ -1034,6 +1034,60 @@
 
 \end{frame}
 
+\begin{frame}[fragile]
+  \frametitle{ $\widehat{R}$ and rank normalized $\widehat{R}$ in \texttt{posterior} package}
+
+\texttt{rhat\_basic()} without rank normalization\\
+\texttt{rhat()} with rank normalization
+\pause
+{\small
+  {\color{gray}
+\begin{Verbatim}[commandchars=\\\{\}]
+x <- array(data=c(\textcolor{black}{rnorm(1000,mean=-3)},
+                  \textcolor{black}{rnorm(1000,mean=3)}),
+           dim=c(1000, 2, 1))
+x <- \textcolor{black}{as_draws_matrix(x)}
+variables(x) <- "N"
+\textcolor{black}{x |>}
+\textcolor{black}{  summarise_draws(mean, sd, mcse_mean, rhat_basic, rhat)}
+\end{Verbatim}
+}
+\pause
+\begin{Verbatim}
+ variable   mean    sd mcse_mean rhat_basic  rhat
+ N        0.0122  3.18      2.15       3.61  1.83
+\end{Verbatim}
+}
+
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{ $\widehat{R}$ and rank normalized $\widehat{R}$ in \texttt{posterior} package}
+
+\texttt{rhat\_basic()} without rank normalization\\
+\texttt{rhat()} with rank normalization
+
+{\small
+  {\color{gray}
+\begin{Verbatim}[commandchars=\\\{\}]
+x <- array(data=c(\textcolor{black}{rt(1000,df=1)-6},
+                  \textcolor{black}{rt(1000,df=1)+6}),
+           dim=c(1000, 2, 1))
+x <- \textcolor{black}{as_draws_matrix(x)}
+variables(x) <- "t1"
+\textcolor{black}{x |>}
+\textcolor{black}{  summarise_draws(mean, sd, mcse_mean, pareto_khat, rhat_basic, rhat)}
+\end{Verbatim}
+}
+\pause
+\begin{Verbatim}
+ variable  mean    sd mcse_mean pareto_khat rhat_basic  rhat
+ t1       -1.11  42.1      1.23        1.07       1.01  1.47
+\end{Verbatim}
+}
+
+\end{frame}
+
 % \begin{frame}
   
 %   {\Large\color{navyblue} Convergence diagnostics}
@@ -1160,7 +1214,7 @@
     \end{equation*}
     where $\hat{\rho}_{n,m}$ is autocorrelation at lag $n$ for chain
     $m$,\\ and $W$ and $\widehat{\var}^{+}$ are the same as in
-    $\widehat{R}$
+    $\widehat{R}$ (without rank normalization)
   \item<2-> This combines $\widehat{R}$ and autocorrelation estimates
     \begin{itemize}
     \item takes into account if the chains are not mixing (the chains have not converged)
@@ -1323,7 +1377,7 @@
     \item \texttt{library(posterior)}
     \item \texttt{summarise\_draws(th, Rhat=basic\_rhat, ESS=basic\_ess)}
     \item \texttt{summarise\_draws(th, mean, mean\_mcse)}
-    \item see demo11\_5 for the examples how to use these
+    \item see demo11\_5 and Digits case study for the examples how to use these
     \end{itemize}
   \item<+-> trace, autocorrelation, density, scatter plots in R
     \begin{itemize}
@@ -1391,6 +1445,8 @@
    {\Large\color{navyblue} Further diagnostics}
 
    \begin{itemize}
+   \item Pareto-$\hat{k}$ diagnostic for checking whether variance is
+     finite
    \item Dynamic HMC/NUTS has additional diagnostics
      \begin{itemize}
      \item divergences
