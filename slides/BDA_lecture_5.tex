@@ -21,6 +21,7 @@
 \usepackage{natbib}
 \bibliographystyle{apalike}
 \usepackage{fancyvrb}
+\usepackage[normalem]{ulem}
 
 \mode<presentation>
 {
@@ -270,7 +271,7 @@
 
   \vspace{-\baselineskip}
   \begin{itemize}
-  \item In continuos case, we can't compute the full transition
+  \item In continuous case, we can't compute the full transition
     matrix, but we can use conditional transition probabilities to
     simulate
   \item<2-> Produce draws $\theta^{(t)}$, given $\theta^{(t-1)}$, from a
@@ -1076,13 +1077,14 @@ x <- array(data=c(\textcolor{black}{rt(1000,df=1)-6},
 x <- \textcolor{black}{as_draws_matrix(x)}
 variables(x) <- "t1"
 \textcolor{black}{x |>}
-\textcolor{black}{  summarise_draws(mean, sd, mcse_mean, pareto_khat, rhat_basic, rhat)}
+\textcolor{black}{  summarise_draws(mean, sd, mcse_mean, pareto_khat,}
+\textcolor{black}{                  rhat_basic, rhat)}
 \end{Verbatim}
 }
 \pause
-\begin{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
  variable  mean    sd mcse_mean pareto_khat rhat_basic  rhat
- t1       -1.11  42.1      1.23        1.07       1.01  1.47
+ t1       -1.11  42.1      1.23        \textcolor{red}{1.07}       1.01  1.47
 \end{Verbatim}
 }
 
@@ -1356,7 +1358,7 @@ variables(x) <- "t1"
    
 \end{frame}
 
-\begin{frame}{Monte Carlo stanard error (MCSE)}
+\begin{frame}{Monte Carlo standard error (MCSE)}
 
   \begin{itemize}
   \item MCSE is obtained as discussed in lecture 4, but replacing the
@@ -1368,15 +1370,98 @@ variables(x) <- "t1"
   
 \end{frame}
 
+\begin{frame}[fragile]
+  \frametitle{ESS and MCSE in \texttt{posterior} package}
+
+  \texttt{ess\_basic()} is ESS for mean\\
+
+  Simulated 4 chains with AR(0.3) process
+
+{\small
+\begin{Verbatim}
+drt |> summarise_draws(mean, sd, pareto_khat,
+                       ess_mean=ess_basic, mcse_mean)
+\end{Verbatim}
+\pause
+\begin{Verbatim}[commandchars=\\\{\}]
+variable mean     sd pareto_khat ess_mean mcse_mean
+xn       0.01   0.99       -0.07     2280.     0.02
+xt3      0.02   1.6         0.33     2452.     0.03
+xt2      0.05   \sout{2.9}         \textcolor{red}{0.52}     \sout{2903}.     \sout{0.05}
+xt1      \sout{0.33}  \sout{93.}          \textcolor{red}{1.0}      \sout{3976}.     \sout{1.5}
+\end{Verbatim}                                     
+}
+
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{ESS and MCSE in \texttt{posterior} package}
+
+  \texttt{ess\_basic()} is ESS for mean\\
+
+  Simulated 4 chains with AR(0.3) process
+
+{\small
+\begin{Verbatim}
+drt |> summarise_draws(mean, pareto_khat,
+                       ess_mean=ess_basic, mcse_mean)
+                       ess_quantile, mcse_quantile)
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+variable mean pareto_khat ess_mean mcse_mean ess_q95 mcse_q95
+xn       0.01       -0.07     2280.     0.02   3251.     0.04
+xt3      0.02        0.33     2452.     0.03   3251.     0.09
+xt2      0.05        \textcolor{red}{0.52}     \sout{2903.}     \sout{0.05}   3251.     0.13 
+xt1      \sout{0.33}        \textcolor{red}{1.0}      \sout{3976.}     \sout{1.5}    3251.     0.49 
+\end{Verbatim}                                     
+}
+
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Bulk-ESS and Tail-ESS in \texttt{posterior} package}
+
+  \begin{itemize}
+  \item ESS depends on the quantity
+  \item For quick diagnostic purposes the default summary shows
+    \begin{itemize}
+    \item median and median absolute deviation (\texttt{mad}), which are valid
+      in case of infinite mean and variance, too
+    \item if \texttt{mad} is much smaller than \texttt{sd}, suspect
+      infinite variance
+    \item Rank-normalized $\widehat{R}$ \texttt{rhat}
+    \item Bulk-ESS (\texttt{ess\_bulk}) is generic ESS for sampling
+      efficiency in bulk using rank normalized values (works for
+      infinite variance)
+    \item Tail-ESS (\texttt{ess\_tail}) is the minimum ESS for 5\%-
+      and 95\%-quantiles
+    \end{itemize}
+  \end{itemize}
+{\footnotesize
+\begin{Verbatim}
+drt |> summarise_draws()
+\end{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+ variable   mean median    sd   mad    q5   q95  rhat ess_bulk ess_tail
+ xn       0.01     0.00  0.99  0.99  -1.6   1.6  1.00    2284.    3189.
+ xt3      0.02     0.00  1.6   1.1   -2.3   2.3  1.00    2284.    3189.
+ xt2      0.05     0.00  2.9   1.2   -2.8   2.9  1.00    2284.    3189.
+ xt1      0.33     0.00 93.    1.5   -5.8   6.1  1.00    2284.    3189.
+\end{Verbatim}                                     
+}
+
+\end{frame}
+
 \begin{frame}{Diagnostic tools}
 
   For this week's assignment:
   \begin{itemize}
-  \item<+-> $\widehat{R}$, ESS, mean, MCSE of mean in R
+  \item<+-> $\widehat{R}$, ESS, MCSE
     \begin{itemize}
     \item \texttt{library(posterior)}
-    \item \texttt{summarise\_draws(th, Rhat=basic\_rhat, ESS=basic\_ess)}
-    \item \texttt{summarise\_draws(th, mean, mean\_mcse)}
+    \item \texttt{th |> summarise\_draws(Rhat=basic\_rhat, ESS=basic\_ess)}
+    \item \texttt{th |> summarise\_draws(mean, mean\_mcse)}
+    \item \texttt{th |> summarize\_draws($\sim$quantile(.x, probs = c(0.05, 0.95)))}
     \item see demo11\_5 and Digits case study for the examples how to use these
     \end{itemize}
   \item<+-> trace, autocorrelation, density, scatter plots in R
