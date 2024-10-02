@@ -35,7 +35,7 @@
   \setbeamertemplate{headline}[default]{}
   \setbeamertemplate{footline}[split]
   % \setbeamertemplate{headline}[text line]{\insertsection}
-  % \setbeamertemplate{footline}[frame number]
+  \setbeamertemplate{footline}[frame number]
 }
 
 \pdfinfo{            
@@ -204,7 +204,7 @@
   \item<+-> More recent variants are robust wrt the algorithm parameters
   \item<+-> The performance scales well with the number of dimensions
   \item<+-> The most popular MCMC algorithm in probabilistic programming
-    frameworks (Stan, PyMC, TFP, Pyro, etc.)
+    frameworks (Stan, PyMC, TFP, Pyro, Turing.jl, etc.)
   \item<+-> Also used as the a high-fidelity reference in Approximate
     Inference in Bayesian Deep Learning competition
     \url{https://izmailovpavel.github.io/neurips_bdl_competition/}
@@ -745,7 +745,7 @@ parameters {
 \begin{lstlisting}[language=Stan]
 model {
   theta ~ beta(1,1);      // prior
-  y ~ binomial(N,theta);  // observation model / likelihood
+  y ~ binomial(N,theta);  // observation / data model
 }
 \end{lstlisting}
 }}
@@ -785,6 +785,8 @@ parameters {
 \end{lstlisting}}
 
   \begin{itemize}
+  \item Only continuous parameters allowed (discrete parameters can
+    often be integerated out in the model block)
   \item Parameters may have constraints
   \item Stan makes transformation to unconstrained space and samples in unconstrained space
     \begin{itemize}
@@ -803,7 +805,7 @@ parameters {
 \begin{lstlisting}[language=Stan]
 model {
   theta ~ beta(1,1);     // prior
-  y ~ binomial(N,theta); // observation model / likelihood
+  y ~ binomial(N,theta); // observation / data model
 }
 \end{lstlisting}}
 
@@ -816,13 +818,14 @@ model {
 \begin{lstlisting}[language=Stan]
 model {
   theta ~ beta(1,1);     // prior
-  y ~ binomial(N,theta); // observation model / likelihood
+  y ~ binomial(N,theta); // observation model
 }
 \end{lstlisting}}
 
     \vspace{-0.5\baselineskip}
     \begin{itemize}
-    \item[] $\sim$ is syntactic sugar and this is equivalent to
+    \item $\sim$ defines a \textit{distribution statement}
+    \item these can be written also as \textit{log density increment statements}
     \end{itemize}
 
   {\small
@@ -837,9 +840,8 @@ model {
     \begin{itemize}
     \item<2-> {\tt target} is the log posterior density (Lecture 4 discussed log)
     \item<3-> {\tt \_lpdf} for continuous, {\tt \_lpmf} for discrete distributions (discrete for the left hand side of {\tt |})
-    \item<4-> for Stan sampler there is no difference between prior and likelihood, all that matters is the final {\tt target}
-    \item<5-> you can write in Stan language any program to compute the
-      log density (Stan language is Turing complete)
+    \item<4-> if \texttt{y} are data, and \texttt{theta} is a parameter, then that term defines log likelihood
+    \item<5-> for Stan sampler there is no difference between prior and likelihood, all that matters is the final {\tt target}
     \end{itemize}
 
 \end{frame} 
@@ -876,7 +878,9 @@ model {
 \begin{frame}{Stan}
   
   \begin{itemize}
-  \item Stan compiles (transplies) the model written in Stan language to C++
+  \item You can write in Stan language any program to compute the
+    log density (Stan language is Turing complete)
+  \item<2-> Stan compiles (transplies) the model written in Stan language to C++
     \begin{itemize}
     \item this makes the sampling for complex models and bigger data faster
     \item also makes Stan models easily portable, you can use your own
@@ -937,7 +941,7 @@ fit = model.sampling(data=data)
   \item Sampling
   \item Generated quantities
   \item Save posterior draws
-  \item Report divergences, $n_\eff$, $\widehat{R}$
+  \item Report divergences, ESS, $\widehat{R}$
   \end{itemize}
 
 \end{frame}
@@ -1200,7 +1204,7 @@ iteration     1     2     3     4
 
   \texttt{draws\_df} looks prettier and works with \texttt{ggplot()}
   
-{\footnotesize
+  {\footnotesize
 \begin{lstlisting}
 > fit_bin2$draws(format ="df")
 # A draws_df: 1000 iterations, 4 chains, and 4 variables
@@ -1228,6 +1232,7 @@ iteration     1     2     3     4
   \texttt{draws\_rvar} makes it easy to compute derived quantities
   
 {\footnotesize
+    \only<2->{\color{gray}}
 \begin{lstlisting}[literate = {±}{{$\pm$}}1]
 > as_draws_rvars(fit_bin2$draws())
 # A draws_rvars: 1000 iterations, 4 chains, and 4 variables
@@ -1242,11 +1247,16 @@ $theta2: rvar<1000,4>[1] mean ± sd:
 
 $oddsratio: rvar<1000,4>[1] mean ± sd:
 [1] 0.57 ± 0.16
-
+\end{lstlisting}
+    \pause
+    \color{black}
+\begin{lstlisting}[literate = {±}{{$\pm$}}1]
 > with(draws, (theta2/(1-theta2))/(theta1/(1-theta1)))
 rvar<1000,4>[1] mean ± sd:
 [1] 0.5689 ± 0.1577 
-
+\end{lstlisting}
+\pause
+\begin{lstlisting}[literate = {±}{{$\pm$}}1]
 > draws$oddsratio<1
 rvar<1000,4>[1] mean ± sd:
 [1] 0.9865 ± 0.1154 
@@ -1255,13 +1265,13 @@ rvar<1000,4>[1] mean ± sd:
 
 \end{frame}
 
-\begin{frame}{Shinystan}
+% \begin{frame}{Shinystan}
 
-  \begin{itemize}
-  \item Graphical user interface for analysing MCMC results
-  \end{itemize}
+%   \begin{itemize}
+%   \item Graphical user interface for analysing MCMC results
+%   \end{itemize}
   
-\end{frame} 
+% \end{frame} 
 
 \begin{frame}{Kilpisjärvi summer temperature}
   
@@ -1276,38 +1286,38 @@ rvar<1000,4>[1] mean ± sd:
 \end{frame}
 
 \begin{frame}[fragile]
-  \frametitle{Gaussian linear model}
+  \frametitle{Normal linear model}
   {\small
   \begin{lstlisting}[language=Stan]
 data {
-    int<lower=0> N; // number of data points 
-    vector[N] x; // 
-    vector[N] y; // 
+    int<lower=0> N;        // number of observations
+    vector[N] x; 
+    vector[N] y;  
 }
 parameters {
-    real alpha; 
-    real beta; 
-    real<lower=0> sigma;
+    real alpha;            // intercept
+    real beta;             // slope
+    real<lower=0> sigma;   // observation model sd
 }
 transformed parameters {
     vector[N] mu;
-    mu <- alpha + beta*x;
+    mu = alpha + beta*x;  // linear model
 }
 model {
-    y ~ normal(mu, sigma);
+    y ~ normal(mu, sigma); // observation model
 }
   \end{lstlisting}
 }
 \end{frame} 
 
 \begin{frame}[fragile]
-  \frametitle{Gaussian linear model}
+  \frametitle{Normal linear model}
   {\small
   \begin{lstlisting}[language=Stan]
 data {
-    int<lower=0> N; // number of data points 
-    vector[N] x; // 
-    vector[N] y; // 
+    int<lower=0> N;        // number of observations
+    vector[N] x; 
+    vector[N] y;  
 }
 \end{lstlisting}
   }
@@ -1319,17 +1329,17 @@ data {
 \end{frame}
 
 \begin{frame}[fragile]
-  \frametitle{Gaussian linear model}
+  \frametitle{Normal linear model}
   {\small
   \begin{lstlisting}[language=Stan]
 parameters {
-    real alpha; 
-    real beta; 
-    real<lower=0> sigma;
+    real alpha;            // intercept
+    real beta;             // slope
+    real<lower=0> sigma;   // observation model sd
 }
 transformed parameters {
     vector[N] mu;
-    mu <- alpha + beta*x;
+    mu = alpha + beta*x;  // linear model
 }
 \end{lstlisting}
   }
@@ -1339,11 +1349,11 @@ transformed parameters {
 \end{frame} 
 
 \begin{frame}[fragile]
-  \frametitle{Priors for Gaussian linear model}
+  \frametitle{Priors for normal linear model}
   {\small
   \begin{lstlisting}[language=Stan]
 data {
-    int<lower=0> N; // number of data points 
+    int<lower=0> N; // number of observations 
     vector[N] x; // 
     vector[N] y; // 
     real pmualpha; // prior mean for alpha
@@ -1354,12 +1364,13 @@ data {
 ...
 transformed parameters {
     vector[N] mu;
-    mu <- alpha + beta*x;
+    mu = alpha + beta*x;
 }
 model {
-    alpha ~ normal(pmualpha,psalpha);
-    beta ~ normal(pmubeta,psbeta);
-    y ~ normal(mu, sigma);
+    alpha ~ normal(pmualpha,psalpha); // prior for alpha
+    beta ~ normal(pmubeta,psbeta);    // prior for beta
+    y ~ normal(mu, sigma);            // observation model
+}
 }
   \end{lstlisting}
 }
@@ -1378,11 +1389,11 @@ parameters {
 }
 transformed parameters {
   vector[N] mu;
-  mu <- alpha + beta*x;
+  mu = alpha + beta*x;
 }
 model {
-  nu ~ gamma(2,0.1); 
-  y ~ student_t(nu, mu, sigma);
+  nu ~ gamma(2,0.1);             // prior for nu
+  y ~ student_t(nu, mu, sigma);  // observation model
 }
   \end{lstlisting}
 }
@@ -1439,14 +1450,18 @@ See https://mc-stan.org/misc/warnings for details.
 
 Center the data inside the model code
   
-  {\scriptsize
+{\scriptsize
+  \color{gray}
 \begin{lstlisting}[language=Stan]
 data {
-  int<lower=0> N; // number of data points
-  vector[N] x; //
-  vector[N] y; //
-  real xpred; // input location for prediction
+  int<lower=0> N; // number of observations
+  vector[N] x; 
+  vector[N] y; 
+  real xpred;     // covarite values for prediction
 }
+\end{lstlisting}
+  \color{black}
+\begin{lstlisting}[language=Stan]
 transformed data {
   vector[N] x_std;
   vector[N] y_std;
@@ -1548,7 +1563,7 @@ fit_bin2 <- stan_glm(y/N ~ grp2, family = binomial(), data = d_bin2,
                     weights = N)
 \end{lstlisting}
   }
-    Gaussian linear model
+    Normal linear model
   {\scriptsize
 \begin{lstlisting}
     fit_lin <- stan_glm(temp ~ year, data = d_lin)
@@ -1600,6 +1615,7 @@ Geomagnetic storms
 \begin{frame}[fragile]
   \frametitle{Extreme value analysis}
   {\footnotesize
+    \color{gray}
   \begin{lstlisting}[language=Stan]
 data {
   int<lower=0> N;
@@ -1608,19 +1624,20 @@ data {
   vector<lower=0>[Nt] yt;
 }
 transformed data {
-  real ymax;
-  ymax <- max(y);
+  real ymax = max(y);
 }
 parameters {
   real<lower=0> sigma; 
   real<lower=-sigma/ymax> k; 
 }
+\end{lstlisting}
+    \color{black}
+  \begin{lstlisting}[language=Stan]
 model {
   y ~ gpareto(k, sigma);
 }
 generated quantities {
-  vector[Nt] predccdf;
-  predccdf<-gpareto_ccdf(yt,k,sigma);
+  vector[Nt] predccdf = gpareto_ccdf(yt, k, sigma);
 }
   \end{lstlisting}
 }
@@ -1679,8 +1696,8 @@ functions {
   \begin{itemize}
   \item R
     \begin{itemize}
-    \item \texttt{posterior} --- posterior handling and diagnostics\\ (Lecture 5 and 6)
-    \item \texttt{shinystan} --- interactive diagnostics
+    \item \texttt{posterior} --- posterior handling and diagnostics\\ (Lectures 5 and 6)
+    % \item \texttt{shinystan} --- interactive diagnostics
     \item \texttt{bayesplot} --- visualization and model checking\\ (Lectures 5, 6, and 8)
     \item \texttt{tidybayes} and \texttt{ggdist} -- more posterior and prediction visualization (Lecture 6)
     \item \texttt{loo} --- cross-validation model assessment and comparison\\ (Lecture 9)
