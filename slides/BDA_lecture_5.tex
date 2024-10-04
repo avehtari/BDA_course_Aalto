@@ -1021,9 +1021,12 @@
     has finite mean and variance
   \item<+-> Rank normalization fixes this and is also more robust given
     finite but high variance
+    \begin{itemize}
+    \item inverse normal-cdf of ranks
+    \end{itemize}
   \item<+-> Folding improves detecting scale differences between chains
-  \item<+-> Paper proposes also local convergence diagnostics and
-    practical MCSE estimates for quantiles
+  \item<+-> The original $\widehat{R}$ is still needed for ESS/MCSE
+    computation as shown later
   \item<+-> Notation updated compared to BDA3 
   \end{itemize}  
 
@@ -1404,7 +1407,7 @@ drt |> summarise_draws(mean, pareto_khat,
                        ess_quantile, mcse_quantile)
 \end{Verbatim}
 \begin{Verbatim}[commandchars=\\\{\}]
-variable mean pareto_khat ess_mean mcse_mean ess_q95 mcse_q95
+/variable mean pareto_khat ess_mean mcse_mean ess_q95 mcse_q95
 xn       0.01       -0.07     2280.     0.02   3251.     0.04
 xt3      0.02        0.33     2452.     0.03   3251.     0.09
 xt2      0.05        \textcolor{red}{0.52}     \sout{2903.}     \sout{0.05}   3251.     0.13 
@@ -1448,6 +1451,20 @@ drt |> summarise_draws()
 
 \end{frame}
 
+\begin{frame}[fragile]
+  \frametitle{ESS and MCSE}
+
+  \begin{itemize}
+  \item ESS and MCSE depend on the quantity
+    \begin{itemize}
+    \item Bulk-ESS and Tail-ESS are useful diagnostic summaries, but
+      eventually need to look at the ESS / MCSE for the quantity of
+      interest
+    \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
 \begin{frame}{Diagnostic tools}
 
   For this week's assignment:
@@ -1455,7 +1472,7 @@ drt |> summarise_draws()
   \item<+-> $\widehat{R}$, ESS, MCSE
     \begin{itemize}
     \item \texttt{library(posterior)}
-    \item \texttt{th |> summarise\_draws(Rhat=basic\_rhat, ESS=basic\_ess)}
+    \item \texttt{th |> summarise\_draws(Rhat=basic\_rhat, ESS=mean\_ess)}
     \item \texttt{th |> summarise\_draws(mean, mean\_mcse)}
     \item \texttt{th |> summarize\_draws($\sim$quantile(.x, probs = c(0.05, 0.95)))}
     \item see demo11\_5 and Digits case study for the examples how to use these
@@ -1532,7 +1549,6 @@ drt |> summarise_draws()
      \begin{itemize}
      \item divergences
      \item tree depth exceedences
-     \item fraction of missing information
      \end{itemize}
    \end{itemize}
    
@@ -1556,7 +1572,8 @@ drt |> summarise_draws()
      \item the bias can be reduced by discarding the initial part of the chain
      \item convergence diagnostics help to decide when the bias can be expected to be negligible
      \end{itemize}
-   \item<+-> MCMC draws are correlated in time, but CLT holds
+   \item<+-> MCMC draws are correlated in time, but CLT holds (given
+     finite variance)
      \begin{itemize}
      \item effective sample size estimates help to decide how many
        correlated draws are needed
