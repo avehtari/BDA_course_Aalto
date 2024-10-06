@@ -238,21 +238,21 @@
 
   \begin{itemize}
   \item Deep learning language models are super big Markov models
-  \item Brian Hayes, 1983, in American Statistican, experimented
-    with 0--8th order Markov chains for producing text. For example,
-    using William Faulkner's story "Two Soldiers" to compute 8th order
-    transition probabilities and then randomly generate text:\\~
+  \item Brian Hayes (1983, \textit{A progress report on the fine art
+      of turning literature into drivel}), experimented with 0--8th
+    order Markov chains for producing text. For example, using William
+    Faulkner's story "Two Soldiers" to compute 8th order transition
+    probabilities and then randomly generate text:\\~
     \pause \\
-    \small\textit{
-      "Who let you in here?" he said. "Go on, beat it." "Durn that," I
-      said, "They got to have wood and water. I can chop it and tote
-      it. Come on," I said, "Where's Pete?" And he looked jest like
-      Pete first soldier hollered. When he got on the table, he come
-      in. He never come out of my own pocket as a measure of
-      protecting the company against riot and bloodshed. And when he
-      said. "You tell me a bus ticket, let alone write out no case
-      histories. Then the law come back with a knife!"}
-    \pause
+    \small\textit{ "Who let you in here?" he said. "Go on, beat it."
+      "Durn that," I said, "They got to have wood and water. I can
+      chop it and tote it. Come on," I said, "Where's Pete?" And he
+      looked jest like Pete first soldier hollered. When he got on the
+      table, he come in. He never come out of my own pocket as a
+      measure of protecting the company against riot and
+      bloodshed. And when he said. "You tell me a bus ticket, let
+      alone write out no case histories. Then the law come back with a
+      knife!"}  \pause
   \item In Markov chain Monte Carlo we are not interested in the
     sequences directly, but how likely each state is in a long
     sequence
@@ -308,7 +308,7 @@
     \item<4->[+] chain goes where most of the posterior mass is
     \item<4->[+] asymptotically chain spends the $\alpha$\% of time where
       $\alpha$\% posterior mass is\only<4>{\\\vspace{-3mm}\hspace{15mm}\includegraphics[width=5.5cm]{Gibbs1.pdf}}
-    \item<5->[+] central limit theorem holds for expectations 
+    \item<5->[+] central limit theorem holds for expectations (Markov)
     \item<6->[-] draws are dependent
     \item<6->[-] construction of efficient Markov chains is not always
       easy
@@ -907,8 +907,8 @@
   \begin{itemize}
   \item BDA3: $\widehat{R}$ aka {\em potential scale reduction factor} (PSRF)
   \item Compare means and variances of the chains\\
-    \uncover<2->{W = within chain variance estimate\\
-    var\_hat\_plus = total variance estimate\\}
+    \uncover<2->{{\color{blue}W} = within chain variance estimate\\
+    {\color{red}var\_hat\_plus} = total variance estimate\\}
     \vspace{1\baselineskip}
     \only<1>{\hspace{-0.5cm}\phantom{\includegraphics[width=10.5cm]{10chains_rhat1.pdf}}}
     \only<2>{\hspace{-0.5cm}\includegraphics[width=10.5cm]{10chains_rhat1.pdf}}
@@ -922,9 +922,9 @@
 
   \begin{itemize}
   \item $M$ chains, each having $N$ draws (with new $\widehat{R}$ notation)
-  \item<2-> Within chains variance $W$
+  \item<2-> Within chains variance ${\color{blue}W}$
     \begin{equation*}
-      W=\frac{1}{M}\sum_{m=1}^M s^2_m ,\text{ where } 
+      {\color{blue}W}=\frac{1}{M}\sum_{m=1}^M s^2_m ,\text{ where } 
       s^2_m=\frac{1}{N-1}\sum_{n=1}^N (\theta_{nm}-\bar{\theta}_{.m})^2
     \end{equation*}
   \item<3-> Between chains variance $B$
@@ -940,9 +940,9 @@
     \end{itemize}
     \vspace{2mm}
   \item<5-> Estimate total variance
-    $\var(\theta \mid y)$ as a weighted mean of $W$ and $B$
+    $\var(\theta \mid y)$ as a weighted mean of ${\color{blue}W}$ and $B$
     \begin{equation*}
-      \widehat{\var}^{+}(\theta \mid y) = \frac{N-1}{N}W+\frac{1}{N}B
+      {\color{red}\widehat{\var}^{+}}(\theta \mid y) = \frac{N-1}{N}W+\frac{1}{N}B
     \end{equation*}
   \end{itemize}  
 
@@ -962,9 +962,9 @@
 
   \begin{itemize}
   \item Estimate total variance
-    $\var(\theta \mid y)$ as a weighted mean of $W$ and $B$
+    $\var(\theta \mid y)$ as a weighted mean of ${\color{blue}W}$ and $B$
     \begin{equation*}
-      \widehat{\var}^{+}(\theta \mid y) = \frac{N-1}{N}W+\frac{1}{N}B
+      {\color{red}\widehat{\var}}^{+}(\theta \mid y) = \frac{N-1}{N}{\color{blue}W}+\frac{1}{N}B
     \end{equation*}
     \vspace{-0.5\baselineskip}
     \begin{itemize}
@@ -972,16 +972,16 @@
       starting points are overdispersed
     \end{itemize}
     \vspace{0.5\baselineskip}
-  \item<2-> Given finite $N$, $W$ \emph{underestimates} marginal posterior variance
+  \item<2-> Given finite $N$, ${\color{blue}W}$ \emph{underestimates} marginal posterior variance
     \begin{itemize}
     \item single chains have not yet visited all points in the distribution
-    \item when $N\rightarrow\infty, \quad \E(W)\rightarrow \var(\theta \mid y)$
+    \item when $N\rightarrow\infty, \quad \E({\color{blue}W})\rightarrow \var(\theta \mid y)$
     \end{itemize}
     \vspace{0.5\baselineskip}
-  \item<3-> As $\widehat{\var}^{+}(\theta \mid y)$ overestimates and $W$ underestimates,
+  \item<3-> As ${\color{red}\widehat{\var}^{+}}(\theta \mid y)$ overestimates and $W$ underestimates,
     compute
     \begin{equation*}
-      \widehat{R}=\sqrt{\frac{\widehat{\var}^{+}}{W}}
+      \widehat{R}=\sqrt{\frac{{\color{red}\widehat{\var}^{+}}}{{\color{blue}W}}}
     \end{equation*}
 \end{itemize}  
 
@@ -993,8 +993,8 @@
   \begin{itemize}
   \item BDA3: $\widehat{R}$ aka {\em potential scale reduction factor} (PSRF)
   \item Compare means and variances of the chains\\
-    W = within chain variance estimate\\
-    var\_hat\_plus = total variance estimate\\
+    {\color{blue}W} = within chain variance estimate\\
+    {\color{red}var\_hat\_plus} = total variance estimate\\
     \vspace{1\baselineskip}
     \only<1>{\hspace{-0.5cm}\includegraphics[width=10.5cm]{10chains_rhat1.pdf}}
     \only<2>{\hspace{-0.5cm}\includegraphics[width=10.5cm]{10chains_rhat2.pdf}}
@@ -1006,7 +1006,7 @@
 \begin{frame}{$\widehat{R}$}
 
   \begin{equation*}
-      \widehat{R}=\sqrt{\frac{\widehat{\var}^{+}}{W}}
+      \widehat{R}=\sqrt{\frac{{\color{red}\widehat{\var}^{+}}}{{\color{blue}W}}}
     \end{equation*}
     \begin{itemize}
     \item<1-> Estimates how much the scale of $\psi$ could reduce if $N\rightarrow\infty$
@@ -1044,12 +1044,13 @@
   \begin{itemize}
   \item<+-> Original $\widehat{R}$ requires that the target distribution
     has finite mean and variance
-  \item<+-> Rank normalization fixes this and is also more robust given
-    finite but high variance
+  \item<+-> Rank normalization fixes this, is also more robust given
+    finite but high variance, and is more sensitive to differences in
+    variance
     \begin{itemize}
     \item inverse normal-cdf of ranks
+    \item inverse normal-cdf of ranks of absolute difference from median
     \end{itemize}
-  \item<+-> Folding improves detecting scale differences between chains
   \item<+-> The original $\widehat{R}$ is still needed for ESS/MCSE
     computation as shown later
   \item<+-> Notation updated compared to BDA3 
@@ -1076,15 +1077,15 @@ x <- array(data=c(\textcolor{black}{rnorm(1000,mean=-3)},
                   \textcolor{black}{rnorm(1000,mean=3)}),
            dim=c(1000, 2, 1))
 x <- \textcolor{black}{as_draws_matrix(x)}
-variables(x) <- "N"
-\textcolor{black}{x |>}
-\textcolor{black}{  summarise_draws(mean, sd, mcse_mean, rhat_basic, rhat)}
+variables(x) <- "N_2"
 \end{Verbatim}
 }
 \pause
-\begin{Verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{black}{x |>}
+\textcolor{black}{  summarise_draws(mean, sd, mcse_mean, rhat_basic, rhat)}
  variable   mean    sd mcse_mean rhat_basic  rhat
- N        0.0122  3.18      2.15       3.61  1.83
+ N_2      0.0122  3.18      2.15       3.61  1.83
 \end{Verbatim}
 }
 
@@ -1103,18 +1104,79 @@ x <- array(data=c(\textcolor{black}{rt(1000,df=1)-6},
                   \textcolor{black}{rt(1000,df=1)+6}),
            dim=c(1000, 2, 1))
 x <- \textcolor{black}{as_draws_matrix(x)}
-variables(x) <- "t1"
-\textcolor{black}{x |>}
-\textcolor{black}{  summarise_draws(mean, sd, mcse_mean, pareto_khat,}
-\textcolor{black}{                  rhat_basic, rhat)}
+variables(x) <- "t1_2"
 \end{Verbatim}
 }
 \pause
 \begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{black}{x |>}
+\textcolor{black}{  summarise_draws(mean, sd, mcse_mean, pareto_khat,}
+\textcolor{black}{                  rhat_basic, rhat)}
  variable  mean    sd mcse_mean pareto_khat rhat_basic  rhat
- t1       -1.11  42.1      1.23        \textcolor{red}{1.07}       1.01  1.47
+ t1_2     -1.11  42.1      1.23        \textcolor{red}{1.07}       1.01  1.47
 \end{Verbatim}
 }
+
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Rank normalized $\widehat{R}$}
+
+  For example:
+  
+  Cauchy mixture \uncover<2->{\hspace{1.5cm}$\rightarrow$ ranks}\uncover<3->{\hspace{2.5cm} $\rightarrow$ inverse cdf}
+
+  \begin{minipage}[t][5cm][t]{1.5\linewidth}
+  \hspace{-10mm}
+    \includegraphics[width=4cm]{t1_2_a.pdf}
+    \uncover<2->{\includegraphics[width=4cm]{t1_2_r.pdf}}
+    \uncover<3->{\includegraphics[width=4cm]{t1_2_z.pdf}}
+  \end{minipage}   
+
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{ $\widehat{R}$ and rank normalized $\widehat{R}$ in \texttt{posterior} package}
+
+\texttt{rhat\_basic()} without rank normalization\\
+\texttt{rhat()} with \textbf{folding} and rank normalization
+
+{\small
+  {\color{gray}
+\begin{Verbatim}[commandchars=\\\{\}]
+x <- array(data=c(\textcolor{black}{normal(1000)},
+                  \textcolor{black}{normal(1000)*2}),
+           dim=c(1000, 2, 1))
+x <- \textcolor{black}{as_draws_matrix(x)}
+variables(x) <- "N2v"
+\end{Verbatim}
+}
+\pause
+\begin{Verbatim}[commandchars=\\\{\}]
+\textcolor{black}{x |>}
+\textcolor{black}{  summarise_draws(mean, sd, mcse_mean,}
+\textcolor{black}{                  rhat_basic, rhat)}
+ variable  mean    sd mcse_mean rhat_basic  rhat
+ N2v      -0.05   1.6      0.03       1.00  1.09
+\end{Verbatim}
+}
+
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Rank normalized $\widehat{R}$ with folding}
+
+  For example:
+  
+  Normal variance mixture \uncover<2->{\hspace{.2cm}$\rightarrow$ folded}\uncover<3->{\hspace{2.4cm} $\rightarrow$ \only<3>{ranks}\only<4>{inverse cdf}}
+
+  \begin{minipage}[t][5cm][t]{1.5\linewidth}
+  \hspace{-10mm}
+    \includegraphics[width=4cm]{N2v_2_a.pdf}
+    \uncover<2->{\includegraphics[width=4cm]{N2v_2_f.pdf}}
+    \uncover<3->{\only<3>{\includegraphics[width=4cm]{N2v_2_r.pdf}}
+    \only<4>{\includegraphics[width=4cm]{N2v_2_z.pdf}}}
+  \end{minipage}   
 
 \end{frame}
 
@@ -1165,6 +1227,10 @@ variables(x) <- "t1"
     \begin{itemize}
     \item describes the correlation given a certain lag
     \item can be used to compare efficiency of MCMC algorithms and parameterizations
+    \item For real valued, the correlation at lag $n$
+      \begin{align*}
+        \frac{\operatorname{E} \left[(X_{t+n }-\operatorname{E}[X])({X}_{t}-\operatorname{E}[X])\right]}{\operatorname{Var}\left[X\right]}
+      \end{align*}
     \end{itemize}
   \end{itemize}
 % \vspace{.5cm}
@@ -1227,7 +1293,7 @@ variables(x) <- "t1"
     where ${\color{blue}S_\eff=S/\tau}$ (=ESS),\\ and ${\color{blue}\tau}$ is sum of autocorrelations
     \only<1>{\includegraphics[width=7cm]{Metrop1acf.pdf}}
     \begin{itemize}
-      \item<2-> ${\color{blue}\tau}$ describes how many dependent draws correspond to one independent sample
+      \item<2-> ${\color{blue}\tau}$ describes the relative inefficiency due to the dependency
       \item<3-> new $\widehat{R}$ paper $S=NM$ (in BDA3 $N=nm$ and $n_\eff=N/\tau$)
       \item<4-> BDA3 focuses on $S_\eff$ and not the Monte Carlo error directly\\
         new $\widehat{R}$ paper discusses more about MCSEs for different quantities
@@ -1240,10 +1306,10 @@ variables(x) <- "t1"
   \begin{itemize}
   \item Estimation of the autocorrelation using several chains
     \begin{equation*}
-      \hat{\rho}_n=1-\frac{W - \frac{1}{M}\sum_{m=1}^M \hat{\rho}_{n,m}}{2\widehat{\var}^{+}}
+      \hat{\rho}_n=1-\frac{{\color{blue}W} - \frac{1}{M}\sum_{m=1}^M {\color{darkgreen}\hat{\rho}_{n,m}}}{2{\color{red}\widehat{\var}^{+}}}
     \end{equation*}
-    where $\hat{\rho}_{n,m}$ is autocorrelation at lag $n$ for chain
-    $m$,\\ and $W$ and $\widehat{\var}^{+}$ are the same as in
+    where ${\color{darkgreen}\hat{\rho}_{n,m}}$ is autocorrelation at lag $n$ for chain
+    $m$,\\ and ${\color{blue}W}$ and ${\color{red}\widehat{\var}^{+}}$ are the same as in
     $\widehat{R}$ (without rank normalization)
   \item<2-> This combines $\widehat{R}$ and autocorrelation estimates
     \begin{itemize}
@@ -1268,10 +1334,10 @@ variables(x) <- "t1"
     where $\hat{\rho}_t$ is empirical autocorrelation \\
     \uncover<2->{\includegraphics[width=7cm]{Metrop1acf_500.pdf}}
     \begin{itemize}
-    \item<3-> empirical autocorrelation function is noisy and thus
+    \item<2-> empirical autocorrelation function is noisy and thus
       estimate of $\tau$ is noisy
-    \item<3-> noise is larger for longer lags (less observations)
-    \item<4-> less noisy estimate is obtained by truncating
+    \item<2-> noise is larger for longer lags (less observations)
+    \item<3-> less noisy estimate is obtained by truncating
     \begin{align*}
       \hat{\tau} = 1 + 2 \sum_{t=1}^T \hat{\rho}_t
     \end{align*}
