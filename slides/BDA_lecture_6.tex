@@ -28,6 +28,21 @@
 \usepackage{natbib}
 \bibliographystyle{apalike}
 
+\makeatletter
+\newcommand{\minted@style@bw}{%
+  \renewcommand\fcolorbox[3][]{##3}%
+  \renewcommand\textcolor[3][]{##3}%
+  \color{gray}
+}
+
+% define new minted option "gray"
+\minted@def@opt@switch{gray}
+\fvset{formatcom*={%
+  \ifthenelse{\equal{\minted@get@opt{gray}{true}}{true}}
+  {\minted@style@bw}{}%
+}}
+\makeatother
+
 \mode<presentation>
 {
   \setbeamercovered{invisible}
@@ -50,21 +65,6 @@
 \definecolor{navyblue}{rgb}{0,0,0.5}
 \renewcommand{\emph}[1]{\textcolor{navyblue}{#1}}
 \definecolor{darkgreen}{rgb}{0,0.3922,0}
-
-\makeatletter
-\newcommand{\minted@style@bw}{%
-  \renewcommand\fcolorbox[3][]{##3}%
-  \renewcommand\textcolor[3][]{##3}%
-  \color{gray}
-}
-
-% define new minted option "gray"
-\minted@def@opt@switch{gray}
-\fvset{formatcom*={%
-  \ifthenelse{\equal{\minted@get@opt{gray}{true}}{true}}
-  {\minted@style@bw}{}%
-}}
-\makeatother
 
 \graphicspath{{./figs/}}
 

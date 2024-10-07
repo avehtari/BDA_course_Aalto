@@ -21,9 +21,26 @@
 \usepackage{rotating}
 \usepackage{listings}
 \usepackage{lstbayes}
+\usepackage{minted}
+\setminted{highlightcolor=lightyellow}
 \usepackage[all,poly,ps,color]{xy}
 \usepackage{natbib}
 \bibliographystyle{apalike}
+
+\makeatletter
+\newcommand{\minted@style@bw}{%
+  \renewcommand\fcolorbox[3][]{##3}%
+  \renewcommand\textcolor[3][]{##3}%
+  \color{gray}
+}
+
+% define new minted option "gray"
+\minted@def@opt@switch{gray}
+\fvset{formatcom*={%
+  \ifthenelse{\equal{\minted@get@opt{gray}{true}}{true}}
+  {\minted@style@bw}{}%
+}}
+\makeatother
 
 \mode<presentation>
 {
@@ -43,6 +60,7 @@
   /Keywords   (Bayesian data analysis)
 }
 
+\definecolor{lightyellow}{rgb}{1,1,0.878}
 \definecolor{hutblue}{rgb}{0,0.2549,0.6784}
 \definecolor{forestgreen}{rgb}{0.1333,0.5451,0.1333}
 \definecolor{navyblue}{rgb}{0,0,0.5}
@@ -374,102 +392,364 @@
 \begin{frame}[fragile]{Stan vs brms}
 
   \vspace{-0.5\baselineskip}
-{\footnotesize
-\begin{lstlisting}[language=Stan]
+
+  Stan
+  
+{\small
+\begin{minted}[highlightlines={10-13}]{stan}
 model {
   // Priors
   for (diet in 1:N_diets) {
-    mean_diet[diet] ~ normal(0, 10);
-    sd_diet[diet] ~ exponential(1);
+    mu_diet[diet] ~ normal(mu_0, sd);
   }
-
+  mu_0 ~ normal(0, 1);
+  sd ~ normal(0, 1)
+  sigma ~ normal(0, 1);
+  
   // Observation model
   for (obs in 1:N_observations) {
-    weight[obs] ~ normal(mean_diet[diet_idx[obs]],
-                         sd_diet[diet_idx[obs]]);
+    weight[obs] ~ normal(mu_diet[diet_idx[obs]], sigma);
   }
 }
-\end{lstlisting}}
+\end{minted}
+}
+\end{frame}
+
+\begin{frame}[fragile]{Stan vs brms}
+
+  \vspace{-0.5\baselineskip}
+
+  Stan
+  
+{\small
+\begin{minted}[highlightlines={2-5}]{stan}
+model {
+  // Priors
+  for (diet in 1:N_diets) {
+    mu_diet[diet] ~ normal(mu_0, sd);
+  }
+  mu_0 ~ normal(0, 1);
+  sd ~ normal(0, 1)
+  sigma ~ normal(0, 1);
+  
+  // Observation model
+  for (obs in 1:N_observations) {
+    weight[obs] ~ normal(mu_diet[diet_idx[obs]], sigma);
+  }
+}
+\end{minted}
+}
+\end{frame}
+
+\begin{frame}[fragile]{Stan vs brms}
+
+  \vspace{-0.5\baselineskip}
+
+  Stan
+  
+{\small
+\begin{minted}[highlightlines={6-7}]{stan}
+model {
+  // Priors
+  for (diet in 1:N_diets) {
+    mu_diet[diet] ~ normal(mu_0, sd);
+  }
+  mu_0 ~ normal(0, 1);
+  sd ~ normal(0, 1)
+  sigma ~ normal(0, 1);
+  
+  // Observation model
+  for (obs in 1:N_observations) {
+    weight[obs] ~ normal(mu_diet[diet_idx[obs]], sigma);
+  }
+}
+\end{minted}
+}
+\end{frame}
+
+\begin{frame}[fragile]{Stan vs brms}
+
+  \vspace{-0.5\baselineskip}
+
+  Stan
+  
+{\small
+\begin{minted}[highlightlines={8}]{stan}
+model {
+  // Priors
+  for (diet in 1:N_diets) {
+    mu_diet[diet] ~ normal(mu_0, sd);
+  }
+  mu_0 ~ normal(0, 1);
+  sd ~ normal(0, 1)
+  sigma ~ normal(0, 1);
+  
+  // Observation model
+  for (obs in 1:N_observations) {
+    weight[obs] ~ normal(mu_diet[diet_idx[obs]], sigma);
+  }
+}
+\end{minted}
+}
+\end{frame}
+
+\begin{frame}[fragile]{Stan vs brms}
+
+  \vspace{-0.5\baselineskip}
+
+  Stan without loops
+  
+{\small
+\begin{minted}[highlightlines={3,9}]{stan}
+model {
+  // Priors
+  mu_diet ~ normal(mu_0, sd);
+  mu_0 ~ normal(0, 1);
+  sd ~ normal(0, 1)
+  sigma ~ normal(0, 1);
+  
+  // Observation model
+  weight ~ normal(mu_diet[diet_idx], sigma);
+}
+\end{minted}
+}
 
 \end{frame}
 
 \begin{frame}[fragile]{Stan vs brms}
 
   \vspace{-0.5\baselineskip}
-{\footnotesize
-\begin{lstlisting}[language=Stan]
+
+  Stan without loops
+  
+{\small
+\begin{minted}{stan}
 model {
   // Priors
-  for (diet in 1:N_diets) {
-    mean_diet[diet] ~ normal(0, 10);
-    sd_diet[diet] ~ exponential(1);
-  }
-
+  mu_diet ~ normal(mu_0, sd);
+  mu_0 ~ normal(0, 1);
+  sd ~ normal(0, 1)
+  sigma ~ normal(0, 1);
+  
   // Observation model
-  for (obs in 1:N_observations) {
-    weight[obs] ~ normal(mean_diet[diet_idx[obs]],
-                         sd_diet[diet_idx[obs]]);
-  }
-  // Best practice would be to write the model
-  // without the for loop as
-  // weight ~ normal(mean_diet[diet_idx],
-  //                 sd_diet[diet_idx]);
+  weight ~ normal(mu_diet[diet_idx], sigma);
 }
-\end{lstlisting}}
+\end{minted}
+
+  brms formula
+%\begin{minted}[escapeinside=\%\%,beameroverlays]{r}
+\begin{minted}{r}  
+brm(weight ~ 1 + (1 | Diet),
+\end{minted}
+}
 
 \end{frame}
 
 \begin{frame}[fragile]{Stan vs brms}
 
   \vspace{-0.5\baselineskip}
-{\footnotesize
-\begin{lstlisting}[language=Stan]
+
+  Stan without loops
+  
+{\small
+\begin{minted}[escapeinside=\%\%]{stan}
 model {
   // Priors
-  for (diet in 1:N_diets) {
-    mean_diet[diet] ~ normal(0, 10);
-    sd_diet[diet] ~ exponential(1);
-  }
-
+  mu_diet ~ normal(mu_0, sd);
+  mu_0 ~ normal(0, 1);
+  sd ~ normal(0, 1)
+  sigma ~ normal(0, 1);
+  
   // Observation model
-  for (obs in 1:N_observations) {
-    weight[obs] ~ normal(mean_diet[diet_idx[obs]],
-                         sd_diet[diet_idx[obs]]);
-  }
+  %\fboxsep0pt\colorbox{lightyellow}{weight}% ~ normal(mu_diet[diet_idx], sigma);
 }
-\end{lstlisting}}
-{\footnotesize
-\begin{lstlisting}
-brm(weight ~ 1 + (1 | Diet), 
-\end{lstlisting}}
+\end{minted}
+
+  brms formula
+%\begin{minted}[escapeinside=\%\%,beameroverlays]{r}
+\begin{minted}[escapeinside=\%\%]{r}  
+brm(%\fboxsep0pt\colorbox{lightyellow}{weight}% ~ 1 + (1 | Diet),
+\end{minted}
+}
 
 \end{frame}
 
 \begin{frame}[fragile]{Stan vs brms}
 
-{\footnotesize
-\begin{lstlisting}[language=Stan]
+  \vspace{-0.5\baselineskip}
+
+  Stan without loops
+  
+{\small
+\begin{minted}[escapeinside=\%\%]{stan}
 model {
   // Priors
-  for (diet in 1:N_diets) {
-    mean_diet[diet] ~ normal(0, 10);
-    sd_diet[diet] ~ exponential(1);
-  }
-
+  mu_diet ~ normal(%\fboxsep0pt\colorbox{lightyellow}{mu\_0}%, sd);
+  mu_0 ~ normal(0, 1);
+  sd ~ normal(0, 1)
+  sigma ~ normal(0, 1);
+  
   // Observation model
-  for (obs in 1:N_observations) {
-    weight[obs] ~ normal(mean_diet[diet_idx[obs]],
-                         sd_diet[diet_idx[obs]]);
-  }
+  weight ~ normal(mu_diet[diet_idx], sigma);
 }
-\end{lstlisting}}
-{\footnotesize
-\begin{lstlisting}
+\end{minted}
+
+  brms formula
+%\begin{minted}[escapeinside=\%\%,beameroverlays]{r}
+\begin{minted}[escapeinside=\%\%]{r}  
+brm(weight ~%\fboxsep0pt\colorbox{lightyellow}{ 1 }%+ (1 | Diet),
+\end{minted}
+}
+
+\end{frame}
+
+\begin{frame}[fragile]{Stan vs brms}
+
+  \vspace{-0.5\baselineskip}
+
+  Stan without loops
+  
+{\small
+\begin{minted}[escapeinside=\%\%]{stan}
+model {
+  // Priors
+  %\fboxsep0pt\colorbox{lightyellow}{mu\_diet ~ normal(mu\_0, sd)}%;
+  mu_0 ~ normal(0, 1);
+  sd ~ normal(0, 1)
+  sigma ~ normal(0, 1);
+  
+  // Observation model
+  weight ~ normal(mu_diet[diet_idx], sigma);
+}
+\end{minted}
+
+  brms formula
+%\begin{minted}[escapeinside=\%\%,beameroverlays]{r}
+\begin{minted}[escapeinside=\%\%]{r}  
+brm(weight ~%\fboxsep0pt\colorbox{lightyellow}{ 1 + (1 | Diet)}%,
+\end{minted}
+}
+
+\end{frame}
+
+\begin{frame}[fragile]{Stan vs brms}
+
+  \vspace{-0.5\baselineskip}
+
+  Stan without loops
+  
+{\small
+\begin{minted}{stan}
+model {
+  // Priors
+  mu_diet ~ normal(mu_0, sd);
+  mu_0 ~ normal(0, 1);
+  sd ~ normal(0, 1)
+  sigma ~ normal(0, 1);
+  
+  // Observation model
+  weight ~ normal(mu_diet[diet_idx], sigma);
+}
+\end{minted}
+
+  brms formula
+\begin{minted}[escapeinside=\%\%]{r}
+brm(weight ~ 1 + (1 | Diet), %\fboxsep0pt\colorbox{lightyellow}{data=Chick12}%,
+\end{minted}
+}
+
+\end{frame}
+
+\begin{frame}[fragile]{Stan vs brms}
+
+  \vspace{-0.5\baselineskip}
+
+  Stan without loops
+  
+{\small
+\begin{minted}[highlightlines={4}]{stan}
+model {
+  // Priors
+  mu_diet ~ normal(mu_0, sd);
+  mu_0 ~ normal(0, 1);
+  sd ~ normal(0, 1)
+  sigma ~ normal(0, 1);
+  
+  // Observation model
+  weight ~ normal(mu_diet[diet_idx], sigma);
+}
+\end{minted}
+
+  brms formula
+\begin{minted}[highlightlines={2}]{r}
 brm(weight ~ 1 + (1 | Diet), data=Chick12,
     prior=c(prior(normal(0,1), class="Intercept"), # p(mu_0)
-            prior(normal(0,1), class="sigma"),     # p(sigma)
-            prior(normal(0,1), class="sd"))        # p(tau)
-\end{lstlisting}}
+            prior(normal(0,1), class="sd"),        # p(tau)
+            prior(normal(0,1), class="sigma"))     # p(sigma)
+\end{minted}
+}
+
+\end{frame}
+
+\begin{frame}[fragile]{Stan vs brms}
+
+  \vspace{-0.5\baselineskip}
+
+  Stan without loops
+  
+{\small
+\begin{minted}[highlightlines={5}]{stan}
+model {
+  // Priors
+  mu_diet ~ normal(mu_0, sd);
+  mu_0 ~ normal(0, 1);
+  sd ~ normal(0, 1)
+  sigma ~ normal(0, 1);
+  
+  // Observation model
+  weight ~ normal(mu_diet[diet_idx], sigma);
+}
+\end{minted}
+
+  brms formula
+\begin{minted}[highlightlines={3}]{r}
+brm(weight ~ 1 + (1 | Diet), data=Chick12,
+    prior=c(prior(normal(0,1), class="Intercept"), # p(mu_0)
+            prior(normal(0,1), class="sd"),        # p(tau)
+            prior(normal(0,1), class="sigma"))     # p(sigma)
+\end{minted}
+}
+
+\end{frame}
+
+\begin{frame}[fragile]{Stan vs brms}
+
+  \vspace{-0.5\baselineskip}
+
+  Stan without loops
+  
+{\small
+\begin{minted}[highlightlines={6}]{stan}
+model {
+  // Priors
+  mu_diet ~ normal(mu_0, sd);
+  mu_0 ~ normal(0, 1);
+  sd ~ normal(0, 1)
+  sigma ~ normal(0, 1);
+  
+  // Observation model
+  weight ~ normal(mu_diet[diet_idx], sigma);
+}
+\end{minted}
+
+  brms formula
+\begin{minted}[highlightlines={4}]{r}
+brm(weight ~ 1 + (1 | Diet), data=Chick12,
+    prior=c(prior(normal(0,1), class="Intercept"), # p(mu_0)
+            prior(normal(0,1), class="sd"),        # p(tau)
+            prior(normal(0,1), class="sigma"))     # p(sigma)
+\end{minted}
+}
 
 \end{frame}
 
@@ -674,9 +954,10 @@ brm(weight ~ 1 + (1 | Diet), data=Chick12,
   Flight time
 
 {\small
-\begin{lstlisting}
+\begin{minted}{r}
 flight_time ~ s(wing_length) + s(wing_length, by = nclips)
-\end{lstlisting}}
+\end{minted}
+}
   
 \end{frame}
 
@@ -685,18 +966,28 @@ flight_time ~ s(wing_length) + s(wing_length, by = nclips)
   Flight time
 
 {\small
-\begin{lstlisting}
+\begin{minted}{r}
 flight_time ~ s(wing_length) + s(wing_length, by = nclips)
-\end{lstlisting}}
+\end{minted}
+}
+
+  \includegraphics[width=11cm,trim=0 0 0 205,clip]{figs/helicopter_separate_hier_time.pdf}
+
+\end{frame}
+
+\begin{frame}[fragile]{Paper helicopters: brms}
 
 Stability
   
 {\small
-\begin{lstlisting}
+\begin{minted}{r}
 stable_flight ~ s(wing_length) + s(wing_length, by = nclips),
 family = bernoulli()
-\end{lstlisting}}
-  
+\end{minted}
+}
+
+  \includegraphics[width=11cm,trim=0 0 0 205,clip]{figs/helicopter_separate_hier_stable.pdf}
+
 \end{frame}
 
 \begin{frame}{Student retention}
@@ -711,22 +1002,26 @@ family = bernoulli()
 
   \vspace{-0.75\baselineskip}
   \includegraphics[width=6.8cm]{figs/student_retention_9_binom.pdf}
-  \only<2>{\\\includegraphics[width=6.5cm]{figs/student_retention_9_binom_comp.pdf}}
-  \only<3-4>{\\\includegraphics[width=6.8cm]{figs/student_retention_9_binom_hier.pdf}}
-  \only<4>{\\\vspace{-0.5\baselineskip}
-      \scriptsize \texttt{nstudents | trials(nstudents1) $\sim$ 1 + (1 | year), family=binomial()}}
+  \only<2>{\\\includegraphics[width=6.3cm]{figs/student_retention_9_binom_comp.pdf}}
+  \only<3-4>{\\\includegraphics[width=6.6cm]{figs/student_retention_9_binom_hier.pdf}}
+  \only<4>{\\\vspace{-0.8\baselineskip}
+      \scriptsize \mintinline{r}{nstudents | trials(nstudents1) ~ 1 + (1 | year), family=binomial()}}
 
 \end{frame}
 
-\begin{frame}{Student retention latent spline model}
+\begin{frame}[fragile]{Student retention latent spline model}
 
   \vspace{-0.5\baselineskip}
   \hspace{-5mm}\includegraphics[height=3.6cm]{student_retention_sbinom_linpreds.pdf}
   \only<1>{\\\vspace{-0.5\baselineskip}
-      \scriptsize \texttt{nstudents | trials(nstudents1) $\sim$ s(assignment, k=4) + (assignment | year), family=binomial()}}
-  \only<2->{\\\hspace{-5mm}\includegraphics[height=3.7cm]{figs/student_retention_sbinom_hier.pdf}}
-  \only<3->{\includegraphics[height=3.4cm]{figs/student_retention_sbinom_hier_comp.pdf}}
-
+    \scriptsize
+    \mintinline{r}{nstudents | trials(nstudents1) ~ s(assignment, k=4) + (assignment | year),}~\\~\vspace{-\baselineskip}\\
+    \,\,\mintinline{r}{ family=binomial()}
+  }
+  \begin{minipage}[t][6cm][t]{1.0\linewidth}
+    \only<2->{\hspace{-5mm}\includegraphics[height=3.7cm]{figs/student_retention_sbinom_hier.pdf}}
+    \only<3->{\includegraphics[height=3.4cm]{figs/student_retention_sbinom_hier_comp.pdf}}
+  \end{minipage}
 \end{frame}
 
 \begin{frame}{Student retention latent spline model, year 2023?}
@@ -764,80 +1059,46 @@ HMC divergences are more likely when using hierarchical models
 
 \end{frame}
 
-\begin{frame}[fragile]{Centered vs non-centered parameterization}
-
-\vspace{-0.5\baselineskip}
-Hierarchical model code from the course demos
-
-{\footnotesize
-\begin{lstlisting}[language=Stan]
-data {
-  int<lower=0> N; // number of observations
-  int<lower=0> K; // number of groups
-  array[N] int<lower=1, upper=K> x; // discrete group indicators
-  vector[N] y; // real valued observations
-}
-\end{lstlisting}}
-\end{frame}
-
-\begin{frame}[fragile]{Centered vs non-centered parameterization}
-
-\vspace{-0.5\baselineskip}
-Hierarchical model code from the course demos
-
-{\footnotesize
-\begin{lstlisting}[language=Stan]
-data {
-  int<lower=0> N; // number of observations
-  int<lower=0> K; // number of groups
-  array[N] int<lower=1, upper=K> x; // discrete group indicators
-  vector[N] y; // real valued observations
-}
-\end{lstlisting}}
-{\footnotesize
-\begin{lstlisting}[language=Stan]
-parameters {
-  real mu0; // prior mean
-  real<lower=0> sigma0; // prior std constrained to be positive
-  vector[K] mu; // group means
-  real<lower=0> sigma; // common std constrained to be positive
-}
-\end{lstlisting}}
-\end{frame}
-
 \begin{frame}[fragile]{Centered parameterization}
 
 \vspace{-0.5\baselineskip}
 Hierarchical model code from the course demos
 
 {\footnotesize
-\begin{lstlisting}[language=Stan]
+\begin{minted}{stan}
 data {
-  int<lower=0> N; // number of observations
-  int<lower=0> K; // number of groups
+  int<lower=0> N;                   // number of observations
+  int<lower=0> K;                   // number of groups
   array[N] int<lower=1, upper=K> x; // discrete group indicators
-  vector[N] y; // real valued observations
+  vector[N] y;                      // real valued observations
 }
-\end{lstlisting}}
+\end{minted}
+}
+\pause
+\vspace{-\baselineskip}
 {\footnotesize
-\begin{lstlisting}[language=Stan]
+\begin{minted}{stan}
 parameters {
-  real mu0; // prior mean
-  real<lower=0> sigma0; // prior std constrained to be positive
-  vector[K] mu; // group means
-  real<lower=0> sigma; // common std constrained to be positive
+  real mu0;                         // prior mean
+  real<lower=0> sigma0;             // prior std constrained to be pos.
+  vector[K] mu;                     // group means
+  real<lower=0> sigma;              // common std constrained to be pos.
 }
-\end{lstlisting}}
+\end{minted}
+}
+\pause
+\vspace{-\baselineskip}
 {\footnotesize
-\begin{lstlisting}[language=Stan]
+\begin{minted}{stan}
 model {
-  mu0 ~ normal(10, 10);     // weakly informative prior
-  sigma0 ~ normal(0, 10);   // weakly informative prior
-  mu ~ normal(mu0, sigma0); // population prior with unknown parameters
-  sigma ~ lognormal(0, .5); // weakly informative prior
-  y ~ normal(mu[x], sigma); // observation model
+  mu0 ~ normal(10, 10);             // weakly informative prior
+  sigma0 ~ normal(0, 10);           // weakly informative prior
+  mu ~ normal(mu0, sigma0);         // population prior with unknown param.
+  sigma ~ lognormal(0, .5);         // weakly informative prior
+  y ~ normal(mu[x], sigma);         // observation model
 }
-\end{lstlisting}}
+\end{minted}
+}
 \end{frame}
 
 \begin{frame}[fragile]{Centered parameterization}
@@ -872,22 +1133,26 @@ model {
 Transformation
 
 {\footnotesize
-\begin{lstlisting}[language=Stan]
+\begin{minted}[highlightlines=4]{stan}
 parameters {
-  real mu0; // prior mean
-  real<lower=0> sigma0; // prior std constrained to be positive
-  vector[K] z; // latent variable
-  real<lower=0> sigma; // common std constrained to be positive
+  real mu0;                         // prior mean
+  real<lower=0> sigma0;             // prior std constrained to be pos.
+  vector[K] z;                      // latent variable
+  real<lower=0> sigma;              // common std constrained to be pos.
 }
-\end{lstlisting}}
+\end{minted}
+}
+\vspace{-\baselineskip}
 {\footnotesize
-\begin{lstlisting}[language=Stan]
+\begin{minted}[highlightlines=2]{stan}
 transformed parameters {
-  vector[K] mu = mu0 + sigma0 * z; // group means
+  vector[K] mu = mu0 + sigma0 * z;  // group means
 }
-\end{lstlisting}}
+\end{minted}
+}
+\vspace{-\baselineskip}
 {\footnotesize
-\begin{lstlisting}[language=Stan]
+\begin{minted}[highlightlines=4]{stan}
 model {
   mu0 ~ normal(10, 10);     // weakly informative prior
   sigma0 ~ normal(0, 10);   // weakly informative prior
@@ -895,7 +1160,8 @@ model {
   sigma ~ lognormal(0, .5); // weakly informative prior
   y ~ normal(mu[x], sigma); // observation model
 }
-\end{lstlisting}}
+\end{minted}
+}
 
 \end{frame}
 
@@ -1137,4 +1403,5 @@ model {
 %%% Local Variables: 
 %%% TeX-PDF-mode: t
 %%% TeX-master: t
+%%% TeX-command-extra-options: "-shell-escape"
 %%% End: 
