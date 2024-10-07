@@ -369,6 +369,7 @@
     \end{itemize}
   
   \end{itemize}
+  \vspace{16.5pt}
   \includegraphics[width=10cm]{hmc_dynamics.png}\\
   {\footnotesize From Monnahan et al (2017)}
   
@@ -384,6 +385,7 @@
     \item discretization error does not usually grow in time
     \end{itemize}
   \end{itemize}
+  \vspace{4.3pt}
   {\includegraphics[height=5.5cm,trim=0 0 150 0,clip]{hmc_leapfrog.png}}
   \uncover<2>{\includegraphics[height=5.5cm,trim=150 0 0 0,clip]{hmc_leapfrog.png}}\\
   {\footnotesize From Neal (2012)}
@@ -425,6 +427,7 @@
     to $(\theta,\phi)$ points with different joint density
   \end{itemize}
   
+  \vspace{4.3pt}
   \includegraphics[width=10cm]{hmc_leapfrog.png}\\
       {\footnotesize~~ From Neal (2012)}
 
@@ -450,7 +453,8 @@
     \item Many steps can reduce random walk
     \item Many steps require many log density and gradient evaluations
     \end{itemize}
-  {\includegraphics[height=5cm,trim=0 0 140 0,clip]{hmc_leapfrog_2d.png}}\\
+    \vspace{20.5pt}
+    {\includegraphics[height=5cm,trim=0 0 140 0,clip]{hmc_leapfrog_2d.png}}\\
   {\footnotesize From Monnahan et al (2017)}
 \end{frame}
   
@@ -595,7 +599,7 @@
 
   % \item Different parameterizations matter
 
-\begin{frame}{Divergences}
+\begin{frame}[fragile]{Divergences}
 
   \begin{itemize}
   \item HMC specific: indicates that Hamiltonian dynamic simulation
@@ -603,36 +607,109 @@
     \begin{itemize}
     \item indicates possibility of biased estimates
     \end{itemize}
-  \item {\small \url{http://mc-stan.org/users/documentation/case-studies/divergences_and_bias.html}}
-     \only<1>{\phantom{\includegraphics[width=8cm]{unnamed-chunk-6-1.png}}}
-     \only<2>{\includegraphics[width=8cm]{unnamed-chunk-6-1.png}}
-     \only<3>{\includegraphics[width=8cm]{unnamed-chunk-7-1.png}}
-     \only<4>{\includegraphics[width=8cm]{unnamed-chunk-9-1.png}}
-     \only<5>{\includegraphics[width=8cm]{unnamed-chunk-12-1.png}}
-     \only<6>{\includegraphics[width=8cm]{unnamed-chunk-13-1.png}}
-     \only<7>{\includegraphics[width=8cm]{unnamed-chunk-15-1.png}}
-     \only<8>{\includegraphics[width=8cm]{unnamed-chunk-21-1.png}}
-     \only<9>{\includegraphics[width=8cm]{unnamed-chunk-31-1.png}}
   \end{itemize}
+     \only<1>{\phantom{\includegraphics[height=5.5cm]{kilpis_hier_cp_hard_trace1.pdf}}}
+     \only<2>{\includegraphics[height=5.5cm]{kilpis_hier_cp_hard_trace1.pdf}}
+     \only<3>{\includegraphics[height=5.5cm]{kilpis_hier_cp_hard_cummean1.pdf}}
+     \only<4>{\includegraphics[height=5.5cm]{kilpis_hier_cp_hard_cummean1b.pdf}}
+     \only<5-6>{\includegraphics[height=5.5cm]{kilpis_hier_cp_hard_trace.pdf}}
+
+     \vspace{-1\baselineskip}
+     \footnotesize
+     \onslide<6>
+\begin{minted}{r}
+variable  mean median    sd   mad    q5   q95  rhat ess_bulk ess_tail
+lsigma0   -1.0   -1.0  0.10 0.070  -1.2 -0.93   1.2      7.2      19.
+\end{minted}
+     
+\end{frame}
+
+\begin{frame}[fragile]{Divergences}
+
+  \begin{itemize}
+  \item HMC specific: indicates that Hamiltonian dynamic simulation
+    has problems with unexpected fast changes in log-density
+    \begin{itemize}
+    \item indicates possibility of biased estimates
+    \end{itemize}
+  \end{itemize}
+     \only<1>{\includegraphics[height=5.5cm]{kilpis_hier_cp_hard_trace.pdf}}
+     \only<2>{\includegraphics[height=5.5cm]{kilpis_hier_cp_hard_scatter_08.pdf}}
+     
+     \vspace{-1\baselineskip}
+     \footnotesize
+\begin{minted}{r}
+Warning: 29 of 4000 (1.0%) transitions ended with a divergence.
+See https://mc-stan.org/misc/warnings for details.
+\end{minted}
+     
+\end{frame}
+
+\begin{frame}[fragile]{Divergences}
+
+  \begin{itemize}
+  \item HMC specific: indicates that Hamiltonian dynamic simulation
+    has problems with unexpected fast changes in log-density
+    \begin{itemize}
+    \item indicates possibility of biased estimates
+    \end{itemize}
+  \end{itemize}
+     \only<1-2>{\includegraphics[height=5.5cm]{kilpis_hier_cp_hard_scatter_08_0999.pdf}}
+     \only<3>{\includegraphics[height=5.5cm]{kilpis_hier_cp_0999_hard_trace.pdf}}
+
+     \onslide<2-3>
+     \vspace{-1\baselineskip}
+     \footnotesize
+\begin{minted}{r}
+variable  mean median    sd   mad    q5   q95  rhat ess_bulk ess_tail
+lsigma0   -1.9   -2.1  0.41  0.13  -2.3 -0.91   2.0      5.8      14.
+\end{minted}
+     
+\end{frame}
+
+\begin{frame}[fragile]{Divergences}
+
+  \begin{itemize}
+  \item HMC specific: indicates that Hamiltonian dynamic simulation
+    has problems with unexpected fast changes in log-density
+    \begin{itemize}
+    \item indicates possibility of biased estimates
+    \end{itemize}
+  \end{itemize}
+  \begin{minipage}[t][5cm][t]{1.5\linewidth}
+    \hspace{-0.9cm}\includegraphics[height=5cm]{kilpis_hier_cp_ncp_hard_scatter.pdf}
+\end{minipage}
+
+     \onslide<2>
+     \vspace{-\baselineskip}
+     \footnotesize
+     With NCP parameterization\\
+     \vspace{-1.5\baselineskip}
+\begin{minted}{r}
+variable  mean median    sd   mad     q5   q95  rhat ess_bulk ess_tail
+sigma0    0.27   0.24  0.19  0.20  0.023  0.64   1.0    1571.    1737.
+lsigma0  -1.7   -1.4   1.1   0.87 -3.8   -0.45   1.0    1571.    1737.
+\end{minted}
+     
 \end{frame}
 
 
 \begin{frame}{Problematic distributions}
 
   \begin{itemize}
-  \item<1-> Nonlinear dependencies
+  \item Nonlinear dependencies
     \begin{itemize}
     \item simple mass matrix scaling doesn't help
     \end{itemize}
-  \item<2-> Funnels
+  \item Funnels
     \begin{itemize}
     \item optimal step size depends on location
     \end{itemize}
-  \item<3-> Multimodal
+  \item Multimodal
     \begin{itemize}
     \item difficult to move from one mode to another
     \end{itemize}
-  \item<4-> Long-tailed with non-finite variance and mean
+  \item Long-tailed with non-finite variance and mean
     \begin{itemize}
     \item efficiency of exploration is reduced
     \item central limit theorem doesn't hold for mean and variance
@@ -745,7 +822,8 @@
 
 \begin{frame}[fragile]{Binomial model - Stan code}
 
-  {Domain-specific language} for constructing models
+  {Domain-specific language} for constructing models\\
+  with common \textit{distributed as} $\sim$ notation
 
 
 \small
@@ -818,8 +896,8 @@ parameters {
   \item Parameters may have constraints
   \item Stan makes transformation to unconstrained space and samples in unconstrained space
     \begin{itemize}
-    \item e.g. log transformation for <lower=a> 
-    \item e.g. logit transformation for <lower=a,upper=b> 
+    \item e.g. log transformation for \mintinline{stan}{<lower=a>}
+    \item e.g. logit transformation for \mintinline{stan}{<lower=a,upper=b>}
     \end{itemize}
   \item<2-> For these declared transformation Stan automatically takes
     into account the Jacobian of the transformation (see BDA3 p. 21)
@@ -840,9 +918,9 @@ model {
 
     \vspace{-0.5\baselineskip}
     \begin{itemize}
-    \item $\sim$ defines a \textit{distribution statement}
+    \item \mintinline{stan}{~} defines a \textit{distribution statement}
       \begin{itemize}
-      \item[] e.g. \textit{y is distributed as binomial(N, theta)}
+      \item[] e.g. \textit{y is distributed as} binomial(\textit{N, theta})
       \end{itemize}
     \item<2-> these can be written also as \textit{log density increment statements}
       \begin{itemize}
@@ -1494,16 +1572,6 @@ model {
 
 \end{frame}
 
-\begin{frame}{Kilpisjärvi summer temperature}
-
-  Posterior draws of alpha and beta
-  
-  \begin{center}
-    \includegraphics[width=10cm]{kilpis_lin_mcmc_scatter.pdf}
-  \end{center}
- 
-\end{frame}
-
 \begin{frame}[fragile]{Kilpisjärvi summer temperature}
   
   Posterior draws of alpha and beta
@@ -1512,12 +1580,16 @@ model {
     \includegraphics[width=10cm]{kilpis_lin_mcmc_scatter.pdf}
   \end{center}
 
-{\scriptsize
+\scriptsize
+\onslide<2-3>
 \begin{minted}{r}
 Warning: 1 of 4000 (0.0%) transitions hit the maximum treedepth limit of 10.
 See https://mc-stan.org/misc/warnings for details.
 \end{minted}
-}
+\onslide<3>
+\small
+Hitting maximum treedepth does not invalidate results, but indicates
+inefficient sampling
   
 \end{frame}
 
@@ -1681,6 +1753,7 @@ fit_lin_t <- brm(temp ~ year, data = d_lin, family = student())
 
 \begin{frame}{Extreme value analysis}
 
+  \vspace{-0.5\baselineskip}
 Geomagnetic storms
 
 \includegraphics[width=12cm]{stan_gpareto_geomev.png}  
