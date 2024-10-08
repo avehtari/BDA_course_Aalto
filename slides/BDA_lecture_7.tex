@@ -23,6 +23,7 @@
 \usepackage{lstbayes}
 \usepackage{minted}
 \setminted{highlightcolor=lightyellow}
+\newmintinline{r}{}
 \usepackage[all,poly,ps,color]{xy}
 \usepackage{natbib}
 \bibliographystyle{apalike}
@@ -51,7 +52,7 @@
   \setbeamertemplate{headline}[default]{}
   \setbeamertemplate{footline}[split]
   % \setbeamertemplate{headline}[text line]{\insertsection}
-  % \setbeamertemplate{footline}[frame number]
+  \setbeamertemplate{footline}[frame number]
 }
 
 \pdfinfo{            
@@ -1233,6 +1234,57 @@ model {
     \end{itemize}
   \end{itemize}
 \end{frame}
+
+\begin{frame}[fragile]{brms formulas}
+
+  \begin{tabular}[t]{lll}
+    model & formula & alternative formula \\ \hline
+    intercept only & & \\
+    $y \sim \N(\alpha, \sigma)$ & \rinline/y ~ 1/ & \\\pause
+    linear models & & \\
+  $y \sim \N(\alpha + \beta x, \sigma)$ & \rinline/y ~ x/ & \rinline/y ~ 1 + x/ \\\pause
+  $y \sim \N(\beta x, \sigma)$ & \rinline/y ~ 0 + x/ & \rinline/y ~ -1 + x/ \\ \pause
+     hierarchical models  && \\
+  $y \sim \N(\alpha_0 + \alpha_g + \beta x, \sigma)$ & \rinline/y ~ x + (1 | g)/ & \\\pause
+  $y \sim \N(\alpha_0 + \alpha_g + \beta_0 x + \beta_g x, \sigma)$ & \rinline/y ~ x + (x | g)/ & (see above) \\
+  \end{tabular}
+
+\end{frame}
+
+\begin{frame}[fragile]{brms formulas}
+
+  \begin{tabular}[t]{lll}
+    model & formula \\ \hline
+    heteroskedastic & \\
+    $y \sim \N\left(\alpha_\mu + \beta_\mu x,\, \exp(\alpha_\sigma + \beta_\sigma x)\right)$ & \rinline/bf(y ~ x, sigma ~ x)/ \\\pause
+  \end{tabular}
+
+\end{frame}
+
+\begin{frame}[fragile]{brms families}
+
+  \rinline/family/ argument determines the observation model family
+
+  \small
+  \begin{tabular}[t]{lll}
+    model & brms \\ \hline
+    $y \sim t_{\nu}(\alpha + \beta x, \sigma)$ & \rinline/y ~ x, family = student()/  \\
+    $y \sim \Bin(\logit^{-1}(\alpha + \beta x), N)$ & \rinline/y | trials(N) ~ x, family = binomial()/  \\
+    $y \sim \Negbin(\exp(\alpha + \beta x), \phi)$ & \rinline/y ~ x, family = negbinomial()/  \\
+  \end{tabular}
+
+  
+\end{frame}
+
+\begin{frame}[fragile]{BDA course demo for brms}
+
+Link in the course web site or directly
+
+\small
+\url{https://avehtari.github.io/BDA_R_demos/demos_rstan/brms_demo.html}
+  
+\end{frame}
+
 
 \begin{frame}{Exchangeability}
 
