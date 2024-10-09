@@ -1519,7 +1519,7 @@ intercept is the expected temperature in the middle of the range
 
   \vspace{-0.75\baselineskip}
 \begin{minted}[fontsize=\footnotesize]{r}
-fit_lin <- brm(temp ~ year, data = data_lin, family = gaussian())
+fit_lin <- brm(temp ~ year, data = data_lin)
 \end{minted}
 \pause
 \begin{minted}[fontsize=\scriptsize,highlightlines={5,6,11,16,21}]{r}
@@ -1545,6 +1545,18 @@ generated quantities {
   // actual population-level intercept
   real b_Intercept = Intercept - dot_product(means_X, b);
 }
+\end{minted}
+
+\end{frame}
+
+\begin{frame}[fragile,fragile]{brms covariate centering by default}
+
+  Sometimes we want to turn off the covariate centering, which can be
+  done with additional argument for brms formula function
+  \rinline/bf()/
+
+\begin{minted}[fontsize=\footnotesize]{r}
+fit_lin <- brm(bf(temp ~ year, center=FALSE), data = data_lin)
 \end{minted}
 
 \end{frame}
