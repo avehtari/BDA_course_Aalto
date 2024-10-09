@@ -551,8 +551,9 @@
     \begin{itemize}
     \item the dynamic simulation is build as a binary tree\\
       \includegraphics[width=8.5cm]{hmc_binary_tree.png}\\ {\scriptsize from Hoffman \& Gelman (2014)}      
-    \item<2-> maximum simulation length is capped to avoid very long
-      waiting times in case of bad behavior
+    \item<2-> maximum simulation length, i.e. maximum number of steps,
+      is capped to avoid very long waiting times in case of bad
+      behavior
     \end{itemize}
   \item<3-> Indicates inefficiency in sampling leading to higher
     autocorrelations and lower ESS ($S_{\eff}$)
@@ -1204,6 +1205,11 @@ $num_max_treedepth
 \end{minted}
   }
 
+  \pause
+  
+  \mintedinline{r}{diagnostic\_summary()} includes E-BFMI diagnostic,
+  which I'll skip in this course
+  
 \end{frame}
 
 \begin{frame}[fragile]{Difference between proportions (bayesplot)}
@@ -1588,8 +1594,8 @@ See https://mc-stan.org/misc/warnings for details.
 \end{minted}
 \onslide<3>
 \small
-Hitting maximum treedepth does not invalidate results, but indicates
-inefficient sampling
+Hitting maximum treedepth (maximum number of steps) does not
+invalidate results, but indicates inefficient sampling
   
 \end{frame}
 
@@ -1676,7 +1682,7 @@ Two group Binomial model:
 \begin{minted}{r}
 d_bin2 <- data.frame(N = c(674, 680), y = c(39,22), grp2 = c(0,1))
 fit_bin2 <- stan_glm(y/N ~ grp2, family = binomial(), data = d_bin2,
-                    weights = N)
+                     weights = N)
 \end{minted}
   }
 % \begin{minted}{r}
@@ -1778,11 +1784,11 @@ data {
     {\only<2>{\setminted{gray=false}}
 \begin{minted}{stan}
 transformed data {
-  real ymax = max(y);
+  real ymax = max(y);        // pre-compute a useful quantity
 }
 parameters {
   real<lower=0> sigma; 
-  real<lower=-sigma/ymax> k; 
+  real<lower=-sigma/ymax> k; // constraint can depend on other parameters
 }
 \end{minted}
     }
@@ -1790,7 +1796,7 @@ parameters {
     {\only<3>{\setminted{gray=false}}
 \begin{minted}{stan}
 model {
-  y ~ gpareto(k, sigma);
+  y ~ gpareto(k, sigma);     // user defined distribution
 }
 \end{minted}
     }
@@ -1870,7 +1876,8 @@ functions {
     \item \texttt{posterior} --- posterior handling and diagnostics\\ (Lectures 5 and 6)
     % \item \texttt{shinystan} --- interactive diagnostics
     \item \texttt{bayesplot} --- visualization and model checking\\ (Lectures 5, 6, and 8)
-    \item \texttt{tidybayes} and \texttt{ggdist} -- more posterior and prediction visualization (Lecture 6)
+    \item \texttt{tidybayes} and \texttt{ggdist} --- more posterior and prediction visualization (Lecture 6)
+    \item \texttt{marginaleffects} --- prediction and comparison visualization
     \item \texttt{loo} --- cross-validation model assessment and comparison\\ (Lecture 9)
     \item \texttt{projpred} --- projection predictive variable selection\\ (Lecture 12)
     \item \texttt{priorsense} --- prior and likelihood sensitivity
