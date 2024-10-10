@@ -588,128 +588,6 @@ generated quantities {
 
 \end{frame}
 
-\begin{frame}{Prior predictive checking: Exposure to air pollution}
-
-  \begin{itemize}
-  \item Example from Jonah Gabry, Daniel Simpson, Aki Vehtari, Michael
-    Betancourt, and Andrew Gelman (2019). Visualization in Bayesian
-    workflow. \url{https://doi.org/10.1111/rssa.12378}
-  \item Estimation of human exposure to air pollution from particulate
-    matter measuring less than 2.5 microns in diameter ($\mathrm{PM}_{2.5}$)
-    \begin{itemize}
-    \item Exposure to $\mathrm{PM}_{2.5}$ is linked to a number of
-      poor health outcomes and a recent report estimated that
-      $\mathrm{PM}_{2.5}$ is responsible for three million deaths
-      worldwide each year (Shaddick et al., 2017)
-    \item In order to estimate the public health effect of ambient
-      $\mathrm{PM}_{2.5}$, we need a good estimate of the
-      $\mathrm{PM}_{2.5}$ concentration at the same spatial resolution
-      as our population estimates.
-    \end{itemize}
-\end{itemize}
-
-\end{frame}
-
-\begin{frame}{Prior predictive checking: Exposure to air pollution}
-
-  \begin{itemize}
-  \item Direct measurements of PM 2.5 from ground monitors at 2980
-    locations
-  \item High-resolution satellite data of aerosol optical depth
-    
-  \end{itemize}
-  \begin{center}
-    \only<1>{\vspace{-1.8\baselineskip}\includegraphics[height=7cm]{map-data.png}}
-    \only<2>{\vspace{-1.8\baselineskip}\includegraphics[height=7cm]{plot1.png}}
-    \only<3>{\hspace{-3cm}\includegraphics[height=6.55cm]{plot2.png}}
-\end{center}
-\end{frame}
-
-\begin{frame}{Prior predictive checking: Exposure to air pollution}
-
-  Prior predictive checking
-  \vspace{-1\baselineskip}
-  \begin{center}
-    \only<1>{\includegraphics[width=11cm]{pm25_pp1a.pdf}}
-    \only<2>{\includegraphics[width=11cm]{pm25_pp1b.pdf}}
-    \only<3>{\includegraphics[width=11cm]{pm25_pp2.pdf}}
-\end{center}
-\end{frame}
-
-\begin{frame}{Posterior predictive checking: Exposure to air pollution}
-
-  Marginal predictive distributions
-\begin{figure}
-\centering
-\begin{subfigure}{0.48\textwidth}
-\includegraphics[width=\textwidth]{ppc_dens1.png}
-\caption{Model 1}
-\end{subfigure}
-~
-\begin{subfigure}{0.48\textwidth}
-\includegraphics[width=\textwidth]{ppc_dens2.png}
-\caption{Model 2}
-\end{subfigure}
-% ~
-% \begin{subfigure}{0.31\textwidth}
-% \includegraphics[width=\textwidth]{ppc_dens3.png}
-% \caption{Model 3}
-% \end{subfigure}
-\end{figure}
-
-\end{frame}
-
-\begin{frame}{Posterior predictive checking: Exposure to air pollution}
-
-
-Test statistic (skewness)
-\begin{figure}
-\centering
-\begin{subfigure}{0.31\textwidth}
-\includegraphics[width=\textwidth]{ppc_skew1.png}
-\caption{Model 1}
-\end{subfigure}
-~
-\begin{subfigure}{0.31\textwidth}
-\includegraphics[width=\textwidth]{ppc_skew2.png}
-\caption{Model 2}
-\end{subfigure}
-~
-\begin{subfigure}{0.31\textwidth}
-\includegraphics[width=\textwidth]{ppc_skew3.png}
-\caption{Model 3}
-\end{subfigure}
-
-\end{figure}
-
-\end{frame}
-
-\begin{frame}{Posterior predictive checking: Exposure to air pollution}
-
-
-Test statistic (median for groups)
-
-  \begin{figure}
-\centering
-\begin{subfigure}{.31\textwidth}
-\includegraphics[width=\textwidth]{ppc_med_grouped1.png}
-\caption{Model 1}
-\end{subfigure}
-~
-\begin{subfigure}{.31\textwidth}
-\includegraphics[width=\textwidth]{ppc_med_grouped2.png}
-\caption{Model 2}
-\end{subfigure}
-~
-\begin{subfigure}{.31\textwidth}
-\includegraphics[width=\textwidth]{ppc_med_grouped3.png}
-\caption{Model 3}
-\end{subfigure}
-
-\end{figure}
-
-\end{frame}
-
 \begin{frame}{Posterior predictive checking: Mesquite bushes}
 
   Positive target: normal vs log-normal model
@@ -718,6 +596,50 @@ Test statistic (median for groups)
   \vspace{-0.1\baselineskip} {Predicting the yields of mesquite bushes.\\
     \color{gray} \footnotesize
     Gelman, Hill \& Vehtari (2020): Regression and Other Stories, Chapter 11.}\\
+
+\end{frame}
+
+\begin{frame}[fragile]{Meta-analysis}
+\framesubtitle{Pharmacologic treatments for chronic obstructive pulmonary disease}
+
+\begin{minipage}[t][][t]{1.2\linewidth}
+  \hspace{-10mm}
+  \includegraphics[width=12.5cm]{baker2009_treatments_and_studies.pdf}
+\end{minipage}
+
+\end{frame}
+
+\begin{frame}[fragile]{Posterior predictive checking}
+\framesubtitle{Pharmacologic treatments for chronic obstructive pulmonary disease}
+
+\vspace{-0.75\baselineskip}
+Pooled over studies, separate for treatments
+
+\vspace{-0.25\baselineskip}
+\begin{minted}[fontsize=\footnotesize,escapeinside=\%\%]{r}
+fit_pooled <- brm(exac | trials(total) ~ %\highlight{0 + treatment}%,
+                  prior = prior(student_t(7, 0, 1.5), class='b'),
+                  family=binomial(), data=dat.baker2009)
+\end{minted}
+\vspace{-0.25\baselineskip}
+  \includegraphics[width=9cm]{baker2009_pooled_studies_ppc_dens_overlay.pdf}
+
+\end{frame}
+
+\begin{frame}[fragile]{Posterior predictive checking}
+\framesubtitle{Pharmacologic treatments for chronic obstructive pulmonary disease}
+
+\vspace{-0.75\baselineskip}
+Hirerachical for studies, hierarchical for treatments
+
+\vspace{-0.25\baselineskip}
+\begin{minted}[fontsize=\footnotesize,escapeinside=\%\%]{r}
+fit_hier <- brm(exac | trials(total) ~ %\highlight{(1 | treatment) + (1 | study)}%,
+                family=binomial(), data=dat.baker2009)
+%\phantom{~}%
+\end{minted}
+\vspace{-0.25\baselineskip}
+  \includegraphics[width=9cm]{baker2009_hier1_ppc_dens_overlay.pdf}
 
 \end{frame}
 
@@ -870,6 +792,128 @@ family = bernoulli()
     \includegraphics[height=3.5cm]{helicopter_hier_stable_reliabilitydiag_2024.pdf}}
   
 \end{frame}
+
+\begin{frame}{Prior predictive checking: Exposure to air pollution}
+
+  \begin{itemize}
+  \item Example from Jonah Gabry, Daniel Simpson, Aki Vehtari, Michael
+    Betancourt, and Andrew Gelman (2019). Visualization in Bayesian
+    workflow. \url{https://doi.org/10.1111/rssa.12378}
+  \item Estimation of human exposure to air pollution from particulate
+    matter measuring less than 2.5 microns in diameter ($\mathrm{PM}_{2.5}$)
+    \begin{itemize}
+    \item Exposure to $\mathrm{PM}_{2.5}$ is linked to a number of
+      poor health outcomes and a recent report estimated that
+      $\mathrm{PM}_{2.5}$ is responsible for three million deaths
+      worldwide each year (Shaddick et al., 2017)
+    \item In order to estimate the public health effect of ambient
+      $\mathrm{PM}_{2.5}$, we need a good estimate of the
+      $\mathrm{PM}_{2.5}$ concentration at the same spatial resolution
+      as our population estimates.
+    \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Prior predictive checking: Exposure to air pollution}
+
+  \begin{itemize}
+  \item Direct measurements of PM 2.5 from ground monitors at 2980
+    locations
+  \item High-resolution satellite data of aerosol optical depth
+    
+  \end{itemize}
+  \begin{center}
+    \only<1>{\vspace{-1.8\baselineskip}\includegraphics[height=7cm]{map-data.png}}
+    \only<2>{\vspace{-1.8\baselineskip}\includegraphics[height=7cm]{plot1.png}}
+    \only<3>{\hspace{-3cm}\includegraphics[height=6.55cm]{plot2.png}}
+\end{center}
+\end{frame}
+
+\begin{frame}{Prior predictive checking: Exposure to air pollution}
+
+  Prior predictive checking
+  \vspace{-1\baselineskip}
+  \begin{center}
+    \only<1>{\includegraphics[width=11cm]{pm25_pp1a.pdf}}
+    \only<2>{\includegraphics[width=11cm]{pm25_pp1b.pdf}}
+    \only<3>{\includegraphics[width=11cm]{pm25_pp2.pdf}}
+\end{center}
+\end{frame}
+
+% \begin{frame}{Posterior predictive checking: Exposure to air pollution}
+
+%   Marginal predictive distributions
+% \begin{figure}
+% \centering
+% \begin{subfigure}{0.48\textwidth}
+% \includegraphics[width=\textwidth]{ppc_dens1.png}
+% \caption{Model 1}
+% \end{subfigure}
+% ~
+% \begin{subfigure}{0.48\textwidth}
+% \includegraphics[width=\textwidth]{ppc_dens2.png}
+% \caption{Model 2}
+% \end{subfigure}
+% % ~
+% % \begin{subfigure}{0.31\textwidth}
+% % \includegraphics[width=\textwidth]{ppc_dens3.png}
+% % \caption{Model 3}
+% % \end{subfigure}
+% \end{figure}
+
+% \end{frame}
+
+% \begin{frame}{Posterior predictive checking: Exposure to air pollution}
+
+
+% Test statistic (skewness)
+% \begin{figure}
+% \centering
+% \begin{subfigure}{0.31\textwidth}
+% \includegraphics[width=\textwidth]{ppc_skew1.png}
+% \caption{Model 1}
+% \end{subfigure}
+% ~
+% \begin{subfigure}{0.31\textwidth}
+% \includegraphics[width=\textwidth]{ppc_skew2.png}
+% \caption{Model 2}
+% \end{subfigure}
+% ~
+% \begin{subfigure}{0.31\textwidth}
+% \includegraphics[width=\textwidth]{ppc_skew3.png}
+% \caption{Model 3}
+% \end{subfigure}
+
+% \end{figure}
+
+% \end{frame}
+
+% \begin{frame}{Posterior predictive checking: Exposure to air pollution}
+
+
+% Test statistic (median for groups)
+
+%   \begin{figure}
+% \centering
+% \begin{subfigure}{.31\textwidth}
+% \includegraphics[width=\textwidth]{ppc_med_grouped1.png}
+% \caption{Model 1}
+% \end{subfigure}
+% ~
+% \begin{subfigure}{.31\textwidth}
+% \includegraphics[width=\textwidth]{ppc_med_grouped2.png}
+% \caption{Model 2}
+% \end{subfigure}
+% ~
+% \begin{subfigure}{.31\textwidth}
+% \includegraphics[width=\textwidth]{ppc_med_grouped3.png}
+% \caption{Model 3}
+% \end{subfigure}
+
+% \end{figure}
+
+% \end{frame}
 
 \begin{frame}{Further reading and examples}
 
