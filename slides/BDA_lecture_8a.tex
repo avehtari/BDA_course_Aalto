@@ -498,8 +498,89 @@
 
 
 % \end{frame}
+\begin{frame}[fragile]
+  \frametitle{Posterior predictive checking -- Stan code}
 
-\begin{frame}{Example: Exposure to air pollution}
+  \vspace{-0.2\parskip}
+  \begin{itemize}
+  \item demo demos\_rstan/ppc/poisson-ppc.Rmd
+  \end{itemize}
+
+  \vspace{-0.5\parskip}
+\begin{minted}[gray,fontsize=\footnotesize]{stan}
+data {
+  int<lower=1> N;
+  int<lower=0> y[N];
+}
+parameters {
+  real<lower=0> lambda;
+}
+model {
+  lambda ~ exponential(0.2);
+  y ~ poisson(lambda);
+}
+\end{minted}
+  \vspace{-\parskip}
+\begin{minted}[fontsize=\footnotesize,highlightlines=5]{stan}
+generated quantities {
+  real log_lik[N];
+  int y_rep[N];
+  for (n in 1:N) {
+    y_rep[n] = poisson_rng(lambda);
+    log_lik[n] = poisson_lpmf(y[n] | lambda);
+    }
+}
+\end{minted}
+\end{frame}
+
+\begin{frame}{PPC for count data -- Poisson model}
+  
+  \vspace{-1\baselineskip}
+  \rinline/ppc_dens_overlay(y, yrep[1:50,])/
+
+    \includegraphics[height=8cm]{poisson_ppc_dens_overlay.pdf}
+
+\end{frame}
+
+\begin{frame}{PPC for count data -- Poisson model}
+  
+  \vspace{-1\baselineskip}
+  \rinline/ppc_rootogram(y, yrep)/
+
+    \includegraphics[height=8cm]{poisson_ppc_rootogram.pdf}
+
+\end{frame}
+
+\begin{frame}{PPC for count data -- Poisson model}
+  
+  \vspace{-1\baselineskip}
+  \rinline/prop_zero <- function(x) mean(x == 0)/\\
+  \rinline/ppc_stat(y, yrep, stat = "prop_zero")/
+
+    \includegraphics[height=7.5cm]{poisson_ppc_stat_propzero.pdf}
+
+\end{frame}
+
+\begin{frame}{PPC for count data -- hurdle truncated Poisson model}
+  
+  \vspace{-1\baselineskip}
+  \rinline/ppc_rootogram(y, yrep2)/
+
+    \includegraphics[height=8cm]{poisson2_ppc_rootogram.pdf}
+
+\end{frame}
+
+\begin{frame}{PPC for count data -- hurdle truncated Poisson model}
+  
+  \vspace{-1\baselineskip}
+  \rinline/prop_zero <- function(x) mean(x == 0)/\\
+  \rinline/ppc_stat(y, yrep2, stat = "prop_zero")/
+
+    \includegraphics[height=7.5cm]{poisson2_ppc_stat_propzero.pdf}
+
+\end{frame}
+
+\begin{frame}{Prior predictive checking: Exposure to air pollution}
 
   \begin{itemize}
   \item Example from Jonah Gabry, Daniel Simpson, Aki Vehtari, Michael
@@ -521,7 +602,7 @@
 
 \end{frame}
 
-\begin{frame}{Example: Exposure to air pollution}
+\begin{frame}{Prior predictive checking: Exposure to air pollution}
 
   \begin{itemize}
   \item Direct measurements of PM 2.5 from ground monitors at 2980
@@ -536,7 +617,7 @@
 \end{center}
 \end{frame}
 
-\begin{frame}{Example: Exposure to air pollution}
+\begin{frame}{Prior predictive checking: Exposure to air pollution}
 
   Prior predictive checking
   \vspace{-1\baselineskip}
@@ -547,9 +628,9 @@
 \end{center}
 \end{frame}
 
-\begin{frame}{Example: Exposure to air pollution}
+\begin{frame}{Posterior predictive checking: Exposure to air pollution}
 
-  Posterior predictive checking -- marginal predictive distributions
+  Marginal predictive distributions
 \begin{figure}
 \centering
 \begin{subfigure}{0.48\textwidth}
@@ -570,10 +651,10 @@
 
 \end{frame}
 
-\begin{frame}{Example: Exposure to air pollution}
+\begin{frame}{Posterior predictive checking: Exposure to air pollution}
 
 
-  Posterior predictive checking -- test statistic (skewness)
+Test statistic (skewness)
 \begin{figure}
 \centering
 \begin{subfigure}{0.31\textwidth}
@@ -595,10 +676,10 @@
 
 \end{frame}
 
-\begin{frame}{Example: Exposure to air pollution}
+\begin{frame}{Posterior predictive checking: Exposure to air pollution}
 
 
-  Posterior predictive checking -- test statistic (median for groups)
+Test statistic (median for groups)
 
   \begin{figure}
 \centering
@@ -621,9 +702,11 @@
 
 \end{frame}
 
-\begin{frame}{Positive target}
+\begin{frame}{Posterior predictive checking: Mesquite bushes}
+
+  Positive target: normal vs log-normal model
   
-    \includegraphics[width=11cm]{mesquite_ppc.pdf}\\
+    \includegraphics[width=11.5cm]{mesquite_ppc.pdf}\\
   \vspace{-0.1\baselineskip} {Predicting the yields of mesquite bushes.\\
     \color{gray} \footnotesize
     Gelman, Hill \& Vehtari (2020): Regression and Other Stories, Chapter 11.}\\
@@ -765,102 +848,19 @@ family = bernoulli()
 \end{minted}
 }
   \vspace{-0.25\baselineskip}
-  \includegraphics[height=3.6cm]{helicopter_hier_stable.pdf}
+  \includegraphics[height=3.6cm]{helicopter_hier_stable_2024.pdf}
   \vspace{-0.1\baselineskip}
   \only<2>{\rinline/pp_check(fit, ndraws=20)/\\
-    \includegraphics[height=3.5cm]{helicopter_hier_stable_ppc_dens_overlay.pdf}}
+    \includegraphics[height=3.5cm]{helicopter_hier_stable_ppc_dens_overlay_2024.pdf}}
   \only<3>{\rinline/pp_check(fit, type="bars")/\\
-    \includegraphics[height=3.5cm]{helicopter_hier_stable_ppc_bars.pdf}}
+    \includegraphics[height=3.5cm]{helicopter_hier_stable_ppc_bars_2024.pdf}}
   \only<4>{\rinline/pp_check(fit, type="bars_grouped")/\\
-    \includegraphics[height=3.5cm]{helicopter_hier_stable_ppc_bars_grouped.pdf}}
+    \includegraphics[height=3.5cm]{helicopter_hier_stable_ppc_bars_grouped_2024.pdf}}
   \only<5>{with \texttt{caret::calibration()}\\
-    \includegraphics[height=3.5cm]{helicopter_hier_stable_calibration.pdf}}
+    \includegraphics[height=3.5cm]{helicopter_hier_stable_calibration_2024.pdf}}
   \only<6>{with \texttt{reliabilitydiag::reliabilitydiag()}\\
-    \includegraphics[height=3.5cm]{helicopter_hier_stable_reliabilitydiag.pdf}}
+    \includegraphics[height=3.5cm]{helicopter_hier_stable_reliabilitydiag_2024.pdf}}
   
-\end{frame}
-
-  
-\begin{frame}[fragile]
-  \frametitle{Posterior predictive checking -- Stan code}
-
-  \vspace{-0.2\parskip}
-  \begin{itemize}
-  \item demo demos\_rstan/ppc/poisson-ppc.Rmd
-  \end{itemize}
-
-  \vspace{-0.5\parskip}
-\begin{minted}[gray,fontsize=\footnotesize]{stan}
-data {
-  int<lower=1> N;
-  int<lower=0> y[N];
-}
-parameters {
-  real<lower=0> lambda;
-}
-model {
-  lambda ~ exponential(0.2);
-  y ~ poisson(lambda);
-}
-\end{minted}
-  \vspace{-\parskip}
-\begin{minted}[fontsize=\footnotesize,highlightlines=5]{stan}
-generated quantities {
-  real log_lik[N];
-  int y_rep[N];
-  for (n in 1:N) {
-    y_rep[n] = poisson_rng(lambda);
-    log_lik[n] = poisson_lpmf(y[n] | lambda);
-    }
-}
-\end{minted}
-\end{frame}
-
-\begin{frame}{PPC for count data -- Poisson model}
-  
-  \vspace{-1\baselineskip}
-  \rinline/ppc_dens_overlay(y, yrep[1:50,])/
-
-    \includegraphics[height=8cm]{poisson_ppc_dens_overlay.pdf}
-
-\end{frame}
-
-\begin{frame}{PPC for count data -- Poisson model}
-  
-  \vspace{-1\baselineskip}
-  \rinline/ppc_rootogram(y, yrep)/
-
-    \includegraphics[height=8cm]{poisson_ppc_rootogram.pdf}
-
-\end{frame}
-
-\begin{frame}{PPC for count data -- Poisson model}
-  
-  \vspace{-1\baselineskip}
-  \rinline/prop_zero <- function(x) mean(x == 0)/\\
-  \rinline/ppc_stat(y, yrep, stat = "prop_zero")/
-
-    \includegraphics[height=7.5cm]{poisson_ppc_stat_propzero.pdf}
-
-\end{frame}
-
-\begin{frame}{PPC for count data -- hurdle truncated Poisson model}
-  
-  \vspace{-1\baselineskip}
-  \rinline/ppc_rootogram(y, yrep2)/
-
-    \includegraphics[height=8cm]{poisson2_ppc_rootogram.pdf}
-
-\end{frame}
-
-\begin{frame}{PPC for count data -- hurdle truncated Poisson model}
-  
-  \vspace{-1\baselineskip}
-  \rinline/prop_zero <- function(x) mean(x == 0)/\\
-  \rinline/ppc_stat(y, yrep2, stat = "prop_zero")/
-
-    \includegraphics[height=7.5cm]{poisson2_ppc_stat_propzero.pdf}
-
 \end{frame}
 
 \begin{frame}{Further reading and examples}
