@@ -1445,12 +1445,11 @@ model {
     \item as hierarchical models and Bayesian inference is most useful
       when likelihood is weak
     \end{itemize}
-  \item<+-> If using brms and the likelihood very every group is
-    strong and the non-centered parameterization is causing
-    divergences
+  \item<+-> If the likelihood is highly informative for all groups, and
+    the non-centered parameterization is causing divergences,
     \begin{itemize}
     \item use non-hierarchical model as the hierarchical part is not
-      that important with strong likelihood, that is, instead of 
+      that important with strong likelihood. Instead of 
 \begin{minted}[fontsize=\footnotesize]{r}
 y ~ 1 + (1 | group)
 \end{minted}
@@ -1555,8 +1554,8 @@ generated quantities {
   done with additional argument for brms formula function
   \rinline/bf()/
 
-\begin{minted}[fontsize=\footnotesize]{r}
-fit_lin <- brm(bf(temp ~ year, center=FALSE), data = data_lin)
+\begin{minted}[fontsize=\footnotesize,escapeinside=\%\%]{r}
+fit_lin <- brm(%\colorbox{lightyellow}{bf(temp ~ year, center=FALSE)}%, data = data_lin)
 \end{minted}
 
 \end{frame}
@@ -1582,7 +1581,7 @@ fit_lin <- brm(bf(temp ~ year, center=FALSE), data = data_lin)
   \begin{tabular}[t]{lll}
     model & formula \\ \hline
     heteroskedastic & \\
-    $y \sim \N\left(\alpha_\mu + \beta_\mu x,\, \exp(\alpha_\sigma + \beta_\sigma x)\right)$ & \rinline/bf(y ~ x, sigma ~ x)/ \\\pause
+    $y \sim \N\left(\alpha_\mu + \beta_\mu x,\, \exp(\alpha_\sigma + \beta_\sigma x)\right)$ & \rinline/bf(y ~ x, sigma ~ x)/ \\
   \end{tabular}
 
 \end{frame}
