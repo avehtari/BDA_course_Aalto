@@ -22,10 +22,28 @@
 \usepackage{subcaption}
 \usepackage{listings}
 \usepackage{lstbayes}
+\usepackage{minted}
+\setminted{highlightcolor=lightyellow}
+\newmintinline{r}{}
 \usepackage[all,poly,ps,color]{xy}
 \usepackage{eurosym}
 \usepackage{natbib}
 \bibliographystyle{apalike}
+
+\makeatletter
+\newcommand{\minted@style@bw}{%
+  \renewcommand\fcolorbox[3][]{##3}%
+  \renewcommand\textcolor[3][]{##3}%
+  \color{gray}
+}
+
+% define new minted option "gray"
+\minted@def@opt@switch{gray}
+\fvset{formatcom*={%
+  \ifthenelse{\equal{\minted@get@opt{gray}{true}}{true}}
+  {\minted@style@bw}{}%
+}}
+\makeatother
 
 \mode<presentation>
 {
@@ -36,7 +54,7 @@
   \setbeamertemplate{headline}[default]{}
   \setbeamertemplate{footline}[split]
   % \setbeamertemplate{headline}[text line]{\insertsection}
-  % \setbeamertemplate{footline}[frame number]
+  \setbeamertemplate{footline}[frame number]
 }
 
 \pdfinfo{            
@@ -45,6 +63,7 @@
   /Keywords   (Bayesian data analysis)
 }
 
+\definecolor{lightyellow}{rgb}{1,1,0.878}
 \definecolor{forestgreen}{rgb}{0.1333,0.5451,0.1333}
 \definecolor{navyblue}{rgb}{0,0,0.5}
 \renewcommand{\emph}[1]{\textcolor{navyblue}{#1}}
@@ -157,6 +176,7 @@
   \item demo6\_1: Posterior predictive checking - light speed
   \item demo6\_2: Posterior predictive checking - sequential dependence
   \item demo6\_3: Posterior predictive checking - poor test statistic
+  \item \url{https://avehtari.github.io/BDA_R_demos/demos_rstan/brms_demo.html}
   \end{itemize}
 
 \end{frame}
@@ -219,7 +239,7 @@
 \begin{frame}{Posterior predictive checking -- bayesplot}
 
   \vspace{-1\baselineskip}
-  \texttt{ppc\_hist(y, yrep[1:8,])}
+  \rinline/ppc_hist(y, yrep[1:8,])/
   
   \includegraphics[height=8cm]{Newcomb_ppc_hist.pdf}
 
@@ -228,7 +248,7 @@
 \begin{frame}{Posterior predictive checking -- bayesplot}
 
   \vspace{-1\baselineskip}
-  \texttt{ppc\_dens\_overlay(y, yrep[1:100,])}
+  \rinline/ppc_dens_overlay(y, yrep[1:100,])/
   
   \includegraphics[height=8cm]{Newcomb_ppc_dens_overlay.pdf}
 
@@ -237,7 +257,7 @@
 \begin{frame}{Posterior predictive checking -- bayesplot}
 
   \vspace{-1\baselineskip}
-  \texttt{ppc\_ecdf\_overlay(y, yrep[1:100,])}
+  \rinline/ppc_ecdf_overlay(y, yrep[1:100,])/
   
   \includegraphics[height=8cm]{Newcomb_ppc_ecdf_overlay.pdf}
 
@@ -246,7 +266,7 @@
 \begin{frame}{Posterior predictive checking -- bayesplot}
 
   \vspace{-1\baselineskip}
-  \texttt{ppc\_scatter(y, yrep[1:4,]) + geom\_abline()}
+  \rinline/ppc_scatter(y, yrep[1:4,]) + geom_abline()/
   
   \includegraphics[height=7.5cm]{Newcomb_ppc_scatter.pdf}
 
@@ -328,7 +348,7 @@
 \begin{frame}{Posterior predictive checking -- bayesplot}
 
   \vspace{-1\baselineskip}
-  \texttt{ppc\_stat(y, yrep)}, the default statistic "mean" is usually bad
+  \rinline/ppc_stat(y, yrep)/, the default statistic "mean" is usually bad
   
   \includegraphics[height=8cm]{Newcomb_ppc_stat_mean.pdf}
 
@@ -337,7 +357,7 @@
 \begin{frame}{Posterior predictive checking -- bayesplot}
 
   \vspace{-1\baselineskip}
-  \texttt{ppc\_stat(y, yrep, stat="min")}
+  \rinline/ppc_stat(y, yrep, stat="min")/
   
   \includegraphics[height=8cm]{Newcomb_ppc_stat_min.pdf}
 
@@ -346,7 +366,7 @@
 \begin{frame}{Posterior predictive checking -- bayesplot}
 
   \vspace{-1\baselineskip}
-  \texttt{ppc\_stat(y, yrep, stat="max")}
+  \rinline/ppc_stat(y, yrep, stat="max")/
   
   \includegraphics[height=8cm]{Newcomb_ppc_stat_max.pdf}
 
@@ -355,7 +375,7 @@
 \begin{frame}{Posterior predictive checking -- bayesplot}
 
   \vspace{-1\baselineskip}
-  \texttt{ppc\_stat2d(y, yrep, stat=c("min","max"))}
+  \rinline/ppc_stat2d(y, yrep, stat=c("min","max"))/
   
   \includegraphics[height=8cm]{Newcomb_ppc_stat2d_minmax.pdf}
 
@@ -382,7 +402,7 @@
 % \begin{frame}{Posterior predictive checking (good fit)}
 
 %   \vspace{-1\baselineskip}
-%   \texttt{ppc\_hist(y2, y2rep[1:8,])}
+%   \rinline/ppc_hist(y2, y2rep[1:8,])/
   
 %   \includegraphics[height=8cm]{Newcomb_ppc_hist_nooutliers.pdf}
 
@@ -391,7 +411,7 @@
 % \begin{frame}{Posterior predictive checking (good fit)}
 
 %   \vspace{-1\baselineskip}
-%   \texttt{ppc\_dens\_overlay(y2, y2rep[1:100,])}
+%   \rinline/ppc_dens_overlay(y2, y2rep[1:100,])/
   
 %   \includegraphics[height=8cm]{Newcomb_ppc_dens_overlay_nooutliers.pdf}
 
@@ -400,7 +420,7 @@
 % \begin{frame}{Posterior predictive checking (good fit)}
 
 %   \vspace{-1\baselineskip}
-%   \texttt{ppc\_ecdf\_overlay(y2, y2rep[1:100,])}
+%   \rinline/ppc_ecdf_overlay(y2, y2rep[1:100,])/
   
 %   \includegraphics[height=8cm]{Newcomb_ppc_ecdf_overlay_nooutliers.pdf}
 
@@ -409,7 +429,7 @@
 % \begin{frame}{Posterior predictive checking (good fit)}
 
 %   \vspace{-1\baselineskip}
-%   \texttt{ppc\_stat2d(y2, y2rep, stat=c("min","max"))}
+%   \rinline/ppc_stat2d(y2, y2rep, stat=c("min","max"))/
   
 %   \includegraphics[height=8cm]{Newcomb_ppc_stat2d_minmax_nooutliers.pdf}
 
@@ -615,10 +635,12 @@
   Latent hierarchical linear + spline
 
 {\footnotesize
-\begin{lstlisting}
-nstudents | trials(nstudents1) ~ (assignment | year) +
-  s(assignment, k=4), family=binomial()
-\end{lstlisting}}
+\begin{minted}{r}
+nstudents | trials(nstudents1) ~
+  s(assignment, k=4) + (assignment | year),
+  family=binomial()
+\end{minted}
+}
 
   Latent functions + posterior uncertainty\\\hspace{-5mm}
   \only<1>{\includegraphics[height=3.55cm]{student_retention_sbinom_linpreds10.pdf}}
@@ -630,18 +652,18 @@ nstudents | trials(nstudents1) ~ (assignment | year) +
 \begin{frame}[fragile]{Student retention}
 
 1. Latent hierarchical linear model
-{\footnotesize
-\begin{lstlisting}
-nstudents | trials(nstudents1) ~ (assignment | year),
+\begin{minted}[fontsize=\footnotesize]{r}
+nstudents | trials(nstudents1) ~
+  (assignment | year),
   family=binomial()
-\end{lstlisting}}
+\end{minted}
 
-2. Latent hierarchical linear model + spline
-{\footnotesize
-\begin{lstlisting}
-nstudents | trials(nstudents1) ~ (assignment | year) +
-  s(assignment, k=4), family=binomial()
-\end{lstlisting}}
+2. Latent spline + hierarchical linear model
+\begin{minted}[fontsize=\footnotesize]{r}
+nstudents | trials(nstudents1) ~
+  s(assignment, k=4) + (assignment | year),
+  family=binomial()
+\end{minted}
   
 \end{frame}
 
@@ -664,8 +686,8 @@ Latent hierarchical linear model + spline\\
 
 \end{frame}
 
-\begin{frame}[fragile]{Student retention -- Marginal PPC}
-\framesubtitle{\texttt{pp\_check(fit, ndraws=100)}}
+\begin{frame}[fragile]{Student retention -- Marginal PPC (brms)}
+\framesubtitle{\rinline/pp_check(fit, ndraws=100)/}
 
   
 \vspace{-0.75\baselineskip}  
@@ -682,8 +704,8 @@ Latent hierarchical linear model + spline\\
 
 \end{frame}
 
-\begin{frame}[fragile]{Student retention -- Posterior predictive intervals}
-\framesubtitle{\texttt{pp\_check(fit, type = "intervals\_grouped", group="year")}}
+\begin{frame}[fragile]{Student retention -- Posterior predictive intervals (brms)}
+\framesubtitle{\rinline/pp_check(fit, type = "intervals_grouped", group="year")/}
 
 \vspace{-0.8\baselineskip}  
 Latent hierarchical linear model\\  
@@ -701,8 +723,8 @@ Latent hierarchical linear model + spline\\
 
 \end{frame}
 
-\begin{frame}[fragile]{Student retention -- Posterior predictive ribbon}
-\framesubtitle{\texttt{pp\_check(fit, type = "ribbon\_grouped", group="year")}}
+\begin{frame}[fragile]{Student retention -- Posterior predictive ribbon (brms)}
+\framesubtitle{\rinline/pp_check(fit, type = "ribbon_grouped", group="year")/}
 
 \vspace{-0.8\baselineskip}  
 Latent hierarchical linear model\\  
@@ -733,30 +755,30 @@ Latent hierarchical linear model + spline\\
 
 % \end{frame}
 
-\begin{frame}[fragile]{PPC for binary target -- Helicopters}
+\begin{frame}[fragile]{PPC for binary target -- Helicopters (brms)}
 
-  \vspace{-0.6\baselineskip}
+  \vspace{-1.3\baselineskip}
 {\scriptsize
-\begin{lstlisting}
+\begin{minted}{r}
 stable_flight ~ s(wing_length) + s(wing_length, by = nclips),
 family = bernoulli()
-\end{lstlisting}}
-  \vspace{-0.5\baselineskip}
+\end{minted}
+}
+  \vspace{-0.25\baselineskip}
   \includegraphics[height=3.6cm]{helicopter_hier_stable.pdf}
   \vspace{-0.1\baselineskip}
-  \only<2>{\texttt{pp\_check(fit, ndraws=20)}\\
-    \includegraphics[height=3.6cm]{helicopter_hier_stable_ppc_dens_overlay.pdf}}
-  \only<3>{\texttt{pp\_check(fit, type="bars")}\\
-    \includegraphics[height=3.6cm]{helicopter_hier_stable_ppc_bars.pdf}}
-  \only<4>{\texttt{pp\_check(fit, type="bars\_grouped")}\\
-    \includegraphics[height=3.6cm]{helicopter_hier_stable_ppc_bars_grouped.pdf}}
+  \only<2>{\rinline/pp_check(fit, ndraws=20)/\\
+    \includegraphics[height=3.5cm]{helicopter_hier_stable_ppc_dens_overlay.pdf}}
+  \only<3>{\rinline/pp_check(fit, type="bars")/\\
+    \includegraphics[height=3.5cm]{helicopter_hier_stable_ppc_bars.pdf}}
+  \only<4>{\rinline/pp_check(fit, type="bars_grouped")/\\
+    \includegraphics[height=3.5cm]{helicopter_hier_stable_ppc_bars_grouped.pdf}}
   \only<5>{with \texttt{caret::calibration()}\\
-    \includegraphics[height=3.6cm]{helicopter_hier_stable_calibration.pdf}}
+    \includegraphics[height=3.5cm]{helicopter_hier_stable_calibration.pdf}}
   \only<6>{with \texttt{reliabilitydiag::reliabilitydiag()}\\
-    \includegraphics[height=3.6cm]{helicopter_hier_stable_reliabilitydiag.pdf}}
+    \includegraphics[height=3.5cm]{helicopter_hier_stable_reliabilitydiag.pdf}}
   
 \end{frame}
-
 
   
 \begin{frame}[fragile]
@@ -767,9 +789,8 @@ family = bernoulli()
   \item demo demos\_rstan/ppc/poisson-ppc.Rmd
   \end{itemize}
 
-  \vspace{-0.2\parskip}
-  {\color{gray}\footnotesize
-\begin{lstlisting}[language=Stan]
+  \vspace{-0.5\parskip}
+\begin{minted}[gray,fontsize=\footnotesize]{stan}
 data {
   int<lower=1> N;
   int<lower=0> y[N];
@@ -781,11 +802,9 @@ model {
   lambda ~ exponential(0.2);
   y ~ poisson(lambda);
 }
-\end{lstlisting}
-  }
+\end{minted}
   \vspace{-\parskip}
-  {\footnotesize
-\begin{lstlisting}[language=Stan]
+\begin{minted}[fontsize=\footnotesize,highlightlines=5]{stan}
 generated quantities {
   real log_lik[N];
   int y_rep[N];
@@ -794,14 +813,13 @@ generated quantities {
     log_lik[n] = poisson_lpmf(y[n] | lambda);
     }
 }
-\end{lstlisting}
- }
+\end{minted}
 \end{frame}
 
 \begin{frame}{PPC for count data -- Poisson model}
   
   \vspace{-1\baselineskip}
-  \texttt{ppc\_dens\_overlay(y, yrep[1:50,])}
+  \rinline/ppc_dens_overlay(y, yrep[1:50,])/
 
     \includegraphics[height=8cm]{poisson_ppc_dens_overlay.pdf}
 
@@ -810,7 +828,7 @@ generated quantities {
 \begin{frame}{PPC for count data -- Poisson model}
   
   \vspace{-1\baselineskip}
-  \texttt{ppc\_rootogram(y, yrep)}
+  \rinline/ppc_rootogram(y, yrep)/
 
     \includegraphics[height=8cm]{poisson_ppc_rootogram.pdf}
 
@@ -819,8 +837,8 @@ generated quantities {
 \begin{frame}{PPC for count data -- Poisson model}
   
   \vspace{-1\baselineskip}
-  \texttt{prop\_zero <- function(x) mean(x == 0)}\\
-  \texttt{ppc\_stat(y, yrep, stat = "prop\_zero")}
+  \rinline/prop_zero <- function(x) mean(x == 0)/\\
+  \rinline/ppc_stat(y, yrep, stat = "prop_zero")/
 
     \includegraphics[height=7.5cm]{poisson_ppc_stat_propzero.pdf}
 
@@ -829,7 +847,7 @@ generated quantities {
 \begin{frame}{PPC for count data -- hurdle truncated Poisson model}
   
   \vspace{-1\baselineskip}
-  \texttt{ppc\_rootogram(y, yrep2)}
+  \rinline/ppc_rootogram(y, yrep2)/
 
     \includegraphics[height=8cm]{poisson2_ppc_rootogram.pdf}
 
@@ -838,8 +856,8 @@ generated quantities {
 \begin{frame}{PPC for count data -- hurdle truncated Poisson model}
   
   \vspace{-1\baselineskip}
-  \texttt{prop\_zero <- function(x) mean(x == 0)}\\
-  \texttt{ppc\_stat(y, yrep2, stat = "prop\_zero")}
+  \rinline/prop_zero <- function(x) mean(x == 0)/\\
+  \rinline/ppc_stat(y, yrep2, stat = "prop_zero")/
 
     \includegraphics[height=7.5cm]{poisson2_ppc_stat_propzero.pdf}
 
@@ -853,7 +871,8 @@ generated quantities {
     workflow. \url{https://doi.org/10.1111/rssa.12378}.
   \item Graphical posterior predictive checks using the bayesplot package
     \url{http://mc-stan.org/bayesplot/articles/graphical-ppcs.html}
-  \item Another demo \href{http://avehtari.github.io/BDA_R_demos/demos_rstan/ppc/poisson-ppc.html}{demos\_rstan/ppc/poisson-ppc.Rmd}
+  \item brms demos \url{https://avehtari.github.io/BDA_R_demos/demos_rstan/brms_demo.html}
+
   \end{itemize}
   
 \end{frame}
@@ -885,9 +904,38 @@ generated quantities {
 
 \end{frame}
 
+\begin{frame}{priorsense --- prior and likelihood sensitivity analysis}
+
+  \vspace{-0.75\baselineskip}
+  \begin{itemize}
+  \item Power-scale prior and likelihood separately as\\
+    $p(\theta)^\alpha$ and $p(y| \theta)^\alpha$
+    \only<1>{
+  \item Beta blockers --- randomized control-treatment experiment
+    \begin{itemize}
+    \item no prior sensitivity
+    \item likelihood is informative
+    \end{itemize}
+    }
+    \only<2-3>{
+  \item Sorafenib Toxicity --- Binomial model meta analysis
+    \begin{itemize}
+    \item prior-data conflict
+    \item<3> due to accidentally too narrow prior
+    \end{itemize}
+    }
+  \end{itemize}
+
+  \vspace{-0.75\baselineskip}
+  \only<1>{\includegraphics[height=7.5cm]{beta_blockers_priorsense.pdf}}
+  \only<2->{\includegraphics[height=7.5cm]{sorafenib_priorsense.pdf}}
+  
+\end{frame}
+
 \end{document}
 
 %%% Local Variables: 
 %%% TeX-PDF-mode: t
 %%% TeX-master: t
+%%% TeX-command-extra-options: "-shell-escape"
 %%% End: 
