@@ -21,20 +21,20 @@
 \usepackage{rotating}
 \usepackage{listings}
 \usepackage{lstbayes}
-\usepackage{minted}
-\setminted{highlightcolor=lightyellow}
-\newmintinline{r}{}
 \usepackage[all,poly,ps,color]{xy}
 \usepackage{natbib}
 \bibliographystyle{apalike}
 
+% minted
+\usepackage{minted}
+\setminted{highlightcolor=yellow!25}
+\newmintinline{r}{}
 \makeatletter
 \newcommand{\minted@style@bw}{%
   \renewcommand\fcolorbox[3][]{##3}%
   \renewcommand\textcolor[3][]{##3}%
   \color{gray}
 }
-
 % define new minted option "gray"
 \minted@def@opt@switch{gray}
 \fvset{formatcom*={%
@@ -42,6 +42,13 @@
   {\minted@style@bw}{}%
 }}
 \makeatother
+\newcommand{\reducedstrut}{\vrule width 0pt height .9\ht\strutbox depth .9\dp\strutbox\relax}
+\newcommand{\highlight}[1]{%
+  \begingroup
+  \setlength{\fboxsep}{0pt}%  
+  \colorbox{yellow!30}{\reducedstrut\detokenize{#1}\/}%
+  \endgroup
+}
 
 \mode<presentation>
 {
@@ -61,7 +68,10 @@
   /Keywords   (Bayesian data analysis)
 }
 
-\definecolor{lightyellow}{rgb}{1,1,0.878}
+%\definecolor{lightyellow}{rgb}{1,1,0.5}
+%\definecolor{lightgoldenrodyellow}{rgb}{0.98, 0.98, 0.82}
+\definecolor{lightyellow}{rgb}{1, 1, 0.6}
+
 \definecolor{hutblue}{rgb}{0,0.2549,0.6784}
 \definecolor{forestgreen}{rgb}{0.1333,0.5451,0.1333}
 \definecolor{navyblue}{rgb}{0,0,0.5}
@@ -570,7 +580,7 @@ model {
   sigma ~ normal(0, 1);
   
   // Observation model
-  %\fboxsep0pt\colorbox{lightyellow}{weight}% ~ normal(mu_diet[diet_idx], sigma);
+  %\highlight{weight}% ~ normal(mu_diet[diet_idx], sigma);
 }
 \end{minted}
 
@@ -578,7 +588,7 @@ model {
   \vspace{-0.5\baselineskip}
 %\begin{minted}[escapeinside=\%\%,beameroverlays]{r}
 \begin{minted}[escapeinside=\%\%]{r}  
-brm(%\fboxsep0pt\colorbox{lightyellow}{weight}% ~ 1 + (1 | Diet),
+brm(%\highlight{weight}% ~ 1 + (1 | Diet),
 \end{minted}
 }
 
@@ -595,7 +605,7 @@ brm(%\fboxsep0pt\colorbox{lightyellow}{weight}% ~ 1 + (1 | Diet),
 \begin{minted}[escapeinside=\%\%]{stan}
 model {
   // Priors
-  mu_diet ~ normal(%\fboxsep0pt\colorbox{lightyellow}{mu\_0}%, sd);
+  mu_diet ~ normal(%\highlight{mu_0}%, sd);
   mu_0 ~ normal(0, 1);
   sd ~ normal(0, 1)
   sigma ~ normal(0, 1);
@@ -609,7 +619,7 @@ model {
   \vspace{-0.5\baselineskip}
 %\begin{minted}[escapeinside=\%\%,beameroverlays]{r}
 \begin{minted}[escapeinside=\%\%]{r}  
-brm(weight ~%\fboxsep0pt\colorbox{lightyellow}{ 1 }%+ (1 | Diet),
+brm(weight ~%\highlight{ 1 }%+ (1 | Diet),
 \end{minted}
 }
 
@@ -626,7 +636,7 @@ brm(weight ~%\fboxsep0pt\colorbox{lightyellow}{ 1 }%+ (1 | Diet),
 \begin{minted}[escapeinside=\%\%]{stan}
 model {
   // Priors
-  %\fboxsep0pt\colorbox{lightyellow}{mu\_diet ~ normal(mu\_0, sd)}%;
+  %\highlight{mu_diet ~ normal(mu_0, sd)}%;
   mu_0 ~ normal(0, 1);
   sd ~ normal(0, 1)
   sigma ~ normal(0, 1);
@@ -640,7 +650,7 @@ model {
   \vspace{-0.5\baselineskip}
 %\begin{minted}[escapeinside=\%\%,beameroverlays]{r}
 \begin{minted}[escapeinside=\%\%]{r}  
-brm(weight ~%\fboxsep0pt\colorbox{lightyellow}{ 1 + (1 | Diet)}%,
+brm(weight ~%\highlight{ 1 + (1 | Diet)}%,
 \end{minted}
 }
 
@@ -670,7 +680,7 @@ model {
   brms formula
   \vspace{-0.5\baselineskip}
 \begin{minted}[escapeinside=\%\%]{r}
-brm(weight ~ 1 + (1 | Diet), %\fboxsep0pt\colorbox{lightyellow}{data=Chick12}%,
+brm(weight ~ 1 + (1 | Diet), %\highlight{data=Chick12}%,
 \end{minted}
 }
 
@@ -1199,7 +1209,7 @@ Intercept     0.68      0.11     0.45     0.92 1.01      390      242
 
   \vspace{-0.5\baselineskip}
 \begin{minted}[escapeinside=\%\%,fontsize=\footnotesize]{r}
-nstudents | trials(nstudents1) ~ assignment + %\fboxsep0pt\colorbox{lightyellow}{(assignment || year)}%, ...
+nstudents | trials(nstudents1) ~ assignment + %\highlight{(assignment || year)}%, ...
 \end{minted}
 
 \begin{minted}[highlightlines={8-12,14-17},fontsize=\scriptsize,xleftmargin=-5mm]{r}
@@ -1228,7 +1238,7 @@ assignment    -0.21      0.04    -0.30    -0.14 1.00     1056      803
 
   \vspace{-0.5\baselineskip}
 \begin{minted}[escapeinside=\%\%,fontsize=\footnotesize]{r}
-nstudents | trials(nstudents1) ~ assignment + %\fboxsep0pt\colorbox{lightyellow}{(assignment | year)}%, ...
+nstudents | trials(nstudents1) ~ assignment + %\highlight{(assignment | year)}%, ...
 \end{minted}
 
 \begin{minted}[highlightlines={8-13},fontsize=\scriptsize,xleftmargin=-5mm]{r}
@@ -1555,7 +1565,7 @@ generated quantities {
   \rinline/bf()/
 
 \begin{minted}[fontsize=\footnotesize,escapeinside=\%\%]{r}
-fit_lin <- brm(%\colorbox{lightyellow}{bf(temp ~ year, center=FALSE)}%, data = data_lin)
+fit_lin <- brm(%\highlight{bf(temp ~ year, center=FALSE)}%, data = data_lin)
 \end{minted}
 
 \end{frame}
@@ -1601,6 +1611,120 @@ fit_lin <- brm(%\colorbox{lightyellow}{bf(temp ~ year, center=FALSE)}%, data = d
   
 \end{frame}
 
+\begin{frame}[fragile]{Meta-analysis}
+\framesubtitle{Pharmacologic treatments for chronic obstructive pulmonary disease}
+
+\begin{minted}[fontsize=\footnotesize]{r}
+> head(dat.baker2009)
+                  study year id   treatment exac total
+1 Llewellyn-Jones 1996 1996  1 Fluticasone    0     8
+2 Llewellyn-Jones 1996 1996  1     Placebo    3     8
+3            Boyd 1997 1997  2  Salmeterol   47   229
+4            Boyd 1997 1997  2     Placebo   59   227
+5        Paggiaro 1998 1998  3 Fluticasone   45   142
+6        Paggiaro 1998 1998  3     Placebo   51   139
+\end{minted}
+  
+\end{frame}
+
+\begin{frame}[fragile]{Meta-analysis}
+\framesubtitle{Pharmacologic treatments for chronic obstructive pulmonary disease}
+
+\only<1>{A big variation in the number of patients per study}
+\only<2>{2--4 drugs tested per study, and some not including placebo}
+
+\begin{minipage}[t][][t]{1.2\linewidth}
+  \hspace{-10mm}
+  \only<1>{\includegraphics[width=12.5cm]{baker2009_n_patients_per_study.pdf}}
+  \only<2>{\includegraphics[width=12.5cm]{baker2009_treatments_and_studies.pdf}}
+\end{minipage}
+\end{frame}
+
+\begin{frame}[fragile]{Meta-analysis}
+\framesubtitle{Pharmacologic treatments for chronic obstructive pulmonary disease}
+
+\vspace{-0.75\baselineskip}
+Pooled over studies, separate for treatments
+
+\vspace{-0.25\baselineskip}
+\begin{minted}[fontsize=\footnotesize,escapeinside=\%\%]{r}
+fit_pooled <- brm(%\highlight{exac | trials(total) ~ 0 + treatment}%,
+                  prior = prior(student_t(7, 0, 1.5), class='b'),
+                  family=binomial(), data=dat.baker2009)
+\end{minted}
+\vspace{-0.25\baselineskip}
+  \phantom{\includegraphics[width=9cm]{baker2009_pooled_studies_odds_ratio.pdf}}
+
+\end{frame}
+
+\begin{frame}[fragile]{Meta-analysis}
+\framesubtitle{Pharmacologic treatments for chronic obstructive pulmonary disease}
+
+\vspace{-0.75\baselineskip}
+Pooled over studies, separate for treatments
+
+\vspace{-0.25\baselineskip}
+\begin{minted}[fontsize=\footnotesize,escapeinside=\%\%]{r}
+fit_pooled <- brm(exac | trials(total) ~ 0 + %\highlight{treatment}%,
+                  prior = prior(student_t(7, 0, 1.5), class='b'),
+                  family=binomial(), data=dat.baker2009)
+\end{minted}
+\vspace{-0.25\baselineskip}
+  {\includegraphics[width=9cm]{baker2009_pooled_studies_odds_ratio.pdf}}
+
+\end{frame}
+
+\begin{frame}[fragile]{Meta-analysis}
+\framesubtitle{Pharmacologic treatments for chronic obstructive pulmonary disease}
+
+\vspace{-0.75\baselineskip}
+Hirerachical for studies, hierarchical for treatments
+
+\vspace{-0.25\baselineskip}
+\begin{minted}[fontsize=\footnotesize,escapeinside=\%\%]{r}
+fit_hier <- brm(%\highlight{exac | trials(total) ~ (1 | treatment) + (1 | study)}%,
+                family=binomial(), data=dat.baker2009)
+\end{minted}
+%\vspace{-0.25\baselineskip}
+  \phantom{\includegraphics[width=9cm]{baker2009_hier1_odds_ratio.pdf}}
+
+\end{frame}
+
+\begin{frame}[fragile]{Meta-analysis}
+\framesubtitle{Pharmacologic treatments for chronic obstructive pulmonary disease}
+
+\vspace{-0.75\baselineskip}
+Hirerachical for studies, hierarchical for treatments
+
+\vspace{-0.25\baselineskip}
+\begin{minted}[fontsize=\footnotesize,escapeinside=\%\%]{r}
+fit_hier <- brm(exac | trials(total) ~ %\highlight{(1 | treatment)}% + (1 | study),
+                family=binomial(), data=dat.baker2009)
+\end{minted}
+%\vspace{-0.25\baselineskip}
+  {\includegraphics[width=9cm]{baker2009_hier1_odds_ratio.pdf}}
+
+\end{frame}
+
+\begin{frame}[fragile]{Meta-analysis}
+\framesubtitle{Pharmacologic treatments for chronic obstructive pulmonary disease}
+
+\vspace{-0.75\baselineskip}
+Hirerachical for studies, hierarchical for treatments
+
+\vspace{-0.25\baselineskip}
+\begin{minted}[fontsize=\footnotesize,escapeinside=\%\%]{r}
+fit_hier <- brm(exac | trials(total) ~ (1 | treatment) + %\highlight{(1 | study)}%,
+                family=binomial(), data=dat.baker2009)
+\end{minted}
+
+\begin{minipage}[t][][t]{1.2\linewidth}
+  \hspace{-10mm}
+  {\includegraphics[width=12.5cm]{baker2009_hier1_study_effects.pdf}}
+\end{minipage}
+
+\end{frame}
+
 \begin{frame}[fragile]{BDA course demo for brms}
 
 Link in the course web site or directly
@@ -1609,7 +1733,6 @@ Link in the course web site or directly
 \url{https://avehtari.github.io/BDA_R_demos/demos_rstan/brms_demo.html}
   
 \end{frame}
-
 
 \begin{frame}{Exchangeability}
 
