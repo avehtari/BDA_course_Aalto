@@ -29,6 +29,8 @@
 \usepackage{minted}
 \setminted{highlightcolor=yellow!25}
 \newmintinline{r}{}
+% The following is adjusted from
+% https://tex.stackexchange.com/questions/548592/changing-all-colors-to-black-white-using-minted-sty
 \makeatletter
 \newcommand{\minted@style@bw}{%
   \renewcommand\fcolorbox[3][]{##3}%
@@ -42,6 +44,8 @@
   {\minted@style@bw}{}%
 }}
 \makeatother
+% The following is ajusted from
+% https://tex.stackexchange.com/questions/74459/remove-space-before-colorbox
 \newcommand{\reducedstrut}{\vrule width 0pt height .9\ht\strutbox depth .9\dp\strutbox\relax}
 \newcommand{\highlight}[1]{%
   \begingroup
@@ -349,7 +353,7 @@
   \only<1>{\includegraphics[width=8cm]{rats_posterior.pdf}}
   \only<2>{\includegraphics[width=10cm]{rats_hierdraws.pdf}}
   \only<3>{\includegraphics[width=10cm]{rats_hierprior.pdf}}
-  \only<4-5>{\vspace{-0.3\baselineskip}\includegraphics[width=6.7cm]{rats_separate_less.pdf}\\}
+  \only<4-5>{\vspace{-\baselineskip}\includegraphics[width=6.7cm]{rats_separate_less.pdf}\\}
   \only<5>{\vspace{-0.3\baselineskip}
     \includegraphics[width=6.7cm]{rats_hier_less.pdf}\\}
   % \only<6>{\vspace{-0.3\baselineskip}
@@ -368,7 +372,7 @@
 
 \begin{frame}{Hierarchical binomial model: rats}
 
-  {\vspace{-0.3\baselineskip}
+  {\vspace{-\baselineskip}
     \includegraphics[width=6.7cm]{rats_hier_less.pdf}\\}
   {\vspace{-0.3\baselineskip}
     \includegraphics[width=6.7cm]{rats_hierprior.pdf}\\}
@@ -1356,6 +1360,36 @@ model {
   
 \end{frame}
 
+\begin{frame}[fragile]{Centered parameterization}
+
+\vspace{-0.5\baselineskip}
+Hierarchical model code from the course demos
+
+\vspace{-\baselineskip}
+{\footnotesize
+\begin{minted}[highlightlines={4}]{stan}
+parameters {
+  real mu0;                         // prior mean
+  real<lower=0> sigma0;             // prior std constrained to be pos.
+  vector[K] mu;                     // group means
+  real<lower=0> sigma;              // common std constrained to be pos.
+}
+\end{minted}
+}
+\vspace{-\baselineskip}
+{\footnotesize
+\begin{minted}[highlightlines={4}]{stan}
+model {
+  mu0 ~ normal(10, 10);             // weakly informative prior
+  sigma0 ~ normal(0, 10);           // weakly informative prior
+  mu ~ normal(mu0, sigma0);         // population prior with unknown param.
+  sigma ~ lognormal(0, .5);         // weakly informative prior
+  y ~ normal(mu[x], sigma);         // observation model
+}
+\end{minted}
+}
+\end{frame}
+
 \begin{frame}[fragile]{Non-centered parameterization}
 
 \vspace{-0.5\baselineskip}
@@ -1458,14 +1492,15 @@ model {
   \item<+-> If the likelihood is highly informative for all groups, and
     the non-centered parameterization is causing divergences,
     \begin{itemize}
-    \item use non-hierarchical model as the hierarchical part is not
+    \item use fixed population prior model as the hierarchical part is not
       that important with strong likelihood. Instead of 
 \begin{minted}[fontsize=\footnotesize]{r}
 y ~ 1 + (1 | group)
 \end{minted}
-      use
+      use, for example, 
 \begin{minted}[fontsize=\footnotesize]{r}
-y ~ 1 + group
+y ~ 1 + group,
+prior = prior(normal(0, 10), class='b')
 \end{minted}
     \end{itemize}
   \item<+-> There can be need for both centered and non-centered
