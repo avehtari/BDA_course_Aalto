@@ -31,13 +31,14 @@
 \usepackage{minted}
 \setminted{highlightcolor=yellow!25}
 \newmintinline{r}{}
+% The following is adjusted from
+% https://tex.stackexchange.com/questions/548592/changing-all-colors-to-black-white-using-minted-sty
 \makeatletter
 \newcommand{\minted@style@bw}{%
   \renewcommand\fcolorbox[3][]{##3}%
   \renewcommand\textcolor[3][]{##3}%
   \color{gray}
 }
-
 % define new minted option "gray"
 \minted@def@opt@switch{gray}
 \fvset{formatcom*={%
@@ -45,6 +46,8 @@
   {\minted@style@bw}{}%
 }}
 \makeatother
+% The following is ajusted from
+% https://tex.stackexchange.com/questions/74459/remove-space-before-colorbox
 \newcommand{\reducedstrut}{\vrule width 0pt height .9\ht\strutbox depth .9\dp\strutbox\relax}
 \newcommand{\highlight}[1]{%
   \begingroup
@@ -66,7 +69,7 @@
 }
 
 \pdfinfo{            
-  /Title      (BDA, Lecture 8) 
+  /Title      (BDA, Lecture 8a) 
   /Author     (Aki Vehtari) % 
   /Keywords   (Bayesian data analysis)
 }
@@ -780,6 +783,8 @@ family = bernoulli()
   \vspace{-0.25\baselineskip}
   \includegraphics[height=3.6cm]{helicopter_hier_stable_2024.pdf}
   \vspace{-0.1\baselineskip}
+  \only<1>{\phantom{\rinline/pp_check(fit, ndraws=20)/\\
+    \includegraphics[height=3.5cm]{helicopter_hier_stable_ppc_dens_overlay_2024.pdf}}}
   \only<2>{\rinline/pp_check(fit, ndraws=20)/\\
     \includegraphics[height=3.5cm]{helicopter_hier_stable_ppc_dens_overlay_2024.pdf}}
   \only<3>{\rinline/pp_check(fit, type="bars")/\\
@@ -796,9 +801,8 @@ family = bernoulli()
 \begin{frame}{Prior predictive checking: Exposure to air pollution}
 
   \begin{itemize}
-  \item Example from Jonah Gabry, Daniel Simpson, Aki Vehtari, Michael
-    Betancourt, and Andrew Gelman (2019). Visualization in Bayesian
-    workflow. \url{https://doi.org/10.1111/rssa.12378}
+  \item Example from Gabry, Simpson, Vehtari, Betancourt, and  Gelman (2019).
+    Visualization in Bayesian workflow. \url{https://doi.org/10.1111/rssa.12378}
   \item Estimation of human exposure to air pollution from particulate
     matter measuring less than 2.5 microns in diameter ($\mathrm{PM}_{2.5}$)
     \begin{itemize}
