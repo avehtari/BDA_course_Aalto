@@ -25,6 +25,35 @@
 \usepackage{lstbayes}
 \graphicspath{{/home/ave/doc/images/}{}{../teranaloppu/}{../metodi/}{../slides/Hartikainen/}{../gphealth/}{../2008_09_RSS2008/}{../gphealth/}{../jyvaskyla2009/}{../nbbc2009/}{../gphealth/hippics/}{../euroheis2010/}{../pubgensens2011/}{../reykjavik2013/}{../liverpool2013/}{../../gpstuff/doc/}{./images/}{../aalto_stochastic/}{figs/}{../Stancon2018Helsinki/figs/}{../../paper/cvapprox/}{../gppa2017/}{../valencia2017/}{../../paper/combine_predictive_distribution/tex/}{../venice2018/figs/}{./figs/}}
 
+% minted
+\usepackage{minted}
+\setminted{highlightcolor=yellow!25}
+\newmintinline{r}{}
+% The following is adjusted from
+% https://tex.stackexchange.com/questions/548592/changing-all-colors-to-black-white-using-minted-sty
+\makeatletter
+\newcommand{\minted@style@bw}{%
+  \renewcommand\fcolorbox[3][]{##3}%
+  \renewcommand\textcolor[3][]{##3}%
+  \color{gray}
+}
+% define new minted option "gray"
+\minted@def@opt@switch{gray}
+\fvset{formatcom*={%
+  \ifthenelse{\equal{\minted@get@opt{gray}{true}}{true}}
+  {\minted@style@bw}{}%
+}}
+\makeatother
+% The following is ajusted from
+% https://tex.stackexchange.com/questions/74459/remove-space-before-colorbox
+\newcommand{\reducedstrut}{\vrule width 0pt height .9\ht\strutbox depth .9\dp\strutbox\relax}
+\newcommand{\highlight}[1]{%
+  \begingroup
+  \setlength{\fboxsep}{0pt}%  
+  \colorbox{yellow!30}{\reducedstrut\detokenize{#1}\/}%
+  \endgroup
+}
+
 \usepackage{natbib}
 \bibliographystyle{apalike}
 
@@ -37,7 +66,7 @@
   \setbeamertemplate{headline}[default]{}
   \setbeamertemplate{footline}[split]
   % \setbeamertemplate{headline}[text line]{\insertsection}
-  % \setbeamertemplate{footline}[frame number]
+  \setbeamertemplate{footline}[frame number]
 }
 
 \pdfinfo{            
@@ -313,8 +342,7 @@ LOO-PIT check -- latent hierarchical linear + spline\\
 
 Latent hierarchical linear vs. latent hierarchical linear + spline
   
-{\small
-\begin{lstlisting}
+\begin{minted}[fontsize=\footnotesize]{text}
 > loo_R2(fit4) |> round(digits=2)
    Estimate Est.Error Q2.5 Q97.5
 R2     0.92      0.02 0.88  0.95
@@ -322,7 +350,7 @@ R2     0.92      0.02 0.88  0.95
 > loo_R2(fit6) |> round(digits=2)
    Estimate Est.Error Q2.5 Q97.5
 R2     0.97      0.01 0.95  0.98
-\end{lstlisting}}
+\end{minted}
 
   $R^2$ measures the goodness of the mean of the predictive
   distribution
@@ -352,25 +380,24 @@ R2     0.97      0.01 0.95  0.98
 %\vspace{-0.5\baselineskip}  
 \only<2->{
   LOO predictive intervals -- latent hierarchical linear + spline\\  
-  \hspace{-7mm}
   \begin{minipage}[t][3.6cm][t]{1.0\linewidth}
+  \hspace{-9mm}
     \includegraphics[height=3.6cm]{student_retention_sbinom_ppc_loo_intervals.pdf}
   \end{minipage}
 }
 
-\vspace{-0.7\baselineskip}
-\only<3->{\fontsize{6.9}{9}\selectfont {~~~~~-8.4 -5.6 -2.9 -2.9 -2.8 -3.0 -4.0 -3.2 -3.9 -3.2 -3.4 -3.2 -2.9 -3.9 -3.4 -3.4 -3.2 -2.7 -2.8 -3.1\\
+\vspace{-1.75\baselineskip}
+\only<3->{\fontsize{6.95}{9}\selectfont {~~~~~-8.4 -5.6 -2.9 -2.9 -2.8 -3.0 -4.0 -3.2 -3.9 -3.2 -3.4 -3.2 -2.9 -3.9 -3.4 -3.4 -3.2 -2.7 -2.8 -3.1\\
     ~~~~~~~~~-2.5 -2.8 -2.9 -3.4 -5.4 -3.7 -3.1 -3.3 -3.5 -3.2 -3.5 -3.5 -6.6 -3.8 -3.7 -3.4 -2.5 -2.8 -2.9 -3.3\\
   }}
-\only<4->{\footnotesize $\sum = $ -141.7}
+\uncover<4->{\footnotesize $\sum = $ -141.7}
   
 \end{frame}
 
 \begin{frame}[fragile]{Student retention -- elpd\_loo}
 
 Latent hierarchical linear + spline
-{\small
-\begin{lstlisting}
+\begin{minted}[fontsize=\footnotesize,highlightlines=6]{text}
 > loo(fit6)
 
 Computed from 4000 by 40 log-likelihood matrix
@@ -378,27 +405,11 @@ Computed from 4000 by 40 log-likelihood matrix
          Estimate   SE
 elpd_loo   -141.7  7.2
 p_loo        10.9  2.5
-\end{lstlisting}}
+\end{minted}
 
-\end{frame}
-
-\begin{frame}[fragile]{Student retention -- elpd\_loo}
-
-Latent hierarchical linear + spline
-{\small
-\begin{lstlisting}
-> loo(fit6)
-
-Computed from 4000 by 40 log-likelihood matrix
-
-         Estimate   SE
-elpd_loo   -141.7  7.2
-p_loo        10.9  2.5
-\end{lstlisting}}
-
+\pause
 Latent hierarchical linear
-{\small
-\begin{lstlisting}
+\begin{minted}[fontsize=\footnotesize,highlightlines=6]{text}
 > loo(fit4)
 
 Computed from 4000 by 40 log-likelihood matrix
@@ -406,7 +417,7 @@ Computed from 4000 by 40 log-likelihood matrix
          Estimate   SE
 elpd_loo   -184.3 17.3
 p_loo        24.3  5.8
-\end{lstlisting}}
+\end{minted}
 
 \end{frame}
 
@@ -415,28 +426,28 @@ p_loo        24.3  5.8
   \vspace{-\baselineskip}
 {
   {\small LOO predictive intervals -- latent hierarchical linear}\\  
-  \hspace{-7mm}
-  \begin{minipage}[t][2.9cm][t]{1.0\linewidth}
-    \includegraphics[height=2.9cm,trim=0 40 0 0,clip]{student_retention_lbinom_ppc_loo_intervals.pdf}
+  \begin{minipage}[t][2.8cm][t]{1.2\linewidth}
+  \hspace{-9mm}
+    \includegraphics[height=2.8cm,trim=0 40 0 0,clip]{student_retention_lbinom_ppc_loo_intervals.pdf}
   \end{minipage}
 }
 
-\vspace{-0.7\baselineskip}
-{\fontsize{6.95}{9}\selectfont {~~~~-15.7  -7.6  -3.9  -2.9  -6.7  -4.2  -2.9  -3.1 -12.9  -4.7  -3.3  -3.4 -9.0  -3.0  -3.3  -3.2  -8.2  -2.8  -3.2  -3.0\\
+\vspace{-1.75\baselineskip}
+{\fontsize{6.7}{8}\selectfont {~~~~-15.7  -7.6  -3.9  -2.9  -6.7  -4.2  -2.9  -3.1 -12.9  -4.7  -3.3  -3.4 -9.0  -3.0  -3.3  -3.2  -8.2  -2.8  -3.2  -3.0\\
     ~~~~~~~~~-2.9 -3.3 -3.0 -4.6 -4.3 -3.3 -3.0 -4.0 -3.0 -5.6 -3.6 -5.4 -4.9 -3.6 -3.9 -5.2 -2.7 -3.7 -3.0 -4.1
   }}
 {\scriptsize $\sum = $ -184.3}
 
 {
   {\small LOO predictive intervals -- latent hierarchical linear + spline}\\
-  \hspace{-7mm}
-  \begin{minipage}[t][2.9cm][t]{1.0\linewidth}
-    \includegraphics[height=2.9cm,trim=0 40 0 0,clip]{student_retention_sbinom_ppc_loo_intervals.pdf}
+  \begin{minipage}[t][2.8cm][t]{1.2\linewidth}
+  \hspace{-9mm}
+    \includegraphics[height=2.8cm,trim=0 40 0 0,clip]{student_retention_sbinom_ppc_loo_intervals.pdf}
   \end{minipage}
 }
 
-\vspace{-0.7\baselineskip}
-{\fontsize{6.95}{9}\selectfont {~~~~~-8.4 -5.6 -2.9 -2.9 -2.8 -3.0 -4.0 -3.2 -3.9 -3.2 -3.4 -3.2 -2.9 -3.9 -3.4 -3.4 -3.2 -2.7 -2.8 -3.1\\
+\vspace{-1.75\baselineskip}
+{\fontsize{6.7}{8}\selectfont {~~~~~-8.4 -5.6 -2.9 -2.9 -2.8 -3.0 -4.0 -3.2 -3.9 -3.2 -3.4 -3.2 -2.9 -3.9 -3.4 -3.4 -3.2 -2.7 -2.8 -3.1\\
     ~~~~~~~~~-2.5 -2.8 -2.9 -3.4 -5.4 -3.7 -3.1 -3.3 -3.5 -3.2 -3.5 -3.5 -6.6 -3.8 -3.7 -3.4 -2.5 -2.8 -2.9 -3.3
   }}
 {\scriptsize $\sum = $ -141.7}
@@ -471,31 +482,28 @@ p_loo        24.3  5.8
 
   {\color{gray}
 Latent hierarchical linear + spline
-{\small
-\begin{lstlisting}
+\begin{minted}[fontsize=\footnotesize,highlightlines=3]{text}
 > loo(fit6)
          Estimate   SE
 elpd_loo   -141.7  7.2
 p_loo        10.9  2.5
-\end{lstlisting}}
+\end{minted}
 
 Latent hierarchical linear
-{\small
-\begin{lstlisting}
+\begin{minted}[fontsize=\footnotesize,highlightlines=3]{text}
 > loo(fit4)
          Estimate   SE
 elpd_loo   -184.3 17.3
 p_loo        23.8  5.7
-\end{lstlisting}}
+\end{minted}
 }
 
-{\small
-\begin{lstlisting}
+\begin{minted}[fontsize=\footnotesize,highlightlines={2-4}]{text}
 > loo_compare(loo(fit4), loo(fit6))
      elpd_diff se_diff
 fit6   0.0       0.0  
 fit4 -42.6      14.3  
-\end{lstlisting}}
+\end{minted}
 
 \end{frame}
 
@@ -566,69 +574,54 @@ fit4 -42.6      14.3
 
 PSIS-LOO
 
-{\scriptsize
-\begin{lstlisting}
+\begin{minted}[fontsize=\footnotesize,escapeinside=||]{text}
 > fit4 <- add_criterion(fit4, 'loo')
 Pareto k diagnostic values:
-                         Count Pct.    Min. n_eff
-(-Inf, 0.5]   (good)     28    70.0%   399       
- (0.5, 0.7]   (ok)        7    17.5%   77        
-   (0.7, 1]   (bad)       4    10.0%   46        
-   (1, Inf)   (very bad)  1     2.5%   49        
-\end{lstlisting}}
+                         Count Pct.    Min. ESS
+|{\color{forestgreen}(-Inf, 0.7]   (good)     32    80.0%   114     }|
+|{\color{red}   (0.7, 1]   (bad)       7    17.5%   <NA>    }|
+|{\color{red}   (1, Inf)   (very bad)  1     2.5%   <NA>    }|
+\end{minted}
 
-PSIS-LOO + moment matching  
-{\scriptsize
-\begin{lstlisting}
-> ...(fit4, 'loo', moment_match=TRUE, reloo=TRUE, overwrite=TRUE)
-Pareto k diagnostic values:
-                         Count Pct.    Min. n_eff
-(-Inf, 0.5]   (good)     30    75.0%   165       
- (0.5, 0.7]   (ok)       10    25.0%   77        
-   (0.7, 1]   (bad)       0     0.0%   <NA>      
-   (1, Inf)   (very bad)  0     0.0%   <NA>      
-\end{lstlisting}}
+\pause
+PSIS-LOO + moment matching + reloo
+\begin{minted}[fontsize=\footnotesize,escapeinside=||]{text}
+> ...(fit4, 'loo', |\highlight{moment_match=TRUE, reloo=TRUE, overwrite=TRUE}|)
+|{\color{forestgreen}All Pareto k estimates are good (k < 0.7).}|
+\end{minted}
 
-  \vspace{0.5\baselineskip}
+  \vfill
 {\color{gray}\footnotesize\href{https://doi.org/10.1007/s11222-020-09982-2}{Paananen, Piironen, Bürkner, and Vehtari (2021). Implicitly adaptive importance sampling. \textit{Statistics and Computing}, 31, 16.}}
   
 \end{frame}
 
-\begin{frame}[fragile]{Student retention -- loo computation}
+% \begin{frame}[fragile]{Student retention -- loo computation}
 
-PSIS-LOO
+% PSIS-LOO
 
-{\scriptsize
-\begin{lstlisting}
-> fit6 <- add_criterion(fit6, 'loo')
-Pareto k diagnostic values:
-                         Count Pct.    Min. n_eff
-(-Inf, 0.5]   (good)     34    85.0%   558       
- (0.5, 0.7]   (ok)        5    12.5%   226       
-   (0.7, 1]   (bad)       1     2.5%   215       
-   (1, Inf)   (very bad)  0     0.0%   <NA>
-\end{lstlisting}}
+% \begin{minted}[fontsize=\footnotesize,escapeinside=||]{text}
+% > fit6 <- add_criterion(fit6, 'loo')
+% Pareto k diagnostic values:
+%                          Count Pct.    Min. n_eff
+% (-Inf, 0.5]   (good)     34    85.0%   558       
+%  (0.5, 0.7]   (ok)        5    12.5%   226       
+%    (0.7, 1]   (bad)       1     2.5%   215       
+%    (1, Inf)   (very bad)  0     0.0%   <NA>
+% \end{minted}
 
-PSIS-LOO + moment matching  
-{\scriptsize
-\begin{lstlisting}
-> ...(fit6, 'loo', moment_match=TRUE, overwrite=TRUE)
-Pareto k diagnostic values:
-                         Count Pct.    Min. n_eff
-(-Inf, 0.5]   (good)     34    85.0%   558       
- (0.5, 0.7]   (ok)        6    15.0%   226       
-   (0.7, 1]   (bad)       0     0.0%   <NA>      
-   (1, Inf)   (very bad)  0     0.0%   <NA>      
-\end{lstlisting}}
+% PSIS-LOO + moment matching  
+% \begin{minted}[fontsize=\footnotesize,escapeinside=||]{text}
+% > ...(fit6, 'loo', moment_match=TRUE, overwrite=TRUE)
+% All Pareto k estimates are good (k < 0.7).
+% \end{minted}
   
-  \vspace{0.5\baselineskip}
-{\color{gray}\footnotesize\href{https://doi.org/10.1007/s11222-020-09982-2}{Paananen, Piironen, Bürkner, and Vehtari (2021). Implicitly adaptive importance sampling. \textit{Statistics and Computing}, 31, 16.}}
-\end{frame}
+%   \vspace{0.5\baselineskip}
+% {\color{gray}\footnotesize\href{https://doi.org/10.1007/s11222-020-09982-2}{Paananen, Piironen, Bürkner, and Vehtari (2021). Implicitly adaptive importance sampling. \textit{Statistics and Computing}, 31, 16.}}
+% \end{frame}
 
 \begin{frame}[fragile]{looic?}
 
-{\scriptsize
-\begin{lstlisting}
+\begin{minted}[fontsize=\footnotesize,highlightlines={8}]{text}
 > loo(fit6)
 
 Computed from 4000 by 40 log-likelihood matrix
@@ -639,14 +632,14 @@ p_loo        10.9  2.5
 looic       283.4 14.4
 ------
 Monte Carlo SE of elpd_loo is 0.1.
-\end{lstlisting}}
+\end{minted}
 
   \begin{itemize}
-  \item \texttt{loo} output shows also {looic}
+  \item \rinline{loo} output shows also {looic}
   \item for historical non-Bayesian reasons it's -2 * elpd\_loo
     \begin{itemize}
       \item connection to deviance and information criteria
-      \item you can just ignore it
+      \item you can just ignore it (I'd prefer it would not e´be shown)
     \end{itemize}
 
   \end{itemize}
@@ -682,7 +675,7 @@ Monte Carlo SE of elpd_loo is 0.1.
     didn't multiply by -2)
 \end{list1}
 
-\vspace{\baselineskip}
+%\vspace{\baselineskip}
 {\color{gray}\footnotesize \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman and Gabry (2017). Practical Bayesian model evaluation using leave-one-out cross-validation and WAIC. \textit{Statistics and Computing}, 27(5):1413–1432}\\
 \href{http://dx.doi.org/10.1214/12-SS102}{Vehtari \& Ojanen (2012). A survey of Bayesian predictive methods for model assessment, selection and comparison. \textit{Statistics Surveys}, 6:142-228.}}
 
@@ -704,9 +697,9 @@ Monte Carlo SE of elpd_loo is 0.1.
       $p(y_n|y_1,\ldots,y_{n-1},M_1) = \int p(y_n|\theta,M_1)p(\theta|y_1,\ldots,y_{n-1},M_1)d\theta$\\
   } }
 
-\vspace{4\baselineskip}
 {\color{gray}\footnotesize
-  \href{http://dx.doi.org/10.1214/12-SS102}{Vehtari \& Ojanen (2012). A survey of Bayesian predictive methods for model assessment, selection and comparison. \textit{Statistics Surveys}, 6:142-228.}}
+  \href{http://dx.doi.org/10.1214/12-SS102}{Vehtari \& Ojanen (2012). A survey of Bayesian predictive methods for model assessment, selection and comparison. \textit{Statistics Surveys}, 6:142-228.}\\
+}
 
 \end{frame}
 
@@ -779,11 +772,12 @@ Monte Carlo SE of elpd_loo is 0.1.
     \hspace{-0.8cm}\begin{minipage}[t]{1.0\linewidth}
       {\small
         \begin{tabular}{lll}
-          $t$-test & mean of data & {\tt stan\_glm(y \~\ 1)}\\
-          paired $t$-test & mean of diffs &{\tt stan\_glm((y1 - y2) \~\  1)}\\
-          Pearson correl. & linear model &{\tt stan\_glm(y \~\  1 + x)}\\
-          two-sample $t$-test & group means &{\tt stan\_glm(y \~\  1 + gid)}\\
-          ANOVA & hier. model &{\tt stan\_glm(y \~\  1 + (1 | gid))}\\
+          test & model & formula \\\hline
+          $t$-test & mean of data & \rinline/y ~ 1/\\
+          paired $t$-test & mean of diffs &\rinline/(y1 - y2) ~  1/\\
+          Pearson correl. & linear model &\rinline/y ~  1 + x/\\
+          two-sample $t$-test & group means &\rinline/y ~  1 + gid/\\
+          ANOVA & hier. model &\rinline/y ~  1 + (1 | gid)/\\
           $\ldots$ &
         \end{tabular}}
       \end{minipage}
@@ -828,81 +822,25 @@ Monte Carlo SE of elpd_loo is 0.1.
     \end{itemize}
   \end{itemize}
 
-{\footnotesize
-\begin{lstlisting}
+\begin{minted}[fontsize=\footnotesize,escapeinside=\%\%]{r}
 d_bin2 <- data.frame(N = c(674, 680),
                      y = c(39,22),
                      grp2 = c(0,1))
 
-fitb1 <- brm(y | trials(N) ~ 1,
-             family = binomial(),
-             data = d_bin2)
+fitb1 <- brm(%\highlight{y | trials(N) ~ 1}%, family = binomial(), data = d_bin2)
 
-fitb2 <- brm(y | trials(N) ~ 1 + grp2,
-             family = binomial(),
-             data = d_bin2)
-\end{lstlisting}}
-
-\end{frame}
-
-\begin{frame}[fragile]{Beta blockers}
-
-\begin{itemize}
-  \item An experiment was performed to estimate the effect of
-    beta-blockers on mortality of cardiac patients
-  \item A group of
-    patients were randomly assigned to treatment and control groups:
-    \begin{itemize}
-    \item out of 674 patients receiving the control, 39 died
-    \item out of 680 receiving the treatment, 22 died
-    \end{itemize}
-  \end{itemize}
-
-{\footnotesize
-\begin{lstlisting}
-d_bin2b <- data.frame(y = c(rep(1,39), rep(0,674-39),
-                            rep(1,22), rep(0,680-22)),
-                      grp2 = c(rep(0, 674), rep(1, 680)))
-
-fitb1 <- brm(y ~ 1, family = bernoulli(), data = d_bin2b)
-
-fitb2 <- brm(y ~ 1 + grp2, family = bernoulli(), data = d_bin2b)
-\end{lstlisting}}
-
-\end{frame}
-
-\begin{frame}[fragile]{Beta blockers}
-
-\begin{itemize}
-  \item An experiment was performed to estimate the effect of
-    beta-blockers on mortality of cardiac patients
-  \item A group of
-    patients were randomly assigned to treatment and control groups:
-    \begin{itemize}
-    \item out of 674 patients receiving the control, 39 died
-    \item out of 680 receiving the treatment, 22 died
-    \end{itemize}
-  \end{itemize}
-
-{\footnotesize
-\begin{lstlisting}
-d_bin2b <- data.frame(y = c(rep(1,39), rep(0,674-39),
-                            rep(1,22), rep(0,680-22)),
-                      grp2 = c(rep(0, 674), rep(1, 680)))
-
-fitb1 <- brm(y ~ 1, family = bernoulli(), data = d_bin2b)
-
-fitb2 <- brm(y ~ 1 + grp2, family = bernoulli(), data = d_bin2b)
-
+fitb2 <- brm(%\highlight{y | trials(N) ~ 1 + grp2}%, family = binomial(), data = d_bin2)
+\end{minted}
+  \pause
+\begin{minted}[fontsize=\footnotesize,escapeinside=\%\%]{r}
 > loo_compare(loo(fitb1),loo(fitb2))
       elpd_diff se_diff
 fitb2  0.0       0.0   
 fitb1 -1.6       2.3   
-\end{lstlisting}}
-
+\end{minted}
 \end{frame}
 
-\begin{frame}{Bayesian inference}
+\begin{frame}{Posterior inference}
 
   \begin{itemize}
   \item Instead of model selection, report full posterior \only<1>{and}
@@ -959,19 +897,17 @@ fitb1 -1.6       2.3
   \begin{itemize}
   \item Equivalence testing (region of practical equivalence)
     \begin{itemize}
-      \only<1>{
     \item what is the probability that the effect is closer than
       $\epsilon$ to null, where $\epsilon$ is based on what is
       practically useful effect size
-      }
-      \only<2>{
-      \item some people combine posterior interval and region of
-        practical equivalence}
+      % \only<2>{
+      % \item some people combine posterior interval and region of
+      %   practical equivalence}
     \end{itemize}
   \end{itemize}
 
-    \only<1>{\includegraphics[width=10cm]{odds1_rope.pdf}}
-    \only<2>{\includegraphics[width=10cm]{odds1_cirope.pdf}}
+    {\includegraphics[width=10cm]{odds1_rope.pdf}}
+    % \only<2>{\includegraphics[width=10cm]{odds1_cirope.pdf}}
 
 \end{frame}
 
@@ -1011,9 +947,9 @@ fitb1 -1.6       2.3
   \only<4>{\begin{minipage}{14.1cm}
       \hspace{-1.2cm}\includegraphics[width=6.8cm]{odds1_rope.pdf}\includegraphics[width=6.8cm]{odds2_rope.pdf}
     \end{minipage}}
-  \only<5>{\begin{minipage}{14.1cm}
-      \hspace{-1.2cm}\includegraphics[width=6.8cm]{odds1_cirope.pdf}\includegraphics[width=6.8cm]{odds2_cirope.pdf}
-    \end{minipage}}
+  % \only<5>{\begin{minipage}{14.1cm}
+  %     \hspace{-1.2cm}\includegraphics[width=6.8cm]{odds1_cirope.pdf}\includegraphics[width=6.8cm]{odds2_cirope.pdf}
+  %   \end{minipage}}
   
 \end{frame}
 
@@ -1108,7 +1044,7 @@ fitb1 -1.6       2.3
 
 \end{frame}
 
-\begin{frame}[fragile]{Bayesian hypothesis testing}
+\begin{frame}[fragile,fragile]{Bayesian hypothesis testing}
 
   \begin{itemize}
   \item Predictive performance
@@ -1129,13 +1065,12 @@ fitb1 -1.6       2.3
     \url{https://users.aalto.fi/~ave/modelselection/betablockers.html})
   \end{itemize}
 
-{\footnotesize
-\begin{lstlisting}
+\begin{minted}[fontsize=\footnotesize,escapeinside=\%\%]{r}
 > loo_compare(loo(fitb1),loo(fitb2))
       elpd_diff se_diff
 fitb2  0.0       0.0   
 fitb1 -1.6       2.3   
-\end{lstlisting}}
+\end{minted}
 
 \end{frame}
 
@@ -1505,7 +1440,8 @@ N(0,$\frac{1}{\sqrt{p}}$) prior on each coefficient\\
     \includegraphics[width=10.5cm]{gaussian_forward.pdf}}
   \only<2->{R2D2 prior reduces overfit in model selection\\
     \includegraphics[width=10.5cm]{r2d2_forward.pdf}\\}
-  
+
+  \vspace{-\baselineskip}
   \uncover<3>{Reminder: variable selection is not needed with good priors
     to get good predictive performance, but may be useful for other purposes}
 
@@ -1623,4 +1559,5 @@ N(0,$\frac{1}{\sqrt{p}}$) prior on each coefficient\\
 %%% Local Variables: 
 %%% mode: latex
 %%% TeX-master: t
+%%% TeX-command-extra-options: "-shell-escape"
 %%% End:
