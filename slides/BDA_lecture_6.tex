@@ -30,13 +30,14 @@
 \usepackage{minted}
 \setminted{highlightcolor=yellow!25}
 \newmintinline{r}{}
+% The following is adjusted from
+% https://tex.stackexchange.com/questions/548592/changing-all-colors-to-black-white-using-minted-sty
 \makeatletter
 \newcommand{\minted@style@bw}{%
   \renewcommand\fcolorbox[3][]{##3}%
   \renewcommand\textcolor[3][]{##3}%
   \color{gray}
 }
-
 % define new minted option "gray"
 \minted@def@opt@switch{gray}
 \fvset{formatcom*={%
@@ -44,6 +45,8 @@
   {\minted@style@bw}{}%
 }}
 \makeatother
+% The following is ajusted from
+% https://tex.stackexchange.com/questions/74459/remove-space-before-colorbox
 \newcommand{\reducedstrut}{\vrule width 0pt height .9\ht\strutbox depth .9\dp\strutbox\relax}
 \newcommand{\highlight}[1]{%
   \begingroup
@@ -1007,46 +1010,61 @@ model {
 \end{frame}
 
 \begin{frame}[fragile]{CmdStanR}
-
+  
+  CmdStanR is an R interface for Stan
+  
   {\small
     \setminted{gray}
     {\only<1>{\setminted{gray=false}}
-      RStan
 \begin{minted}{r}
+# Load CmdStanR
 library(cmdstanr) 
 options(mc.cores = 1)
 \end{minted}
     }
 {\only<2>{\setminted{gray=false}}
 \begin{minted}{r}
-d_bin <- list(N = 10, y = 7)
+# Compile Stan model
 mod_bin <- cmdstan_model(stan_file = 'binom.stan')
+\end{minted}
+}
+{\only<3>{\setminted{gray=false}}
+\begin{minted}{r}
+# Sample from the posterior given the model and data
+d_bin <- list(N = 10, y = 7)
 fit_bin <- mod_bin$sample(data = d_bin)
 \end{minted}
 }
+{\only<4>{\setminted{gray=false}}
+\begin{minted}{r}
+# Show summary and access draws
+fit_bin$summary()
+draws <- fit_bin$draws(format = "df")
+\end{minted}
+}
 }
 \end{frame}
 
-\begin{frame}[fragile]{PyStan}
+% \begin{frame}[fragile]{PyStan}
 
-  {\small
-    \setminted{gray}
-    {\only<1>{\setminted{gray=false}}
-      PyStan
-\begin{minted}{py}
-import pystan
-import stan_utility
-\end{minted}
-    }
-    {\only<2>{\setminted{gray=false}}
-\begin{minted}{py}
-data = dict(N=10, y=8)
-model = stan_utility.compile_model('binom.stan')
-fit = model.sampling(data=data)
-\end{minted}
-    }
-  }
-\end{frame}
+%   {\small
+%     \setminted{gray}
+%     {\only<1>{\setminted{gray=false}}
+%       PyStan
+% \begin{minted}{py}
+% import pystan
+% import stan_utility
+% \end{minted}
+%     }
+%     {\only<2>{\setminted{gray=false}}
+% \begin{minted}{py}
+% data = dict(N=10, y=8)
+% model = stan_utility.compile_model('binom.stan')
+% fit = model.sampling(data=data)
+% \end{minted}
+%     }
+%   }
+% \end{frame}
 
 \begin{frame}{Stan}
   
@@ -1216,7 +1234,7 @@ $num_max_treedepth
 
   \pause
   
-  \mintedinline{r}{diagnostic\_summary()} includes E-BFMI diagnostic,
+  \rinline/diagnostic_summary()/ includes E-BFMI diagnostic,
   which I'll skip in this course
   
 \end{frame}
@@ -1690,8 +1708,10 @@ Two group Binomial model:
   {\footnotesize
 \begin{minted}{r}
 d_bin2 <- data.frame(N = c(674, 680), y = c(39,22), grp2 = c(0,1))
-fit_bin2 <- stan_glm(y/N ~ grp2, family = binomial(), data = d_bin2,
-                     weights = N)
+fit_bin2 <- stan_glm(y/N ~ grp2,
+                     weights = N,
+                     family = binomial(),
+                     data = d_bin2)
 \end{minted}
   }
 % \begin{minted}{r}
@@ -1722,14 +1742,17 @@ Two group Binomial model:
   {\footnotesize
 \begin{minted}{r}
 d_bin2 <- data.frame(N = c(674, 680), y = c(39,22), grp2 = c(0,1))
-fit_bin2 <- stan_glm(y/N ~ grp2, family = binomial(), data = d_bin2,
-                    weights = N)
+fit_bin2 <- stan_glm(y/N ~ grp2,
+                     weights = N,
+                     family = binomial(),
+                     data = d_bin2)
 \end{minted}
   }
     Normal linear model
   {\footnotesize
 \begin{minted}{r}
-    fit_lin <- stan_glm(temp ~ year, data = d_lin)
+    fit_lin <- stan_glm(temp ~ year,
+                        data = d_lin)
 \end{minted}
   }
 % \begin{minted}{r}
@@ -1757,10 +1780,13 @@ fit_bin2 <- stan_glm(y/N ~ grp2, family = binomial(), data = d_bin2,
 
   {\footnotesize
 \begin{minted}{r}
-fit_bin2 <- brm(y | trials(N) ~ grp2, family = binomial(), data = d_bin2)
+fit_bin2 <- brm(y | trials(N) ~ grp2,
+                family = binomial(),
+                data = d_bin2)
 
-
-fit_lin_t <- brm(temp ~ year, data = d_lin, family = student())
+fit_lin_t <- brm(temp ~ year,
+                 family = student(),
+                 data = d_lin)
 \end{minted}
   }
     
