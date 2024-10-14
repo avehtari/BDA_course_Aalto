@@ -659,25 +659,26 @@ p(y_\mathrm{pred.}|x_\mathrm{pred.},\alpha,\beta,\sigma) = p_\mathrm{normal}(y_\
 <span id="cb38-6"><a href="#cb38-6"></a>                <span class="fu">c</span>(<span class="dv">242</span>, <span class="dv">212</span>, <span class="dv">184</span>, <span class="dv">177</span>, <span class="dv">174</span>, <span class="dv">172</span>, <span class="dv">163</span>, <span class="dv">156</span>)<span class="sc">/</span><span class="dv">242</span>,</span>
 <span id="cb38-7"><a href="#cb38-7"></a>                <span class="fu">c</span>(<span class="dv">332</span>, <span class="dv">310</span>, <span class="dv">278</span>, <span class="dv">258</span>, <span class="dv">243</span>, <span class="dv">242</span>, <span class="dv">226</span>, <span class="dv">224</span>)<span class="sc">/</span><span class="dv">332</span>,</span>
 <span id="cb38-8"><a href="#cb38-8"></a>                <span class="fu">c</span>(<span class="dv">301</span>, <span class="dv">269</span>, <span class="dv">231</span>, <span class="dv">232</span>, <span class="dv">217</span>, <span class="dv">208</span>, <span class="dv">193</span>, <span class="dv">191</span>)<span class="sc">/</span><span class="dv">301</span>,</span>
-<span id="cb38-9"><a href="#cb38-9"></a>                <span class="fu">c</span>(<span class="dv">245</span>, <span class="dv">240</span>, <span class="dv">228</span>, <span class="dv">217</span>, <span class="dv">206</span>, <span class="dv">199</span>, <span class="dv">191</span>, <span class="dv">182</span>)<span class="sc">/</span><span class="dv">245</span>)</span>
-<span id="cb38-10"><a href="#cb38-10"></a><span class="co"># These are our predictors x: for each observation, the corresponding assignment number.</span></span>
-<span id="cb38-11"><a href="#cb38-11"></a>assignment <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>, <span class="dv">5</span>)</span>
-<span id="cb38-12"><a href="#cb38-12"></a><span class="co"># These are in some sense our test data: the proportion of students handing in the last assignment (9),</span></span>
-<span id="cb38-13"><a href="#cb38-13"></a><span class="co"># sorted by year. </span></span>
-<span id="cb38-14"><a href="#cb38-14"></a><span class="co"># Usually, we would not want to split our data like that and instead</span></span>
-<span id="cb38-15"><a href="#cb38-15"></a><span class="co"># use e.g. Leave-One-Out Cross-Validation (LOO-CV, see e.g. http://mc-stan.org/loo/index.html)</span></span>
-<span id="cb38-16"><a href="#cb38-16"></a><span class="co"># to evaluate model performance.</span></span>
-<span id="cb38-17"><a href="#cb38-17"></a>propstudents9 <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">121</span><span class="sc">/</span><span class="dv">176</span>, <span class="dv">153</span><span class="sc">/</span><span class="dv">242</span>, <span class="dv">218</span><span class="sc">/</span><span class="dv">332</span>, <span class="dv">190</span><span class="sc">/</span><span class="dv">301</span>, <span class="dv">175</span><span class="sc">/</span><span class="dv">245</span>)</span>
-<span id="cb38-18"><a href="#cb38-18"></a><span class="co"># The total number of assignments</span></span>
-<span id="cb38-19"><a href="#cb38-19"></a>no_assignments <span class="ot">=</span> <span class="dv">9</span></span>
-<span id="cb38-20"><a href="#cb38-20"></a><span class="co"># The assignment numbers for which we want to generate predictions</span></span>
-<span id="cb38-21"><a href="#cb38-21"></a>x_predictions <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span>no_assignments</span>
-<span id="cb38-22"><a href="#cb38-22"></a><span class="co"># (Cmd)Stan(R) expects the data to be passed in the below format:</span></span>
-<span id="cb38-23"><a href="#cb38-23"></a>model_data <span class="ot">=</span> <span class="fu">list</span>(<span class="at">N=</span><span class="fu">length</span>(assignment),</span>
-<span id="cb38-24"><a href="#cb38-24"></a>                 <span class="at">x=</span>assignment,</span>
-<span id="cb38-25"><a href="#cb38-25"></a>                 <span class="at">y=</span>propstudents,</span>
-<span id="cb38-26"><a href="#cb38-26"></a>                 <span class="at">no_predictions=</span>no_assignments,</span>
-<span id="cb38-27"><a href="#cb38-27"></a>                 <span class="at">x_predictions=</span>x_predictions)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb38-9"><a href="#cb38-9"></a>                <span class="fu">c</span>(<span class="dv">245</span>, <span class="dv">240</span>, <span class="dv">228</span>, <span class="dv">217</span>, <span class="dv">206</span>, <span class="dv">199</span>, <span class="dv">191</span>, <span class="dv">182</span>)<span class="sc">/</span><span class="dv">245</span>,</span>
+<span id="cb38-10"><a href="#cb38-10"></a>                <span class="fu">c</span>(<span class="dv">264</span>, <span class="dv">249</span>, <span class="dv">215</span>, <span class="dv">221</span>, <span class="dv">215</span>, <span class="dv">206</span>, <span class="dv">192</span>, <span class="dv">186</span>)<span class="sc">/</span><span class="dv">264</span>)</span>
+<span id="cb38-11"><a href="#cb38-11"></a><span class="co"># These are our predictors x: for each observation, the corresponding assignment number.</span></span>
+<span id="cb38-12"><a href="#cb38-12"></a>assignment <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>, <span class="dv">6</span>)</span>
+<span id="cb38-13"><a href="#cb38-13"></a><span class="co"># These are in some sense our test data: the proportion of students handing in the last assignment (9),</span></span>
+<span id="cb38-14"><a href="#cb38-14"></a><span class="co"># sorted by year. </span></span>
+<span id="cb38-15"><a href="#cb38-15"></a><span class="co"># Usually, we would not want to split our data like that and instead</span></span>
+<span id="cb38-16"><a href="#cb38-16"></a><span class="co"># use e.g. Leave-One-Out Cross-Validation (LOO-CV, see e.g. http://mc-stan.org/loo/index.html)</span></span>
+<span id="cb38-17"><a href="#cb38-17"></a><span class="co"># to evaluate model performance.</span></span>
+<span id="cb38-18"><a href="#cb38-18"></a>propstudents9 <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">121</span><span class="sc">/</span><span class="dv">176</span>, <span class="dv">153</span><span class="sc">/</span><span class="dv">242</span>, <span class="dv">218</span><span class="sc">/</span><span class="dv">332</span>, <span class="dv">190</span><span class="sc">/</span><span class="dv">301</span>, <span class="dv">175</span><span class="sc">/</span><span class="dv">245</span>, <span class="dv">179</span><span class="sc">/</span><span class="dv">264</span>)</span>
+<span id="cb38-19"><a href="#cb38-19"></a><span class="co"># The total number of assignments</span></span>
+<span id="cb38-20"><a href="#cb38-20"></a>no_assignments <span class="ot">=</span> <span class="dv">9</span></span>
+<span id="cb38-21"><a href="#cb38-21"></a><span class="co"># The assignment numbers for which we want to generate predictions</span></span>
+<span id="cb38-22"><a href="#cb38-22"></a>x_predictions <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span>no_assignments</span>
+<span id="cb38-23"><a href="#cb38-23"></a><span class="co"># (Cmd)Stan(R) expects the data to be passed in the below format:</span></span>
+<span id="cb38-24"><a href="#cb38-24"></a>model_data <span class="ot">=</span> <span class="fu">list</span>(<span class="at">N=</span><span class="fu">length</span>(assignment),</span>
+<span id="cb38-25"><a href="#cb38-25"></a>                 <span class="at">x=</span>assignment,</span>
+<span id="cb38-26"><a href="#cb38-26"></a>                 <span class="at">y=</span>propstudents,</span>
+<span id="cb38-27"><a href="#cb38-27"></a>                 <span class="at">no_predictions=</span>no_assignments,</span>
+<span id="cb38-28"><a href="#cb38-28"></a>                 <span class="at">x_predictions=</span>x_predictions)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>Sampling from the posterior distribution happens here</strong>:</p>
 <div class="cell">
@@ -1518,207 +1519,208 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb47-191"><a href="#cb47-191"></a>                <span class="fu">c</span>(<span class="dv">242</span>, <span class="dv">212</span>, <span class="dv">184</span>, <span class="dv">177</span>, <span class="dv">174</span>, <span class="dv">172</span>, <span class="dv">163</span>, <span class="dv">156</span>)<span class="sc">/</span><span class="dv">242</span>,</span>
 <span id="cb47-192"><a href="#cb47-192"></a>                <span class="fu">c</span>(<span class="dv">332</span>, <span class="dv">310</span>, <span class="dv">278</span>, <span class="dv">258</span>, <span class="dv">243</span>, <span class="dv">242</span>, <span class="dv">226</span>, <span class="dv">224</span>)<span class="sc">/</span><span class="dv">332</span>,</span>
 <span id="cb47-193"><a href="#cb47-193"></a>                <span class="fu">c</span>(<span class="dv">301</span>, <span class="dv">269</span>, <span class="dv">231</span>, <span class="dv">232</span>, <span class="dv">217</span>, <span class="dv">208</span>, <span class="dv">193</span>, <span class="dv">191</span>)<span class="sc">/</span><span class="dv">301</span>,</span>
-<span id="cb47-194"><a href="#cb47-194"></a>                <span class="fu">c</span>(<span class="dv">245</span>, <span class="dv">240</span>, <span class="dv">228</span>, <span class="dv">217</span>, <span class="dv">206</span>, <span class="dv">199</span>, <span class="dv">191</span>, <span class="dv">182</span>)<span class="sc">/</span><span class="dv">245</span>)</span>
-<span id="cb47-195"><a href="#cb47-195"></a><span class="co"># These are our predictors x: for each observation, the corresponding assignment number.</span></span>
-<span id="cb47-196"><a href="#cb47-196"></a>assignment <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>, <span class="dv">5</span>)</span>
-<span id="cb47-197"><a href="#cb47-197"></a><span class="co"># These are in some sense our test data: the proportion of students handing in the last assignment (9),</span></span>
-<span id="cb47-198"><a href="#cb47-198"></a><span class="co"># sorted by year. </span></span>
-<span id="cb47-199"><a href="#cb47-199"></a><span class="co"># Usually, we would not want to split our data like that and instead</span></span>
-<span id="cb47-200"><a href="#cb47-200"></a><span class="co"># use e.g. Leave-One-Out Cross-Validation (LOO-CV, see e.g. http://mc-stan.org/loo/index.html)</span></span>
-<span id="cb47-201"><a href="#cb47-201"></a><span class="co"># to evaluate model performance.</span></span>
-<span id="cb47-202"><a href="#cb47-202"></a>propstudents9 <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">121</span><span class="sc">/</span><span class="dv">176</span>, <span class="dv">153</span><span class="sc">/</span><span class="dv">242</span>, <span class="dv">218</span><span class="sc">/</span><span class="dv">332</span>, <span class="dv">190</span><span class="sc">/</span><span class="dv">301</span>, <span class="dv">175</span><span class="sc">/</span><span class="dv">245</span>)</span>
-<span id="cb47-203"><a href="#cb47-203"></a><span class="co"># The total number of assignments</span></span>
-<span id="cb47-204"><a href="#cb47-204"></a>no_assignments <span class="ot">=</span> <span class="dv">9</span></span>
-<span id="cb47-205"><a href="#cb47-205"></a><span class="co"># The assignment numbers for which we want to generate predictions</span></span>
-<span id="cb47-206"><a href="#cb47-206"></a>x_predictions <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span>no_assignments</span>
-<span id="cb47-207"><a href="#cb47-207"></a><span class="co"># (Cmd)Stan(R) expects the data to be passed in the below format:</span></span>
-<span id="cb47-208"><a href="#cb47-208"></a>model_data <span class="ot">=</span> <span class="fu">list</span>(<span class="at">N=</span><span class="fu">length</span>(assignment),</span>
-<span id="cb47-209"><a href="#cb47-209"></a>                 <span class="at">x=</span>assignment,</span>
-<span id="cb47-210"><a href="#cb47-210"></a>                 <span class="at">y=</span>propstudents,</span>
-<span id="cb47-211"><a href="#cb47-211"></a>                 <span class="at">no_predictions=</span>no_assignments,</span>
-<span id="cb47-212"><a href="#cb47-212"></a>                 <span class="at">x_predictions=</span>x_predictions)</span>
-<span id="cb47-213"><a href="#cb47-213"></a><span class="in">```</span></span>
-<span id="cb47-214"><a href="#cb47-214"></a></span>
-<span id="cb47-215"><a href="#cb47-215"></a>**Sampling from the posterior distribution happens here**:</span>
-<span id="cb47-216"><a href="#cb47-216"></a></span>
-<span id="cb47-219"><a href="#cb47-219"></a><span class="in">```{r}</span></span>
-<span id="cb47-220"><a href="#cb47-220"></a><span class="co">#| eval: false</span></span>
-<span id="cb47-221"><a href="#cb47-221"></a><span class="co"># This reads the file at the specified path and tries to compile it. </span></span>
-<span id="cb47-222"><a href="#cb47-222"></a><span class="co"># If it fails, an error is thrown.</span></span>
-<span id="cb47-223"><a href="#cb47-223"></a>retention_model <span class="ot">=</span> <span class="fu">cmdstan_model</span>(<span class="st">"assignment6_linear_model.stan"</span>)</span>
-<span id="cb47-224"><a href="#cb47-224"></a><span class="co"># This "out &lt;- capture.output(...)" construction suppresses output from cmdstanr</span></span>
-<span id="cb47-225"><a href="#cb47-225"></a><span class="co"># See also https://github.com/stan-dev/cmdstanr/issues/646</span></span>
-<span id="cb47-226"><a href="#cb47-226"></a>out <span class="ot">&lt;-</span> <span class="fu">capture.output</span>(</span>
-<span id="cb47-227"><a href="#cb47-227"></a>    <span class="co"># Sampling from the posterior distribution happens here:</span></span>
-<span id="cb47-228"><a href="#cb47-228"></a>    fit <span class="ot">&lt;-</span> retention_model<span class="sc">$</span><span class="fu">sample</span>(<span class="at">data=</span>model_data, <span class="at">refresh=</span><span class="dv">0</span>, <span class="at">show_messages=</span><span class="cn">FALSE</span>)</span>
-<span id="cb47-229"><a href="#cb47-229"></a>)</span>
-<span id="cb47-230"><a href="#cb47-230"></a><span class="in">```</span></span>
-<span id="cb47-231"><a href="#cb47-231"></a></span>
-<span id="cb47-232"><a href="#cb47-232"></a>**Draws postprocessing happens here**:</span>
-<span id="cb47-233"><a href="#cb47-233"></a></span>
-<span id="cb47-236"><a href="#cb47-236"></a><span class="in">```{r}</span></span>
-<span id="cb47-237"><a href="#cb47-237"></a><span class="co">#| eval: false</span></span>
-<span id="cb47-238"><a href="#cb47-238"></a><span class="co"># This extracts the draws from the sampling result as a data.frame.</span></span>
-<span id="cb47-239"><a href="#cb47-239"></a>draws_df <span class="ot">=</span> fit<span class="sc">$</span><span class="fu">draws</span>(<span class="at">format=</span><span class="st">"draws_df"</span>)</span>
-<span id="cb47-240"><a href="#cb47-240"></a></span>
-<span id="cb47-241"><a href="#cb47-241"></a><span class="co"># This does some data/draws wrangling to compute the 5, 50 and 95 percentiles of </span></span>
-<span id="cb47-242"><a href="#cb47-242"></a><span class="co"># the mean at the specified covariate values (x_predictions). </span></span>
-<span id="cb47-243"><a href="#cb47-243"></a><span class="co"># It can be instructive to play around with each of the data processing steps</span></span>
-<span id="cb47-244"><a href="#cb47-244"></a><span class="co"># to find out what each step does, e.g. by removing parts from the back like "|&gt;  gather(pct,y,-x)"</span></span>
-<span id="cb47-245"><a href="#cb47-245"></a><span class="co"># and printing the resulting data.frame.</span></span>
-<span id="cb47-246"><a href="#cb47-246"></a>mu_quantiles_df <span class="ot">=</span> draws_df <span class="sc">|&gt;</span> </span>
-<span id="cb47-247"><a href="#cb47-247"></a>      <span class="fu">subset_draws</span>(<span class="at">variable =</span> <span class="fu">c</span>(<span class="st">"mu_pred"</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb47-248"><a href="#cb47-248"></a>      <span class="fu">summarise_draws</span>(<span class="sc">~</span><span class="fu">quantile2</span>(.x, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.05</span>, .<span class="dv">5</span>, <span class="fl">0.95</span>))) <span class="sc">|&gt;</span> </span>
-<span id="cb47-249"><a href="#cb47-249"></a>      <span class="fu">mutate</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb47-250"><a href="#cb47-250"></a>      <span class="fu">pivot_longer</span>(<span class="fu">c</span>(q5, q50, q95), <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">"pct"</span>))</span>
-<span id="cb47-251"><a href="#cb47-251"></a><span class="co"># Same as above, but for the predictions.</span></span>
-<span id="cb47-252"><a href="#cb47-252"></a>y_quantiles_df <span class="ot">=</span> draws_df <span class="sc">|&gt;</span> </span>
-<span id="cb47-253"><a href="#cb47-253"></a>      <span class="fu">subset_draws</span>(<span class="at">variable =</span> <span class="fu">c</span>(<span class="st">"y_pred"</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb47-254"><a href="#cb47-254"></a>      <span class="fu">summarise_draws</span>(<span class="sc">~</span><span class="fu">quantile2</span>(.x, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.05</span>, .<span class="dv">5</span>, <span class="fl">0.95</span>))) <span class="sc">|&gt;</span> </span>
-<span id="cb47-255"><a href="#cb47-255"></a>      <span class="fu">mutate</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb47-256"><a href="#cb47-256"></a>      <span class="fu">pivot_longer</span>(<span class="fu">c</span>(q5, q50, q95), <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">"pct"</span>))</span>
-<span id="cb47-257"><a href="#cb47-257"></a><span class="in">```</span></span>
-<span id="cb47-258"><a href="#cb47-258"></a></span>
-<span id="cb47-259"><a href="#cb47-259"></a>**Plotting happens here**:</span>
-<span id="cb47-260"><a href="#cb47-260"></a></span>
-<span id="cb47-263"><a href="#cb47-263"></a><span class="in">```{r}</span></span>
-<span id="cb47-264"><a href="#cb47-264"></a><span class="co">#| eval: false</span></span>
-<span id="cb47-265"><a href="#cb47-265"></a><span class="co">#| label: fig-posterior</span></span>
-<span id="cb47-266"><a href="#cb47-266"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb47-267"><a href="#cb47-267"></a>  <span class="co"># scatter plot of the training data:  </span></span>
-<span id="cb47-268"><a href="#cb47-268"></a>  <span class="fu">geom_point</span>(</span>
-<span id="cb47-269"><a href="#cb47-269"></a>    <span class="fu">aes</span>(x, y, <span class="at">color=</span>assignment), </span>
-<span id="cb47-270"><a href="#cb47-270"></a>    <span class="at">data=</span><span class="fu">data.frame</span>(<span class="at">x=</span>assignment, <span class="at">y=</span>propstudents, <span class="at">assignment=</span><span class="st">"1-8"</span>)</span>
-<span id="cb47-271"><a href="#cb47-271"></a>) <span class="sc">+</span></span>
-<span id="cb47-272"><a href="#cb47-272"></a>  <span class="co"># scatter plot of the test data:</span></span>
-<span id="cb47-273"><a href="#cb47-273"></a>  <span class="fu">geom_point</span>(</span>
-<span id="cb47-274"><a href="#cb47-274"></a>    <span class="fu">aes</span>(x, y, <span class="at">color=</span>assignment), </span>
-<span id="cb47-275"><a href="#cb47-275"></a>    <span class="at">data=</span><span class="fu">data.frame</span>(<span class="at">x=</span>no_assignments, <span class="at">y=</span>propstudents9, <span class="at">assignment=</span><span class="st">"9"</span>)</span>
-<span id="cb47-276"><a href="#cb47-276"></a>) <span class="sc">+</span></span>
-<span id="cb47-277"><a href="#cb47-277"></a>  <span class="co"># you have to tell us what this plots:</span></span>
-<span id="cb47-278"><a href="#cb47-278"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(x,<span class="at">y=</span>value,<span class="at">linetype=</span>pct), <span class="at">data=</span>mu_quantiles_df, <span class="at">color=</span><span class="st">'grey'</span>, <span class="at">linewidth=</span><span class="fl">1.5</span>) <span class="sc">+</span></span>
-<span id="cb47-279"><a href="#cb47-279"></a>  <span class="co"># you have to tell us what this plots:</span></span>
-<span id="cb47-280"><a href="#cb47-280"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(x,<span class="at">y=</span>value,<span class="at">linetype=</span>pct), <span class="at">data=</span>y_quantiles_df, <span class="at">color=</span><span class="st">'red'</span>) <span class="sc">+</span></span>
-<span id="cb47-281"><a href="#cb47-281"></a>  <span class="co"># adding xticks for each assignment:</span></span>
-<span id="cb47-282"><a href="#cb47-282"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks=</span><span class="dv">1</span><span class="sc">:</span>no_assignments) <span class="sc">+</span></span>
-<span id="cb47-283"><a href="#cb47-283"></a>  <span class="co"># adding labels to the plot:</span></span>
-<span id="cb47-284"><a href="#cb47-284"></a>  <span class="fu">labs</span>(<span class="at">y=</span><span class="st">"assignment submission %"</span>, <span class="at">x=</span><span class="st">"assignment number"</span>) <span class="sc">+</span></span>
-<span id="cb47-285"><a href="#cb47-285"></a>  <span class="co"># specifying that line types repeat:</span></span>
-<span id="cb47-286"><a href="#cb47-286"></a>  <span class="fu">scale_linetype_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">2</span>)) <span class="sc">+</span></span>
-<span id="cb47-287"><a href="#cb47-287"></a>  <span class="co"># Specify colours of the observations:</span></span>
-<span id="cb47-288"><a href="#cb47-288"></a>  <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"1-8"</span><span class="ot">=</span><span class="st">"black"</span>, <span class="st">"9"</span><span class="ot">=</span><span class="st">"blue"</span>)) <span class="sc">+</span></span>
-<span id="cb47-289"><a href="#cb47-289"></a>  <span class="co"># remove the legend for the linetypes:</span></span>
-<span id="cb47-290"><a href="#cb47-290"></a>  <span class="fu">guides</span>(<span class="at">linetype=</span><span class="st">"none"</span>)</span>
-<span id="cb47-291"><a href="#cb47-291"></a><span class="in">```</span></span>
-<span id="cb47-292"><a href="#cb47-292"></a></span>
-<span id="cb47-293"><a href="#cb47-293"></a>::: hint</span>
-<span id="cb47-294"><a href="#cb47-294"></a><span class="fu">## Quick check for sampling convergence</span></span>
-<span id="cb47-295"><a href="#cb47-295"></a></span>
-<span id="cb47-296"><a href="#cb47-296"></a>If your model is correctly implemented, sampling from the posterior distribution should have been successful. You can check whether Stan thinks that sampling succeeded by inspecting the output of the below command, which you should be able to interpret with a little help from the <span class="co">[</span><span class="ot">CmdStan User's Guide</span><span class="co">](https://mc-stan.org/docs/cmdstan-guide/diagnose.html)</span>.</span>
-<span id="cb47-297"><a href="#cb47-297"></a></span>
-<span id="cb47-300"><a href="#cb47-300"></a><span class="in">```{r}</span></span>
-<span id="cb47-301"><a href="#cb47-301"></a><span class="co">#| eval: false</span></span>
-<span id="cb47-302"><a href="#cb47-302"></a>fit<span class="sc">$</span><span class="fu">cmdstan_diagnose</span>()</span>
-<span id="cb47-303"><a href="#cb47-303"></a><span class="in">```</span></span>
-<span id="cb47-304"><a href="#cb47-304"></a>:::</span>
-<span id="cb47-305"><a href="#cb47-305"></a></span>
-<span id="cb47-306"><a href="#cb47-306"></a><span class="fu"># Diagnosing Problems in HMC-NUTS Sampling</span></span>
-<span id="cb47-307"><a href="#cb47-307"></a></span>
-<span id="cb47-308"><a href="#cb47-308"></a><span class="fu">## Improper Posterior</span></span>
-<span id="cb47-309"><a href="#cb47-309"></a></span>
-<span id="cb47-310"><a href="#cb47-310"></a>An unbounded likelihood without a proper prior can lead to an improper posterior. We recommend to always use proper priors (integral over a proper distribution is finite) to guarantee proper posteriors.</span>
-<span id="cb47-311"><a href="#cb47-311"></a></span>
-<span id="cb47-312"><a href="#cb47-312"></a>A commonly used model that can have unbounded likelihood is logistic regression with complete separation in data.</span>
-<span id="cb47-313"><a href="#cb47-313"></a></span>
-<span id="cb47-314"><a href="#cb47-314"></a><span class="fu">### Data</span></span>
-<span id="cb47-315"><a href="#cb47-315"></a></span>
-<span id="cb47-316"><a href="#cb47-316"></a>Univariate continous predictor $x$, binary target $y$, and the two classes are completely separable, which leads to unbounded likelihood.</span>
-<span id="cb47-317"><a href="#cb47-317"></a></span>
-<span id="cb47-320"><a href="#cb47-320"></a><span class="in">```{r}</span></span>
-<span id="cb47-321"><a href="#cb47-321"></a><span class="fu">set.seed</span>(<span class="dv">48927</span><span class="sc">+</span><span class="dv">4</span>)</span>
-<span id="cb47-322"><a href="#cb47-322"></a>M<span class="ot">=</span><span class="dv">1</span>;</span>
-<span id="cb47-323"><a href="#cb47-323"></a>N<span class="ot">=</span><span class="dv">10</span>;</span>
-<span id="cb47-324"><a href="#cb47-324"></a>x<span class="ot">=</span><span class="fu">matrix</span>(<span class="fu">sort</span>(<span class="fu">rnorm</span>(N)),<span class="at">ncol=</span>M)</span>
-<span id="cb47-325"><a href="#cb47-325"></a>y<span class="ot">=</span><span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">each=</span>N<span class="sc">/</span><span class="dv">2</span>)</span>
-<span id="cb47-326"><a href="#cb47-326"></a>data_logit <span class="ot">&lt;-</span><span class="fu">list</span>(<span class="at">M =</span> M, <span class="at">N =</span> N, <span class="at">x =</span> x, <span class="at">y =</span> y)</span>
-<span id="cb47-327"><a href="#cb47-327"></a><span class="fu">data.frame</span>(data_logit) <span class="sc">|&gt;</span></span>
-<span id="cb47-328"><a href="#cb47-328"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
-<span id="cb47-329"><a href="#cb47-329"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">shape=</span><span class="dv">1</span>, <span class="at">alpha=</span><span class="fl">0.6</span>) <span class="sc">+</span></span>
-<span id="cb47-330"><a href="#cb47-330"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))</span>
-<span id="cb47-331"><a href="#cb47-331"></a><span class="in">```</span></span>
-<span id="cb47-332"><a href="#cb47-332"></a></span>
-<span id="cb47-333"><a href="#cb47-333"></a><span class="fu">### Compile and Sample from the following model</span></span>
-<span id="cb47-334"><a href="#cb47-334"></a></span>
-<span id="cb47-335"><a href="#cb47-335"></a><span class="in">``` stan</span></span>
-<span id="cb47-336"><a href="#cb47-336"></a><span class="in">// logistic regression</span></span>
-<span id="cb47-337"><a href="#cb47-337"></a><span class="in">data {</span></span>
-<span id="cb47-338"><a href="#cb47-338"></a><span class="in">  int&lt;lower=0&gt; N;</span></span>
-<span id="cb47-339"><a href="#cb47-339"></a><span class="in">  int&lt;lower=0&gt; M;</span></span>
-<span id="cb47-340"><a href="#cb47-340"></a><span class="in">  array[N] int&lt;lower=0,upper=1&gt; y;</span></span>
-<span id="cb47-341"><a href="#cb47-341"></a><span class="in">  matrix[N,M] x;</span></span>
-<span id="cb47-342"><a href="#cb47-342"></a><span class="in">}</span></span>
-<span id="cb47-343"><a href="#cb47-343"></a><span class="in">parameters {</span></span>
-<span id="cb47-344"><a href="#cb47-344"></a><span class="in">  real alpha;</span></span>
-<span id="cb47-345"><a href="#cb47-345"></a><span class="in">  vector[M] beta;</span></span>
-<span id="cb47-346"><a href="#cb47-346"></a><span class="in">}</span></span>
-<span id="cb47-347"><a href="#cb47-347"></a><span class="in">model {</span></span>
-<span id="cb47-348"><a href="#cb47-348"></a><span class="in">  y ~ bernoulli_logit_glm(x, alpha, beta);</span></span>
-<span id="cb47-349"><a href="#cb47-349"></a><span class="in">}</span></span>
-<span id="cb47-350"><a href="#cb47-350"></a><span class="in">```</span></span>
-<span id="cb47-351"><a href="#cb47-351"></a></span>
-<span id="cb47-352"><a href="#cb47-352"></a><span class="fu">### Convergence diagnostics</span></span>
-<span id="cb47-353"><a href="#cb47-353"></a></span>
-<span id="cb47-356"><a href="#cb47-356"></a><span class="in">```{r}</span></span>
-<span id="cb47-357"><a href="#cb47-357"></a><span class="co"># Get the summary diagnostics using [fit object name]]$diagnostic_summary()</span></span>
-<span id="cb47-358"><a href="#cb47-358"></a></span>
-<span id="cb47-359"><a href="#cb47-359"></a><span class="co"># Get summary statistics from your chains using summarize_draws() (hint: look at how we used the function last week)</span></span>
-<span id="cb47-360"><a href="#cb47-360"></a></span>
-<span id="cb47-361"><a href="#cb47-361"></a><span class="co"># Plot histograms and bivariate scatter plots using mcmc_pairs(). See for guidance on how to use the function here: https://mc-stan.org/bayesplot/reference/MCMC-scatterplots.html</span></span>
-<span id="cb47-362"><a href="#cb47-362"></a></span>
-<span id="cb47-363"><a href="#cb47-363"></a><span class="co"># To plot the tracplot of individual chains, use the mcmc_trace() function. See for guidance on how to use the function here: https://mc-stan.org/bayesplot/reference/MCMC-traces.html </span></span>
-<span id="cb47-364"><a href="#cb47-364"></a></span>
-<span id="cb47-365"><a href="#cb47-365"></a><span class="in">```</span></span>
-<span id="cb47-366"><a href="#cb47-366"></a></span>
-<span id="cb47-367"><a href="#cb47-367"></a><span class="fu"># Generalized linear model: Bioassay model with Metropolis algorithm</span></span>
-<span id="cb47-368"><a href="#cb47-368"></a></span>
-<span id="cb47-369"><a href="#cb47-369"></a>Replicate the computations for the bioassay example of section 3.7 (BDA3) using Stan.</span>
-<span id="cb47-370"><a href="#cb47-370"></a></span>
-<span id="cb47-371"><a href="#cb47-371"></a>Write down the model for the bioassay data in Stan syntax. Use the slightly modified Gaussian prior from Assignment 4 and 5, that is $$</span>
-<span id="cb47-372"><a href="#cb47-372"></a>    \alpha \sim normal(0,2), \quad</span>
-<span id="cb47-373"><a href="#cb47-373"></a>    \beta \sim normal(10,10)</span>
-<span id="cb47-374"><a href="#cb47-374"></a>$$</span>
-<span id="cb47-375"><a href="#cb47-375"></a></span>
-<span id="cb47-376"><a href="#cb47-376"></a>Write your Stan code here</span>
-<span id="cb47-377"><a href="#cb47-377"></a></span>
-<span id="cb47-378"><a href="#cb47-378"></a><span class="fu">## Run model and analyse output</span></span>
-<span id="cb47-379"><a href="#cb47-379"></a></span>
-<span id="cb47-382"><a href="#cb47-382"></a><span class="in">```{r}</span></span>
-<span id="cb47-383"><a href="#cb47-383"></a><span class="co">#| eval: false</span></span>
-<span id="cb47-384"><a href="#cb47-384"></a><span class="co"># Load data</span></span>
-<span id="cb47-385"><a href="#cb47-385"></a>data <span class="ot">=</span><span class="fu">list</span>(<span class="at">n =</span> bioassay<span class="sc">$</span>n, <span class="at">x =</span> bioassay<span class="sc">$</span>x, <span class="at">y =</span> bioassay<span class="sc">$</span>y, <span class="at">N =</span> <span class="fu">nrow</span>(bioassay))</span>
-<span id="cb47-386"><a href="#cb47-386"></a></span>
-<span id="cb47-387"><a href="#cb47-387"></a><span class="co"># Compile Model</span></span>
-<span id="cb47-388"><a href="#cb47-388"></a>mod <span class="ot">&lt;-</span> <span class="fu">cmdstan_model</span>(<span class="co"># your stan model location)</span></span>
-<span id="cb47-389"><a href="#cb47-389"></a></span>
-<span id="cb47-390"><a href="#cb47-390"></a><span class="co"># Estimate model</span></span>
-<span id="cb47-391"><a href="#cb47-391"></a>out <span class="ot">&lt;-</span> <span class="fu">capture.output</span>(</span>
-<span id="cb47-392"><a href="#cb47-392"></a>  <span class="co"># Sampling from the posterior distribution happens here:</span></span>
-<span id="cb47-393"><a href="#cb47-393"></a>  fit <span class="ot">&lt;-</span> mod<span class="sc">$</span><span class="fu">sample</span>(<span class="at">data=</span>data, <span class="at">refresh=</span><span class="dv">0</span>, <span class="at">show_messages=</span><span class="cn">FALSE</span>, <span class="at">seed =</span> <span class="dv">4711</span>, <span class="at">chains =</span> <span class="dv">4</span>, <span class="at">iter_warmup =</span> <span class="dv">1000</span>, </span>
-<span id="cb47-394"><a href="#cb47-394"></a>                    <span class="at">iter_sampling =</span> <span class="dv">3000</span>)</span>
-<span id="cb47-395"><a href="#cb47-395"></a>)</span>
-<span id="cb47-396"><a href="#cb47-396"></a></span>
-<span id="cb47-397"><a href="#cb47-397"></a><span class="co"># This extracts the draws from the sampling result as a data.frame.</span></span>
-<span id="cb47-398"><a href="#cb47-398"></a><span class="at">draws_df =</span> fit<span class="sc">$</span><span class="fu">draws</span>(<span class="at">format=</span><span class="st">"draws_df"</span>)</span>
-<span id="cb47-399"><a href="#cb47-399"></a></span>
-<span id="cb47-400"><a href="#cb47-400"></a><span class="co"># This is what you'll need for convergence diagnostics</span></span>
-<span id="cb47-401"><a href="#cb47-401"></a><span class="fu">summarise_draws</span>(draws_df, <span class="at">Rhat=</span>rhat_basic, <span class="at">ESS=</span> ess_mean, <span class="sc">~</span><span class="fu">ess_quantile</span>(.x, <span class="at">probs =</span> <span class="fl">0.05</span>))</span>
-<span id="cb47-402"><a href="#cb47-402"></a></span>
-<span id="cb47-403"><a href="#cb47-403"></a><span class="co"># Scatter plot of the draws</span></span>
-<span id="cb47-404"><a href="#cb47-404"></a><span class="fu">mcmc_scatter</span>(draws_df, <span class="at">pars=</span><span class="fu">c</span>(<span class="st">"alpha"</span>, <span class="st">"beta"</span>))</span>
-<span id="cb47-405"><a href="#cb47-405"></a></span>
-<span id="cb47-406"><a href="#cb47-406"></a><span class="co"># Plot the autocorrelation function and compare to last week</span></span>
-<span id="cb47-407"><a href="#cb47-407"></a><span class="fu">mcmc_acf</span>(draws_df, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">"alpha"</span>,<span class="st">"beta"</span>))</span>
-<span id="cb47-408"><a href="#cb47-408"></a><span class="st">```</span></span>
+<span id="cb47-194"><a href="#cb47-194"></a>                <span class="fu">c</span>(<span class="dv">245</span>, <span class="dv">240</span>, <span class="dv">228</span>, <span class="dv">217</span>, <span class="dv">206</span>, <span class="dv">199</span>, <span class="dv">191</span>, <span class="dv">182</span>)<span class="sc">/</span><span class="dv">245</span>,</span>
+<span id="cb47-195"><a href="#cb47-195"></a>                <span class="fu">c</span>(<span class="dv">264</span>, <span class="dv">249</span>, <span class="dv">215</span>, <span class="dv">221</span>, <span class="dv">215</span>, <span class="dv">206</span>, <span class="dv">192</span>, <span class="dv">186</span>)<span class="sc">/</span><span class="dv">264</span>)</span>
+<span id="cb47-196"><a href="#cb47-196"></a><span class="co"># These are our predictors x: for each observation, the corresponding assignment number.</span></span>
+<span id="cb47-197"><a href="#cb47-197"></a>assignment <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>, <span class="dv">6</span>)</span>
+<span id="cb47-198"><a href="#cb47-198"></a><span class="co"># These are in some sense our test data: the proportion of students handing in the last assignment (9),</span></span>
+<span id="cb47-199"><a href="#cb47-199"></a><span class="co"># sorted by year. </span></span>
+<span id="cb47-200"><a href="#cb47-200"></a><span class="co"># Usually, we would not want to split our data like that and instead</span></span>
+<span id="cb47-201"><a href="#cb47-201"></a><span class="co"># use e.g. Leave-One-Out Cross-Validation (LOO-CV, see e.g. http://mc-stan.org/loo/index.html)</span></span>
+<span id="cb47-202"><a href="#cb47-202"></a><span class="co"># to evaluate model performance.</span></span>
+<span id="cb47-203"><a href="#cb47-203"></a>propstudents9 <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">121</span><span class="sc">/</span><span class="dv">176</span>, <span class="dv">153</span><span class="sc">/</span><span class="dv">242</span>, <span class="dv">218</span><span class="sc">/</span><span class="dv">332</span>, <span class="dv">190</span><span class="sc">/</span><span class="dv">301</span>, <span class="dv">175</span><span class="sc">/</span><span class="dv">245</span>, <span class="dv">179</span><span class="sc">/</span><span class="dv">264</span>)</span>
+<span id="cb47-204"><a href="#cb47-204"></a><span class="co"># The total number of assignments</span></span>
+<span id="cb47-205"><a href="#cb47-205"></a>no_assignments <span class="ot">=</span> <span class="dv">9</span></span>
+<span id="cb47-206"><a href="#cb47-206"></a><span class="co"># The assignment numbers for which we want to generate predictions</span></span>
+<span id="cb47-207"><a href="#cb47-207"></a>x_predictions <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span>no_assignments</span>
+<span id="cb47-208"><a href="#cb47-208"></a><span class="co"># (Cmd)Stan(R) expects the data to be passed in the below format:</span></span>
+<span id="cb47-209"><a href="#cb47-209"></a>model_data <span class="ot">=</span> <span class="fu">list</span>(<span class="at">N=</span><span class="fu">length</span>(assignment),</span>
+<span id="cb47-210"><a href="#cb47-210"></a>                 <span class="at">x=</span>assignment,</span>
+<span id="cb47-211"><a href="#cb47-211"></a>                 <span class="at">y=</span>propstudents,</span>
+<span id="cb47-212"><a href="#cb47-212"></a>                 <span class="at">no_predictions=</span>no_assignments,</span>
+<span id="cb47-213"><a href="#cb47-213"></a>                 <span class="at">x_predictions=</span>x_predictions)</span>
+<span id="cb47-214"><a href="#cb47-214"></a><span class="in">```</span></span>
+<span id="cb47-215"><a href="#cb47-215"></a></span>
+<span id="cb47-216"><a href="#cb47-216"></a>**Sampling from the posterior distribution happens here**:</span>
+<span id="cb47-217"><a href="#cb47-217"></a></span>
+<span id="cb47-220"><a href="#cb47-220"></a><span class="in">```{r}</span></span>
+<span id="cb47-221"><a href="#cb47-221"></a><span class="co">#| eval: false</span></span>
+<span id="cb47-222"><a href="#cb47-222"></a><span class="co"># This reads the file at the specified path and tries to compile it. </span></span>
+<span id="cb47-223"><a href="#cb47-223"></a><span class="co"># If it fails, an error is thrown.</span></span>
+<span id="cb47-224"><a href="#cb47-224"></a>retention_model <span class="ot">=</span> <span class="fu">cmdstan_model</span>(<span class="st">"assignment6_linear_model.stan"</span>)</span>
+<span id="cb47-225"><a href="#cb47-225"></a><span class="co"># This "out &lt;- capture.output(...)" construction suppresses output from cmdstanr</span></span>
+<span id="cb47-226"><a href="#cb47-226"></a><span class="co"># See also https://github.com/stan-dev/cmdstanr/issues/646</span></span>
+<span id="cb47-227"><a href="#cb47-227"></a>out <span class="ot">&lt;-</span> <span class="fu">capture.output</span>(</span>
+<span id="cb47-228"><a href="#cb47-228"></a>    <span class="co"># Sampling from the posterior distribution happens here:</span></span>
+<span id="cb47-229"><a href="#cb47-229"></a>    fit <span class="ot">&lt;-</span> retention_model<span class="sc">$</span><span class="fu">sample</span>(<span class="at">data=</span>model_data, <span class="at">refresh=</span><span class="dv">0</span>, <span class="at">show_messages=</span><span class="cn">FALSE</span>)</span>
+<span id="cb47-230"><a href="#cb47-230"></a>)</span>
+<span id="cb47-231"><a href="#cb47-231"></a><span class="in">```</span></span>
+<span id="cb47-232"><a href="#cb47-232"></a></span>
+<span id="cb47-233"><a href="#cb47-233"></a>**Draws postprocessing happens here**:</span>
+<span id="cb47-234"><a href="#cb47-234"></a></span>
+<span id="cb47-237"><a href="#cb47-237"></a><span class="in">```{r}</span></span>
+<span id="cb47-238"><a href="#cb47-238"></a><span class="co">#| eval: false</span></span>
+<span id="cb47-239"><a href="#cb47-239"></a><span class="co"># This extracts the draws from the sampling result as a data.frame.</span></span>
+<span id="cb47-240"><a href="#cb47-240"></a>draws_df <span class="ot">=</span> fit<span class="sc">$</span><span class="fu">draws</span>(<span class="at">format=</span><span class="st">"draws_df"</span>)</span>
+<span id="cb47-241"><a href="#cb47-241"></a></span>
+<span id="cb47-242"><a href="#cb47-242"></a><span class="co"># This does some data/draws wrangling to compute the 5, 50 and 95 percentiles of </span></span>
+<span id="cb47-243"><a href="#cb47-243"></a><span class="co"># the mean at the specified covariate values (x_predictions). </span></span>
+<span id="cb47-244"><a href="#cb47-244"></a><span class="co"># It can be instructive to play around with each of the data processing steps</span></span>
+<span id="cb47-245"><a href="#cb47-245"></a><span class="co"># to find out what each step does, e.g. by removing parts from the back like "|&gt;  gather(pct,y,-x)"</span></span>
+<span id="cb47-246"><a href="#cb47-246"></a><span class="co"># and printing the resulting data.frame.</span></span>
+<span id="cb47-247"><a href="#cb47-247"></a>mu_quantiles_df <span class="ot">=</span> draws_df <span class="sc">|&gt;</span> </span>
+<span id="cb47-248"><a href="#cb47-248"></a>      <span class="fu">subset_draws</span>(<span class="at">variable =</span> <span class="fu">c</span>(<span class="st">"mu_pred"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb47-249"><a href="#cb47-249"></a>      <span class="fu">summarise_draws</span>(<span class="sc">~</span><span class="fu">quantile2</span>(.x, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.05</span>, .<span class="dv">5</span>, <span class="fl">0.95</span>))) <span class="sc">|&gt;</span> </span>
+<span id="cb47-250"><a href="#cb47-250"></a>      <span class="fu">mutate</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb47-251"><a href="#cb47-251"></a>      <span class="fu">pivot_longer</span>(<span class="fu">c</span>(q5, q50, q95), <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">"pct"</span>))</span>
+<span id="cb47-252"><a href="#cb47-252"></a><span class="co"># Same as above, but for the predictions.</span></span>
+<span id="cb47-253"><a href="#cb47-253"></a>y_quantiles_df <span class="ot">=</span> draws_df <span class="sc">|&gt;</span> </span>
+<span id="cb47-254"><a href="#cb47-254"></a>      <span class="fu">subset_draws</span>(<span class="at">variable =</span> <span class="fu">c</span>(<span class="st">"y_pred"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb47-255"><a href="#cb47-255"></a>      <span class="fu">summarise_draws</span>(<span class="sc">~</span><span class="fu">quantile2</span>(.x, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.05</span>, .<span class="dv">5</span>, <span class="fl">0.95</span>))) <span class="sc">|&gt;</span> </span>
+<span id="cb47-256"><a href="#cb47-256"></a>      <span class="fu">mutate</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb47-257"><a href="#cb47-257"></a>      <span class="fu">pivot_longer</span>(<span class="fu">c</span>(q5, q50, q95), <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">"pct"</span>))</span>
+<span id="cb47-258"><a href="#cb47-258"></a><span class="in">```</span></span>
+<span id="cb47-259"><a href="#cb47-259"></a></span>
+<span id="cb47-260"><a href="#cb47-260"></a>**Plotting happens here**:</span>
+<span id="cb47-261"><a href="#cb47-261"></a></span>
+<span id="cb47-264"><a href="#cb47-264"></a><span class="in">```{r}</span></span>
+<span id="cb47-265"><a href="#cb47-265"></a><span class="co">#| eval: false</span></span>
+<span id="cb47-266"><a href="#cb47-266"></a><span class="co">#| label: fig-posterior</span></span>
+<span id="cb47-267"><a href="#cb47-267"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb47-268"><a href="#cb47-268"></a>  <span class="co"># scatter plot of the training data:  </span></span>
+<span id="cb47-269"><a href="#cb47-269"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb47-270"><a href="#cb47-270"></a>    <span class="fu">aes</span>(x, y, <span class="at">color=</span>assignment), </span>
+<span id="cb47-271"><a href="#cb47-271"></a>    <span class="at">data=</span><span class="fu">data.frame</span>(<span class="at">x=</span>assignment, <span class="at">y=</span>propstudents, <span class="at">assignment=</span><span class="st">"1-8"</span>)</span>
+<span id="cb47-272"><a href="#cb47-272"></a>) <span class="sc">+</span></span>
+<span id="cb47-273"><a href="#cb47-273"></a>  <span class="co"># scatter plot of the test data:</span></span>
+<span id="cb47-274"><a href="#cb47-274"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb47-275"><a href="#cb47-275"></a>    <span class="fu">aes</span>(x, y, <span class="at">color=</span>assignment), </span>
+<span id="cb47-276"><a href="#cb47-276"></a>    <span class="at">data=</span><span class="fu">data.frame</span>(<span class="at">x=</span>no_assignments, <span class="at">y=</span>propstudents9, <span class="at">assignment=</span><span class="st">"9"</span>)</span>
+<span id="cb47-277"><a href="#cb47-277"></a>) <span class="sc">+</span></span>
+<span id="cb47-278"><a href="#cb47-278"></a>  <span class="co"># you have to tell us what this plots:</span></span>
+<span id="cb47-279"><a href="#cb47-279"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(x,<span class="at">y=</span>value,<span class="at">linetype=</span>pct), <span class="at">data=</span>mu_quantiles_df, <span class="at">color=</span><span class="st">'grey'</span>, <span class="at">linewidth=</span><span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb47-280"><a href="#cb47-280"></a>  <span class="co"># you have to tell us what this plots:</span></span>
+<span id="cb47-281"><a href="#cb47-281"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(x,<span class="at">y=</span>value,<span class="at">linetype=</span>pct), <span class="at">data=</span>y_quantiles_df, <span class="at">color=</span><span class="st">'red'</span>) <span class="sc">+</span></span>
+<span id="cb47-282"><a href="#cb47-282"></a>  <span class="co"># adding xticks for each assignment:</span></span>
+<span id="cb47-283"><a href="#cb47-283"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks=</span><span class="dv">1</span><span class="sc">:</span>no_assignments) <span class="sc">+</span></span>
+<span id="cb47-284"><a href="#cb47-284"></a>  <span class="co"># adding labels to the plot:</span></span>
+<span id="cb47-285"><a href="#cb47-285"></a>  <span class="fu">labs</span>(<span class="at">y=</span><span class="st">"assignment submission %"</span>, <span class="at">x=</span><span class="st">"assignment number"</span>) <span class="sc">+</span></span>
+<span id="cb47-286"><a href="#cb47-286"></a>  <span class="co"># specifying that line types repeat:</span></span>
+<span id="cb47-287"><a href="#cb47-287"></a>  <span class="fu">scale_linetype_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">2</span>)) <span class="sc">+</span></span>
+<span id="cb47-288"><a href="#cb47-288"></a>  <span class="co"># Specify colours of the observations:</span></span>
+<span id="cb47-289"><a href="#cb47-289"></a>  <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"1-8"</span><span class="ot">=</span><span class="st">"black"</span>, <span class="st">"9"</span><span class="ot">=</span><span class="st">"blue"</span>)) <span class="sc">+</span></span>
+<span id="cb47-290"><a href="#cb47-290"></a>  <span class="co"># remove the legend for the linetypes:</span></span>
+<span id="cb47-291"><a href="#cb47-291"></a>  <span class="fu">guides</span>(<span class="at">linetype=</span><span class="st">"none"</span>)</span>
+<span id="cb47-292"><a href="#cb47-292"></a><span class="in">```</span></span>
+<span id="cb47-293"><a href="#cb47-293"></a></span>
+<span id="cb47-294"><a href="#cb47-294"></a>::: hint</span>
+<span id="cb47-295"><a href="#cb47-295"></a><span class="fu">## Quick check for sampling convergence</span></span>
+<span id="cb47-296"><a href="#cb47-296"></a></span>
+<span id="cb47-297"><a href="#cb47-297"></a>If your model is correctly implemented, sampling from the posterior distribution should have been successful. You can check whether Stan thinks that sampling succeeded by inspecting the output of the below command, which you should be able to interpret with a little help from the <span class="co">[</span><span class="ot">CmdStan User's Guide</span><span class="co">](https://mc-stan.org/docs/cmdstan-guide/diagnose.html)</span>.</span>
+<span id="cb47-298"><a href="#cb47-298"></a></span>
+<span id="cb47-301"><a href="#cb47-301"></a><span class="in">```{r}</span></span>
+<span id="cb47-302"><a href="#cb47-302"></a><span class="co">#| eval: false</span></span>
+<span id="cb47-303"><a href="#cb47-303"></a>fit<span class="sc">$</span><span class="fu">cmdstan_diagnose</span>()</span>
+<span id="cb47-304"><a href="#cb47-304"></a><span class="in">```</span></span>
+<span id="cb47-305"><a href="#cb47-305"></a>:::</span>
+<span id="cb47-306"><a href="#cb47-306"></a></span>
+<span id="cb47-307"><a href="#cb47-307"></a><span class="fu"># Diagnosing Problems in HMC-NUTS Sampling</span></span>
+<span id="cb47-308"><a href="#cb47-308"></a></span>
+<span id="cb47-309"><a href="#cb47-309"></a><span class="fu">## Improper Posterior</span></span>
+<span id="cb47-310"><a href="#cb47-310"></a></span>
+<span id="cb47-311"><a href="#cb47-311"></a>An unbounded likelihood without a proper prior can lead to an improper posterior. We recommend to always use proper priors (integral over a proper distribution is finite) to guarantee proper posteriors.</span>
+<span id="cb47-312"><a href="#cb47-312"></a></span>
+<span id="cb47-313"><a href="#cb47-313"></a>A commonly used model that can have unbounded likelihood is logistic regression with complete separation in data.</span>
+<span id="cb47-314"><a href="#cb47-314"></a></span>
+<span id="cb47-315"><a href="#cb47-315"></a><span class="fu">### Data</span></span>
+<span id="cb47-316"><a href="#cb47-316"></a></span>
+<span id="cb47-317"><a href="#cb47-317"></a>Univariate continous predictor $x$, binary target $y$, and the two classes are completely separable, which leads to unbounded likelihood.</span>
+<span id="cb47-318"><a href="#cb47-318"></a></span>
+<span id="cb47-321"><a href="#cb47-321"></a><span class="in">```{r}</span></span>
+<span id="cb47-322"><a href="#cb47-322"></a><span class="fu">set.seed</span>(<span class="dv">48927</span><span class="sc">+</span><span class="dv">4</span>)</span>
+<span id="cb47-323"><a href="#cb47-323"></a>M<span class="ot">=</span><span class="dv">1</span>;</span>
+<span id="cb47-324"><a href="#cb47-324"></a>N<span class="ot">=</span><span class="dv">10</span>;</span>
+<span id="cb47-325"><a href="#cb47-325"></a>x<span class="ot">=</span><span class="fu">matrix</span>(<span class="fu">sort</span>(<span class="fu">rnorm</span>(N)),<span class="at">ncol=</span>M)</span>
+<span id="cb47-326"><a href="#cb47-326"></a>y<span class="ot">=</span><span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">each=</span>N<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb47-327"><a href="#cb47-327"></a>data_logit <span class="ot">&lt;-</span><span class="fu">list</span>(<span class="at">M =</span> M, <span class="at">N =</span> N, <span class="at">x =</span> x, <span class="at">y =</span> y)</span>
+<span id="cb47-328"><a href="#cb47-328"></a><span class="fu">data.frame</span>(data_logit) <span class="sc">|&gt;</span></span>
+<span id="cb47-329"><a href="#cb47-329"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
+<span id="cb47-330"><a href="#cb47-330"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">shape=</span><span class="dv">1</span>, <span class="at">alpha=</span><span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb47-331"><a href="#cb47-331"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))</span>
+<span id="cb47-332"><a href="#cb47-332"></a><span class="in">```</span></span>
+<span id="cb47-333"><a href="#cb47-333"></a></span>
+<span id="cb47-334"><a href="#cb47-334"></a><span class="fu">### Compile and Sample from the following model</span></span>
+<span id="cb47-335"><a href="#cb47-335"></a></span>
+<span id="cb47-336"><a href="#cb47-336"></a><span class="in">``` stan</span></span>
+<span id="cb47-337"><a href="#cb47-337"></a><span class="in">// logistic regression</span></span>
+<span id="cb47-338"><a href="#cb47-338"></a><span class="in">data {</span></span>
+<span id="cb47-339"><a href="#cb47-339"></a><span class="in">  int&lt;lower=0&gt; N;</span></span>
+<span id="cb47-340"><a href="#cb47-340"></a><span class="in">  int&lt;lower=0&gt; M;</span></span>
+<span id="cb47-341"><a href="#cb47-341"></a><span class="in">  array[N] int&lt;lower=0,upper=1&gt; y;</span></span>
+<span id="cb47-342"><a href="#cb47-342"></a><span class="in">  matrix[N,M] x;</span></span>
+<span id="cb47-343"><a href="#cb47-343"></a><span class="in">}</span></span>
+<span id="cb47-344"><a href="#cb47-344"></a><span class="in">parameters {</span></span>
+<span id="cb47-345"><a href="#cb47-345"></a><span class="in">  real alpha;</span></span>
+<span id="cb47-346"><a href="#cb47-346"></a><span class="in">  vector[M] beta;</span></span>
+<span id="cb47-347"><a href="#cb47-347"></a><span class="in">}</span></span>
+<span id="cb47-348"><a href="#cb47-348"></a><span class="in">model {</span></span>
+<span id="cb47-349"><a href="#cb47-349"></a><span class="in">  y ~ bernoulli_logit_glm(x, alpha, beta);</span></span>
+<span id="cb47-350"><a href="#cb47-350"></a><span class="in">}</span></span>
+<span id="cb47-351"><a href="#cb47-351"></a><span class="in">```</span></span>
+<span id="cb47-352"><a href="#cb47-352"></a></span>
+<span id="cb47-353"><a href="#cb47-353"></a><span class="fu">### Convergence diagnostics</span></span>
+<span id="cb47-354"><a href="#cb47-354"></a></span>
+<span id="cb47-357"><a href="#cb47-357"></a><span class="in">```{r}</span></span>
+<span id="cb47-358"><a href="#cb47-358"></a><span class="co"># Get the summary diagnostics using [fit object name]]$diagnostic_summary()</span></span>
+<span id="cb47-359"><a href="#cb47-359"></a></span>
+<span id="cb47-360"><a href="#cb47-360"></a><span class="co"># Get summary statistics from your chains using summarize_draws() (hint: look at how we used the function last week)</span></span>
+<span id="cb47-361"><a href="#cb47-361"></a></span>
+<span id="cb47-362"><a href="#cb47-362"></a><span class="co"># Plot histograms and bivariate scatter plots using mcmc_pairs(). See for guidance on how to use the function here: https://mc-stan.org/bayesplot/reference/MCMC-scatterplots.html</span></span>
+<span id="cb47-363"><a href="#cb47-363"></a></span>
+<span id="cb47-364"><a href="#cb47-364"></a><span class="co"># To plot the tracplot of individual chains, use the mcmc_trace() function. See for guidance on how to use the function here: https://mc-stan.org/bayesplot/reference/MCMC-traces.html </span></span>
+<span id="cb47-365"><a href="#cb47-365"></a></span>
+<span id="cb47-366"><a href="#cb47-366"></a><span class="in">```</span></span>
+<span id="cb47-367"><a href="#cb47-367"></a></span>
+<span id="cb47-368"><a href="#cb47-368"></a><span class="fu"># Generalized linear model: Bioassay model with Metropolis algorithm</span></span>
+<span id="cb47-369"><a href="#cb47-369"></a></span>
+<span id="cb47-370"><a href="#cb47-370"></a>Replicate the computations for the bioassay example of section 3.7 (BDA3) using Stan.</span>
+<span id="cb47-371"><a href="#cb47-371"></a></span>
+<span id="cb47-372"><a href="#cb47-372"></a>Write down the model for the bioassay data in Stan syntax. Use the slightly modified Gaussian prior from Assignment 4 and 5, that is $$</span>
+<span id="cb47-373"><a href="#cb47-373"></a>    \alpha \sim normal(0,2), \quad</span>
+<span id="cb47-374"><a href="#cb47-374"></a>    \beta \sim normal(10,10)</span>
+<span id="cb47-375"><a href="#cb47-375"></a>$$</span>
+<span id="cb47-376"><a href="#cb47-376"></a></span>
+<span id="cb47-377"><a href="#cb47-377"></a>Write your Stan code here</span>
+<span id="cb47-378"><a href="#cb47-378"></a></span>
+<span id="cb47-379"><a href="#cb47-379"></a><span class="fu">## Run model and analyse output</span></span>
+<span id="cb47-380"><a href="#cb47-380"></a></span>
+<span id="cb47-383"><a href="#cb47-383"></a><span class="in">```{r}</span></span>
+<span id="cb47-384"><a href="#cb47-384"></a><span class="co">#| eval: false</span></span>
+<span id="cb47-385"><a href="#cb47-385"></a><span class="co"># Load data</span></span>
+<span id="cb47-386"><a href="#cb47-386"></a>data <span class="ot">=</span><span class="fu">list</span>(<span class="at">n =</span> bioassay<span class="sc">$</span>n, <span class="at">x =</span> bioassay<span class="sc">$</span>x, <span class="at">y =</span> bioassay<span class="sc">$</span>y, <span class="at">N =</span> <span class="fu">nrow</span>(bioassay))</span>
+<span id="cb47-387"><a href="#cb47-387"></a></span>
+<span id="cb47-388"><a href="#cb47-388"></a><span class="co"># Compile Model</span></span>
+<span id="cb47-389"><a href="#cb47-389"></a>mod <span class="ot">&lt;-</span> <span class="fu">cmdstan_model</span>(<span class="co"># your stan model location)</span></span>
+<span id="cb47-390"><a href="#cb47-390"></a></span>
+<span id="cb47-391"><a href="#cb47-391"></a><span class="co"># Estimate model</span></span>
+<span id="cb47-392"><a href="#cb47-392"></a>out <span class="ot">&lt;-</span> <span class="fu">capture.output</span>(</span>
+<span id="cb47-393"><a href="#cb47-393"></a>  <span class="co"># Sampling from the posterior distribution happens here:</span></span>
+<span id="cb47-394"><a href="#cb47-394"></a>  fit <span class="ot">&lt;-</span> mod<span class="sc">$</span><span class="fu">sample</span>(<span class="at">data=</span>data, <span class="at">refresh=</span><span class="dv">0</span>, <span class="at">show_messages=</span><span class="cn">FALSE</span>, <span class="at">seed =</span> <span class="dv">4711</span>, <span class="at">chains =</span> <span class="dv">4</span>, <span class="at">iter_warmup =</span> <span class="dv">1000</span>, </span>
+<span id="cb47-395"><a href="#cb47-395"></a>                    <span class="at">iter_sampling =</span> <span class="dv">3000</span>)</span>
+<span id="cb47-396"><a href="#cb47-396"></a>)</span>
+<span id="cb47-397"><a href="#cb47-397"></a></span>
+<span id="cb47-398"><a href="#cb47-398"></a><span class="co"># This extracts the draws from the sampling result as a data.frame.</span></span>
+<span id="cb47-399"><a href="#cb47-399"></a><span class="at">draws_df =</span> fit<span class="sc">$</span><span class="fu">draws</span>(<span class="at">format=</span><span class="st">"draws_df"</span>)</span>
+<span id="cb47-400"><a href="#cb47-400"></a></span>
+<span id="cb47-401"><a href="#cb47-401"></a><span class="co"># This is what you'll need for convergence diagnostics</span></span>
+<span id="cb47-402"><a href="#cb47-402"></a><span class="fu">summarise_draws</span>(draws_df, <span class="at">Rhat=</span>rhat_basic, <span class="at">ESS=</span> ess_mean, <span class="sc">~</span><span class="fu">ess_quantile</span>(.x, <span class="at">probs =</span> <span class="fl">0.05</span>))</span>
+<span id="cb47-403"><a href="#cb47-403"></a></span>
+<span id="cb47-404"><a href="#cb47-404"></a><span class="co"># Scatter plot of the draws</span></span>
+<span id="cb47-405"><a href="#cb47-405"></a><span class="fu">mcmc_scatter</span>(draws_df, <span class="at">pars=</span><span class="fu">c</span>(<span class="st">"alpha"</span>, <span class="st">"beta"</span>))</span>
+<span id="cb47-406"><a href="#cb47-406"></a></span>
+<span id="cb47-407"><a href="#cb47-407"></a><span class="co"># Plot the autocorrelation function and compare to last week</span></span>
+<span id="cb47-408"><a href="#cb47-408"></a><span class="fu">mcmc_acf</span>(draws_df, <span class="at">pars =</span> <span class="fu">c</span>(<span class="st">"alpha"</span>,<span class="st">"beta"</span>))</span>
+<span id="cb47-409"><a href="#cb47-409"></a><span class="st">```</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
