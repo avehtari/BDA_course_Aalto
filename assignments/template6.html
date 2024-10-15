@@ -622,11 +622,11 @@ p(y_\mathrm{pred.}|x_\mathrm{pred.},\alpha,\beta,\sigma) = p_\mathrm{normal}(y_\
 <span id="annotated-cell-1-16"><a href="#annotated-cell-1-16"></a>    <span class="co">// slope</span></span>
 <span id="annotated-cell-1-17"><a href="#annotated-cell-1-17"></a>    <span class="dt">real</span> beta; </span>
 <span id="annotated-cell-1-18"><a href="#annotated-cell-1-18"></a>    <span class="co">// the standard deviation should be constrained to be positive</span></span>
-<span id="annotated-cell-1-19"><a href="#annotated-cell-1-19"></a>    <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; sigma; </span>
+<span id="annotated-cell-1-19"><a href="#annotated-cell-1-19"></a>    <span class="dt">real</span>&lt;<span class="kw">upper</span>=<span class="dv">0</span>&gt; sigma; </span>
 <span id="annotated-cell-1-20"><a href="#annotated-cell-1-20"></a>} </span>
 <span id="annotated-cell-1-21"><a href="#annotated-cell-1-21"></a><span class="kw">transformed parameters</span> {</span>
 <span id="annotated-cell-1-22"><a href="#annotated-cell-1-22"></a>    <span class="co">// deterministic transformation of parameters and data</span></span>
-<span id="annotated-cell-1-23"><a href="#annotated-cell-1-23"></a>    <span class="dt">vector</span>[N] mu = alpha + beta * x; <span class="co">// linear model</span></span>
+<span id="annotated-cell-1-23"><a href="#annotated-cell-1-23"></a>    <span class="dt">vector</span>[N] mu = alpha + beta * x <span class="co">// linear model</span></span>
 <span id="annotated-cell-1-24"><a href="#annotated-cell-1-24"></a>} </span>
 <span id="annotated-cell-1-25"><a href="#annotated-cell-1-25"></a><span class="kw">model</span> {</span>
 <span id="annotated-cell-1-26"><a href="#annotated-cell-1-26"></a>    <span class="co">// observation model / likelihood</span></span>
@@ -636,7 +636,7 @@ p(y_\mathrm{pred.}|x_\mathrm{pred.},\alpha,\beta,\sigma) = p_\mathrm{normal}(y_\
 <span id="annotated-cell-1-30"><a href="#annotated-cell-1-30"></a>    <span class="co">// compute the means for the covariate values at which to make predictions</span></span>
 <span id="annotated-cell-1-31"><a href="#annotated-cell-1-31"></a>    <span class="dt">vector</span>[no_predictions] mu_pred = alpha + beta * x_predictions;</span>
 <span id="annotated-cell-1-32"><a href="#annotated-cell-1-32"></a>    <span class="co">// sample from the predictive distribution, a normal(mu_pred, sigma).</span></span>
-<span id="annotated-cell-1-33"><a href="#annotated-cell-1-33"></a>    <span class="dt">array</span>[no_predictions] <span class="dt">real</span> y_pred = normal_rng(mu_pred, sigma);</span>
+<span id="annotated-cell-1-33"><a href="#annotated-cell-1-33"></a>    <span class="dt">array</span>[no_predictions] <span class="dt">real</span> y_pred = normal_rng(mu, sigma);</span>
 <span id="annotated-cell-1-34"><a href="#annotated-cell-1-34"></a>} </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="hint">
 <ol type="1">
@@ -1475,11 +1475,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb47-145"><a href="#cb47-145"></a><span class="in">    // slope</span></span>
 <span id="cb47-146"><a href="#cb47-146"></a><span class="in">    real beta; </span></span>
 <span id="cb47-147"><a href="#cb47-147"></a><span class="in">    // the standard deviation should be constrained to be positive</span></span>
-<span id="cb47-148"><a href="#cb47-148"></a><span class="in">    real&lt;lower=0&gt; sigma; </span></span>
+<span id="cb47-148"><a href="#cb47-148"></a><span class="in">    real&lt;upper=0&gt; sigma; </span></span>
 <span id="cb47-149"><a href="#cb47-149"></a><span class="in">} </span></span>
 <span id="cb47-150"><a href="#cb47-150"></a><span class="in">transformed parameters { #&lt;3&gt;</span></span>
 <span id="cb47-151"><a href="#cb47-151"></a><span class="in">    // deterministic transformation of parameters and data</span></span>
-<span id="cb47-152"><a href="#cb47-152"></a><span class="in">    vector[N] mu = alpha + beta * x; // linear model</span></span>
+<span id="cb47-152"><a href="#cb47-152"></a><span class="in">    vector[N] mu = alpha + beta * x // linear model</span></span>
 <span id="cb47-153"><a href="#cb47-153"></a><span class="in">} </span></span>
 <span id="cb47-154"><a href="#cb47-154"></a><span class="in">model { #&lt;4&gt;</span></span>
 <span id="cb47-155"><a href="#cb47-155"></a><span class="in">    // observation model / likelihood</span></span>
@@ -1489,7 +1489,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb47-159"><a href="#cb47-159"></a><span class="in">    // compute the means for the covariate values at which to make predictions</span></span>
 <span id="cb47-160"><a href="#cb47-160"></a><span class="in">    vector[no_predictions] mu_pred = alpha + beta * x_predictions;</span></span>
 <span id="cb47-161"><a href="#cb47-161"></a><span class="in">    // sample from the predictive distribution, a normal(mu_pred, sigma).</span></span>
-<span id="cb47-162"><a href="#cb47-162"></a><span class="in">    array[no_predictions] real y_pred = normal_rng(mu_pred, sigma);</span></span>
+<span id="cb47-162"><a href="#cb47-162"></a><span class="in">    array[no_predictions] real y_pred = normal_rng(mu, sigma);</span></span>
 <span id="cb47-163"><a href="#cb47-163"></a><span class="in">} </span></span>
 <span id="cb47-164"><a href="#cb47-164"></a><span class="in">```</span></span>
 <span id="cb47-165"><a href="#cb47-165"></a></span>
