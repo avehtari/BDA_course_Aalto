@@ -300,6 +300,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#general-information" id="toc-general-information" class="nav-link active" data-scroll-target="#general-information"><span class="header-section-number">1</span> General information</a></li>
+  <li><a href="#simulation-warm-up" id="toc-simulation-warm-up" class="nav-link" data-scroll-target="#simulation-warm-up"><span class="header-section-number">2</span> Simulation warm-up</a></li>
+  <li><a href="#sleep-deprivation" id="toc-sleep-deprivation" class="nav-link" data-scroll-target="#sleep-deprivation"><span class="header-section-number">3</span> Sleep deprivation</a></li>
+  <li><a href="#school-calendar" id="toc-school-calendar" class="nav-link" data-scroll-target="#school-calendar"><span class="header-section-number">4</span> School calendar</a></li>
   </ul>
 </nav>
     </div>
@@ -333,7 +336,328 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="general-information" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> General information</h1>
-<p>This notebook will be published later!</p>
+<p>This assignment relates to Lecture 7 and Chapter 5.</p>
+<p>We recommend using <a href="https://jupyter.cs.aalto.fi">JupyterHub</a> (which has all the needed packages pre-installed).</p>
+<div class="hint">
+<p><strong>Reading instructions:</strong></p>
+<ul>
+<li><a href="../BDA3_notes.html#ch5"><strong>The reading instructions for BDA3 Chapter 5</strong></a>.</li>
+</ul>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+General Instructions for Answering the Assignment Questions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<ul>
+<li>Questions below are exact copies of the text found in the MyCourses quiz and should serve as a notebook where you can store notes and code.</li>
+<li>We recommend opening these notebooks in the Aalto JupyterHub, see <a href="https://avehtari.github.io/BDA_course_Aalto/FAQ.html#How_to_use_R_and_RStudio_remotely"><strong>how to use R and RStudio remotely</strong></a>.</li>
+<li>For inspiration for code, have a look at the <a href="https://avehtari.github.io/BDA_course_Aalto/demos.html"><strong>BDA R Demos</strong></a> and the specific Assignment code notebooks</li>
+<li>Recommended additional self study exercises for each chapter in BDA3 are listed in the course web page. These will help to gain deeper understanding of the topic.</li>
+<li>Common questions and answers regarding installation and technical problems can be found in <a href="https://avehtari.github.io/BDA_course_Aalto/FAQ.html">Frequently Asked Questions (FAQ)</a>.</li>
+<li>Deadlines for all assignments can be found on the course web page and in MyCourses.</li>
+<li>You are allowed to discuss assignments with your friends, but it is not allowed to copy solutions directly from other students or from internet.</li>
+<li>Do not share your answers publicly.</li>
+<li>Do not copy answers from the internet or from previous years. We compare the answers to the answers from previous years and to the answers from other students this year.</li>
+<li>Use of AI is allowed on the course, but the most of the work needs to by the student, and you need to report whether you used AI and in which way you used them (See <a href="https://www.aalto.fi/en/services/guidance-for-the-use-of-artificial-intelligence-in-teaching-and-learning-at-aalto-university">points 5 and 6 in Aalto guidelines for use of AI in teaching</a>).</li>
+<li>All suspected plagiarism will be reported and investigated. See more about the <a href="https://into.aalto.fi/display/ensaannot/Aalto+University+Code+of+Academic+Integrity+and+Handling+Violations+Thereof"><strong>Aalto University Code of Academic Integrity and Handling Violations Thereof</strong></a>.</li>
+<li>If you have any suggestions or improvements to the course material, please post in the course chat feedback channel, create an issue, or submit a pull request to the public repository!</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(tidybayes)) {</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    <span class="fu">install.packages</span>(<span class="st">"tidybayes"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3"></a>    <span class="fu">library</span>(tidybayes)</span>
+<span id="cb1-4"><a href="#cb1-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: tidybayes</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in library(package, lib.loc = lib.loc, character.only = TRUE,
+logical.return = TRUE, : there is no package called 'tidybayes'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Installing package into '/home/runner/work/_temp/Library'
+(as 'lib' is unspecified)</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>also installing the dependencies 'svUnit', 'arrayhelpers'</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(brms)) {</span>
+<span id="cb6-2"><a href="#cb6-2"></a>    <span class="fu">install.packages</span>(<span class="st">"brms"</span>)</span>
+<span id="cb6-3"><a href="#cb6-3"></a>    <span class="fu">library</span>(brms)</span>
+<span id="cb6-4"><a href="#cb6-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: brms</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: Rcpp</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading 'brms' package (version 2.22.0). Useful instructions
+can be found by typing help('brms'). A more detailed introduction
+to the package is available through vignette('brms_overview').</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'brms'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:tidybayes':
+
+    dstudent_t, pstudent_t, qstudent_t, rstudent_t</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:stats':
+
+    ar</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(metadat)) {</span>
+<span id="cb13-2"><a href="#cb13-2"></a>  <span class="fu">install.packages</span>(<span class="st">"metadat"</span>)</span>
+<span id="cb13-3"><a href="#cb13-3"></a>  <span class="fu">library</span>(metadat)</span>
+<span id="cb13-4"><a href="#cb13-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: metadat</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in library(package, lib.loc = lib.loc, character.only = TRUE,
+logical.return = TRUE, : there is no package called 'metadat'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Installing package into '/home/runner/work/_temp/Library'
+(as 'lib' is unspecified)</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>also installing the dependency 'mathjaxr'</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(cmdstanr)){</span>
+<span id="cb18-2"><a href="#cb18-2"></a>    <span class="fu">install.packages</span>(<span class="st">"cmdstanr"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://mc-stan.org/r-packages/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span>
+<span id="cb18-3"><a href="#cb18-3"></a>    <span class="fu">library</span>(cmdstanr)</span>
+<span id="cb18-4"><a href="#cb18-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: cmdstanr</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>This is cmdstanr version 0.8.1</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>- CmdStanR documentation and vignettes: mc-stan.org/cmdstanr</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>- CmdStan path: /home/runner/.cmdstan/cmdstan-2.35.0</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>- CmdStan version: 2.35.0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>cmdstan_installed <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
+<span id="cb24-2"><a href="#cb24-2"></a>  res <span class="ot">&lt;-</span> <span class="fu">try</span>(out <span class="ot">&lt;-</span> cmdstanr<span class="sc">::</span><span class="fu">cmdstan_path</span>(), <span class="at">silent =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb24-3"><a href="#cb24-3"></a>  <span class="sc">!</span><span class="fu">inherits</span>(res, <span class="st">"try-error"</span>)</span>
+<span id="cb24-4"><a href="#cb24-4"></a>}</span>
+<span id="cb24-5"><a href="#cb24-5"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">cmdstan_installed</span>()){</span>
+<span id="cb24-6"><a href="#cb24-6"></a>    <span class="fu">install_cmdstan</span>()</span>
+<span id="cb24-7"><a href="#cb24-7"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="simulation-warm-up" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Simulation warm-up</h1>
+<p>Here is the function to simulate and plot observations from a hierarchical data-generating process.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>hierarchical_sim <span class="ot">&lt;-</span> <span class="cf">function</span>(group_pop_mean,</span>
+<span id="cb25-2"><a href="#cb25-2"></a>                             between_group_sd,</span>
+<span id="cb25-3"><a href="#cb25-3"></a>                             within_group_sd,</span>
+<span id="cb25-4"><a href="#cb25-4"></a>                             n_groups,</span>
+<span id="cb25-5"><a href="#cb25-5"></a>                             n_obs_per_group</span>
+<span id="cb25-6"><a href="#cb25-6"></a>                             ) {</span>
+<span id="cb25-7"><a href="#cb25-7"></a>  <span class="co"># Generate group means</span></span>
+<span id="cb25-8"><a href="#cb25-8"></a>  group_means <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(</span>
+<span id="cb25-9"><a href="#cb25-9"></a>    <span class="at">n =</span> n_groups,</span>
+<span id="cb25-10"><a href="#cb25-10"></a>    <span class="at">mean =</span> group_pop_mean,</span>
+<span id="cb25-11"><a href="#cb25-11"></a>    <span class="at">sd =</span> between_group_sd</span>
+<span id="cb25-12"><a href="#cb25-12"></a>  )</span>
+<span id="cb25-13"><a href="#cb25-13"></a></span>
+<span id="cb25-14"><a href="#cb25-14"></a>  <span class="co"># Generate observations</span></span>
+<span id="cb25-15"><a href="#cb25-15"></a></span>
+<span id="cb25-16"><a href="#cb25-16"></a>  <span class="do">## Create an empty vector for observations</span></span>
+<span id="cb25-17"><a href="#cb25-17"></a>  y <span class="ot">&lt;-</span> <span class="fu">numeric</span>()</span>
+<span id="cb25-18"><a href="#cb25-18"></a>  <span class="do">## Create a vector for the group identifier</span></span>
+<span id="cb25-19"><a href="#cb25-19"></a>  group <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>n_groups, <span class="at">each =</span> n_obs_per_group)</span>
+<span id="cb25-20"><a href="#cb25-20"></a>  </span>
+<span id="cb25-21"><a href="#cb25-21"></a>  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_groups) {</span>
+<span id="cb25-22"><a href="#cb25-22"></a>    <span class="do">### Generate one group observations</span></span>
+<span id="cb25-23"><a href="#cb25-23"></a>    group_y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(</span>
+<span id="cb25-24"><a href="#cb25-24"></a>      <span class="at">n =</span> n_obs_per_group,</span>
+<span id="cb25-25"><a href="#cb25-25"></a>      <span class="at">mean =</span> group_means[j],</span>
+<span id="cb25-26"><a href="#cb25-26"></a>      <span class="at">sd =</span> within_group_sd</span>
+<span id="cb25-27"><a href="#cb25-27"></a>    )</span>
+<span id="cb25-28"><a href="#cb25-28"></a>    <span class="do">### Append the group observations to the vector</span></span>
+<span id="cb25-29"><a href="#cb25-29"></a>    y <span class="ot">&lt;-</span> <span class="fu">c</span>(y, group_y)</span>
+<span id="cb25-30"><a href="#cb25-30"></a>  }</span>
+<span id="cb25-31"><a href="#cb25-31"></a></span>
+<span id="cb25-32"><a href="#cb25-32"></a>  <span class="co"># Combine into a data frame</span></span>
+<span id="cb25-33"><a href="#cb25-33"></a>  data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb25-34"><a href="#cb25-34"></a>    <span class="at">group =</span> <span class="fu">factor</span>(group),</span>
+<span id="cb25-35"><a href="#cb25-35"></a>    <span class="at">y =</span> y</span>
+<span id="cb25-36"><a href="#cb25-36"></a>  )</span>
+<span id="cb25-37"><a href="#cb25-37"></a></span>
+<span id="cb25-38"><a href="#cb25-38"></a>  <span class="co"># Plot the data</span></span>
+<span id="cb25-39"><a href="#cb25-39"></a>  <span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> y, <span class="at">y =</span> group)) <span class="sc">+</span></span>
+<span id="cb25-40"><a href="#cb25-40"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb25-41"><a href="#cb25-41"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> group_pop_mean, <span class="at">linetype =</span> <span class="st">"dashed"</span>)</span>
+<span id="cb25-42"><a href="#cb25-42"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Example using the function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="fu">hierarchical_sim</span>(</span>
+<span id="cb26-2"><a href="#cb26-2"></a>  <span class="at">group_pop_mean =</span> <span class="dv">50</span>,</span>
+<span id="cb26-3"><a href="#cb26-3"></a>  <span class="at">between_group_sd =</span> <span class="dv">5</span>,</span>
+<span id="cb26-4"><a href="#cb26-4"></a>  <span class="at">within_group_sd =</span> <span class="dv">1</span>,</span>
+<span id="cb26-5"><a href="#cb26-5"></a>  <span class="at">n_groups =</span> <span class="dv">10</span>,</span>
+<span id="cb26-6"><a href="#cb26-6"></a>  <span class="at">n_obs_per_group =</span> <span class="dv">5</span></span>
+<span id="cb26-7"><a href="#cb26-7"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in ggplot(data, aes(x = y, y = group)): could not find function "ggplot"</code></pre>
+</div>
+</div>
+</section>
+<section id="sleep-deprivation" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Sleep deprivation</h1>
+<p>The dataset <code>sleepstudy</code> is available by using the command <code>data(sleepstudy, package = "lme4")</code></p>
+<p>Below is some code for fitting a brms model. This model is a simple pooled model. You will need to fit a hierarchical model as explained in the assignment, but this code should help getting started.</p>
+<p>Load the dataset</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="fu">data</span>(sleepstudy, <span class="at">package =</span> <span class="st">"lme4"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in find.package(package, lib.loc, verbose = verbose): there is no package called 'lme4'</code></pre>
+</div>
+</div>
+<p>Specify the formula and observation family:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>sleepstudy_pooled_formula <span class="ot">&lt;-</span> <span class="fu">bf</span>(</span>
+<span id="cb30-2"><a href="#cb30-2"></a>  Reaction <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> Days,</span>
+<span id="cb30-3"><a href="#cb30-3"></a>  <span class="at">family =</span> <span class="st">"gaussian"</span>,</span>
+<span id="cb30-4"><a href="#cb30-4"></a>  <span class="at">center =</span> <span class="cn">FALSE</span></span>
+<span id="cb30-5"><a href="#cb30-5"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can see the parameters and default priors with</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="fu">get_prior</span>(pooled_formula, <span class="at">data =</span> sleepstudy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error: object 'pooled_formula' not found</code></pre>
+</div>
+</div>
+<p>We can then specify the priors:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>(sleepstudy_pooled_priors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb33-2"><a href="#cb33-2"></a>  <span class="fu">prior</span>(</span>
+<span id="cb33-3"><a href="#cb33-3"></a>    <span class="fu">normal</span>(<span class="dv">400</span>, <span class="dv">100</span>),</span>
+<span id="cb33-4"><a href="#cb33-4"></a>    <span class="at">class =</span> <span class="st">"b"</span>,</span>
+<span id="cb33-5"><a href="#cb33-5"></a>    <span class="at">coef =</span> <span class="st">"Intercept"</span></span>
+<span id="cb33-6"><a href="#cb33-6"></a>  ),</span>
+<span id="cb33-7"><a href="#cb33-7"></a>  <span class="fu">prior</span>(</span>
+<span id="cb33-8"><a href="#cb33-8"></a>    <span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">50</span>),</span>
+<span id="cb33-9"><a href="#cb33-9"></a>    <span class="at">class =</span> <span class="st">"b"</span>,</span>
+<span id="cb33-10"><a href="#cb33-10"></a>    <span class="at">coef =</span> <span class="st">"Days"</span></span>
+<span id="cb33-11"><a href="#cb33-11"></a>  ),</span>
+<span id="cb33-12"><a href="#cb33-12"></a>  <span class="fu">prior</span>(</span>
+<span id="cb33-13"><a href="#cb33-13"></a>    <span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">50</span>),</span>
+<span id="cb33-14"><a href="#cb33-14"></a>    <span class="at">class =</span> <span class="st">"sigma"</span></span>
+<span id="cb33-15"><a href="#cb33-15"></a>  )</span>
+<span id="cb33-16"><a href="#cb33-16"></a>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            prior class      coef group resp dpar nlpar   lb   ub source
+ normal(400, 100)     b Intercept                       &lt;NA&gt; &lt;NA&gt;   user
+    normal(0, 50)     b      Days                       &lt;NA&gt; &lt;NA&gt;   user
+    normal(0, 50) sigma                                 &lt;NA&gt; &lt;NA&gt;   user</code></pre>
+</div>
+</div>
+<p>And then fit the model:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>sleepstudy_pooled_fit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
+<span id="cb35-2"><a href="#cb35-2"></a>  <span class="at">formula =</span> pooled_formula,</span>
+<span id="cb35-3"><a href="#cb35-3"></a>  <span class="at">prior =</span> pooled_priors,</span>
+<span id="cb35-4"><a href="#cb35-4"></a>  <span class="at">data =</span> sleepstudy</span>
+<span id="cb35-5"><a href="#cb35-5"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error: object 'pooled_formula' not found</code></pre>
+</div>
+</div>
+<p>We can inspect the model fit:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a><span class="fu">summary</span>(pooled_fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error: object 'pooled_fit' not found</code></pre>
+</div>
+</div>
+</section>
+<section id="school-calendar" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> School calendar</h1>
+<p>Meta-analysis models can be fit in brms. When the standard error is known, the <code>se()</code> function can be used to specify it.</p>
+<p>The dataset <code>dat.konstantopoulos2011</code> has the observations for the school calendar intervention meta-analysis.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a><span class="fu">data</span>(dat.konstantopoulos2011, <span class="at">package =</span> <span class="st">"metadat"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>As mentioned in the assignment instructions, a unique identifier for school needs to be created by combining the district and school:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a>schoolcalendar_data <span class="ot">&lt;-</span> dat.konstantopoulos2011 <span class="sc">|&gt;</span></span>
+<span id="cb40-2"><a href="#cb40-2"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb40-3"><a href="#cb40-3"></a>    <span class="at">school =</span> <span class="fu">factor</span>(school),</span>
+<span id="cb40-4"><a href="#cb40-4"></a>    <span class="at">district =</span> <span class="fu">factor</span>(district),</span>
+<span id="cb40-5"><a href="#cb40-5"></a>    <span class="at">district_school =</span> <span class="fu">interaction</span>(district, school, <span class="at">drop =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">"_"</span>)</span>
+<span id="cb40-6"><a href="#cb40-6"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then the models can be fit</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a></span>
+<span id="cb41-2"><a href="#cb41-2"></a>schoolcalendar_pooled_formula <span class="ot">&lt;-</span> <span class="fu">bf</span>(</span>
+<span id="cb41-3"><a href="#cb41-3"></a>  <span class="at">formula =</span> yi <span class="sc">|</span> <span class="fu">se</span>(<span class="fu">sqrt</span>(vi)) <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb41-4"><a href="#cb41-4"></a>  <span class="at">family =</span> <span class="st">"gaussian"</span></span>
+<span id="cb41-5"><a href="#cb41-5"></a>)  </span>
+<span id="cb41-6"><a href="#cb41-6"></a></span>
+<span id="cb41-7"><a href="#cb41-7"></a>schoolcalendar_pooled_fit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
+<span id="cb41-8"><a href="#cb41-8"></a>  <span class="at">formula =</span> schoolcalendar_pooled_formula,</span>
+<span id="cb41-9"><a href="#cb41-9"></a>  <span class="at">data =</span> schoolcalendar_data</span>
+<span id="cb41-10"><a href="#cb41-10"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Predictions for a new school can be made using the <code>posterior_epred</code> function:</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a></span>
+<span id="cb42-2"><a href="#cb42-2"></a>new_school <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb42-3"><a href="#cb42-3"></a>  <span class="at">school =</span> <span class="fu">factor</span>(<span class="dv">1</span>),</span>
+<span id="cb42-4"><a href="#cb42-4"></a>  <span class="at">district =</span> <span class="fu">factor</span>(<span class="dv">1</span>),</span>
+<span id="cb42-5"><a href="#cb42-5"></a>  <span class="at">district_school =</span> <span class="fu">factor</span>(<span class="st">"1_1"</span>),</span>
+<span id="cb42-6"><a href="#cb42-6"></a>  <span class="at">vi =</span> <span class="dv">0</span> <span class="co"># the expectation of the prediction is not affected by the sampling variance, so this can be any number</span></span>
+<span id="cb42-7"><a href="#cb42-7"></a>)</span>
+<span id="cb42-8"><a href="#cb42-8"></a>  </span>
+<span id="cb42-9"><a href="#cb42-9"></a></span>
+<span id="cb42-10"><a href="#cb42-10"></a>schoolcalendar_post_epred <span class="ot">&lt;-</span> <span class="fu">posterior_epred</span>(</span>
+<span id="cb42-11"><a href="#cb42-11"></a>    schoolcalendar_pooled_fit,</span>
+<span id="cb42-12"><a href="#cb42-12"></a>    <span class="at">newdata =</span> new_school,</span>
+<span id="cb42-13"><a href="#cb42-13"></a>    <span class="at">allow_new_levels =</span> <span class="cn">TRUE</span></span>
+<span id="cb42-14"><a href="#cb42-14"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>It can be helpful to plot the posterior estimates. Here is a function that will do this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a>plot_school_posteriors <span class="ot">&lt;-</span> <span class="cf">function</span>(fit, dataset) {</span>
+<span id="cb43-2"><a href="#cb43-2"></a>  tidybayes<span class="sc">::</span><span class="fu">add_predicted_draws</span>(dataset, fit) <span class="sc">|&gt;</span></span>
+<span id="cb43-3"><a href="#cb43-3"></a>    <span class="fu">ggplot</span>(</span>
+<span id="cb43-4"><a href="#cb43-4"></a>      <span class="fu">aes</span>(</span>
+<span id="cb43-5"><a href="#cb43-5"></a>        <span class="at">x =</span> .prediction,</span>
+<span id="cb43-6"><a href="#cb43-6"></a>        <span class="at">y =</span> <span class="fu">interaction</span>(district, school, <span class="at">sep =</span> <span class="st">", "</span>, <span class="at">lex.order =</span> <span class="cn">TRUE</span>))) <span class="sc">+</span></span>
+<span id="cb43-7"><a href="#cb43-7"></a>    tidybayes<span class="sc">::</span><span class="fu">stat_halfeye</span>() <span class="sc">+</span></span>
+<span id="cb43-8"><a href="#cb43-8"></a>    <span class="fu">ylab</span>(<span class="st">"District, school"</span>) <span class="sc">+</span></span>
+<span id="cb43-9"><a href="#cb43-9"></a>    <span class="fu">xlab</span>(<span class="st">"Posterior effect"</span>)</span>
+<span id="cb43-10"><a href="#cb43-10"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And can be used as follows:</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a><span class="fu">plot_school_posteriors</span>(</span>
+<span id="cb44-2"><a href="#cb44-2"></a>  <span class="at">fit =</span> schoolcalendar_pooled_fit,</span>
+<span id="cb44-3"><a href="#cb44-3"></a>  <span class="at">dataset =</span> school_calendar_data</span>
+<span id="cb44-4"><a href="#cb44-4"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
 <!-- -->
@@ -824,22 +1148,270 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">---</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="an">title:</span><span class="co"> "Notebook for Assignment 7"</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="an">author:</span><span class="co"> "Aki Vehtari et al."</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="an">format:</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="co">  html:</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="co">    toc: true</span></span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="co">    code-tools: true</span></span>
-<span id="cb1-8"><a href="#cb1-8"></a><span class="co">    code-line-numbers: true</span></span>
-<span id="cb1-9"><a href="#cb1-9"></a><span class="co">    number-sections: true</span></span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="co">    mainfont: Georgia, serif</span></span>
-<span id="cb1-11"><a href="#cb1-11"></a><span class="an">editor:</span><span class="co"> source</span></span>
-<span id="cb1-12"><a href="#cb1-12"></a><span class="co">---</span></span>
-<span id="cb1-13"><a href="#cb1-13"></a></span>
-<span id="cb1-14"><a href="#cb1-14"></a><span class="fu"># General information</span></span>
-<span id="cb1-15"><a href="#cb1-15"></a></span>
-<span id="cb1-16"><a href="#cb1-16"></a>This notebook will be published later!</span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb45" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb45-1"><a href="#cb45-1"></a><span class="co">---</span></span>
+<span id="cb45-2"><a href="#cb45-2"></a><span class="an">title:</span><span class="co"> "Notebook for Assignment 7"</span></span>
+<span id="cb45-3"><a href="#cb45-3"></a><span class="an">author:</span><span class="co"> "Aki Vehtari et al."</span></span>
+<span id="cb45-4"><a href="#cb45-4"></a><span class="an">format:</span></span>
+<span id="cb45-5"><a href="#cb45-5"></a><span class="co">  html:</span></span>
+<span id="cb45-6"><a href="#cb45-6"></a><span class="co">    toc: true</span></span>
+<span id="cb45-7"><a href="#cb45-7"></a><span class="co">    code-tools: true</span></span>
+<span id="cb45-8"><a href="#cb45-8"></a><span class="co">    code-line-numbers: true</span></span>
+<span id="cb45-9"><a href="#cb45-9"></a><span class="co">    number-sections: true</span></span>
+<span id="cb45-10"><a href="#cb45-10"></a><span class="co">    mainfont: Georgia, serif</span></span>
+<span id="cb45-11"><a href="#cb45-11"></a><span class="an">editor:</span><span class="co"> source</span></span>
+<span id="cb45-12"><a href="#cb45-12"></a><span class="co">---</span></span>
+<span id="cb45-13"><a href="#cb45-13"></a></span>
+<span id="cb45-14"><a href="#cb45-14"></a><span class="fu"># General information</span></span>
+<span id="cb45-15"><a href="#cb45-15"></a></span>
+<span id="cb45-16"><a href="#cb45-16"></a>This assignment relates to Lecture 7 and Chapter 5.</span>
+<span id="cb45-17"><a href="#cb45-17"></a></span>
+<span id="cb45-18"><a href="#cb45-18"></a>We recommend using <span class="co">[</span><span class="ot">JupyterHub</span><span class="co">](https://jupyter.cs.aalto.fi)</span> (which has all the needed packages pre-installed).</span>
+<span id="cb45-19"><a href="#cb45-19"></a></span>
+<span id="cb45-20"><a href="#cb45-20"></a>::: hint</span>
+<span id="cb45-21"><a href="#cb45-21"></a>**Reading instructions:**</span>
+<span id="cb45-22"><a href="#cb45-22"></a></span>
+<span id="cb45-23"><a href="#cb45-23"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">**The reading instructions for BDA3 Chapter 5**</span><span class="co">](../BDA3_notes.html#ch5)</span>.</span>
+<span id="cb45-24"><a href="#cb45-24"></a>:::</span>
+<span id="cb45-25"><a href="#cb45-25"></a></span>
+<span id="cb45-26"><a href="#cb45-26"></a>{{&lt; include includes/_general_cloze_instructions.md &gt;}}</span>
+<span id="cb45-27"><a href="#cb45-27"></a></span>
+<span id="cb45-30"><a href="#cb45-30"></a><span class="in">```{r}</span></span>
+<span id="cb45-31"><a href="#cb45-31"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(tidybayes)) {</span>
+<span id="cb45-32"><a href="#cb45-32"></a>    <span class="fu">install.packages</span>(<span class="st">"tidybayes"</span>)</span>
+<span id="cb45-33"><a href="#cb45-33"></a>    <span class="fu">library</span>(tidybayes)</span>
+<span id="cb45-34"><a href="#cb45-34"></a>}</span>
+<span id="cb45-35"><a href="#cb45-35"></a></span>
+<span id="cb45-36"><a href="#cb45-36"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(brms)) {</span>
+<span id="cb45-37"><a href="#cb45-37"></a>    <span class="fu">install.packages</span>(<span class="st">"brms"</span>)</span>
+<span id="cb45-38"><a href="#cb45-38"></a>    <span class="fu">library</span>(brms)</span>
+<span id="cb45-39"><a href="#cb45-39"></a>}</span>
+<span id="cb45-40"><a href="#cb45-40"></a></span>
+<span id="cb45-41"><a href="#cb45-41"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(metadat)) {</span>
+<span id="cb45-42"><a href="#cb45-42"></a>  <span class="fu">install.packages</span>(<span class="st">"metadat"</span>)</span>
+<span id="cb45-43"><a href="#cb45-43"></a>  <span class="fu">library</span>(metadat)</span>
+<span id="cb45-44"><a href="#cb45-44"></a>}</span>
+<span id="cb45-45"><a href="#cb45-45"></a></span>
+<span id="cb45-46"><a href="#cb45-46"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(cmdstanr)){</span>
+<span id="cb45-47"><a href="#cb45-47"></a>    <span class="fu">install.packages</span>(<span class="st">"cmdstanr"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://mc-stan.org/r-packages/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span>
+<span id="cb45-48"><a href="#cb45-48"></a>    <span class="fu">library</span>(cmdstanr)</span>
+<span id="cb45-49"><a href="#cb45-49"></a>}</span>
+<span id="cb45-50"><a href="#cb45-50"></a>cmdstan_installed <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
+<span id="cb45-51"><a href="#cb45-51"></a>  res <span class="ot">&lt;-</span> <span class="fu">try</span>(out <span class="ot">&lt;-</span> cmdstanr<span class="sc">::</span><span class="fu">cmdstan_path</span>(), <span class="at">silent =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb45-52"><a href="#cb45-52"></a>  <span class="sc">!</span><span class="fu">inherits</span>(res, <span class="st">"try-error"</span>)</span>
+<span id="cb45-53"><a href="#cb45-53"></a>}</span>
+<span id="cb45-54"><a href="#cb45-54"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">cmdstan_installed</span>()){</span>
+<span id="cb45-55"><a href="#cb45-55"></a>    <span class="fu">install_cmdstan</span>()</span>
+<span id="cb45-56"><a href="#cb45-56"></a>}</span>
+<span id="cb45-57"><a href="#cb45-57"></a><span class="in">```</span></span>
+<span id="cb45-58"><a href="#cb45-58"></a></span>
+<span id="cb45-59"><a href="#cb45-59"></a><span class="fu"># Simulation warm-up</span></span>
+<span id="cb45-60"><a href="#cb45-60"></a></span>
+<span id="cb45-61"><a href="#cb45-61"></a>Here is the function to simulate and plot observations from a</span>
+<span id="cb45-62"><a href="#cb45-62"></a>hierarchical data-generating process.</span>
+<span id="cb45-63"><a href="#cb45-63"></a></span>
+<span id="cb45-66"><a href="#cb45-66"></a><span class="in">```{r}</span></span>
+<span id="cb45-67"><a href="#cb45-67"></a>hierarchical_sim <span class="ot">&lt;-</span> <span class="cf">function</span>(group_pop_mean,</span>
+<span id="cb45-68"><a href="#cb45-68"></a>                             between_group_sd,</span>
+<span id="cb45-69"><a href="#cb45-69"></a>                             within_group_sd,</span>
+<span id="cb45-70"><a href="#cb45-70"></a>                             n_groups,</span>
+<span id="cb45-71"><a href="#cb45-71"></a>                             n_obs_per_group</span>
+<span id="cb45-72"><a href="#cb45-72"></a>                             ) {</span>
+<span id="cb45-73"><a href="#cb45-73"></a>  <span class="co"># Generate group means</span></span>
+<span id="cb45-74"><a href="#cb45-74"></a>  group_means <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(</span>
+<span id="cb45-75"><a href="#cb45-75"></a>    <span class="at">n =</span> n_groups,</span>
+<span id="cb45-76"><a href="#cb45-76"></a>    <span class="at">mean =</span> group_pop_mean,</span>
+<span id="cb45-77"><a href="#cb45-77"></a>    <span class="at">sd =</span> between_group_sd</span>
+<span id="cb45-78"><a href="#cb45-78"></a>  )</span>
+<span id="cb45-79"><a href="#cb45-79"></a></span>
+<span id="cb45-80"><a href="#cb45-80"></a>  <span class="co"># Generate observations</span></span>
+<span id="cb45-81"><a href="#cb45-81"></a></span>
+<span id="cb45-82"><a href="#cb45-82"></a>  <span class="do">## Create an empty vector for observations</span></span>
+<span id="cb45-83"><a href="#cb45-83"></a>  y <span class="ot">&lt;-</span> <span class="fu">numeric</span>()</span>
+<span id="cb45-84"><a href="#cb45-84"></a>  <span class="do">## Create a vector for the group identifier</span></span>
+<span id="cb45-85"><a href="#cb45-85"></a>  group <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>n_groups, <span class="at">each =</span> n_obs_per_group)</span>
+<span id="cb45-86"><a href="#cb45-86"></a>  </span>
+<span id="cb45-87"><a href="#cb45-87"></a>  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_groups) {</span>
+<span id="cb45-88"><a href="#cb45-88"></a>    <span class="do">### Generate one group observations</span></span>
+<span id="cb45-89"><a href="#cb45-89"></a>    group_y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(</span>
+<span id="cb45-90"><a href="#cb45-90"></a>      <span class="at">n =</span> n_obs_per_group,</span>
+<span id="cb45-91"><a href="#cb45-91"></a>      <span class="at">mean =</span> group_means[j],</span>
+<span id="cb45-92"><a href="#cb45-92"></a>      <span class="at">sd =</span> within_group_sd</span>
+<span id="cb45-93"><a href="#cb45-93"></a>    )</span>
+<span id="cb45-94"><a href="#cb45-94"></a>    <span class="do">### Append the group observations to the vector</span></span>
+<span id="cb45-95"><a href="#cb45-95"></a>    y <span class="ot">&lt;-</span> <span class="fu">c</span>(y, group_y)</span>
+<span id="cb45-96"><a href="#cb45-96"></a>  }</span>
+<span id="cb45-97"><a href="#cb45-97"></a></span>
+<span id="cb45-98"><a href="#cb45-98"></a>  <span class="co"># Combine into a data frame</span></span>
+<span id="cb45-99"><a href="#cb45-99"></a>  data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb45-100"><a href="#cb45-100"></a>    <span class="at">group =</span> <span class="fu">factor</span>(group),</span>
+<span id="cb45-101"><a href="#cb45-101"></a>    <span class="at">y =</span> y</span>
+<span id="cb45-102"><a href="#cb45-102"></a>  )</span>
+<span id="cb45-103"><a href="#cb45-103"></a></span>
+<span id="cb45-104"><a href="#cb45-104"></a>  <span class="co"># Plot the data</span></span>
+<span id="cb45-105"><a href="#cb45-105"></a>  <span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> y, <span class="at">y =</span> group)) <span class="sc">+</span></span>
+<span id="cb45-106"><a href="#cb45-106"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb45-107"><a href="#cb45-107"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> group_pop_mean, <span class="at">linetype =</span> <span class="st">"dashed"</span>)</span>
+<span id="cb45-108"><a href="#cb45-108"></a>}</span>
+<span id="cb45-109"><a href="#cb45-109"></a><span class="in">```</span></span>
+<span id="cb45-110"><a href="#cb45-110"></a></span>
+<span id="cb45-111"><a href="#cb45-111"></a>Example using the function:</span>
+<span id="cb45-114"><a href="#cb45-114"></a><span class="in">```{r}</span></span>
+<span id="cb45-115"><a href="#cb45-115"></a><span class="fu">hierarchical_sim</span>(</span>
+<span id="cb45-116"><a href="#cb45-116"></a>  <span class="at">group_pop_mean =</span> <span class="dv">50</span>,</span>
+<span id="cb45-117"><a href="#cb45-117"></a>  <span class="at">between_group_sd =</span> <span class="dv">5</span>,</span>
+<span id="cb45-118"><a href="#cb45-118"></a>  <span class="at">within_group_sd =</span> <span class="dv">1</span>,</span>
+<span id="cb45-119"><a href="#cb45-119"></a>  <span class="at">n_groups =</span> <span class="dv">10</span>,</span>
+<span id="cb45-120"><a href="#cb45-120"></a>  <span class="at">n_obs_per_group =</span> <span class="dv">5</span></span>
+<span id="cb45-121"><a href="#cb45-121"></a>  )</span>
+<span id="cb45-122"><a href="#cb45-122"></a><span class="in">```</span></span>
+<span id="cb45-123"><a href="#cb45-123"></a></span>
+<span id="cb45-124"><a href="#cb45-124"></a><span class="fu"># Sleep deprivation</span></span>
+<span id="cb45-125"><a href="#cb45-125"></a></span>
+<span id="cb45-126"><a href="#cb45-126"></a>The dataset <span class="in">`sleepstudy`</span> is available by using the command</span>
+<span id="cb45-127"><a href="#cb45-127"></a><span class="in">`data(sleepstudy, package = "lme4")`</span></span>
+<span id="cb45-128"><a href="#cb45-128"></a></span>
+<span id="cb45-129"><a href="#cb45-129"></a>Below is some code for fitting a brms model. This model is a simple</span>
+<span id="cb45-130"><a href="#cb45-130"></a>pooled model. You will need to fit a hierarchical model as explained</span>
+<span id="cb45-131"><a href="#cb45-131"></a>in the assignment, but this code should help getting started.</span>
+<span id="cb45-132"><a href="#cb45-132"></a></span>
+<span id="cb45-133"><a href="#cb45-133"></a>Load the dataset</span>
+<span id="cb45-136"><a href="#cb45-136"></a><span class="in">```{r}</span></span>
+<span id="cb45-137"><a href="#cb45-137"></a><span class="fu">data</span>(sleepstudy, <span class="at">package =</span> <span class="st">"lme4"</span>)</span>
+<span id="cb45-138"><a href="#cb45-138"></a><span class="in">```</span></span>
+<span id="cb45-139"><a href="#cb45-139"></a></span>
+<span id="cb45-140"><a href="#cb45-140"></a>Specify the formula and observation family:</span>
+<span id="cb45-141"><a href="#cb45-141"></a></span>
+<span id="cb45-144"><a href="#cb45-144"></a><span class="in">```{r}</span></span>
+<span id="cb45-145"><a href="#cb45-145"></a>sleepstudy_pooled_formula <span class="ot">&lt;-</span> <span class="fu">bf</span>(</span>
+<span id="cb45-146"><a href="#cb45-146"></a>  Reaction <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> Days,</span>
+<span id="cb45-147"><a href="#cb45-147"></a>  <span class="at">family =</span> <span class="st">"gaussian"</span>,</span>
+<span id="cb45-148"><a href="#cb45-148"></a>  <span class="at">center =</span> <span class="cn">FALSE</span></span>
+<span id="cb45-149"><a href="#cb45-149"></a>)</span>
+<span id="cb45-150"><a href="#cb45-150"></a><span class="in">```</span></span>
+<span id="cb45-151"><a href="#cb45-151"></a></span>
+<span id="cb45-152"><a href="#cb45-152"></a>We can see the parameters and default priors with</span>
+<span id="cb45-155"><a href="#cb45-155"></a><span class="in">```{r}</span></span>
+<span id="cb45-156"><a href="#cb45-156"></a><span class="fu">get_prior</span>(pooled_formula, <span class="at">data =</span> sleepstudy)</span>
+<span id="cb45-157"><a href="#cb45-157"></a><span class="in">```</span></span>
+<span id="cb45-158"><a href="#cb45-158"></a></span>
+<span id="cb45-159"><a href="#cb45-159"></a>We can then specify the priors:</span>
+<span id="cb45-160"><a href="#cb45-160"></a></span>
+<span id="cb45-163"><a href="#cb45-163"></a><span class="in">```{r}</span></span>
+<span id="cb45-164"><a href="#cb45-164"></a>(sleepstudy_pooled_priors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb45-165"><a href="#cb45-165"></a>  <span class="fu">prior</span>(</span>
+<span id="cb45-166"><a href="#cb45-166"></a>    <span class="fu">normal</span>(<span class="dv">400</span>, <span class="dv">100</span>),</span>
+<span id="cb45-167"><a href="#cb45-167"></a>    <span class="at">class =</span> <span class="st">"b"</span>,</span>
+<span id="cb45-168"><a href="#cb45-168"></a>    <span class="at">coef =</span> <span class="st">"Intercept"</span></span>
+<span id="cb45-169"><a href="#cb45-169"></a>  ),</span>
+<span id="cb45-170"><a href="#cb45-170"></a>  <span class="fu">prior</span>(</span>
+<span id="cb45-171"><a href="#cb45-171"></a>    <span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">50</span>),</span>
+<span id="cb45-172"><a href="#cb45-172"></a>    <span class="at">class =</span> <span class="st">"b"</span>,</span>
+<span id="cb45-173"><a href="#cb45-173"></a>    <span class="at">coef =</span> <span class="st">"Days"</span></span>
+<span id="cb45-174"><a href="#cb45-174"></a>  ),</span>
+<span id="cb45-175"><a href="#cb45-175"></a>  <span class="fu">prior</span>(</span>
+<span id="cb45-176"><a href="#cb45-176"></a>    <span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">50</span>),</span>
+<span id="cb45-177"><a href="#cb45-177"></a>    <span class="at">class =</span> <span class="st">"sigma"</span></span>
+<span id="cb45-178"><a href="#cb45-178"></a>  )</span>
+<span id="cb45-179"><a href="#cb45-179"></a>))</span>
+<span id="cb45-180"><a href="#cb45-180"></a><span class="in">```</span></span>
+<span id="cb45-181"><a href="#cb45-181"></a></span>
+<span id="cb45-182"><a href="#cb45-182"></a>And then fit the model:</span>
+<span id="cb45-183"><a href="#cb45-183"></a></span>
+<span id="cb45-186"><a href="#cb45-186"></a><span class="in">```{r}</span></span>
+<span id="cb45-187"><a href="#cb45-187"></a>sleepstudy_pooled_fit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
+<span id="cb45-188"><a href="#cb45-188"></a>  <span class="at">formula =</span> pooled_formula,</span>
+<span id="cb45-189"><a href="#cb45-189"></a>  <span class="at">prior =</span> pooled_priors,</span>
+<span id="cb45-190"><a href="#cb45-190"></a>  <span class="at">data =</span> sleepstudy</span>
+<span id="cb45-191"><a href="#cb45-191"></a>)</span>
+<span id="cb45-192"><a href="#cb45-192"></a><span class="in">```</span></span>
+<span id="cb45-193"><a href="#cb45-193"></a></span>
+<span id="cb45-194"><a href="#cb45-194"></a>We can inspect the model fit:</span>
+<span id="cb45-195"><a href="#cb45-195"></a></span>
+<span id="cb45-198"><a href="#cb45-198"></a><span class="in">```{r}</span></span>
+<span id="cb45-199"><a href="#cb45-199"></a><span class="fu">summary</span>(pooled_fit)</span>
+<span id="cb45-200"><a href="#cb45-200"></a><span class="in">```</span></span>
+<span id="cb45-201"><a href="#cb45-201"></a></span>
+<span id="cb45-202"><a href="#cb45-202"></a><span class="fu"># School calendar</span></span>
+<span id="cb45-203"><a href="#cb45-203"></a></span>
+<span id="cb45-204"><a href="#cb45-204"></a>Meta-analysis models can be fit in brms. When the standard error is</span>
+<span id="cb45-205"><a href="#cb45-205"></a>known, the <span class="in">`se()`</span> function can be used to specify it.</span>
+<span id="cb45-206"><a href="#cb45-206"></a></span>
+<span id="cb45-207"><a href="#cb45-207"></a>The dataset <span class="in">`dat.konstantopoulos2011`</span> has the observations for the school calendar intervention meta-analysis.</span>
+<span id="cb45-208"><a href="#cb45-208"></a></span>
+<span id="cb45-211"><a href="#cb45-211"></a><span class="in">```{r}</span></span>
+<span id="cb45-212"><a href="#cb45-212"></a><span class="fu">data</span>(dat.konstantopoulos2011, <span class="at">package =</span> <span class="st">"metadat"</span>)</span>
+<span id="cb45-213"><a href="#cb45-213"></a><span class="in">```</span></span>
+<span id="cb45-214"><a href="#cb45-214"></a></span>
+<span id="cb45-215"><a href="#cb45-215"></a>As mentioned in the assignment instructions, a unique identifier for</span>
+<span id="cb45-216"><a href="#cb45-216"></a>school needs to be created by combining the district and school:</span>
+<span id="cb45-217"><a href="#cb45-217"></a></span>
+<span id="cb45-220"><a href="#cb45-220"></a><span class="in">```{r}</span></span>
+<span id="cb45-221"><a href="#cb45-221"></a>schoolcalendar_data <span class="ot">&lt;-</span> dat.konstantopoulos2011 <span class="sc">|&gt;</span></span>
+<span id="cb45-222"><a href="#cb45-222"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb45-223"><a href="#cb45-223"></a>    <span class="at">school =</span> <span class="fu">factor</span>(school),</span>
+<span id="cb45-224"><a href="#cb45-224"></a>    <span class="at">district =</span> <span class="fu">factor</span>(district),</span>
+<span id="cb45-225"><a href="#cb45-225"></a>    <span class="at">district_school =</span> <span class="fu">interaction</span>(district, school, <span class="at">drop =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">"_"</span>)</span>
+<span id="cb45-226"><a href="#cb45-226"></a>  )</span>
+<span id="cb45-227"><a href="#cb45-227"></a><span class="in">```</span></span>
+<span id="cb45-228"><a href="#cb45-228"></a></span>
+<span id="cb45-229"><a href="#cb45-229"></a>Then the models can be fit</span>
+<span id="cb45-230"><a href="#cb45-230"></a><span class="in">```r</span></span>
+<span id="cb45-231"><a href="#cb45-231"></a></span>
+<span id="cb45-232"><a href="#cb45-232"></a>schoolcalendar_pooled_formula <span class="ot">&lt;-</span> <span class="fu">bf</span>(</span>
+<span id="cb45-233"><a href="#cb45-233"></a>  <span class="at">formula =</span> yi <span class="sc">|</span> <span class="fu">se</span>(<span class="fu">sqrt</span>(vi)) <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb45-234"><a href="#cb45-234"></a>  <span class="at">family =</span> <span class="st">"gaussian"</span></span>
+<span id="cb45-235"><a href="#cb45-235"></a>)  </span>
+<span id="cb45-236"><a href="#cb45-236"></a></span>
+<span id="cb45-237"><a href="#cb45-237"></a>schoolcalendar_pooled_fit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
+<span id="cb45-238"><a href="#cb45-238"></a>  <span class="at">formula =</span> schoolcalendar_pooled_formula,</span>
+<span id="cb45-239"><a href="#cb45-239"></a>  <span class="at">data =</span> schoolcalendar_data</span>
+<span id="cb45-240"><a href="#cb45-240"></a>)</span>
+<span id="cb45-241"><a href="#cb45-241"></a><span class="in">```</span></span>
+<span id="cb45-242"><a href="#cb45-242"></a></span>
+<span id="cb45-243"><a href="#cb45-243"></a>Predictions for a new school can be made using the <span class="in">`posterior_epred`</span> function:</span>
+<span id="cb45-244"><a href="#cb45-244"></a><span class="in">```r</span></span>
+<span id="cb45-245"><a href="#cb45-245"></a></span>
+<span id="cb45-246"><a href="#cb45-246"></a>new_school <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb45-247"><a href="#cb45-247"></a>  <span class="at">school =</span> <span class="fu">factor</span>(<span class="dv">1</span>),</span>
+<span id="cb45-248"><a href="#cb45-248"></a>  <span class="at">district =</span> <span class="fu">factor</span>(<span class="dv">1</span>),</span>
+<span id="cb45-249"><a href="#cb45-249"></a>  <span class="at">district_school =</span> <span class="fu">factor</span>(<span class="st">"1_1"</span>),</span>
+<span id="cb45-250"><a href="#cb45-250"></a>  <span class="at">vi =</span> <span class="dv">0</span> <span class="co"># the expectation of the prediction is not affected by the sampling variance, so this can be any number</span></span>
+<span id="cb45-251"><a href="#cb45-251"></a>)</span>
+<span id="cb45-252"><a href="#cb45-252"></a>  </span>
+<span id="cb45-253"><a href="#cb45-253"></a></span>
+<span id="cb45-254"><a href="#cb45-254"></a>schoolcalendar_post_epred <span class="ot">&lt;-</span> <span class="fu">posterior_epred</span>(</span>
+<span id="cb45-255"><a href="#cb45-255"></a>    schoolcalendar_pooled_fit,</span>
+<span id="cb45-256"><a href="#cb45-256"></a>    <span class="at">newdata =</span> new_school,</span>
+<span id="cb45-257"><a href="#cb45-257"></a>    <span class="at">allow_new_levels =</span> <span class="cn">TRUE</span></span>
+<span id="cb45-258"><a href="#cb45-258"></a>  )</span>
+<span id="cb45-259"><a href="#cb45-259"></a></span>
+<span id="cb45-260"><a href="#cb45-260"></a><span class="in">```</span></span>
+<span id="cb45-261"><a href="#cb45-261"></a></span>
+<span id="cb45-262"><a href="#cb45-262"></a>It can be helpful to plot the posterior estimates. Here is a function that will do this:</span>
+<span id="cb45-263"><a href="#cb45-263"></a></span>
+<span id="cb45-266"><a href="#cb45-266"></a><span class="in">```{r}</span></span>
+<span id="cb45-267"><a href="#cb45-267"></a>plot_school_posteriors <span class="ot">&lt;-</span> <span class="cf">function</span>(fit, dataset) {</span>
+<span id="cb45-268"><a href="#cb45-268"></a>  tidybayes<span class="sc">::</span><span class="fu">add_predicted_draws</span>(dataset, fit) <span class="sc">|&gt;</span></span>
+<span id="cb45-269"><a href="#cb45-269"></a>    <span class="fu">ggplot</span>(</span>
+<span id="cb45-270"><a href="#cb45-270"></a>      <span class="fu">aes</span>(</span>
+<span id="cb45-271"><a href="#cb45-271"></a>        <span class="at">x =</span> .prediction,</span>
+<span id="cb45-272"><a href="#cb45-272"></a>        <span class="at">y =</span> <span class="fu">interaction</span>(district, school, <span class="at">sep =</span> <span class="st">", "</span>, <span class="at">lex.order =</span> <span class="cn">TRUE</span>))) <span class="sc">+</span></span>
+<span id="cb45-273"><a href="#cb45-273"></a>    tidybayes<span class="sc">::</span><span class="fu">stat_halfeye</span>() <span class="sc">+</span></span>
+<span id="cb45-274"><a href="#cb45-274"></a>    <span class="fu">ylab</span>(<span class="st">"District, school"</span>) <span class="sc">+</span></span>
+<span id="cb45-275"><a href="#cb45-275"></a>    <span class="fu">xlab</span>(<span class="st">"Posterior effect"</span>)</span>
+<span id="cb45-276"><a href="#cb45-276"></a>}</span>
+<span id="cb45-277"><a href="#cb45-277"></a></span>
+<span id="cb45-278"><a href="#cb45-278"></a><span class="in">```</span></span>
+<span id="cb45-279"><a href="#cb45-279"></a></span>
+<span id="cb45-280"><a href="#cb45-280"></a>And can be used as follows:</span>
+<span id="cb45-281"><a href="#cb45-281"></a></span>
+<span id="cb45-282"><a href="#cb45-282"></a><span class="in">```r</span></span>
+<span id="cb45-283"><a href="#cb45-283"></a><span class="fu">plot_school_posteriors</span>(</span>
+<span id="cb45-284"><a href="#cb45-284"></a>  <span class="at">fit =</span> schoolcalendar_pooled_fit,</span>
+<span id="cb45-285"><a href="#cb45-285"></a>  <span class="at">dataset =</span> school_calendar_data</span>
+<span id="cb45-286"><a href="#cb45-286"></a>)</span>
+<span id="cb45-287"><a href="#cb45-287"></a><span class="in">```</span></span>
+</code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
