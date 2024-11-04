@@ -165,7 +165,7 @@
 \item {\color{gray}5.3 Bayesian analysis of hierarchical models (we use Stan/brms for computation)}
 \item {\color{gray}5.4 Hierarchical normal model (we use Stan/brms for computation)}
 \item 5.5 Example: parallel experiments in eight schools (useful discussion on benefits of hierarchical model)
-\item {\color{gray}5.6 Meta-analysis (can be skipped)}
+\item 5.6 Meta-analysis
 \item 5.7 Weakly informative priors for hierarchical variance parameters
 \end{itemize}
 \end{frame}
@@ -394,12 +394,6 @@
 
   \begin{itemize}
   \item A typical treatment effect analysis
-  \item Models
-    \begin{itemize}
-    \item a separate model, in which each diet is modeled individually
-    \item a pooled model, in which all measurements are combined and there is no distinction between diets
-    \item a hierarchical model
-    \end{itemize}
   \end{itemize}
   
 \end{frame}
@@ -1291,6 +1285,102 @@ assignment    -0.21      0.03    -0.27    -0.14 1.00     1073     1464
 HMC divergences are more likely when using hierarchical models
 
 \end{frame}
+
+% drop in 2025 vvv
+\begin{frame}[fragile]{Divergences}
+
+  \begin{itemize}
+  \item HMC specific: indicates that Hamiltonian dynamic simulation
+    has problems with unexpected fast changes in log-density
+    \begin{itemize}
+    \item indicates possibility of biased estimates
+    \end{itemize}
+  \end{itemize}
+     \only<1>{\phantom{\includegraphics[height=5.5cm]{kilpis_hier_cp_hard_trace1.pdf}}}
+     \only<2>{\includegraphics[height=5.5cm]{kilpis_hier_cp_hard_trace1.pdf}}
+     \only<3>{\includegraphics[height=5.5cm]{kilpis_hier_cp_hard_cummean1.pdf}}
+     \only<4>{\includegraphics[height=5.5cm]{kilpis_hier_cp_hard_cummean1b.pdf}}
+     \only<5-6>{\includegraphics[height=5.5cm]{kilpis_hier_cp_hard_trace.pdf}}
+
+     \vspace{-1\baselineskip}
+     \footnotesize
+     \onslide<6>
+\begin{minted}{r}
+variable  mean median    sd   mad    q5   q95  rhat ess_bulk ess_tail
+lsigma0   -1.0   -1.0  0.10 0.070  -1.2 -0.93   1.2      7.2      19.
+\end{minted}
+     
+\end{frame}
+
+\begin{frame}[fragile]{Divergences}
+
+  \begin{itemize}
+  \item HMC specific: indicates that Hamiltonian dynamic simulation
+    has problems with unexpected fast changes in log-density
+    \begin{itemize}
+    \item indicates possibility of biased estimates
+    \end{itemize}
+  \end{itemize}
+     \only<1>{\includegraphics[height=5.5cm]{kilpis_hier_cp_hard_trace.pdf}}
+     \only<2>{\includegraphics[height=5.5cm]{kilpis_hier_cp_hard_scatter_08.pdf}}
+     
+     \vspace{-1\baselineskip}
+     \footnotesize
+\begin{minted}{r}
+Warning: 29 of 4000 (1.0%) transitions ended with a divergence.
+See https://mc-stan.org/misc/warnings for details.
+\end{minted}
+     
+\end{frame}
+
+\begin{frame}[fragile]{Divergences}
+
+  \begin{itemize}
+  \item HMC specific: indicates that Hamiltonian dynamic simulation
+    has problems with unexpected fast changes in log-density
+    \begin{itemize}
+    \item indicates possibility of biased estimates
+    \end{itemize}
+  \end{itemize}
+     \only<1-2>{\includegraphics[height=5.5cm]{kilpis_hier_cp_hard_scatter_08_0999.pdf}}
+     \only<3>{\includegraphics[height=5.5cm]{kilpis_hier_cp_0999_hard_trace.pdf}}
+
+     \onslide<2-3>
+     \vspace{-1\baselineskip}
+     \footnotesize
+\begin{minted}{r}
+variable  mean median    sd   mad    q5   q95  rhat ess_bulk ess_tail
+lsigma0   -1.9   -2.1  0.41  0.13  -2.3 -0.91   2.0      5.8      14.
+\end{minted}
+     
+\end{frame}
+
+\begin{frame}[fragile]{Divergences}
+
+  \begin{itemize}
+  \item HMC specific: indicates that Hamiltonian dynamic simulation
+    has problems with unexpected fast changes in log-density
+    \begin{itemize}
+    \item indicates possibility of biased estimates
+    \end{itemize}
+  \end{itemize}
+  \begin{minipage}[t][5cm][t]{1.5\linewidth}
+    \hspace{-0.9cm}\includegraphics[height=5cm]{kilpis_hier_cp_ncp_hard_scatter.pdf}
+\end{minipage}
+
+     \onslide<2>
+     \vspace{-\baselineskip}
+     \footnotesize
+     With NCP parameterization\\
+     \vspace{-1.5\baselineskip}
+\begin{minted}{r}
+variable  mean median    sd   mad     q5   q95  rhat ess_bulk ess_tail
+sigma0    0.27   0.24  0.19  0.20  0.023  0.64   1.0    1571.    1737.
+lsigma0  -1.7   -1.4   1.1   0.87 -3.8   -0.45   1.0    1571.    1737.
+\end{minted}
+     
+\end{frame}
+% drop in 2025 ^^^
 
 \begin{frame}[fragile]{Centered parameterization}
 
