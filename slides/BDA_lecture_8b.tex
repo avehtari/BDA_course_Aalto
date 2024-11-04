@@ -264,52 +264,50 @@
     \item How accurate the model is?
     \item Is it better than predicting with random guess?
     \item Is it possible that the model has overfitted?
-    \item Is model B better than model A? (next week)
+    \item Is model B better than model A?
     \end{itemize}
 \end{frame}
 
 \begin{frame}{Outline}
 
-  \vspace{-\baselineskip}
-  \begin{list1}
+  \vspace{-.5\baselineskip}
+  \begin{itemize}
   \item What is cross-validation
-    {\color{gray}
   \begin{list2}
     \item Leave-one-out cross-validation (elpd\_loo, p\_loo)
     \item Uncertainty in LOO (SE)
     \end{list2}
-    }
   \item Fast cross-validation
-    {\color{gray}
     \begin{list2}
     \item PSIS and diagnostics in loo package (Pareto k, n\_eff, Monte Carlo SE)
-    \item $K$-fold cross-validation
     \end{list2}
-    }
-  \item When is cross-validation applicable?
+  \item Model comparison and selection (elpd\_diff, se)
+  \end{itemize}
     {\color{gray}
+Next week
+  \begin{itemize}
+    \color{gray}
+  \item When is cross-validation applicable?
     \begin{list2}
     \item data generating mechanisms and prediction tasks
     \item leave-many-out cross-validation
     \end{list2}
-    }
-  \end{list1}
-Next week
-  \begin{list1}
-  \item Model comparison and selection (elpd\_diff, se)
+  \item $K$-fold cross-validation
   \item {\footnotesize Related methods (WAIC, *IC, BF)}
   \item Model averaging
+  \item Hypothesis testing
   \item Potential overfitting in model selection
   % \item<2-> Part 2: Projective Inference in High-dimensional Problems:
   %   Prediction and Feature Selection
-  \end{list1}
-   
+  \end{itemize}
+}
+
 \end{frame}
 
 \begin{frame}{Chapter 7}
 
   \vspace{-\baselineskip}
-   \begin{list1}
+   \begin{itemize}
    \item 7.1 Measures of predictive accuracy
    \item {\color{gray} 7.2 Information criteria and cross-validation}
      \begin{list2}
@@ -321,14 +319,14 @@ Next week
      \item See also \url{https://users.aalto.fi/~ave/modelselection/CV-FAQ.html}
 
      \end{list2}
-     \end{list1}
+   \item 7.3 Model comparison based on predictive performance\\
+     \end{itemize}
 Next week
-   \begin{list1}
- \item 7.3 Model comparison based on predictive performance\\
+   \begin{itemize}
    \item 7.4 Model comparison using Bayes factors\\
    \item 7.5 Continuous model expansion / sensitivity analysis
    \item {\color{gray}7.5 Example (may be skipped)}
-   \end{list1}
+   \end{itemize}
 
 \end{frame}
 
@@ -419,16 +417,11 @@ Computed from 4000 by 20 log-likelihood matrix
 elpd_loo    -29.5 3.3
 p_loo         2.7 1.0
 ------
-Monte Carlo SE of elpd_loo is 0.1.
+------
+MCSE of elpd_loo is 0.1.
+MCSE and ESS estimates assume MCMC draws (r_eff in [0.6, 1.2]).
 
-Pareto k diagnostic values:
-                         Count Pct.    Min. n_eff
-(-Inf, 0.5]   (good)     18    90.0%   899       
- (0.5, 0.7]   (ok)        2    10.0%   459       
-   (0.7, 1]   (bad)       0     0.0%   <NA>      
-   (1, Inf)   (very bad)  0     0.0%   <NA>      
-
-All Pareto k estimates are ok (k < 0.7).
+All Pareto k estimates are good (k < 0.7).
 See help('pareto-k-diagnostic') for details.
 \end{minted}
 Model comparison:
@@ -526,16 +519,10 @@ p_loo         2.7 1.0
       {\color{gray}
 \begin{minted}[fontsize=\footnotesize]{text}
 ------
-Monte Carlo SE of elpd_loo is 0.1.
+MCSE of elpd_loo is 0.1.
+MCSE and ESS estimates assume MCMC draws (r_eff in [0.6, 1.0]).
 
-Pareto k diagnostic values:
-                         Count Pct.    Min. n_eff
-(-Inf, 0.5]   (good)     18    90.0%   899       
- (0.5, 0.7]   (ok)        2    10.0%   459       
-   (0.7, 1]   (bad)       0     0.0%   <NA>      
-   (1, Inf)   (very bad)  0     0.0%   <NA>      
-
-All Pareto k estimates are ok (k < 0.7).
+All Pareto k estimates are good (k < 0.7).
 See help('pareto-k-diagnostic') for details.
 \end{minted}
       }
@@ -550,7 +537,9 @@ Computed from 4000 by 150 log-likelihood matrix.
          Estimate   SE
 elpd_loo    -79.2  9.9
 p_loo         8.3  1.4
-looic       158.3 19.9
+\end{minted}
+{\color{gray}
+\begin{minted}[fontsize=\footnotesize]{text}
 ------
 MCSE of elpd_loo is 0.1.
 MCSE and ESS estimates assume MCMC draws (r_eff in [0.6, 1.2]).
@@ -558,6 +547,7 @@ MCSE and ESS estimates assume MCMC draws (r_eff in [0.6, 1.2]).
 All Pareto k estimates are good (k < 0.7).
 See help('pareto-k-diagnostic') for details.
 \end{minted}
+}
 
 \end{frame}
 
@@ -639,7 +629,7 @@ fit6   0.0       0.0
 fit4 -43.2      14.4  
 \end{minted}
 
-Next week more about this
+More about this soon
   
 \end{frame}
 
@@ -877,16 +867,6 @@ LOO-PIT check\\
 
 \end{frame}
 
-\begin{frame}{Pareto-$\hat{k}$ and convergence rate of PSIS}
-
-  \begin{itemize}
-  \item CLT says that to half the MCSE, need 4 times bigger S
-  \item<2-> If Pareto-$\hat{k} \approx 0.7$, to half the MCSE, need 10 times bigger S
-  \item<3-> If Pareto-$\hat{k}>1$, to half the MCSE, nothing helps
-  \end{itemize}
-  
-\end{frame}
-
 \begin{frame}[fragile]
 
   \begin{itemize}
@@ -905,50 +885,45 @@ LOO-PIT check\\
   \only<1>{\includegraphics[width=10cm]{fakepks.pdf}}
   \only<2>{\includegraphics[width=10cm]{fakeneffs.pdf}}
   \\
-  {\scriptsize
-\begin{lstlisting}
-    Pareto k diagnostic values:
-                         Count Pct.    Min. n_eff
-(-Inf, 0.5]   (good)     18    90.0%   899       
- (0.5, 0.7]   (ok)        2    10.0%   459       
-   (0.7, 1]   (bad)       0     0.0%   <NA>      
-   (1, Inf)   (very bad)  0     0.0%   <NA>      
-\end{lstlisting}
-}
+\begin{minted}[fontsize=\scriptsize]{text}
+All Pareto k estimates are good (k < 0.7).
+\end{minted}
 
 \end{frame}
 
 \begin{frame}[fragile]
   \frametitle{{\tt loo} package}
 
-  {\scriptsize
-    {\color{gray}
-\begin{lstlisting}
+\begin{minted}[gray,fontsize=\scriptsize]{text}
  Computed from 4000 by 20 log-likelihood matrix
 
          Estimate  SE
 elpd_loo    -29.5 3.3
 p_loo         2.7 1.0
-\end{lstlisting}
-      }
-\begin{lstlisting}
+\end{minted}
+\begin{minted}[fontsize=\scriptsize]{text}
 ------
-Monte Carlo SE of elpd_loo is 0.1.
+MCSE of elpd_loo is 0.1.
+MCSE and ESS estimates assume MCMC draws (r_eff in [0.6, 1.2]).
 
-Pareto k diagnostic values:
-                         Count Pct.    Min. n_eff
-(-Inf, 0.5]   (good)     18    90.0%   899       
- (0.5, 0.7]   (ok)        2    10.0%   459       
-   (0.7, 1]   (bad)       0     0.0%   <NA>      
-   (1, Inf)   (very bad)  0     0.0%   <NA>      
-
-All Pareto k estimates are ok (k < 0.7).
+All Pareto k estimates are good (k < 0.7).
 See help('pareto-k-diagnostic') for details.
-\end{lstlisting}
-    }
+\end{minted}
 
-    {\vfill\small see more by \href{https://jmlr.org/papers/v25/19-556.html}{Vehtari et al. (2024)}}
+{\vfill\small see more by \href{https://jmlr.org/papers/v25/19-556.html}{Vehtari et al. (2024)}}
 
+\end{frame}
+
+\begin{frame}[fragile]{Student retention -- loo computation}
+
+\begin{minted}[fontsize=\footnotesize,escapeinside=||]{text}
+> fit4 <- add_criterion(fit4, 'loo')
+Pareto k diagnostic values:
+                         Count Pct.    Min. ESS
+|{\color{forestgreen}(-Inf, 0.7]   (good)     32    80.0%   114     }|
+|{\color{red}   (0.7, 1]   (bad)       7    17.5%   <NA>    }|
+|{\color{red}   (1, Inf)   (very bad)  1     2.5%   <NA>    }|
+\end{minted}
 \end{frame}
 
 % \begin{frame}
@@ -982,6 +957,7 @@ See help('pareto-k-diagnostic') for details.
       \begin{list2}
       \item equivalent to using model to filter the noise out of the weights
       \end{list2}
+    \item<2-> Works well if $\hat{k}<0.7$
       \item<2-> Reduced variability compared to the plain IS
       \item<2-> Reduced bias compared to the truncated IS
       \item<3-> Asymptotically consistent under some mild conditions
@@ -990,6 +966,16 @@ See help('pareto-k-diagnostic') for details.
 
       
     {\vfill\small see more by \href{https://jmlr.org/papers/v25/19-556.html}{Vehtari et al. (2024)}}
+\end{frame}
+
+\begin{frame}{Pareto-$\hat{k}$ and convergence rate of PSIS}
+
+  \begin{itemize}
+  \item CLT says that to half the MCSE, need 4 times bigger S
+  \item<2-> If Pareto-$\hat{k} \approx 0.7$, to half the MCSE, need 10 times bigger S
+  \item<3-> If Pareto-$\hat{k}>1$, to half the MCSE, nothing helps
+  \end{itemize}
+  
 \end{frame}
 
 \begin{frame}[fragile]
@@ -1035,209 +1021,6 @@ generated quantities {
   
 \end{frame}
 
-\begin{frame}[fragile]
-  \frametitle{What if many high Pareto-$\hat{k}$'s}
-
-  \begin{list1}
-  \item<+-> \rinline/rstan::loo(..., moment_match = TRUE)/\\
-    \rinline/brms::loo(..., moment_match = TRUE)/\\
-    support implicitly adaptive importance sampling with moment
-    matching algorithm by
-    \href{https://doi.org/10.1007/s11222-020-09982-2}{Paananen et al. (2021)}.  See \url{http://mc-stan.org/loo/articles/loo2-moment-matching.html}
-  \item<+-> \rinline/rstanarm::loo(..., k_threshold = 0.7)/\\
-    \rinline/brms::loo(..., k_threshold = 0.7)/\\
-    runs MCMC for the folds with $\hat{k}$ above the threshold
-  \item<+-> Integrated LOO (for some models)\\
-    See \url{https://users.aalto.fi/~ave/modelselection/roaches.html}
-  \item<+-> Use $K$-fold-CV (more about this later)\\
-    \rinline/rstanarm::kfold(..., K=10)/\\
-    \rinline/brms::kfold(..., K=10)/\\
-    RStan/CmdStanR vignette \url{http://mc-stan.org/loo/articles/loo2-elpd.html}
-  \end{list1}
-  
-\end{frame}
-
-\begin{frame}{Assumptions about the future observations}
-
-  \vspace{-\baselineskip}
-  \only<1>{\includegraphics[width=9cm]{fakedfixed.pdf}}
-  \only<2->{\includegraphics[width=9cm]{fakedrandom.pdf}}
-  \\ 
-  {\color{blue} $\mbox{elpd\_loo} = \sum_{i=1}^{20} \log p(y_i \mid x_i,x_{-i},y_{-i}) \approx -29.5$\\ \vspace{0.2\baselineskip}}
-  {\color{blue} $\mbox{SE} = \sd(\log p(y_i \mid x_i,x_{-i},y_{-i}))\cdot \sqrt{20} \approx 3.3$\\}
-  \vspace{0.5\baselineskip}
-  \only<1>{LOO is ok for fixed / designed $x$. SE is uncertainty about $y \mid x$.\\\vspace{0.2\baselineskip}}\only<2->{LOO is ok for random $x$. SE is uncertainty about $y \mid x$ and $x$.\\\vspace{0.2\baselineskip}}\onslide<3>{Covariate shift handled with importance weighting or modelling}
-  \onslide<1->{\\\vspace{\baselineskip} \small see \href{http://dx.doi.org/10.1214/12-SS102}{Vehtari \& Ojanen (2012)} and \href{https://users.aalto.fi/~ave/modelselection/CV-FAQ.html}{CV-FAQ}}
-  
-\end{frame}
-
-\begin{frame}{Interpolation vs extrapolation}
-
-  \only<1>{\includegraphics[width=9cm]{lake1data.pdf}}
-  \only<2>{\includegraphics[width=9cm]{lake1gp.pdf}}
-  \only<3->{\includegraphics[width=9cm]{lake1gpptest.pdf}}
-  \\
-  \only<4>{Extrapolation is more difficult}
-  
-\end{frame}
-
-\begin{frame}{Cross-validation for time series?}
-
-  \includegraphics[width=9cm]{lake2data.pdf}
-
-  
-  {Can LOO or other cross-validation be used with time series?}
-  
-\end{frame}
-
-\begin{frame}{Cross-validation for time series}
-
-  \only<1>{\includegraphics[width=9cm]{lake3loo.pdf}}
-  \only<2>{\includegraphics[width=9cm]{lake3stepahead.pdf}}
-  \only<3>{\includegraphics[width=9cm]{lake3tenstepahead.pdf}}
-  \only<4>{\includegraphics[width=9cm]{lake3stepaheadblock.pdf}}
-  \\
-  \only<1>{Leave-one-out cross-validation is ok for assessing conditional model}
-  \only<2>{Leave-future-out (LFO) cross-validation is better for predicting future}
-  \only<3>{$m$-step-ahead cross-validation is better for predicting further future}
-  \only<4>{$m$-step-ahead leave-a-block-out cross-validation}
-  
-\end{frame}
-
-\begin{frame}{Cross-validation for hierarchical data}
-
-  \only<1>{\includegraphics[width=9cm]{rats1data.pdf}}
-  \only<2>{\includegraphics[width=9cm]{rats1loo.pdf}}
-  \only<3>{\includegraphics[width=9cm]{rats1step.pdf}}
-  \only<4>{\includegraphics[width=9cm]{rats1onetime.pdf}}
-  \only<5>{\includegraphics[width=9cm]{rats1onerat.pdf}}
-  \only<6>{\includegraphics[width=9cm]{rats1init.pdf}}
-  \\
-  \only<1>{Can LOO or other cross-validation be used with hierarchical data?}
-  \only<2->{Yes!}
-  
-\end{frame}
-
-\begin{frame}{}
-
-{\Large\color{navyblue} Summary of data generating mechanisms and prediction tasks}
-
-\begin{list1}
-\item You have to make some assumptions on data generating mechanism
-\item Use the knowledge of the prediction task if available
-\item Cross-validation can be used to analyse different parts, even if
-  there is no clear prediction task
-\end{list1}
-
-\vspace{7.5\baselineskip}
-{ \small see \href{http://dx.doi.org/10.1214/12-SS102}{Vehtari \& Ojanen (2012)} and \href{https://users.aalto.fi/~ave/modelselection/CV-FAQ.html}{CV-FAQ}}
-
-\end{frame}
-
-% \begin{frame}{LFO-CV}
-
-%   \only<1>{\includegraphics[width=9cm]{lake4data.pdf}}
-%   \only<2>{\includegraphics[width=9cm]{lake4pred.pdf}}
-%   \only<3>{\includegraphics[width=9cm]{lake4psisrefits.pdf}}
-
-%   \vspace{2\baselineskip}
-%   \only<3> {\small \url{mc-stan.org/loo/articles/loo2-lfo.html}}
-
-  
-% \end{frame}
-
-\begin{frame}{Pareto smoothed importance sampling CV variants}
-
-\begin{list1}
-\item PSIS-LOO for hierarchical models
-  \begin{list2}
-  \item leave-one-group out is challenging for PSIS-LOO\\ \vspace{0.2\baselineskip}
-    
-  \item Stan demo of the challenges and integrated LOO at \url{https://users.aalto.fi/~ave/modelselection/roaches.html}
-  \item {\small see also Merkel, Furr and Rabe-Hesketh (2018)}
-  \end{list2}
-  \item<2-> PSIS-LOO for non-factorized models
-    \begin{list2}
-    \item {\url{mc-stan.org/loo/articles/loo2-non-factorizable.html}}
-    \end{list2}
-  \item<3-> PSIS-LOO for time series
-  \begin{list2}
-  \item Approximate leave-future-out cross-validation (LFO-CV) \\ \vspace{0.2\baselineskip}
-    {\url{mc-stan.org/loo/articles/loo2-lfo.html}}
-  \end{list2}
-\end{list1}
-
-\end{frame}
-
-
-\begin{frame}{$K$-fold cross-validation}
-
-\begin{list1}
-\item $K$-fold cross-validation can approximate LOO
-  \begin{list2}
-    \item the same use cases as with LOO
-  \end{list2}
-\item $K$-fold cross-validation can be used for hierarchical models
-  \begin{list2}
-    \item good for leave-one-group-out
-  \end{list2}
-\item $K$-fold cross-validation can be used for time series
-  \begin{list2}
-    \item with leave-block-out
-  \end{list2}
-\end{list1}
-
-\end{frame}
-
-\begin{frame}{}
-
-  \only<1>{\includegraphics[width=10cm]{lake3kfoldbal1.pdf}} 
- \only<2>{\includegraphics[width=10cm]{lake3kfoldbal2.pdf}}
-  \only<3>{\includegraphics[width=10cm]{lake3kfoldrand.pdf}}
-  \only<4>{\includegraphics[width=10cm]{rats1kfoldrand.pdf}}
-  \only<5->{\includegraphics[width=10cm]{rats1oneratb.pdf}}
-  % \\
-  % \only<6>{kfold\_split\_random()\\ \vspace{0.2\baselineskip}
-  % kfold\_split\_balanced()\\ \vspace{0.2\baselineskip}
-  % kfold\_split\_stratified()}
-  
-\end{frame}
-
-\begin{frame}{$K$-fold-CV code}
-
-  \begin{list1}
-  \item RStan, CmdStanR\\
-    See vignette \url{http://mc-stan.org/loo/articles/loo2-elpd.html}
-  \item RStanARM, brms\\
-    \texttt{kfold(fit)}
-  \item Alternative data divisions\\
-  \rinline/kfold_split_random()/\\
-  \rinline/kfold_split_balanced()/\\
-  \rinline/kfold_split_stratified()/
-  \end{list1}
-  
-\end{frame}
-
-\begin{frame}{Cross-validation for model assessment}
-
-\begin{list1}
-\item CV is good for model assessment when application specific utility/cost functions are used
-  \begin{list2}
-  \item e.g. in concrete quality prediction reported that the absolute
-    error is smaller than X with 90\% probability
-  \end{list2}
-\item<2-> Also useful in model checking in similar way as posterior
-  predictive checking (PPC)
-  \begin{list2}
-  \item checking calibration of leave-one-out predictive posteriors
-    (\rinline/ppc_loo_pit/ in \rinline/bayesplot/)
-  \item model misspecification diagnostics\\ (e.g. Pareto-$k$ and \rinline/p_loo/)
-  \end{list2}
-  {\small see demos \url{https://users.aalto.fi/~ave/casestudies.html}}
-\end{list1}
-
-\end{frame}
-
 \begin{frame}{High Pareto-$\hat{k}$ values}
 
 \begin{list1}
@@ -1263,6 +1046,74 @@ generated quantities {
 \end{list1}
 
 \end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{What if many high Pareto-$\hat{k}$'s}
+
+  \begin{list1}
+  \item<+-> \rinline/rstan::loo(..., moment_match = TRUE)/\\
+    \rinline/brms::loo(..., moment_match = TRUE)/\\
+    support implicitly adaptive importance sampling with moment
+    matching algorithm by
+    \href{https://doi.org/10.1007/s11222-020-09982-2}{Paananen et al. (2021)}.  See \url{http://mc-stan.org/loo/articles/loo2-moment-matching.html}
+  \item<+-> \rinline/rstanarm::loo(..., k_threshold = 0.7)/\\
+    \rinline/brms::loo(..., k_threshold = 0.7)/\\
+    runs MCMC for the folds with $\hat{k}$ above the threshold
+  \item<+-> Integrated LOO (for some models)\\
+    See \url{https://users.aalto.fi/~ave/modelselection/roaches.html}
+  \item<+-> Use $K$-fold-CV (more about this later)\\
+    \rinline/rstanarm::kfold(..., K=10)/\\
+    \rinline/brms::kfold(..., K=10)/\\
+    RStan/CmdStanR vignette \url{http://mc-stan.org/loo/articles/loo2-elpd.html}
+  \end{list1}
+  
+\end{frame}
+
+\begin{frame}[fragile]{Student retention -- loo computation}
+
+PSIS-LOO
+
+\begin{minted}[fontsize=\footnotesize,escapeinside=||]{text}
+> fit4 <- add_criterion(fit4, 'loo')
+Pareto k diagnostic values:
+                         Count Pct.    Min. ESS
+|{\color{forestgreen}(-Inf, 0.7]   (good)     32    80.0%   114     }|
+|{\color{red}   (0.7, 1]   (bad)       7    17.5%   <NA>    }|
+|{\color{red}   (1, Inf)   (very bad)  1     2.5%   <NA>    }|
+\end{minted}
+
+\pause
+PSIS-LOO + moment matching + reloo
+\begin{minted}[fontsize=\footnotesize,escapeinside=||]{text}
+> ...(fit4, 'loo', |\highlight{moment_match=TRUE, reloo=TRUE, overwrite=TRUE}|)
+|{\color{forestgreen}All Pareto k estimates are good (k < 0.7).}|
+\end{minted}
+
+  \vfill
+{\color{gray}\footnotesize\href{https://doi.org/10.1007/s11222-020-09982-2}{Paananen, Piironen, Bürkner, and Vehtari (2021). Implicitly adaptive importance sampling. \textit{Statistics and Computing}, 31, 16.}}
+  
+\end{frame}
+
+\begin{frame}{Cross-validation for model assessment}
+
+\begin{list1}
+\item CV is good for model assessment when application specific utility/cost functions are used
+  \begin{list2}
+  \item e.g. in concrete quality prediction reported that the absolute
+    error is smaller than X with 90\% probability
+  \end{list2}
+\item<2-> Also useful in model checking in similar way as posterior
+  predictive checking (PPC)
+  \begin{list2}
+  \item checking calibration of leave-one-out predictive posteriors
+    (\rinline/ppc_loo_pit/ in \rinline/bayesplot/)
+  \item model misspecification diagnostics\\ (e.g. Pareto-$k$ and \rinline/p_loo/)
+  \end{list2}
+  {\small see demos \url{https://users.aalto.fi/~ave/casestudies.html}}
+\end{list1}
+
+\end{frame}
+
 
 % \begin{frame}{Radon example}
 
@@ -1300,16 +1151,373 @@ generated quantities {
 
 \begin{frame}{Model comparison and selection}
 
-  Next lecture
+  Today
 
   \begin{list1}
   \item Model comparison and selection (elpd\_diff, se)
+  \end{list1}
+
+  Next lecture
+
+  \begin{list1}
   \item {\footnotesize Related methods (WAIC, *IC, BF)}
-  \item Model averaging
-  \item Potential overfitting in model selection
+  \item Hypothesis testing
+  \item Potential overfitting
+  \item Model expansion and averaging
 \end{list1}
 
 \end{frame}
+
+\begin{frame}[fragile]{Student retention -- Posterior predictive distributions}
+\framesubtitle{with \texttt{tidybayes}}
+  
+\vspace{-0.75\baselineskip}  
+Latent hierarchical linear model\\  
+  \hspace{-7mm}
+  \begin{minipage}[t][3.6cm][t]{1.0\linewidth}
+    \includegraphics[height=3.6cm]{student_retention_lbinom_preds.pdf}
+  \end{minipage}
+  
+\vspace{-0.25\baselineskip}  
+Latent hierarchical linear model + spline\\  
+  \hspace{-7mm}
+  \begin{minipage}[t][3.6cm][t]{1.0\linewidth}
+  \includegraphics[height=3.6cm]{student_retention_sbinom_preds.pdf}
+  \end{minipage}  
+
+\end{frame}
+
+\begin{frame}[fragile]{Student retention -- Marginal PPC}
+\framesubtitle{\texttt{pp\_check(fit, ndraws=100)}}
+
+  
+\vspace{-0.75\baselineskip}  
+Latent hierarchical linear model\\  
+  \begin{minipage}[t][3.6cm][t]{1.0\linewidth}
+    \includegraphics[height=3.6cm]{student_retention_lbinom_ppc_dens_overlay.pdf}
+  \end{minipage}
+  
+\vspace{-0.5\baselineskip}  
+Latent hierarchical linear model + spline\\  
+  \begin{minipage}[t][3.6cm][t]{1.0\linewidth}
+    \includegraphics[height=3.6cm]{student_retention_sbinom_ppc_dens_overlay.pdf}
+  \end{minipage}  
+
+\end{frame}
+
+\begin{frame}[fragile]{Student retention -- LOO intervals}
+
+\vspace{-0.5\baselineskip}  
+LOO predictive intervals -- latent hierarchical linear\\  
+  \hspace{-7mm}
+  \begin{minipage}[t][3.6cm][t]{1.0\linewidth}
+    \includegraphics[height=3.6cm]{student_retention_lbinom_ppc_loo_intervals.pdf}
+  \end{minipage}  
+
+\vspace{-0.5\baselineskip}  
+LOO predictive intervals -- latent hierarchical linear + spline\\  
+  \hspace{-7mm}
+  \begin{minipage}[t][3.6cm][t]{1.0\linewidth}
+    \includegraphics[height=3.6cm]{student_retention_sbinom_ppc_loo_intervals.pdf}
+  \end{minipage}  
+
+\end{frame}
+  
+\begin{frame}[fragile]{Student retention -- LOO-PIT checking}
+\framesubtitle{\texttt{pp\_check(fit, type = "loo\_pit\_qq", ndraws=4000)}}
+
+\vspace{-0.5\baselineskip}  
+LOO-PIT check -- latent hierarchical linear\\  
+  \hspace{-7mm}
+  \begin{minipage}[t][3.6cm][t]{1.0\linewidth}
+    \includegraphics[height=3.6cm]{student_retention_lbinom_ppc_loo_pit_qq.pdf}
+  \end{minipage}  
+
+\vspace{-0.5\baselineskip}  
+LOO-PIT check -- latent hierarchical linear + spline\\  
+  \hspace{-7mm}
+  \begin{minipage}[t][3.6cm][t]{1.0\linewidth}
+    \includegraphics[height=3.6cm]{student_retention_sbinom_ppc_loo_pit_qq.pdf}
+  \end{minipage}  
+
+\end{frame}
+
+\begin{frame}[fragile]{Student retention -- $R^2$}
+
+Latent hierarchical linear vs. latent hierarchical linear + spline
+  
+\begin{minted}[fontsize=\footnotesize]{text}
+> loo_R2(fit4) |> round(digits=2)
+   Estimate Est.Error Q2.5 Q97.5
+R2     0.92      0.02 0.88  0.95
+
+> loo_R2(fit6) |> round(digits=2)
+   Estimate Est.Error Q2.5 Q97.5
+R2     0.97      0.01 0.95  0.98
+\end{minted}
+
+  $R^2$ measures the goodness of the mean of the predictive
+  distribution
+
+  \vspace{4\baselineskip}
+{\color{gray}\footnotesize \href{https://doi.org/10.1080/00031305.2018.1549100}{Gelman, Goodrich, Gabry, and Vehtari (2019). R-squared for Bayesian regression models. \textit{The American Statistician}, 73(3):307-309.}}
+  
+\end{frame}
+
+\begin{frame}[fragile]{Student retention -- log score -- elpd }
+
+  \vspace{-\baselineskip}
+  \begin{itemize}
+  \item information theoretical goodness of the whole distribution
+  \item elpd = expected log predictive density (probability)
+  \item elpd\_loo = estimated with LOO predictive densities / probs\\
+    $\sum_{n=1}^N \log p(y_i | x_i, x_{-i}, y_{-i})$
+  \end{itemize}
+ 
+% \vspace{-0.5\baselineskip}  
+% LOO predictive intervals -- latent hierarchical linear\\  
+%   \hspace{-7mm}
+%   \begin{minipage}[t][3.6cm][t]{1.0\linewidth}
+%     \includegraphics[height=3.6cm]{student_retention_sbinom_ppc_loo_intervals.pdf}
+%   \end{minipage}  
+
+%\vspace{-0.5\baselineskip}  
+\only<2->{
+  LOO predictive intervals -- latent hierarchical linear + spline\\  
+  \begin{minipage}[t][3.6cm][t]{1.0\linewidth}
+  \hspace{-9mm}
+    \includegraphics[height=3.6cm]{student_retention_sbinom_ppc_loo_intervals.pdf}
+  \end{minipage}
+}
+
+\vspace{-1.75\baselineskip}
+\only<3->{\fontsize{6.95}{9}\selectfont {~~~~~-8.4 -5.6 -2.9 -2.9 -2.8 -3.0 -4.0 -3.2 -3.9 -3.2 -3.4 -3.2 -2.9 -3.9 -3.4 -3.4 -3.2 -2.7 -2.8 -3.1\\
+    ~~~~~~~~~-2.5 -2.8 -2.9 -3.4 -5.4 -3.7 -3.1 -3.3 -3.5 -3.2 -3.5 -3.5 -6.6 -3.8 -3.7 -3.4 -2.5 -2.8 -2.9 -3.3\\
+  }}
+\uncover<4->{\footnotesize $\sum = $ -141.7}
+  
+\end{frame}
+
+\begin{frame}[fragile]{Student retention -- elpd\_loo}
+
+Latent hierarchical linear + spline
+\begin{minted}[fontsize=\footnotesize,highlightlines=6]{text}
+> loo(fit6)
+
+Computed from 4000 by 40 log-likelihood matrix
+
+         Estimate   SE
+elpd_loo   -141.7  7.2
+p_loo        10.9  2.5
+\end{minted}
+
+\pause
+Latent hierarchical linear
+\begin{minted}[fontsize=\footnotesize,highlightlines=6]{text}
+> loo(fit4)
+
+Computed from 4000 by 40 log-likelihood matrix
+
+         Estimate   SE
+elpd_loo   -184.3 17.3
+p_loo        24.3  5.8
+\end{minted}
+
+\end{frame}
+
+\begin{frame}[fragile]{Student retention -- log score -- elpd }
+
+  \vspace{-\baselineskip}
+{
+  {\small LOO predictive intervals -- latent hierarchical linear}\\  
+  \begin{minipage}[t][2.8cm][t]{1.2\linewidth}
+  \hspace{-9mm}
+    \includegraphics[height=2.8cm,trim=0 40 0 0,clip]{student_retention_lbinom_ppc_loo_intervals.pdf}
+  \end{minipage}
+}
+
+\vspace{-1.75\baselineskip}
+{\fontsize{6.7}{8}\selectfont {~~~~-15.7  -7.6  -3.9  -2.9  -6.7  -4.2  -2.9  -3.1 -12.9  -4.7  -3.3  -3.4 -9.0  -3.0  -3.3  -3.2  -8.2  -2.8  -3.2  -3.0\\
+    ~~~~~~~~~-2.9 -3.3 -3.0 -4.6 -4.3 -3.3 -3.0 -4.0 -3.0 -5.6 -3.6 -5.4 -4.9 -3.6 -3.9 -5.2 -2.7 -3.7 -3.0 -4.1
+  }}
+{\scriptsize $\sum = $ -184.3}
+
+{
+  {\small LOO predictive intervals -- latent hierarchical linear + spline}\\
+  \begin{minipage}[t][2.8cm][t]{1.2\linewidth}
+  \hspace{-9mm}
+    \includegraphics[height=2.8cm,trim=0 40 0 0,clip]{student_retention_sbinom_ppc_loo_intervals.pdf}
+  \end{minipage}
+}
+
+\vspace{-1.75\baselineskip}
+{\fontsize{6.7}{8}\selectfont {~~~~~-8.4 -5.6 -2.9 -2.9 -2.8 -3.0 -4.0 -3.2 -3.9 -3.2 -3.4 -3.2 -2.9 -3.9 -3.4 -3.4 -3.2 -2.7 -2.8 -3.1\\
+    ~~~~~~~~~-2.5 -2.8 -2.9 -3.4 -5.4 -3.7 -3.1 -3.3 -3.5 -3.2 -3.5 -3.5 -6.6 -3.8 -3.7 -3.4 -2.5 -2.8 -2.9 -3.3
+  }}
+{\scriptsize $\sum = $ -141.7}
+  
+\end{frame}
+
+\begin{frame}[fragile]{Student retention -- elpd\_loo}
+
+  \vspace{-0.7\baselineskip}
+  
+\hspace{-5mm}Latent hierarchical linear (fit4) vs latent hierarchical linear + spline (fit6)
+
+\only<+>{\hspace{-5mm}\includegraphics[height=7cm]{student_retention_loo_pointwise_scatter.pdf}}
+\only<+>{\hspace{-5mm}\includegraphics[height=7cm]{student_retention_loo_pointwise_diff_scatter.pdf}}
+\only<+>{\hspace{-5mm}\includegraphics[height=7cm]{student_retention_loo_pointwise_diff_histogram_1.pdf}}
+\only<+>{\hspace{-5mm}\includegraphics[height=7cm]{student_retention_loo_pointwise_diff_histogram_2.pdf}}
+\only<+->{\hspace{-5mm}\includegraphics[height=7cm]{student_retention_loo_pointwise_diff_histogram_3.pdf}}
+\only<+->{
+  \begin{minipage}[t][4cm][t]{3.2cm}
+    \vspace{-10.5\baselineskip}
+    mean $\approx 1.07$\\
+    \only<+->{sd $\approx 2.26$\\}
+    \only<+->{SE = sd/$\sqrt{40}\approx 0.36$\\}
+    \only<+->{\\sum $\approx 42.6$\\}
+    \only<+->{SE = sd$*\sqrt{40}\approx 14.3$\\}
+  \end{minipage}
+}
+
+\end{frame}
+
+\begin{frame}[fragile]{Student retention -- elpd\_loo}
+
+  {\color{gray}
+Latent hierarchical linear + spline
+\begin{minted}[fontsize=\footnotesize,highlightlines=3]{text}
+> loo(fit6)
+         Estimate   SE
+elpd_loo   -141.7  7.2
+p_loo        10.9  2.5
+\end{minted}
+
+Latent hierarchical linear
+\begin{minted}[fontsize=\footnotesize,highlightlines=3]{text}
+> loo(fit4)
+         Estimate   SE
+elpd_loo   -184.3 17.3
+p_loo        23.8  5.7
+\end{minted}
+}
+
+\begin{minted}[fontsize=\footnotesize,highlightlines={2-4}]{text}
+> loo_compare(loo(fit4), loo(fit6))
+     elpd_diff se_diff
+fit6   0.0       0.0  
+fit4 -42.6      14.3  
+\end{minted}
+
+\end{frame}
+
+\begin{frame}{LOO difference uncertainty estimate (SE) reliability}
+\vspace{-0.2\baselineskip}
+
+  \begin{list1}
+  \item[1.] The models make very similar predictions
+    \begin{list2}
+    \item<2-> if $|\mbox{elpd\_loo}|<4$, SE is not reliable, but the
+      difference is small anyway
+    \item<2-> selecting a ``wrong'' model has small cost
+    \item<2-> in nested case, the skewness favors the simpler model
+    \end{list2}
+  \item[2.] The models are misspecified with outliers in the data
+    \begin{list2}
+    \item<3-> in nested case, the bias favors the simpler model
+    \item<3-> model checking and model extension to avoid misspecified
+      models (Bayesian workflow)
+    \end{list2}
+  \item[3.] The number of observations is small
+    \begin{list2}
+    \item<4-> in nested case the skewness favors the simpler model
+    \item<4-> any inference with small $n$ is difficult
+    \item<4-> if $|\mbox{elpd\_loo}|>4$, model is well specified,
+      and $n>100$ then the normal approximation is good
+    \end{list2}
+  \end{list1}
+
+{\color{gray}\footnotesize  Sivula, Magnusson, Matamoros, and Vehtari (2022). Uncertainty in Bayesian leave-one-out cross-validation based model comparison. \textit{\href{https://arxiv.org/abs/2008.10296v3}{arXiv:2008.10296v3}}.}
+  
+\end{frame}
+
+\begin{frame}{Log score and elpd\_loo}
+
+  \begin{itemize}
+  \item Log score is not easily interpretable
+  \item but is information theoretically good utility for the goodness
+    of the whole distribution
+  \item and thus is useful in model comparison
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Log score and elpd\_loo}
+
+  \begin{itemize}
+  \item Interpretation in discrete case
+    \begin{itemize}
+    \item log probability
+    \end{itemize}
+  \item<2-> For example
+    \begin{itemize}
+    \item $\frac{1}{N}\sum_{n=1}^N\exp(\mathrm{elpd}_{\mathrm{loo},n}) \approx 4\%$ probability that we predict the
+      observed value
+    \item<3-> compare to guessing uniformly from the data range [121,310] having
+      $1/(310-121+1) \approx 0.5\%$ probability \only<4->{(log score -210)}
+    \end{itemize}
+  \item<5-> Interpretation in continuous case
+    \begin{itemize}
+    \item can be compared to a simple reference distribution
+    \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+% \begin{frame}[fragile]{Student retention -- loo computation}
+
+% PSIS-LOO
+
+% \begin{minted}[fontsize=\footnotesize,escapeinside=||]{text}
+% > fit6 <- add_criterion(fit6, 'loo')
+% Pareto k diagnostic values:
+%                          Count Pct.    Min. n_eff
+% (-Inf, 0.5]   (good)     34    85.0%   558       
+%  (0.5, 0.7]   (ok)        5    12.5%   226       
+%    (0.7, 1]   (bad)       1     2.5%   215       
+%    (1, Inf)   (very bad)  0     0.0%   <NA>
+% \end{minted}
+
+% PSIS-LOO + moment matching  
+% \begin{minted}[fontsize=\footnotesize,escapeinside=||]{text}
+% > ...(fit6, 'loo', moment_match=TRUE, overwrite=TRUE)
+% All Pareto k estimates are good (k < 0.7).
+% \end{minted}
+  
+%   \vspace{0.5\baselineskip}
+% {\color{gray}\footnotesize\href{https://doi.org/10.1007/s11222-020-09982-2}{Paananen, Piironen, Bürkner, and Vehtari (2021). Implicitly adaptive importance sampling. \textit{Statistics and Computing}, 31, 16.}}
+% \end{frame}
+
+\begin{frame}
+  \frametitle{Next week}
+
+  \begin{itemize}
+  \item When is cross-validation applicable?
+    \begin{list2}
+    \item data generating mechanisms and prediction tasks
+    \item leave-many-out cross-validation
+    \end{list2}
+  \item $K$-fold cross-validation
+  \item {\footnotesize Related methods (WAIC, *IC, BF)}
+  \item Model averaging
+  \item Hypothesis testing
+  \item Potential overfitting in model selection
+  % \item<2-> Part 2: Projective Inference in High-dimensional Problems:
+  %   Prediction and Feature Selection
+  \end{itemize}
+  
+\end{frame}
+
 \end{document}
 
 % \begin{frame}{Sometimes cross-validation is not needed}
@@ -1438,13 +1646,12 @@ generated quantities {
 
   {\includegraphics[height=6.5cm]{arsenicelpddiff_dens3.pdf}}
   \\
-  {\scriptsize
-\begin{lstlisting}
+\begin{minted}[fontsize=\scriptsize]{text}
 > loo_compare(model1, model2)
        elpd_diff se_diff
 model2   0.0       0.0  
 model1 -14.4       6.1  
-\end{lstlisting}}
+\end{minted}
 \vspace{-\baselineskip}
     {\scriptsize \hspace{6cm} see \href{http://link.springer.com/article/10.1007/s11222-016-9696-4}{Vehtari, Gelman \& Gabry (2017a)}}
     
@@ -1454,14 +1661,14 @@ model1 -14.4       6.1
   \frametitle{8 schools -- Model comparison}
 
   {\scriptsize
-\begin{lstlisting}
+\begin{minted}[fontsize=\scriptsize]{text}
 > loo_compare(pooled, hierarchical)
             elpd_diff se_diff
 pooled        0.0       0.0   
 hierarchical -0.3       0.7   
-\end{lstlisting}}
+\end{minted}
 
-  No difference between pooled and hierarchical for predicting the
+    No difference between pooled and hierarchical for predicting the
   future observations for a new school (exchangeble with the schools
   in the data).
 
@@ -1472,11 +1679,11 @@ hierarchical -0.3       0.7
   \frametitle{Poisson vs Hurdle-Poisson example}
 
   {\scriptsize
-\begin{lstlisting}
+\begin{minted}[fontsize=\scriptsize]{text}
                elpd_diff se_diff
 Hurdle-Poisson    0.0       0.0 
 Poisson        -215.9      22.1 
-\end{lstlisting}}
+\end{minted}
 
 Clear difference (which was also obvious in posterior predictive checks)
 
