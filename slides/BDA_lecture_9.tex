@@ -243,17 +243,20 @@
 
 \begin{frame}{Outline}
 
+  \vspace{-0.5\baselineskip}
 {\color{gray}Last week
   \begin{list1}
   \item What is cross-validation
   \item LOO-PIT checking
-  \item Fast cross-validation (PSIS and $K$-fold)
-  \item When is cross-validation applicable?
+  \item Fast cross-validation with PSIS
+  \item LOO model comparison and selection (elpd\_diff, se)
   \end{list1}
 }
 This week
   \begin{list1}
-  \item LOO model comparison and selection (elpd\_diff, se)
+  \item Model comparison with LOO-CV
+  \item When is cross-validation applicable?
+  \item $K$-fold cross-validation
   \item {\footnotesize Related methods (WAIC, *IC, BF)}
   \item Hypothesis testing
   \item Potential overfitting
@@ -570,54 +573,169 @@ fit4 -42.6      14.3
 
 \end{frame}
 
-\begin{frame}[fragile]{Student retention -- loo computation}
+\begin{frame}{Assumptions about the future observations}
 
-PSIS-LOO
-
-\begin{minted}[fontsize=\footnotesize,escapeinside=||]{text}
-> fit4 <- add_criterion(fit4, 'loo')
-Pareto k diagnostic values:
-                         Count Pct.    Min. ESS
-|{\color{forestgreen}(-Inf, 0.7]   (good)     32    80.0%   114     }|
-|{\color{red}   (0.7, 1]   (bad)       7    17.5%   <NA>    }|
-|{\color{red}   (1, Inf)   (very bad)  1     2.5%   <NA>    }|
-\end{minted}
-
-\pause
-PSIS-LOO + moment matching + reloo
-\begin{minted}[fontsize=\footnotesize,escapeinside=||]{text}
-> ...(fit4, 'loo', |\highlight{moment_match=TRUE, reloo=TRUE, overwrite=TRUE}|)
-|{\color{forestgreen}All Pareto k estimates are good (k < 0.7).}|
-\end{minted}
-
-  \vfill
-{\color{gray}\footnotesize\href{https://doi.org/10.1007/s11222-020-09982-2}{Paananen, Piironen, Bürkner, and Vehtari (2021). Implicitly adaptive importance sampling. \textit{Statistics and Computing}, 31, 16.}}
+  \vspace{-\baselineskip}
+  \only<1>{\includegraphics[width=9cm]{fakedfixed.pdf}}
+  \only<2->{\includegraphics[width=9cm]{fakedrandom.pdf}}
+  \\ 
+  {\color{blue} $\mbox{elpd\_loo} = \sum_{i=1}^{20} \log p(y_i \mid x_i,x_{-i},y_{-i}) \approx -29.5$\\ \vspace{0.2\baselineskip}}
+  {\color{blue} $\mbox{SE} = \sd(\log p(y_i \mid x_i,x_{-i},y_{-i}))\cdot \sqrt{20} \approx 3.3$\\}
+  \vspace{0.5\baselineskip}
+  \only<1>{LOO is ok for fixed / designed $x$. SE is uncertainty about $y \mid x$.\\\vspace{0.2\baselineskip}}\only<2->{LOO is ok for random $x$. SE is uncertainty about $y \mid x$ and $x$.\\\vspace{0.2\baselineskip}}\onslide<3>{Covariate shift handled with importance weighting or modelling}
+  \onslide<1->{\\\vspace{\baselineskip} \small see \href{http://dx.doi.org/10.1214/12-SS102}{Vehtari \& Ojanen (2012)} and \href{https://users.aalto.fi/~ave/modelselection/CV-FAQ.html}{CV-FAQ}}
   
 \end{frame}
 
-% \begin{frame}[fragile]{Student retention -- loo computation}
+\begin{frame}{Interpolation vs extrapolation}
 
-% PSIS-LOO
+  \only<1>{\includegraphics[width=9cm]{lake1data.pdf}}
+  \only<2>{\includegraphics[width=9cm]{lake1gp.pdf}}
+  \only<3->{\includegraphics[width=9cm]{lake1gpptest.pdf}}
+  \\
+  \begin{itemize}
+  \item<4> Extrapolation is more difficult
+   item<5> In high dimensional case mostly extrapolation
+  \end{itemize}
+\end{frame}
 
-% \begin{minted}[fontsize=\footnotesize,escapeinside=||]{text}
-% > fit6 <- add_criterion(fit6, 'loo')
-% Pareto k diagnostic values:
-%                          Count Pct.    Min. n_eff
-% (-Inf, 0.5]   (good)     34    85.0%   558       
-%  (0.5, 0.7]   (ok)        5    12.5%   226       
-%    (0.7, 1]   (bad)       1     2.5%   215       
-%    (1, Inf)   (very bad)  0     0.0%   <NA>
-% \end{minted}
+\begin{frame}{Cross-validation for time series?}
 
-% PSIS-LOO + moment matching  
-% \begin{minted}[fontsize=\footnotesize,escapeinside=||]{text}
-% > ...(fit6, 'loo', moment_match=TRUE, overwrite=TRUE)
-% All Pareto k estimates are good (k < 0.7).
-% \end{minted}
+  \includegraphics[width=9cm]{lake2data.pdf}
+
   
-%   \vspace{0.5\baselineskip}
-% {\color{gray}\footnotesize\href{https://doi.org/10.1007/s11222-020-09982-2}{Paananen, Piironen, Bürkner, and Vehtari (2021). Implicitly adaptive importance sampling. \textit{Statistics and Computing}, 31, 16.}}
+  {Can LOO or other cross-validation be used with time series?}
+  
+\end{frame}
+
+\begin{frame}{Cross-validation for time series}
+
+  \only<1>{\includegraphics[width=9cm]{lake3loo.pdf}}
+  \only<2>{\includegraphics[width=9cm]{lake3stepahead.pdf}}
+  \only<3>{\includegraphics[width=9cm]{lake3tenstepahead.pdf}}
+  \only<4>{\includegraphics[width=9cm]{lake3stepaheadblock.pdf}}
+  \\
+  \only<1>{Leave-one-out cross-validation is ok for assessing conditional model}
+  \only<2>{Leave-future-out (LFO) cross-validation is better for predicting future}
+  \only<3>{$m$-step-ahead cross-validation is better for predicting further future}
+  \only<4>{$m$-step-ahead leave-a-block-out cross-validation}
+  
+\end{frame}
+
+\begin{frame}{Cross-validation for hierarchical data}
+
+  \only<1>{\includegraphics[width=9cm]{rats1data.pdf}}
+  \only<2>{\includegraphics[width=9cm]{rats1loo.pdf}}
+  \only<3>{\includegraphics[width=9cm]{rats1step.pdf}}
+  \only<4>{\includegraphics[width=9cm]{rats1onetime.pdf}}
+  \only<5>{\includegraphics[width=9cm]{rats1onerat.pdf}}
+  \only<6>{\includegraphics[width=9cm]{rats1init.pdf}}
+  \\
+  \only<1>{Can LOO or other cross-validation be used with hierarchical data?}
+  \only<2->{Yes!}
+  
+\end{frame}
+
+\begin{frame}{}
+
+{\Large\color{navyblue} Summary of data generating mechanisms and prediction tasks}
+
+\begin{list1}
+\item You have to make some assumptions on data generating mechanism
+\item Use the knowledge of the prediction task if available
+\item Cross-validation can be used to analyse different parts, even if
+  there is no clear prediction task
+\end{list1}
+
+\vspace{7.5\baselineskip}
+{ \small see \href{http://dx.doi.org/10.1214/12-SS102}{Vehtari \& Ojanen (2012)} and \href{https://users.aalto.fi/~ave/modelselection/CV-FAQ.html}{CV-FAQ}}
+
+\end{frame}
+
+% \begin{frame}{LFO-CV}
+
+%   \only<1>{\includegraphics[width=9cm]{lake4data.pdf}}
+%   \only<2>{\includegraphics[width=9cm]{lake4pred.pdf}}
+%   \only<3>{\includegraphics[width=9cm]{lake4psisrefits.pdf}}
+
+%   \vspace{2\baselineskip}
+%   \only<3> {\small \url{mc-stan.org/loo/articles/loo2-lfo.html}}
+
+  
 % \end{frame}
+
+\begin{frame}{Pareto smoothed importance sampling CV variants}
+
+\begin{list1}
+\item PSIS-LOO for hierarchical models
+  \begin{list2}
+  \item leave-one-group out is challenging for PSIS-LOO\\ \vspace{0.2\baselineskip}
+    
+  \item Stan demo of the challenges and integrated LOO at \url{https://users.aalto.fi/~ave/modelselection/roaches.html}
+  \item {\small see also Merkel, Furr and Rabe-Hesketh (2018)}
+  \end{list2}
+  \item<2-> PSIS-LOO for non-factorized models
+    \begin{list2}
+    \item {\url{mc-stan.org/loo/articles/loo2-non-factorizable.html}}
+    \end{list2}
+  \item<3-> PSIS-LOO for time series
+  \begin{list2}
+  \item Approximate leave-future-out cross-validation (LFO-CV) \\ \vspace{0.2\baselineskip}
+    {\url{mc-stan.org/loo/articles/loo2-lfo.html}}
+  \end{list2}
+\end{list1}
+
+\end{frame}
+
+
+\begin{frame}{$K$-fold cross-validation}
+
+\begin{list1}
+\item $K$-fold cross-validation can approximate LOO
+  \begin{list2}
+    \item the same use cases as with LOO
+  \end{list2}
+\item $K$-fold cross-validation can be used for hierarchical models
+  \begin{list2}
+    \item good for leave-one-group-out
+  \end{list2}
+\item $K$-fold cross-validation can be used for time series
+  \begin{list2}
+    \item with leave-block-out
+  \end{list2}
+\end{list1}
+
+\end{frame}
+
+\begin{frame}{}
+
+  \only<1>{\includegraphics[width=10cm]{lake3kfoldbal1.pdf}} 
+ \only<2>{\includegraphics[width=10cm]{lake3kfoldbal2.pdf}}
+  \only<3>{\includegraphics[width=10cm]{lake3kfoldrand.pdf}}
+  \only<4>{\includegraphics[width=10cm]{rats1kfoldrand.pdf}}
+  \only<5->{\includegraphics[width=10cm]{rats1oneratb.pdf}}
+  % \\
+  % \only<6>{kfold\_split\_random()\\ \vspace{0.2\baselineskip}
+  % kfold\_split\_balanced()\\ \vspace{0.2\baselineskip}
+  % kfold\_split\_stratified()}
+  
+\end{frame}
+
+\begin{frame}{$K$-fold-CV code}
+
+  \begin{list1}
+  \item RStan, CmdStanR\\
+    See vignette \url{http://mc-stan.org/loo/articles/loo2-elpd.html}
+  \item RStanARM, brms\\
+    \texttt{kfold(fit)}
+  \item Alternative data divisions\\
+  \rinline/kfold_split_random()/\\
+  \rinline/kfold_split_balanced()/\\
+  \rinline/kfold_split_stratified()/
+  \end{list1}
+  
+\end{frame}
+
 
 \begin{frame}[fragile]{looic?}
 
@@ -639,7 +757,7 @@ Monte Carlo SE of elpd_loo is 0.1.
   \item for historical non-Bayesian reasons it's -2 * elpd\_loo
     \begin{itemize}
       \item connection to deviance and information criteria
-      \item you can just ignore it (I'd prefer it would not e´be shown)
+      \item you can just ignore it (I'd prefer it would not be shown)
     \end{itemize}
 
   \end{itemize}
