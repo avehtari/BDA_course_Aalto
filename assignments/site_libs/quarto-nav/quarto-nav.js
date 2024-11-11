@@ -5,85 +5,8 @@ const headroomChanged = new CustomEvent("quarto-hrChanged", {
   composed: false,
 });
 
-const announceDismiss = () => {
-  const annEl = window.document.getElementById("quarto-announcement");
-  if (annEl) {
-    annEl.remove();
-
-    const annId = annEl.getAttribute("data-announcement-id");
-    window.localStorage.setItem(`quarto-announce-${annId}`, "true");
-  }
-};
-
-const announceRegister = () => {
-  const annEl = window.document.getElementById("quarto-announcement");
-  if (annEl) {
-    const annId = annEl.getAttribute("data-announcement-id");
-    const isDismissed =
-      window.localStorage.getItem(`quarto-announce-${annId}`) || false;
-    if (isDismissed) {
-      announceDismiss();
-      return;
-    } else {
-      annEl.classList.remove("hidden");
-    }
-
-    const actionEl = annEl.querySelector(".quarto-announcement-action");
-    if (actionEl) {
-      actionEl.addEventListener("click", function (e) {
-        e.preventDefault();
-        // Hide the bar immediately
-        announceDismiss();
-      });
-    }
-  }
-};
-
 window.document.addEventListener("DOMContentLoaded", function () {
   let init = false;
-
-  announceRegister();
-
-  // Manage the back to top button, if one is present.
-  let lastScrollTop = window.pageYOffset || document.documentElement.scrollTop;
-  const scrollDownBuffer = 5;
-  const scrollUpBuffer = 35;
-  const btn = document.getElementById("quarto-back-to-top");
-  const hideBackToTop = () => {
-    btn.style.display = "none";
-  };
-  const showBackToTop = () => {
-    btn.style.display = "inline-block";
-  };
-  if (btn) {
-    window.document.addEventListener(
-      "scroll",
-      function () {
-        const currentScrollTop =
-          window.pageYOffset || document.documentElement.scrollTop;
-
-        // Shows and hides the button 'intelligently' as the user scrolls
-        if (currentScrollTop - scrollDownBuffer > lastScrollTop) {
-          hideBackToTop();
-          lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop;
-        } else if (currentScrollTop < lastScrollTop - scrollUpBuffer) {
-          showBackToTop();
-          lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop;
-        }
-
-        // Show the button at the bottom, hides it at the top
-        if (currentScrollTop <= 0) {
-          hideBackToTop();
-        } else if (
-          window.innerHeight + currentScrollTop >=
-          document.body.offsetHeight
-        ) {
-          showBackToTop();
-        }
-      },
-      false
-    );
-  }
 
   function throttle(func, wait) {
     var timeout;
@@ -121,17 +44,6 @@ window.document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  function dashboardOffset() {
-    const dashboardNavEl = window.document.getElementById(
-      "quarto-dashboard-header"
-    );
-    if (dashboardNavEl !== null) {
-      return dashboardNavEl.clientHeight;
-    } else {
-      return 0;
-    }
-  }
-
   function updateDocumentOffsetWithoutAnimation() {
     updateDocumentOffset(false);
   }
@@ -139,7 +51,7 @@ window.document.addEventListener("DOMContentLoaded", function () {
   function updateDocumentOffset(animated) {
     // set body offset
     const topOffset = headerOffset();
-    const bodyOffset = topOffset + footerOffset() + dashboardOffset();
+    const bodyOffset = topOffset + footerOffset();
     const bodyEl = window.document.body;
     bodyEl.setAttribute("data-bs-offset", topOffset);
     bodyEl.style.paddingTop = topOffset + "px";
@@ -237,24 +149,12 @@ window.document.addEventListener("DOMContentLoaded", function () {
     };
   }
 
-  window.addEventListener(
-    "hashchange",
-    function (e) {
-      if (
-        getComputedStyle(document.documentElement).scrollBehavior !== "smooth"
-      ) {
-        window.scrollTo(0, window.pageYOffset - headerOffset());
-      }
-    },
-    false
-  );
-
   // Observe size changed for the header
   const headerEl = window.document.querySelector("header.fixed-top");
   if (headerEl && window.ResizeObserver) {
-    const observer = new window.ResizeObserver(() => {
-      setTimeout(updateDocumentOffsetWithoutAnimation, 0);
-    });
+    const observer = new window.ResizeObserver(
+      updateDocumentOffsetWithoutAnimation
+    );
     observer.observe(headerEl, {
       attributes: true,
       childList: true,
@@ -272,16 +172,13 @@ window.document.addEventListener("DOMContentLoaded", function () {
   if (window.location.protocol !== "file:") {
     const links = window.document.querySelectorAll("a");
     for (let i = 0; i < links.length; i++) {
-      if (links[i].href) {
-        links[i].dataset.originalHref = links[i].href;
-        links[i].href = links[i].href.replace(/\/index\.html/, "/");
-      }
+      links[i].href = links[i].href.replace(/\/index\.html/, "/");
     }
 
     // Fixup any sharing links that require urls
     // Append url to any sharing urls
     const sharingLinks = window.document.querySelectorAll(
-      "a.sidebar-tools-main-item, a.quarto-navigation-tool, a.quarto-navbar-tools, a.quarto-navbar-tools-item"
+      "a.sidebar-tools-main-item"
     );
     for (let i = 0; i < sharingLinks.length; i++) {
       const sharingLink = sharingLinks[i];

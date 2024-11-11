@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.2.475">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Aki Vehtari et al.">
 
-<title>Notebook for Assignment 5 – Bayesian Data Analysis</title>
+<title>Bayesian Data Analysis - Notebook for Assignment 5</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -18,12 +18,11 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -34,7 +33,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -48,13 +47,43 @@ pre.numberSource code > span > a:first-child::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
+    color: #aaaaaa;
   }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
   {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -65,8 +94,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./template6.html" rel="next">
-<link href="./template4.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -82,13 +109,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 50,
-  "keyboard-shortcut": [
-    "f",
-    "/",
-    "s"
-  ],
-  "show-item-context": false,
+  "limit": 20,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -97,42 +118,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
-    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit",
-    "search-label": "Search"
+    "search-submit-button-title": "Submit"
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 </head>
 
@@ -140,16 +131,11 @@ window.Quarto = {
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav">
-    <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-        <i class="bi bi-layout-text-sidebar-reverse"></i>
-      </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./template1.html">Templates</a></li><li class="breadcrumb-item"><a href="./template5.html">Notebook for Assignment 5</a></li></ol></nav>
-        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-        </a>
-      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
-        <i class="bi bi-search"></i>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Notebook for Assignment 5</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
       </button>
     </div>
   </nav>
@@ -157,32 +143,30 @@ window.Quarto = {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Bayesian Data Analysis</a> 
     </div>
       </div>
-        <div class="mt-2 flex-shrink-0 align-items-center">
+      <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Search"></div>
         </div>
-        </div>
+      </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">General instructions</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">General instructions</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment_instructions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Assignment instructions</span></a>
+  <a href="./assignment_instructions.html" class="sidebar-item-text sidebar-link">Assignment instructions</a>
   </div>
 </li>
       </ul>
@@ -190,130 +174,55 @@ window.Quarto = {
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
- <span class="menu-text">Assignments</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Assignments</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Assignment 1</span></a>
+  <a href="./assignment1.html" class="sidebar-item-text sidebar-link">Assignment 1</a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Assignment 2</span></a>
+  <a href="./assignment2.html" class="sidebar-item-text sidebar-link">Assignment 2</a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Assignment 3</span></a>
+  <a href="./assignment3.html" class="sidebar-item-text sidebar-link">Assignment 3</a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Assignment 4</span></a>
+  <a href="./assignment4.html" class="sidebar-item-text sidebar-link">Assignment 4</a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Assignment 5</span></a>
+  <a href="./assignment5.html" class="sidebar-item-text sidebar-link">Assignment 5</a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Assignment 6</span></a>
+  <a href="./assignment6.html" class="sidebar-item-text sidebar-link">Assignment 6</a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Assignment 7</span></a>
+  <a href="./assignment7.html" class="sidebar-item-text sidebar-link">Assignment 7</a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Assignment 8</span></a>
+  <a href="./assignment8.html" class="sidebar-item-text sidebar-link">Assignment 8</a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./assignment9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Assignment 9</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
- <span class="menu-text">Templates</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./template1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Notebook for Assignment 1</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./template2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Notebook for Assignment 2</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./template3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Notebook for Assignment 3</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./template4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Notebook for Assignment 4</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./template5.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Notebook for Assignment 5</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./template6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Notebook for Assignment 6</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./template7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Notebook for Assignment 7</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./template8.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Notebook for Assignment 8</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./template9.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Notebook for Assignment 9</span></a>
+  <a href="./assignment9.html" class="sidebar-item-text sidebar-link">Assignment 9</a>
   </div>
 </li>
       </ul>
@@ -321,24 +230,23 @@ window.Quarto = {
     </ul>
     </div>
 </nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#general-information" id="toc-general-information" class="nav-link active" data-scroll-target="#general-information"><span class="header-section-number">1</span> General information</a></li>
-  <li><a href="#generalized-linear-model-bioassay-model-with-metropolis-algorithm" id="toc-generalized-linear-model-bioassay-model-with-metropolis-algorithm" class="nav-link" data-scroll-target="#generalized-linear-model-bioassay-model-with-metropolis-algorithm"><span class="header-section-number">2</span> Generalized linear model: Bioassay model with Metropolis algorithm</a></li>
+  <li><a href="#general-information" id="toc-general-information" class="nav-link active" data-scroll-target="#general-information"><span class="toc-section-number">1</span>  General information</a></li>
+  <li><a href="#generalized-linear-model-bioassay-model-with-metropolis-algorithm" id="toc-generalized-linear-model-bioassay-model-with-metropolis-algorithm" class="nav-link" data-scroll-target="#generalized-linear-model-bioassay-model-with-metropolis-algorithm"><span class="toc-section-number">2</span>  Generalized linear model: Bioassay model with Metropolis algorithm</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./template1.html">Templates</a></li><li class="breadcrumb-item"><a href="./template5.html">Notebook for Assignment 5</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">Notebook for Assignment 5</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title d-none d-lg-block">Notebook for Assignment 5</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -357,9 +265,7 @@ window.Quarto = {
   </div>
   
 
-
 </header>
-
 
 <section id="general-information" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> General information</h1>
@@ -372,12 +278,12 @@ window.Quarto = {
 <li><a href="../BDA3_notes.html#ch11"><strong>The reading instructions for BDA3 Chapter 11</strong></a>.</li>
 </ul>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-tip callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
+<div class="callout-caption-container flex-fill">
 General Instructions for Answering the Assignment Questions
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -401,12 +307,12 @@ General Instructions for Answering the Assignment Questions
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-warning callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
+<div class="callout-caption-container flex-fill">
 Setup
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
@@ -462,7 +368,7 @@ The assignment contain the following task:
 <pre><code>Loading required package: posterior</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>This is posterior version 1.6.0</code></pre>
+<pre><code>This is posterior version 1.4.1</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
@@ -493,15 +399,18 @@ Attaching package: 'posterior'</code></pre>
 <div class="cell-output cell-output-stderr">
 <pre><code>Loading required package: ggplot2</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(bayesplot)){</span>
-<span id="cb18-2"><a href="#cb18-2"></a>    <span class="fu">install.packages</span>(<span class="st">"bayesplot"</span>)</span>
-<span id="cb18-3"><a href="#cb18-3"></a>    <span class="fu">library</span>(bayesplot)</span>
-<span id="cb18-4"><a href="#cb18-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'ggplot2' was built under R version 4.3.1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(bayesplot)){</span>
+<span id="cb19-2"><a href="#cb19-2"></a>    <span class="fu">install.packages</span>(<span class="st">"bayesplot"</span>)</span>
+<span id="cb19-3"><a href="#cb19-3"></a>    <span class="fu">library</span>(bayesplot)</span>
+<span id="cb19-4"><a href="#cb19-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Loading required package: bayesplot</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>This is bayesplot version 1.11.1</code></pre>
+<pre><code>This is bayesplot version 1.10.0</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code>- Online documentation and vignettes at mc-stan.org/bayesplot</code></pre>
@@ -545,96 +454,92 @@ Attaching package: 'bayesplot'</code></pre>
 \end{aligned}\]</span></p>
 <p>However, this code contains 3 errors. The lines with errors are marked as:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="do">### error x</span></span>
-<span id="cb27-2"><a href="#cb27-2"></a></span>
-<span id="cb27-3"><a href="#cb27-3"></a><span class="do">### error x</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="do">### error x</span></span>
+<span id="cb28-2"><a href="#cb28-2"></a></span>
+<span id="cb28-3"><a href="#cb28-3"></a><span class="do">### error x</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Your task is to find these errors, correct them and answer corresponding questions in MyCourses. Note that <code>bioassaylp()</code> from <code>aaltobda</code> package evaluates the log-likelihood for given <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>. As for proposal distribution we used simple normal distributions <span class="math inline">\(\alpha^* \sim N(\alpha_{t-1}, \sigma = \alpha_\sigma)\)</span> and <span class="math inline">\(\beta^* \sim N(\beta_{t-1}, \sigma = \beta_\sigma)\)</span>. Efficient proposals are discussed in BDA3 p.&nbsp;295–297 (not part of the course). In real-life a pre-run could be made with an automatic adaptive control to adapt the proposal distribution.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="fu">data</span>(<span class="st">"bioassay"</span>)</span>
-<span id="cb28-2"><a href="#cb28-2"></a>density_ratio <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha_propose, alpha_previous, beta_propose, beta_previous, x, y, n){</span>
-<span id="cb28-3"><a href="#cb28-3"></a>        prior_mean <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)</span>
-<span id="cb28-4"><a href="#cb28-4"></a>    prior_sigma <span class="ot">=</span> <span class="fu">cbind</span>(<span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">12</span>), <span class="fu">c</span>(<span class="dv">12</span>, <span class="dv">100</span>))</span>
-<span id="cb28-5"><a href="#cb28-5"></a>    <span class="do">### error 1</span></span>
-<span id="cb28-6"><a href="#cb28-6"></a>        <span class="fu">bioassaylp</span>(alpha_propose, beta_propose, x, y, n)</span>
-<span id="cb28-7"><a href="#cb28-7"></a>        <span class="sc">-</span> <span class="fu">bioassaylp</span>(alpha_previous, beta_previous, x, y, n)</span>
-<span id="cb28-8"><a href="#cb28-8"></a>        <span class="sc">+</span> <span class="fu">dmvnorm</span>(<span class="fu">c</span>(alpha_propose, beta_propose), prior_mean, prior_sigma, <span class="cn">TRUE</span>)</span>
-<span id="cb28-9"><a href="#cb28-9"></a>        <span class="sc">-</span> <span class="fu">dmvnorm</span>(<span class="fu">c</span>(alpha_previous, beta_previous), prior_mean, prior_sigma, <span class="cn">TRUE</span>)</span>
-<span id="cb28-10"><a href="#cb28-10"></a>    <span class="do">### error 1</span></span>
-<span id="cb28-11"><a href="#cb28-11"></a>}</span>
-<span id="cb28-12"><a href="#cb28-12"></a></span>
-<span id="cb28-13"><a href="#cb28-13"></a>metropolis_bioassay <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha_initial, beta_initial, alpha_sigma, beta_sigma, no_draws, warmup_len, x, y, n, chain_number){</span>
-<span id="cb28-14"><a href="#cb28-14"></a>    <span class="fu">data.frame</span>(</span>
-<span id="cb28-15"><a href="#cb28-15"></a>        <span class="at">alpha=</span><span class="fu">c</span>(alpha_initial, alpha_initial<span class="sc">+</span>alpha_sigma, alpha_initial<span class="sc">-</span>alpha_sigma),</span>
-<span id="cb28-16"><a href="#cb28-16"></a>        <span class="at">beta=</span><span class="fu">c</span>(beta_initial, beta_initial<span class="sc">+</span>beta_sigma, beta_initial<span class="sc">-</span>beta_sigma)</span>
-<span id="cb28-17"><a href="#cb28-17"></a>    )</span>
-<span id="cb28-18"><a href="#cb28-18"></a>    alpha_previous <span class="ot">=</span> alpha_initial</span>
-<span id="cb28-19"><a href="#cb28-19"></a>    beta_previous <span class="ot">=</span> beta_initial</span>
-<span id="cb28-20"><a href="#cb28-20"></a>    alpha_rv <span class="ot">=</span> <span class="fu">c</span>()</span>
-<span id="cb28-21"><a href="#cb28-21"></a>    beta_rv <span class="ot">=</span> <span class="fu">c</span>()</span>
-<span id="cb28-22"><a href="#cb28-22"></a>    <span class="cf">for</span>(draw <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>no_draws){</span>
-<span id="cb28-23"><a href="#cb28-23"></a>        alpha_propose <span class="ot">=</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, alpha_previous, alpha_sigma)</span>
-<span id="cb28-24"><a href="#cb28-24"></a>        beta_propose <span class="ot">=</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, beta_previous, beta_sigma)</span>
-<span id="cb28-25"><a href="#cb28-25"></a>        <span class="do">### error 2</span></span>
-<span id="cb28-26"><a href="#cb28-26"></a>        <span class="cf">if</span>(<span class="fu">runif</span>(<span class="dv">1</span>) <span class="sc">&gt;</span> <span class="fu">density_ratio</span>(alpha_propose, alpha_previous, beta_propose, beta_previous, x, y, n))</span>
-<span id="cb28-27"><a href="#cb28-27"></a>        <span class="do">### error 2</span></span>
-<span id="cb28-28"><a href="#cb28-28"></a>          {</span>
-<span id="cb28-29"><a href="#cb28-29"></a>            alpha_previous <span class="ot">=</span> alpha_propose</span>
-<span id="cb28-30"><a href="#cb28-30"></a>            beta_previous <span class="ot">=</span> beta_propose</span>
-<span id="cb28-31"><a href="#cb28-31"></a>          }</span>
-<span id="cb28-32"><a href="#cb28-32"></a>      <span class="do">### error 3</span></span>
-<span id="cb28-33"><a href="#cb28-33"></a>        alpha_rv <span class="ot">=</span> <span class="fu">c</span>(alpha_rv, alpha_propose)</span>
-<span id="cb28-34"><a href="#cb28-34"></a>        beta_rv <span class="ot">=</span> <span class="fu">c</span>(beta_rv, beta_propose)</span>
-<span id="cb28-35"><a href="#cb28-35"></a>      <span class="do">### error 3</span></span>
-<span id="cb28-36"><a href="#cb28-36"></a>    }</span>
-<span id="cb28-37"><a href="#cb28-37"></a>    <span class="fu">data.frame</span>(<span class="at">alpha=</span><span class="fu">tail</span>(alpha_rv,warmup_len), <span class="at">beta=</span><span class="fu">tail</span>(beta_rv, warmup_len), <span class="at">Chain=</span><span class="fu">rep</span>(chain_number, <span class="at">each=</span>no_draws <span class="sc">-</span> warmup_len))</span>
-<span id="cb28-38"><a href="#cb28-38"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="fu">data</span>(<span class="st">"bioassay"</span>)</span>
+<span id="cb29-2"><a href="#cb29-2"></a>density_ratio <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha_propose, alpha_previous, beta_propose, beta_previous, x, y, n){</span>
+<span id="cb29-3"><a href="#cb29-3"></a>        prior_mean <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)</span>
+<span id="cb29-4"><a href="#cb29-4"></a>    prior_sigma <span class="ot">=</span> <span class="fu">cbind</span>(<span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">12</span>), <span class="fu">c</span>(<span class="dv">12</span>, <span class="dv">100</span>))</span>
+<span id="cb29-5"><a href="#cb29-5"></a>    <span class="do">### error 1</span></span>
+<span id="cb29-6"><a href="#cb29-6"></a>        <span class="fu">bioassaylp</span>(alpha_propose, beta_propose, x, y, n)</span>
+<span id="cb29-7"><a href="#cb29-7"></a>        <span class="sc">-</span> <span class="fu">bioassaylp</span>(alpha_previous, beta_previous, x, y, n)</span>
+<span id="cb29-8"><a href="#cb29-8"></a>        <span class="sc">+</span> <span class="fu">dmvnorm</span>(<span class="fu">c</span>(alpha_propose, beta_propose), prior_mean, prior_sigma, <span class="cn">TRUE</span>)</span>
+<span id="cb29-9"><a href="#cb29-9"></a>        <span class="sc">-</span> <span class="fu">dmvnorm</span>(<span class="fu">c</span>(alpha_previous, beta_previous), prior_mean, prior_sigma, <span class="cn">TRUE</span>)</span>
+<span id="cb29-10"><a href="#cb29-10"></a>    <span class="do">### error 1</span></span>
+<span id="cb29-11"><a href="#cb29-11"></a>}</span>
+<span id="cb29-12"><a href="#cb29-12"></a></span>
+<span id="cb29-13"><a href="#cb29-13"></a>metropolis_bioassay <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha_initial, beta_initial, alpha_sigma, beta_sigma, no_draws, warmup_len, x, y, n, chain_number){</span>
+<span id="cb29-14"><a href="#cb29-14"></a>    <span class="fu">data.frame</span>(</span>
+<span id="cb29-15"><a href="#cb29-15"></a>        <span class="at">alpha=</span><span class="fu">c</span>(alpha_initial, alpha_initial<span class="sc">+</span>alpha_sigma, alpha_initial<span class="sc">-</span>alpha_sigma),</span>
+<span id="cb29-16"><a href="#cb29-16"></a>        <span class="at">beta=</span><span class="fu">c</span>(beta_initial, beta_initial<span class="sc">+</span>beta_sigma, beta_initial<span class="sc">-</span>beta_sigma)</span>
+<span id="cb29-17"><a href="#cb29-17"></a>    )</span>
+<span id="cb29-18"><a href="#cb29-18"></a>    alpha_previous <span class="ot">=</span> alpha_initial</span>
+<span id="cb29-19"><a href="#cb29-19"></a>    beta_previous <span class="ot">=</span> beta_initial</span>
+<span id="cb29-20"><a href="#cb29-20"></a>    alpha_rv <span class="ot">=</span> <span class="fu">c</span>()</span>
+<span id="cb29-21"><a href="#cb29-21"></a>    beta_rv <span class="ot">=</span> <span class="fu">c</span>()</span>
+<span id="cb29-22"><a href="#cb29-22"></a>    <span class="cf">for</span>(draw <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>no_draws){</span>
+<span id="cb29-23"><a href="#cb29-23"></a>        alpha_propose <span class="ot">=</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, alpha_previous, alpha_sigma)</span>
+<span id="cb29-24"><a href="#cb29-24"></a>        beta_propose <span class="ot">=</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, beta_previous, beta_sigma)</span>
+<span id="cb29-25"><a href="#cb29-25"></a>        <span class="do">### error 2</span></span>
+<span id="cb29-26"><a href="#cb29-26"></a>        <span class="cf">if</span>(<span class="fu">runif</span>(<span class="dv">1</span>) <span class="sc">&gt;</span> <span class="fu">density_ratio</span>(alpha_propose, alpha_previous, beta_propose, beta_previous, x, y, n))</span>
+<span id="cb29-27"><a href="#cb29-27"></a>        <span class="do">### error 2</span></span>
+<span id="cb29-28"><a href="#cb29-28"></a>          {</span>
+<span id="cb29-29"><a href="#cb29-29"></a>            alpha_previous <span class="ot">=</span> alpha_propose</span>
+<span id="cb29-30"><a href="#cb29-30"></a>            beta_previous <span class="ot">=</span> beta_propose</span>
+<span id="cb29-31"><a href="#cb29-31"></a>          }</span>
+<span id="cb29-32"><a href="#cb29-32"></a>      <span class="do">### error 3</span></span>
+<span id="cb29-33"><a href="#cb29-33"></a>        alpha_rv <span class="ot">=</span> <span class="fu">c</span>(alpha_rv, alpha_propose)</span>
+<span id="cb29-34"><a href="#cb29-34"></a>        beta_rv <span class="ot">=</span> <span class="fu">c</span>(beta_rv, beta_propose)</span>
+<span id="cb29-35"><a href="#cb29-35"></a>      <span class="do">### error 3</span></span>
+<span id="cb29-36"><a href="#cb29-36"></a>    }</span>
+<span id="cb29-37"><a href="#cb29-37"></a>    <span class="fu">data.frame</span>(<span class="at">alpha=</span><span class="fu">tail</span>(alpha_rv,warmup_len), <span class="at">beta=</span><span class="fu">tail</span>(beta_rv, warmup_len), <span class="at">Chain=</span><span class="fu">rep</span>(chain_number, <span class="at">each=</span>no_draws <span class="sc">-</span> warmup_len))</span>
+<span id="cb29-38"><a href="#cb29-38"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="fu">set.seed</span>(<span class="dv">4911</span>)</span>
-<span id="cb29-2"><a href="#cb29-2"></a></span>
-<span id="cb29-3"><a href="#cb29-3"></a>df_chain1 <span class="ot">=</span> <span class="fu">metropolis_bioassay</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3000</span>, <span class="dv">1000</span>, bioassay<span class="sc">$</span>x, bioassay<span class="sc">$</span>y, bioassay<span class="sc">$</span>n, <span class="dv">1</span>)</span>
-<span id="cb29-4"><a href="#cb29-4"></a>df_chain2 <span class="ot">=</span> <span class="fu">metropolis_bioassay</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3000</span>, <span class="dv">1000</span>, bioassay<span class="sc">$</span>x, bioassay<span class="sc">$</span>y, bioassay<span class="sc">$</span>n, <span class="dv">2</span>)</span>
-<span id="cb29-5"><a href="#cb29-5"></a>df_chain3 <span class="ot">=</span> <span class="fu">metropolis_bioassay</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3000</span>, <span class="dv">1000</span>, bioassay<span class="sc">$</span>x, bioassay<span class="sc">$</span>y, bioassay<span class="sc">$</span>n, <span class="dv">3</span>)</span>
-<span id="cb29-6"><a href="#cb29-6"></a>df_chain4 <span class="ot">=</span> <span class="fu">metropolis_bioassay</span>(<span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3000</span>, <span class="dv">1000</span>, bioassay<span class="sc">$</span>x, bioassay<span class="sc">$</span>y, bioassay<span class="sc">$</span>n, <span class="dv">4</span>)</span>
-<span id="cb29-7"><a href="#cb29-7"></a></span>
-<span id="cb29-8"><a href="#cb29-8"></a>df_combined_samples <span class="ot">&lt;-</span> <span class="fu">rbind</span>(df_chain1, df_chain2, df_chain3, df_chain4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="fu">set.seed</span>(<span class="dv">4911</span>)</span>
+<span id="cb30-2"><a href="#cb30-2"></a></span>
+<span id="cb30-3"><a href="#cb30-3"></a>df_chain1 <span class="ot">=</span> <span class="fu">metropolis_bioassay</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3000</span>, <span class="dv">1000</span>, bioassay<span class="sc">$</span>x, bioassay<span class="sc">$</span>y, bioassay<span class="sc">$</span>n, <span class="dv">1</span>)</span>
+<span id="cb30-4"><a href="#cb30-4"></a>df_chain2 <span class="ot">=</span> <span class="fu">metropolis_bioassay</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3000</span>, <span class="dv">1000</span>, bioassay<span class="sc">$</span>x, bioassay<span class="sc">$</span>y, bioassay<span class="sc">$</span>n, <span class="dv">2</span>)</span>
+<span id="cb30-5"><a href="#cb30-5"></a>df_chain3 <span class="ot">=</span> <span class="fu">metropolis_bioassay</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3000</span>, <span class="dv">1000</span>, bioassay<span class="sc">$</span>x, bioassay<span class="sc">$</span>y, bioassay<span class="sc">$</span>n, <span class="dv">3</span>)</span>
+<span id="cb30-6"><a href="#cb30-6"></a>df_chain4 <span class="ot">=</span> <span class="fu">metropolis_bioassay</span>(<span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3000</span>, <span class="dv">1000</span>, bioassay<span class="sc">$</span>x, bioassay<span class="sc">$</span>y, bioassay<span class="sc">$</span>n, <span class="dv">4</span>)</span>
+<span id="cb30-7"><a href="#cb30-7"></a></span>
+<span id="cb30-8"><a href="#cb30-8"></a>df_combined_samples <span class="ot">&lt;-</span> <span class="fu">rbind</span>(df_chain1, df_chain2, df_chain3, df_chain4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Visualize trace plots with the code below. Have a look at <a href="http://mc-stan.org/bayesplot/reference/MCMC-traces.html#examples"><code>bayesplot</code> trace plot examples</a> and tune your plot if wanted.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="co"># Useful functions: mcmc_trace (from bayesplot)</span></span>
-<span id="cb30-2"><a href="#cb30-2"></a><span class="fu">mcmc_trace</span>(df_combined_samples, <span class="at">pars=</span><span class="fu">c</span>(<span class="st">"alpha"</span>, <span class="st">"beta"</span>)) <span class="sc">+</span> <span class="fu">scale_colour_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">"#000000"</span>, <span class="st">"#E69F00"</span>, <span class="st">"#56B4E9"</span>, <span class="st">"#009E73"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="co"># Useful functions: mcmc_trace (from bayesplot)</span></span>
+<span id="cb31-2"><a href="#cb31-2"></a><span class="fu">mcmc_trace</span>(df_combined_samples, <span class="at">pars=</span><span class="fu">c</span>(<span class="st">"alpha"</span>, <span class="st">"beta"</span>)) <span class="sc">+</span> <span class="fu">scale_colour_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">"#000000"</span>, <span class="st">"#E69F00"</span>, <span class="st">"#56B4E9"</span>, <span class="st">"#009E73"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Scale for colour is already present.
 Adding another scale for colour, which will replace the existing scale.</code></pre>
 </div>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="template5_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
+<p><img src="template5_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>After looking at trace plots, compute Rhat values for both alpha and beta, along with the <code>ess_mean</code> as well as ess_quantile for the 25th quantile. If you’re unsure about the below, <a href="https://avehtari.github.io/BDA_R_demos/demos_ch11/demo11_5.html">this demo provides more details on how to use the posterior and bayesplot package</a>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="co"># To compute this, first convert to a draws_df object</span></span>
-<span id="cb32-2"><a href="#cb32-2"></a><span class="fu">names</span>(df_combined_samples)[<span class="fu">names</span>(df_combined_samples) <span class="sc">==</span> <span class="st">'Chain'</span>] <span class="ot">&lt;-</span> <span class="st">'.chain'</span></span>
-<span id="cb32-3"><a href="#cb32-3"></a>draws <span class="ot">&lt;-</span> <span class="fu">as_draws_df</span>(df_combined_samples)</span>
-<span id="cb32-4"><a href="#cb32-4"></a></span>
-<span id="cb32-5"><a href="#cb32-5"></a><span class="co"># You can get what you need from this summary</span></span>
-<span id="cb32-6"><a href="#cb32-6"></a><span class="fu">summarise_draws</span>(draws, <span class="at">Rhat=</span>rhat_basic, <span class="at">ESS=</span> ess_mean, <span class="sc">~</span><span class="fu">ess_quantile</span>(.x, <span class="at">probs =</span> <span class="fl">0.25</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="co"># To compute this, first convert to a draws_df object</span></span>
+<span id="cb33-2"><a href="#cb33-2"></a><span class="fu">names</span>(df_combined_samples)[<span class="fu">names</span>(df_combined_samples) <span class="sc">==</span> <span class="st">'Chain'</span>] <span class="ot">&lt;-</span> <span class="st">'.chain'</span></span>
+<span id="cb33-3"><a href="#cb33-3"></a>draws <span class="ot">&lt;-</span> <span class="fu">as_draws_df</span>(df_combined_samples)</span>
+<span id="cb33-4"><a href="#cb33-4"></a></span>
+<span id="cb33-5"><a href="#cb33-5"></a><span class="co"># You can get what you need from this summary</span></span>
+<span id="cb33-6"><a href="#cb33-6"></a><span class="fu">summarise_draws</span>(draws, <span class="at">Rhat=</span>rhat_basic, <span class="at">ESS=</span> ess_mean, <span class="sc">~</span><span class="fu">ess_quantile</span>(.x, <span class="at">probs =</span> <span class="fl">0.25</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 4
   variable  Rhat   ESS ess_q25
-  &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+  &lt;chr&gt;    &lt;num&gt; &lt;num&gt;   &lt;num&gt;
 1 alpha     2.29  4.99   18.9 
 2 beta      2.28  5.01    9.69</code></pre>
 </div>
 </div>
 <p>Plot the draws for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> (scatter plot) and include this plot in your report. You can compare the results to BDA3 Figure 3.3b to verify that your code gives sensible results. Notice though that the results in Figure 3.3b are generated from the posterior with a uniform prior, so even when if your algorithm works perfectly, the results will look slightly different (although fairly similar).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a><span class="co"># Useful functions: mcmc_scatter (from bayesplot)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="co"># Useful functions: mcmc_scatter (from bayesplot)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
@@ -670,15 +575,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
-  const isCodeAnnotation = (el) => {
-    for (const clz of el.classList) {
-      if (clz.startsWith('code-annotation-')) {                     
-        return true;
-      }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
     }
-    return false;
-  }
-  const onCopySuccess = function(e) {
+  });
+  clipboard.on('success', function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -710,29 +612,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
-  }
-  const getTextToCopy = function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-  }
-  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-    text: getTextToCopy
   });
-  clipboard.on('success', onCopySuccess);
-  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
-    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-      text: getTextToCopy,
-      container: window.document.getElementById('quarto-embedded-source-code-modal')
-    });
-    clipboardModal.on('success', onCopySuccess);
-  }
   const viewSource = window.document.getElementById('quarto-view-source') ||
                      window.document.getElementById('quarto-code-tools-source');
   if (viewSource) {
@@ -784,27 +664,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   if (showAllCode) {
     showAllCode.addEventListener("click", toggleCodeHandler(true));
   }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-    var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
-    }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-        // undo the damage that might have been done by quarto-nav.js in the case of
-        // links that we want to consider external
-        if (link.dataset.originalHref !== undefined) {
-          link.href = link.dataset.originalHref;
-        }
-      }
-    }
-  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+  function tippyHover(el, contentFn) {
     const config = {
       allowHTML: true,
+      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -814,17 +677,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start',
+      placement: 'bottom-start'
     };
-    if (contentFn) {
-      config.content = contentFn;
-    }
-    if (onTriggerFn) {
-      config.onTrigger = onTriggerFn;
-    }
-    if (onUntriggerFn) {
-      config.onUntrigger = onUntriggerFn;
-    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -836,245 +690,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      if (note) {
-        return note.innerHTML;
-      } else {
-        return "";
-      }
+      return note.innerHTML;
     });
   }
-  const xrefs = window.document.querySelectorAll('a.quarto-xref');
-  const processXRef = (id, note) => {
-    // Strip column container classes
-    const stripColumnClz = (el) => {
-      el.classList.remove("page-full", "page-columns");
-      if (el.children) {
-        for (const child of el.children) {
-          stripColumnClz(child);
-        }
-      }
-    }
-    stripColumnClz(note)
-    if (id === null || id.startsWith('sec-')) {
-      // Special case sections, only their first couple elements
-      const container = document.createElement("div");
-      if (note.children && note.children.length > 2) {
-        container.appendChild(note.children[0].cloneNode(true));
-        for (let i = 1; i < note.children.length; i++) {
-          const child = note.children[i];
-          if (child.tagName === "P" && child.innerText === "") {
-            continue;
-          } else {
-            container.appendChild(child.cloneNode(true));
-            break;
-          }
-        }
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(container);
-        }
-        return container.innerHTML
-      } else {
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(note);
-        }
-        return note.innerHTML;
-      }
-    } else {
-      // Remove any anchor links if they are present
-      const anchorLink = note.querySelector('a.anchorjs-link');
-      if (anchorLink) {
-        anchorLink.remove();
-      }
-      if (window.Quarto?.typesetMath) {
-        window.Quarto.typesetMath(note);
-      }
-      // TODO in 1.5, we should make sure this works without a callout special case
-      if (note.classList.contains("callout")) {
-        return note.outerHTML;
-      } else {
-        return note.innerHTML;
-      }
-    }
-  }
-  for (var i=0; i<xrefs.length; i++) {
-    const xref = xrefs[i];
-    tippyHover(xref, undefined, function(instance) {
-      instance.disable();
-      let url = xref.getAttribute('href');
-      let hash = undefined; 
-      if (url.startsWith('#')) {
-        hash = url;
-      } else {
-        try { hash = new URL(url).hash; } catch {}
-      }
-      if (hash) {
-        const id = hash.replace(/^#\/?/, "");
-        const note = window.document.getElementById(id);
-        if (note !== null) {
-          try {
-            const html = processXRef(id, note.cloneNode(true));
-            instance.setContent(html);
-          } finally {
-            instance.enable();
-            instance.show();
-          }
-        } else {
-          // See if we can fetch this
-          fetch(url.split('#')[0])
-          .then(res => res.text())
-          .then(html => {
-            const parser = new DOMParser();
-            const htmlDoc = parser.parseFromString(html, "text/html");
-            const note = htmlDoc.getElementById(id);
-            if (note !== null) {
-              const html = processXRef(id, note);
-              instance.setContent(html);
-            } 
-          }).finally(() => {
-            instance.enable();
-            instance.show();
-          });
-        }
-      } else {
-        // See if we can fetch a full url (with no hash to target)
-        // This is a special case and we should probably do some content thinning / targeting
-        fetch(url)
-        .then(res => res.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const htmlDoc = parser.parseFromString(html, "text/html");
-          const note = htmlDoc.querySelector('main.content');
-          if (note !== null) {
-            // This should only happen for chapter cross references
-            // (since there is no id in the URL)
-            // remove the first header
-            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
-              note.children[0].remove();
-            }
-            const html = processXRef(null, note);
-            instance.setContent(html);
-          } 
-        }).finally(() => {
-          instance.enable();
-          instance.show();
-        });
-      }
-    }, function(instance) {
-    });
-  }
-      let selectedAnnoteEl;
-      const selectorForAnnotation = ( cell, annotation) => {
-        let cellAttr = 'data-code-cell="' + cell + '"';
-        let lineAttr = 'data-code-annotation="' +  annotation + '"';
-        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
-        return selector;
-      }
-      const selectCodeLines = (annoteEl) => {
-        const doc = window.document;
-        const targetCell = annoteEl.getAttribute("data-target-cell");
-        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
-        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
-        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
-        const lineIds = lines.map((line) => {
-          return targetCell + "-" + line;
-        })
-        let top = null;
-        let height = null;
-        let parent = null;
-        if (lineIds.length > 0) {
-            //compute the position of the single el (top and bottom and make a div)
-            const el = window.document.getElementById(lineIds[0]);
-            top = el.offsetTop;
-            height = el.offsetHeight;
-            parent = el.parentElement.parentElement;
-          if (lineIds.length > 1) {
-            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-            height = bottom - top;
-          }
-          if (top !== null && height !== null && parent !== null) {
-            // cook up a div (if necessary) and position it 
-            let div = window.document.getElementById("code-annotation-line-highlight");
-            if (div === null) {
-              div = window.document.createElement("div");
-              div.setAttribute("id", "code-annotation-line-highlight");
-              div.style.position = 'absolute';
-              parent.appendChild(div);
-            }
-            div.style.top = top - 2 + "px";
-            div.style.height = height + 4 + "px";
-            div.style.left = 0;
-            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-            if (gutterDiv === null) {
-              gutterDiv = window.document.createElement("div");
-              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-              gutterDiv.style.position = 'absolute';
-              const codeCell = window.document.getElementById(targetCell);
-              const gutter = codeCell.querySelector('.code-annotation-gutter');
-              gutter.appendChild(gutterDiv);
-            }
-            gutterDiv.style.top = top - 2 + "px";
-            gutterDiv.style.height = height + 4 + "px";
-          }
-          selectedAnnoteEl = annoteEl;
-        }
-      };
-      const unselectCodeLines = () => {
-        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
-        elementsIds.forEach((elId) => {
-          const div = window.document.getElementById(elId);
-          if (div) {
-            div.remove();
-          }
-        });
-        selectedAnnoteEl = undefined;
-      };
-        // Handle positioning of the toggle
-    window.addEventListener(
-      "resize",
-      throttle(() => {
-        elRect = undefined;
-        if (selectedAnnoteEl) {
-          selectCodeLines(selectedAnnoteEl);
-        }
-      }, 10)
-    );
-    function throttle(fn, ms) {
-    let throttle = false;
-    let timer;
-      return (...args) => {
-        if(!throttle) { // first call gets through
-            fn.apply(this, args);
-            throttle = true;
-        } else { // all the others get throttled
-            if(timer) clearTimeout(timer); // cancel #2
-            timer = setTimeout(() => {
-              fn.apply(this, args);
-              timer = throttle = false;
-            }, ms);
-        }
-      };
-    }
-      // Attach click handler to the DT
-      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
-      for (const annoteDlNode of annoteDls) {
-        annoteDlNode.addEventListener('click', (event) => {
-          const clickedEl = event.target;
-          if (clickedEl !== selectedAnnoteEl) {
-            unselectCodeLines();
-            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
-            if (activeEl) {
-              activeEl.classList.remove('code-annotation-active');
-            }
-            selectCodeLines(clickedEl);
-            clickedEl.classList.add('code-annotation-active');
-          } else {
-            // Unselect the line
-            unselectCodeLines();
-            clickedEl.classList.remove('code-annotation-active');
-          }
-        });
-      }
   const findCites = (el) => {
     const parentEl = el.parentElement;
     if (parentEl) {
@@ -1113,212 +731,199 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
-</script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
-      <a href="./template4.html" class="pagination-link" aria-label="Notebook for Assignment 4">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Notebook for Assignment 4</span>
-      </a>          
-  </div>
-  <div class="nav-page nav-page-next">
-      <a href="./template6.html" class="pagination-link" aria-label="Notebook for Assignment 6">
-        <span class="nav-page-text">Notebook for Assignment 6</span> <i class="bi bi-arrow-right-short"></i>
-      </a>
-  </div>
-</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb35" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb35-1"><a href="#cb35-1"></a><span class="co">---</span></span>
-<span id="cb35-2"><a href="#cb35-2"></a><span class="an">title:</span><span class="co"> "Notebook for Assignment 5"</span></span>
-<span id="cb35-3"><a href="#cb35-3"></a><span class="an">author:</span><span class="co"> "Aki Vehtari et al."</span></span>
-<span id="cb35-4"><a href="#cb35-4"></a><span class="an">format:</span></span>
-<span id="cb35-5"><a href="#cb35-5"></a><span class="co">  html:</span></span>
-<span id="cb35-6"><a href="#cb35-6"></a><span class="co">    toc: true</span></span>
-<span id="cb35-7"><a href="#cb35-7"></a><span class="co">    code-tools: true</span></span>
-<span id="cb35-8"><a href="#cb35-8"></a><span class="co">    code-line-numbers: true</span></span>
-<span id="cb35-9"><a href="#cb35-9"></a><span class="co">    number-sections: true</span></span>
-<span id="cb35-10"><a href="#cb35-10"></a><span class="co">    mainfont: Georgia, serif</span></span>
-<span id="cb35-11"><a href="#cb35-11"></a><span class="an">editor:</span><span class="co"> source </span></span>
-<span id="cb35-12"><a href="#cb35-12"></a><span class="co">---</span></span>
-<span id="cb35-13"><a href="#cb35-13"></a></span>
-<span id="cb35-14"><a href="#cb35-14"></a><span class="fu"># General information</span></span>
-<span id="cb35-15"><a href="#cb35-15"></a></span>
-<span id="cb35-16"><a href="#cb35-16"></a>This assignment is related to Lecture 5 and Chapters 10 and 11.</span>
-<span id="cb35-17"><a href="#cb35-17"></a></span>
-<span id="cb35-18"><a href="#cb35-18"></a>If you are not using <span class="co">[</span><span class="ot">JupyterHub</span><span class="co">](https://jupyter.cs.aalto.fi)</span> (which has all the needed packages pre-installed), and want to make the assignment on your own computer, you may use a <span class="co">[</span><span class="ot">docker container</span><span class="co">](docker.html)</span> that includes all the necessary software packages, too.</span>
-<span id="cb35-19"><a href="#cb35-19"></a></span>
-<span id="cb35-20"><a href="#cb35-20"></a>::: hint</span>
-<span id="cb35-21"><a href="#cb35-21"></a>**Reading instructions:**</span>
-<span id="cb35-22"><a href="#cb35-22"></a></span>
-<span id="cb35-23"><a href="#cb35-23"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">**The reading instructions for BDA3 Chapter 10**</span><span class="co">](../BDA3_notes.html#ch10)</span>.</span>
-<span id="cb35-24"><a href="#cb35-24"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">**The reading instructions for BDA3 Chapter 11**</span><span class="co">](../BDA3_notes.html#ch11)</span>.</span>
-<span id="cb35-25"><a href="#cb35-25"></a>:::</span>
-<span id="cb35-26"><a href="#cb35-26"></a></span>
-<span id="cb35-27"><a href="#cb35-27"></a>{{&lt; include includes/_general_cloze_instructions.md &gt;}}</span>
-<span id="cb35-28"><a href="#cb35-28"></a></span>
-<span id="cb35-29"><a href="#cb35-29"></a>::: {.callout-warning collapse="false"}</span>
-<span id="cb35-30"><a href="#cb35-30"></a><span class="fu">## Setup</span></span>
-<span id="cb35-31"><a href="#cb35-31"></a></span>
-<span id="cb35-32"><a href="#cb35-32"></a>The following will set-up <span class="co">[</span><span class="ot">`markmyassignment`</span><span class="co">](https://github.com/MansMeg/markmyassignment)</span> to check your functions at the end of the notebook:</span>
-<span id="cb35-33"><a href="#cb35-33"></a></span>
-<span id="cb35-36"><a href="#cb35-36"></a><span class="in">```{r}</span></span>
-<span id="cb35-37"><a href="#cb35-37"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(markmyassignment)){</span>
-<span id="cb35-38"><a href="#cb35-38"></a>    <span class="fu">install.packages</span>(<span class="st">"markmyassignment"</span>)</span>
-<span id="cb35-39"><a href="#cb35-39"></a>    <span class="fu">library</span>(markmyassignment)</span>
-<span id="cb35-40"><a href="#cb35-40"></a>}</span>
-<span id="cb35-41"><a href="#cb35-41"></a>assignment_path <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">"https://github.com/avehtari/BDA_course_Aalto/"</span>,</span>
-<span id="cb35-42"><a href="#cb35-42"></a><span class="st">"blob/master/tests/assignment5.yml"</span>, <span class="at">sep=</span><span class="st">""</span>)</span>
-<span id="cb35-43"><a href="#cb35-43"></a><span class="fu">set_assignment</span>(assignment_path)</span>
-<span id="cb35-44"><a href="#cb35-44"></a><span class="in">```</span></span>
-<span id="cb35-45"><a href="#cb35-45"></a></span>
-<span id="cb35-46"><a href="#cb35-46"></a>The following installs and loads the <span class="in">`aaltobda`</span> package:</span>
-<span id="cb35-47"><a href="#cb35-47"></a></span>
-<span id="cb35-50"><a href="#cb35-50"></a><span class="in">```{r}</span></span>
-<span id="cb35-51"><a href="#cb35-51"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(aaltobda)){</span>
-<span id="cb35-52"><a href="#cb35-52"></a>    <span class="fu">install.packages</span>(<span class="st">"aaltobda"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://avehtari.github.io/BDA_course_Aalto/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span>
-<span id="cb35-53"><a href="#cb35-53"></a>    <span class="fu">library</span>(aaltobda)</span>
-<span id="cb35-54"><a href="#cb35-54"></a>}</span>
-<span id="cb35-55"><a href="#cb35-55"></a><span class="in">```</span></span>
-<span id="cb35-56"><a href="#cb35-56"></a></span>
-<span id="cb35-57"><a href="#cb35-57"></a>The following installs and loads the <span class="co">[</span><span class="ot">`latex2exp` package</span><span class="co">](https://github.com/stefano-meschiari/latex2exp)</span>, which allows us to use LaTeX in plots:</span>
-<span id="cb35-58"><a href="#cb35-58"></a></span>
-<span id="cb35-61"><a href="#cb35-61"></a><span class="in">```{r}</span></span>
-<span id="cb35-62"><a href="#cb35-62"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(latex2exp)){</span>
-<span id="cb35-63"><a href="#cb35-63"></a>    <span class="fu">install.packages</span>(<span class="st">"latex2exp"</span>)</span>
-<span id="cb35-64"><a href="#cb35-64"></a>    <span class="fu">library</span>(latex2exp)</span>
-<span id="cb35-65"><a href="#cb35-65"></a>}</span>
-<span id="cb35-66"><a href="#cb35-66"></a><span class="in">```</span></span>
-<span id="cb35-67"><a href="#cb35-67"></a></span>
-<span id="cb35-68"><a href="#cb35-68"></a>The following installs and loads the <span class="co">[</span><span class="ot">`posterior` package</span><span class="co">](https://github.com/stan-dev/posterior)</span> which imports the <span class="in">`rhat_basic()`</span> function:</span>
-<span id="cb35-69"><a href="#cb35-69"></a></span>
-<span id="cb35-72"><a href="#cb35-72"></a><span class="in">```{r}</span></span>
-<span id="cb35-73"><a href="#cb35-73"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(posterior)){</span>
-<span id="cb35-74"><a href="#cb35-74"></a>    <span class="fu">install.packages</span>(<span class="st">"posterior"</span>)</span>
-<span id="cb35-75"><a href="#cb35-75"></a>    <span class="fu">library</span>(posterior)</span>
-<span id="cb35-76"><a href="#cb35-76"></a>}</span>
-<span id="cb35-77"><a href="#cb35-77"></a><span class="in">```</span></span>
-<span id="cb35-78"><a href="#cb35-78"></a></span>
-<span id="cb35-79"><a href="#cb35-79"></a>The following installs and loads the <span class="co">[</span><span class="ot">`ggplot2` package</span><span class="co">](https://ggplot2.tidyverse.org/)</span> and the <span class="co">[</span><span class="ot">`bayesplot` package</span><span class="co">](https://mc-stan.org/bayesplot/index.html)</span></span>
-<span id="cb35-80"><a href="#cb35-80"></a></span>
-<span id="cb35-83"><a href="#cb35-83"></a><span class="in">```{r}</span></span>
-<span id="cb35-84"><a href="#cb35-84"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(ggplot2)){</span>
-<span id="cb35-85"><a href="#cb35-85"></a>    <span class="fu">install.packages</span>(<span class="st">"ggplot2"</span>)</span>
-<span id="cb35-86"><a href="#cb35-86"></a>    <span class="fu">library</span>(ggplot2)</span>
-<span id="cb35-87"><a href="#cb35-87"></a>}</span>
-<span id="cb35-88"><a href="#cb35-88"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(bayesplot)){</span>
-<span id="cb35-89"><a href="#cb35-89"></a>    <span class="fu">install.packages</span>(<span class="st">"bayesplot"</span>)</span>
-<span id="cb35-90"><a href="#cb35-90"></a>    <span class="fu">library</span>(bayesplot)</span>
-<span id="cb35-91"><a href="#cb35-91"></a>}</span>
-<span id="cb35-92"><a href="#cb35-92"></a><span class="in">```</span></span>
-<span id="cb35-93"><a href="#cb35-93"></a>:::</span>
-<span id="cb35-94"><a href="#cb35-94"></a></span>
-<span id="cb35-95"><a href="#cb35-95"></a><span class="fu"># Generalized linear model: Bioassay model with Metropolis algorithm</span></span>
-<span id="cb35-96"><a href="#cb35-96"></a></span>
-<span id="cb35-97"><a href="#cb35-97"></a>Metropolis algorithm: Replicate the computations for the bioassay example of BDA3 Section 3.7 using the Metropolis algorithm. The Metropolis algorithm is described in BDA3 Chapter 11.2. More information on the bioassay data can be found in Section 3.7 in BDA3, and in <span class="co">[</span><span class="ot">**Chapter 3 notes**</span><span class="co">](../BDA3_notes.html#ch3)</span>.</span>
-<span id="cb35-98"><a href="#cb35-98"></a></span>
-<span id="cb35-99"><a href="#cb35-99"></a>Below you are given a code that implements Metropolis algorithm. It contains two functions - density ratio that computes ratio of joint distributions using log densities and metropolis_bioassay that performs sampling. Reasons behind using log densities are explained on BDA3 page 261 and Lecture video 4.1. Remember that $p_1/p_0=\exp(\log(p_1)-\log(p_0))$. We use the Gaussian prior as in Assignment 4, that is $$</span>
-<span id="cb35-100"><a href="#cb35-100"></a>\begin{aligned}</span>
-<span id="cb35-101"><a href="#cb35-101"></a>    \begin{bmatrix}</span>
-<span id="cb35-102"><a href="#cb35-102"></a>    \alpha <span class="sc">\\</span> \beta</span>
-<span id="cb35-103"><a href="#cb35-103"></a>    \end{bmatrix}</span>
-<span id="cb35-104"><a href="#cb35-104"></a>    \sim</span>
-<span id="cb35-105"><a href="#cb35-105"></a>    \text{N} \left( \mu_0,  \Sigma_0 \right), \qquad</span>
-<span id="cb35-106"><a href="#cb35-106"></a>    \text{where} \quad</span>
-<span id="cb35-107"><a href="#cb35-107"></a>     \mu_0 = \begin{bmatrix} 0 <span class="sc">\\</span> 10 \end{bmatrix} \quad \text{and} \quad</span>
-<span id="cb35-108"><a href="#cb35-108"></a>     \Sigma_0 = \begin{bmatrix} 2^2 &amp; 12 <span class="sc">\\</span> 12 &amp; 10^2 \end{bmatrix}.</span>
-<span id="cb35-109"><a href="#cb35-109"></a>\end{aligned}$$</span>
-<span id="cb35-110"><a href="#cb35-110"></a></span>
-<span id="cb35-111"><a href="#cb35-111"></a>However, this code contains 3 errors. The lines with errors are marked as:</span>
-<span id="cb35-112"><a href="#cb35-112"></a></span>
-<span id="cb35-115"><a href="#cb35-115"></a><span class="in">```{r}</span></span>
-<span id="cb35-116"><a href="#cb35-116"></a><span class="do">### error x</span></span>
-<span id="cb35-117"><a href="#cb35-117"></a></span>
-<span id="cb35-118"><a href="#cb35-118"></a><span class="do">### error x</span></span>
-<span id="cb35-119"><a href="#cb35-119"></a><span class="in">```</span></span>
-<span id="cb35-120"><a href="#cb35-120"></a></span>
-<span id="cb35-121"><a href="#cb35-121"></a>Your task is to find these errors, correct them and answer corresponding questions in MyCourses. Note that <span class="in">`bioassaylp()`</span> from <span class="in">`aaltobda`</span> package evaluates the log-likelihood for given $\alpha$ and $\beta$. As for proposal distribution we used simple normal distributions $\alpha^* \sim N(\alpha_{t-1}, \sigma = \alpha_\sigma)$ and $\beta^* \sim N(\beta_{t-1}, \sigma = \beta_\sigma)$. Efficient proposals are discussed in BDA3 p. 295--297 (not part of the course). In real-life a pre-run could be made with an automatic adaptive control to adapt the proposal distribution.</span>
-<span id="cb35-122"><a href="#cb35-122"></a></span>
-<span id="cb35-125"><a href="#cb35-125"></a><span class="in">```{r}</span></span>
-<span id="cb35-126"><a href="#cb35-126"></a><span class="fu">data</span>(<span class="st">"bioassay"</span>)</span>
-<span id="cb35-127"><a href="#cb35-127"></a>density_ratio <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha_propose, alpha_previous, beta_propose, beta_previous, x, y, n){</span>
-<span id="cb35-128"><a href="#cb35-128"></a>        prior_mean <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)</span>
-<span id="cb35-129"><a href="#cb35-129"></a>    prior_sigma <span class="ot">=</span> <span class="fu">cbind</span>(<span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">12</span>), <span class="fu">c</span>(<span class="dv">12</span>, <span class="dv">100</span>))</span>
-<span id="cb35-130"><a href="#cb35-130"></a>    <span class="do">### error 1</span></span>
-<span id="cb35-131"><a href="#cb35-131"></a>        <span class="fu">bioassaylp</span>(alpha_propose, beta_propose, x, y, n)</span>
-<span id="cb35-132"><a href="#cb35-132"></a>        <span class="sc">-</span> <span class="fu">bioassaylp</span>(alpha_previous, beta_previous, x, y, n)</span>
-<span id="cb35-133"><a href="#cb35-133"></a>        <span class="sc">+</span> <span class="fu">dmvnorm</span>(<span class="fu">c</span>(alpha_propose, beta_propose), prior_mean, prior_sigma, <span class="cn">TRUE</span>)</span>
-<span id="cb35-134"><a href="#cb35-134"></a>        <span class="sc">-</span> <span class="fu">dmvnorm</span>(<span class="fu">c</span>(alpha_previous, beta_previous), prior_mean, prior_sigma, <span class="cn">TRUE</span>)</span>
-<span id="cb35-135"><a href="#cb35-135"></a>    <span class="do">### error 1</span></span>
-<span id="cb35-136"><a href="#cb35-136"></a>}</span>
-<span id="cb35-137"><a href="#cb35-137"></a></span>
-<span id="cb35-138"><a href="#cb35-138"></a>metropolis_bioassay <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha_initial, beta_initial, alpha_sigma, beta_sigma, no_draws, warmup_len, x, y, n, chain_number){</span>
-<span id="cb35-139"><a href="#cb35-139"></a>    <span class="fu">data.frame</span>(</span>
-<span id="cb35-140"><a href="#cb35-140"></a>        <span class="at">alpha=</span><span class="fu">c</span>(alpha_initial, alpha_initial<span class="sc">+</span>alpha_sigma, alpha_initial<span class="sc">-</span>alpha_sigma),</span>
-<span id="cb35-141"><a href="#cb35-141"></a>        <span class="at">beta=</span><span class="fu">c</span>(beta_initial, beta_initial<span class="sc">+</span>beta_sigma, beta_initial<span class="sc">-</span>beta_sigma)</span>
-<span id="cb35-142"><a href="#cb35-142"></a>    )</span>
-<span id="cb35-143"><a href="#cb35-143"></a>    alpha_previous <span class="ot">=</span> alpha_initial</span>
-<span id="cb35-144"><a href="#cb35-144"></a>    beta_previous <span class="ot">=</span> beta_initial</span>
-<span id="cb35-145"><a href="#cb35-145"></a>    alpha_rv <span class="ot">=</span> <span class="fu">c</span>()</span>
-<span id="cb35-146"><a href="#cb35-146"></a>    beta_rv <span class="ot">=</span> <span class="fu">c</span>()</span>
-<span id="cb35-147"><a href="#cb35-147"></a>    <span class="cf">for</span>(draw <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>no_draws){</span>
-<span id="cb35-148"><a href="#cb35-148"></a>        alpha_propose <span class="ot">=</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, alpha_previous, alpha_sigma)</span>
-<span id="cb35-149"><a href="#cb35-149"></a>        beta_propose <span class="ot">=</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, beta_previous, beta_sigma)</span>
-<span id="cb35-150"><a href="#cb35-150"></a>        <span class="do">### error 2</span></span>
-<span id="cb35-151"><a href="#cb35-151"></a>        <span class="cf">if</span>(<span class="fu">runif</span>(<span class="dv">1</span>) <span class="sc">&gt;</span> <span class="fu">density_ratio</span>(alpha_propose, alpha_previous, beta_propose, beta_previous, x, y, n))</span>
-<span id="cb35-152"><a href="#cb35-152"></a>        <span class="do">### error 2</span></span>
-<span id="cb35-153"><a href="#cb35-153"></a>          {</span>
-<span id="cb35-154"><a href="#cb35-154"></a>            alpha_previous <span class="ot">=</span> alpha_propose</span>
-<span id="cb35-155"><a href="#cb35-155"></a>            beta_previous <span class="ot">=</span> beta_propose</span>
-<span id="cb35-156"><a href="#cb35-156"></a>          }</span>
-<span id="cb35-157"><a href="#cb35-157"></a>      <span class="do">### error 3</span></span>
-<span id="cb35-158"><a href="#cb35-158"></a>        alpha_rv <span class="ot">=</span> <span class="fu">c</span>(alpha_rv, alpha_propose)</span>
-<span id="cb35-159"><a href="#cb35-159"></a>        beta_rv <span class="ot">=</span> <span class="fu">c</span>(beta_rv, beta_propose)</span>
-<span id="cb35-160"><a href="#cb35-160"></a>      <span class="do">### error 3</span></span>
-<span id="cb35-161"><a href="#cb35-161"></a>    }</span>
-<span id="cb35-162"><a href="#cb35-162"></a>    <span class="fu">data.frame</span>(<span class="at">alpha=</span><span class="fu">tail</span>(alpha_rv,warmup_len), <span class="at">beta=</span><span class="fu">tail</span>(beta_rv, warmup_len), <span class="at">Chain=</span><span class="fu">rep</span>(chain_number, <span class="at">each=</span>no_draws <span class="sc">-</span> warmup_len))</span>
-<span id="cb35-163"><a href="#cb35-163"></a>}</span>
-<span id="cb35-164"><a href="#cb35-164"></a></span>
-<span id="cb35-165"><a href="#cb35-165"></a><span class="in">```</span></span>
-<span id="cb35-166"><a href="#cb35-166"></a></span>
-<span id="cb35-169"><a href="#cb35-169"></a><span class="in">```{r}</span></span>
-<span id="cb35-170"><a href="#cb35-170"></a><span class="fu">set.seed</span>(<span class="dv">4911</span>)</span>
-<span id="cb35-171"><a href="#cb35-171"></a></span>
-<span id="cb35-172"><a href="#cb35-172"></a>df_chain1 <span class="ot">=</span> <span class="fu">metropolis_bioassay</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3000</span>, <span class="dv">1000</span>, bioassay<span class="sc">$</span>x, bioassay<span class="sc">$</span>y, bioassay<span class="sc">$</span>n, <span class="dv">1</span>)</span>
-<span id="cb35-173"><a href="#cb35-173"></a>df_chain2 <span class="ot">=</span> <span class="fu">metropolis_bioassay</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3000</span>, <span class="dv">1000</span>, bioassay<span class="sc">$</span>x, bioassay<span class="sc">$</span>y, bioassay<span class="sc">$</span>n, <span class="dv">2</span>)</span>
-<span id="cb35-174"><a href="#cb35-174"></a>df_chain3 <span class="ot">=</span> <span class="fu">metropolis_bioassay</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3000</span>, <span class="dv">1000</span>, bioassay<span class="sc">$</span>x, bioassay<span class="sc">$</span>y, bioassay<span class="sc">$</span>n, <span class="dv">3</span>)</span>
-<span id="cb35-175"><a href="#cb35-175"></a>df_chain4 <span class="ot">=</span> <span class="fu">metropolis_bioassay</span>(<span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3000</span>, <span class="dv">1000</span>, bioassay<span class="sc">$</span>x, bioassay<span class="sc">$</span>y, bioassay<span class="sc">$</span>n, <span class="dv">4</span>)</span>
-<span id="cb35-176"><a href="#cb35-176"></a></span>
-<span id="cb35-177"><a href="#cb35-177"></a>df_combined_samples <span class="ot">&lt;-</span> <span class="fu">rbind</span>(df_chain1, df_chain2, df_chain3, df_chain4)</span>
-<span id="cb35-178"><a href="#cb35-178"></a><span class="in">```</span></span>
-<span id="cb35-179"><a href="#cb35-179"></a></span>
-<span id="cb35-180"><a href="#cb35-180"></a>Visualize trace plots with the code below. Have a look at <span class="co">[</span><span class="ot">`bayesplot` trace plot examples</span><span class="co">](http://mc-stan.org/bayesplot/reference/MCMC-traces.html#examples)</span> and tune your plot if wanted.</span>
-<span id="cb35-181"><a href="#cb35-181"></a></span>
-<span id="cb35-184"><a href="#cb35-184"></a><span class="in">```{r}</span></span>
-<span id="cb35-185"><a href="#cb35-185"></a><span class="co"># Useful functions: mcmc_trace (from bayesplot)</span></span>
-<span id="cb35-186"><a href="#cb35-186"></a><span class="fu">mcmc_trace</span>(df_combined_samples, <span class="at">pars=</span><span class="fu">c</span>(<span class="st">"alpha"</span>, <span class="st">"beta"</span>)) <span class="sc">+</span> <span class="fu">scale_colour_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">"#000000"</span>, <span class="st">"#E69F00"</span>, <span class="st">"#56B4E9"</span>, <span class="st">"#009E73"</span>))</span>
-<span id="cb35-187"><a href="#cb35-187"></a></span>
-<span id="cb35-188"><a href="#cb35-188"></a><span class="in">```</span></span>
-<span id="cb35-189"><a href="#cb35-189"></a></span>
-<span id="cb35-190"><a href="#cb35-190"></a>After looking at trace plots, compute Rhat values for both alpha and beta, along with the <span class="in">`ess_mean`</span> as well as ess_quantile for the 25th quantile. If you're unsure about the below, <span class="co">[</span><span class="ot">this demo provides more details on how to use the posterior and bayesplot package</span><span class="co">](https://avehtari.github.io/BDA_R_demos/demos_ch11/demo11_5.html)</span>.</span>
-<span id="cb35-191"><a href="#cb35-191"></a></span>
-<span id="cb35-194"><a href="#cb35-194"></a><span class="in">```{r}</span></span>
-<span id="cb35-195"><a href="#cb35-195"></a><span class="co"># To compute this, first convert to a draws_df object</span></span>
-<span id="cb35-196"><a href="#cb35-196"></a><span class="fu">names</span>(df_combined_samples)[<span class="fu">names</span>(df_combined_samples) <span class="sc">==</span> <span class="st">'Chain'</span>] <span class="ot">&lt;-</span> <span class="st">'.chain'</span></span>
-<span id="cb35-197"><a href="#cb35-197"></a>draws <span class="ot">&lt;-</span> <span class="fu">as_draws_df</span>(df_combined_samples)</span>
-<span id="cb35-198"><a href="#cb35-198"></a></span>
-<span id="cb35-199"><a href="#cb35-199"></a><span class="co"># You can get what you need from this summary</span></span>
-<span id="cb35-200"><a href="#cb35-200"></a><span class="fu">summarise_draws</span>(draws, <span class="at">Rhat=</span>rhat_basic, <span class="at">ESS=</span> ess_mean, <span class="sc">~</span><span class="fu">ess_quantile</span>(.x, <span class="at">probs =</span> <span class="fl">0.25</span>))</span>
-<span id="cb35-201"><a href="#cb35-201"></a></span>
-<span id="cb35-202"><a href="#cb35-202"></a></span>
-<span id="cb35-203"><a href="#cb35-203"></a><span class="in">```</span></span>
-<span id="cb35-204"><a href="#cb35-204"></a></span>
-<span id="cb35-205"><a href="#cb35-205"></a>Plot the draws for $\alpha$ and $\beta$ (scatter plot) and include this plot in your report. You can compare the results to BDA3 Figure 3.3b to verify that your code gives sensible results. Notice though that the results in Figure 3.3b are generated from the posterior with a uniform prior, so even when if your algorithm works perfectly, the results will look slightly different (although fairly similar).</span>
-<span id="cb35-206"><a href="#cb35-206"></a></span>
-<span id="cb35-209"><a href="#cb35-209"></a><span class="in">```{r}</span></span>
-<span id="cb35-210"><a href="#cb35-210"></a><span class="co"># Useful functions: mcmc_scatter (from bayesplot)</span></span>
-<span id="cb35-211"><a href="#cb35-211"></a><span class="in">```</span></span>
-</code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb36" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb36-1"><a href="#cb36-1"></a><span class="co">---</span></span>
+<span id="cb36-2"><a href="#cb36-2"></a><span class="an">title:</span><span class="co"> "Notebook for Assignment 5"</span></span>
+<span id="cb36-3"><a href="#cb36-3"></a><span class="an">author:</span><span class="co"> "Aki Vehtari et al."</span></span>
+<span id="cb36-4"><a href="#cb36-4"></a><span class="an">format:</span></span>
+<span id="cb36-5"><a href="#cb36-5"></a><span class="co">  html:</span></span>
+<span id="cb36-6"><a href="#cb36-6"></a><span class="co">    toc: true</span></span>
+<span id="cb36-7"><a href="#cb36-7"></a><span class="co">    code-tools: true</span></span>
+<span id="cb36-8"><a href="#cb36-8"></a><span class="co">    code-line-numbers: true</span></span>
+<span id="cb36-9"><a href="#cb36-9"></a><span class="co">    number-sections: true</span></span>
+<span id="cb36-10"><a href="#cb36-10"></a><span class="co">    mainfont: Georgia, serif</span></span>
+<span id="cb36-11"><a href="#cb36-11"></a><span class="an">editor:</span><span class="co"> source </span></span>
+<span id="cb36-12"><a href="#cb36-12"></a><span class="co">---</span></span>
+<span id="cb36-13"><a href="#cb36-13"></a></span>
+<span id="cb36-14"><a href="#cb36-14"></a><span class="fu"># General information</span></span>
+<span id="cb36-15"><a href="#cb36-15"></a></span>
+<span id="cb36-16"><a href="#cb36-16"></a>This assignment is related to Lecture 5 and Chapters 10 and 11.</span>
+<span id="cb36-17"><a href="#cb36-17"></a></span>
+<span id="cb36-18"><a href="#cb36-18"></a>If you are not using <span class="co">[</span><span class="ot">JupyterHub</span><span class="co">](https://jupyter.cs.aalto.fi)</span> (which has all the needed packages pre-installed), and want to make the assignment on your own computer, you may use a <span class="co">[</span><span class="ot">docker container</span><span class="co">](docker.html)</span> that includes all the necessary software packages, too.</span>
+<span id="cb36-19"><a href="#cb36-19"></a></span>
+<span id="cb36-20"><a href="#cb36-20"></a>::: hint</span>
+<span id="cb36-21"><a href="#cb36-21"></a>**Reading instructions:**</span>
+<span id="cb36-22"><a href="#cb36-22"></a></span>
+<span id="cb36-23"><a href="#cb36-23"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">**The reading instructions for BDA3 Chapter 10**</span><span class="co">](../BDA3_notes.html#ch10)</span>.</span>
+<span id="cb36-24"><a href="#cb36-24"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">**The reading instructions for BDA3 Chapter 11**</span><span class="co">](../BDA3_notes.html#ch11)</span>.</span>
+<span id="cb36-25"><a href="#cb36-25"></a>:::</span>
+<span id="cb36-26"><a href="#cb36-26"></a></span>
+<span id="cb36-27"><a href="#cb36-27"></a>{{&lt; include includes/_general_cloze_instructions.md &gt;}}</span>
+<span id="cb36-28"><a href="#cb36-28"></a></span>
+<span id="cb36-29"><a href="#cb36-29"></a>::: {.callout-warning collapse="false"}</span>
+<span id="cb36-30"><a href="#cb36-30"></a><span class="fu">## Setup</span></span>
+<span id="cb36-31"><a href="#cb36-31"></a></span>
+<span id="cb36-32"><a href="#cb36-32"></a>The following will set-up <span class="co">[</span><span class="ot">`markmyassignment`</span><span class="co">](https://github.com/MansMeg/markmyassignment)</span> to check your functions at the end of the notebook:</span>
+<span id="cb36-33"><a href="#cb36-33"></a></span>
+<span id="cb36-36"><a href="#cb36-36"></a><span class="in">```{r}</span></span>
+<span id="cb36-37"><a href="#cb36-37"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(markmyassignment)){</span>
+<span id="cb36-38"><a href="#cb36-38"></a>    <span class="fu">install.packages</span>(<span class="st">"markmyassignment"</span>)</span>
+<span id="cb36-39"><a href="#cb36-39"></a>    <span class="fu">library</span>(markmyassignment)</span>
+<span id="cb36-40"><a href="#cb36-40"></a>}</span>
+<span id="cb36-41"><a href="#cb36-41"></a>assignment_path <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">"https://github.com/avehtari/BDA_course_Aalto/"</span>,</span>
+<span id="cb36-42"><a href="#cb36-42"></a><span class="st">"blob/master/tests/assignment5.yml"</span>, <span class="at">sep=</span><span class="st">""</span>)</span>
+<span id="cb36-43"><a href="#cb36-43"></a><span class="fu">set_assignment</span>(assignment_path)</span>
+<span id="cb36-44"><a href="#cb36-44"></a><span class="in">```</span></span>
+<span id="cb36-45"><a href="#cb36-45"></a></span>
+<span id="cb36-46"><a href="#cb36-46"></a>The following installs and loads the <span class="in">`aaltobda`</span> package:</span>
+<span id="cb36-47"><a href="#cb36-47"></a></span>
+<span id="cb36-50"><a href="#cb36-50"></a><span class="in">```{r}</span></span>
+<span id="cb36-51"><a href="#cb36-51"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(aaltobda)){</span>
+<span id="cb36-52"><a href="#cb36-52"></a>    <span class="fu">install.packages</span>(<span class="st">"aaltobda"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://avehtari.github.io/BDA_course_Aalto/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span>
+<span id="cb36-53"><a href="#cb36-53"></a>    <span class="fu">library</span>(aaltobda)</span>
+<span id="cb36-54"><a href="#cb36-54"></a>}</span>
+<span id="cb36-55"><a href="#cb36-55"></a><span class="in">```</span></span>
+<span id="cb36-56"><a href="#cb36-56"></a></span>
+<span id="cb36-57"><a href="#cb36-57"></a>The following installs and loads the <span class="co">[</span><span class="ot">`latex2exp` package</span><span class="co">](https://github.com/stefano-meschiari/latex2exp)</span>, which allows us to use LaTeX in plots:</span>
+<span id="cb36-58"><a href="#cb36-58"></a></span>
+<span id="cb36-61"><a href="#cb36-61"></a><span class="in">```{r}</span></span>
+<span id="cb36-62"><a href="#cb36-62"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(latex2exp)){</span>
+<span id="cb36-63"><a href="#cb36-63"></a>    <span class="fu">install.packages</span>(<span class="st">"latex2exp"</span>)</span>
+<span id="cb36-64"><a href="#cb36-64"></a>    <span class="fu">library</span>(latex2exp)</span>
+<span id="cb36-65"><a href="#cb36-65"></a>}</span>
+<span id="cb36-66"><a href="#cb36-66"></a><span class="in">```</span></span>
+<span id="cb36-67"><a href="#cb36-67"></a></span>
+<span id="cb36-68"><a href="#cb36-68"></a>The following installs and loads the <span class="co">[</span><span class="ot">`posterior` package</span><span class="co">](https://github.com/stan-dev/posterior)</span> which imports the <span class="in">`rhat_basic()`</span> function:</span>
+<span id="cb36-69"><a href="#cb36-69"></a></span>
+<span id="cb36-72"><a href="#cb36-72"></a><span class="in">```{r}</span></span>
+<span id="cb36-73"><a href="#cb36-73"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(posterior)){</span>
+<span id="cb36-74"><a href="#cb36-74"></a>    <span class="fu">install.packages</span>(<span class="st">"posterior"</span>)</span>
+<span id="cb36-75"><a href="#cb36-75"></a>    <span class="fu">library</span>(posterior)</span>
+<span id="cb36-76"><a href="#cb36-76"></a>}</span>
+<span id="cb36-77"><a href="#cb36-77"></a><span class="in">```</span></span>
+<span id="cb36-78"><a href="#cb36-78"></a></span>
+<span id="cb36-79"><a href="#cb36-79"></a>The following installs and loads the <span class="co">[</span><span class="ot">`ggplot2` package</span><span class="co">](https://ggplot2.tidyverse.org/)</span> and the <span class="co">[</span><span class="ot">`bayesplot` package</span><span class="co">](https://mc-stan.org/bayesplot/index.html)</span></span>
+<span id="cb36-80"><a href="#cb36-80"></a></span>
+<span id="cb36-83"><a href="#cb36-83"></a><span class="in">```{r}</span></span>
+<span id="cb36-84"><a href="#cb36-84"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(ggplot2)){</span>
+<span id="cb36-85"><a href="#cb36-85"></a>    <span class="fu">install.packages</span>(<span class="st">"ggplot2"</span>)</span>
+<span id="cb36-86"><a href="#cb36-86"></a>    <span class="fu">library</span>(ggplot2)</span>
+<span id="cb36-87"><a href="#cb36-87"></a>}</span>
+<span id="cb36-88"><a href="#cb36-88"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(bayesplot)){</span>
+<span id="cb36-89"><a href="#cb36-89"></a>    <span class="fu">install.packages</span>(<span class="st">"bayesplot"</span>)</span>
+<span id="cb36-90"><a href="#cb36-90"></a>    <span class="fu">library</span>(bayesplot)</span>
+<span id="cb36-91"><a href="#cb36-91"></a>}</span>
+<span id="cb36-92"><a href="#cb36-92"></a><span class="in">```</span></span>
+<span id="cb36-93"><a href="#cb36-93"></a>:::</span>
+<span id="cb36-94"><a href="#cb36-94"></a></span>
+<span id="cb36-95"><a href="#cb36-95"></a><span class="fu"># Generalized linear model: Bioassay model with Metropolis algorithm</span></span>
+<span id="cb36-96"><a href="#cb36-96"></a></span>
+<span id="cb36-97"><a href="#cb36-97"></a>Metropolis algorithm: Replicate the computations for the bioassay example of BDA3 Section 3.7 using the Metropolis algorithm. The Metropolis algorithm is described in BDA3 Chapter 11.2. More information on the bioassay data can be found in Section 3.7 in BDA3, and in <span class="co">[</span><span class="ot">**Chapter 3 notes**</span><span class="co">](../BDA3_notes.html#ch3)</span>.</span>
+<span id="cb36-98"><a href="#cb36-98"></a></span>
+<span id="cb36-99"><a href="#cb36-99"></a>Below you are given a code that implements Metropolis algorithm. It contains two functions - density ratio that computes ratio of joint distributions using log densities and metropolis_bioassay that performs sampling. Reasons behind using log densities are explained on BDA3 page 261 and Lecture video 4.1. Remember that $p_1/p_0=\exp(\log(p_1)-\log(p_0))$. We use the Gaussian prior as in Assignment 4, that is $$</span>
+<span id="cb36-100"><a href="#cb36-100"></a>\begin{aligned}</span>
+<span id="cb36-101"><a href="#cb36-101"></a>    \begin{bmatrix}</span>
+<span id="cb36-102"><a href="#cb36-102"></a>    \alpha <span class="sc">\\</span> \beta</span>
+<span id="cb36-103"><a href="#cb36-103"></a>    \end{bmatrix}</span>
+<span id="cb36-104"><a href="#cb36-104"></a>    \sim</span>
+<span id="cb36-105"><a href="#cb36-105"></a>    \text{N} \left( \mu_0,  \Sigma_0 \right), \qquad</span>
+<span id="cb36-106"><a href="#cb36-106"></a>    \text{where} \quad</span>
+<span id="cb36-107"><a href="#cb36-107"></a>     \mu_0 = \begin{bmatrix} 0 <span class="sc">\\</span> 10 \end{bmatrix} \quad \text{and} \quad</span>
+<span id="cb36-108"><a href="#cb36-108"></a>     \Sigma_0 = \begin{bmatrix} 2^2 &amp; 12 <span class="sc">\\</span> 12 &amp; 10^2 \end{bmatrix}.</span>
+<span id="cb36-109"><a href="#cb36-109"></a>\end{aligned}$$</span>
+<span id="cb36-110"><a href="#cb36-110"></a></span>
+<span id="cb36-111"><a href="#cb36-111"></a>However, this code contains 3 errors. The lines with errors are marked as:</span>
+<span id="cb36-112"><a href="#cb36-112"></a></span>
+<span id="cb36-115"><a href="#cb36-115"></a><span class="in">```{r}</span></span>
+<span id="cb36-116"><a href="#cb36-116"></a><span class="do">### error x</span></span>
+<span id="cb36-117"><a href="#cb36-117"></a></span>
+<span id="cb36-118"><a href="#cb36-118"></a><span class="do">### error x</span></span>
+<span id="cb36-119"><a href="#cb36-119"></a><span class="in">```</span></span>
+<span id="cb36-120"><a href="#cb36-120"></a></span>
+<span id="cb36-121"><a href="#cb36-121"></a>Your task is to find these errors, correct them and answer corresponding questions in MyCourses. Note that <span class="in">`bioassaylp()`</span> from <span class="in">`aaltobda`</span> package evaluates the log-likelihood for given $\alpha$ and $\beta$. As for proposal distribution we used simple normal distributions $\alpha^* \sim N(\alpha_{t-1}, \sigma = \alpha_\sigma)$ and $\beta^* \sim N(\beta_{t-1}, \sigma = \beta_\sigma)$. Efficient proposals are discussed in BDA3 p. 295--297 (not part of the course). In real-life a pre-run could be made with an automatic adaptive control to adapt the proposal distribution.</span>
+<span id="cb36-122"><a href="#cb36-122"></a></span>
+<span id="cb36-125"><a href="#cb36-125"></a><span class="in">```{r}</span></span>
+<span id="cb36-126"><a href="#cb36-126"></a><span class="fu">data</span>(<span class="st">"bioassay"</span>)</span>
+<span id="cb36-127"><a href="#cb36-127"></a>density_ratio <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha_propose, alpha_previous, beta_propose, beta_previous, x, y, n){</span>
+<span id="cb36-128"><a href="#cb36-128"></a>        prior_mean <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)</span>
+<span id="cb36-129"><a href="#cb36-129"></a>    prior_sigma <span class="ot">=</span> <span class="fu">cbind</span>(<span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">12</span>), <span class="fu">c</span>(<span class="dv">12</span>, <span class="dv">100</span>))</span>
+<span id="cb36-130"><a href="#cb36-130"></a>    <span class="do">### error 1</span></span>
+<span id="cb36-131"><a href="#cb36-131"></a>        <span class="fu">bioassaylp</span>(alpha_propose, beta_propose, x, y, n)</span>
+<span id="cb36-132"><a href="#cb36-132"></a>        <span class="sc">-</span> <span class="fu">bioassaylp</span>(alpha_previous, beta_previous, x, y, n)</span>
+<span id="cb36-133"><a href="#cb36-133"></a>        <span class="sc">+</span> <span class="fu">dmvnorm</span>(<span class="fu">c</span>(alpha_propose, beta_propose), prior_mean, prior_sigma, <span class="cn">TRUE</span>)</span>
+<span id="cb36-134"><a href="#cb36-134"></a>        <span class="sc">-</span> <span class="fu">dmvnorm</span>(<span class="fu">c</span>(alpha_previous, beta_previous), prior_mean, prior_sigma, <span class="cn">TRUE</span>)</span>
+<span id="cb36-135"><a href="#cb36-135"></a>    <span class="do">### error 1</span></span>
+<span id="cb36-136"><a href="#cb36-136"></a>}</span>
+<span id="cb36-137"><a href="#cb36-137"></a></span>
+<span id="cb36-138"><a href="#cb36-138"></a>metropolis_bioassay <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha_initial, beta_initial, alpha_sigma, beta_sigma, no_draws, warmup_len, x, y, n, chain_number){</span>
+<span id="cb36-139"><a href="#cb36-139"></a>    <span class="fu">data.frame</span>(</span>
+<span id="cb36-140"><a href="#cb36-140"></a>        <span class="at">alpha=</span><span class="fu">c</span>(alpha_initial, alpha_initial<span class="sc">+</span>alpha_sigma, alpha_initial<span class="sc">-</span>alpha_sigma),</span>
+<span id="cb36-141"><a href="#cb36-141"></a>        <span class="at">beta=</span><span class="fu">c</span>(beta_initial, beta_initial<span class="sc">+</span>beta_sigma, beta_initial<span class="sc">-</span>beta_sigma)</span>
+<span id="cb36-142"><a href="#cb36-142"></a>    )</span>
+<span id="cb36-143"><a href="#cb36-143"></a>    alpha_previous <span class="ot">=</span> alpha_initial</span>
+<span id="cb36-144"><a href="#cb36-144"></a>    beta_previous <span class="ot">=</span> beta_initial</span>
+<span id="cb36-145"><a href="#cb36-145"></a>    alpha_rv <span class="ot">=</span> <span class="fu">c</span>()</span>
+<span id="cb36-146"><a href="#cb36-146"></a>    beta_rv <span class="ot">=</span> <span class="fu">c</span>()</span>
+<span id="cb36-147"><a href="#cb36-147"></a>    <span class="cf">for</span>(draw <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>no_draws){</span>
+<span id="cb36-148"><a href="#cb36-148"></a>        alpha_propose <span class="ot">=</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, alpha_previous, alpha_sigma)</span>
+<span id="cb36-149"><a href="#cb36-149"></a>        beta_propose <span class="ot">=</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, beta_previous, beta_sigma)</span>
+<span id="cb36-150"><a href="#cb36-150"></a>        <span class="do">### error 2</span></span>
+<span id="cb36-151"><a href="#cb36-151"></a>        <span class="cf">if</span>(<span class="fu">runif</span>(<span class="dv">1</span>) <span class="sc">&gt;</span> <span class="fu">density_ratio</span>(alpha_propose, alpha_previous, beta_propose, beta_previous, x, y, n))</span>
+<span id="cb36-152"><a href="#cb36-152"></a>        <span class="do">### error 2</span></span>
+<span id="cb36-153"><a href="#cb36-153"></a>          {</span>
+<span id="cb36-154"><a href="#cb36-154"></a>            alpha_previous <span class="ot">=</span> alpha_propose</span>
+<span id="cb36-155"><a href="#cb36-155"></a>            beta_previous <span class="ot">=</span> beta_propose</span>
+<span id="cb36-156"><a href="#cb36-156"></a>          }</span>
+<span id="cb36-157"><a href="#cb36-157"></a>      <span class="do">### error 3</span></span>
+<span id="cb36-158"><a href="#cb36-158"></a>        alpha_rv <span class="ot">=</span> <span class="fu">c</span>(alpha_rv, alpha_propose)</span>
+<span id="cb36-159"><a href="#cb36-159"></a>        beta_rv <span class="ot">=</span> <span class="fu">c</span>(beta_rv, beta_propose)</span>
+<span id="cb36-160"><a href="#cb36-160"></a>      <span class="do">### error 3</span></span>
+<span id="cb36-161"><a href="#cb36-161"></a>    }</span>
+<span id="cb36-162"><a href="#cb36-162"></a>    <span class="fu">data.frame</span>(<span class="at">alpha=</span><span class="fu">tail</span>(alpha_rv,warmup_len), <span class="at">beta=</span><span class="fu">tail</span>(beta_rv, warmup_len), <span class="at">Chain=</span><span class="fu">rep</span>(chain_number, <span class="at">each=</span>no_draws <span class="sc">-</span> warmup_len))</span>
+<span id="cb36-163"><a href="#cb36-163"></a>}</span>
+<span id="cb36-164"><a href="#cb36-164"></a></span>
+<span id="cb36-165"><a href="#cb36-165"></a><span class="in">```</span></span>
+<span id="cb36-166"><a href="#cb36-166"></a></span>
+<span id="cb36-169"><a href="#cb36-169"></a><span class="in">```{r}</span></span>
+<span id="cb36-170"><a href="#cb36-170"></a><span class="fu">set.seed</span>(<span class="dv">4911</span>)</span>
+<span id="cb36-171"><a href="#cb36-171"></a></span>
+<span id="cb36-172"><a href="#cb36-172"></a>df_chain1 <span class="ot">=</span> <span class="fu">metropolis_bioassay</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3000</span>, <span class="dv">1000</span>, bioassay<span class="sc">$</span>x, bioassay<span class="sc">$</span>y, bioassay<span class="sc">$</span>n, <span class="dv">1</span>)</span>
+<span id="cb36-173"><a href="#cb36-173"></a>df_chain2 <span class="ot">=</span> <span class="fu">metropolis_bioassay</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3000</span>, <span class="dv">1000</span>, bioassay<span class="sc">$</span>x, bioassay<span class="sc">$</span>y, bioassay<span class="sc">$</span>n, <span class="dv">2</span>)</span>
+<span id="cb36-174"><a href="#cb36-174"></a>df_chain3 <span class="ot">=</span> <span class="fu">metropolis_bioassay</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3000</span>, <span class="dv">1000</span>, bioassay<span class="sc">$</span>x, bioassay<span class="sc">$</span>y, bioassay<span class="sc">$</span>n, <span class="dv">3</span>)</span>
+<span id="cb36-175"><a href="#cb36-175"></a>df_chain4 <span class="ot">=</span> <span class="fu">metropolis_bioassay</span>(<span class="dv">5</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3000</span>, <span class="dv">1000</span>, bioassay<span class="sc">$</span>x, bioassay<span class="sc">$</span>y, bioassay<span class="sc">$</span>n, <span class="dv">4</span>)</span>
+<span id="cb36-176"><a href="#cb36-176"></a></span>
+<span id="cb36-177"><a href="#cb36-177"></a>df_combined_samples <span class="ot">&lt;-</span> <span class="fu">rbind</span>(df_chain1, df_chain2, df_chain3, df_chain4)</span>
+<span id="cb36-178"><a href="#cb36-178"></a><span class="in">```</span></span>
+<span id="cb36-179"><a href="#cb36-179"></a></span>
+<span id="cb36-180"><a href="#cb36-180"></a>Visualize trace plots with the code below. Have a look at <span class="co">[</span><span class="ot">`bayesplot` trace plot examples</span><span class="co">](http://mc-stan.org/bayesplot/reference/MCMC-traces.html#examples)</span> and tune your plot if wanted.</span>
+<span id="cb36-181"><a href="#cb36-181"></a></span>
+<span id="cb36-184"><a href="#cb36-184"></a><span class="in">```{r}</span></span>
+<span id="cb36-185"><a href="#cb36-185"></a><span class="co"># Useful functions: mcmc_trace (from bayesplot)</span></span>
+<span id="cb36-186"><a href="#cb36-186"></a><span class="fu">mcmc_trace</span>(df_combined_samples, <span class="at">pars=</span><span class="fu">c</span>(<span class="st">"alpha"</span>, <span class="st">"beta"</span>)) <span class="sc">+</span> <span class="fu">scale_colour_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">"#000000"</span>, <span class="st">"#E69F00"</span>, <span class="st">"#56B4E9"</span>, <span class="st">"#009E73"</span>))</span>
+<span id="cb36-187"><a href="#cb36-187"></a></span>
+<span id="cb36-188"><a href="#cb36-188"></a><span class="in">```</span></span>
+<span id="cb36-189"><a href="#cb36-189"></a></span>
+<span id="cb36-190"><a href="#cb36-190"></a>After looking at trace plots, compute Rhat values for both alpha and beta, along with the <span class="in">`ess_mean`</span> as well as ess_quantile for the 25th quantile. If you're unsure about the below, <span class="co">[</span><span class="ot">this demo provides more details on how to use the posterior and bayesplot package</span><span class="co">](https://avehtari.github.io/BDA_R_demos/demos_ch11/demo11_5.html)</span>.</span>
+<span id="cb36-191"><a href="#cb36-191"></a></span>
+<span id="cb36-194"><a href="#cb36-194"></a><span class="in">```{r}</span></span>
+<span id="cb36-195"><a href="#cb36-195"></a><span class="co"># To compute this, first convert to a draws_df object</span></span>
+<span id="cb36-196"><a href="#cb36-196"></a><span class="fu">names</span>(df_combined_samples)[<span class="fu">names</span>(df_combined_samples) <span class="sc">==</span> <span class="st">'Chain'</span>] <span class="ot">&lt;-</span> <span class="st">'.chain'</span></span>
+<span id="cb36-197"><a href="#cb36-197"></a>draws <span class="ot">&lt;-</span> <span class="fu">as_draws_df</span>(df_combined_samples)</span>
+<span id="cb36-198"><a href="#cb36-198"></a></span>
+<span id="cb36-199"><a href="#cb36-199"></a><span class="co"># You can get what you need from this summary</span></span>
+<span id="cb36-200"><a href="#cb36-200"></a><span class="fu">summarise_draws</span>(draws, <span class="at">Rhat=</span>rhat_basic, <span class="at">ESS=</span> ess_mean, <span class="sc">~</span><span class="fu">ess_quantile</span>(.x, <span class="at">probs =</span> <span class="fl">0.25</span>))</span>
+<span id="cb36-201"><a href="#cb36-201"></a></span>
+<span id="cb36-202"><a href="#cb36-202"></a></span>
+<span id="cb36-203"><a href="#cb36-203"></a><span class="in">```</span></span>
+<span id="cb36-204"><a href="#cb36-204"></a></span>
+<span id="cb36-205"><a href="#cb36-205"></a>Plot the draws for $\alpha$ and $\beta$ (scatter plot) and include this plot in your report. You can compare the results to BDA3 Figure 3.3b to verify that your code gives sensible results. Notice though that the results in Figure 3.3b are generated from the posterior with a uniform prior, so even when if your algorithm works perfectly, the results will look slightly different (although fairly similar).</span>
+<span id="cb36-206"><a href="#cb36-206"></a></span>
+<span id="cb36-209"><a href="#cb36-209"></a><span class="in">```{r}</span></span>
+<span id="cb36-210"><a href="#cb36-210"></a><span class="co"># Useful functions: mcmc_scatter (from bayesplot)</span></span>
+<span id="cb36-211"><a href="#cb36-211"></a><span class="in">```</span></span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
-
 
 
 
