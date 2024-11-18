@@ -299,6 +299,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#general-information" id="toc-general-information" class="nav-link active" data-scroll-target="#general-information"><span class="header-section-number">1</span> General information</a></li>
+  <li><a href="#r2" id="toc-r2" class="nav-link" data-scroll-target="#r2"><span class="header-section-number">2</span> R2</a></li>
+  <li><a href="#portuguese-student-data" id="toc-portuguese-student-data" class="nav-link" data-scroll-target="#portuguese-student-data"><span class="header-section-number">3</span> Portuguese Student Data</a>
+  <ul class="collapse">
+  <li><a href="#data-prep" id="toc-data-prep" class="nav-link" data-scroll-target="#data-prep"><span class="header-section-number">3.1</span> Data Prep</a></li>
+  <li><a href="#normal-model" id="toc-normal-model" class="nav-link" data-scroll-target="#normal-model"><span class="header-section-number">3.2</span> Normal Model</a></li>
+  <li><a href="#r2-model" id="toc-r2-model" class="nav-link" data-scroll-target="#r2-model"><span class="header-section-number">3.3</span> R2 Model</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -332,11 +339,1089 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="general-information" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> General information</h1>
-<p>This notebook will be published later!</p>
+<p>This assignment relates to Lectures 9-10 and Chapter 9 of BDA3</p>
+<p>We recommend using <a href="https://jupyter.cs.aalto.fi">JupyterHub</a> (which has all the needed packages pre-installed).</p>
+<div class="hint">
+<p><strong>Reading instructions:</strong> - <a href="https://acris.aalto.fi/ws/portalfiles/portal/34206843/bayes_R2_v3.pdf"><strong>For background on Bayes-R2</strong></a> - <a href="../BDA3_notes.html#ch9"><strong>The reading instructions for BDA3 Chapter 9</strong></a> (decision analysis).</p>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+General Instructions for Answering the Assignment Questions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<ul>
+<li>Questions below are exact copies of the text found in the MyCourses quiz and should serve as a notebook where you can store notes and code.</li>
+<li>We recommend opening these notebooks in the Aalto JupyterHub, see <a href="https://avehtari.github.io/BDA_course_Aalto/FAQ.html#How_to_use_R_and_RStudio_remotely"><strong>how to use R and RStudio remotely</strong></a>.</li>
+<li>For inspiration for code, have a look at the <a href="https://avehtari.github.io/BDA_course_Aalto/demos.html"><strong>BDA R Demos</strong></a> and the specific Assignment code notebooks</li>
+<li>Recommended additional self study exercises for each chapter in BDA3 are listed in the course web page. These will help to gain deeper understanding of the topic.</li>
+<li>Common questions and answers regarding installation and technical problems can be found in <a href="https://avehtari.github.io/BDA_course_Aalto/FAQ.html">Frequently Asked Questions (FAQ)</a>.</li>
+<li>Deadlines for all assignments can be found on the course web page and in MyCourses.</li>
+<li>You are allowed to discuss assignments with your friends, but it is not allowed to copy solutions directly from other students or from internet.</li>
+<li>Do not share your answers publicly.</li>
+<li>Do not copy answers from the internet or from previous years. We compare the answers to the answers from previous years and to the answers from other students this year.</li>
+<li>Use of AI is allowed on the course, but the most of the work needs to by the student, and you need to report whether you used AI and in which way you used them (See <a href="https://www.aalto.fi/en/services/guidance-for-the-use-of-artificial-intelligence-in-teaching-and-learning-at-aalto-university">points 5 and 6 in Aalto guidelines for use of AI in teaching</a>).</li>
+<li>All suspected plagiarism will be reported and investigated. See more about the <a href="https://into.aalto.fi/display/ensaannot/Aalto+University+Code+of+Academic+Integrity+and+Handling+Violations+Thereof"><strong>Aalto University Code of Academic Integrity and Handling Violations Thereof</strong></a>.</li>
+<li>If you have any suggestions or improvements to the course material, please post in the course chat feedback channel, create an issue, or submit a pull request to the public repository!</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(brms)) {</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    <span class="fu">install.packages</span>(<span class="st">"brms"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3"></a>    <span class="fu">library</span>(brms)</span>
+<span id="cb1-4"><a href="#cb1-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: brms</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: Rcpp</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading 'brms' package (version 2.22.0). Useful instructions
+can be found by typing help('brms'). A more detailed introduction
+to the package is available through vignette('brms_overview').</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'brms'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:stats':
+
+    ar</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(cmdstanr)){</span>
+<span id="cb7-2"><a href="#cb7-2"></a>    <span class="fu">install.packages</span>(<span class="st">"cmdstanr"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://mc-stan.org/r-packages/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span>
+<span id="cb7-3"><a href="#cb7-3"></a>    <span class="fu">library</span>(cmdstanr)</span>
+<span id="cb7-4"><a href="#cb7-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: cmdstanr</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>This is cmdstanr version 0.8.1</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>- CmdStanR documentation and vignettes: mc-stan.org/cmdstanr</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>- CmdStan path: /home/runner/.cmdstan/cmdstan-2.35.0</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>- CmdStan version: 2.35.0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>cmdstan_installed <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
+<span id="cb13-2"><a href="#cb13-2"></a>  res <span class="ot">&lt;-</span> <span class="fu">try</span>(out <span class="ot">&lt;-</span> cmdstanr<span class="sc">::</span><span class="fu">cmdstan_path</span>(), <span class="at">silent =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb13-3"><a href="#cb13-3"></a>  <span class="sc">!</span><span class="fu">inherits</span>(res, <span class="st">"try-error"</span>)</span>
+<span id="cb13-4"><a href="#cb13-4"></a>}</span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">cmdstan_installed</span>()){</span>
+<span id="cb13-6"><a href="#cb13-6"></a>    <span class="fu">install_cmdstan</span>()</span>
+<span id="cb13-7"><a href="#cb13-7"></a>}</span>
+<span id="cb13-8"><a href="#cb13-8"></a></span>
+<span id="cb13-9"><a href="#cb13-9"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(ggplot2)){</span>
+<span id="cb13-10"><a href="#cb13-10"></a>    <span class="fu">install.packages</span>(<span class="st">"ggplot2"</span>)</span>
+<span id="cb13-11"><a href="#cb13-11"></a>    <span class="fu">library</span>(ggplot2)</span>
+<span id="cb13-12"><a href="#cb13-12"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: ggplot2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(bayesplot)){</span>
+<span id="cb15-2"><a href="#cb15-2"></a>    <span class="fu">install.packages</span>(<span class="st">"bayesplot"</span>)</span>
+<span id="cb15-3"><a href="#cb15-3"></a>    <span class="fu">library</span>(bayesplot)</span>
+<span id="cb15-4"><a href="#cb15-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: bayesplot</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>This is bayesplot version 1.11.1</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>- Online documentation and vignettes at mc-stan.org/bayesplot</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>- bayesplot theme set to bayesplot::theme_default()</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>   * Does _not_ affect other ggplot2 plots</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>   * See ?bayesplot_theme_set for details on theme setting</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'bayesplot'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:brms':
+
+    rhat</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(dplyr)){</span>
+<span id="cb24-2"><a href="#cb24-2"></a>    <span class="fu">install.packages</span>(<span class="st">"dplyr"</span>)</span>
+<span id="cb24-3"><a href="#cb24-3"></a>    <span class="fu">library</span>(dplyr)</span>
+<span id="cb24-4"><a href="#cb24-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: dplyr</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(tidyr)){</span>
+<span id="cb29-2"><a href="#cb29-2"></a>    <span class="fu">install.packages</span>(<span class="st">"tidyr"</span>)</span>
+<span id="cb29-3"><a href="#cb29-3"></a>    <span class="fu">library</span>(tidyr)</span>
+<span id="cb29-4"><a href="#cb29-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: tidyr</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(matrixStats)){</span>
+<span id="cb31-2"><a href="#cb31-2"></a>    <span class="fu">install.packages</span>(<span class="st">"matrixStats"</span>)</span>
+<span id="cb31-3"><a href="#cb31-3"></a>    <span class="fu">library</span>(matrixStats)</span>
+<span id="cb31-4"><a href="#cb31-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: matrixStats</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'matrixStats'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:dplyr':
+
+    count</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(ggdist)){</span>
+<span id="cb35-2"><a href="#cb35-2"></a>    <span class="fu">install.packages</span>(<span class="st">"ggdist"</span>)</span>
+<span id="cb35-3"><a href="#cb35-3"></a>    <span class="fu">library</span>(ggdist)</span>
+<span id="cb35-4"><a href="#cb35-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: ggdist</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'ggdist'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:brms':
+
+    dstudent_t, pstudent_t, qstudent_t, rstudent_t</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(tinytable)){</span>
+<span id="cb39-2"><a href="#cb39-2"></a>    <span class="fu">install.packages</span>(<span class="st">"tinytable"</span>)</span>
+<span id="cb39-3"><a href="#cb39-3"></a>    <span class="fu">library</span>(tinytable)</span>
+<span id="cb39-4"><a href="#cb39-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: tinytable</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in library(package, lib.loc = lib.loc, character.only = TRUE,
+logical.return = TRUE, : there is no package called 'tinytable'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Installing package into '/home/runner/work/_temp/Library'
+(as 'lib' is unspecified)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(posterior)){</span>
+<span id="cb43-2"><a href="#cb43-2"></a>    <span class="fu">install.packages</span>(<span class="st">"posterior"</span>)</span>
+<span id="cb43-3"><a href="#cb43-3"></a>    <span class="fu">library</span>(posterior)</span>
+<span id="cb43-4"><a href="#cb43-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: posterior</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>This is posterior version 1.6.0</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'posterior'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:bayesplot':
+
+    rhat</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    mad, sd, var</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    %in%, match</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(patchwork)){</span>
+<span id="cb50-2"><a href="#cb50-2"></a>    <span class="fu">install.packages</span>(<span class="st">"patchwork"</span>)</span>
+<span id="cb50-3"><a href="#cb50-3"></a>    <span class="fu">library</span>(patchwork)</span>
+<span id="cb50-4"><a href="#cb50-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: patchwork</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in library(package, lib.loc = lib.loc, character.only = TRUE,
+logical.return = TRUE, : there is no package called 'patchwork'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Installing package into '/home/runner/work/_temp/Library'
+(as 'lib' is unspecified)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(mvtnorm)){</span>
+<span id="cb54-2"><a href="#cb54-2"></a>    <span class="fu">install.packages</span>(<span class="st">"mvtnorm"</span>)</span>
+<span id="cb54-3"><a href="#cb54-3"></a>    <span class="fu">library</span>(mvtnorm)</span>
+<span id="cb54-4"><a href="#cb54-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: mvtnorm</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1"></a><span class="fu">theme_set</span>(bayesplot<span class="sc">::</span><span class="fu">theme_default</span>(<span class="at">base_family =</span> <span class="st">"sans"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="r2" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> R2</h1>
+<p>Compute and plot the prior predictive R2 distributions for the standard normal prior and R2 prior normal models. Modify the code below.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1"></a>sims <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb57-2"><a href="#cb57-2"></a>p <span class="ot">&lt;-</span> <span class="dv">26</span></span>
+<span id="cb57-3"><a href="#cb57-3"></a>n <span class="ot">&lt;-</span> <span class="dv">400</span></span>
+<span id="cb57-4"><a href="#cb57-4"></a>X <span class="ot">&lt;-</span> <span class="fu">rmvnorm</span>(n,<span class="at">mean =</span> <span class="fu">array</span>(<span class="dv">0</span>,p),<span class="at">sigma =</span> <span class="fu">diag</span>(<span class="fu">array</span>(<span class="dv">1</span>,p)))</span>
+<span id="cb57-5"><a href="#cb57-5"></a></span>
+<span id="cb57-6"><a href="#cb57-6"></a></span>
+<span id="cb57-7"><a href="#cb57-7"></a><span class="do">## Prior Predictive Graphs: Normal</span></span>
+<span id="cb57-8"><a href="#cb57-8"></a>ppR2_gausprior<span class="ot">&lt;-</span><span class="fu">numeric</span>()</span>
+<span id="cb57-9"><a href="#cb57-9"></a></span>
+<span id="cb57-10"><a href="#cb57-10"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>sims) {</span>
+<span id="cb57-11"><a href="#cb57-11"></a>  sigma2 <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="dv">1</span>,<span class="at">rate=</span><span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb57-12"><a href="#cb57-12"></a>  beta <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(p)</span>
+<span id="cb57-13"><a href="#cb57-13"></a>  mu <span class="ot">&lt;-</span> X<span class="sc">%*%</span><span class="fu">as.vector</span>(beta)</span>
+<span id="cb57-14"><a href="#cb57-14"></a>  muvar <span class="ot">&lt;-</span> <span class="fu">var</span>(mu)</span>
+<span id="cb57-15"><a href="#cb57-15"></a>  ppR2_gausprior[i] <span class="ot">&lt;-</span> muvar<span class="sc">/</span>(muvar<span class="sc">+</span>sigma2)</span>
+<span id="cb57-16"><a href="#cb57-16"></a>}</span>
+<span id="cb57-17"><a href="#cb57-17"></a><span class="fu">ggplot</span>()<span class="sc">+</span><span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">x=</span>ppR2_gausprior), <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="at">length.out=</span><span class="dv">50</span>)) <span class="sc">+</span></span>
+<span id="cb57-18"><a href="#cb57-18"></a>  <span class="fu">xlim</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb57-19"><a href="#cb57-19"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks=</span><span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb57-20"><a href="#cb57-20"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Prior predictive Bayesian R^2"</span>,<span class="at">y=</span><span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="template9_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1"></a><span class="do">## Prior Predictive Graphs: R^2 prior</span></span>
+<span id="cb58-2"><a href="#cb58-2"></a>ppR2_r2prior<span class="ot">&lt;-</span><span class="fu">numeric</span>()</span>
+<span id="cb58-3"><a href="#cb58-3"></a>mu_R2 <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
+<span id="cb58-4"><a href="#cb58-4"></a>scale_R2 <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb58-5"><a href="#cb58-5"></a></span>
+<span id="cb58-6"><a href="#cb58-6"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>sims) {</span>
+<span id="cb58-7"><a href="#cb58-7"></a>  sigma2 <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="dv">1</span>,<span class="at">rate=</span><span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb58-8"><a href="#cb58-8"></a>  R2 <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(<span class="dv">1</span>,(mu_R2<span class="sc">*</span>scale_R2),((<span class="dv">1</span><span class="sc">-</span>mu_R2)<span class="sc">*</span>scale_R2))</span>
+<span id="cb58-9"><a href="#cb58-9"></a>  tau2 <span class="ot">&lt;-</span> R2<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>R2)</span>
+<span id="cb58-10"><a href="#cb58-10"></a>  psi <span class="ot">&lt;-</span> <span class="fu">rdirichlet</span>(<span class="dv">1</span>,<span class="fu">rep</span>(<span class="dv">1</span>,p))</span>
+<span id="cb58-11"><a href="#cb58-11"></a>  beta <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(p) <span class="sc">*</span> <span class="fu">sqrt</span>(tau2<span class="sc">*</span>psi<span class="sc">*</span>sigma2)</span>
+<span id="cb58-12"><a href="#cb58-12"></a>  mu <span class="ot">&lt;-</span> X<span class="sc">%*%</span><span class="fu">as.vector</span>(beta)</span>
+<span id="cb58-13"><a href="#cb58-13"></a>  muvar <span class="ot">&lt;-</span> <span class="fu">var</span>(mu)</span>
+<span id="cb58-14"><a href="#cb58-14"></a>  ppR2_r2prior[i] <span class="ot">&lt;-</span> muvar<span class="sc">/</span>(muvar<span class="sc">+</span>sigma2)</span>
+<span id="cb58-15"><a href="#cb58-15"></a>}</span>
+<span id="cb58-16"><a href="#cb58-16"></a><span class="fu">ggplot</span>()<span class="sc">+</span><span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">x=</span>ppR2_r2prior), <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="at">length.out=</span><span class="dv">50</span>)) <span class="sc">+</span></span>
+<span id="cb58-17"><a href="#cb58-17"></a>  <span class="fu">xlim</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb58-18"><a href="#cb58-18"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks=</span><span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb58-19"><a href="#cb58-19"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Prior predictive Bayesian R^2"</span>,<span class="at">y=</span><span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="template9_files/figure-html/unnamed-chunk-2-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="portuguese-student-data" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Portuguese Student Data</h1>
+<section id="data-prep" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="data-prep"><span class="header-section-number">3.1</span> Data Prep</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1"></a><span class="co"># Load the data</span></span>
+<span id="cb59-2"><a href="#cb59-2"></a>student <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">url</span>(<span class="st">'https://raw.githubusercontent.com/avehtari/ROS-Examples/master/Student/data/student-merged.csv'</span>))</span>
+<span id="cb59-3"><a href="#cb59-3"></a></span>
+<span id="cb59-4"><a href="#cb59-4"></a><span class="co"># Predictors to be used</span></span>
+<span id="cb59-5"><a href="#cb59-5"></a>predictors <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"school"</span>,<span class="st">"sex"</span>,<span class="st">"age"</span>,<span class="st">"address"</span>,<span class="st">"famsize"</span>,<span class="st">"Pstatus"</span>,<span class="st">"Medu"</span>,<span class="st">"Fedu"</span>,<span class="st">"traveltime"</span>,<span class="st">"studytime"</span>,<span class="st">"failures"</span>,<span class="st">"schoolsup"</span>,<span class="st">"famsup"</span>,<span class="st">"paid"</span>,<span class="st">"activities"</span>, <span class="st">"nursery"</span>, <span class="st">"higher"</span>, <span class="st">"internet"</span>, <span class="st">"romantic"</span>,<span class="st">"famrel"</span>,<span class="st">"freetime"</span>,<span class="st">"goout"</span>,<span class="st">"Dalc"</span>,<span class="st">"Walc"</span>,<span class="st">"health"</span>,<span class="st">"absences"</span>)</span>
+<span id="cb59-6"><a href="#cb59-6"></a>p <span class="ot">&lt;-</span> <span class="fu">length</span>(predictors)</span>
+<span id="cb59-7"><a href="#cb59-7"></a></span>
+<span id="cb59-8"><a href="#cb59-8"></a><span class="co"># To reduce variability us the median grades based on those three</span></span>
+<span id="cb59-9"><a href="#cb59-9"></a><span class="co"># exams for each topic, students with non-zero grades are selected</span></span>
+<span id="cb59-10"><a href="#cb59-10"></a>grades <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"G1mat"</span>,<span class="st">"G2mat"</span>,<span class="st">"G3mat"</span>,<span class="st">"G1por"</span>,<span class="st">"G2por"</span>,<span class="st">"G3por"</span>)</span>
+<span id="cb59-11"><a href="#cb59-11"></a>student <span class="ot">&lt;-</span> student <span class="sc">%&gt;%</span></span>
+<span id="cb59-12"><a href="#cb59-12"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">matches</span>(<span class="st">"G[1-3]..."</span>), <span class="sc">~</span><span class="fu">na_if</span>(.,<span class="dv">0</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb59-13"><a href="#cb59-13"></a>  <span class="fu">mutate</span>(<span class="at">Gmat =</span> <span class="fu">rowMedians</span>(<span class="fu">as.matrix</span>(<span class="fu">select</span>(.,<span class="fu">matches</span>(<span class="st">"G.mat"</span>))), <span class="at">na.rm=</span><span class="cn">TRUE</span>),</span>
+<span id="cb59-14"><a href="#cb59-14"></a>         <span class="at">Gpor =</span> <span class="fu">rowMedians</span>(<span class="fu">as.matrix</span>(<span class="fu">select</span>(.,<span class="fu">matches</span>(<span class="st">"G.por"</span>))), <span class="at">na.rm=</span><span class="cn">TRUE</span>))</span>
+<span id="cb59-15"><a href="#cb59-15"></a>student_Gmat <span class="ot">&lt;-</span> <span class="fu">subset</span>(student, <span class="fu">is.finite</span>(Gmat), <span class="at">select=</span><span class="fu">c</span>(<span class="st">"Gmat"</span>,predictors))</span>
+<span id="cb59-16"><a href="#cb59-16"></a>student_Gmat <span class="ot">&lt;-</span> student_Gmat[<span class="fu">is.finite</span>(<span class="fu">rowMeans</span>(student_Gmat)),]</span>
+<span id="cb59-17"><a href="#cb59-17"></a>student_Gpor <span class="ot">&lt;-</span> <span class="fu">subset</span>(student, <span class="fu">is.finite</span>(Gpor), <span class="at">select=</span><span class="fu">c</span>(<span class="st">"Gpor"</span>,predictors))</span>
+<span id="cb59-18"><a href="#cb59-18"></a>(nmat <span class="ot">&lt;-</span> <span class="fu">nrow</span>(student_Gmat))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 382</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1"></a><span class="co"># Look at the data</span></span>
+<span id="cb61-2"><a href="#cb61-2"></a><span class="fu">head</span>(student_Gmat) <span class="sc">|&gt;</span> <span class="fu">tt</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<!-- preamble start -->
+
+    <script>
+      function styleCell_zj9jv5gh44xshwb0ncxl(i, j, css_id) {
+        var table = document.getElementById("tinytable_zj9jv5gh44xshwb0ncxl");
+        table.rows[i].cells[j].classList.add(css_id);
+      }
+      function insertSpanRow(i, colspan, content) {
+        var table = document.getElementById('tinytable_zj9jv5gh44xshwb0ncxl');
+        var newRow = table.insertRow(i);
+        var newCell = newRow.insertCell(0);
+        newCell.setAttribute("colspan", colspan);
+        // newCell.innerText = content;
+        // this may be unsafe, but innerText does not interpret <br>
+        newCell.innerHTML = content;
+      }
+      function spanCell_zj9jv5gh44xshwb0ncxl(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_zj9jv5gh44xshwb0ncxl");
+        const targetRow = table.rows[i];
+        const targetCell = targetRow.cells[j];
+        for (let r = 0; r < rowspan; r++) {
+          // Only start deleting cells to the right for the first row (r == 0)
+          if (r === 0) {
+            // Delete cells to the right of the target cell in the first row
+            for (let c = colspan - 1; c > 0; c--) {
+              if (table.rows[i + r].cells[j + c]) {
+                table.rows[i + r].deleteCell(j + c);
+              }
+            }
+          }
+          // For rows below the first, delete starting from the target column
+          if (r > 0) {
+            for (let c = colspan - 1; c >= 0; c--) {
+              if (table.rows[i + r] && table.rows[i + r].cells[j]) {
+                table.rows[i + r].deleteCell(j);
+              }
+            }
+          }
+        }
+        // Set rowspan and colspan of the target cell
+        targetCell.rowSpan = rowspan;
+        targetCell.colSpan = colspan;
+      }
+window.addEventListener('load', function () { styleCell_zj9jv5gh44xshwb0ncxl(0, 0, 'tinytable_css_idaro9fsxluygvzajrbwdr') })
+window.addEventListener('load', function () { styleCell_zj9jv5gh44xshwb0ncxl(0, 1, 'tinytable_css_idaro9fsxluygvzajrbwdr') })
+window.addEventListener('load', function () { styleCell_zj9jv5gh44xshwb0ncxl(0, 2, 'tinytable_css_idaro9fsxluygvzajrbwdr') })
+window.addEventListener('load', function () { styleCell_zj9jv5gh44xshwb0ncxl(0, 3, 'tinytable_css_idaro9fsxluygvzajrbwdr') })
+window.addEventListener('load', function () { styleCell_zj9jv5gh44xshwb0ncxl(0, 4, 'tinytable_css_idaro9fsxluygvzajrbwdr') })
+window.addEventListener('load', function () { styleCell_zj9jv5gh44xshwb0ncxl(0, 5, 'tinytable_css_idaro9fsxluygvzajrbwdr') })
+window.addEventListener('load', function () { styleCell_zj9jv5gh44xshwb0ncxl(0, 6, 'tinytable_css_idaro9fsxluygvzajrbwdr') })
+window.addEventListener('load', function () { styleCell_zj9jv5gh44xshwb0ncxl(0, 7, 'tinytable_css_idaro9fsxluygvzajrbwdr') })
+window.addEventListener('load', function () { styleCell_zj9jv5gh44xshwb0ncxl(0, 8, 'tinytable_css_idaro9fsxluygvzajrbwdr') })
+window.addEventListener('load', function () { styleCell_zj9jv5gh44xshwb0ncxl(0, 9, 'tinytable_css_idaro9fsxluygvzajrbwdr') })
+window.addEventListener('load', function () { styleCell_zj9jv5gh44xshwb0ncxl(0, 10, 'tinytable_css_idaro9fsxluygvzajrbwdr') })
+window.addEventListener('load', function () { styleCell_zj9jv5gh44xshwb0ncxl(0, 11, 'tinytable_css_idaro9fsxluygvzajrbwdr') })
+window.addEventListener('load', function () { styleCell_zj9jv5gh44xshwb0ncxl(0, 12, 'tinytable_css_idaro9fsxluygvzajrbwdr') })
+window.addEventListener('load', function () { styleCell_zj9jv5gh44xshwb0ncxl(0, 13, 'tinytable_css_idaro9fsxluygvzajrbwdr') })
+window.addEventListener('load', function () { styleCell_zj9jv5gh44xshwb0ncxl(0, 14, 'tinytable_css_idaro9fsxluygvzajrbwdr') })
+window.addEventListener('load', function () { styleCell_zj9jv5gh44xshwb0ncxl(0, 15, 'tinytable_css_idaro9fsxluygvzajrbwdr') })
+window.addEventListener('load', function () { styleCell_zj9jv5gh44xshwb0ncxl(0, 16, 'tinytable_css_idaro9fsxluygvzajrbwdr') })
+window.addEventListener('load', function () { styleCell_zj9jv5gh44xshwb0ncxl(0, 17, 'tinytable_css_idaro9fsxluygvzajrbwdr') })
+window.addEventListener('load', function () { styleCell_zj9jv5gh44xshwb0ncxl(0, 18, 'tinytable_css_idaro9fsxluygvzajrbwdr') })
+window.addEventListener('load', function () { styleCell_zj9jv5gh44xshwb0ncxl(0, 19, 'tinytable_css_idaro9fsxluygvzajrbwdr') })
+window.addEventListener('load', function () { styleCell_zj9jv5gh44xshwb0ncxl(0, 20, 'tinytable_css_idaro9fsxluygvzajrbwdr') })
+window.addEventListener('load', function () { styleCell_zj9jv5gh44xshwb0ncxl(0, 21, 'tinytable_css_idaro9fsxluygvzajrbwdr') })
+window.addEventListener('load', function () { styleCell_zj9jv5gh44xshwb0ncxl(0, 22, 'tinytable_css_idaro9fsxluygvzajrbwdr') })
+window.addEventListener('load', function () { styleCell_zj9jv5gh44xshwb0ncxl(0, 23, 'tinytable_css_idaro9fsxluygvzajrbwdr') })
+window.addEventListener('load', function () { styleCell_zj9jv5gh44xshwb0ncxl(0, 24, 'tinytable_css_idaro9fsxluygvzajrbwdr') })
+window.addEventListener('load', function () { styleCell_zj9jv5gh44xshwb0ncxl(0, 25, 'tinytable_css_idaro9fsxluygvzajrbwdr') })
+window.addEventListener('load', function () { styleCell_zj9jv5gh44xshwb0ncxl(0, 26, 'tinytable_css_idaro9fsxluygvzajrbwdr') })
+    </script>
+
+    <style>
+    .table td.tinytable_css_idaro9fsxluygvzajrbwdr, .table th.tinytable_css_idaro9fsxluygvzajrbwdr {  border-bottom: solid 0.1em #d3d8dc; }
+    </style>
+    <div class="container">
+      <table class="table table-borderless" id="tinytable_zj9jv5gh44xshwb0ncxl" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+        <thead>
+        
+              <tr>
+                <th scope="col">Gmat</th>
+                <th scope="col">school</th>
+                <th scope="col">sex</th>
+                <th scope="col">age</th>
+                <th scope="col">address</th>
+                <th scope="col">famsize</th>
+                <th scope="col">Pstatus</th>
+                <th scope="col">Medu</th>
+                <th scope="col">Fedu</th>
+                <th scope="col">traveltime</th>
+                <th scope="col">studytime</th>
+                <th scope="col">failures</th>
+                <th scope="col">schoolsup</th>
+                <th scope="col">famsup</th>
+                <th scope="col">paid</th>
+                <th scope="col">activities</th>
+                <th scope="col">nursery</th>
+                <th scope="col">higher</th>
+                <th scope="col">internet</th>
+                <th scope="col">romantic</th>
+                <th scope="col">famrel</th>
+                <th scope="col">freetime</th>
+                <th scope="col">goout</th>
+                <th scope="col">Dalc</th>
+                <th scope="col">Walc</th>
+                <th scope="col">health</th>
+                <th scope="col">absences</th>
+              </tr>
+        </thead>
+        
+        <tbody>
+                <tr>
+                  <td>10</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>15</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>2</td>
+                  <td>4</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>0</td>
+                  <td>3</td>
+                  <td>1</td>
+                  <td>2</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>2</td>
+                </tr>
+                <tr>
+                  <td> 6</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>15</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>2</td>
+                  <td>2</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>3</td>
+                  <td>3</td>
+                  <td>4</td>
+                  <td>2</td>
+                  <td>4</td>
+                  <td>5</td>
+                  <td>2</td>
+                </tr>
+                <tr>
+                  <td>13</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>15</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>1</td>
+                  <td>2</td>
+                  <td>2</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>0</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>4</td>
+                  <td>3</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>2</td>
+                  <td>8</td>
+                </tr>
+                <tr>
+                  <td> 9</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>15</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>1</td>
+                  <td>2</td>
+                  <td>4</td>
+                  <td>1</td>
+                  <td>3</td>
+                  <td>0</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>0</td>
+                  <td>4</td>
+                  <td>3</td>
+                  <td>2</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>5</td>
+                  <td>2</td>
+                </tr>
+                <tr>
+                  <td>10</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>15</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>1</td>
+                  <td>3</td>
+                  <td>3</td>
+                  <td>2</td>
+                  <td>3</td>
+                  <td>2</td>
+                  <td>0</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>4</td>
+                  <td>2</td>
+                  <td>1</td>
+                  <td>2</td>
+                  <td>3</td>
+                  <td>3</td>
+                  <td>8</td>
+                </tr>
+                <tr>
+                  <td>12</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>15</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>1</td>
+                  <td>3</td>
+                  <td>4</td>
+                  <td>1</td>
+                  <td>3</td>
+                  <td>0</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>0</td>
+                  <td>4</td>
+                  <td>3</td>
+                  <td>2</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>5</td>
+                  <td>2</td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+<!-- hack to avoid NA insertion in last line -->
+</div>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1"></a><span class="co"># Visualise the distributions of median math scores</span></span>
+<span id="cb62-2"><a href="#cb62-2"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(student_Gmat, <span class="fu">aes</span>(<span class="at">x=</span>Gmat)) <span class="sc">+</span> <span class="fu">geom_dots</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'Median math exam score'</span>)</span>
+<span id="cb62-3"><a href="#cb62-3"></a>p1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="template9_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1"></a><span class="co"># Some data transformation for non-binary predictors to have standard</span></span>
+<span id="cb63-2"><a href="#cb63-2"></a><span class="co"># deviation 1</span></span>
+<span id="cb63-3"><a href="#cb63-3"></a>studentstd_Gmat <span class="ot">&lt;-</span> student_Gmat</span>
+<span id="cb63-4"><a href="#cb63-4"></a>Gmatbin<span class="ot">&lt;-</span><span class="fu">apply</span>(student_Gmat[,predictors], <span class="dv">2</span>, <span class="cf">function</span>(x) {<span class="fu">length</span>(<span class="fu">unique</span>(x))<span class="sc">==</span><span class="dv">2</span>})</span>
+<span id="cb63-5"><a href="#cb63-5"></a>studentstd_Gmat[,predictors[<span class="sc">!</span>Gmatbin]] <span class="ot">&lt;-</span><span class="fu">scale</span>(student_Gmat[,predictors[<span class="sc">!</span>Gmatbin]])</span>
+<span id="cb63-6"><a href="#cb63-6"></a>studentstd_Gpor <span class="ot">&lt;-</span> student_Gpor</span>
+<span id="cb63-7"><a href="#cb63-7"></a>Gporbin<span class="ot">&lt;-</span><span class="fu">apply</span>(student_Gpor[,predictors], <span class="dv">2</span>, <span class="cf">function</span>(x) {<span class="fu">length</span>(<span class="fu">unique</span>(x))<span class="sc">==</span><span class="dv">2</span>})</span>
+<span id="cb63-8"><a href="#cb63-8"></a>studentstd_Gpor[,predictors[<span class="sc">!</span>Gporbin]] <span class="ot">&lt;-</span><span class="fu">scale</span>(student_Gpor[,predictors[<span class="sc">!</span>Gporbin]])</span>
+<span id="cb63-9"><a href="#cb63-9"></a></span>
+<span id="cb63-10"><a href="#cb63-10"></a><span class="co"># Set Seed for reproducibility</span></span>
+<span id="cb63-11"><a href="#cb63-11"></a>SEED <span class="ot">&lt;-</span> <span class="dv">2132</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="normal-model" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="normal-model"><span class="header-section-number">3.2</span> Normal Model</h2>
+<p>Estimate model</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1"></a><span class="co"># Estimate Model</span></span>
+<span id="cb64-2"><a href="#cb64-2"></a>fit1 <span class="ot">&lt;-</span> <span class="fu">brm</span>(Gmat <span class="sc">~</span> ., <span class="at">data =</span> studentstd_Gmat,</span>
+<span id="cb64-3"><a href="#cb64-3"></a>             <span class="at">normalize=</span><span class="cn">FALSE</span>,</span>
+<span id="cb64-4"><a href="#cb64-4"></a>            <span class="at">seed =</span> SEED)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Compiling Stan program...</code></pre>
+</div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in .fun(model_code = .x1): Boost not found; call install.packages('BH')</code></pre>
+</div>
+</div>
+<p>Visualise posteriors</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1"></a><span class="co"># Plot marginal posteriors of the coefficients</span></span>
+<span id="cb67-2"><a href="#cb67-2"></a>drawsmu <span class="ot">&lt;-</span> <span class="fu">as_draws_df</span>(fit1, <span class="at">variable=</span><span class="fu">paste0</span>(<span class="st">'b_'</span>,predictors)) <span class="sc">|&gt;</span></span>
+<span id="cb67-3"><a href="#cb67-3"></a>  <span class="fu">set_variables</span>(predictors)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error: object 'fit1' not found</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1"></a>p <span class="ot">&lt;-</span> <span class="fu">mcmc_areas</span>(drawsmu,</span>
+<span id="cb69-2"><a href="#cb69-2"></a>                <span class="at">prob_outer=</span><span class="fl">0.98</span>, <span class="at">area_method =</span> <span class="st">"scaled height"</span>) <span class="sc">+</span></span>
+<span id="cb69-3"><a href="#cb69-3"></a>  <span class="fu">xlim</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="dv">3</span>,<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error: object 'drawsmu' not found</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1"></a>p <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">scale_y_discrete</span>(<span class="at">limits =</span> <span class="fu">rev</span>(<span class="fu">levels</span>(p<span class="sc">$</span>data<span class="sc">$</span>parameter)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in p$data: $ operator is invalid for atomic vectors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1"></a>p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 26</code></pre>
+</div>
+</div>
+<p>Now, find prior predictive R2</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1"></a>X <span class="ot">&lt;-</span> studentstd_Gmat[,<span class="dv">2</span><span class="sc">:</span><span class="fu">dim</span>(student_Gmat)[<span class="dv">2</span>]] </span>
+<span id="cb75-2"><a href="#cb75-2"></a></span>
+<span id="cb75-3"><a href="#cb75-3"></a>ppR2_1<span class="ot">&lt;-</span><span class="fu">numeric</span>()</span>
+<span id="cb75-4"><a href="#cb75-4"></a>sims <span class="ot">&lt;-</span> <span class="dv">4000</span></span>
+<span id="cb75-5"><a href="#cb75-5"></a></span>
+<span id="cb75-6"><a href="#cb75-6"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>sims) {</span>
+<span id="cb75-7"><a href="#cb75-7"></a>  sigma2 <span class="ot">&lt;-</span> <span class="fu">rstudent_t</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">0</span>,<span class="dv">3</span>)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb75-8"><a href="#cb75-8"></a>  beta <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="fu">length</span>(predictors))</span>
+<span id="cb75-9"><a href="#cb75-9"></a>  mu <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(X)<span class="sc">%*%</span><span class="fu">as.vector</span>(beta)</span>
+<span id="cb75-10"><a href="#cb75-10"></a>  muvar <span class="ot">&lt;-</span> <span class="fu">var</span>(mu)</span>
+<span id="cb75-11"><a href="#cb75-11"></a>  ppR2_1[i] <span class="ot">&lt;-</span> muvar<span class="sc">/</span>(muvar<span class="sc">+</span>sigma2)</span>
+<span id="cb75-12"><a href="#cb75-12"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Plot prior predictive R2 vs posterior R2</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Prior=</span>ppR2_1,<span class="at">Posterior=</span><span class="fu">bayes_R2</span>(fit1, <span class="at">summary=</span><span class="cn">FALSE</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error: object 'fit1' not found</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1"></a><span class="fu">names</span>(data) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Prior"</span>,<span class="st">"Posterior"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in names(data) &lt;- c("Prior", "Posterior"): names() applied to a non-vector</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1"></a><span class="fu">mcmc_hist</span>(data,</span>
+<span id="cb80-2"><a href="#cb80-2"></a>          <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="at">length.out=</span><span class="dv">100</span>),</span>
+<span id="cb80-3"><a href="#cb80-3"></a>          <span class="at">facet_args =</span> <span class="fu">list</span>(<span class="at">nrow =</span> <span class="dv">2</span>)) <span class="sc">+</span></span>
+<span id="cb80-4"><a href="#cb80-4"></a>  <span class="fu">facet_text</span>(<span class="at">size =</span> <span class="dv">13</span>) <span class="sc">+</span></span>
+<span id="cb80-5"><a href="#cb80-5"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>),</span>
+<span id="cb80-6"><a href="#cb80-6"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"0"</span>,<span class="st">"0.25"</span>,<span class="st">"0.5"</span>,<span class="st">"0.75"</span>,<span class="st">"1"</span>)) <span class="sc">+</span></span>
+<span id="cb80-7"><a href="#cb80-7"></a>  <span class="fu">theme</span>(<span class="at">axis.line.y =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb80-8"><a href="#cb80-8"></a>  <span class="fu">xlab</span>(<span class="st">"Bayesian R^2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in dim(x) &lt;- length(x): invalid first argument, must be vector (list or atomic)</code></pre>
+</div>
+</div>
+<p>Bayes-R2 and LOO-R2</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1"></a><span class="fu">bayes_R2</span>(fit1) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span> <span class="fu">tt</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error: object 'fit1' not found</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1"></a><span class="fu">loo_R2</span>(fit1) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span> <span class="fu">tt</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error: object 'fit1' not found</code></pre>
+</div>
+</div>
+</section>
+<section id="r2-model" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="r2-model"><span class="header-section-number">3.3</span> R2 Model</h2>
+<p>Estimate the model, amend the code below</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">brm</span>(Gmat <span class="sc">~</span> ., <span class="at">data =</span> studentstd_Gmat,</span>
+<span id="cb86-2"><a href="#cb86-2"></a>            <span class="at">seed =</span> SEED,</span>
+<span id="cb86-3"><a href="#cb86-3"></a>            <span class="at">normalize =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb86-4"><a href="#cb86-4"></a>            <span class="at">prior=</span><span class="fu">c</span>(<span class="fu">prior</span>(<span class="fu">R2D2</span>(<span class="at">mean_R2 =</span> <span class="fl">0.5</span>, <span class="at">prec_R2 =</span> <span class="dv">1</span>, <span class="at">cons_D2 =</span> <span class="dv">1</span>,</span>
+<span id="cb86-5"><a href="#cb86-5"></a>                               <span class="at">autoscale =</span> <span class="cn">TRUE</span>),<span class="at">class=</span>b)),</span>
+<span id="cb86-6"><a href="#cb86-6"></a>            <span class="at">backend =</span> <span class="st">"cmdstanr"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Start sampling</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Running MCMC with 4 sequential chains...
+
+Chain 1 Iteration:    1 / 2000 [  0%]  (Warmup) 
+Chain 1 Iteration:  100 / 2000 [  5%]  (Warmup) 
+Chain 1 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+Chain 1 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+Chain 1 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+Chain 1 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+Chain 1 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+Chain 1 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+Chain 1 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+Chain 1 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+Chain 1 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+Chain 1 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+Chain 1 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+Chain 1 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+Chain 1 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+Chain 1 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+Chain 1 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+Chain 1 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+Chain 1 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+Chain 1 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+Chain 1 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+Chain 1 Iteration: 2000 / 2000 [100%]  (Sampling) 
+Chain 1 finished in 0.7 seconds.
+Chain 2 Iteration:    1 / 2000 [  0%]  (Warmup) 
+Chain 2 Iteration:  100 / 2000 [  5%]  (Warmup) 
+Chain 2 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+Chain 2 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+Chain 2 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+Chain 2 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+Chain 2 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+Chain 2 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+Chain 2 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+Chain 2 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+Chain 2 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+Chain 2 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+Chain 2 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+Chain 2 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+Chain 2 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+Chain 2 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+Chain 2 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+Chain 2 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+Chain 2 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+Chain 2 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+Chain 2 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+Chain 2 Iteration: 2000 / 2000 [100%]  (Sampling) 
+Chain 2 finished in 0.6 seconds.
+Chain 3 Iteration:    1 / 2000 [  0%]  (Warmup) 
+Chain 3 Iteration:  100 / 2000 [  5%]  (Warmup) 
+Chain 3 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+Chain 3 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+Chain 3 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+Chain 3 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+Chain 3 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+Chain 3 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+Chain 3 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+Chain 3 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+Chain 3 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+Chain 3 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+Chain 3 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+Chain 3 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+Chain 3 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+Chain 3 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+Chain 3 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+Chain 3 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+Chain 3 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+Chain 3 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+Chain 3 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+Chain 3 Iteration: 2000 / 2000 [100%]  (Sampling) 
+Chain 3 finished in 0.7 seconds.
+Chain 4 Iteration:    1 / 2000 [  0%]  (Warmup) 
+Chain 4 Iteration:  100 / 2000 [  5%]  (Warmup) 
+Chain 4 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+Chain 4 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+Chain 4 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+Chain 4 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+Chain 4 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+Chain 4 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+Chain 4 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+Chain 4 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+Chain 4 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+Chain 4 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+Chain 4 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+Chain 4 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+Chain 4 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+Chain 4 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+Chain 4 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+Chain 4 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+Chain 4 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+Chain 4 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+Chain 4 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+Chain 4 Iteration: 2000 / 2000 [100%]  (Sampling) 
+Chain 4 finished in 0.7 seconds.
+
+All 4 chains finished successfully.
+Mean chain execution time: 0.7 seconds.
+Total execution time: 3.1 seconds.</code></pre>
+</div>
+</div>
+<p>Visualise Posteriors</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1"></a><span class="co"># Plot marginal posteriors</span></span>
+<span id="cb89-2"><a href="#cb89-2"></a>draws2 <span class="ot">&lt;-</span> <span class="fu">as_draws_df</span>(fit2, <span class="at">variable=</span><span class="fu">paste0</span>(<span class="st">'b_'</span>,predictors)) <span class="sc">|&gt;</span></span>
+<span id="cb89-3"><a href="#cb89-3"></a>  <span class="fu">set_variables</span>(predictors)</span>
+<span id="cb89-4"><a href="#cb89-4"></a>p <span class="ot">&lt;-</span> <span class="fu">mcmc_areas</span>(draws2,</span>
+<span id="cb89-5"><a href="#cb89-5"></a>                <span class="at">prob_outer=</span><span class="fl">0.98</span>, <span class="at">area_method =</span> <span class="st">"scaled height"</span>) <span class="sc">+</span></span>
+<span id="cb89-6"><a href="#cb89-6"></a>  <span class="fu">xlim</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="dv">3</span>,<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Scale for x is already present.
+Adding another scale for x, which will replace the existing scale.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1"></a>p <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">scale_y_discrete</span>(<span class="at">limits =</span> <span class="fu">rev</span>(<span class="fu">levels</span>(p<span class="sc">$</span>data<span class="sc">$</span>parameter)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Scale for y is already present.
+Adding another scale for y, which will replace the existing scale.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1"></a>p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="template9_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Find prior predictive R2. This should be equal to the prior you set on R2 if all predictors are scaled to have unit variance. Since binary predictors were not standardised, the prior predictive might look slightly different, let’s compute it for illustration</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1"></a>ppR2_2<span class="ot">&lt;-</span><span class="fu">numeric</span>()</span>
+<span id="cb94-2"><a href="#cb94-2"></a>sims <span class="ot">&lt;-</span> <span class="dv">4000</span></span>
+<span id="cb94-3"><a href="#cb94-3"></a></span>
+<span id="cb94-4"><a href="#cb94-4"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>sims) {</span>
+<span id="cb94-5"><a href="#cb94-5"></a>  sigma2 <span class="ot">&lt;-</span> <span class="fu">rstudent_t</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">0</span>,<span class="dv">3</span>)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb94-6"><a href="#cb94-6"></a>  R2 <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>)</span>
+<span id="cb94-7"><a href="#cb94-7"></a>  tau2 <span class="ot">&lt;-</span> R2<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>R2)</span>
+<span id="cb94-8"><a href="#cb94-8"></a>  psi <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">rdirichlet</span>(<span class="dv">1</span>,<span class="fu">rep</span>(<span class="dv">1</span>,<span class="fu">dim</span>(X)[<span class="dv">2</span>])))</span>
+<span id="cb94-9"><a href="#cb94-9"></a>  beta <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="fu">dim</span>(X)[<span class="dv">2</span>])<span class="sc">*</span><span class="fu">sqrt</span>(sigma2<span class="sc">*</span>tau2<span class="sc">*</span>psi)</span>
+<span id="cb94-10"><a href="#cb94-10"></a>  mu <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(X)<span class="sc">%*%</span><span class="fu">as.vector</span>(beta)</span>
+<span id="cb94-11"><a href="#cb94-11"></a>  muvar <span class="ot">&lt;-</span> <span class="fu">var</span>(mu)</span>
+<span id="cb94-12"><a href="#cb94-12"></a>  ppR2_2[i] <span class="ot">&lt;-</span> muvar<span class="sc">/</span>(muvar<span class="sc">+</span>sigma2)</span>
+<span id="cb94-13"><a href="#cb94-13"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now, find the predictive R2 and compare to the posterior.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1"></a><span class="co"># Prior vs posterior R2</span></span>
+<span id="cb95-2"><a href="#cb95-2"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Prior=</span>ppR2_2,<span class="at">Posterior=</span><span class="fu">bayes_R2</span>(fit2, <span class="at">summary=</span><span class="cn">FALSE</span>)) </span>
+<span id="cb95-3"><a href="#cb95-3"></a><span class="fu">names</span>(data) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Prior"</span>,<span class="st">"Posterior"</span>)</span>
+<span id="cb95-4"><a href="#cb95-4"></a><span class="fu">mcmc_hist</span>(data,</span>
+<span id="cb95-5"><a href="#cb95-5"></a>          <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="at">length.out=</span><span class="dv">100</span>),</span>
+<span id="cb95-6"><a href="#cb95-6"></a>          <span class="at">facet_args =</span> <span class="fu">list</span>(<span class="at">nrow =</span> <span class="dv">2</span>)) <span class="sc">+</span></span>
+<span id="cb95-7"><a href="#cb95-7"></a>  <span class="fu">facet_text</span>(<span class="at">size =</span> <span class="dv">13</span>) <span class="sc">+</span></span>
+<span id="cb95-8"><a href="#cb95-8"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>),</span>
+<span id="cb95-9"><a href="#cb95-9"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"0"</span>,<span class="st">"0.25"</span>,<span class="st">"0.5"</span>,<span class="st">"0.75"</span>,<span class="st">"1"</span>)) <span class="sc">+</span></span>
+<span id="cb95-10"><a href="#cb95-10"></a>  <span class="fu">theme</span>(<span class="at">axis.line.y =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb95-11"><a href="#cb95-11"></a>  <span class="fu">xlab</span>(<span class="st">"Bayesian R^2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="template9_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Summaries of R2 and LOO-R2</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1"></a><span class="co"># Bayes-R2 and LOO-R2</span></span>
+<span id="cb96-2"><a href="#cb96-2"></a><span class="fu">bayes_R2</span>(fit2) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span> <span class="fu">tt</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<!-- preamble start -->
+
+    <script>
+      function styleCell_ylmb0cfzcduko2fxy7d6(i, j, css_id) {
+        var table = document.getElementById("tinytable_ylmb0cfzcduko2fxy7d6");
+        table.rows[i].cells[j].classList.add(css_id);
+      }
+      function insertSpanRow(i, colspan, content) {
+        var table = document.getElementById('tinytable_ylmb0cfzcduko2fxy7d6');
+        var newRow = table.insertRow(i);
+        var newCell = newRow.insertCell(0);
+        newCell.setAttribute("colspan", colspan);
+        // newCell.innerText = content;
+        // this may be unsafe, but innerText does not interpret <br>
+        newCell.innerHTML = content;
+      }
+      function spanCell_ylmb0cfzcduko2fxy7d6(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_ylmb0cfzcduko2fxy7d6");
+        const targetRow = table.rows[i];
+        const targetCell = targetRow.cells[j];
+        for (let r = 0; r < rowspan; r++) {
+          // Only start deleting cells to the right for the first row (r == 0)
+          if (r === 0) {
+            // Delete cells to the right of the target cell in the first row
+            for (let c = colspan - 1; c > 0; c--) {
+              if (table.rows[i + r].cells[j + c]) {
+                table.rows[i + r].deleteCell(j + c);
+              }
+            }
+          }
+          // For rows below the first, delete starting from the target column
+          if (r > 0) {
+            for (let c = colspan - 1; c >= 0; c--) {
+              if (table.rows[i + r] && table.rows[i + r].cells[j]) {
+                table.rows[i + r].deleteCell(j);
+              }
+            }
+          }
+        }
+        // Set rowspan and colspan of the target cell
+        targetCell.rowSpan = rowspan;
+        targetCell.colSpan = colspan;
+      }
+window.addEventListener('load', function () { styleCell_ylmb0cfzcduko2fxy7d6(0, 0, 'tinytable_css_idy9g8jgyvn86mxms89wb1') })
+window.addEventListener('load', function () { styleCell_ylmb0cfzcduko2fxy7d6(0, 1, 'tinytable_css_idy9g8jgyvn86mxms89wb1') })
+window.addEventListener('load', function () { styleCell_ylmb0cfzcduko2fxy7d6(0, 2, 'tinytable_css_idy9g8jgyvn86mxms89wb1') })
+window.addEventListener('load', function () { styleCell_ylmb0cfzcduko2fxy7d6(0, 3, 'tinytable_css_idy9g8jgyvn86mxms89wb1') })
+    </script>
+
+    <style>
+    .table td.tinytable_css_idy9g8jgyvn86mxms89wb1, .table th.tinytable_css_idy9g8jgyvn86mxms89wb1 {  border-bottom: solid 0.1em #d3d8dc; }
+    </style>
+    <div class="container">
+      <table class="table table-borderless" id="tinytable_ylmb0cfzcduko2fxy7d6" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+        <thead>
+        
+              <tr>
+                <th scope="col">Estimate</th>
+                <th scope="col">Est.Error</th>
+                <th scope="col">Q2.5</th>
+                <th scope="col">Q97.5</th>
+              </tr>
+        </thead>
+        
+        <tbody>
+                <tr>
+                  <td>0.2527685</td>
+                  <td>0.03639153</td>
+                  <td>0.180655</td>
+                  <td>0.3217405</td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+<!-- hack to avoid NA insertion in last line -->
+</div>
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1"></a><span class="fu">loo_R2</span>(fit2) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span> <span class="fu">tt</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<!-- preamble start -->
+
+    <script>
+      function styleCell_yflqnhohc0csmx4p6uxp(i, j, css_id) {
+        var table = document.getElementById("tinytable_yflqnhohc0csmx4p6uxp");
+        table.rows[i].cells[j].classList.add(css_id);
+      }
+      function insertSpanRow(i, colspan, content) {
+        var table = document.getElementById('tinytable_yflqnhohc0csmx4p6uxp');
+        var newRow = table.insertRow(i);
+        var newCell = newRow.insertCell(0);
+        newCell.setAttribute("colspan", colspan);
+        // newCell.innerText = content;
+        // this may be unsafe, but innerText does not interpret <br>
+        newCell.innerHTML = content;
+      }
+      function spanCell_yflqnhohc0csmx4p6uxp(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_yflqnhohc0csmx4p6uxp");
+        const targetRow = table.rows[i];
+        const targetCell = targetRow.cells[j];
+        for (let r = 0; r < rowspan; r++) {
+          // Only start deleting cells to the right for the first row (r == 0)
+          if (r === 0) {
+            // Delete cells to the right of the target cell in the first row
+            for (let c = colspan - 1; c > 0; c--) {
+              if (table.rows[i + r].cells[j + c]) {
+                table.rows[i + r].deleteCell(j + c);
+              }
+            }
+          }
+          // For rows below the first, delete starting from the target column
+          if (r > 0) {
+            for (let c = colspan - 1; c >= 0; c--) {
+              if (table.rows[i + r] && table.rows[i + r].cells[j]) {
+                table.rows[i + r].deleteCell(j);
+              }
+            }
+          }
+        }
+        // Set rowspan and colspan of the target cell
+        targetCell.rowSpan = rowspan;
+        targetCell.colSpan = colspan;
+      }
+window.addEventListener('load', function () { styleCell_yflqnhohc0csmx4p6uxp(0, 0, 'tinytable_css_idays7kll4tzvtfo03uywb') })
+window.addEventListener('load', function () { styleCell_yflqnhohc0csmx4p6uxp(0, 1, 'tinytable_css_idays7kll4tzvtfo03uywb') })
+window.addEventListener('load', function () { styleCell_yflqnhohc0csmx4p6uxp(0, 2, 'tinytable_css_idays7kll4tzvtfo03uywb') })
+window.addEventListener('load', function () { styleCell_yflqnhohc0csmx4p6uxp(0, 3, 'tinytable_css_idays7kll4tzvtfo03uywb') })
+    </script>
+
+    <style>
+    .table td.tinytable_css_idays7kll4tzvtfo03uywb, .table th.tinytable_css_idays7kll4tzvtfo03uywb {  border-bottom: solid 0.1em #d3d8dc; }
+    </style>
+    <div class="container">
+      <table class="table table-borderless" id="tinytable_yflqnhohc0csmx4p6uxp" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+        <thead>
+        
+              <tr>
+                <th scope="col">Estimate</th>
+                <th scope="col">Est.Error</th>
+                <th scope="col">Q2.5</th>
+                <th scope="col">Q97.5</th>
+              </tr>
+        </thead>
+        
+        <tbody>
+                <tr>
+                  <td>0.2143526</td>
+                  <td>0.03283822</td>
+                  <td>0.1481408</td>
+                  <td>0.2780378</td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+<!-- hack to avoid NA insertion in last line -->
+</div>
+</div>
 
 
 <!-- -->
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -820,22 +1905,312 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   <div class="nav-page nav-page-next">
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">---</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="an">title:</span><span class="co"> "Notebook for Assignment 9"</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="an">author:</span><span class="co"> "Aki Vehtari et al."</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="an">format:</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="co">  html:</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="co">    toc: true</span></span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="co">    code-tools: true</span></span>
-<span id="cb1-8"><a href="#cb1-8"></a><span class="co">    code-line-numbers: true</span></span>
-<span id="cb1-9"><a href="#cb1-9"></a><span class="co">    number-sections: true</span></span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="co">    mainfont: Georgia, serif</span></span>
-<span id="cb1-11"><a href="#cb1-11"></a><span class="an">editor:</span><span class="co"> source</span></span>
-<span id="cb1-12"><a href="#cb1-12"></a><span class="co">---</span></span>
-<span id="cb1-13"><a href="#cb1-13"></a></span>
-<span id="cb1-14"><a href="#cb1-14"></a><span class="fu"># General information</span></span>
-<span id="cb1-15"><a href="#cb1-15"></a></span>
-<span id="cb1-16"><a href="#cb1-16"></a>This notebook will be published later!</span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb98" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb98-1"><a href="#cb98-1"></a><span class="co">---</span></span>
+<span id="cb98-2"><a href="#cb98-2"></a><span class="an">title:</span><span class="co"> "Notebook for Assignment 9"</span></span>
+<span id="cb98-3"><a href="#cb98-3"></a><span class="an">author:</span><span class="co"> "Aki Vehtari et al."</span></span>
+<span id="cb98-4"><a href="#cb98-4"></a><span class="an">format:</span></span>
+<span id="cb98-5"><a href="#cb98-5"></a><span class="co">  html:</span></span>
+<span id="cb98-6"><a href="#cb98-6"></a><span class="co">    toc: true</span></span>
+<span id="cb98-7"><a href="#cb98-7"></a><span class="co">    code-tools: true</span></span>
+<span id="cb98-8"><a href="#cb98-8"></a><span class="co">    code-line-numbers: true</span></span>
+<span id="cb98-9"><a href="#cb98-9"></a><span class="co">    number-sections: true</span></span>
+<span id="cb98-10"><a href="#cb98-10"></a><span class="co">    mainfont: Georgia, serif</span></span>
+<span id="cb98-11"><a href="#cb98-11"></a><span class="an">editor:</span><span class="co"> source</span></span>
+<span id="cb98-12"><a href="#cb98-12"></a><span class="co">---</span></span>
+<span id="cb98-13"><a href="#cb98-13"></a></span>
+<span id="cb98-14"><a href="#cb98-14"></a><span class="fu"># General information</span></span>
+<span id="cb98-15"><a href="#cb98-15"></a></span>
+<span id="cb98-16"><a href="#cb98-16"></a></span>
+<span id="cb98-17"><a href="#cb98-17"></a>This assignment relates to Lectures 9-10 and Chapter 9 of BDA3</span>
+<span id="cb98-18"><a href="#cb98-18"></a></span>
+<span id="cb98-19"><a href="#cb98-19"></a>We recommend using <span class="co">[</span><span class="ot">JupyterHub</span><span class="co">](https://jupyter.cs.aalto.fi)</span> (which has all the needed packages pre-installed).</span>
+<span id="cb98-20"><a href="#cb98-20"></a></span>
+<span id="cb98-21"><a href="#cb98-21"></a>::: hint</span>
+<span id="cb98-22"><a href="#cb98-22"></a>**Reading instructions:**</span>
+<span id="cb98-23"><a href="#cb98-23"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**For background on Bayes-R2**</span><span class="co">](https://acris.aalto.fi/ws/portalfiles/portal/34206843/bayes_R2_v3.pdf)</span></span>
+<span id="cb98-24"><a href="#cb98-24"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**The reading instructions for BDA3 Chapter 9**</span><span class="co">](../BDA3_notes.html#ch9)</span> (decision analysis).</span>
+<span id="cb98-25"><a href="#cb98-25"></a>:::</span>
+<span id="cb98-26"><a href="#cb98-26"></a></span>
+<span id="cb98-27"><a href="#cb98-27"></a>{{&lt; include includes/_general_cloze_instructions.md &gt;}}</span>
+<span id="cb98-28"><a href="#cb98-28"></a></span>
+<span id="cb98-31"><a href="#cb98-31"></a><span class="in">```{r}</span></span>
+<span id="cb98-32"><a href="#cb98-32"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(brms)) {</span>
+<span id="cb98-33"><a href="#cb98-33"></a>    <span class="fu">install.packages</span>(<span class="st">"brms"</span>)</span>
+<span id="cb98-34"><a href="#cb98-34"></a>    <span class="fu">library</span>(brms)</span>
+<span id="cb98-35"><a href="#cb98-35"></a>}</span>
+<span id="cb98-36"><a href="#cb98-36"></a></span>
+<span id="cb98-37"><a href="#cb98-37"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(cmdstanr)){</span>
+<span id="cb98-38"><a href="#cb98-38"></a>    <span class="fu">install.packages</span>(<span class="st">"cmdstanr"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://mc-stan.org/r-packages/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span>
+<span id="cb98-39"><a href="#cb98-39"></a>    <span class="fu">library</span>(cmdstanr)</span>
+<span id="cb98-40"><a href="#cb98-40"></a>}</span>
+<span id="cb98-41"><a href="#cb98-41"></a>cmdstan_installed <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
+<span id="cb98-42"><a href="#cb98-42"></a>  res <span class="ot">&lt;-</span> <span class="fu">try</span>(out <span class="ot">&lt;-</span> cmdstanr<span class="sc">::</span><span class="fu">cmdstan_path</span>(), <span class="at">silent =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb98-43"><a href="#cb98-43"></a>  <span class="sc">!</span><span class="fu">inherits</span>(res, <span class="st">"try-error"</span>)</span>
+<span id="cb98-44"><a href="#cb98-44"></a>}</span>
+<span id="cb98-45"><a href="#cb98-45"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">cmdstan_installed</span>()){</span>
+<span id="cb98-46"><a href="#cb98-46"></a>    <span class="fu">install_cmdstan</span>()</span>
+<span id="cb98-47"><a href="#cb98-47"></a>}</span>
+<span id="cb98-48"><a href="#cb98-48"></a></span>
+<span id="cb98-49"><a href="#cb98-49"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(ggplot2)){</span>
+<span id="cb98-50"><a href="#cb98-50"></a>    <span class="fu">install.packages</span>(<span class="st">"ggplot2"</span>)</span>
+<span id="cb98-51"><a href="#cb98-51"></a>    <span class="fu">library</span>(ggplot2)</span>
+<span id="cb98-52"><a href="#cb98-52"></a>}</span>
+<span id="cb98-53"><a href="#cb98-53"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(bayesplot)){</span>
+<span id="cb98-54"><a href="#cb98-54"></a>    <span class="fu">install.packages</span>(<span class="st">"bayesplot"</span>)</span>
+<span id="cb98-55"><a href="#cb98-55"></a>    <span class="fu">library</span>(bayesplot)</span>
+<span id="cb98-56"><a href="#cb98-56"></a>}</span>
+<span id="cb98-57"><a href="#cb98-57"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(dplyr)){</span>
+<span id="cb98-58"><a href="#cb98-58"></a>    <span class="fu">install.packages</span>(<span class="st">"dplyr"</span>)</span>
+<span id="cb98-59"><a href="#cb98-59"></a>    <span class="fu">library</span>(dplyr)</span>
+<span id="cb98-60"><a href="#cb98-60"></a>}</span>
+<span id="cb98-61"><a href="#cb98-61"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(tidyr)){</span>
+<span id="cb98-62"><a href="#cb98-62"></a>    <span class="fu">install.packages</span>(<span class="st">"tidyr"</span>)</span>
+<span id="cb98-63"><a href="#cb98-63"></a>    <span class="fu">library</span>(tidyr)</span>
+<span id="cb98-64"><a href="#cb98-64"></a>}</span>
+<span id="cb98-65"><a href="#cb98-65"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(matrixStats)){</span>
+<span id="cb98-66"><a href="#cb98-66"></a>    <span class="fu">install.packages</span>(<span class="st">"matrixStats"</span>)</span>
+<span id="cb98-67"><a href="#cb98-67"></a>    <span class="fu">library</span>(matrixStats)</span>
+<span id="cb98-68"><a href="#cb98-68"></a>}</span>
+<span id="cb98-69"><a href="#cb98-69"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(ggdist)){</span>
+<span id="cb98-70"><a href="#cb98-70"></a>    <span class="fu">install.packages</span>(<span class="st">"ggdist"</span>)</span>
+<span id="cb98-71"><a href="#cb98-71"></a>    <span class="fu">library</span>(ggdist)</span>
+<span id="cb98-72"><a href="#cb98-72"></a>}</span>
+<span id="cb98-73"><a href="#cb98-73"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(tinytable)){</span>
+<span id="cb98-74"><a href="#cb98-74"></a>    <span class="fu">install.packages</span>(<span class="st">"tinytable"</span>)</span>
+<span id="cb98-75"><a href="#cb98-75"></a>    <span class="fu">library</span>(tinytable)</span>
+<span id="cb98-76"><a href="#cb98-76"></a>}</span>
+<span id="cb98-77"><a href="#cb98-77"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(posterior)){</span>
+<span id="cb98-78"><a href="#cb98-78"></a>    <span class="fu">install.packages</span>(<span class="st">"posterior"</span>)</span>
+<span id="cb98-79"><a href="#cb98-79"></a>    <span class="fu">library</span>(posterior)</span>
+<span id="cb98-80"><a href="#cb98-80"></a>}</span>
+<span id="cb98-81"><a href="#cb98-81"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(patchwork)){</span>
+<span id="cb98-82"><a href="#cb98-82"></a>    <span class="fu">install.packages</span>(<span class="st">"patchwork"</span>)</span>
+<span id="cb98-83"><a href="#cb98-83"></a>    <span class="fu">library</span>(patchwork)</span>
+<span id="cb98-84"><a href="#cb98-84"></a>}</span>
+<span id="cb98-85"><a href="#cb98-85"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(mvtnorm)){</span>
+<span id="cb98-86"><a href="#cb98-86"></a>    <span class="fu">install.packages</span>(<span class="st">"mvtnorm"</span>)</span>
+<span id="cb98-87"><a href="#cb98-87"></a>    <span class="fu">library</span>(mvtnorm)</span>
+<span id="cb98-88"><a href="#cb98-88"></a>}</span>
+<span id="cb98-89"><a href="#cb98-89"></a><span class="fu">theme_set</span>(bayesplot<span class="sc">::</span><span class="fu">theme_default</span>(<span class="at">base_family =</span> <span class="st">"sans"</span>))</span>
+<span id="cb98-90"><a href="#cb98-90"></a><span class="in">```</span></span>
+<span id="cb98-91"><a href="#cb98-91"></a></span>
+<span id="cb98-92"><a href="#cb98-92"></a><span class="fu"># R2</span></span>
+<span id="cb98-93"><a href="#cb98-93"></a></span>
+<span id="cb98-94"><a href="#cb98-94"></a>Compute and plot the prior predictive R2 distributions for the standard normal prior and R2 prior normal models. Modify the code below.</span>
+<span id="cb98-97"><a href="#cb98-97"></a><span class="in">```{r}</span></span>
+<span id="cb98-98"><a href="#cb98-98"></a>sims <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb98-99"><a href="#cb98-99"></a>p <span class="ot">&lt;-</span> <span class="dv">26</span></span>
+<span id="cb98-100"><a href="#cb98-100"></a>n <span class="ot">&lt;-</span> <span class="dv">400</span></span>
+<span id="cb98-101"><a href="#cb98-101"></a>X <span class="ot">&lt;-</span> <span class="fu">rmvnorm</span>(n,<span class="at">mean =</span> <span class="fu">array</span>(<span class="dv">0</span>,p),<span class="at">sigma =</span> <span class="fu">diag</span>(<span class="fu">array</span>(<span class="dv">1</span>,p)))</span>
+<span id="cb98-102"><a href="#cb98-102"></a></span>
+<span id="cb98-103"><a href="#cb98-103"></a></span>
+<span id="cb98-104"><a href="#cb98-104"></a><span class="do">## Prior Predictive Graphs: Normal</span></span>
+<span id="cb98-105"><a href="#cb98-105"></a>ppR2_gausprior<span class="ot">&lt;-</span><span class="fu">numeric</span>()</span>
+<span id="cb98-106"><a href="#cb98-106"></a></span>
+<span id="cb98-107"><a href="#cb98-107"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>sims) {</span>
+<span id="cb98-108"><a href="#cb98-108"></a>  sigma2 <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="dv">1</span>,<span class="at">rate=</span><span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb98-109"><a href="#cb98-109"></a>  beta <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(p)</span>
+<span id="cb98-110"><a href="#cb98-110"></a>  mu <span class="ot">&lt;-</span> X<span class="sc">%*%</span><span class="fu">as.vector</span>(beta)</span>
+<span id="cb98-111"><a href="#cb98-111"></a>  muvar <span class="ot">&lt;-</span> <span class="fu">var</span>(mu)</span>
+<span id="cb98-112"><a href="#cb98-112"></a>  ppR2_gausprior[i] <span class="ot">&lt;-</span> muvar<span class="sc">/</span>(muvar<span class="sc">+</span>sigma2)</span>
+<span id="cb98-113"><a href="#cb98-113"></a>}</span>
+<span id="cb98-114"><a href="#cb98-114"></a><span class="fu">ggplot</span>()<span class="sc">+</span><span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">x=</span>ppR2_gausprior), <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="at">length.out=</span><span class="dv">50</span>)) <span class="sc">+</span></span>
+<span id="cb98-115"><a href="#cb98-115"></a>  <span class="fu">xlim</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb98-116"><a href="#cb98-116"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks=</span><span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb98-117"><a href="#cb98-117"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Prior predictive Bayesian R^2"</span>,<span class="at">y=</span><span class="st">""</span>)</span>
+<span id="cb98-118"><a href="#cb98-118"></a></span>
+<span id="cb98-119"><a href="#cb98-119"></a><span class="do">## Prior Predictive Graphs: R^2 prior</span></span>
+<span id="cb98-120"><a href="#cb98-120"></a>ppR2_r2prior<span class="ot">&lt;-</span><span class="fu">numeric</span>()</span>
+<span id="cb98-121"><a href="#cb98-121"></a>mu_R2 <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
+<span id="cb98-122"><a href="#cb98-122"></a>scale_R2 <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb98-123"><a href="#cb98-123"></a></span>
+<span id="cb98-124"><a href="#cb98-124"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>sims) {</span>
+<span id="cb98-125"><a href="#cb98-125"></a>  sigma2 <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="dv">1</span>,<span class="at">rate=</span><span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb98-126"><a href="#cb98-126"></a>  R2 <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(<span class="dv">1</span>,(mu_R2<span class="sc">*</span>scale_R2),((<span class="dv">1</span><span class="sc">-</span>mu_R2)<span class="sc">*</span>scale_R2))</span>
+<span id="cb98-127"><a href="#cb98-127"></a>  tau2 <span class="ot">&lt;-</span> R2<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>R2)</span>
+<span id="cb98-128"><a href="#cb98-128"></a>  psi <span class="ot">&lt;-</span> <span class="fu">rdirichlet</span>(<span class="dv">1</span>,<span class="fu">rep</span>(<span class="dv">1</span>,p))</span>
+<span id="cb98-129"><a href="#cb98-129"></a>  beta <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(p) <span class="sc">*</span> <span class="fu">sqrt</span>(tau2<span class="sc">*</span>psi<span class="sc">*</span>sigma2)</span>
+<span id="cb98-130"><a href="#cb98-130"></a>  mu <span class="ot">&lt;-</span> X<span class="sc">%*%</span><span class="fu">as.vector</span>(beta)</span>
+<span id="cb98-131"><a href="#cb98-131"></a>  muvar <span class="ot">&lt;-</span> <span class="fu">var</span>(mu)</span>
+<span id="cb98-132"><a href="#cb98-132"></a>  ppR2_r2prior[i] <span class="ot">&lt;-</span> muvar<span class="sc">/</span>(muvar<span class="sc">+</span>sigma2)</span>
+<span id="cb98-133"><a href="#cb98-133"></a>}</span>
+<span id="cb98-134"><a href="#cb98-134"></a><span class="fu">ggplot</span>()<span class="sc">+</span><span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">x=</span>ppR2_r2prior), <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="at">length.out=</span><span class="dv">50</span>)) <span class="sc">+</span></span>
+<span id="cb98-135"><a href="#cb98-135"></a>  <span class="fu">xlim</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb98-136"><a href="#cb98-136"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks=</span><span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb98-137"><a href="#cb98-137"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Prior predictive Bayesian R^2"</span>,<span class="at">y=</span><span class="st">""</span>)</span>
+<span id="cb98-138"><a href="#cb98-138"></a></span>
+<span id="cb98-139"><a href="#cb98-139"></a><span class="in">```</span></span>
+<span id="cb98-140"><a href="#cb98-140"></a></span>
+<span id="cb98-141"><a href="#cb98-141"></a><span class="fu"># Portuguese Student Data</span></span>
+<span id="cb98-142"><a href="#cb98-142"></a></span>
+<span id="cb98-143"><a href="#cb98-143"></a><span class="fu">## Data Prep</span></span>
+<span id="cb98-144"><a href="#cb98-144"></a></span>
+<span id="cb98-147"><a href="#cb98-147"></a><span class="in">```{r}</span></span>
+<span id="cb98-148"><a href="#cb98-148"></a><span class="co"># Load the data</span></span>
+<span id="cb98-149"><a href="#cb98-149"></a>student <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">url</span>(<span class="st">'https://raw.githubusercontent.com/avehtari/ROS-Examples/master/Student/data/student-merged.csv'</span>))</span>
+<span id="cb98-150"><a href="#cb98-150"></a></span>
+<span id="cb98-151"><a href="#cb98-151"></a><span class="co"># Predictors to be used</span></span>
+<span id="cb98-152"><a href="#cb98-152"></a>predictors <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"school"</span>,<span class="st">"sex"</span>,<span class="st">"age"</span>,<span class="st">"address"</span>,<span class="st">"famsize"</span>,<span class="st">"Pstatus"</span>,<span class="st">"Medu"</span>,<span class="st">"Fedu"</span>,<span class="st">"traveltime"</span>,<span class="st">"studytime"</span>,<span class="st">"failures"</span>,<span class="st">"schoolsup"</span>,<span class="st">"famsup"</span>,<span class="st">"paid"</span>,<span class="st">"activities"</span>, <span class="st">"nursery"</span>, <span class="st">"higher"</span>, <span class="st">"internet"</span>, <span class="st">"romantic"</span>,<span class="st">"famrel"</span>,<span class="st">"freetime"</span>,<span class="st">"goout"</span>,<span class="st">"Dalc"</span>,<span class="st">"Walc"</span>,<span class="st">"health"</span>,<span class="st">"absences"</span>)</span>
+<span id="cb98-153"><a href="#cb98-153"></a>p <span class="ot">&lt;-</span> <span class="fu">length</span>(predictors)</span>
+<span id="cb98-154"><a href="#cb98-154"></a></span>
+<span id="cb98-155"><a href="#cb98-155"></a><span class="co"># To reduce variability us the median grades based on those three</span></span>
+<span id="cb98-156"><a href="#cb98-156"></a><span class="co"># exams for each topic, students with non-zero grades are selected</span></span>
+<span id="cb98-157"><a href="#cb98-157"></a>grades <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"G1mat"</span>,<span class="st">"G2mat"</span>,<span class="st">"G3mat"</span>,<span class="st">"G1por"</span>,<span class="st">"G2por"</span>,<span class="st">"G3por"</span>)</span>
+<span id="cb98-158"><a href="#cb98-158"></a>student <span class="ot">&lt;-</span> student <span class="sc">%&gt;%</span></span>
+<span id="cb98-159"><a href="#cb98-159"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">matches</span>(<span class="st">"G[1-3]..."</span>), <span class="sc">~</span><span class="fu">na_if</span>(.,<span class="dv">0</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb98-160"><a href="#cb98-160"></a>  <span class="fu">mutate</span>(<span class="at">Gmat =</span> <span class="fu">rowMedians</span>(<span class="fu">as.matrix</span>(<span class="fu">select</span>(.,<span class="fu">matches</span>(<span class="st">"G.mat"</span>))), <span class="at">na.rm=</span><span class="cn">TRUE</span>),</span>
+<span id="cb98-161"><a href="#cb98-161"></a>         <span class="at">Gpor =</span> <span class="fu">rowMedians</span>(<span class="fu">as.matrix</span>(<span class="fu">select</span>(.,<span class="fu">matches</span>(<span class="st">"G.por"</span>))), <span class="at">na.rm=</span><span class="cn">TRUE</span>))</span>
+<span id="cb98-162"><a href="#cb98-162"></a>student_Gmat <span class="ot">&lt;-</span> <span class="fu">subset</span>(student, <span class="fu">is.finite</span>(Gmat), <span class="at">select=</span><span class="fu">c</span>(<span class="st">"Gmat"</span>,predictors))</span>
+<span id="cb98-163"><a href="#cb98-163"></a>student_Gmat <span class="ot">&lt;-</span> student_Gmat[<span class="fu">is.finite</span>(<span class="fu">rowMeans</span>(student_Gmat)),]</span>
+<span id="cb98-164"><a href="#cb98-164"></a>student_Gpor <span class="ot">&lt;-</span> <span class="fu">subset</span>(student, <span class="fu">is.finite</span>(Gpor), <span class="at">select=</span><span class="fu">c</span>(<span class="st">"Gpor"</span>,predictors))</span>
+<span id="cb98-165"><a href="#cb98-165"></a>(nmat <span class="ot">&lt;-</span> <span class="fu">nrow</span>(student_Gmat))</span>
+<span id="cb98-166"><a href="#cb98-166"></a></span>
+<span id="cb98-167"><a href="#cb98-167"></a><span class="co"># Look at the data</span></span>
+<span id="cb98-168"><a href="#cb98-168"></a><span class="fu">head</span>(student_Gmat) <span class="sc">|&gt;</span> <span class="fu">tt</span>()</span>
+<span id="cb98-169"><a href="#cb98-169"></a></span>
+<span id="cb98-170"><a href="#cb98-170"></a><span class="co"># Visualise the distributions of median math scores</span></span>
+<span id="cb98-171"><a href="#cb98-171"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(student_Gmat, <span class="fu">aes</span>(<span class="at">x=</span>Gmat)) <span class="sc">+</span> <span class="fu">geom_dots</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'Median math exam score'</span>)</span>
+<span id="cb98-172"><a href="#cb98-172"></a>p1</span>
+<span id="cb98-173"><a href="#cb98-173"></a></span>
+<span id="cb98-174"><a href="#cb98-174"></a><span class="co"># Some data transformation for non-binary predictors to have standard</span></span>
+<span id="cb98-175"><a href="#cb98-175"></a><span class="co"># deviation 1</span></span>
+<span id="cb98-176"><a href="#cb98-176"></a>studentstd_Gmat <span class="ot">&lt;-</span> student_Gmat</span>
+<span id="cb98-177"><a href="#cb98-177"></a>Gmatbin<span class="ot">&lt;-</span><span class="fu">apply</span>(student_Gmat[,predictors], <span class="dv">2</span>, <span class="cf">function</span>(x) {<span class="fu">length</span>(<span class="fu">unique</span>(x))<span class="sc">==</span><span class="dv">2</span>})</span>
+<span id="cb98-178"><a href="#cb98-178"></a>studentstd_Gmat[,predictors[<span class="sc">!</span>Gmatbin]] <span class="ot">&lt;-</span><span class="fu">scale</span>(student_Gmat[,predictors[<span class="sc">!</span>Gmatbin]])</span>
+<span id="cb98-179"><a href="#cb98-179"></a>studentstd_Gpor <span class="ot">&lt;-</span> student_Gpor</span>
+<span id="cb98-180"><a href="#cb98-180"></a>Gporbin<span class="ot">&lt;-</span><span class="fu">apply</span>(student_Gpor[,predictors], <span class="dv">2</span>, <span class="cf">function</span>(x) {<span class="fu">length</span>(<span class="fu">unique</span>(x))<span class="sc">==</span><span class="dv">2</span>})</span>
+<span id="cb98-181"><a href="#cb98-181"></a>studentstd_Gpor[,predictors[<span class="sc">!</span>Gporbin]] <span class="ot">&lt;-</span><span class="fu">scale</span>(student_Gpor[,predictors[<span class="sc">!</span>Gporbin]])</span>
+<span id="cb98-182"><a href="#cb98-182"></a></span>
+<span id="cb98-183"><a href="#cb98-183"></a><span class="co"># Set Seed for reproducibility</span></span>
+<span id="cb98-184"><a href="#cb98-184"></a>SEED <span class="ot">&lt;-</span> <span class="dv">2132</span></span>
+<span id="cb98-185"><a href="#cb98-185"></a><span class="in">```</span></span>
+<span id="cb98-186"><a href="#cb98-186"></a></span>
+<span id="cb98-187"><a href="#cb98-187"></a><span class="fu">## Normal Model</span></span>
+<span id="cb98-188"><a href="#cb98-188"></a></span>
+<span id="cb98-189"><a href="#cb98-189"></a>Estimate model </span>
+<span id="cb98-192"><a href="#cb98-192"></a><span class="in">```{r}</span></span>
+<span id="cb98-193"><a href="#cb98-193"></a><span class="co"># Estimate Model</span></span>
+<span id="cb98-194"><a href="#cb98-194"></a>fit1 <span class="ot">&lt;-</span> <span class="fu">brm</span>(Gmat <span class="sc">~</span> ., <span class="at">data =</span> studentstd_Gmat,</span>
+<span id="cb98-195"><a href="#cb98-195"></a>             <span class="at">normalize=</span><span class="cn">FALSE</span>,</span>
+<span id="cb98-196"><a href="#cb98-196"></a>            <span class="at">seed =</span> SEED)</span>
+<span id="cb98-197"><a href="#cb98-197"></a><span class="in">```</span></span>
+<span id="cb98-198"><a href="#cb98-198"></a></span>
+<span id="cb98-199"><a href="#cb98-199"></a>Visualise posteriors</span>
+<span id="cb98-202"><a href="#cb98-202"></a><span class="in">```{r}</span></span>
+<span id="cb98-203"><a href="#cb98-203"></a><span class="co"># Plot marginal posteriors of the coefficients</span></span>
+<span id="cb98-204"><a href="#cb98-204"></a>drawsmu <span class="ot">&lt;-</span> <span class="fu">as_draws_df</span>(fit1, <span class="at">variable=</span><span class="fu">paste0</span>(<span class="st">'b_'</span>,predictors)) <span class="sc">|&gt;</span></span>
+<span id="cb98-205"><a href="#cb98-205"></a>  <span class="fu">set_variables</span>(predictors)</span>
+<span id="cb98-206"><a href="#cb98-206"></a>p <span class="ot">&lt;-</span> <span class="fu">mcmc_areas</span>(drawsmu,</span>
+<span id="cb98-207"><a href="#cb98-207"></a>                <span class="at">prob_outer=</span><span class="fl">0.98</span>, <span class="at">area_method =</span> <span class="st">"scaled height"</span>) <span class="sc">+</span></span>
+<span id="cb98-208"><a href="#cb98-208"></a>  <span class="fu">xlim</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="dv">3</span>,<span class="dv">3</span>))</span>
+<span id="cb98-209"><a href="#cb98-209"></a>p <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">scale_y_discrete</span>(<span class="at">limits =</span> <span class="fu">rev</span>(<span class="fu">levels</span>(p<span class="sc">$</span>data<span class="sc">$</span>parameter)))</span>
+<span id="cb98-210"><a href="#cb98-210"></a>p</span>
+<span id="cb98-211"><a href="#cb98-211"></a><span class="in">```</span></span>
+<span id="cb98-212"><a href="#cb98-212"></a></span>
+<span id="cb98-213"><a href="#cb98-213"></a>Now, find prior predictive R2</span>
+<span id="cb98-216"><a href="#cb98-216"></a><span class="in">```{r}</span></span>
+<span id="cb98-217"><a href="#cb98-217"></a>X <span class="ot">&lt;-</span> studentstd_Gmat[,<span class="dv">2</span><span class="sc">:</span><span class="fu">dim</span>(student_Gmat)[<span class="dv">2</span>]] </span>
+<span id="cb98-218"><a href="#cb98-218"></a></span>
+<span id="cb98-219"><a href="#cb98-219"></a>ppR2_1<span class="ot">&lt;-</span><span class="fu">numeric</span>()</span>
+<span id="cb98-220"><a href="#cb98-220"></a>sims <span class="ot">&lt;-</span> <span class="dv">4000</span></span>
+<span id="cb98-221"><a href="#cb98-221"></a></span>
+<span id="cb98-222"><a href="#cb98-222"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>sims) {</span>
+<span id="cb98-223"><a href="#cb98-223"></a>  sigma2 <span class="ot">&lt;-</span> <span class="fu">rstudent_t</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">0</span>,<span class="dv">3</span>)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb98-224"><a href="#cb98-224"></a>  beta <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="fu">length</span>(predictors))</span>
+<span id="cb98-225"><a href="#cb98-225"></a>  mu <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(X)<span class="sc">%*%</span><span class="fu">as.vector</span>(beta)</span>
+<span id="cb98-226"><a href="#cb98-226"></a>  muvar <span class="ot">&lt;-</span> <span class="fu">var</span>(mu)</span>
+<span id="cb98-227"><a href="#cb98-227"></a>  ppR2_1[i] <span class="ot">&lt;-</span> muvar<span class="sc">/</span>(muvar<span class="sc">+</span>sigma2)</span>
+<span id="cb98-228"><a href="#cb98-228"></a>}</span>
+<span id="cb98-229"><a href="#cb98-229"></a><span class="in">```</span></span>
+<span id="cb98-230"><a href="#cb98-230"></a></span>
+<span id="cb98-231"><a href="#cb98-231"></a></span>
+<span id="cb98-232"><a href="#cb98-232"></a>Plot prior predictive R2 vs posterior R2</span>
+<span id="cb98-235"><a href="#cb98-235"></a><span class="in">```{r}</span></span>
+<span id="cb98-236"><a href="#cb98-236"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Prior=</span>ppR2_1,<span class="at">Posterior=</span><span class="fu">bayes_R2</span>(fit1, <span class="at">summary=</span><span class="cn">FALSE</span>)) </span>
+<span id="cb98-237"><a href="#cb98-237"></a><span class="fu">names</span>(data) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Prior"</span>,<span class="st">"Posterior"</span>)</span>
+<span id="cb98-238"><a href="#cb98-238"></a></span>
+<span id="cb98-239"><a href="#cb98-239"></a><span class="fu">mcmc_hist</span>(data,</span>
+<span id="cb98-240"><a href="#cb98-240"></a>          <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="at">length.out=</span><span class="dv">100</span>),</span>
+<span id="cb98-241"><a href="#cb98-241"></a>          <span class="at">facet_args =</span> <span class="fu">list</span>(<span class="at">nrow =</span> <span class="dv">2</span>)) <span class="sc">+</span></span>
+<span id="cb98-242"><a href="#cb98-242"></a>  <span class="fu">facet_text</span>(<span class="at">size =</span> <span class="dv">13</span>) <span class="sc">+</span></span>
+<span id="cb98-243"><a href="#cb98-243"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>),</span>
+<span id="cb98-244"><a href="#cb98-244"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"0"</span>,<span class="st">"0.25"</span>,<span class="st">"0.5"</span>,<span class="st">"0.75"</span>,<span class="st">"1"</span>)) <span class="sc">+</span></span>
+<span id="cb98-245"><a href="#cb98-245"></a>  <span class="fu">theme</span>(<span class="at">axis.line.y =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb98-246"><a href="#cb98-246"></a>  <span class="fu">xlab</span>(<span class="st">"Bayesian R^2"</span>)</span>
+<span id="cb98-247"><a href="#cb98-247"></a><span class="in">```</span></span>
+<span id="cb98-248"><a href="#cb98-248"></a></span>
+<span id="cb98-249"><a href="#cb98-249"></a></span>
+<span id="cb98-250"><a href="#cb98-250"></a>Bayes-R2 and LOO-R2</span>
+<span id="cb98-253"><a href="#cb98-253"></a><span class="in">```{r}</span></span>
+<span id="cb98-254"><a href="#cb98-254"></a><span class="fu">bayes_R2</span>(fit1) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span> <span class="fu">tt</span>()</span>
+<span id="cb98-255"><a href="#cb98-255"></a><span class="fu">loo_R2</span>(fit1) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span> <span class="fu">tt</span>()</span>
+<span id="cb98-256"><a href="#cb98-256"></a><span class="in">```</span></span>
+<span id="cb98-257"><a href="#cb98-257"></a></span>
+<span id="cb98-258"><a href="#cb98-258"></a></span>
+<span id="cb98-259"><a href="#cb98-259"></a><span class="fu">## R2 Model</span></span>
+<span id="cb98-260"><a href="#cb98-260"></a></span>
+<span id="cb98-261"><a href="#cb98-261"></a>Estimate the model, amend the code below</span>
+<span id="cb98-264"><a href="#cb98-264"></a><span class="in">```{r}</span></span>
+<span id="cb98-265"><a href="#cb98-265"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">brm</span>(Gmat <span class="sc">~</span> ., <span class="at">data =</span> studentstd_Gmat,</span>
+<span id="cb98-266"><a href="#cb98-266"></a>            <span class="at">seed =</span> SEED,</span>
+<span id="cb98-267"><a href="#cb98-267"></a>            <span class="at">normalize =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb98-268"><a href="#cb98-268"></a>            <span class="at">prior=</span><span class="fu">c</span>(<span class="fu">prior</span>(<span class="fu">R2D2</span>(<span class="at">mean_R2 =</span> <span class="fl">0.5</span>, <span class="at">prec_R2 =</span> <span class="dv">1</span>, <span class="at">cons_D2 =</span> <span class="dv">1</span>,</span>
+<span id="cb98-269"><a href="#cb98-269"></a>                               <span class="at">autoscale =</span> <span class="cn">TRUE</span>),<span class="at">class=</span>b)),</span>
+<span id="cb98-270"><a href="#cb98-270"></a>            <span class="at">backend =</span> <span class="st">"cmdstanr"</span>)</span>
+<span id="cb98-271"><a href="#cb98-271"></a><span class="in">```</span></span>
+<span id="cb98-272"><a href="#cb98-272"></a></span>
+<span id="cb98-273"><a href="#cb98-273"></a>Visualise Posteriors</span>
+<span id="cb98-276"><a href="#cb98-276"></a><span class="in">```{r}</span></span>
+<span id="cb98-277"><a href="#cb98-277"></a><span class="co"># Plot marginal posteriors</span></span>
+<span id="cb98-278"><a href="#cb98-278"></a>draws2 <span class="ot">&lt;-</span> <span class="fu">as_draws_df</span>(fit2, <span class="at">variable=</span><span class="fu">paste0</span>(<span class="st">'b_'</span>,predictors)) <span class="sc">|&gt;</span></span>
+<span id="cb98-279"><a href="#cb98-279"></a>  <span class="fu">set_variables</span>(predictors)</span>
+<span id="cb98-280"><a href="#cb98-280"></a>p <span class="ot">&lt;-</span> <span class="fu">mcmc_areas</span>(draws2,</span>
+<span id="cb98-281"><a href="#cb98-281"></a>                <span class="at">prob_outer=</span><span class="fl">0.98</span>, <span class="at">area_method =</span> <span class="st">"scaled height"</span>) <span class="sc">+</span></span>
+<span id="cb98-282"><a href="#cb98-282"></a>  <span class="fu">xlim</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="dv">3</span>,<span class="dv">3</span>))</span>
+<span id="cb98-283"><a href="#cb98-283"></a>p <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">scale_y_discrete</span>(<span class="at">limits =</span> <span class="fu">rev</span>(<span class="fu">levels</span>(p<span class="sc">$</span>data<span class="sc">$</span>parameter)))</span>
+<span id="cb98-284"><a href="#cb98-284"></a>p</span>
+<span id="cb98-285"><a href="#cb98-285"></a><span class="in">```</span></span>
+<span id="cb98-286"><a href="#cb98-286"></a></span>
+<span id="cb98-287"><a href="#cb98-287"></a>Find prior predictive R2. This should be equal to the prior you set on R2 if all predictors are scaled to have unit variance. Since binary predictors were not standardised, the prior predictive might look slightly different, let's compute it for illustration</span>
+<span id="cb98-290"><a href="#cb98-290"></a><span class="in">```{r}</span></span>
+<span id="cb98-291"><a href="#cb98-291"></a>ppR2_2<span class="ot">&lt;-</span><span class="fu">numeric</span>()</span>
+<span id="cb98-292"><a href="#cb98-292"></a>sims <span class="ot">&lt;-</span> <span class="dv">4000</span></span>
+<span id="cb98-293"><a href="#cb98-293"></a></span>
+<span id="cb98-294"><a href="#cb98-294"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>sims) {</span>
+<span id="cb98-295"><a href="#cb98-295"></a>  sigma2 <span class="ot">&lt;-</span> <span class="fu">rstudent_t</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">0</span>,<span class="dv">3</span>)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb98-296"><a href="#cb98-296"></a>  R2 <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>)</span>
+<span id="cb98-297"><a href="#cb98-297"></a>  tau2 <span class="ot">&lt;-</span> R2<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>R2)</span>
+<span id="cb98-298"><a href="#cb98-298"></a>  psi <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">rdirichlet</span>(<span class="dv">1</span>,<span class="fu">rep</span>(<span class="dv">1</span>,<span class="fu">dim</span>(X)[<span class="dv">2</span>])))</span>
+<span id="cb98-299"><a href="#cb98-299"></a>  beta <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="fu">dim</span>(X)[<span class="dv">2</span>])<span class="sc">*</span><span class="fu">sqrt</span>(sigma2<span class="sc">*</span>tau2<span class="sc">*</span>psi)</span>
+<span id="cb98-300"><a href="#cb98-300"></a>  mu <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(X)<span class="sc">%*%</span><span class="fu">as.vector</span>(beta)</span>
+<span id="cb98-301"><a href="#cb98-301"></a>  muvar <span class="ot">&lt;-</span> <span class="fu">var</span>(mu)</span>
+<span id="cb98-302"><a href="#cb98-302"></a>  ppR2_2[i] <span class="ot">&lt;-</span> muvar<span class="sc">/</span>(muvar<span class="sc">+</span>sigma2)</span>
+<span id="cb98-303"><a href="#cb98-303"></a>}</span>
+<span id="cb98-304"><a href="#cb98-304"></a><span class="in">```</span></span>
+<span id="cb98-305"><a href="#cb98-305"></a></span>
+<span id="cb98-306"><a href="#cb98-306"></a></span>
+<span id="cb98-307"><a href="#cb98-307"></a>Now, find the predictive R2 and compare to the posterior.</span>
+<span id="cb98-310"><a href="#cb98-310"></a><span class="in">```{r}</span></span>
+<span id="cb98-311"><a href="#cb98-311"></a><span class="co"># Prior vs posterior R2</span></span>
+<span id="cb98-312"><a href="#cb98-312"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Prior=</span>ppR2_2,<span class="at">Posterior=</span><span class="fu">bayes_R2</span>(fit2, <span class="at">summary=</span><span class="cn">FALSE</span>)) </span>
+<span id="cb98-313"><a href="#cb98-313"></a><span class="fu">names</span>(data) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Prior"</span>,<span class="st">"Posterior"</span>)</span>
+<span id="cb98-314"><a href="#cb98-314"></a><span class="fu">mcmc_hist</span>(data,</span>
+<span id="cb98-315"><a href="#cb98-315"></a>          <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="at">length.out=</span><span class="dv">100</span>),</span>
+<span id="cb98-316"><a href="#cb98-316"></a>          <span class="at">facet_args =</span> <span class="fu">list</span>(<span class="at">nrow =</span> <span class="dv">2</span>)) <span class="sc">+</span></span>
+<span id="cb98-317"><a href="#cb98-317"></a>  <span class="fu">facet_text</span>(<span class="at">size =</span> <span class="dv">13</span>) <span class="sc">+</span></span>
+<span id="cb98-318"><a href="#cb98-318"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>),</span>
+<span id="cb98-319"><a href="#cb98-319"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"0"</span>,<span class="st">"0.25"</span>,<span class="st">"0.5"</span>,<span class="st">"0.75"</span>,<span class="st">"1"</span>)) <span class="sc">+</span></span>
+<span id="cb98-320"><a href="#cb98-320"></a>  <span class="fu">theme</span>(<span class="at">axis.line.y =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb98-321"><a href="#cb98-321"></a>  <span class="fu">xlab</span>(<span class="st">"Bayesian R^2"</span>)</span>
+<span id="cb98-322"><a href="#cb98-322"></a><span class="in">```</span></span>
+<span id="cb98-323"><a href="#cb98-323"></a></span>
+<span id="cb98-324"><a href="#cb98-324"></a>Summaries of R2 and LOO-R2</span>
+<span id="cb98-327"><a href="#cb98-327"></a><span class="in">```{r}</span></span>
+<span id="cb98-328"><a href="#cb98-328"></a><span class="co"># Bayes-R2 and LOO-R2</span></span>
+<span id="cb98-329"><a href="#cb98-329"></a><span class="fu">bayes_R2</span>(fit2) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span> <span class="fu">tt</span>()</span>
+<span id="cb98-330"><a href="#cb98-330"></a><span class="fu">loo_R2</span>(fit2) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span> <span class="fu">tt</span>()</span>
+<span id="cb98-331"><a href="#cb98-331"></a><span class="in">```</span></span>
+</code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
