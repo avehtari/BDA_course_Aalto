@@ -35,6 +35,35 @@
 \usepackage{eurosym}
 \usepackage{microtype}
 
+% minted
+\usepackage{minted}
+\setminted{highlightcolor=yellow!25}
+\newmintinline{r}{}
+% The following is adjusted from
+% https://tex.stackexchange.com/questions/548592/changing-all-colors-to-black-white-using-minted-sty
+\makeatletter
+\newcommand{\minted@style@bw}{%
+  \renewcommand\fcolorbox[3][]{##3}%
+  \renewcommand\textcolor[3][]{##3}%
+  \color{gray}
+}
+% define new minted option "gray"
+\minted@def@opt@switch{gray}
+\fvset{formatcom*={%
+  \ifthenelse{\equal{\minted@get@opt{gray}{true}}{true}}
+  {\minted@style@bw}{}%
+}}
+\makeatother
+% The following is ajusted from
+% https://tex.stackexchange.com/questions/74459/remove-space-before-colorbox
+\newcommand{\reducedstrut}{\vrule width 0pt height .9\ht\strutbox depth .9\dp\strutbox\relax}
+\newcommand{\highlight}[1]{%
+  \begingroup
+  \setlength{\fboxsep}{0pt}%  
+  \colorbox{yellow!30}{\reducedstrut\detokenize{#1}\/}%
+  \endgroup
+}
+
 \usepackage{natbib}
 \bibliographystyle{apalike}
 
@@ -773,6 +802,29 @@ Sigma <- solve(optimres$hessian)
 
 \end{frame}
 
+\begin{frame}[fragile]{brms supports Laplace / Pathfinder / ADVI}
+
+  These might be useful for initializng MCMC or big data. The ADVI
+  implementation is not very good.
+  
+\begin{minted}[fontsize=\footnotesize,escapeinside=\%\%]{r}
+fit1 <- brm(..., %\highlight{algorithm = "laplace"}%)
+
+fit1 <- brm(..., %\highlight{algorithm = "pathfinder"}%)
+
+fit1 <- brm(..., %\highlight{algorithm = "meanfield"}%)
+
+fit1 <- brm(..., %\highlight{algorithm = "fullrank"}%)
+\end{minted}
+
+% \begin{minted}[fontsize=\footnotesize]{r}
+% fit1 <- brm(..., algorithm = "laplace")
+
+% fit1 <- brm(..., algorithm = "pathfinder")
+% \end{minted}
+
+\end{frame}
+
 \end{document}
 
 \begin{frame}{Large sample theory}
@@ -1185,6 +1237,7 @@ Sigma <- solve(optimres$hessian)
 \end{document}
 
 %%% Local Variables: 
-%%% TeX-PDF-mode: t
+%%% mode: latex
 %%% TeX-master: t
-%%% End: 
+%%% TeX-command-extra-options: "-shell-escape"
+%%% End:
