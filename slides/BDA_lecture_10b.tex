@@ -29,8 +29,6 @@
 \usepackage{amsbsy}
 \usepackage{eucal}
 \usepackage{rotating}
-\usepackage{listings}
-\usepackage{lstbayes}
 \usepackage[all,poly,ps,color]{xy}
 \usepackage{eurosym}
 \usepackage{microtype}
@@ -448,8 +446,7 @@
     \item iterative optimization to find a mode (may use gradients)
     \item autodiff or finite-difference for gradients and Hessian
     \item<2> e.g. in R, demo4\_1.R:
-    {\scriptsize
-\begin{lstlisting}[]
+\begin{minted}[fontsize=\footnotesize]{r}
 bioassayfun <- function(w, df) {
   z <- w[1] + w[2]*df$x
   -sum(df$y*(z) - df$n*log1p(exp(z)))
@@ -459,8 +456,7 @@ theta0 <- c(0,0)
 optimres <- optim(w0, bioassayfun, gr=NULL, df1, hessian=T)
 thetahat <- optimres$par
 Sigma <- solve(optimres$hessian)
-\end{lstlisting}
-      }
+\end{minted}
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -566,7 +562,7 @@ Sigma <- solve(optimres$hessian)
     \begin{itemize}
     \item e.g. $\theta \in [0,1]$ presenting probability
     \item<+-> Stan code can include constraints\\
-      \texttt{real<lower=,upper=0> theta;}
+      \rinline/real<lower=0,upper=0> theta;/
     \item<+-> for this, Stan does the inference in unconstrained space
       using logit transformation
     \item<+-> density of the transformed parameter needs to include
@@ -816,12 +812,6 @@ fit1 <- brm(..., %\highlight{algorithm = "meanfield"}%)
 
 fit1 <- brm(..., %\highlight{algorithm = "fullrank"}%)
 \end{minted}
-
-% \begin{minted}[fontsize=\footnotesize]{r}
-% fit1 <- brm(..., algorithm = "laplace")
-
-% fit1 <- brm(..., algorithm = "pathfinder")
-% \end{minted}
 
 \end{frame}
 
