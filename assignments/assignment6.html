@@ -345,18 +345,75 @@ General Instructions for Answering the Assignment Questions
 <h3 class="anchored"></h3>
 <h3 class="anchored">Lecture 6/Chapter 12 of BDA Quiz (96% of grade)</h3>
 <p>This week's assignment focuses on building the foundations for using frontier MCMC methods and the probabilistic programming language Stan. We will directly code in Stan, but later assignments will use the <a href="https://paulbuerkner.com/brms/">brms package</a> for estimating Stan models.&nbsp;</p>
-<p><br></p>
+<p><br>
+</p>
 <h3 class="anchored">1. A brief overview of Hamiltonian Monte Carlo (HMC)</h3>
-<p>1.1: Based on the <a href="https://avehtari.github.io/BDA_course_Aalto/slides/BDA_lecture_6.pdf">lecture slides</a> for this week, what is the intuition behind HMC?<br></p>
+<p>1.1: Based on the <a href="https://avehtari.github.io/BDA_course_Aalto/slides/BDA_lecture_6.pdf">lecture slides</a> for this week, what is the intuition behind HMC?<br>
+</p>
 <p></p>
 <p>In order to generate good proposals, HMC uses the Hamiltonian function and it's partial derivatives to generate a path along the surface of the log posterior. As in the lecture, define \( \phi \) as the momentum variable which is of the same dimension as the parameter vector \( \theta \). The Hamiltonian function has two terms \( U(\theta) \) and \( K(\phi) \).&nbsp;&nbsp;</p>
-<p>1.2: What is the intuition behind the term \( U( \theta ) \)?<br>&nbsp;&nbsp;</p>
-<p>1.3: What is the intuition behind the term&nbsp; \( K( \phi ) \)?<br></p>
-<p>1.4: The partial derivatives of the Hamiltonian, also known as Hamilton's equations, determine how \( \theta \) and \( \phi \) change during MCMC. What problem occurs when implementing Hamilton's equations computationally?<br><br></p>
-<p>1.5: Therefore, all HMC implementations on the computer need to discretise the simulated trajectory dictated by Hamilton's equations. Which computational method does Stan (an most other HMC based algorithms) use for discretisation?<br></p>
-<p>1.6: It is not necessary in this course to know the computational details behind the leapfrog integrator, only that it is applied for L steps along the Hamiltonian trajectory with step size, \(\epsilon\). The figure below by Neal (2012) shows dynamic simulation in the joint position-momentum space using leapfrog methd. Based on these figures, which of the following statements is false=<br></p>
+<p>1.2: What is the intuition behind the term \( U( \theta ) \)?<br>
+&nbsp;&nbsp;</p>
+<p>1.3: What is the intuition behind the term&nbsp; \( K( \phi ) \)?<br>
+</p>
+<p>1.4: The partial derivatives of the Hamiltonian, also known as Hamilton's equations, determine how \( \theta \) and \( \phi \) change during MCMC. What problem occurs when implementing Hamilton's equations computationally?<br>
+<br>
+</p>
+<p>1.5: Therefore, all HMC implementations on the computer need to discretise the simulated trajectory dictated by Hamilton's equations. Which computational method does Stan (an most other HMC based algorithms) use for discretisation?<br>
+</p>
+<p>1.6: It is not necessary in this course to know the computational details behind the leapfrog integrator, only that it is applied for L steps along the Hamiltonian trajectory with step size, \(\epsilon\). The figure below by Neal (2012) shows dynamic simulation in the joint position-momentum space using leapfrog method. Based on these figures, which of the following statements is false=<br>
+</p>
 
-Figure 1<img src="https://github.com/avehtari/BDA_course_Aalto/blob/master/slides/figs/hmc_leapfrog.png?raw=true" data-hpc="true" class="Box-sc-g0xbh4-0 fzFXnm"><br><br><br>HMC has two general steps at each iteration of the MCMC chain. Denote the current state of the MCMC chain as t, then<br>1) we draw a new momentum variable \( \phi \) (often assumed to distributed marginally Gaussian) and<br>2) perform a Metropolis update with \(&nbsp;r=\exp\left(-H(\theta^*,\phi^*)+H(\theta^{(t-1)},\phi^{(t-1)})\right) \), where Hamiltonian dynamics are used to produce the proposal.<br>The two parameters of the algorithm, number of steps L and step size \(\epsilon\), need to be tuned. <br><br>1.7: What can happen eventually, when allowing the trajectory length, defined as step size times number of steps, \(\epsilon L\), to be long enough? Check out this <a href="https://chi-feng.github.io/mcmc-demo/app.html?algorithm=HamiltonianMC&amp;target=standard">interactive demo</a> (algorithm=HamiltonianMC, target=standard) and set Leapfrog steps equal to 75 for visual intuition (if the demo freezes, close the demo, restart and instead of sliders, make the control changes by editing the values in the numeric fields). Do not adjust anything else in the demo.&nbsp;<br><br><br>To avoid this behaviour that&nbsp;<em>static</em> HMC with fixed integration time (number of steps times the step size) may have, the No-U-Turn (NUTS) algorithm by <a href="https://www.jmlr.org/papers/volume15/hoffman14a/hoffman14a.pdf">Hoffman and Gelman (2014)</a> performs automatic tuning:&nbsp;neither the step size nor number of steps need be specified by the user. NUTS uses a tree-building algorithm (see the <a href="https://avehtari.github.io/BDA_course_Aalto/slides/BDA_lecture_6.pdf">slides</a>) to adaptively determine the <em>number of steps</em>, L,&nbsp; while the <em>step size</em> is adapted during the warm-up phase according to a target average acceptance ratio. To gain some more intuition on the behaviour of the adaptivity of NUTS, open the interactive demo again with his <a href="https://chi-feng.github.io/mcmc-demo/app.html?algorithm=EfficientNUTS&amp;target=banana">link</a> (algorithm=EfficientNUTS, target=banana). Set Autoplay delay to around 500, and set Leapfrog \(\delta\) t to 0.03. This algorithm corresponds to Algorithm 3 in <a href="https://arxiv.org/pdf/1111.4246">Hoffman and Gelman (2014)</a>, where for a fixed \( \epsilon \), the algorithm adaptively&nbsp;determines the number of steps, L.<br><br>1.8: What do you observe?<br><br><br>1.9: On the other hand, set Leapfrog \(\delta\) t to 0.6, all else equal. What do you observe?<br><br><br>The user does not need to select the stepsize directly. Stan includes also adaptation of the step size in the warmup phase using stochastic optimization called dual averaging. The user specifies a target acceptance ratio (in Stan actually target for expected discretization error), with argument <code>adapt_delta</code>, and a number of iterations during which adaptation of \( \epsilon L \) occurs (warm-up draws). Open, the interactive demo again with this <a href="https://chi-feng.github.io/mcmc-demo/app.html?algorithm=DualAveragingNUTS&amp;target=banana">link</a> (algorithm=DualAveragingNUTS, target=banana), and adjust the Autoplay delay to around 70, but otherwise keep the default options, particularly, keep the target acceptance ratio (here \(\delta\)) at 0.65. On the top left-hand corner m/M_adapt tells you how many draws have been taken compared to number of warm-up draws. Wait until m/M_adapt is at least 50/200.<br><br>1.10: What do you observe with the first couple of iterations?<br>&nbsp;<br><br>1.11: What do you observe with sufficient warm-up?<br>&nbsp;<br><br>1.12: Now set the target acceptance ratio to 0.95. What do you observe?<br><br><br>1.13: Now set the target acceptance ratio to 0.05. What do you observe?<br><br><br>The current Stan HMC-NUTS implementation has some further enchantments, but we will not go to details of those. The main algorithm paramaters are <code>adapt_delta</code> and <code>max_treedepth&nbsp;</code>options.<br><code><br>adapt_delta&nbsp;</code>specifies the target expected discretization error (in the same scale as the average proposal acceptance ratio), during the warm-up phase and <code>max_treedepth</code> determines the maximum number of tree doublings in dynamic simulation and thus determine also the maximum number of steps taken. The default in most packages using Stan is setting <code>adapt_delta=0.8</code>. <br><br>1.14: What should happen when you increase <code>adapt_delta</code>, all else equal?<br><br><br><code>max_treedepth</code> controls the maximum number of doublings in the tree-building algorithm and thus controls the maximum number of steps in Hamiltonian simulation. This allows the sampler to explore further away in the distribution, which can be beneficial when dealing with complex posteriors. The default in Stan is <code>max_treedepth = 10</code>. <br><br>1.15: What is the main cost to increasing the <code>max_treedepth</code>?<br><br><br>1.16: Despite the adaptated step-szie, you may encounter challenging posteriors, e.g. with highly varying curvature in log-density. What can happen if the step-size is too big compared to the curvature of the log-density? <br><br><br><br>
+Figure 1<img src="https://github.com/avehtari/BDA_course_Aalto/blob/master/slides/figs/hmc_leapfrog.png?raw=true" data-hpc="true" class="Box-sc-g0xbh4-0 fzFXnm"><br>
+<br>
+<br>
+HMC has two general steps at each iteration of the MCMC chain. Denote the current state of the MCMC chain as t, then<br>
+1) we draw a new momentum variable \( \phi \) (often assumed to distributed marginally Gaussian) and<br>
+2) perform a Metropolis update with \(&nbsp;r=\exp\left(-H(\theta^*,\phi^*)+H(\theta^{(t-1)},\phi^{(t-1)})\right) \), where Hamiltonian dynamics are used to produce the proposal.<br>
+The two parameters of the algorithm, number of steps L and step size \(\epsilon\), need to be tuned. <br>
+<br>
+1.7: What can happen eventually, when allowing the trajectory length, defined as step size times number of steps, \(\epsilon L\), to be long enough? Check out this <a href="https://chi-feng.github.io/mcmc-demo/app.html?algorithm=HamiltonianMC&amp;target=standard">interactive demo</a> (algorithm=HamiltonianMC, target=standard) and set Leapfrog steps equal to 75 for visual intuition (if the demo freezes, close the demo, restart and instead of sliders, make the control changes by editing the values in the numeric fields). Do not adjust anything else in the demo.&nbsp;<br>
+<br>
+<br>
+To avoid this behaviour that&nbsp;<em>static</em> HMC with fixed integration time (number of steps times the step size) may have, the No-U-Turn (NUTS) algorithm by <a href="https://www.jmlr.org/papers/volume15/hoffman14a/hoffman14a.pdf">Hoffman and Gelman (2014)</a> performs automatic tuning:&nbsp;neither the step size nor number of steps need be specified by the user. NUTS uses a tree-building algorithm (see the <a href="https://avehtari.github.io/BDA_course_Aalto/slides/BDA_lecture_6.pdf">slides</a>) to adaptively determine the <em>number of steps</em>, L,&nbsp; while the <em>step size</em> is adapted during the warm-up phase according to a target average acceptance ratio. To gain some more intuition on the behaviour of the adaptivity of NUTS, open the interactive demo again with his <a href="https://chi-feng.github.io/mcmc-demo/app.html?algorithm=EfficientNUTS&amp;target=banana">link</a> (algorithm=EfficientNUTS, target=banana). Set Autoplay delay to around 500, and set Leapfrog \(\delta\) t to 0.03. This algorithm corresponds to Algorithm 3 in <a href="https://arxiv.org/pdf/1111.4246">Hoffman and Gelman (2014)</a>, where for a fixed \( \epsilon \), the algorithm adaptively&nbsp;determines the number of steps, L.<br>
+<br>
+1.8: What do you observe?<br>
+<br>
+<br>
+1.9: On the other hand, set Leapfrog \(\delta\) t to 0.6, all else equal. What do you observe?<br>
+<br>
+<br>
+The user does not need to select the stepsize directly. Stan includes also adaptation of the step size in the warmup phase using stochastic optimization called dual averaging. The user specifies a target acceptance ratio (in Stan actually target for expected discretization error), with argument <code>adapt_delta</code>, and a number of iterations during which adaptation of \( \epsilon L \) occurs (warm-up draws). Open, the interactive demo again with this <a href="https://chi-feng.github.io/mcmc-demo/app.html?algorithm=DualAveragingNUTS&amp;target=banana">link</a> (algorithm=DualAveragingNUTS, target=banana), and adjust the Autoplay delay to around 70, but otherwise keep the default options, particularly, keep the target acceptance ratio (here \(\delta\)) at 0.65. On the top left-hand corner m/M_adapt tells you how many draws have been taken compared to number of warm-up draws. Wait until m/M_adapt is at least 50/200.<br>
+<br>
+1.10: What do you observe with the first couple of iterations?<br>
+&nbsp;<br>
+<br>
+1.11: What do you observe with sufficient warm-up?<br>
+&nbsp;<br>
+<br>
+1.12: Now set the target acceptance ratio to 0.95. What do you observe?<br>
+<br>
+<br>
+1.13: Now set the target acceptance ratio to 0.05. What do you observe?<br>
+<br>
+<br>
+The current Stan HMC-NUTS implementation has some further enchantments, but we will not go to details of those. The main algorithm parameters are <code>adapt_delta</code> and <code>max_treedepth&nbsp;</code>options.<br>
+<code><br>
+adapt_delta&nbsp;</code>specifies the target expected discretization error (in the same scale as the average proposal acceptance ratio), during the warm-up phase and <code>max_treedepth</code> determines the maximum number of tree doublings in dynamic simulation and thus determine also the maximum number of steps taken. The default in most packages using Stan is setting <code>adapt_delta=0.8</code>. <br>
+<br>
+1.14: What should happen when you increase <code>adapt_delta</code>, all else equal?<br>
+<br>
+<br>
+<code>max_treedepth</code> controls the maximum number of doublings in the tree-building algorithm and thus controls the maximum number of steps in Hamiltonian simulation. This allows the sampler to explore further away in the distribution, which can be beneficial when dealing with complex posteriors. The default in Stan is <code>max_treedepth = 10</code>. <br>
+<br>
+1.15: What is the main cost to increasing the <code>max_treedepth</code>?<br>
+<br>
+<br>
+1.16: Despite the adapted step-size, you may encounter challenging posteriors, e.g. with highly varying curvature in log-density. What can happen if the step-size is too big compared to the curvature of the log-density? <br>
+<br>
+<br>
+<br>
+
 
 <h3 class="anchored">2. Stan warmup</h3>
 <p>From 2018 to 2023, we have been keeping track of assignment submissions for the BDA course given the number of submissions for the 1st assignment. We will fit a simple linear model to answer two questions of interest:</p>
@@ -365,8 +422,15 @@ Figure 1<img src="https://github.com/avehtari/BDA_course_Aalto/blob/master/slide
     <li>Given the submission rates for assignments 1–8, how many students will complete the final 9th assignment (and potentially pass the course)?</li>
 </ul>
 <p>Below is broken Stan code for a linear model. In the following, we write the equations following the Stan distributional definitions. See <a href="https://mc-stan.org/docs/functions-reference/unbounded_continuous_distributions.html#normal-distribution">Stan documentation</a> for the definitions related to the normal distribution.</p>
-<p>\(p(y | x, \alpha, \beta, \sigma) = \text{normal}(y | \alpha + \beta x, \sigma) \) (normal model)<br>\(p(\alpha, \beta, \sigma) \propto \text{const.} \) (improper flat prior)</p>
-<p></p>In both the statistical model above and in the Stan model below, \(x \in \mathbb{R}^N\) and \(y \in \mathbb{R}^N \) are vectors of the covariates / predictors (the assignment number) and vectors of the observation (proportions of students who have handed in the respective assignment). \(\alpha \in \mathbb{R}\) is the unknown scalar intercept, \(\beta \in \mathbb{R}\) is the unknown scalar slope and \(\sigma \in \mathbb{R}_{&gt;0}\) is the unknown scalar observation standard deviation. The statistical model further implies<br><br>\( p(y_{pred.} | x_{pred.}, \alpha, \beta, \sigma) = \text{normal}(y_{pred.} | \alpha + \beta x, \sigma) \)<br><br>as the predictive distribution for a new observation \(y_{pred.}\) at a given new covariate value \( x_{pred.} \). The broken Stan model code:<br>&nbsp;<br>
+<p>\(p(y | x, \alpha, \beta, \sigma) = \text{normal}(y | \alpha + \beta x, \sigma) \) (normal model)<br>
+\(p(\alpha, \beta, \sigma) \propto \text{const.} \) (improper flat prior)</p>
+<p></p>In both the statistical model above and in the Stan model below, \(x \in \mathbb{R}^N\) and \(y \in \mathbb{R}^N \) are vectors of the covariates / predictors (the assignment number) and vectors of the observation (proportions of students who have handed in the respective assignment). \(\alpha \in \mathbb{R}\) is the unknown scalar intercept, \(\beta \in \mathbb{R}\) is the unknown scalar slope and \(\sigma \in \mathbb{R}_{&gt;0}\) is the unknown scalar observation standard deviation. The statistical model further implies<br>
+<br>
+\( p(y_{pred.} | x_{pred.}, \alpha, \beta, \sigma) = \text{normal}(y_{pred.} | \alpha + \beta x, \sigma) \)<br>
+<br>
+as the predictive distribution for a new observation \(y_{pred.}\) at a given new covariate value \( x_{pred.} \). The broken Stan model code:<br>
+&nbsp;<br>
+
 
 <pre style="word-wrap: break-word; white-space: pre-wrap;">data {
     // number of data points
@@ -403,40 +467,71 @@ generated quantities {
     array[N_predictions] real y_pred = normal_rng(to_array_1d(mu), sigma);
 }</pre>
 <p>Firstly, let's review some Stan syntax.</p>
-<p>2.1: What is the function of the data block?<br></p>
-<p>2.2: Why should you be careful about declarations of constraints in the data block?<br><br></p>
-<p>2.3: What is the function of the parameters block?<br></p>
-<p>2.4: Can you use statements (e.g. real&lt;lower=0&gt; theta = lambda^2) in the parameters code block, where lambda is some other variable?<br></p>
-<p>2.5: What is the function of the transformed parameters block?<br></p>
-<p>2.6: What is the function of the model block?<br><br></p>
-<p>2.7: As you've learned in the lecture or from <a href="https://mc-stan.org/docs/reference-manual/statements.html#distribution-statements.section">the Stan documentation</a>, log densities can be added to the target density either via the distribution statement using ~ or via the log probability increment statement using target +=. Furthermore, we don't need to include constant terms. Assume the model block has a line &nbsp; <code>theta ~ normal(0,1);</code>. How could you equivalently increment the log density to get the same increment (ignoring the possible difference in the constants)?<br></p>
-<p>2.8: Why can the normalising constant(s) be dropped when using MCMC (this holds for e.g. variational inference and optimisation too)?<br></p>
+<p>2.1: What is the function of the data block?<br>
+</p>
+<p>2.2: Why should you be careful about declarations of constraints in the data block?<br>
+<br>
+</p>
+<p>2.3: What is the function of the parameters block?<br>
+</p>
+<p>2.4: Can you use statements (e.g. real&lt;lower=0&gt; theta = lambda^2) in the parameters code block, where lambda is some other variable?<br>
+</p>
+<p>2.5: What is the function of the transformed parameters block?<br>
+</p>
+<p>2.6: What is the function of the model block?<br>
+<br>
+</p>
+<p>2.7: As you've learned in the lecture or from <a href="https://mc-stan.org/docs/reference-manual/statements.html#distribution-statements.section">the Stan documentation</a>, log densities can be added to the target density either via the distribution statement using ~ or via the log probability increment statement using target +=. Furthermore, we don't need to include constant terms. Assume the model block has a line &nbsp; <code>theta ~ normal(0,1);</code>. How could you equivalently increment the log density to get the same increment (ignoring the possible difference in the constants)?<br>
+</p>
+<p>2.8: Why can the normalising constant(s) be dropped when using MCMC (this holds for e.g. variational inference and optimisation too)?<br>
+</p>
 <p></p>
-<p><br></p>
+<p><br>
+</p>
 <p>Stan language allows writing the models as usually written in books and articles. As you've learned during the course, a collection of distribution statements define a <em>joint distribution </em>as a product of component distributions.&nbsp;</p>
 <p>Suppose your model is the following:</p>
-<p><br>\( p(y|\mu,\sigma) = \text{normal}(y|\mu,\sigma) \)<br>\( p(\mu) = \text{normal}(\mu|0,1) \)<br>\( p(\sigma) = \text{normal}^+(\sigma|0,10) \)<br></p>
-<p><br></p>
-<p>2.9: What are correct ways to write your model in the model block? In the below, assume that there is a line-break after each semi-colon, and that the variables have been appropriately declared in the parameter blocks.<br></p>
+<p><br>
+\( p(y|\mu,\sigma) = \text{normal}(y|\mu,\sigma) \)<br>
+\( p(\mu) = \text{normal}(\mu|0,1) \)<br>
+\( p(\sigma) = \text{normal}^+(\sigma|0,10) \)<br>
+</p>
+<p><br>
+</p>
+<p>2.9: What are correct ways to write your model in the model block? In the below, assume that there is a line-break after each semi-colon, and that the variables have been appropriately declared in the parameter blocks.<br>
+</p>
 <p>When writing complicated models, it may happen that some distribution statement is accidentally repeated twice. Check out <a href="https://mc-stan.org/docs/reference-manual/statements.html">this page</a> in the Stan manual to see what happens in this case.&nbsp;</p>
-<p>2.10: What is the function of the generated quantities block?<br></p>
-<p><br></p>
+<p>2.10: What is the function of the generated quantities block?<br>
+</p>
+<p><br>
+</p>
 <p>Now, let's return to the student retention model code, shown above.</p>
-<p>2.11: What are the three mistakes in the Stan model code above?<br>&nbsp;</p>
+<p>2.11: What are the three mistakes in the Stan model code above?<br>
+&nbsp;</p>
 <p>You may find some of the mistakes in the code using Stan syntax checker. If you copy the Stan code to a file ending <code>.stan</code> and open it in RStudio (you can also choose from RStudio menu File \(\rightarrow\)New File\(\rightarrow\)Stan file to create a new Stan file), the editor will show you some syntax errors. More syntax errors might be detected by clicking `Check’ in the bar just above the Stan file in the RStudio editor. Note that some of the errors in the presented Stan code may not be syntax errors.</p>
 <p>Use the code in the <a href="https://avehtari.github.io/BDA_course_Aalto/assignments/template6.html">template</a>&nbsp;to first compile your model using CmdStanR (which is a handy interface for CmdStan which transplies Stan model code to C++ which is compiled to executable program which can do the actual sampling), run the inference with the supplied data, and finally create the plot to answer the following questions.&nbsp;</p>
-<p><br></p>
-<p>Define the term of the model \( \mu = \alpha + \beta x \) as the linear predictor.<br></p>
-<p>2.12: What is the solid red line plotting?<br></p>
-<p>2.13: What are the dashed red lines referring to?<br><br></p>
-<p>2.14: How and why are these different from the corresponding grey lines?<br></p>
-<p>2.15: What is the general trend of student retention as measured by the assignment submissions?<br></p>
-<p>2.16: Does it do a good job predicting the proportion of students who submit the final 9th assignment?<br></p>
-<p>2.17: What modeling choice could you make to improve the prediction for the given data set?<br></p>
-<p><br></p>
+<p><br>
+</p>
+<p>Define the term of the model \( \mu = \alpha + \beta x \) as the linear predictor.<br>
+</p>
+<p>2.12: What is the solid red line plotting?<br>
+</p>
+<p>2.13: What are the dashed red lines referring to?<br>
+<br>
+</p>
+<p>2.14: How and why are these different from the corresponding grey lines?<br>
+</p>
+<p>2.15: What is the general trend of student retention as measured by the assignment submissions?<br>
+</p>
+<p>2.16: Does it do a good job predicting the proportion of students who submit the final 9th assignment?<br>
+</p>
+<p>2.17: What modeling choice could you make to improve the prediction for the given data set?<br>
+</p>
+<p><br>
+</p>
 <h3 class="anchored">3. Diagnosing Problems in HMC-NUTS sampling&nbsp;</h3>
 <p>Another benefit of the HMC-NUTS algorithm over simpler non-gradient based MCMC algorithms, is that we have access to many diagnostic tools related to the posterior geometry that we would otherwise not have. This feedback is helpful for modeling and also for debugging code, and therefore an essential part of the <a href="https://arxiv.org/abs/2011.01808">Bayesian workflow</a>. A model type which is&nbsp;likely to cause problems is logistic regression with complete separation in the data. This creates an unbounded likelihood.</p>
-<p>3.1: Why is it problematic to use flat, improper priors for this likelihood?<br></p>
+<p>3.1: Why is it problematic to use flat, improper priors for this likelihood?<br>
+</p>
 <p>Using the data generated from the template, compile and run the following Stan model:</p>
 <p></p>
 <pre><code>// logistic regression
@@ -452,21 +547,50 @@ parameters {
 }
 model {
   y ~ bernoulli_logit_glm(x, alpha, beta);
-}</code></pre>3.2: You can use the function <code>[fit object name]$diagnostic summary()</code> to check for the number of divergent transitions and max_treedepth exceedences. What do you see?<br><br><br>3.3: You can examine the problematic behaviour of MCMC&nbsp; by looking at parameter specific sampling diagnostics using the <code>summarize_draws</code> function discussed last week. To gain visual intuition use bayesplot's <code>mcmc_pairs</code> function to plot histograms and bivariate scatter plots of the posteriors. What do you observe?<br><br><br>Before thinking about changing the model, a first step should be to check for any easy mistakes made in the Stan code. The Stan compiler has a pedantic mode to help spot such issues.&nbsp;By default the pedantic mode is not enabled, but we can use option&nbsp;<code>pedantic = TRUE</code>&nbsp;at compilation time, or after compilation with the&nbsp;<code>check_syntax</code>&nbsp;method.<br><br>3.4: Use the function <code>[Stan model]$check_syntax(pedantic = TRUE)</code>. What warning message(s) do you get?<br><br><br>3.5: Set normal(0,10) priors for both parameters, what do you find from the MCMC output?<br><br><br>As you've learned during the course, using proper priors, even when they are wide, are always preferable to stabilise inference and make the model generative. You'll learn next week more about priors.&nbsp;<br><br>3.6: Sometimes, when adjusting Stan model code you may have removed a variable from the model block, but left the declaration in the parameters block. Add such a variable to your model. What do you see from convergence diagnostics (it may also help you visualise the MCMC chains using <code>mcmc_pairs</code> and <code>mcmc_trace</code>)?<br>&nbsp;<br><br>3.7: Use <code>check_syntax(pedantic = TRUE)</code>, would you have been able to detect this problem from the output?<br><br><br>A further important problem is that of high correlation between parameters in the posterior, which may lead to slow exploration and divergent transitions. Sometimes, we can address this by slightly re-writing the model. Check out the <a href="https://avehtari.github.io/BDA_course_Aalto/slides/BDA_lecture_6.pdf">lecture's</a> discussion the Kilpisjärvi case study. More on that in the weeks to follow.&nbsp;&nbsp;<br><br>
+}</code></pre>3.2: You can use the function <code>[fit object name]$diagnostic summary()</code> to check for the number of divergent transitions and max_treedepth exceedences. What do you see?<br>
+<br>
+<br>
+3.3: You can examine the problematic behaviour of MCMC&nbsp; by looking at parameter specific sampling diagnostics using the <code>summarize_draws</code> function discussed last week. To gain visual intuition use bayesplot's <code>mcmc_pairs</code> function to plot histograms and bivariate scatter plots of the posteriors. What do you observe?<br>
+<br>
+<br>
+Before thinking about changing the model, a first step should be to check for any easy mistakes made in the Stan code. The Stan compiler has a pedantic mode to help spot such issues.&nbsp;By default the pedantic mode is not enabled, but we can use option&nbsp;<code>pedantic = TRUE</code>&nbsp;at compilation time, or after compilation with the&nbsp;<code>check_syntax</code>&nbsp;method.<br>
+<br>
+3.4: Use the function <code>[Stan model]$check_syntax(pedantic = TRUE)</code>. What warning message(s) do you get?<br>
+<br>
+<br>
+3.5: Set normal(0,10) priors for both parameters, what do you find from the MCMC output?<br>
+<br>
+<br>
+As you've learned during the course, using proper priors, even when they are wide, are always preferable to stabilise inference and make the model generative. You'll learn next week more about priors.&nbsp;<br>
+<br>
+3.6: Sometimes, when adjusting Stan model code you may have removed a variable from the model block, but left the declaration in the parameters block. Add such a variable to your model. What do you see from convergence diagnostics (it may also help you visualise the MCMC chains using <code>mcmc_pairs</code> and <code>mcmc_trace</code>)?<br>
+&nbsp;<br>
+<br>
+3.7: Use <code>check_syntax(pedantic = TRUE)</code>, would you have been able to detect this problem from the output?<br>
+<br>
+<br>
+A further important problem is that of high correlation between parameters in the posterior, which may lead to slow exploration and divergent transitions. Sometimes, we can address this by slightly re-writing the model. Check out the <a href="https://avehtari.github.io/BDA_course_Aalto/slides/BDA_lecture_6.pdf">lecture's</a> discussion the Kilpisjärvi case study. More on that in the weeks to follow.&nbsp;&nbsp;<br>
+<br>
+
 <h3 class="anchored">4. Generalised Linear Model: Bioassay with Stan</h3>
 <p>Now, we re-investigate the Bioassay model from last week with Stan. If you need a reminder about the model and likelihood definition, check out section 3.7 in BDA3. To make the implementation simpler, we consider the following priors:</p>
 <p>alpha ~ normal(0,2)</p>
 <p>beta ~ normal(10,10)</p>
-<p>4.1: What is the difference in the prior to last week?<br></p>
-<p>4.2: Which pre-built function can you use in Stan to compute the likelihood?&nbsp;<br></p>
+<p>4.1: What is the difference in the prior to last week?<br>
+</p>
+<p>4.2: Which pre-built function can you use in Stan to compute the likelihood?&nbsp;<br>
+</p>
 <p>Use the code hints in the <a href="https://avehtari.github.io/BDA_course_Aalto/assignments/template6.html">template</a> to complete your Stan model. For questions about declarations and functionality of Stan, your first point of reference should always be the <a href="https://mc-stan.org/docs/reference-manual/">Stan Manual</a>&nbsp;(it's been recently revised, be sure to open at least version 2.35). Use 4 chains, with 1000 warmup and 2000 total draws each, use default options for adapt_delta and max_treedepth, and use seed = 4911.&nbsp; Compile your model, define the data inputs needed, sample from the posterior, and answer the following. To make sure that your model is correct, compare a scatter plot of alpha and beta to last week (the priors are not exactly the same, but the posterior should be quite similar to last week as the priors are relatively weak):</p>
-<p>4.3: Did the Stan model produce any warnings about the sampling efficiency?&nbsp;<br></p>
+<p>4.3: Did the Stan model produce any warnings about the sampling efficiency?&nbsp;<br>
+</p>
 <p>4.4: Use the Rhat function from the posterior package, rhat(),&nbsp;(used in last week's assignment). The Rhat for for alpha  and beta &nbsp;.&nbsp;</p>
 <p>4.5: The ESS mean for alpha= and for beta=.</p>
 <p>4.6: ESS q0.05 for alpha=, ESS q0.05 for beta=.</p>
 <p>Plot the autocorrelation function for the draws for the chains of alpha and beta using the <code>mcmc_acf</code> function from the <code>bayesplot</code> package and compare that to the autocorrelation function from the Metropolis-Hastings (MH) algorithm you developed last week. You don't need to re-do the model for the MH algorithm with the new priors, but for better comparison this is what you should do outside of this exercise.&nbsp;</p>
-<p>4.7: What do you see?<br></p>
-<p><br></p>
+<p>4.7: What do you see?<br>
+</p>
+<p><br>
+</p>
 
 
 
