@@ -36,6 +36,35 @@
 \usepackage{eurosym}
 \usepackage{microtype}
 
+% minted
+\usepackage{minted}
+\setminted{highlightcolor=yellow!25}
+\newmintinline{r}{}
+% The following is adjusted from
+% https://tex.stackexchange.com/questions/548592/changing-all-colors-to-black-white-using-minted-sty
+\makeatletter
+\newcommand{\minted@style@bw}{%
+  \renewcommand\fcolorbox[3][]{##3}%
+  \renewcommand\textcolor[3][]{##3}%
+  \color{gray}
+}
+% define new minted option "gray"
+\minted@def@opt@switch{gray}
+\fvset{formatcom*={%
+  \ifthenelse{\equal{\minted@get@opt{gray}{true}}{true}}
+  {\minted@style@bw}{}%
+}}
+\makeatother
+% The following is ajusted from
+% https://tex.stackexchange.com/questions/74459/remove-space-before-colorbox
+\newcommand{\reducedstrut}{\vrule width 0pt height .9\ht\strutbox depth .9\dp\strutbox\relax}
+\newcommand{\highlight}[1]{%
+  \begingroup
+  \setlength{\fboxsep}{0pt}%  
+  \colorbox{yellow!30}{\reducedstrut\detokenize{#1}\/}%
+  \endgroup
+}
+
 \usepackage{natbib}
 \bibliographystyle{apalike}
 
@@ -325,9 +354,9 @@ $n=50$, $p=500$, $p_\text{rel} = 150$, $\rho=0.5$
     \end{itemize}
     \uncover<3->{\hspace{-1cm}\small
         \begin{tabular}[t]{ll}
-     {\tt y $\sim$ 1 + x} & fixed / population effect; pooled model\\
-     {\tt y $\sim$ 1 + (0 + x | g) } & random / group effects \\
-     {\tt y $\sim$ 1 + x + (1 + x | g) } & mixed effects; hierarchical model 
+     \rinline/y ~ 1 + x/ & fixed / population effect; pooled model\\
+     \rinline/y ~ 1 + (0 + x | g)/ & random / group effects \\
+     \rinline/y ~ 1 + x + (1 + x | g)/ & mixed effects; hierarchical model 
         \end{tabular}
       }
       \vspace{1\baselineskip}
@@ -359,9 +388,7 @@ $n=50$, $p=500$, $p_\text{rel} = 150$, $\rho=0.5$
         predictor
       \end{itemize}
       \uncover<8->{\hspace{-1cm}\small
-        \begin{tabular}[t]{ll}
-     {\tt deaths $\sim$ dosage,} & {\tt family = binomial}\\
-        \end{tabular}
+     \rinline/deaths ~ dosage, family = binomial/ \\
         }
       \item<9-> Hierarchical GLM natural extension
     \item<10-> 16.3 Weakly informative priors section is excellent
@@ -511,9 +538,9 @@ $n=50$, $p=500$, $p_\text{rel} = 150$, $\rho=0.5$
     variables can be slow (Laplace integration over the latents coming)
   \item<2-> \texttt{brms}:
     \begin{itemize}
-    \item covariance matrix based computation:\\ {\tt y $\sim$ gp(x)} 
+    \item covariance matrix based computation:\\ \rinline/y ~ gp(x)/
     \item Hilbert space basis function approximation:\\
-    {\tt y $\sim$ gp(x, k=20)} 
+    \rinline/y ~ gp(x, k=20)/ 
     \end{itemize}
   \end{itemize}
   
@@ -549,6 +576,7 @@ $n=50$, $p=500$, $p_\text{rel} = 150$, $\rho=0.5$
 \end{document}
 
 %%% Local Variables: 
-%%% TeX-PDF-mode: t
+%%% mode: latex
 %%% TeX-master: t
-%%% End: 
+%%% TeX-command-extra-options: "-shell-escape"
+%%% End:

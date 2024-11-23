@@ -16,10 +16,37 @@
 % \usepackage{amsbsy}
 % \usepackage{eucal}
 \usepackage{rotating}
-\usepackage{listings}
-\usepackage{lstbayes}
 \usepackage[all,poly,ps,color]{xy}
 \usepackage{eurosym}
+
+% minted
+\usepackage{minted}
+\setminted{highlightcolor=yellow!25}
+\newmintinline{r}{}
+% The following is adjusted from
+% https://tex.stackexchange.com/questions/548592/changing-all-colors-to-black-white-using-minted-sty
+\makeatletter
+\newcommand{\minted@style@bw}{%
+  \renewcommand\fcolorbox[3][]{##3}%
+  \renewcommand\textcolor[3][]{##3}%
+  \color{gray}
+}
+% define new minted option "gray"
+\minted@def@opt@switch{gray}
+\fvset{formatcom*={%
+  \ifthenelse{\equal{\minted@get@opt{gray}{true}}{true}}
+  {\minted@style@bw}{}%
+}}
+\makeatother
+% The following is ajusted from
+% https://tex.stackexchange.com/questions/74459/remove-space-before-colorbox
+\newcommand{\reducedstrut}{\vrule width 0pt height .9\ht\strutbox depth .9\dp\strutbox\relax}
+\newcommand{\highlight}[1]{%
+  \begingroup
+  \setlength{\fboxsep}{0pt}%  
+  \colorbox{yellow!30}{\reducedstrut\detokenize{#1}\/}%
+  \endgroup
+}
 
 \usepackage{natbib}
 \bibliographystyle{apalike}
@@ -33,7 +60,7 @@
   \setbeamertemplate{headline}[default]{}
   \setbeamertemplate{footline}[split]
   % \setbeamertemplate{headline}[text line]{\insertsection}
-  % \setbeamertemplate{footline}[frame number]
+  \setbeamertemplate{footline}[frame number]
 }
 
 \pdfinfo{            
@@ -815,7 +842,7 @@ $n=50$, $p=500$, $p_\text{rel} = 150$, $\rho=0.5$
 
   \begin{itemize}
   \item \texttt{projpred} supports also hierarchical models in \texttt{brms}\\
-  {\footnotesize  Catalina, Bürkner, and Vehtari (2022). Projection predictive inference for generalized linear and additive multilevel models. \textit{Proceedings of the 24th International Conference on Artificial Intelligence and Statistics (AISTATS), PMLR} 151:4446–4461. \url{https://proceedings.mlr.press/v151/catalina22a.html}}
+  {\small  Catalina, Bürkner, and Vehtari (2022). Projection predictive inference for generalized linear and additive multilevel models. \textit{Proceedings of the 24th International Conference on Artificial Intelligence and Statistics (AISTATS), PMLR} 151:4446–4461. \url{https://proceedings.mlr.press/v151/catalina22a.html}}
   \end{itemize}
   
 \end{frame}
@@ -867,18 +894,27 @@ $n=50$, $p=500$, $p_\text{rel} = 150$, $\rho=0.5$
 
 % \end{frame}
 
-\begin{frame}{Intro paper and brms and rstanarm + projpred examples}
+\begin{frame}[fragile]{Intro paper and brms and rstanarm + projpred examples}
 
 \begin{itemize}
-\item {\footnotesize McLatchie, Rögnvaldsson, Weber, and Aki Vehtari (2023). Robust and efficient projection predictive inference. \url{https://arxiv.org/abs/2306.15581}}
+\item {\small McLatchie, Rögnvaldsson, Weber, and Aki Vehtari (2024). Advances in projection predictive inference. \emph{Statistical Science}. \url{https://arxiv.org/abs/2306.15581}}
 \item \url{https://mc-stan.org/projpred/articles/projpred.html}
 \item \url{https://users.aalto.fi/~ave/casestudies.html}
 \item Fast and often sufficient if $n\gg p$\\
-  {\footnotesize \texttt{varsel <- cv\_varsel(fit, method='forward', cv\_method='loo', validate\_search=FALSE)}}
+\begin{minted}[fontsize=\footnotesize]{r}
+varsel <- cv_varsel(fit, method='forward', cv_method='loo',
+                    validate_search=FALSE)
+\end{minted}
 \item Slower but needed if not $n\gg p$\\
-  {\footnotesize \texttt{varsel <- cv\_varsel(fit, method='forward', cv\_method='kfold, K=10, validate\_search=TRUE)}}
+\begin{minted}[fontsize=\footnotesize]{r}
+varsel <- cv_varsel(fit, method='forward', cv_method='kfold', K=10,
+                    validate_search=TRUE)
+\end{minted}
 \item If $p$ is very big\\
-  {\footnotesize \texttt{varsel <- cv\_varsel(fit, method='L1, cv\_method='kfold, K=5, validate\_search=TRUE)}}
+\begin{minted}[fontsize=\footnotesize]{r}
+varsel <- cv_varsel(fit, method='L1', cv_method='kfold', K=5,
+                    validate_search=TRUE)
+\end{minted}
 \end{itemize}
 
 \end{frame}
@@ -906,4 +942,5 @@ $n=50$, $p=500$, $p_\text{rel} = 150$, $\rho=0.5$
 %%% Local Variables: 
 %%% mode: latex
 %%% TeX-master: t
+%%% TeX-command-extra-options: "-shell-escape"
 %%% End:
