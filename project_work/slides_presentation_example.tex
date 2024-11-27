@@ -31,9 +31,36 @@
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
 \usepackage{booktabs}
-\usepackage{listings}
-\usepackage{lstbayes}
 \usepackage{microtype}
+
+% minted
+\usepackage{minted}
+\setminted{highlightcolor=yellow!25}
+\newmintinline{r}{}
+% The following is adjusted from
+% https://tex.stackexchange.com/questions/548592/changing-all-colors-to-black-white-using-minted-sty
+\makeatletter
+\newcommand{\minted@style@bw}{%
+  \renewcommand\fcolorbox[3][]{##3}%
+  \renewcommand\textcolor[3][]{##3}%
+  \color{gray}
+}
+% define new minted option "gray"
+\minted@def@opt@switch{gray}
+\fvset{formatcom*={%
+  \ifthenelse{\equal{\minted@get@opt{gray}{true}}{true}}
+  {\minted@style@bw}{}%
+}}
+\makeatother
+% The following is ajusted from
+% https://tex.stackexchange.com/questions/74459/remove-space-before-colorbox
+\newcommand{\reducedstrut}{\vrule width 0pt height .9\ht\strutbox depth .9\dp\strutbox\relax}
+\newcommand{\highlight}[1]{%
+  \begingroup
+  \setlength{\fboxsep}{0pt}%  
+  \colorbox{yellow!30}{\reducedstrut\detokenize{#1}\/}%
+  \endgroup
+}
 
 \usepackage{natbib}
 \bibliographystyle{apalike}
@@ -224,6 +251,14 @@
 
 \begin{document}
 
+\begin{frame}[fragile]{Make brms silent}
+
+\begin{minted}[fontsize=\footnotesize]{r}
+fit <- brm(..., silent=2, refresh=0)
+\end{minted}
+  
+\end{frame}
+
 \begin{frame}
 
   \centering
@@ -328,13 +363,12 @@
     \begin{itemize}
     \item no difference
     \end{itemize}
-    {\footnotesize
-\begin{lstlisting}
+\begin{minted}[fontsize=\footnotesize]{r}
                elpd_diff se_diff
 RHS prior        0.0       0.0   
 Gaussian prior  -1.1       2.2   
-\end{lstlisting}
-  }
+\end{minted}
+
 \end{itemize}
 
 \end{frame}
@@ -348,15 +382,13 @@ Gaussian prior  -1.1       2.2
     \begin{itemize}
     \item no difference
     \end{itemize}
-    {\scriptsize
-\begin{lstlisting}
+\begin{minted}[fontsize=\footnotesize]{r}
                elpd_diff se_diff
 RHS prior        0.0       0.0   
 Gaussian prior  -1.1       2.2   
-\end{lstlisting}
-  }
-    {\scriptsize
-\begin{lstlisting}
+\end{minted}
+
+\begin{minted}[fontsize=\footnotesize]{r}
 Computed from 4000 by 250 log-likelihood matrix
 
          Estimate   SE
@@ -364,16 +396,12 @@ elpd_loo   -723.9  9.4
 p_loo        13.4  1.2
 looic      1447.9 18.8
 ------
-Monte Carlo SE of elpd_loo is 0.1.
+MCSE of elpd_loo is 0.1.
+MCSE and ESS estimates assume MCMC draws (r_eff in [0.6, 1.2]).
 
-Pareto k diagnostic values:
-                         Count Pct.    Min. n_eff
-(-Inf, 0.5]   (good)     249   99.6%   1374      
- (0.5, 0.7]   (ok)         1    0.4%   724       
-   (0.7, 1]   (bad)        0    0.0%   <NA>      
-   (1, Inf)   (very bad)   0    0.0%   <NA>      
-\end{lstlisting}
-  }
+All Pareto k estimates are good (k < 0.7).
+See help('pareto-k-diagnostic') for details.
+\end{minted}
 
 \end{itemize}
 
@@ -406,12 +434,10 @@ Pareto k diagnostic values:
 
 For example:
   
-  {\footnotesize
-\begin{lstlisting}
+\begin{minted}[fontsize=\footnotesize]{r}
 theme_set(bayesplot::theme_default(base_family = "sans",
-          base_size=16))
-\end{lstlisting}
-  }
+                                   base_size=16))
+\end{minted}
 
 \end{frame}
 
@@ -655,8 +681,7 @@ theme_set(bayesplot::theme_default(base_family = "sans",
 
 Gaussian linear model with regularized horseshoe prior
   
-  {\tiny
-\begin{lstlisting}
+\begin{minted}[fontsize=\tiny]{stan}
 // generated with brms 2.14.4
 functions {
   vector horseshoe(vector z, vector lambda, real tau, real c2) {
@@ -723,9 +748,7 @@ generated quantities {
   // actual population-level intercept
   real b_Intercept = Intercept - dot_product(means_X, b);
 }
-\end{lstlisting}
-  }
-
+\end{minted}
 
 \end{frame}
 
@@ -782,45 +805,19 @@ generated quantities {
   {\Large\color{navyblue} Hierarchical example: Rats growth curves}
 
 Simple linear model
-{\footnotesize
-\begin{lstlisting}
-fit_1 <- stan_glm(weight ~ age, data=dfrats)
-\end{lstlisting}
-}
+\begin{minted}[fontsize=\footnotesize]{r}
+fit_1 <- brm(weight ~ age, data=dfrats)
+\end{minted}
 
 Linear model with hierarchical intercept
-{\footnotesize
-\begin{lstlisting}
-fit_2 <- stan_glmer(weight ~ age + (1 | rat), data=dfrats)
-\end{lstlisting}
-}
+\begin{minted}[fontsize=\footnotesize]{r}
+fit_2 <- brm(weight ~ age + (1 | rat), data=dfrats)
+\end{minted}
 
  Linear model with hierarchical intercept and slope
-{\footnotesize
-\begin{lstlisting}
-fit_3 <- stan_glmer(weight ~ age + (age | rat), data=dfrats)
-\end{lstlisting}
-}
-
- \uncover<2->{
-Instead of \texttt{stan\_glm(er)}, use \texttt{brm} to get the Stan code, too.
-}
-\end{frame}
-
-\begin{frame}[fragile]
-
-  {\Large\color{navyblue} Hierarchical example: Rats growth curves}
-
-Leave-one-out cross-validation
-{\footnotesize
-\begin{lstlisting}
-                                 elpd_diff se_diff
-hierarchical intercept and slope    0.0       0.0 
-hierarchical intercept            -23.6       9.3 
-simple linear model              -109.6      13.3 
-\end{lstlisting}
-}
-
+\begin{minted}[fontsize=\footnotesize]{r}
+fit_3 <- brm(weight ~ age + (age | rat), data=dfrats)
+\end{minted}
 
 \end{frame}
 
@@ -829,14 +826,27 @@ simple linear model              -109.6      13.3
   {\Large\color{navyblue} Hierarchical example: Rats growth curves}
 
 Leave-one-out cross-validation
-{\footnotesize
-\begin{lstlisting}
+\begin{minted}[fontsize=\footnotesize]{r}
                                  elpd_diff se_diff
 hierarchical intercept and slope    0.0       0.0 
 hierarchical intercept            -23.6       9.3 
 simple linear model              -109.6      13.3 
-\end{lstlisting}
-}
+\end{minted}
+
+
+\end{frame}
+
+\begin{frame}[fragile]
+
+  {\Large\color{navyblue} Hierarchical example: Rats growth curves}
+
+Leave-one-out cross-validation
+\begin{minted}[fontsize=\footnotesize]{r}
+                                 elpd_diff se_diff
+hierarchical intercept and slope    0.0       0.0 
+hierarchical intercept            -23.6       9.3 
+simple linear model              -109.6      13.3 
+\end{minted}
 
 % Leave-one-out cross-validation stacking model weights
 % {\footnotesize
@@ -1656,4 +1666,5 @@ Glioma & 85 & 22283 & 95.8 & 14.2 & 15.6 & 2.6 \\
 %%% Local Variables: 
 %%% mode: latex
 %%% TeX-master: t
+%%% TeX-command-extra-options: "-shell-escape"
 %%% End:
