@@ -347,11 +347,11 @@ Lecture 9-10/Chapter 9 of BDA Quiz (96% of grade)<br><br>
 <p>The coefficient of determination, \( R^2 \), measures the proportion of variance explained by the model compared to the total variance of the model. This metric can be easily extended to a Bayesian definition. Let \( \tilde{y} \) denote future data. Suppose a model uses covariates X to model the target y with parameters \( \theta \). Define \( \mu_n = E[\tilde{y}_n |X_n,\theta] \) as the expected predictor for future observations for all n and \( \epsilon_n =&nbsp; \tilde{y}_n - \mu_n \) as the modeled residual.&nbsp;</p>
 <p>1.1: While for certain priors the implied probability distribution for Bayes \( R^2 \) may be derived analytically, we can generally find the push-forward distribution with Monte-Carlo Integration. Which of the below correctly characterises the s-th draw from the Bayes \(R^2\) distribution?<br></p>
 <p></p>
-<p>1.2: What is the intuition behind Bayes-\(R^2\)?<br></p>
+<p>1.2 What is the intuition behind the Bayesian \(R^2\)? </p>
 <p>1.3: Assume a normal observation model with variance \(\sigma^2\) and the predictor terms includes covariates X and coefficients \( \beta \). Which of the below is the correct expression for a draw from the Bayes-\(R^2\) distribution?<br></p>
 <p>1.4: With some further assumptions, we can formulate Bayes-\( R^2 \) similarly for other observation families. For logistic regression, define \( \mu_n^{(s)} = logit^{-1}(X_n^T\beta^{(s)}) = \pi_n^{(s)} \) and \(&nbsp;E[var( \epsilon_n^{(s)}) | \theta^{(s)}] =&nbsp;\pi_n^{(s)}(1-\pi_n^{(s)})&nbsp; &nbsp;\). Which of the below is the correct expression for a draw from the Bayes-\(R^2\) distribution?<br></p>
 <p></p>
-<p>For other GLMs, it is not so straightforward to define the Bayes-\( R^2 \), so in this course, we recommend showing the Bayes-\( R^2 \) only for normal and logistic regression models.&nbsp;</p>
+<p>For other GLMs, it is not so straighforward to define the Bayes-\( R^2 \), so in this course, we recommend showing the Bayes-\( R^2 \) only for normal and logistic regression models.&nbsp;</p>
 <p>The prior-predictive distribution of \(R^2\) is also useful to look at in order to understand the impact of the prior choices on the expected amount of variance fit. For the below, assume \( y_i \sim normal(\beta^TX_i,\sigma) \). Assume the covariates, \(X \in \mathbb{R}^{N \times p} \), have been scaled to have 0 mean and variance 1, and p = 26.</p>
 <p>1.5: Assume standard normal priors for \(\beta\) and an exponential prior with rate 1/3 for \(\sigma\). Draw from the priors 4000 times, and generate prior predictive values for Bayes-\(R^2\). Which of the figures below refers to the correct implied \(R^2\) distribution?<br></p>
 <p></p>
@@ -360,7 +360,7 @@ Lecture 9-10/Chapter 9 of BDA Quiz (96% of grade)<br><br>
 <p><br></p>
 <p>\( \beta_j&nbsp; \sim normal(0, \sqrt(\tau^2\psi_j\sigma^2)) \)<br>\( \tau^2 = R^2/(1-R^2) \)<br>\( R^2 \sim beta(\mu_{R^2},\sigma_{R^2}) \)&nbsp;<br>\( \psi \sim Dir(\xi) \)<br>\( \sigma \sim \pi() \) (some distribution)<br></p>
 <p><br></p>
-<p>Here, we use the relationship between the variance of the predictor term \( X\beta \) and \(R^2\) to relate inference on the \( R^2 \) space to the population variance of \( \beta \), \(\tau^2\). If you are curious about this relationship, <a href="https://arxiv.org/abs/1609.00046">Zhang et al. (2022)</a> provide derivations.&nbsp; \( \tau^2 \) is the population variance for the coefficients \( \beta \), which is allocated to individual coefficients via a weight vector \( \psi \). Positivity of weights \( \psi&nbsp; \) and sum to 1 constraint are enforced by assuming a Dirichlet distribution as prior. You may interpret \( \psi \) as determining the importance of a variable in explaining the variance of the target data, \(y\) (larger \( \psi_j \) compared to \( \psi_{-j} \) means that the j-th coefficient has larger variance and thus the j-th covariate contributes relatively more to the fraction of variance explained, \( R^2 \) ). The concentrations of the Dirichlet distribution, \( \xi \) can be used to encode prior information about the relative importance of covariates in terms of the fraction of variance explained. In absence of such prior knowledge, which is likely your starting point of your analysis, you may set these concentrations to 1. This implies that you think the covariates have have equal importance. If you want to enforce sparsity on the coefficient vector, try setting to&nbsp;\( \xi = 0.3 \) (this pushes weights to the edges of the p-dimensional simplex)</p>
+<p>Here, we use the relationship between the variance of the predictor term \( X\beta \) and \(R^2\) to relate inference on the \( R^2 \) space to the population variance of \( \beta \), \(\tau^2\). If you are curious about this relationship, <a href="https://arxiv.org/abs/1609.00046">Zhang et al. (2022)</a> provide derivations.&nbsp; \( \tau^2 \) is the population variance for the coefficients \( \beta \), which is allocated to individual coefficients via a weight vector \( \psi \). Positivity of weights \( \psi&nbsp; \) and sum to 1 constraint are enforced by assuming a Dirichlet distribution as prior. You may interpret \( \psi \) as determining the importance of a variable in explaining the variance of the target data, \(y\) (larger \( \psi_j \) compared to \( \psi_{-j} \) means that the j-th coefficient has larger variance and thus the j-th covariate contributes relatively more to the fraction of variance explained, \( R^2 \) ). The concentrations of the Dirichlet distribution, \( \xi \) can be used to encode prior information about the relative importance of covariates in terms of the fraction of variance explained. In absence of such prior knowledge, which is likely your starting point of your analysis, you may set these concentrations to 1. This implies that you think the covariates have equal importance. If you want to enforce sparsity on the coefficient vector, try setting to&nbsp;\( \xi = 0.3 \) (this pushes weights to the edges of the p-dimensional simplex)</p>
 <p></p>
 <p></p>
 <p>1.8: Assume that \( \sigma \sim exp(1/3) \), \( \mu_{R^2} = 1/3, \sigma_{R^2} = 3 \) and \( \xi_j = 1 \) for all j in 1 to p. Which of the below distributions should the prior predictive Bayes-\(R^2\) be closest to? Assume the beta distributions below are parameterised in terms of location and scale.<br></p>
@@ -377,7 +377,7 @@ Lecture 9-10/Chapter 9 of BDA Quiz (96% of grade)<br><br>
 <h3 class="anchored">2.Portuguese Student Data</h3>
 <p></p>
 <h3 class="anchored"></h3>
-<p>Now we apply these priors to a data set in which the goal is to predict Portuguese students' final period math grade based on a moderately large set of covariates (p = 26), including social background and past schooling information.</p>
+<p>Now we apply these priors to a data set in which the goal is to predict Portoguese students' final period math grade based on a moderately large set of covariates (p = 26), including social background and past schooling information.</p>
 <p>Use the data preparation steps in the code template, and estimate a model with normal(0,1) priors on the regression coefficients, and otherwise use default priors.</p>
 <p>2.1: Plot the marginal posteriors of the coefficients with this prior, what do you observe?<br><br><br>2.2: Compute and plot the prior and posterior Bayes-\(R^2\) distributions. Which of the figures below refers to the correct the implied \(R^2\) distribution with normal(0,1) priors on the regression coefficients?<br></p>
 <p>2.3: Compute the mean of the posterior R2 distribution  and the mean of the loo R2 .<br><br>2.4: What does the difference between the mean of the posterior R2 and LOO cross-validated R2 distribution indicate?<br></p>
@@ -389,10 +389,8 @@ Lecture 9-10/Chapter 9 of BDA Quiz (96% of grade)<br><br>
 <p>2.7: Compute the mean of the posterior predictive R2 distribution  and the mean of the loo R2 .<br><br></p>
 <p>2.8: What does the difference between the mean of the posterior R2 and LOO cross-validated R2 distribution indicate?</p>
 <p></p>
-
 <p><span style=""><span style="font-size: 26.2499px;"><b>3. Bayesian Decision theory</b></span></span></p>
-
-<p>3.1: Which of the following are steps of decision analysis (according to BDA3 p.238)?<br></p>
+<p></p>3.1 Which of the following are steps of decision analysis according to BDA3? <br><br>
 <h3 class="anchored">4. Decision theory case study</h3>
 <p></p>
 <h3 class="anchored"></h3>
@@ -418,7 +416,7 @@ Lecture 9-10/Chapter 9 of BDA Quiz (96% of grade)<br><br>
             <p><span>4.6: with radiotherapy:&nbsp;</span></p>
             <p>4.7: with surgery: <br></p>
             <p>4.8: with no treatment:&nbsp;</p>
-            <p>4.9: What should the man choose to maximize his&nbsp;expected life expectancy?</p>
+            <p>4.9: What should the man choose to maximize his&nbsp;expected l<span>ife expectancy?</span></p>
             <p><span></span></p>
             <div title="Page 86">
                 <p>

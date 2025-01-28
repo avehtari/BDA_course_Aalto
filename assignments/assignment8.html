@@ -341,171 +341,50 @@ General Instructions for Answering the Assignment Questions
 <section id="assignment-questions" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="assignment-questions"><span class="header-section-number">1.1</span> Assignment questions</h2>
 <p>For convenience the assignment questions are copied below. Answer the questions in MyCourses.</p>
-Lecture 8-9/Chapter 7 of BDA Quiz (96% of grade)<br>
-<br>
-
-<h3 class="anchored">1. ELPD</h3>In order to evaluate a model, for comparison to other models or for model checking purposes, it is useful to measure how well predictions match the data. Preferably, the measure of predictive accuracy is tailored to the data-application (application specific cost-function or decision theoretic quantity, discussed more next week). But in the absence of that, we might choose from a range of scoring functions or rules mentioned in the lecture/book (see for more details on general scoring functions or rules in <a href="https://sites.stat.washington.edu/raftery/Research/PDF/Gneiting2007jasa.pdf">Gneiting and Raftery (2007)</a>). For the below denote the target as \( y \) and potential covariates as \(x\).<br>
-<br>
-1.1: Which expression below is defines the log-score for observation \(y_i \)?<br>
-<br>
-<br>
-1.2: Why is the log-score a convenient scoring rule?<br>
-<br>
-<br>
-1.3: Denote by \( \tilde{y} \) unseen target data with distribution \( p_t(\tilde{y}) \) and by \( y \) target data that is conditioned on for posterior inference on model parameters.&nbsp; Which of the below refers to the expected log-predictive density for new data points \( \tilde{y}_1, \dotsc, \tilde{y}_n \)?<br>
-<br>
-<br>
-1.4: Suppose \( \tilde{y} = y \), then elpd reduces to the log point-wise predictive densities (lpd) for observations \(y_1,\dotsc,y_n \). Why is lpd often a bad estimate for elpd?<br>
-<br>
-<br>
-1.5: We often use leave-one-out cross-validation (LOO-CV) to approximate out-of-sample performance. Denote by \( y_i \) all but the i-th observation for y and by \( \int p(y_i | \theta)p(\theta | y_{-i})d\theta \) the posterior predictive distribution for the i-th data point based on data leaving out the i-th data point.&nbsp; Which of the expressions below refers to the Bayesian LOO-CV estimate of the out-of-sample predictive fit \(elpd_{LOO} \)?<br>
-<br>
-<br>
-1.6: Instead of computing the LOO predictive densities n times for n left-out observations, a computationally much more efficient approach is to fit the model once and use importance sampling to approximate the n LOO densities in \(elpd_{LOO} \). Which of the below refers to the importance sampling estimate of \(elpd_{LOO} \)? Assume \( \sum_{r=1}^S \tilde{w_i}^{(r)} = 1 \) for all i.&nbsp;<br>
-<br>
-<br>
-1.7: Use \( p(\theta | x,y) \) as the proposal distribution for \( p(\theta | x_{-i}, y_{-i}) \). Derive the expression for the unnormalised importance weights \( w_i^{(s)}&nbsp; \)(up to a constant of proportionality), assuming that the likelihood conditional on x and y can be factorised by \( i = 1,\dotsc,n \) . Which of the below is proportional to the desired importance weight draw for the s-th draw of the posterior and observation i?<br>
-<br>
-<br>
-1.8: Derive the expression for the self-normalised importance sampling estimator with the weights derived in 1.7. Which of the below is correct?<br>
-<br>
-<br>
-The importance sampling estimator can also be extended to other scoring functions/rules. In particular, it will be of advantage for the projects to review the \(R^2\), Root-mean-squared-error (RMSE) which measure relative variance fit and point predictive accuracy respectively, as well as the Probability Integral Transform (PIT), and their associated cross-validated variants. These are easily implemented with BRMS fit objects. See the BRMS <a href="https://cran.r-project.org/web/packages/brms/brms.pdf">manual</a>&nbsp;as well as the <a href="https://avehtari.github.io/bayes_R2/bayes_R2.html">Bayes \(R^2\) case study</a>&nbsp;further details on implementation for some of these.<br>
-<br>
-ELPD assesses predictions in terms of the <em>sharpness (concentration)</em>&nbsp;(<a href="https://projecteuclid.org/journals/statistics-surveys/volume-6/issue-none/A-survey-of-Bayesian-predictive-methods-for-model-assessment-selection/10.1214/12-SS102.full">for log-score this is related to negative entropy</a>), as well as <em>calibration (coverage) </em>of the predictive distribution<em>.&nbsp;</em>Sharpness of the predictive distribution is rewarded since narrow predictive distributions have higher densities. On the other hand, too narrow distributions have high density in too narrow region, and lower density elsewhere. The probability intervals (e.g. central intervals) cumulative density functions of a calibrated distribution match the distribution of the target. It is possible that two different models are both well calibrated, but they have different sharpness, for example, if one of the models has additional covariate which helps to reduce the predictive uncertainty. In the below we will further discuss how to visually assess calibration. This belongs to the posterior predictive checks discussed during the lecture, and are useful to check first before formally evaluating models with ELPD (and other scoring functions/rules).&nbsp;<br>
-<br>
-1.9: We can measure calibration by transforming the comparison between an observation and the conditional predictive distribution to a value between \([0,1]\). Define \( y^{rep}_i \) as a draw from the predictive distribution \( p(\tilde{y}_ i | y_i) \), which transformation should we use?<br>
-<br>
-<br>
-1.10: This transformation is called the probability integral transform (PIT). How should the PITs be distributed with infinite data, if the predictive distribution is correctly calibrated?<br>
-<br>
-<br>
-When dealing with finite data, we can only hope to be close enough to uniform and you can use the ppc_loo_pit_overlay() function from bayesplot to visually check for the posterior uncertainty in the (cross-validated) PIT values.&nbsp;<br>
-<br>
-Instead of looking at the distribution of PIT values, it can be easier to examine the cumulative distribution function of the PIT values, which should be close to a 45-degree line, since the large sample distribution is uniform. <a href="https://avehtari.github.io/BDA_R_demos/demos_rstan/brms_demo.html">The below is taken from the BRMS demo 13</a>.&nbsp;<br>
-<br>
-Suppose the kernel density estimates of the predictive distribution and data look the following:<br>
-<br>
-<br>
-
-<br>
-<br>
-
+Lecture 8-9/Chapter 7 of BDA Quiz (96% of grade)<br><br>
+<h3 class="anchored">1. ELPD</h3>In order to evaluate a model, for comparison to other models or for model checking purposes, it is useful to measure how well predictions match the data. Preferably, the measure of predictive accuracy is tailored to the data-application (application specific cost-function or decision theoretic quantity, discussed more next week). But in the absence of that, we might choose from a range of scoring functions or rules mentioned in the lecture/book (see for more details on general scoring functions or rules in <a href="https://sites.stat.washington.edu/raftery/Research/PDF/Gneiting2007jasa.pdf">Gneiting and Raftery (2007)</a>). For the below denote the target as \( y \) and potential covariates as \(x\).<br><br>1.1: Which expression below is defines the log-score for observation \(y_i \)?<br><br><br>
+<p>1.2 Why is the log-score a convenient scoring rule? </p>
+<p>1.3 Denote by \( \tilde{y} \) unseen target data with distribution \( p_t(\tilde{y}) \) and by \( y \) target data that is conditioned on for posterior inference on model parameters. Which of the following refers to the expected log-predictive density for new data points \( \tilde{y}_1, \dotsc, \tilde{y}_n \)? </p>
+<p></p>
+<p>1.4 Suppose \( \tilde{y} = y \), then elpd reduces to the log point-wise predictive densities (lpd) for observations \(y_1,\dotsc,y_n \). Why is lpd often a bad estimate for elpd? </p>
+<p></p>
+<p>1.5 We often use leave-one-out cross-validation (LOO-CV) to approximate out-of-sample performance. Denote by \( y_{-i} \) all but the \(i\)th observation for \( y \) and by \( \int p(y_i | \theta)p(\theta | y_{-i})d\theta \) the posterior predictive distribution for the \(i\)th data point based on data leaving out the \(i\)th data point. Which of the expressions below refers to the Bayesian LOO-CV estimate of the out-of-sample predictive fit \(elpd_{LOO} \)? </p><br>1.6: Instead of computing the LOO predictive densities n times for n left-out observations, a computationally much more efficient approach is to fit the model once and use importance sampling to approximate the n LOO densities in \(elpd_{LOO} \). Which of the below refers to the importance sampling estimate of \(elpd_{LOO} \)? Assume \( \sum_{r=1}^S \tilde{w_i}^{(r)} = 1 \) for all i.&nbsp;<br><br><br>1.7: Use \( p(\theta | x,y) \) as the proposal distribution for \( p(\theta | x_{-i}, y_{-i}) \). Derive the expression for the unnormalised importance weights \( w_i^{(s)}&nbsp; \)(up to a constant of proportionality), assuming that the likelihood conditional on x and y can be factorised by \( i = 1,\dotsc,n \) . Which of the below is proportional to the desired importance weight draw for the s-th draw of the posterior and observation i?<br><br><br>1.8: Derive the expression for the self-normalised importance sampling estimator with the weights derived in 1.7. Which of the below is correct?<br><br><br>The importance sampling estimator can also be extended to other scoring functions/rules. In particular, it will be of advantage for the projects to review the \(R^2\), Root-mean-squared-error (RMSE) which measure relative variance fit and point predictive accuracy respectively, as well as the Probability Integral Transform (PIT), and their associated cross-validated variants. These are easily implemented with BRMS fit objects. See the BRMS <a href="https://cran.r-project.org/web/packages/brms/brms.pdf">manual</a>&nbsp;as well as the Bayes \(R^2\)&nbsp;<a href="https://avehtari.github.io/bayes_R2/bayes_R2.html">case study</a>&nbsp;further details on implementation for some of these.<br><br>ELPD assesses predictions in terms of the <em>sharpness (concentration)</em>&nbsp;(<a href="https://projecteuclid.org/journals/statistics-surveys/volume-6/issue-none/A-survey-of-Bayesian-predictive-methods-for-model-assessment-selection/10.1214/12-SS102.full">for log-score this is related to negative entropy</a>), as well as <em>calibration (coverage) </em>of the predictive distribution<em>.&nbsp;</em>Sharpness of the predictive distribution is rewarded since narrow predictive distributions have higher densities. On the other hand, too narrow distributions have high density in too narrow region, and lower density elsewhere. The probability intervals (e.g. central intervals) cumulative density functions of a calibrated distribution match the distribution of the target. It is possible that two different models are both well calibrated, but they have different sharpness, for example, if one of the models has additional covariate which helps to reduce the predictive uncertainty. In the below we will further discuss how to visually assess calibration. This belongs to the posterior predictive checks discussed during the lecture, and are useful to check first before formally evaluating models with ELPD (and other scoring functions/rules).&nbsp;<br><br>1.9: We can measure calibration by transforming the comparison between an observation and the conditional predictive distribution to a value between \([0,1]\). Define \( y^{rep}_i \) as a draw from the predictive distribution \( p(\tilde{y}_ i | y_i) \), which transformation should we use?<br><br><br>1.10: This transformation is called the probability integral transform (PIT). How should the PITs be distributed with infinite data, if the predictive distribution is correctly calibrated?<br><br><br>When dealing with finite data, we can only hope to be close enough to uniform and you can use the ppc_loo_pit_overlay() function from bayesplot to visually check for the posterior uncertainty in the (cross-validated) PIT values.&nbsp;<br><br>Instead of looking at the distribution of PIT values, it can be easier to examine the cumulative distribution function of the PIT values, which should be close to a 45-degree line, since the large sample distribution is uniform. <a href="https://avehtari.github.io/BDA_R_demos/demos_rstan/brms_demo.html">The below is taken from the BRMS demo 13</a>.&nbsp;<br><br>Suppose the kernel density estimates of the predictive distribution and data look the following:<br><br><br>
+<br><br>
 Figure 1<img src="https://github.com/avehtari/BDA_course_Aalto/blob/master/figures/Quizzes/predictive_kernel1.png?raw=true" data-hpc="true" class="Box-sc-g0xbh4-0 fzFXnm" style="width: 300px;"><br>
-
-<br>
-1.11: What can you say about calibration from this model for the data?<br>
-<br>
-<br>
-1.12: Based on the model in Figure 1, which of the plots below match the ECDF plot (light blue envelope indicates regions of acceptable ECDF values)?<br>
-&nbsp;<br>
-<br>
-1.13: What is the correct interpretation of the ECDF graph?&nbsp;<br>
-<br>
-<br>
-Suppose the revised model produces the following predictive distribution:<br>
-<br>
-
-Figure 4<img src="https://github.com/avehtari/BDA_course_Aalto/blob/master/figures/Quizzes/predictive_kernel2.png?raw=true" data-hpc="true" class="Box-sc-g0xbh4-0 fzFXnm" style="width: 300px;"><br>
-<br>
-<br>
-<br>
-
+<br>1.11: What can you say about calibration from this model for the data?<br><br><br>1.12: Based on the model in Figure 1, which of the plots below match the ECDF plot (light blue envelope indicates regions of acceptable ECDF values)?<br>&nbsp;<br><br>1.13: What is the correct interpretation of the ECDF graph?&nbsp;<br><br><br>Suppose the revised model produces the following predictive distribution:<br><br>
+Figure 4<img src="https://github.com/avehtari/BDA_course_Aalto/blob/master/figures/Quizzes/predictive_kernel2.png?raw=true" data-hpc="true" class="Box-sc-g0xbh4-0 fzFXnm" style="width: 300px;"><br><br><br><br>
 1.14: Based on the model in Figure 4, which of the plots below match the ECDF plot (light blue envelope indicates regions of acceptable ECDF values)?<br>
-
-<h3 class="anchored">2. Pareto-smoothed importance sampling<br>
-</h3>
-<p>2.1:&nbsp;What makes the weights of the importance estimator for \(elpd_{LOO}\) be potentially unreliable with finite amount of MCMC draws?<br>
-</p>
-<p>2.2:&nbsp;Assuming that importance weights have finite variance and mean, we can use the standard CLT to guarantee variance reduction at rate 1/S, where S is the number of MCMC draws. Different CLTs can be applied depending on the existence of certain fractional moments (fractional moments are more general than integer moments and are useful in describing properties of fat-tailed distributions). To estimate the number of fractional moments of the weights, we can model the tails of the importance weights using insights of extreme value theory (<a href="https://www.jstor.org/stable/2958083?casa_token=quT8q7BWXIcAAAAA%3ALzyVeQUR6xs7OuLOQlyqZE4zj18ajlZ7TBWkRDmSEWAkZskNwfPW3IaZkHeigJRx7CKYZoWw2A0jVO5RLCP1c1dz3L6qZiVLRegko4O8JX8XEaeUyo31">Pickands, 1975</a>). &nbsp;What distribution can be used to estimate the number of fractional moments?<br>
-<br>
-</p>
-<p>We refer to the estimated value of 1/k as the k-hat value reported as a diagnostic in the loo package. Since most distributions have tails that are well approximated by GDP, we can replace tail weights of the importance weight distribution with the expected ordered statistics of the fitted GDP. In the context of LOO, we refer to this as Pareto smoothed importance sampling (PSIS-LOO).<br>
-<br>
-2.3: What is the rationale of replacing largest weights by the expected ordered statistics of the fitted GDP?<br>
-</p>
-<p>2.4:&nbsp;Based on the above, suppose importance weights follow a standard Cauchy distribution. What k-hat value do you expect with sufficiently large number of draws?<br>
-</p>
-<p>2.5:&nbsp;After what k-hat value should we seriously doubt the reliability of the Pareto smoothed importance sampling estimator?&nbsp;<br>
-</p>
-<p>2.6: What does a high k-hat value indicate about the target distribution?<br>
-</p>
-<p>2.7:&nbsp;What are common causes for large k-hats within the context of PSIS loo?<br>
-</p>
-<p>2.8: What should you consider doing if you have high k-hat values?<br>
-</p>
+<h3 class="anchored">2. Pareto-smoothed importance sampling<br></h3>
+<p>2.1:&nbsp;What makes the weights of the importance estimator for \(elpd_{LOO}\) be potentially unreliable with finite amount of MCMC draws?<br></p>
+<p>2.2:&nbsp;Assuming that importance weights have finite variance and mean, we can use the standard CLT to guarantee variance reduction at rate 1/S, where S is the number of MCMC draws. Different CLTs can be applied depending on the existence of certain fractional moments (fractional moments are more general than integer moments and are useful in describing properties of fat-tailed distributions). To estimate the number of fractional moments of the weights, we can model the tails of the importance weights using insights of extreme value theory (<a href="https://www.jstor.org/stable/2958083?casa_token=quT8q7BWXIcAAAAA%3ALzyVeQUR6xs7OuLOQlyqZE4zj18ajlZ7TBWkRDmSEWAkZskNwfPW3IaZkHeigJRx7CKYZoWw2A0jVO5RLCP1c1dz3L6qZiVLRegko4O8JX8XEaeUyo31">Pickands, 1975</a>). &nbsp;What distribution can be used to estimate the number of fractional moments?<br><br></p>
+<p>We refer to the estimated value of 1/k as the k-hat value reported as a diagnostic in the loo package. Since most distributions have tails that are well approximated by GDP, we can replace tail weights of the importance weight distribution with the expected ordered statistics of the fitted GDP. In the context of LOO, we refer to this as Pareto smoothed importance sampling (PSIS-LOO).<br><br>2.3: What is the rationale of replacing largest weights by the expected ordered statistics of the fitted GDP?<br></p>
+<p>2.4:&nbsp;Based on the above, suppose importance weights follow a standard Cauchy distribution. What k-hat value do you expect with sufficiently large number of draws?<br></p>
+<p>2.5:&nbsp;After what k-hat value should we seriously doubt the reliability of the Pareto smoothed importance sampling estimator?&nbsp;<br></p>
+<p>2.6: What does a high k-hat value indicate about the target distribution?<br></p>
+<p>2.7:&nbsp;What are common causes for large k-hats within the context of PSIS loo?<br></p>
+<p>2.8: What should you consider doing if you have high k-hat values?<br></p>
 <h3 class="anchored">3. Sleep study</h3>
 <p></p>
 <p>In Assignment 7, you fit two different models to the sleepstudy dataset. One with varying intercepts per person and one with varying intercepts and slopes. In this exercise you will perform visual checks and leave-one-out cross-validation on these models.</p>
-<p>First, perform the following steps for the varying intercept model. This model allows for different Subjects to have different baseline Reaction times (before sleep deprivation).<br>
-</p>
+<p>First, perform the following steps for the varying intercept model. This model allows for different Subjects to have different baseline Reaction times (before sleep deprivation).<br></p>
 <p>Use `pp_check(fit)` to create the default density overlay plot.</p>
-<p>3.1: Which of the following best describes the interpretation of the plot?<br>
-</p>
-<p>Next try a different plot of the predictions:<br>
-`pp_check(fit, type = "intervals_grouped", x = "Days", group = "Subject")`<br>
-<br>
-3.2: What does the plot present?<br>
-<br>
-<br>
-3.3: Based on the plot, what can you say about how the model predicts the observations of individual Subjects? <br>
-</p>
-<p>Next, use PSIS-LOO CV to estimate the elpd of the varying intercepts model.<br>
-<br>
-3.4: The elpd_loo estimate for the varying intercepts model is  and the standard error estimate is .<br>
-<br>
-The second model estimates varying intercepts and varying slopes. This model allows for different effects of Days for each Subject.<br>
-<br>
-Plot again the default density plot of predictions using `pp_check()`<br>
-</p>
-<p>3.5: Which best describes the plot:<br>
-<br>
-<br>
-Perform PSIS-LOO CV to estimate elpd_loo for the varying intercepts and slopes model. You may find that there are high Pareto-k values. These can be fixed with importance weighted moment matching at the cost of some computation, but in this case the elpd_loo will change negligibly with the improved estimates.<br>
-</p>
-<p>3.6: The elpd_loo estimate for the varying slopes and intercepts model is  and the standard error estimate is .<br>
-<br>
-So far you have only performed visual posterior checks to compare the models. However, another option is to compare the leave-one-out cross validation values between the models. Use `loo_compare()` to calculate the elpd_diff between the two models.</p>
-<p>3.7: The elpd_diff estimate is (enter as negative value as shown in the loo_compare output)  and the standard error is <br>
-<br>
-3.8: Which of these best describes the conclusions from the loo comparison:<br>
-<br>
-</p>
+<p>3.1: Which of the following best describes the interpretation of the plot?<br></p>
+<p>Next try a different plot of the predictions:<br>`pp_check(fit, type = "intervals_grouped", x = "Days", group = "Subject")`<br><br>3.2: What does the plot present?<br><br><br>3.3: Based on the plot, what can you say about how the model predicts the observations of individual Subjects? <br></p>
+<p>Next, use PSIS-LOO CV to estimate the elpd of the varying intercepts model.<br><br>3.4: The elpd_loo estimate for the varying intercepts model is  and the standard error estimate is .<br><br>The second model estimates varying intercepts and varying slopes. This model allows for different effects of Days for each Subject.<br><br>Plot again the default density plot of predictions using `pp_check()`<br></p>
+<p>3.5: Which best describes the plot:<br><br><br>Perform PSIS-LOO CV to estimate elpd_loo for the varying intercepts and slopes model. You may find that there are high Pareto-k values. These can be fixed with importance weighted moment matching at the cost of some computation, but in this case the elpd_loo will change negligibly with the improved estimates.<br></p>
+<p>3.6: The elpd_loo estimate for the varying slopes and intercepts model is  and the standard error estimate is .<br><br>So far you have only performed visual posterior checks to compare the models. However, another option is to compare the leave-one-out cross validation values between the models. Use `loo_compare()` to calculate the elpd_diff between the two models.</p>
+<p>3.7: The elpd_diff estimate is (enter as negative value as shown in the loo_compare output)  and the standard error is <br><br>3.8: Which of these best describes the conclusions from the loo comparison:<br><br></p>
 <p></p>
-<h3 class="anchored">4. Sleep study extensions</h3><br>
-So far you only compared the two models that were fit in the previous week. But modelling is an iterative process, and additional features of the data can be modelled. <br>
-Next, you will add two extensions to the previous models, which you may have thought about already: (1) Reaction times are known to be positively skewed (2) There could be a non-linear relationship between Days and Reaction time.<br>
-<br>
-The first issue can be tackled by changing the observation family to a positively skewed distribution, such as log-normal.<br>
-As this transforms the interpretation of the coefficients, the priors should be updated.<p></p>
+<h3 class="anchored">4. Sleep study extensions</h3><br>So far you only compared the two models that were fit in the previous week. But modelling is an iterative process, and additional features of the data can be modelled. <br>Next, you will add two extentions to the previous models, which you may have thought about already: (1) Reaction times are known to be positively skewed (2) There could be a non-linear relationship between Days and Reaction time.<br><br>The first issue can be tackled by changing the observation family to a positively skewed distribution, such as log-normal.<br>As this transforms the interpretation of the coefficients, the priors should be updated.<p></p>
 <p>Use the following priors with the lognormal observation family.</p>
 <p>\(\alpha_0 \sim normal(\log(250), 1)\)</p>
 <p>\(\beta_0 \sim normal(0, 1)\)</p>
 <p>\(\sigma \sim normal(0, 2)\)</p>
 <p>\(\alpha_j \sim normal(0, \tau_\alpha)\)</p>
-<p>\(\beta_j \sim normal(0, \tau_\beta)\)<br>
-</p>
+<p>\(\beta_j \sim normal(0, \tau_\beta)\)<br></p>
 <p>\(\tau_\alpha \sim normal(0,&nbsp; 1)\)</p>
 <p>\(\tau_\beta \sim normal(0,&nbsp; 1)\)</p>
-<p>Fit the varying slopes and intercept model with lognormal family.<br>
-<br>
-4.1 Plot the default `pp_check()`. What do you notice?<br>
-<br>
-<br>
-Estimate the elpd_loo for the lognormal model. <br>
-4.2: The elpd_loo estimate for the lognormal model is , and the standard error estimate is .<br>
-<br>
-4.3 How does this compare to the other models with respect to LOO-CV?<br>
-<br>
-<br>
-Next, to address potential non-linear effect with respect to Days, you can try with a spline term for Days. This allows for a non-linear population-level effect of Days on Reaction time. Add the term `s(Days)` to the formula for the lognormal model, and compare to the other models using pp_check and loo_compare. Use a normal(0, 1) prior on the `sDays_1` term.<br>
-<br>
-4.4 Based on elpd_loo comparison:<br>
-<br>
-<br>
-4.5 Based on elpd_loo, the order of the four models from best to worst predictive performance is:<br>
-<br>
-</p>
+<p>Fit the varying slopes and intercept model with lognormal family.<br><br>4.1 Plot the default `pp_check()`. What do you notice?<br><br><br>Estimate the elpd_loo for the lognormal model. <br>4.2: The elpd_loo estimate for the lognormal model is , and the standard error estimate is .<br><br>4.3 How does this compare to the other models with respect to LOO-CV?<br><br><br>Next, to address potential non-linear effect with respect to Days, you can try with a spline term for Days. This allows for a non-linear population-level effect of Days on Reaction time. Add the term `s(Days)` to the formula for the lognormal model, and compare to the other models using pp_check and loo_compare. Use a normal(0, 1) prior on the `sDays_1` term.<br><br>4.4 Based on elpd_loo comparison:<br><br><br>4.5 Based on elpd_loo, the order of the four models from best to worst predictive performance is:<br><br></p>
 
 
 
