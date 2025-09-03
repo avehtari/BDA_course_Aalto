@@ -364,6 +364,14 @@
     \item quantile {\tt beta.ppf}
     \item random number {\tt beta.rvs}
     \end{itemize}
+    \begin{itemize}
+        \item {\tt from preliz import Beta}
+        \item Similar to  scipy.stats
+        \item Nicer features to explore distributions 
+        \item \url{https://preliz.readthedocs.io}
+    \end{itemize}
+
+
   \end{itemize}
 
 \end{frame}
@@ -452,100 +460,106 @@
 \begin{frame}{Left handedness}
 
   \begin{itemize}
-  \item<+-> If we would like to provide scissors for all students, how
-    many left handed scissors we would need?
-    \begin{itemize}
-    \item related to consumer behavior analysis and A/B testing
-  \end{itemize}
-\item<+-> Make a guess of how many left handed there are now
-  \begin{itemize}
-  \item<+-> tell your guess to the next one
-  \end{itemize}
-\end{itemize}  
-
-\end{frame}
-
-\begin{frame}{Left handedness}
-
-  \vspace{-0.5\baselineskip}
-  \begin{itemize}
-  \item<+-> What we know and don't know
-    \begin{itemize}
-    \item $N=L+R$ is the total number of students in the lecture hall,
-      $N$ is known in the beginning
-    \item<+-> $L$ and $R$ are the number of left and right handed students, not known before we start asking
-    \item<+-> $n=l+r$ is the number of students we have asked
-    \item<+-> $l$ and $r$ are the numbers of left and right handed students from the students we asked
-    \item<+-> we also know that $l \leq L \leq (N-r)$ and $r \leq R \leq (N-l)$
-    \end{itemize}
-  \item<+-> After observing $n$ students with $l$ left handed, what we
-    know about $L$?
-    \begin{itemize}
-    \item We define $L=l+\tilde{l}$, where $\tilde{l}$ is the
-      unobserved number of left handed students among those who we did
-      not yet ask
-    \item We know $l$, $r$, and $N$, and want to predict $\tilde{l}$ and $L$
-    \end{itemize}
+    \item<+-> If we would like to provide scissors for all students, how
+      many left handed scissors we would need?
+      % \begin{itemize}
+      %   \item related to consumer behavior analysis and A/B testing
+      % \end{itemize}
+  % \item<+-> Make a guess of how many left handed there are now
+  %   \begin{itemize}
+  %     \item<+-> tell your guess to the next one
+  %   \end{itemize}
   \item<+-> {\color{blue} Posterior} distribution for
     $\theta$ is $\Beta(\alpha+l, \beta+r)$
   \item<+-> {\color{red} Posterior predictive} distribution for
     $\displaystyle\tilde{l}$ is\\
     $\BetaBinomial(\tilde{l} | N-n, \alpha+l, \beta+r)=\int_0^1\Bin(\tilde{l} | N-n, \theta)\Beta(\theta | \alpha+l, \beta+r)d\theta$
-  \end{itemize}
+  \item<+-> {\small Demo: \url{https://handedness.streamlit.app}}
+
+\end{itemize}  
+\end{frame}
+
+% \begin{frame}{Left handedness}
+
+%   \vspace{-0.5\baselineskip}
+%   \begin{itemize}
+%   \item<+-> What we know and don't know
+%     \begin{itemize}
+%     \item $N=L+R$ is the total number of students in the lecture hall,
+%       $N$ is known in the beginning
+%     \item<+-> $L$ and $R$ are the number of left and right handed students, not known before we start asking
+%     \item<+-> $n=l+r$ is the number of students we have asked
+%     \item<+-> $l$ and $r$ are the numbers of left and right handed students from the students we asked
+%     \item<+-> we also know that $l \leq L \leq (N-r)$ and $r \leq R \leq (N-l)$
+%     \end{itemize}
+%   \item<+-> After observing $n$ students with $l$ left handed, what we
+%     know about $L$?
+%     \begin{itemize}
+%     \item We define $L=l+\tilde{l}$, where $\tilde{l}$ is the
+%       unobserved number of left handed students among those who we did
+%       not yet ask
+%     \item We know $l$, $r$, and $N$, and want to predict $\tilde{l}$ and $L$
+%     \end{itemize}
+%   \item<+-> {\color{blue} Posterior} distribution for
+%     $\theta$ is $\Beta(\alpha+l, \beta+r)$
+%   \item<+-> {\color{red} Posterior predictive} distribution for
+%     $\displaystyle\tilde{l}$ is\\
+%     $\BetaBinomial(\tilde{l} | N-n, \alpha+l, \beta+r)=\int_0^1\Bin(\tilde{l} | N-n, \theta)\Beta(\theta | \alpha+l, \beta+r)d\theta$
+%   \end{itemize}
   
-\end{frame}
+% \end{frame}
 
-%%% handedness demo
+% %%% handedness demo
 
-\begin{frame}{Justification for uniform prior}
+% \begin{frame}{Justification for uniform prior}
 
-  \begin{itemize}
-  \item $p({\color{red}\theta}|M)=1$ if
-    \begin{itemize}
-    \item[1)] we want the prior predictive distribution to be uniform
-      \begin{equation*}
-        p(y|n,M) = \frac{1}{n+1}, \quad y=0,\ldots,n
-      \end{equation*}
-      \begin{itemize}
-      \item nice justification as it is based on observables $y$ and $n$
-      \end{itemize}
-    \item<2->[2)] we think all values of ${\color{red}\theta}$ are equally likely
-      % Laplace "principle of insufficient reason"
-    \end{itemize} 
-  \end{itemize}
+%   \begin{itemize}
+%   \item $p({\color{red}\theta}|M)=1$ if
+%     \begin{itemize}
+%     \item[1)] we want the prior predictive distribution to be uniform
+%       \begin{equation*}
+%         p(y|n,M) = \frac{1}{n+1}, \quad y=0,\ldots,n
+%       \end{equation*}
+%       \begin{itemize}
+%       \item nice justification as it is based on observables $y$ and $n$
+%       \end{itemize}
+%     \item<2->[2)] we think all values of ${\color{red}\theta}$ are equally likely
+%       % Laplace "principle of insufficient reason"
+%     \end{itemize} 
+%   \end{itemize}
 
-\end{frame}
+% \end{frame}
 
-\begin{frame}{Left handedness}
+% \begin{frame}{Left handedness}
 
-  \vspace{-0.5\baselineskip}
-  \begin{itemize}
-  \item What we know and don't know
-    \begin{itemize}
-    \item $N=L+R$ is the total number of students in the lecture hall,
-      $N$ is known in the beginning
-    \item $L$ and $R$ are the number of left and right handed students, not known before we start asking
-    \item $n=l+r$ is the number of students we have asked
-    \item $l$ and $r$ are the numbers of left and right handed students from the students we asked
-    \item we also know that $l \leq L \leq (N-r)$ and $r \leq R \leq (N-l)$
-    \end{itemize}
-  \item After observing $n$ students with $l$ left handed, what we
-    know about $L$?
-    \begin{itemize}
-    \item We define $L=l+\tilde{l}$, where $\tilde{l}$ is the
-      unobserved number of left handed students among those who we did
-      not yet ask
-    \item We know $l$, $r$, and $N$, and want to predict $\tilde{l}$ and $L$
-    \end{itemize}
-  \item {\color{blue} Posterior} distribution for
-    $\theta$ is $\Beta(\alpha+l, \beta+r)$
-  \item {\color{red} Posterior predictive} distribution for
-    $\displaystyle\tilde{l}$ is\\
-    $\BetaBinomial(\tilde{l} | N-n, \alpha+l, \beta+r)=\int_0^1\Bin(\tilde{l} | N-n, \theta)\Beta(\theta | \alpha+l, \beta+r)d\theta$
-  \item {\small Demo: \url{https://handedness.streamlit.app}}
-  \end{itemize}
+%   \vspace{-0.5\baselineskip}
+%   \begin{itemize}
+%   \item What we know and don't know
+%     \begin{itemize}
+%     \item $N=L+R$ is the total number of students in the lecture hall,
+%       $N$ is known in the beginning
+%     \item $L$ and $R$ are the number of left and right handed students, not known before we start asking
+%     \item $n=l+r$ is the number of students we have asked
+%     \item $l$ and $r$ are the numbers of left and right handed students from the students we asked
+%     \item we also know that $l \leq L \leq (N-r)$ and $r \leq R \leq (N-l)$
+%     \end{itemize}
+%   \item After observing $n$ students with $l$ left handed, what we
+%     know about $L$?
+%     \begin{itemize}
+%     \item We define $L=l+\tilde{l}$, where $\tilde{l}$ is the
+%       unobserved number of left handed students among those who we did
+%       not yet ask
+%     \item We know $l$, $r$, and $N$, and want to predict $\tilde{l}$ and $L$
+%     \end{itemize}
+%   \item {\color{blue} Posterior} distribution for
+%     $\theta$ is $\Beta(\alpha+l, \beta+r)$
+%   \item {\color{red} Posterior predictive} distribution for
+%     $\displaystyle\tilde{l}$ is\\
+%     $\BetaBinomial(\tilde{l} | N-n, \alpha+l, \beta+r)=\int_0^1\Bin(\tilde{l} | N-n, \theta)\Beta(\theta | \alpha+l, \beta+r)d\theta$
+%   \item {\small Demo: \url{https://handedness.streamlit.app}}
+%   \end{itemize}
   
-\end{frame}
+% \end{frame}
 %%% priors
 
 \begin{frame}{Priors}
@@ -759,40 +773,39 @@
   \only<2>{\includegraphics[width=9cm,trim=1300 550 0 240,clip]{figs/left_handed_infographic.png}\\}
   \only<3>{\includegraphics[width=9cm,trim=0 600 1400 240,clip]{figs/left_handed_infographic.png}\\}
   \only<2-3>{\tiny Fig from \url{https://www.reddit.com/r/dataisbeautiful/comments/s9x1ya/history_of_lefthandedness_oc/}}
-  \only<4>{\vspace{0.5\baselineskip}\includegraphics[width=8cm]{figs/beta_8_60_prior.pdf}}
-  
+  \only<4>{\vspace{0.5\baselineskip}\includegraphics[width=6cm]{figs/beta_8_60_prior.pdf} \small Demo:\url{https://handedness.streamlit.app}}
 \end{frame}
 
-\begin{frame}{Left handedness}
+% \begin{frame}{Left handedness}
 
-  \vspace{-0.5\baselineskip}
-  \begin{itemize}
-  \item What we know and don't know
-    \begin{itemize}
-    \item $N=L+R$ is the total number of students in the lecture hall,
-      $N$ is known in the beginning
-    \item $L$ and $R$ are the number of left and right handed students, not known before we start asking
-    \item $n=l+r$ is the number of students we have asked
-    \item $l$ and $r$ are the numbers of left and right handed students from the students we asked
-    \item we also know that $l \leq L \leq (N-r)$ and $r \leq R \leq (N-l)$
-    \end{itemize}
-  \item After observing $n$ students with $l$ left handed, what we
-    know about $L$?
-    \begin{itemize}
-    \item We define $L=l+\tilde{l}$, where $\tilde{l}$ is the
-      unobserved number of left handed students among those who we did
-      not yet ask
-    \item We know $l$, $r$, and $N$, and want to predict $\tilde{l}$ and $L$
-    \end{itemize}
-  \item {\color{blue} Posterior} distribution for
-    $\theta$ is $\Beta(\alpha+l, \beta+r)$
-  \item {\color{red} Posterior predictive} distribution for
-    $\displaystyle\tilde{l}$ is\\
-    $\BetaBinomial(\tilde{l} | N-n, \alpha+l, \beta+r)=\int_0^1\Bin(\tilde{l} | N-n, \theta)\Beta(\theta | \alpha+l, \beta+r)d\theta$
-  \item {\small Demo: \url{https://handedness.streamlit.app}}
-  \end{itemize}
+%   \vspace{-0.5\baselineskip}
+%   \begin{itemize}
+%   \item What we know and don't know
+%     \begin{itemize}
+%     \item $N=L+R$ is the total number of students in the lecture hall,
+%       $N$ is known in the beginning
+%     \item $L$ and $R$ are the number of left and right handed students, not known before we start asking
+%     \item $n=l+r$ is the number of students we have asked
+%     \item $l$ and $r$ are the numbers of left and right handed students from the students we asked
+%     \item we also know that $l \leq L \leq (N-r)$ and $r \leq R \leq (N-l)$
+%     \end{itemize}
+%   \item After observing $n$ students with $l$ left handed, what we
+%     know about $L$?
+%     \begin{itemize}
+%     \item We define $L=l+\tilde{l}$, where $\tilde{l}$ is the
+%       unobserved number of left handed students among those who we did
+%       not yet ask
+%     \item We know $l$, $r$, and $N$, and want to predict $\tilde{l}$ and $L$
+%     \end{itemize}
+%   \item {\color{blue} Posterior} distribution for
+%     $\theta$ is $\Beta(\alpha+l, \beta+r)$
+%   \item {\color{red} Posterior predictive} distribution for
+%     $\displaystyle\tilde{l}$ is\\
+%     $\BetaBinomial(\tilde{l} | N-n, \alpha+l, \beta+r)=\int_0^1\Bin(\tilde{l} | N-n, \theta)\Beta(\theta | \alpha+l, \beta+r)d\theta$
+%   \item {\small Demo: \url{https://handedness.streamlit.app}}
+%   \end{itemize}
   
-\end{frame}
+% \end{frame}
 
 \begin{frame}{Benefits of integration and prior}
 
@@ -802,7 +815,6 @@
   
   \only<1>{\hspace{-1cm}\includegraphics[width=11.5cm]{figs/lefthand_simulation_phat.pdf}}
   \only<2>{\hspace{-1cm}\includegraphics[width=11.5cm]{figs/lefthand_simulation_yhat.pdf}}
-
 \end{frame}
 
 % \begin{frame}{Benefits of integration and prior}
@@ -1016,8 +1028,9 @@
 \begin{frame}{Reasons to use Normal distribution}
 
   \begin{itemize}
-  \item Normal distribution often justified based on central limit theorem
-  \item More often used due to the computational convenience or tradition
+    \item Computational convenience
+    \item Tradition
+    \item Often good approximation (justification based on central limit theorem)
   \end{itemize}
 
 \end{frame}
@@ -1027,17 +1040,17 @@
 \begin{frame}{Central limit theorem*}
 
   \begin{itemize}
-  \item De Moivre, Laplace, Gauss, Chebysev, Liapounov, Markov, et al.
+  % \item De Moivre, Laplace, Gauss, Chebysev, Liapounov, Markov, et al.
   \item Given certain conditions, distribution of sum (and mean) of
     random variables approach Gaussian distribution as
     $n \rightarrow \infty$
-  \item Problems
+  \item<2-> Problems
     \begin{itemize}
-    \item does not hold for distributions with infinite variance,
+    \item<2-> does not hold for distributions with infinite variance,
       e.g., Cauchy
-    \item<2-> may require large $n$,\\ e.g.
+    \item<3-> may require large $n$,\\ e.g.
       Binomial, when $\theta$ close to $0$ or $1$
-    \item<3-> does not hold if one the variables has much larger scale
+    \item<4-> does not hold if one the variables has much larger scale
     \end{itemize}
   \end{itemize}
 
@@ -1129,7 +1142,7 @@
     \begin{align*}
       \text{where} \quad
       \mu_n=\frac{\frac{1}{\tau_0^2}\mu_0+\frac{n}{\sigma^2}\bar{y}}{\frac{1}{\tau_0^2}+\frac{n}{\sigma^2}} \quad
-      \text{ja} \quad \frac{1}{\tau_n^2} = \frac{1}{\tau_0^2}+\frac{n}{\sigma^2}
+      \text{and} \quad \frac{1}{\tau_n^2} = \frac{1}{\tau_0^2}+\frac{n}{\sigma^2}
     \end{align*}
   \item If $\tau_0^2=\sigma^2$, prior corresponds to one virtual observation with value $\mu_0$
     \pause
@@ -1208,7 +1221,7 @@
     prior information for that. E.g.
     \begin{itemize}
     \item proportion of students using MS Windows vs. Apple macOS vs. Linux
-    \item proportion of students who are longer than 1.9m
+    \item proportion of students who are taller than 1.9 m
     \item proportion of students, who submitted the first assignment,
       attending the next lecture
     \item proportion of students, who submitted the first assignment,
