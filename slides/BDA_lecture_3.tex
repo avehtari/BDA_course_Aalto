@@ -280,7 +280,7 @@
 
 % \end{frame}
 
-\begin{frame}{Posterior for $\mu$ and $\sigma$ given one observation $y$}
+\begin{frame}{Posterior for $\mu$ and $\sigma$ given $y$}
 
   \begin{itemize}
   \item<+-> Data model for $y$ $p(y \mid \mu, \sigma)$
@@ -364,14 +364,18 @@
   \begin{itemize}
   \item<+-> Joint distribution of parameters
     \begin{align*}
-      p(\theta_1,\theta_2 \mid y) \propto p(y \mid \theta_1,\theta_2)p(\theta_1,\theta_2)
+      p(\mu, \sigma \mid y) \propto p(y \mid \mu,\sigma)p(\mu, \sigma)
     \end{align*}
   \item<+-> Marginalization
       \begin{align*}
-        p(\theta_1 \mid y) = \int p(\theta_1,\theta_2 \mid y) d\theta_2
+        p(\mu \mid y) = \int p(\mu, \sigma \mid y) d\sigma
       \end{align*}
-      $p(\theta_1 \mid y)$ is a marginal distribution
+      $p(\mu \mid y)$ is a marginal distribution
        \vspace{0.5\baselineskip}
+     \item<+-> Analytic solution
+       \begin{itemize}
+       \item sometimes the integral has an analytic solution
+       \end{itemize}
   % \item Goal is to find marginal posterior of an interesting quantity
   %   \begin{itemize}
   %   \item a parameter of the model
@@ -379,8 +383,8 @@
   %   \end{itemize}
     \item<+-> Monte Carlo approximation
       \begin{align*}
-        \text{if }\quad & (\theta_1^{(s)},\theta_2^{(s)}) \sim p(\theta_1,\theta_2 \mid y) \\
-        \text{then }\quad & \theta_1^{(s)} \sim p(\theta_1 \mid y)
+        \text{if }\quad & (\mu^{(s)},\sigma^{(s)}) \sim p(\mu,\sigma \mid y) \\
+        \text{then }\quad & \mu^{(s)} \sim p(\mu \mid y)
     \end{align*}
   \end{itemize}
 
@@ -394,11 +398,11 @@
   %     p(\tilde{y},\theta \mid y) &= p(\tilde{y} \mid \theta,y) p(\theta \mid y)\\
   %      &= p(\tilde{y} \mid \theta) p(\theta \mid y) \qquad \text{(often)}
   %   \end{align*}
-  \item Posterior predictive distribution is obtained by marginalizing
-    out the posterior distribution
+  \item Posterior predictive distribution for a future $\tilde{y}$ is
+    obtained by marginalizing the joint distribution of unknowns
       \begin{align*}
-        p(\tilde{y} \mid y)  & = \int p(\tilde{y}, \theta \mid y) d\theta\\
-                             & \uncover<2->{= \int p(\tilde{y} \mid \theta)p(\theta \mid y) d\theta}
+        \uncover<2->{p(\tilde{y} \mid y)}  & \uncover<2->{= \int} p(\tilde{y}, \mu, \sigma, \mid y) \uncover<2->{d\mu\sigma}\\
+                             & \uncover<3->{= \int p(\tilde{y} \mid \mu, \sigma)p(\mu, \sigma \mid y) d\mu\sigma}
       \end{align*}
     \end{itemize}
 
@@ -849,7 +853,7 @@
     variances and degrees of freedom doesn't have a closed form
     \begin{itemize}
     \item but easy to sample from the two distributions, and obtain
-      samples of the differences
+      draws of the differences
       \begin{align*}
         \text{if }\quad & \mu_1^{(s)} \sim p(\mu_1 \mid y_1) \\
         & \mu_2^{(s)}  \sim p(\mu_2 \mid y_2) \\
