@@ -270,6 +270,21 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
   
 \end{frame}
 
+
+
+\begin{frame}{Grid sampling and curse of dimensionality}
+
+  \begin{itemize}
+  \item In general the number of evaluations increase exponentially $c^D$
+  \end{itemize}
+  \vspace{-0.5\baselineskip}
+  \begin{center}
+    \includegraphics[width=10cm]{grid_dimensions.png}
+  \end{center}
+\end{frame}
+
+
+
 \begin{frame}{Grid sampling and curse of dimensionality}
 
   \begin{itemize}
@@ -317,6 +332,16 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
      \item they worked together in atomic bomb project
      \item Metropolis and Ulam, "The Monte Carlo Method", 1949
      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Markov Chain Monte Carlo - history}
+
+  \begin{itemize}
+  \item The Metropolis algorithm was introduce in 1953 by Metropolis, N., Rosenbluth, A., Rosenbluth, M., Teller, A. and Teller, E.
+    \pause
+   \item The Metropolis algorithm was later generalized by Hastings (1970)
     \pause
    \item Bayesians started to have enough cheap computation time in 1990s
      \begin{itemize}
@@ -324,17 +349,16 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
      \item Gelfand \& Smith, 1990
        \pause
      \item Stan initial release 2012
-     \item JAGS, Nimble, Tensorflow probability, PyMC, Pyro, BlackJAX
+     \item JAGS, Nimble, TFP, PyMC, Pyro, BlackJAX
        Turing.jl, ...
      \item  Štrumbelj et al. (2024). Past, Present, and Future of Software for Bayesian Inference. \textit{Statistical Science}, 39(1):46-61. \url{https://doi.org/10.1214/23-STS907}
      \end{itemize}
-     % \begin{itemize}
-     %   \item tätä ennen käyttö vähäistä, vaikka bayesilaisiakin
-     %     osallistui teorian ja menetelmien kehittämiseen
-     % \end{itemize}
+     \pause
+  \item Check this \url{https://www.youtube.com/watch?v=KZeIEiBrT_w} by Veritasium.
   \end{itemize}
-
 \end{frame}
+
+
 
 % \note{Buffon tiputteli neuloja lautalattialle
 % % http://noppa5.pc.helsinki.fi/koe/flash/prob/buf-en.html
@@ -455,7 +479,7 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
       \texttt{rt(n=10000, df=1)}
     }
     \only<12>{
-      \includegraphics[width=9.5cm]{C1c.pdf}\\ \vspace{-0.5\baselineskip}\footnotesize
+      \includegraphics[width=9.5cm]{C1c.png}\\ \vspace{-0.5\baselineskip}\footnotesize
       \texttt{cummean(rt(n=10000, df=1))}
     }
 \end{itemize}
@@ -560,7 +584,7 @@ where $w^{(t)}$ is the normalized probability of a grid cell $t$, and $\alpha^{(
     \end{equation*}
     where $I(\theta^{(s)} \in A)=1$ if $\theta^{(s)} \in A$
     \begin{itemize}
-    \item $I(\cdot)$ is binomially distributed as $p(\theta \in A)$
+    \item The sum of $I(\cdot)$ is binomially distributed as $p(\theta \in A)$
         \begin{itemize}
         \item use beta CDF, or normal approximation
         \item[$\rightarrow$] $\var(I(\cdot)) =  p(1-p)S$  (Appendix A, p. 579)
@@ -695,10 +719,22 @@ The corresponding MCSE estimates:
    %   default number of digits. Think for each reported value how
    %   many digits is sensible.
   \end{itemize}
-
-\uncover<13>{See also \url{https://users.aalto.fi/~ave/casestudies/Digits/digits.html}}
   
 \end{frame}
+
+
+\begin{frame}{How many digits to report Summary}
+
+\vspace{-0.5\baselineskip}  
+  \begin{itemize}
+    \item Too many digits are difficult to read and can be misleading
+    \item Check the Monte Carlo standard error to avoid showing random noise
+    \item Show meaningful digits given the posterior uncertainty
+    \item Take into account model assumptions and the context/audience
+  \end{itemize}
+Check this case study \url{https://users.aalto.fi/~ave/casestudies/Digits/digits.html}
+\end{frame}
+
 
 \begin{frame}{More data}
 
@@ -751,7 +787,7 @@ The corresponding MCSE estimates:
 
 \end{frame}
 
-\begin{frame}{Simple example: $x \sim N, \quad t_4, \quad t_2, \quad t_1, \quad t_{1/2}$}
+\begin{frame}{Simple example: $x \sim N, \quad t_4, \quad t_2, \quad t_1$}
 
   \begin{itemize}
   \item N has all moments finite
@@ -768,7 +804,7 @@ The corresponding MCSE estimates:
   }
 \end{frame}
 
-\begin{frame}{Simple example: $x \sim t_4, \quad t_2, \quad t_1, \quad t_{1/2}$}
+\begin{frame}{Simple example: $x \sim t_4, \quad t_2, \quad t_1$}
 
 \vspace{-0.5\baselineskip}
 \hspace{-1cm}
@@ -1462,6 +1498,12 @@ The corresponding MCSE estimates:
   \item Concentration of the measure, that is, where is the most of the
     mass?
   \end{itemize}
+
+  \vspace{0.5\baselineskip}
+  \begin{center}
+    \includegraphics[width=10cm]{curse_dimensionality.pdf}  
+  \end{center}
+  
 
 \end{frame}
 
