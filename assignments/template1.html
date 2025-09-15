@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.34">
+<meta name="generator" content="quarto-1.8.24">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -70,14 +70,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="./assignment9.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-c8ad9e5dbd60b7b70b38521ab19b7da4.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-ccd1e9a650e7dd5c465c899acf874ff2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-49b4ea129b5fe46be082b9426b6fdfc5.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -132,9 +133,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
-    <div class="sidebar-title mb-0 py-0">
-      <a href="./">Bayesian Data Analysis</a> 
-    </div>
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
@@ -341,10 +341,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The exercises here refer to the lecture 1/BDA chapter 1 content, not the course infrastructure quiz. This assignment is meant to test whether or not you have sufficient knowledge to participate in the course. The first question checks that you remember basic terms of probability calculus. The second exercise checks you recognise the most important notation used throughout the course and used in BDA3. The third-fifth exercise you will solve some basic Bayes theorem questions to check your understanding on the basics of probability theory. The 6th exercise checks on whether you recall the three steps of Bayesian Data Ananlysis as mentioned in chapter 1 of BDA3. The last exercise walks you through an example of how we can use models to generate distributions for outcomes of interest, applied to a setting of a simplified Roulette table.</p>
 <p>This quarto document is not intended to be submitted, but to render the questions as they appear on Mycourses to be available also outside of it. The following will set-up <code>markmyassignment</code> to check your functions at the end of the notebook:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(markmyassignment)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(markmyassignment)</span>
 <span id="cb1-2"><a href="#cb1-2"></a>assignment_path <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">"https://github.com/avehtari/BDA_course_Aalto/"</span>,</span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="st">"blob/master/tests/assignment1.yml"</span>, <span class="at">sep=</span><span class="st">""</span>)</span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="fu">set_assignment</span>(assignment_path)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="fu">set_assignment</span>(assignment_path)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Assignment set:
 assignment1: Bayesian Data Analysis: Assignment 1
@@ -374,7 +374,7 @@ Figure&nbsp;1: Parts of Bayesian workflow
 <h1 data-number="3"><span class="header-section-number">3</span> Bayes’ theorem 2</h1>
 <p>The following will help you implementing a function to calculate the required probabilities for this exercise. Keep the below name and format for the function to work with <code>markmyassignment</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>boxes_test <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>), <span class="at">ncol =</span> <span class="dv">2</span>,</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>boxes_test <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>), <span class="at">ncol =</span> <span class="dv">2</span>,</span>
 <span id="cb3-2"><a href="#cb3-2"></a>    <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>), <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"white"</span>)))</span>
 <span id="cb3-3"><a href="#cb3-3"></a></span>
 <span id="cb3-4"><a href="#cb3-4"></a>p_red <span class="ot">&lt;-</span> <span class="cf">function</span>(boxes) {</span>
@@ -387,14 +387,14 @@ Figure&nbsp;1: Parts of Bayesian workflow
 <span id="cb3-11"><a href="#cb3-11"></a>    <span class="co"># Do computation here, and return as below.</span></span>
 <span id="cb3-12"><a href="#cb3-12"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
 <span id="cb3-13"><a href="#cb3-13"></a>    <span class="fu">c</span>(<span class="fl">0.29090909</span>,<span class="fl">0.07272727</span>,<span class="fl">0.63636364</span>)</span>
-<span id="cb3-14"><a href="#cb3-14"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-14"><a href="#cb3-14"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="a-binomial-model-for-the-roulette-table" class="level1" data-number="4">
 <h1 data-number="4"><span class="header-section-number">4</span> A Binomial Model for the Roulette Table</h1>
 <p>Incomplete code can be found below.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># proportion of red/black</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># proportion of red/black</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a>theta <span class="ot">&lt;-</span> <span class="co"># declare probability parameter for the binomial model</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a></span>
 <span id="cb4-4"><a href="#cb4-4"></a><span class="co"># Sequence of trials</span></span>
@@ -412,21 +412,21 @@ Figure&nbsp;1: Parts of Bayesian workflow
 <span id="cb4-16"><a href="#cb4-16"></a>}</span>
 <span id="cb4-17"><a href="#cb4-17"></a></span>
 <span id="cb4-18"><a href="#cb4-18"></a><span class="co"># Create a data frame containing the draws for each number of trials</span></span>
-<span id="cb4-19"><a href="#cb4-19"></a>proportion_60 <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(trials, binom_gen, theta, nsims)) <span class="co"># lapply applies elements in trials column to binom_gen function, which is then rowbound via do.call</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-19"><a href="#cb4-19"></a>proportion_60 <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(trials, binom_gen, theta, nsims)) <span class="co"># lapply applies elements in trials column to binom_gen function, which is then rowbound via do.call</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now plot a histogram of the computed proportions for 10, 50 and 1000 trials, using the code below</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Plot the Distributions</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Plot the Distributions</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a>subset_df60 <span class="ot">&lt;-</span> proportion_60[proportion_60<span class="sc">$</span>Trials <span class="sc">%in%</span> <span class="fu">c</span>(<span class="co">#trial values), ] # Subset your dataframe</span></span>
 <span id="cb5-3"><a href="#cb5-3"></a></span>
 <span id="cb5-4"><a href="#cb5-4"></a>subset_df60 <span class="sc">|&gt;</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(Proportions)) <span class="sc">+</span></span>
 <span id="cb5-5"><a href="#cb5-5"></a>  <span class="fu">geom_histogram</span>(<span class="at">position =</span> <span class="st">"identity"</span> ,<span class="at">bins =</span> <span class="dv">40</span>) <span class="sc">+</span></span>
 <span id="cb5-6"><a href="#cb5-6"></a>  <span class="fu">facet_grid</span>(<span class="at">cols =</span> <span class="fu">vars</span>(Trials))  <span class="sc">+</span></span>
-<span id="cb5-7"><a href="#cb5-7"></a>  <span class="fu">ggtitle</span>(<span class="st">"Proportions for specific trials"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-7"><a href="#cb5-7"></a>  <span class="fu">ggtitle</span>(<span class="st">"Proportions for specific trials"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Suppose you are now certain that theta = 0.6, plot the probability density given 1000 trials using the code below.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>size <span class="ot">=</span>  <span class="co"># number of trials</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>size <span class="ot">=</span>  <span class="co"># number of trials</span></span>
 <span id="cb6-2"><a href="#cb6-2"></a>prob <span class="ot">=</span>  <span class="co"># probability of success</span></span>
 <span id="cb6-3"><a href="#cb6-3"></a></span>
 <span id="cb6-4"><a href="#cb6-4"></a>binom_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
@@ -437,7 +437,7 @@ Figure&nbsp;1: Parts of Bayesian workflow
 <span id="cb6-9"><a href="#cb6-9"></a><span class="fu">ggplot</span>(binom_data, <span class="fu">aes</span>(<span class="at">x =</span> Success, <span class="at">y =</span> Probability)) <span class="sc">+</span></span>
 <span id="cb6-10"><a href="#cb6-10"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
 <span id="cb6-11"><a href="#cb6-11"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb6-12"><a href="#cb6-12"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"PMF of Binomial Distribution"</span>, <span class="at">x =</span> <span class="st">"Number of Successes"</span>, <span class="at">y =</span> <span class="st">"PDF"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-12"><a href="#cb6-12"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"PMF of Binomial Distribution"</span>, <span class="at">x =</span> <span class="st">"Number of Successes"</span>, <span class="at">y =</span> <span class="st">"PDF"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
@@ -445,7 +445,7 @@ Figure&nbsp;1: Parts of Bayesian workflow
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-markmyassignment
+<span class="screen-reader-only">Warning</span>markmyassignment
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -453,7 +453,7 @@ markmyassignment
 <div class="callout-body-container callout-body">
 <p>The following will check the functions for which <code>markmyassignment</code> has been set up:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">mark_my_assignment</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">mark_my_assignment</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>✔ | F W  S  OK | Context
 
@@ -595,13 +595,14 @@ Backtrace:
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -1006,7 +1007,7 @@ Backtrace:
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb9" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1"></a><span class="co">---</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1"></a><span class="co">---</span></span>
 <span id="cb9-2"><a href="#cb9-2"></a><span class="an">title:</span><span class="co"> "Notebook for Assignment 1"</span></span>
 <span id="cb9-3"><a href="#cb9-3"></a><span class="an">author:</span><span class="co"> "Aki Vehtari et al."</span></span>
 <span id="cb9-4"><a href="#cb9-4"></a><span class="an">format:</span></span>
@@ -1132,7 +1133,7 @@ Backtrace:
 <span id="cb9-130"><a href="#cb9-130"></a><span class="fu">mark_my_assignment</span>()</span>
 <span id="cb9-131"><a href="#cb9-131"></a><span class="st">```</span></span>
 <span id="cb9-132"><a href="#cb9-132"></a><span class="at">:::</span></span>
-</code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
