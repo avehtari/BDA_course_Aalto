@@ -111,6 +111,19 @@
   \end{itemize}
 \end{frame}
 
+\begin{frame}{This lecture}
+
+  \begin{itemize}
+  \item Normal / Gaussian distribution with unknown mean and scale
+  \item Connection between analytic probability density and Monte Carlo approximation
+  \item Marginalization by analytic integration and by Monte Carlo
+  \item Posterior predictive distribution by analytic integration and by Monte Carlo
+  \item Generalized Linear Models (GLM) (Binomial and Poisson)
+  \item Grid Monte Carlo sampling
+  \end{itemize}
+\end{frame}
+
+
 \begin{frame}{Normal / Gaussian}
 
   \only<1-6>{observation $y$, and parameters $\mu$ and $\sigma$}
@@ -121,43 +134,43 @@
     {observation $y$, and parameters $\mu=1$ and $\sigma=1/2$}
     }\only<1>{
   \begin{align*}
-    p({y}|\mu,\sigma)&=\frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}({y}-\mu)^2\right)
+    p({y} \mid \mu,\sigma)&=\frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}({y}-\mu)^2\right)
   \end{align*}
     \centering
   \includegraphics[height=4cm,clip]{lec3_normal6}
   }\only<2>{
   \begin{align*}
-    p({y}|\mu,\sigma)&=\frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}{\color{red}({y}-\mu)^2}\right)
+    p({y} \mid \mu,\sigma)&=\frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}{\color{red}({y}-\mu)^2}\right)
   \end{align*}
     \centering
   \includegraphics[height=4cm,clip]{lec3_normal2}
   }\only<3>{
   \begin{align*}
-    p({y}|\mu,\sigma)&=\frac{1}{\sqrt{2\pi}\sigma}\exp\left({\color{red}-}\frac{1}{2\sigma^2}{\color{red}({y}-\mu)^2}\right)
+    p({y} \mid \mu,\sigma)&=\frac{1}{\sqrt{2\pi}\sigma}\exp\left({\color{red}-}\frac{1}{2\sigma^2}{\color{red}({y}-\mu)^2}\right)
   \end{align*}
     \centering
   \includegraphics[height=4cm,clip]{lec3_normal3}
   }\only<4>{
   \begin{align*}
-    p({y}|\mu,\sigma)&=\frac{1}{\sqrt{2\pi}\sigma}\exp\left({\color{red}-\frac{1}{2\sigma^2}({y}-\mu)^2}\right)
+    p({y} \mid \mu,\sigma)&=\frac{1}{\sqrt{2\pi}\sigma}\exp\left({\color{red}-\frac{1}{2\sigma^2}({y}-\mu)^2}\right)
   \end{align*}
     \centering
   \includegraphics[height=4cm,clip]{lec3_normal4}
   }\only<5>{
   \begin{align*}
-    p({y}|\mu,\sigma)&=\frac{1}{\sqrt{2\pi}\sigma}{\color{red}\exp\left(-\frac{1}{2\sigma^2}({y}-\mu)^2\right)}
+    p({y} \mid \mu,\sigma)&=\frac{1}{\sqrt{2\pi}\sigma}{\color{red}\exp\left(-\frac{1}{2\sigma^2}({y}-\mu)^2\right)}
   \end{align*}
     \centering
   \includegraphics[height=4cm,clip]{lec3_normal5}
   }\only<6>{
   \begin{align*}
-    p({y}|\mu,\sigma)&={\color{red}\frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}({y}-\mu)^2\right)}
+    p({y} \mid \mu,\sigma)&={\color{red}\frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}({y}-\mu)^2\right)}
   \end{align*}
     \centering
   \includegraphics[height=4cm,clip]{lec3_normal6}
   }\only<7-8>{
     \begin{align*}
-    p({y}|\mu,\sigma)&=\frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}({y}-\mu)^2\right)
+    p({y} \mid \mu,\sigma)&=\frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}({y}-\mu)^2\right)
     \end{align*}
   }\only<7>{
     \centering
@@ -182,7 +195,18 @@
 \only<2>{\includegraphics[height=4cm,clip]{helicopter_hier_time_residual_2025.pdf}}
 \only<3>{\includegraphics[height=4cm,clip]{helicopter_hier_time_residual_hist_2025.pdf}}
 \only<4>{\includegraphics[height=4cm,clip]{helicopter_hier_time_residual_dots_2025.pdf}}
-\only<5>{\includegraphics[height=4cm,clip]{helicopter_hier_time_residual_dots_normal_2025.pdf}}
+\only<5->{\includegraphics[height=4cm,clip]{helicopter_hier_time_residual_dots_normal_2025.pdf}}
+
+\uncover<6->{
+  \begin{itemize}
+  \item Why close to normally distributed?
+    \begin{itemize}
+    \item<7-> Many small sources of variations summed together tend to
+      be close to normally distributed
+    \item<8-> Central Limit Theorem (CLT)
+    \end{itemize}
+  \end{itemize}
+  }
 
 \end{frame}
 
@@ -190,7 +214,7 @@
 
     \vspace{-2\baselineskip}
     \begin{align*}
-    p({y}|\mu,\sigma)&=\frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}({y}-\mu)^2\right)
+    p({y} \mid \mu,\sigma)&=\frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}({y}-\mu)^2\right)
     \end{align*}
     \vspace{-\baselineskip}
   \begin{center}
@@ -283,10 +307,10 @@
 \begin{frame}{Posterior for $\mu$ and $\sigma$ given $y$}
 
   \begin{itemize}
-  \item<+-> Data model for $y$ $p(y \mid \mu, \sigma)$
-  \item<+-> Likelihood for parameters given observed $y$ $p(y \mid \mu, \sigma)$
-  \item<+-> Prior $p(\mu, \sigma$)
-  \item<+-> Posterior $p(\mu, \sigma \mid y $)
+  \item<+-> Data model for $y$: $p(y \mid \mu, \sigma)$
+  \item<+-> Likelihood for $\mu$ and $\sigma$ given observed $y$: $p(y \mid \mu, \sigma)$
+  \item<+-> Prior for $\mu$ and $\sigma$: $p(\mu, \sigma$)
+  \item<+-> Posterior for $\mu$ and $\sigma$: $p(\mu, \sigma \mid y $)
   \item<+-> For some priors there is analytic solution for posterior,
     and Monte Carlo is a general approach
   \item<+-> Before looking at the posterior $p(\mu, \sigma \mid y $),
@@ -297,12 +321,12 @@
 
 \begin{frame}{Monte Carlo and posterior draws}
 
-  \only<1-2>{Density $p(\theta|\mu,\sigma)=\frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}(\theta-\mu)^2\right)\quad$ {\color{gray}(\texttt{dnorm()})}\\
+  \only<1-2>{Density $p(\theta \mid \mu,\sigma)=\frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}(\theta-\mu)^2\right)\quad$ {\color{gray}(\texttt{dnorm()})}\\
     \includegraphics[width=10cm]{norm1d_1.pdf}
-  \uncover<2>{$\E(\theta)=\int \theta p(\theta|\mu,\sigma) d\theta = \mu$}}
-  \only<3>{Density $p(\theta|\mu,\sigma)=\frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}(\theta-\mu)^2\right)$\\
+  \uncover<2>{$\E(\theta)=\int \theta p(\theta \mid \mu,\sigma) d\theta = \mu$}}
+  \only<3>{Density $p(\theta \mid \mu,\sigma)=\frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{1}{2\sigma^2}(\theta-\mu)^2\right)$\\
     \includegraphics[width=10cm]{norm1d_1b.pdf}
-    {$p(\theta \leq 0)=\int_{-\infty}^{0} p(\theta|\mu,\sigma) d\theta$},\,\,\\
+    {$p(\theta \leq 0)=\int_{-\infty}^{0} p(\theta \mid \mu,\sigma) d\theta$},\,\,\\
     many numerical approximations {\color{gray}(pnorm())}}
   \only<4>{In practice evaluate in finite number of locations {\color{gray}(dnorm())} \uncover<1>{$\frac{1}{\sqrt{2\pi}\sigma}$}\\
     \includegraphics[width=10cm]{norm1d_2.pdf}}
@@ -342,11 +366,11 @@
     \item<1-> for visualization
     \item<2-> to approximate expectations (integrals)
       \begin{align*}
-        E_{p(\theta \mid y)}[{\color{blue}\theta}] = \int {\color{blue}\theta} p(\theta \mid y) \approx \frac{1}{S}\sum_{s=1}^{S} {\color{blue}\theta^{(s)}}
+        E_{p(\theta \mid y)}[{\color{blue}\theta}] = \int {\color{blue}\theta} p(\theta \mid y) d\theta \approx \frac{1}{S}\sum_{s=1}^{S} {\color{blue}\theta^{(s)}}
       \end{align*}
     \item<3-> easy to approximate expectations of functions (push forward)
       \begin{align*}
-        E_{p(\theta \mid y)}[{\color{blue}g(\theta)}] = \int {\color{blue}g(\theta)} p(\theta \mid y) \approx \frac{1}{S}\sum_{s=1}^{S} {\color{blue}g(\theta^{(s)})}
+        E_{p(\theta \mid y)}[{\color{blue}g(\theta)}] = \int {\color{blue}g(\theta)} p(\theta \mid y) d\theta \approx \frac{1}{S}\sum_{s=1}^{S} {\color{blue}g(\theta^{(s)})}
       \end{align*}
     \end{itemize}
   \item<4-> If $p({\color{blue}g(\theta)})$ has finite variance, then
@@ -731,25 +755,25 @@
 
 \end{frame}
 
-\begin{frame}
+% \begin{frame}
   
-  {\large\color{navyblue} Simon Newcomb's light of speed experiment in 1882}
+%   {\large\color{navyblue} Simon Newcomb's light of speed experiment in 1882}
 
-  {\small
-  Newcomb measured ($n=66$) the time required for light to travel from
-  his laboratory on the Potomac River to a mirror at the base of the
-  Washington Monument and back, a total distance of 7422 meters.}
-  \begin{center}
-    \vspace{-0.5\baselineskip}
-    {\includegraphics[width=7.5cm]{newcomb_data.pdf}}\\
-    \vspace{-1\baselineskip}
-    \only<1>{\phantom{\includegraphics[width=7.5cm]{newcomb_posterior1.pdf}}}
-    \only<2>{\includegraphics[width=7.5cm]{newcomb_posterior1.pdf}}
-    \only<3>{\includegraphics[width=7.5cm]{newcomb_posterior2.pdf}}
-    \only<4>{\includegraphics[width=7.5cm]{newcomb_posterior3.pdf}}
-  \end{center}
+%   {\small
+%   Newcomb measured ($n=66$) the time required for light to travel from
+%   his laboratory on the Potomac River to a mirror at the base of the
+%   Washington Monument and back, a total distance of 7422 meters.}
+%   \begin{center}
+%     \vspace{-0.5\baselineskip}
+%     {\includegraphics[width=7.5cm]{newcomb_data.pdf}}\\
+%     \vspace{-1\baselineskip}
+%     \only<1>{\phantom{\includegraphics[width=7.5cm]{newcomb_posterior1.pdf}}}
+%     \only<2>{\includegraphics[width=7.5cm]{newcomb_posterior1.pdf}}
+%     \only<3>{\includegraphics[width=7.5cm]{newcomb_posterior2.pdf}}
+%     \only<4>{\includegraphics[width=7.5cm]{newcomb_posterior3.pdf}}
+%   \end{center}
 
-\end{frame}
+% \end{frame}
 
 % \note{
 % Newcomb mittasi 66 kertaa ajan mik� valolla meni kulkea 7442m
@@ -1043,7 +1067,7 @@
     \vspace{-1.5\baselineskip}
         \begin{align*}
       \mbox{LD50:}\;\;\;
-          \E\left(\frac{y}{n}\right)=\logit^{-1}(\alpha+\beta x) = 0.5
+          \E[\theta]=\logit^{-1}(\alpha+\beta x) = 0.5
           \uncover<4->{\quad \Rightarrow \quad & x_{\mathrm{LD50}}=-\alpha/\beta}\\
           \uncover<5->{& x_{\mathrm{LD50}}^{(s)}=-\alpha^{(s)}/\beta^{(s)}}
     \end{align*}
@@ -1137,7 +1161,7 @@
 
 \end{frame}
 
-\begin{frame}{Example GLM}
+\begin{frame}{Example: GLM for counts}
 
 {\footnotesize\vspace{-1mm}
     \begin{tabular}{c c}
@@ -1172,7 +1196,7 @@
 
 \end{frame}
 
-\begin{frame}{Example GLM: Poisson Linear Model}
+\begin{frame}{Example: GLM for counts}
   
   \vspace{-1\baselineskip}
 
@@ -1180,9 +1204,9 @@
     \begin{align*}
       y_i \mid \color{blue} \mu_i & \sim \Poisson(\color{blue}\mu_i \color{black})\\
       \color{blue}\mu_i & = e^{\color{darkgreen}\alpha + \beta x_i}\\
-      \uncover<2->{\\ {\Poisson(y_i|\mu_i )} & = \frac{1}{y_i!}\mu_i^{y_i}e^{-\mu_i}}
+      \uncover<2->{\\ {\Poisson(y_i \mid \mu_i )} & = \frac{1}{y_i!}\mu_i^{y_i}e^{-\mu_i}}
       \uncover<3->{\\ ~ \\ \text{Alternatively}: & \\
-      y_i \mid \color{blue}\mu_i,\color{black}\phi & \sim \Negbin(y_i|\color{blue}\mu_i,\color{black}\phi)}
+      y_i \mid \color{blue}\mu_i,\color{black}\phi & \sim \Negbin(y_i \mid \color{blue}\mu_i,\color{black}\phi)}
     \end{align*}
     \uncover<4->{ \tiny 
     \begin{equation*}
