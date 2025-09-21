@@ -345,40 +345,49 @@ ul.task-list li input[type="checkbox"] {
 <h2 data-number="1.1" class="anchored" data-anchor-id="assignment-questions"><span class="header-section-number">1.1</span> Assignment questions</h2>
 <p>For convenience the assignment questions are copied below. Answer the questions in MyCourses.</p>
 <p></p>
-<div>
-    <div>
-        <div>
-            <p></p>
-            <p></p>
-            <p></p>
-            <p></p>
-            <p></p>
-            <p></p>
-            <h3 class="anchored">Lecture 4/Chapters 3 and 10 of BDA Quiz (96% of grade)</h3>
-            <h3 class="anchored"><br></h3>
-            <p>As, always, please see the provided <a href="https://avehtari.github.io/BDA_course_Aalto/assignments/template4.html">code notebook</a>&nbsp;from the website to help you get started on the coding tasks.</p>
-            <p><br></p>
-            <h3 class="anchored">1. Mean estimates, Monte Carlo standard error (MCSE) and Pareto-k diagnostic<br></h3>
-            <p>This task is about understanding and calculating Monte Carlo standard error.</p>
-            <p></p>
-            <p>1.1 Which of these correctly describes MCSE:</p>
-            <p></p>
-            <p><br></p>
-            <p></p>
-            <p>We will explore mean estimates and MCSE estimates of two distributions.</p>
-            <p>First is the gamma distribution, parameterised with shape (alpha) and rate (beta).</p>
-            <p>1.2 Look up the gamma distribution in Appendix A in BDA (or&nbsp;<a href="https://en.wikipedia.org/wiki/Gamma_distribution">wikipedia</a>). What is the mean of the gamma(alpha = 3, beta = 3) distribution?</p>
-        </div>
-        <div><br>Use the appropriate R function to draw a sample of size 1000 from a gamma(3, 3) distribution.&nbsp;</div>
-        <div>1.3 Which of these commands correctly does this:<br></div>
-        <div>
-            <p><br></p>
-            <p>One way to calculate the Monte Carlo standard error of the mean is to repeatedly take samples of draws from the distribution, calculate the mean of each sample and then the standard deviation of the means. Let's re-calculate the mean with a lower number of draws.<br></p>
-            <p><br></p>
-            <p>1.4 Which of these best describes the relationship between the empirical mean of the sample of size 400 and the analytical mean of the gamma(3, 3) distribution?<br><br></p>
-            <p>Simulate 2000 samples, each of 400 draws from the Gamma(3, 3), calculate and save the mean of each sample. Then calculate the standard deviation of the sample of means.<br><br>Adjust the following R code to do this:<br>
-            </p>
-            <pre>  # create a vector to store the sample means
+<h1 id="lecture-4chapters-3-10-of-bda-quiz-96-of-grade">Lecture 4/Chapters 3-10
+  of BDA Quiz (96% of grade)</h1>
+<p>As, always, please see the provided <a href="https://avehtari.github.io/BDA_course_Aalto/assignments/template4.html">code
+    notebook</a> from the website to help you get started on the coding tasks. Here a reminder about the nomenclature of draws and samples, which can also be
+  found in the <a href="https://avehtari.github.io/BDA_course_Aalto/BDA3_notes.html#posterior-draws-and-sample">BDA3
+    notes for Chapter 2</a>: A sample can mean also data. So to improve clarity,
+  we (and Stan developers) prefer the following: Individual is draw, plural is
+  draws, a set of draws is a sample, and many sets of draws are samples. The
+  number of draws is the same as the sample size, and later we discuss also
+  effective sample size (ESS) for a set of posterior draws.</p>
+<p></p>
+<h1 id="mean-estimates-monte-carlo-standard-error-mcse-and-pareto-k-diagnostic">
+  1. Mean estimates, Monte Carlo standard error (MCSE) and Pareto-k diagnostic
+</h1>
+<p>This task is about understanding and calculating Monte Carlo standard error.
+</p>
+<p><strong>1.1</strong> Which of these correctly describes MCSE:</p>
+<p></p>
+<p>We will explore mean estimates and MCSE estimates of two distributions.</p>
+<p>First is the gamma distribution, parameterised with shape (alpha) and rate
+  (beta).</p>
+<p><strong>1.2</strong> Look up the gamma distribution in Appendix A in BDA (or
+  <a href="https://en.wikipedia.org/wiki/Gamma_distribution">wikipedia</a>).
+  What is the mean of the <code>gamma(alpha = 3, beta = 3)</code> distribution?
+</p>
+<p></p>
+<p>Use the appropriate R function to draw a sample of size 1000 from a
+  <code>gamma(alpha = 3, beta = 3)</code> distribution.</p>
+<p><strong>1.3</strong> Which of these commands correctly does this:</p>
+<p></p>
+<p>One way to calculate the Monte Carlo standard error of the mean is to
+  repeatedly take samples of draws from the distribution, calculate the mean of
+  each sample and then the standard deviation of the means. Let’s re-calculate
+  the mean with a lower number of draws.</p>
+<p><strong>1.4</strong> Which of these best describes the relationship between
+  the empirical mean of the sample of size 400 and the analytical mean of the
+  <code>gamma(alpha = 3, beta = 3)</code> distribution?</p>
+<p></p>
+<p>Simulate 2000 samples, each of 400 draws from the <code>gamma(alpha = 3, beta
+    = 3)</code>, calculate and save the mean of each sample. Then calculate the
+  standard deviation of the sample of means.</p>
+<p>Adjust the following R code to do this:</p>
+<pre><code># create a vector to store the sample means
   sample_means &lt;- rep(NA, times = NUMBER_OF_SAMPLES)
   # loop over the number of samples
   for (i in 1:NUMBER_OF_SAMPLES) {
@@ -388,161 +397,153 @@ ul.task-list li input[type="checkbox"] {
     sample_means[i] &lt;- ...
   }
   # calculate the standard deviation of the sample means
-  sd(...)
-  </pre>
-            <p></p>
-
-            <p>1.5 Enter the MCSE that is calculated from the code (enter with two decimal places): <br><br>Now, explore the Cauchy(location = 0, scale = 1) distribution. The corresponding functions are named similarly to the gamma functions above.<br></p>
-            <p><br></p>
-            <p>1.6 What is the mean of the Cauchy(0, 1) distribution?</p>
-            <p><br></p>
-            <p>Change the simulation to take samples of the Cauchy(0, 1) distribution and calculate the MCSE of the mean. Try this a few times.</p>
-            <p></p>
-            <p><br></p>
-            <p>1.7 What do you notice about the MCSE for the mean of the Cauchy and gamma distributions? </p>
-            <p><br></p>
-            <p>The Central Limit Theorem (CLT) gives us the conditions under which it is also possible to estimate the MCSE from a single sample (see lecture slides and for excellent visual intuition, check out "But what is the Central Limit Theorem" by 3Blue1Brown&nbsp;)&nbsp;for means and other functions of the posterior. The function mcse_mean from the <a href="https://mc-stan.org/posterior/articles/posterior.html">posterior package</a> provides this method (more on this is also mentioned in the lecture).</p><br>
-            <p></p>
-            <p>1.8 Let’s put the claims of the CLT to test. Assume you’ve taken \(N\) draws of a random variable and stored them in a vector \(\theta\). Assume also that the random variable follows a distribution with finite mean and variance, what is the correct formula for the MCSE of the mean?&nbsp; \(SD\) denotes the standard deviation and \(var\) the variance of \(\theta\).<br></p>
-            <p></p>
-            <p><br></p>
-            <p>1.9 Based on what you learned about the Gamma(3, 3) and the Cauchy(0, 1) distributions, which of these statements is correct?</p>
-            <p><br></p>
-            <p><br></p>
-            <p>The Pareto-k diagnostic can be used to diagnose whether the mean (or other moments) exists. The function posterior::pareto_khat() calculates this for a sample of draws. Calculate the Pareto-k for samples of 400 draws from the gamma(3, 3) and the Cauchy(0, 1) distributions.</p>
-            <p><br></p>
-            <p>1.10 Which of these is true:<br></p>
-            <p><br></p>
-        </div>
-        <div>MCSE can be calculated for any estimate, including quantiles and probability and can be used to guide how many digits to report for a given estimate. Suppose you calculate the following summary of a parameter:</div>
-        <div>mean = 0.483834 (MCSE = 0.003)<br></div>
-        <div>5% quantile = 0.234536 (MCSE = 0.01)<br></div>
-        <div>95% quantile = 1.34823 (MCSE = 0.2)</div>
-        <div><br></div>
-    </div>
-    <div><br></div>
-    <div>1.11 Based on recommendations from the lecture how should you report for the mean?<br></div>
-    <div></div>
-
-    1.12 Based on recommendations from the lecture how should you report the 5% quantile?<br>
-</div>
-<div></div>
-<div><br></div>
-<div>
-    1.13 Based on recommendations from the lecture how should you report the 95% quantile?<br>
-</div>
-<div>
-    <div></div>
-    <div>
-        <div>
-            <div>
-                <div><br>
-                </div><br>
-            </div>
-        </div>
-        <div>
-            <h3 class="anchored">2. Bioassay model: Prior<br></h3>
-            <p>In this exercise, you will use a dose-response relation model that is used in BDA3 Section 3.7 and in the chapter reading notes.<br>The likelihood is the same as in the book, but instead of uniform priors, we will use a bivariate normal distribution as the joint prior distribution of the parameters \(\alpha\) and \(\beta\).<br></p>
-            <p>In the prior distribution for \((\alpha,\beta)\), the marginal distributions are \(\alpha \sim N(0,2^2)\) and \(\beta \sim N(10,10^2)\), and the correlation between them is \(\mathrm{corr}(\alpha, \beta)=0.6\).</p>
-
-            <p>2.1 The mean of the prior distribution for \((\alpha, \beta)\) is: </p>
-            <p>2.2 The covariance of the prior distribution (two by two matrix) is:&nbsp;</p>
-            <p></p>
-        </div>
-        <div>
-            <h3 class="anchored">3. Bioassay model: Importance sampling</h3>
-        </div>
-        <div>For this section, you will estimate the posterior mean by weighting prior draws with the appropriate importance weights. To do this you will need to calculate the unnormalized importance ratios \(\tilde{w}\) (also known as weights) when the importance sampling target distribution \(q(\theta)\) is the posterior distribution, and the proposal distribution \(g(\theta)\) is the prior distribution as defined above. You will then need to use this function to calculate the importance sampling estimate of the posterior mean, given draws from the prior.<br></div>
-        <div><br></div>
-        <div>
-            <div>3.1 What is the general formula for the importance ratios (also called importance weights)?</div>
-            <div><br></div>
-            <div><br></div>
-            <div><br></div>
-            <div>3.2&nbsp;What is the correct formula for the importance ratios in the case where the prior&nbsp;is the proposal and the posterior is the target?</div>
-            <div>
-                <div><br></div>
-                <div></div>
-            </div>
-            <div><br></div>3.3 What is the correct formula for the <strong>unnormalized</strong> importance ratios in&nbsp;the case where the prior&nbsp;is the proposal and the posterior is the target?
-            <div>
-                <div><br></div>
-                <div>
-                    <div></div>
-                </div>
-            </div><br>
-        </div>
-        <div>3.4 The unnormalized log importance ratios in the case where the prior&nbsp;is the proposal and the posterior is the target simplify to:</div>
-        <div><br></div>
-        <div></div>
-        <div><br></div>
-        <div>3.5 Why is it better to compute the importance rations on the log scale?</div>
-        <div><br></div>
-        <div></div><div><br></div>
-        <div><br></div>
-        <div>The function `bioassaylp` from the aaltobda package calculates the unnormalized log posterior density assuming a uniform prior.</div>
-        <div><br></div>
-        <div>3.6&nbsp;What is the relationship between the posterior, likelihood and prior when the prior is uniform? </div>
-        <div><br></div>
-        <div>
-            <div>3.7 What is the correct formula or formulas for the self-normalized importance sampling estimate of the mean? \(w\) are the unnormalized importance weights, and \(\tilde{w}\) are the self-normalized weights.<br></div>
-            <div><br></div>
-            <div></div>
-            <div><br></div>
-            <div>Use the function rmvnorm to draw 4000 draws from the prior specified in question 2, calculate the importance weights and then the importance sampling estimate of the posterior mean.</div>
-            <div><br></div>
-            <div>3.8 The importance sampling estimate of the posterior mean is: <br></div>
-            <div><br></div>
-            <div>alpha: , beta: .</div>
-            <div><br></div>
-            <div>3.9 What is the equation for the generic effective sample size (ESS) estimate for importance sampling?</div>
-            <div><br></div>
-            <div>
-                <div><br></div>
-                <div>3.10 Importance sampling ESS: </div>
-                <div><br></div>
-                <div>3.11 What is the MCSE of the estimates? Make sure to use the ESS in the denominator instead of the sample size.<br></div>
-            </div>
-            <div><br></div>
-            <div>
-                <div>alpha: , beta: .</div>
-                <div><br></div>
-                <div>3.12 What is the Pareto-k diagnostic of the importance ratios (enter value with one decimal)? .</div>
-                <div><br></div>
-                <div>3.13 Based on the value, should you trust the importance sampling estimate of the mean?<br></div>
-            </div>
-            <div><br></div>
-            <div>
-                <div>
-                    <h3 class="anchored">4. Bioassay model: Independent posterior draws</h3>
-                </div><br>
-            </div>
-            <div>
-                <div>
-                    <p>You are given 4000 independent draws from the posterior distribution<br>of the model in the dataset `bioassay_posterior` in the `aaltobda` package.</p>
-                    <p>4.1 The posterior can be summarised by the means and 90% posterior interval.<br>What is the mean, 5% and 95% quantiles of the posterior draws for the parameters?<br>mean of alpha: , 5% quantile of alpha: , 95% quantile of alpha: </p>
-                    <p>mean of beta: , 5% quantile of beta: , 95% quantile of beta: </p>
-                </div>
-                <div><br></div>
-                <div>4.2 What is the MCSE for the mean and quantiles (remember that they are independent draws)?<br>For alpha: MCSE for mean: , MCSE for 5% quantile: , MCSE for 95% quantile: </div>
-                <div><br></div>
-                <div>For beta: MCSE for mean: , MCSE for 5% quantile: , MCSE for 95% quantile: </div>
-            </div>
-            <div><br></div>
-            <div>Compare these posterior summaries to the importance sampling estimate.<br></div>
-            <div><br></div>
-            <div>4.3 How does the importance sampling estimate of the posterior mean compare to the estimate from independent posterior draws?</div>
-            <div></div>
-            <div><br></div>
-            <div>Remember that the LD50 (median lethal dose) is equal to \( exp( -\alpha / \beta) \).&nbsp;</div>
-            <div>Calculate the posterior probability that the LD50 is less than 0.85ml/g. Also calculate the MCSE for this probability.</div>
-            <div><br></div>
-            <div>4.4 Pr(LD50 &lt; 0.85 ml/g) = , MCSE = <br></div>
-            <div><br></div>
-            <div><br></div><br>
-        </div>
-    </div>
-</div>
+  sd(...)</code></pre>
+<p><strong>1.5</strong> Enter the MCSE that is calculated from the code (report your answer with 2
+  decimal digits, the decimal separator throughout the <strong>whole
+    course</strong> is a dot, “.”): </p>
+<p>Now, explore the <code>Cauchy(location = 0, scale = 1)</code> distribution.
+  The corresponding functions are named similarly to the gamma functions above.
+</p>
+<p><strong>1.6</strong> What is the mean of the <code>Cauchy(0, 1)</code>
+  distribution?</p>
+<p></p>
+<p>Change the simulation code to take samples of the <code>Cauchy(0, 1)</code>
+  distribution and calculate the MCSE of the mean. Try this a few times.</p>
+<p><strong>1.7</strong> What do you notice about the MCSE for the mean of the
+  Cauchy and gamma distributions?</p>
+<p></p>
+<p>The Central Limit Theorem (CLT) gives us the conditions under which it is
+  also possible to estimate the MCSE from a single sample (see lecture slides
+  and for excellent visual intuition, check out “But what is the Central Limit
+  Theorem” by 3Blue1Brown ) for means and other functions of the posterior. The
+  function mcse_mean from the <a href="https://mc-stan.org/posterior/articles/posterior.html">posterior
+    package</a> provides this method (more on this is also mentioned in the
+  lecture).</p>
+<p><strong>1.8</strong> Let’s put the claims of the CLT to test. Assume you’ve
+  taken <span class="math inline">\(N\)</span> independent draws of a random
+  variable and stored them in a vector <span class="math inline">\(\theta\)</span>. Assume also that the random variable
+  follows a distribution with finite mean and variance, what is the correct
+  formula for the MCSE of the mean? <span class="math inline">\(SD\)</span>
+  denotes the standard deviation and var the variance of <span class="math inline">\(\theta\)</span>.</p>
+<p><strong>1.9</strong> Based on what you learned about the <code>gamma(3,
+    3)</code> and the <code>Cauchy(0, 1)</code> distributions, which of these
+  statements is correct?</p>
+<p></p>
+<p>The Pareto-k diagnostic can be used to diagnose whether the mean (or other
+  moments) exists. The function <code>posterior::pareto_khat()</code> calculates
+  this for a sample of draws. Calculate the Pareto-k for samples of 400 draws
+  from the <code>gamma(3, 3)</code> and the <code>Cauchy(0, 1)</code>
+  distributions.</p>
+<p><strong>1.10</strong> Which of these is true:</p>
+<p></p>
+<p>MCSE can be calculated for any estimate, including quantiles and
+  probabilities and can be used to guide how many digits to report for a given
+  estimate. Suppose you calculate the following summary of a parameter: - mean =
+  0.483834 (MCSE = 0.003) - 5% quantile = 0.234536 (MCSE = 0.01) - 95% quantile
+  = 1.34823 (MCSE = 0.2)</p>
+<p><strong>1.11</strong> Based on recommendations from the lecture how should
+  you report for the mean?</p>
+<p></p>
+<p><strong>1.12</strong> Based on recommendations from the lecture how should
+  you report the 5% quantile?</p>
+<p></p>
+<p><strong>1.13</strong> Based on recommendations from the lecture how should
+  you report the 95% quantile?</p>
+<p></p>
+<h1 id="bioassay-model-prior">2. Bioassay model: Prior</h1>
+<p>In this exercise, you will use a dose-response relation model that is used in
+  BDA3 Section 3.7 and in the chapter reading notes. The likelihood is the same
+  as in the book, but instead of uniform priors, we will use a bivariate normal
+  distribution as the joint prior distribution of the parameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>.</p>
+<p>In the prior distribution for <span class="math inline">\((\alpha,\beta)\)</span>, the marginal distributions
+  are <span class="math inline">\(\alpha∼N(0,2^2)\)</span> and <span class="math inline">\(\beta∼N(10,10^2)\)</span>, and the correlation between
+  them is <span class="math inline">\(\mathrm{corr}(\alpha,\beta)=0.6\)</span>.
+</p>
+<p><strong>2.1</strong> The mean of the prior distribution for <span class="math inline">\((\alpha,\beta)\)</span> is: (  ,
+   )</p>
+<p><strong>2.2</strong> The covariance of the prior distribution (two by two
+  matrix) is:</p>
+<h1 id="bioassay-model-importance-sampling">3. Bioassay model: Importance
+  sampling</h1>
+<p>For this section, you will estimate the posterior mean by weighting prior
+  draws with the appropriate importance weights. To do this you will need to
+  calculate the unnormalized importance ratios <span class="math inline">\(\tilde{w}\)</span> (also known as weights) when the
+  importance sampling target distribution <span class="math inline">\(q(\theta)\)</span> is the posterior distribution, and
+  the proposal distribution <span class="math inline">\(g(\theta)\)</span> is
+  the prior distribution as defined above. You will then need to use this
+  function to calculate the importance sampling estimate of the posterior mean,
+  given draws from the prior.</p>
+<p><strong>3.1</strong> What is the general formula for the importance ratios
+  (also called importance weights)?</p>
+<p></p>
+<p><strong>3.2</strong> What is the correct formula for the importance ratios in
+  the case where the prior is the proposal and the posterior is the target?</p>
+<p></p>
+<p><strong>3.3</strong> What is the correct formula for the
+  <strong>unnormalized</strong> importance ratios in the case where the prior is
+  the proposal and the posterior is the target?</p>
+<p></p>
+<p><strong>3.4</strong> The unnormalized log importance ratios in the case where
+  the prior is the proposal and the posterior is the target simplify to:</p>
+<p></p>
+<p><strong>3.5</strong> Why is it better to compute the importance rations on
+  the log scale?</p>
+<p></p>
+<p>The function <code>bioassaylp</code> from the aaltobda package calculates the
+  unnormalized log posterior density assuming a uniform prior.</p>
+<p><strong>3.6</strong> What is the relationship between the posterior,
+  likelihood and prior when the prior is uniform?</p>
+<p></p>
+<p><strong>3.7</strong> What is the correct formula or formulas for the
+  self-normalized importance sampling estimate of the mean? <span class="math inline">\(w\)</span> are the unnormalized importance weights,
+  and <span class="math inline">\(\tilde{w}\)</span> are the self-normalized
+  weights.</p>
+<p>Use the function <code>rmvnorm</code> to draw 4000 draws from the prior
+  specified in question 2, calculate the importance weights and then the
+  importance sampling estimate of the posterior mean.</p>
+<p><strong>3.8</strong> The importance sampling estimate of the posterior mean
+  is:</p>
+<p>alpha: , beta: .</p>
+<p><strong>3.9</strong> What is the equation for the generic effective sample
+  size (ESS) estimate for importance sampling?</p>
+<p><strong>3.10</strong> Importance sampling ESS: </p>
+<p><strong>3.11</strong> What is the MCSE of the estimates? Make sure to use the
+  ESS in the denominator instead of the sample size.</p>
+<p>alpha: , beta: </p>
+<p><strong>3.12</strong> What is the Pareto-k diagnostic of the importance
+  ratios (enter value with one decimal)? </p>
+<p><strong>3.13</strong> Based on the value, should you trust the importance
+  sampling estimate of the mean?</p>
+<p></p>
+<h1 id="bioassay-model-independent-posterior-draws">4. Bioassay model:
+  Independent posterior draws</h1>
+<p>You are given 4000 independent draws from the posterior distribution of the
+  model in the dataset <code>bioassay_posterior</code> in the
+  <code>aaltobda</code> package.</p>
+<p><strong>4.1</strong> The posterior can be summarised by the means and 90%
+  posterior interval. What is the mean, 5% and 95% quantiles of the posterior
+  draws for the parameters?</p>
+<p>mean of alpha: , 5% quantile of alpha:
+  , 95% quantile of alpha: </p>
+<p>mean of beta: , 5% quantile of beta:
+  , 95% quantile of beta: </p>
+<p><strong>4.2</strong> What is the MCSE for the mean and quantiles (remember
+  that they are independent draws)?</p>
+<p>For alpha: MCSE for mean: , MCSE for 5% quantile:
+  , MCSE for 95% quantile: 
+</p>
+<p>For beta: MCSE for mean: , MCSE for 5% quantile:
+  , MCSE for 95% quantile: </p>
+<p>Compare these posterior summaries to the importance sampling estimate.</p>
+<p><strong>4.3</strong> How does the importance sampling estimate of the
+  posterior mean compare to the estimate from independent posterior draws?</p>
+<p></p>
+<p>Remember that the LD50 (median lethal dose) is equal to <span class="math inline">\(\mathrm{exp}(−\alpha/\beta)\)</span>.</p>
+<p>Calculate the posterior probability that the LD50 is less than 0.85ml/g. Also
+  calculate the MCSE for this probability.</p>
+<p>4.4 Pr(LD50 &lt; 0.85 ml/g) = , MCSE =
+  </p>
+<p></p>
 
 
 </section>
