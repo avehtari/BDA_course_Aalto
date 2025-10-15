@@ -119,6 +119,7 @@
 \DeclareMathOperator{\var}{var}
 \DeclareMathOperator{\Sd}{Sd}
 \DeclareMathOperator{\sd}{sd}
+\DeclareMathOperator{\normal}{normal}
 \DeclareMathOperator{\Gammad}{Gamma}
 \DeclareMathOperator{\Invgamma}{Inv-gamma}
 \DeclareMathOperator{\Bin}{Bin}
@@ -1183,6 +1184,8 @@ family = bernoulli()
   \footnotesize
 \rinline/nstudents | trials(nstudents1) ~ 1 + (1 | year), family=binomial()/
 
+Year specific intercepts have prior $\normal(0, \sigma_\mathrm{intercept})$
+
 \begin{minted}[highlightlines={8-11,13-15},fontsize=\scriptsize,xleftmargin=-5mm]{r}
  Family: binomial 
   Links: mu = logit 
@@ -1210,6 +1213,8 @@ Intercept     0.68      0.11     0.45     0.92 1.01      390      242
 nstudents | trials(nstudents1) ~ assignment + %\highlight{(assignment || year)}%, ...
 \end{minted}
 
+Year specific intercepts and slopes have independent priors $\normal(0, \sigma_\mathrm{intercept})$ and $\normal(0, \sigma_\mathrm{assignment})$
+  
 \begin{minted}[highlightlines={8-12,14-17},fontsize=\scriptsize,xleftmargin=-5mm]{r}
  Family: binomial 
   Links: mu = logit 
@@ -1239,6 +1244,21 @@ assignment    -0.21      0.04    -0.30    -0.14 1.00     1056      803
 nstudents | trials(nstudents1) ~ assignment + %\highlight{(assignment | year)}%, ...
 \end{minted}
 
+  \vspace{-0.5\baselineskip}
+  Year specific intercepts and slopes have a joint prior
+$$
+  \N
+\begin{bmatrix}
+  \begin{pmatrix}
+    0\\0
+  \end{pmatrix},
+\begin{pmatrix}\sigma_\mathrm{intercept} \\ \sigma_\mathrm{slope}\end{pmatrix}
+\begin{pmatrix}1 & \rho \\ \rho & 1\end{pmatrix}
+\begin{pmatrix}\sigma_\mathrm{intercept} \\ \sigma_\mathrm{slope} \end{pmatrix}^T
+\end{bmatrix}
+$$
+
+  \vspace{-0.5\baselineskip}
 \begin{minted}[highlightlines={8-13},fontsize=\scriptsize,xleftmargin=-5mm]{r}
  Family: binomial 
   Links: mu = logit 
@@ -1260,12 +1280,30 @@ Intercept      2.36      0.37     1.60     3.10 1.00      860     1179
 assignment    -0.21      0.03    -0.27    -0.14 1.00     1073     1464
 \end{minted}
 
-  \pause
-  
-  brms uses by default multivariate normal population prior for
-  multiple varying coefficients, with LKJ prior on the correlation
-  matrix
-  
+\end{frame}
+
+\begin{frame}[fragile]{brms multivariate population prior}
+
+  \vspace{-0.5\baselineskip}
+\begin{minted}[escapeinside=\%\%,fontsize=\footnotesize]{r}
+nstudents | trials(nstudents1) ~ assignment + %\highlight{(assignment | year)}%, ...
+\end{minted}
+
+  Year specific intercepts and slopes have a joint prior
+$$
+  \N
+\begin{bmatrix}
+  \begin{pmatrix}
+    0\\0
+  \end{pmatrix},
+\begin{pmatrix}\sigma_\mathrm{intercept} \\ \sigma_\mathrm{slope}\end{pmatrix}
+\begin{pmatrix}1 & \rho \\ \rho & 1\end{pmatrix}
+\begin{pmatrix}\sigma_\mathrm{intercept} \\ \sigma_\mathrm{slope} \end{pmatrix}^T
+\end{bmatrix}
+$$
+
+brms uses LKJ prior for the correlation matrix (can be bigger than in this example)
+
 \end{frame}
 
 % student_retention_sbinom_hier.pdf
