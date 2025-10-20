@@ -413,8 +413,10 @@
   
 % \end{frame}
 
-\begin{frame}[fragile]{Diet effect on chicken weights (at age 12 days)}
+\begin{frame}[fragile]{Stan code for hierarchical model}
 
+Diet effect on chicken weights (at age 12 days)
+  
 {\small
 \begin{minted}{stan}
 data {
@@ -431,8 +433,14 @@ data {
 
 \begin{frame}[fragile]{Diet effect on chicken weights (at age 12 days)}
 
-{\small
-\begin{minted}{stan}
+Hierarchical model with
+    \begin{itemize}
+    \item[-] unknown mean weight per diet
+    \item[-] unknown prior mean and sd
+    \item[-] unknown residual sigma
+    \end{itemize}
+  
+{\small\begin{minted}{stan}
 parameters {
   vector[N_diets] mu_diet;
   real mu_0;
@@ -597,6 +605,9 @@ model {
 }
 \end{minted}
 
+\vspace{-\baselineskip}
+{\color{lightgray}\hrulefill}
+
   brms formula
   \vspace{-0.5\baselineskip}
 %\begin{minted}[escapeinside=\%\%,beameroverlays]{r}
@@ -627,6 +638,9 @@ model {
   %\highlight{weight}% ~ normal(mu_diet[diet_idx], sigma);
 }
 \end{minted}
+
+\vspace{-\baselineskip}
+{\color{lightgray}\hrulefill}
 
   brms formula
   \vspace{-0.5\baselineskip}
@@ -659,7 +673,10 @@ model {
 }
 \end{minted}
 
-  brms formula
+\vspace{-\baselineskip}
+{\color{lightgray}\hrulefill}
+
+brms formula
   \vspace{-0.5\baselineskip}
 %\begin{minted}[escapeinside=\%\%,beameroverlays]{r}
 \begin{minted}[escapeinside=\%\%]{r}  
@@ -689,6 +706,9 @@ model {
   weight ~ normal(mu_diet[diet_idx], sigma);
 }
 \end{minted}
+
+\vspace{-\baselineskip}
+{\color{lightgray}\hrulefill}
 
   brms formula
   \vspace{-0.5\baselineskip}
@@ -721,6 +741,9 @@ model {
 }
 \end{minted}
 
+\vspace{-\baselineskip}
+{\color{lightgray}\hrulefill}
+
   brms formula
   \vspace{-0.5\baselineskip}
 \begin{minted}[escapeinside=\%\%]{r}
@@ -750,6 +773,9 @@ model {
   weight ~ normal(mu_diet[diet_idx], sigma);
 }
 \end{minted}
+
+\vspace{-\baselineskip}
+{\color{lightgray}\hrulefill}
 
   brms formula
   \vspace{-0.5\baselineskip}
@@ -784,6 +810,9 @@ model {
 }
 \end{minted}
 
+\vspace{-\baselineskip}
+{\color{lightgray}\hrulefill}
+
   brms formula
   \vspace{-0.5\baselineskip}
 \begin{minted}[highlightlines={3}]{r}
@@ -816,6 +845,9 @@ model {
   weight ~ normal(mu_diet[diet_idx], sigma);
 }
 \end{minted}
+
+\vspace{-\baselineskip}
+{\color{lightgray}\hrulefill}
 
   brms formula
   \vspace{-0.5\baselineskip}
@@ -1232,6 +1264,9 @@ family = bernoulli()
 
 Year specific intercepts have prior $\normal(0, \sigma_\mathrm{intercept})$
 
+\vspace{-\baselineskip}
+{\color{lightgray}\hrulefill}
+
 {  \footnotesize
 \begin{minted}[highlightlines={8-11,13-15},fontsize=\scriptsize,xleftmargin=-5mm]{r}
  Family: binomial 
@@ -1262,7 +1297,10 @@ nstudents | trials(nstudents1) ~ assignment + %\highlight{(assignment || year)}%
 \end{minted}
 
 Year specific intercepts and slopes have independent priors $\normal(0, \sigma_\mathrm{intercept})$ and $\normal(0, \sigma_\mathrm{assignment})$
-  
+
+\vspace{-\baselineskip}
+{\color{lightgray}\hrulefill}
+
 \begin{minted}[highlightlines={8-12,14-17},fontsize=\scriptsize,xleftmargin=-5mm]{r}
  Family: binomial 
   Links: mu = logit 
@@ -1305,6 +1343,9 @@ $$
 \begin{pmatrix}\sigma_\mathrm{intercept} \\ \sigma_\mathrm{slope} \end{pmatrix}^T
 \end{bmatrix}
 $$
+
+\vspace{-\baselineskip}
+{\color{lightgray}\hrulefill}
 
   \vspace{-0.5\baselineskip}
 \begin{minted}[highlightlines={8-13},fontsize=\scriptsize,xleftmargin=-5mm]{r}
@@ -1651,9 +1692,9 @@ model {
 
   \vspace{-1\baselineskip}
   \hspace{15mm} Strong likelihood \hspace{14mm} Weak likelihood\\
-  \hspace{10mm}{\includegraphics[width=4cm]{kilpis_hier_cp_easy_2.pdf}}
+  \hspace{10mm}{\rotatebox{90}{\hspace{15mm}Centered}~~\includegraphics[width=4cm]{kilpis_hier_cp_easy_2.pdf}}
   {\includegraphics[width=4cm]{kilpis_hier_cp_hard_1.pdf}}\\
-  \hspace{10mm}{\includegraphics[width=4cm]{kilpis_hier_ncp_easy_1.pdf}}
+  \hspace{10mm}{\rotatebox{90}{\hspace{15mm}Non-centered}~~\includegraphics[width=4cm]{kilpis_hier_ncp_easy_1.pdf}}
   {\includegraphics[width=4cm]{kilpis_hier_ncp_hard_2.pdf}}\\
   \vspace{-80mm}\rotatebox{90}{Non-centered param. \hspace{8mm} Centered param. }
   
@@ -1678,7 +1719,7 @@ y ~ 1 + (1 | group)
       use, for example, 
 \begin{minted}[fontsize=\footnotesize]{r}
 y ~ 1 + group,
-prior = prior(normal(0, 10), class='b')
+prior = prior(normal(0, 10), class="b", coeff="group")
 \end{minted}
     \end{itemize}
   \item<+-> There can be need for both centered and non-centered
@@ -1863,7 +1904,7 @@ Pooled over studies, separate for treatments
 \begin{minted}[fontsize=\footnotesize,escapeinside=\%\%]{r}
 fit_pooled <- brm(%\highlight{exac | trials(total) ~ 0 + treatment}%,
                   prior = prior(student_t(7, 0, 1.5), class='b'),
-                  family=binomial(), data=dat.baker2009)
+                  family = binomial(), data = dat.baker2009)
 \end{minted}
 \vspace{-0.25\baselineskip}
   \phantom{\includegraphics[width=9cm]{baker2009_pooled_studies_odds_ratio.pdf}}
@@ -1880,7 +1921,7 @@ Pooled over studies, separate for treatments
 \begin{minted}[fontsize=\footnotesize,escapeinside=\%\%]{r}
 fit_pooled <- brm(exac | trials(total) ~ 0 + %\highlight{treatment}%,
                   prior = prior(student_t(7, 0, 1.5), class='b'),
-                  family=binomial(), data=dat.baker2009)
+                  family = binomial(), data = dat.baker2009)
 \end{minted}
 \vspace{-0.25\baselineskip}
   {\includegraphics[width=9cm]{baker2009_pooled_studies_odds_ratio.pdf}}
@@ -1896,7 +1937,7 @@ Hirerachical for studies, hierarchical for treatments
 \vspace{-0.25\baselineskip}
 \begin{minted}[fontsize=\footnotesize,escapeinside=\%\%]{r}
 fit_hier <- brm(%\highlight{exac | trials(total) ~ (1 | treatment) + (1 | study)}%,
-                family=binomial(), data=dat.baker2009)
+                family = binomial(), data = dat.baker2009)
 \end{minted}
 %\vspace{-0.25\baselineskip}
   \phantom{\includegraphics[width=9cm]{baker2009_hier1_odds_ratio.pdf}}
@@ -1912,7 +1953,7 @@ Hirerachical for studies, hierarchical for treatments
 \vspace{-0.25\baselineskip}
 \begin{minted}[fontsize=\footnotesize,escapeinside=\%\%]{r}
 fit_hier <- brm(exac | trials(total) ~ %\highlight{(1 | treatment)}% + (1 | study),
-                family=binomial(), data=dat.baker2009)
+                family = binomial(), data = dat.baker2009)
 \end{minted}
 %\vspace{-0.25\baselineskip}
   {\includegraphics[width=9cm]{baker2009_hier1_odds_ratio.pdf}}
@@ -1928,7 +1969,7 @@ Hirerachical for studies, hierarchical for treatments
 \vspace{-0.25\baselineskip}
 \begin{minted}[fontsize=\footnotesize,escapeinside=\%\%]{r}
 fit_hier <- brm(exac | trials(total) ~ (1 | treatment) + %\highlight{(1 | study)}%,
-                family=binomial(), data=dat.baker2009)
+                family = binomial(), data = dat.baker2009)
 \end{minted}
 
 \begin{minipage}[t][][t]{1.2\linewidth}
@@ -1973,9 +2014,11 @@ Link in the course web site or directly
 
   \item Exchangeability implies symmetry: If there is no information
     which can be used \textit{a priori} to separate $\theta_j$ form
-    each other, we can assume exchangeability. ("Ignorance implies
-    exchangeability")
-
+    each other, we can assume exchangeability.
+    \begin{itemize}
+    \item "Ignorance implies
+      exchangeability"
+    \end{itemize}
   \end{itemize}
 \end{frame}
 
