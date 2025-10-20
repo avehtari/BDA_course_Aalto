@@ -231,11 +231,13 @@
   \end{minipage}\\
   \only<1>{\hide[white]{-0.3}{-0.2}{0.13}{1.2}} %
 \end{overlayarea}
+\uncover<3->{
   Joint posterior
   \begin{eqnarray*}
     p({\color{set12}\theta},{\color{set11}\tau} \mid y) & \propto & p(y \mid {\color{set12}\theta},{\color{set11}\tau}) p({\color{set12}\theta},{\color{set11}\tau}) \\
     & \propto & p(y \mid {\color{set12}\theta}) p({\color{set12}\theta} \mid {\color{set11}\tau}) p({\color{set11}\tau})
   \end{eqnarray*}
+   }
 \end{frame}
 
 \begin{frame}{Compare}
@@ -362,6 +364,15 @@
 
 \end{frame}
 
+% \begin{frame}{Hierarchical binomial model: rats}
+
+%   {\vspace{-\baselineskip}
+%     \includegraphics[width=6.7cm]{rats_hier_less.pdf}\\}
+%   {\vspace{-0.3\baselineskip}
+%     \includegraphics[width=6.7cm]{rats_hierprior.pdf}\\}
+
+% \end{frame}
+
 \begin{frame}{Hierarchical model and group size: Rats}
 
   \vspace{-\baselineskip}
@@ -371,32 +382,66 @@
   
 \end{frame}
 
-\begin{frame}{Hierarchical binomial model: rats}
-
-  {\vspace{-\baselineskip}
-    \includegraphics[width=6.7cm]{rats_hier_less.pdf}\\}
-  {\vspace{-0.3\baselineskip}
-    \includegraphics[width=6.7cm]{rats_hierprior.pdf}\\}
-
-\end{frame}
-
 \begin{frame}{Hierarchical model and group size: Radon}
 
   919 home radon levels in 85 counties in Minnesota:
   
-    \hspace{0.2cm} Separate \hspace{4.3cm} Hierarchical
+    \hspace{0.2cm} Separate \hspace{4.3cm} \uncover<2->{Hierarchical}
   \begin{minipage}[b]{12cm}
-    {  \hspace{-0.9cm}~\includegraphics[width=6.3cm]{radon2.pdf}\includegraphics[width=6.3cm]{radon4.pdf}}
+    {  \hspace{-0.9cm}~\includegraphics[width=6.3cm]{radon2.pdf}\uncover<2->{\includegraphics[width=6.3cm]{radon4.pdf}}}
   \end{minipage}
   
 \end{frame}
 
-\begin{frame}{Diet effect on chicken weights (at age 12 days)}
+% \begin{frame}{Assignment 7: Sleep deprivation}
 
-  \begin{itemize}
-  \item A typical treatment effect analysis
-  \end{itemize}
+%   \begin{itemize}
+%   \item How sleep deprivation by restricting the sleep time affects reaction speed?
+%   \item Variation between people?
+%   \end{itemize}
   
+% \end{frame}
+
+% \begin{frame}{Assignment 7: School calendar change}
+
+%   \begin{itemize}
+%   \item A typical meta analysis
+%   \item Different studies analysing the effect of changing the school
+%     calendar from a standard one with a long summer break to a
+%     modified one with more regular but shorter breaks
+%   \end{itemize}
+  
+% \end{frame}
+
+\begin{frame}[fragile]{Diet effect on chicken weights (at age 12 days)}
+
+{\small
+\begin{minted}{stan}
+data {
+  int<lower=1> N_observations;
+  int<lower=1> N_diets;
+
+  vector[N_observations] weight;
+  vector[N_observations] diet_idx;
+}
+\end{minted}
+}
+
+\end{frame}
+
+\begin{frame}[fragile]{Diet effect on chicken weights (at age 12 days)}
+
+{\small
+\begin{minted}{stan}
+parameters {
+  vector[N_diets] mu_diet;
+  real mu_0;
+  real<lower=0> sd;
+  real<lower=0> sigma;
+}
+\end{minted}
+}
+
 \end{frame}
 
 \begin{frame}[fragile]{Stan hierarchical model}
