@@ -344,28 +344,165 @@ ul.task-list li input[type="checkbox"] {
 <section id="assignment-questions" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="assignment-questions"><span class="header-section-number">1.1</span> Assignment questions</h2>
 <p>For convenience the assignment questions are copied below. Answer the questions in MyCourses.</p>
-Lecture 7/Chapter 5 of BDA Quiz (96% of grade)<br><br>This week's assignment focuses on hierarchical models and modelling with brms.<br><br>
-<h3 class="anchored">1. Exchangeability</h3>An important building block of hierarchical models is the assumption of exchangeability. Let's review.<br><br>
-<p>1.1 Consider parameters \(\theta_j\) for j in 1...J. Which of these statements correctly describes exchangeability? </p>
-<p>1.2 What best describes the difference between independence and exchangeability? </p>
 <p></p>
-<p></p>Consider the following:&nbsp;&nbsp;assume a box has n black and white balls but we do not know how many of each color. We pick a ball \(y_1\) at random, we do not put it back, and pick another ball \(y_2\) at random.&nbsp;Denote the number of black balls by B and white by W.<br><br>1.3:&nbsp;Are observations \( y_1 \) and&nbsp; \( y_2 \) exchangeable?<br><br><br>1.4:&nbsp;Are observations \(y_1\) and \(y_2\) independent?<br><br><br>1.5:&nbsp;Can we treat the two observations as if they are independent?<br><br><br>1.6: Exchangeability allows us to express dependencies of data and parameters in a convenient form. Suppose we model a sequence of exchangeable random variables \( \theta \) via a governing, or population distribution, where conditional on some unknown parameters \( \phi \), we may assume independence between the elements of&nbsp; \( \theta\). Assume that \(\theta\) has J elements, write down an equation that conveniently factors the joint probability \( p(\theta,\phi) \):<br><br><br>De Finetti's theorem provides the theoretical basis for the equivalence to the independence assumption when J goes to infinity. In practice J is finite, but the difference may be small when J is relatively large. Check out the examples mentioned in the <a href="https://avehtari.github.io/BDA_course_Aalto/BDA3_notes.html">Chapter notes</a> if you need more convincing.&nbsp;<br><br>\( \phi \) is in general unknown. so the marginal prior for \( \theta \) must average over uncertainty in \( \phi \): \( \int \prod^J_{j=1} p(\theta_j | \phi) p(\phi)d\phi \).&nbsp;<br><br>1.7 Based on the marginal prior formulation in the paragraph above, what can you say about the covariances \( \text{cov}( \theta_i, \theta_j) \)?<br><br><br>1.8 As with the parameters above, we often think of exchangeability as arising for our data model conditional on extra information x, such that the tuple \((x_i,y_i)\) are exchangeable whereas \(y_i\) might not be. In which modeling context is this useful? Assume that the target data is denoted by \( y_i \)<br>&nbsp;<br><br>
-<h3 class="anchored">2. Overview of hierarchical models</h3><br>2.1 Which of these best describes a hierarchical model?<br><br><br><br>2.2: Consider that there are observations \(y\) indexed by observation number \(i\) and group \(j\). Suppose the data are modeled dependent on parameters \( \theta_j \) where \( j = 1,\dotsc,J\) indexes some meaningful grouping such as hospital-j specific health-outcomes, conditional on parameters \( \phi \) which are hyper-parameters of the prior distribution of \( \theta_j \). \( \phi \) are modeled by prior distribution \( p(\phi) \). We think of the distribution \( p( \theta_j | \phi&nbsp; ) \) as the population distribution which generates the values for \( \theta \) in the hierarchical model. What are some of the benefits of hierarchical models compared to separate models, which assume no relationship between j (and separate models are estimated), and pooled models, which consider all j jointly, but do not model j specific parameters?<br>&nbsp;<br><br>Throughout the rest of the course, we will often compare the hierarchical model, to a separate model and the pooled model. Suppose for the questions below that you are modeling data \( y_{ij} \) where \( i \) refers to an observation within the \( j^{\text{th}}\) group, the observation model for&nbsp;\( y_{ij} \)&nbsp; is normal, and we consider hierarchies at the level of the parameters describing the location of&nbsp;&nbsp;\( y_{ij} \).&nbsp;<br><br>2.3 Based on the description of the above, the lecture and BDA chapter 5 content, which of these below would suggest a separate model for \( y_{ij} \)? \(\pi() \) stands for some prior distribution and \( \eta_j \) may be a vector of parameters such that&nbsp; \(cov(\eta_s,\eta_r) = 0 \) for \( s \neq r \).<br><br>
-<p></p>
-2.4&nbsp;Based on the description of the above, the lecture and BDA chapter 5 content, which of these below would suggest a pooled model for \( y_{ij} \)? \(\pi() \) stands for some prior distribution and \( \eta_j \)&nbsp; may be a vector of parameters such that&nbsp; \(cov(\eta_s,\eta_r) = 0 \) for \( s \neq r \).<p></p><br>2.5: Based on the description of the above, the lecture and BDA chapter 5 content, which of these below would suggest a hierarchical model for \( y_{ij} \)? \(\pi() \) stands for some prior distribution and \( \eta_j \) may be a vector where \(cov(\eta_s,\eta_r) = 0 \) for \( s \neq r \).<p><br><br>2.6: Why are hierarchical models sometimes also referred to as partially pooled models. You may find it helpful to review the first unnumbered equation on page 115 of&nbsp;<a href="https://users.aalto.fi/~ave/BDA3.pdf">BDA3</a>?<br><br></p><br>It may help, before translating the model to code, to first describe the relationship between variables as a directed acyclic graph (DAG) <a href="https://avehtari.github.io/BDA_course_Aalto/slides/BDA_lecture_7.pdf">(see lecture 7,slide 3)</a>.&nbsp; We interpret the DAG starting from top to bottom as describing the generative mechanism implied by priors and observation model for \( y_{ij} \). Top level variables feed into distributions of lower level parameters and the observation model. Distributions are typically not further described in the DAG.&nbsp; By drawing variables sequentially from top to bottom, you can generate <em>fake observations</em>&nbsp;(push-forward distribution). In the case that the parameters have not yet been updated by the data information, this push-forward distribution is called the prior predictive distribution of&nbsp; \( y \).&nbsp; You have already created such a prior predictive distribution in Assignment 1, question 7 and we will return to this in the sections below.&nbsp;<br><br>2.7: What is the difference between sequential draws from priors and the data model as described above to drawing from the joint posterior in Stan?<br><br><br>In the Figure 1 below, assume that all circular nodes indicate that the object inside can be generated according to some distribution, conditional on the parent nodes.<br><br>
-Figure 1<img src="https://github.com/avehtari/BDA_course_Aalto/blob/master/figures/Quizzes/DAG.png?raw=true" data-hpc="true" class="Box-sc-g0xbh4-0 fzFXnm" style="width: 300px;">
-<br><br>2.8: Which of these equations properly describes the posterior for the model shown in the diagram?<br><br><br><br>
-<h3 class="anchored">3. Meta-analysis and hierarchical models</h3>
-<p>Often similar research studies in areas such as medicine or social science will be published under slightly different conditions or replicated with different subjects. It is of interest to summarise and integrate those findings for which hierarchical models have become increasingly popular.&nbsp;</p>
-<p>3.1: Suppose \(y_i\) is the point estimate for an effect size of a single study, \( i \). Why is it often appropriate to model \( y_i \) by a normal distribution with known standard deviation \( \sigma_i \) which is taken as the standard error estimate for \( y_i \)?<br><br></p>
-<p>3.2 Why are hierarchical models preferable to separate and pooled models for meta-analysis? </p>
-<p>3.3 Suppose the assumption of exchangeability is false because you know the estimates of effects across studies depends on extra information \( x_i \), e.g. geolocation, and this has a substantial impact on the estimates. What should you do in this circumstance? </p>
-<p></p><br>3.4: Based on the discussion above, which of the below would refer to a hierarchical model for \( y_i\)?<br><br><br><br>
-<h3 class="anchored">4. Introduction to brms</h3><br>brms is an R package which makes writing models with Stan easier.<br><br>Suppose you have oberved the following variables, from different groups: \(x, z, y\). \(i\) is the observation number and \(j\) the group indicator. Assume a model \(y_{ij} \sim\) normal\((\mu_{ij}, \sigma)\).<br>Translate the following equations for the linear predictor term \( \mu_{ij}\) into brms syntax:<br><br>4.1 \(\mu_{ij} = \alpha_0\): <br><br><br><br><br>4.2 \(\mu_{ij} = \alpha_0 + \beta_1 x_i\)<br><br><br><br>4.3 \(\mu_{ij} = \alpha_0 + \beta_1 x_i + \beta_2 z_i\)<br><br><br><br>4.4 \(\mu_{ij} = \alpha_0 + \alpha_j + \beta_1 x_i\)<br><br><br><br>Note that in within brms, coefficients that do not vary according to some grouping index (e.g. \( \mu_{ij} = \alpha_0 \)) are called population effects while coefficients that vary according to some grouping are called varying effects (e.g. \( \mu_{ij} = \alpha_j \)). Some literatures refer to these parameters as fixed and random effects respectively, however in the context of Bayesian inference, this terminology can be misleading, since parameters in a model are treated as random variables. See <a href="http://www.stat.columbia.edu/~gelman/research/published/AOS259.pdf">here</a> for more discussion on this. For the questions below, we will use brms terminology.&nbsp;<br><br>
-<h3 class="anchored">5. Simulation warmup</h3><br>In this task, you will simulate data from a hierarchical model to gain better insight into it.<br>
-<p><br>The following R code simulates data from a hierarchical structure, and then plots the results. Experiment with this function by using it on different values of the arguments, and answer the following questions. This code is also included in the notebook for this assignment.<br></p>
-<p></p>
-<pre>hierarchical_sim &lt;- function(group_pop_mean,
+<h1 id="lecture-7chapter-5-of-bda-quiz-96-of-grade">Lecture 7/Chapter 5 of BDA
+  Quiz (96% of grade)</h1>
+<p>This week’s assignment focuses on hierarchical models and modelling with
+  brms.</p>
+<h1 id="exchangeability">1. Exchangeability</h1>
+<p>An important building block of hierarchical models is the assumption of
+  exchangeability. Please have a look at lecture 7, slides 75-83, Chapter 5.2 in
+  BDA3, as well as the <a href="https://avehtari.github.io/BDA_course_Aalto/BDA3_notes.html#exchangeability-vs.-independence">chapter
+    notes for chapter 5</a> more details on the difference between the
+  exchangeability and independence assumption. Let’s review.</p>
+<p><strong>1.1</strong> Consider parameters <span class="math inline">\(\theta_j\)</span> for <span class="math inline">\(j \;
+    \text{in} \; 1...J\)</span>. Which of these statements correctly describes
+  exchangeability?</p>
+<p><strong>1.2</strong> What best describes the difference between independence
+  and exchangeability?</p>
+<p>Consider the following: assume a box has n black and white balls but we do
+  not know how many of each color. We pick a ball <span class="math inline">\(y_1\)</span> at random, we do not put it back, and
+  pick another ball <span class="math inline">\(y_2\)</span> at random. Denote
+  the number of black balls by B and white by W.</p>
+<p><strong>1.3</strong> Are observations <span class="math inline">\(y_1\)</span> and <span class="math inline">\(y_2\)</span> exchangeable?</p>
+<p><strong>1.4</strong> Are observations <span class="math inline">\(y_1\)</span> and <span class="math inline">\(y_2\)</span> independent?</p>
+<p><strong>1.5</strong> Can we treat the two observations as if they are
+  independent?</p>
+<p><strong>1.6</strong> Exchangeability allows us to express dependencies of
+  data and parameters in a convenient form. Suppose we model a sequence of
+  exchangeable random variables <span class="math inline">\(\theta\)</span> via
+  a governing, or population distribution, where conditional on some unknown
+  parameters <span class="math inline">\(\phi\)</span>, we may assume
+  independence between the elements of <span class="math inline">\(\theta\)</span>. Assume that <span class="math inline">\(\theta\)</span> has <span class="math inline">\(J\)</span> elements, write down an equation that
+  conveniently factors the joint probability <span class="math inline">\(p(\theta,\phi)\)</span>:</p>
+<p>De Finetti’s theorem provides the theoretical basis for the equivalence to
+  the independence assumption when <span class="math inline">\(J\)</span> goes
+  to infinity. In practice <span class="math inline">\(J\)</span> is finite, but
+  the difference may be small when <span class="math inline">\(J\)</span> is
+  relatively large. Check out the examples mentioned in the <a href="https://avehtari.github.io/BDA_course_Aalto/BDA3_notes.html#exchangeability-vs.-independence">Chapter
+    notes</a> if you need more convincing.</p>
+<p><span class="math inline">\(\phi\)</span> is in general unknown. So the
+  marginal prior for <span class="math inline">\(\theta\)</span> must average
+  over uncertainty in <span class="math inline">\(\phi\)</span>: <span class="math inline">\(\int \prod_{j=1}^Jp(\theta_j \mid
+    \phi)p(\phi)d\phi\)</span>.</p>
+<p><strong>1.7</strong> Based on the marginal prior formulation in the paragraph
+  above, what can you say about the covariances <span class="math inline">\(\mathrm{cov}(\theta_i,\theta_j)\)</span>?</p>
+<p><strong>1.8</strong> As with the parameters above, we often think of
+  exchangeability as arising for our data model conditional on extra information
+  <span class="math inline">\(x\)</span>, such that the tuple <span class="math inline">\((x_i,y_i)\)</span> are exchangeable whereas <span class="math inline">\(y_i\)</span> might not be. In which modeling context
+  is this useful? Assume that the target data is denoted by <span class="math inline">\(y_i\)</span>.</p>
+<h1 id="overview-of-hierarchical-models">2. Overview of hierarchical models</h1>
+<p><strong>2.1</strong> Which of these best describes a hierarchical model?</p>
+<p><strong>2.2</strong> Consider that there are observations <span class="math inline">\(y\)</span> indexed by observation number <span class="math inline">\(i\)</span> and group <span class="math inline">\(j\)</span>. Suppose the data are modeled dependent on
+  parameters <span class="math inline">\(θ_j\)</span> where <span class="math inline">\(j=1,\dotsc,J\)</span> indexes some meaningful grouping
+  such as hospital-j specific health-outcomes, conditional on parameters <span class="math inline">\(\phi\)</span> which are hyper-parameters of the prior
+  distribution of <span class="math inline">\(\theta_j\)</span>. <span class="math inline">\(\phi\)</span> are modeled by prior distribution <span class="math inline">\(p(\phi)\)</span>. We think of the distribution <span class="math inline">\(p(\theta_j|\phi)\)</span> as the population
+  distribution which generates the values for <span class="math inline">\(\theta\)</span> in the hierarchical model. What are
+  some of the benefits of hierarchical models compared to separate models, which
+  assume no relationship between <span class="math inline">\(j\)</span> (and
+  separate models are estimated), and pooled models, which consider all <span class="math inline">\(j\)</span> jointly, but do not model <span class="math inline">\(j\)</span> specific parameters?</p>
+<p>Throughout the rest of the course, we will often compare the hierarchical
+  model, to a separate model and the pooled model. Suppose for the questions
+  below that you are modeling data <span class="math inline">\(y_{ij}\)</span>
+  where <span class="math inline">\(i\)</span> refers to an observation within
+  the jth group, the observation model for <span class="math inline">\(y_{ij}\)</span> is normal, and we consider hierarchies
+  at the level of the parameters describing the location of <span class="math inline">\(y_{ij}\)</span>.</p>
+<p><strong>2.3</strong> Based on the description of the above, the lecture and
+  BDA chapter 5 content, which of these below would suggest a separate model for
+  <span class="math inline">\(y_{ij}\)</span>? <span class="math inline">\(\pi()\)</span> stands for some prior distribution and
+  <span class="math inline">\(η_j\)</span> may be a vector of parameters such
+  that <span class="math inline">\(\mathrm{cov}(\eta_s,\eta_r)=0\)</span> for
+  <span class="math inline">\(s\neq r\)</span>.</p>
+<p><strong>2.4</strong> Based on the description of the above, the lecture and
+  BDA chapter 5 content, which of these below would suggest a pooled model for
+  <span class="math inline">\(y_{ij}\)</span>? <span class="math inline">\(\pi()\)</span> stands for some prior distribution and
+  <span class="math inline">\(η_j\)</span> may be a vector of parameters such
+  that <span class="math inline">\(\mathrm{cov}(\eta_s,\eta_r)=0\)</span> for
+  <span class="math inline">\(s\neq r\)</span>.</p>
+<p><strong>2.5</strong> Based on the description of the above, the lecture and
+  BDA chapter 5 content, which of these below would suggest a hierarchical model
+  for <span class="math inline">\(y_{ij}\)</span>? <span class="math inline">\(\pi()\)</span> stands for some prior distribution and
+  <span class="math inline">\(η_j\)</span> may be a vector of parameters such
+  that <span class="math inline">\(\mathrm{cov}(\eta_s,\eta_r)=0\)</span> for
+  <span class="math inline">\(s\neq r\)</span>.</p>
+<p><strong>2.6</strong> Why are hierarchical models sometimes also referred to
+  as partially pooled models. You may find it helpful to review the first
+  unnumbered equation on <a href="https://users.aalto.fi/~ave/BDA3.pdf">page 115
+    of BDA3</a>?</p>
+<p>It may help, before translating the model to code, to first describe the
+  relationship between variables as a directed acyclic graph (DAG) (<a href="https://avehtari.github.io/BDA_course_Aalto/slides/BDA_lecture_7.pdf">see
+    lecture 7,slide 3</a>). We interpret the DAG starting from top to bottom as
+  describing the generative mechanism implied by priors and observation model
+  for <span class="math inline">\(y_{ij}\)</span>. Top level variables feed into
+  distributions of lower level parameters and the observation model.
+  Distributions are typically not further described in the DAG. By drawing
+  variables sequentially from top to bottom, you can generate fake observations
+  (push-forward distribution). In the case that the parameters have not yet been
+  updated by the data information, this push-forward distribution is called the
+  prior predictive distribution of <span class="math inline">\(y\)</span>. You
+  have already created such a prior predictive distribution in Assignment 1,
+  question 7 and we will return to this in the sections below.</p>
+<p><strong>2.7</strong> What is the difference between sequential draws from
+  priors and the data model as described above to drawing from the joint
+  posterior in Stan?</p>
+<p>In the Figure 1 below, assume that all circular nodes indicate that the
+  object inside can be generated according to some distribution, conditional on
+  the parent nodes.</p>
+<div class="figure"><img style="width: 50.0%;" src="https://raw.githubusercontent.com/avehtari/BDA_course_Aalto/master/figures/Quizzes/DAG.png" alt="">
+  <p class="caption">Figure 1</p>
+</div>
+<p><strong>2.8</strong> Which of these equations properly describes the
+  posterior for the model shown in the diagram?</p>
+<h1 id="meta-analysis-and-hierarchical-models">3. Meta-analysis and hierarchical
+  models</h1>
+<p>Often similar research studies in areas such as medicine or social science
+  will be published under slightly different conditions or replicated with
+  different subjects. It is of interest to summarise and integrate those
+  findings for which hierarchical models have become increasingly popular.</p>
+<p><strong>3.1</strong> Suppose <span class="math inline">\(y_i\)</span> is the
+  point estimate for an effect size of a single study, <span class="math inline">\(i\)</span>. Why is it often appropriate to model <span class="math inline">\(y_i\)</span> by a normal distribution with known
+  standard deviation <span class="math inline">\(\sigma_i\)</span> which is
+  taken as the standard error estimate for <span class="math inline">\(y_i\)</span>?</p>
+<p><strong>3.2</strong> Why are hierarchical models preferable to separate and
+  pooled models for meta-analysis?</p>
+<p><strong>3.3</strong> Suppose the assumption of exchangeability is false
+  because you know the estimates of effects across studies depends on extra
+  information <span class="math inline">\(x_i\)</span>, e.g.&nbsp;geolocation, and
+  this has a substantial impact on the estimates. What should you do in this
+  circumstance?</p>
+<p><strong>3.4</strong> Based on the discussion above, which of the below would
+  refer to a hierarchical model for <span class="math inline">\(y_i\)</span>?
+</p>
+<h1 id="introduction-to-brms">4. Introduction to brms</h1>
+<p>brms is an R package which makes writing models with Stan easier.</p>
+<p>Suppose you have oberved the following variables, from different groups:
+  <span class="math inline">\(x,z,y\)</span>. <span class="math inline">\(i\)</span> is the observation number and <span class="math inline">\(j\)</span> the group indicator. Assume a model <span class="math inline">\(y_{ij} \sim
+    \mathrm{normal}\left(\mu_{ij},\sigma\right)\)</span>. Translate the
+  following equations for the linear predictor term <span class="math inline">\(\mu_{ij}\)</span> into brms syntax:</p>
+<p><strong>4.1</strong> <span class="math inline">\(\mu_{ij}=\alpha_0\)</span>:
+</p>
+<p><strong>4.2</strong> <span class="math inline">\(\mu_{ij}=\alpha_0+\beta_1
+    x_i\)</span></p>
+<p><strong>4.3</strong> <span class="math inline">\(\mu_{ij}=\alpha_0+\beta_1
+    x_i+\beta_2 z_i\)</span></p>
+<p><strong>4.4</strong> <span class="math inline">\(\mu_{ij}=\alpha_0+\alpha_j+\beta_1 x_i\)</span></p>
+<p>Note that in within brms, coefficients that do not vary according to some
+  grouping index (e.g.&nbsp;<span class="math inline">\(\mu_{ij}=\alpha_0\)</span>)
+  are called population effects while coefficients that vary according to some
+  grouping are called varying effects (e.g.&nbsp;<span class="math inline">\(\mu_{ij}=\alpha_j\)</span>). Some literatures refer to
+  these parameters as fixed and random effects respectively, however in the
+  context of Bayesian inference, this terminology can be misleading, since
+  parameters in a model are treated as random variables. See <a href="http://www.stat.columbia.edu/~gelman/research/published/AOS259.pdf">here</a>
+  for more discussion on this. For the questions below, we will use brms
+  terminology.</p>
+<h1 id="simulation-warmup">5. Simulation warmup</h1>
+<p>In this task, you will simulate data from a hierarchical model to gain better
+  insight into it.</p>
+<p>The following R code simulates data from a hierarchical structure, and then
+  plots the results. Experiment with this function by using it on different
+  values of the arguments, and answer the following questions. This code is also
+  included in the notebook for this assignment.</p>
+<pre><code>hierarchical_sim &lt;- function(group_pop_mean,
                              between_group_sd,
                              within_group_sd,
                              n_groups,
@@ -390,94 +527,196 @@ Figure 1<img src="https://github.com/avehtari/BDA_course_Aalto/blob/master/figur
   ggplot(data, aes(x = y, y = group)) +
     geom_point() +
     geom_vline(xintercept = group_pop_mean, linetype = "dashed")
-}
-</pre><br>
-<p>5.1 Which of the following generative models does the code correspond to?</p>
-<p>\(i\) is the observation number, \(j\) is the group indicator.<br></p>
-<p><br></p>
-<p>5.2 What does the vertical dashed line in the plot represent?<br></p>
-<p>5.3 Which function call would plausibly create Figure 2 below?<br><br>Figure 2<img src="https://mycourses.aalto.fi/draftfile.php/1868342/user/draft/168392433/image%20%281%29.png" alt="" role="presentation" class="img-fluid"><br></p>
-<p><br></p>
-<p>5.4 Which of these statements correctly describes the behaviour when the number of groups is increased?<br></p>
-<p>5.5 Which of these statements correctly describes the behaviour when the ratio of the between group and within group variance is changed?<br><br><br></p>
-<h3 class="anchored">6. Sleep deprivation</h3>In many studies, data will have been collected for the same people repeatedly (e.g. at different time points). A hierarchical model is well suited for such data as we can specify a grouping structure corresponding to the person/subject id. The sleepstudy
-dataset contains observations of reaction times for different people
-after differing number of days of sleep deprivation.<br><br>Your task is
-to fit a hierarchical normal linear model in brms.<br> The observation model will be Reaction\(_{ij} \sim\) normal\((\mu_{ij}, \sigma)\) where i refers to an observation id and j to the subject id.&nbsp; But depending on the model, the \(\mu_{ij}\) term will be differently parameterised.<br><br>First fit a model with a population-level intercept, population-level effect of Days and varying intercept per Subject. Note: in order to have the Intercept parameter be more clearly interpretable, use `center = FALSE` when creating the brms formula (see the Parameterization of the population-level intercept secion in the [brms manual](https://rdrr.io/cran/brms/man/brmsformula.html). Centering refers here to data transformations made within the Stan model, that among other things makes sampling more efficient, but change the interpretation of the intercept. <a href="https://avehtari.github.io/BDA_R_demos/demos_rstan/brms_demo.html">Section 5</a> of this demo provides some more insight into this.<br>Use the following priors (check the code notebook for how to specify):<br><br>\(\alpha_0 \sim normal(250, 100)\)<br>\(\beta_0 \sim normal(0, 20)\)<br>\(\alpha_j \sim normal(0, \tau)\)<br>\(\tau \sim normal^+(0, 100)\)<br>\(\sigma \sim normal^+(0, 100)\)<br>
-<p><br>6.1 Which of these formulae correctly defines the linear predictor term in a model with population-level intercept, population-level effect of Days and varying intercepts per Subject?<br><br><br></p>6.2 Which is the correct brms formula for this model?<br><br>
-<p><br><br>6.3 Based on the posterior, the estimate of the population-level intercept is .<br><br>6.4 The population-level intercept can be interpreted as:<br><br></p>
-<p>6.5 Based on the posterior, the estimate of the population-level effect of Days on Reaction is .<br></p>
-<p>6.6 The population-level effect of Days can be interpreted as:<br></p>
-<p>6.7 Based on the posterior, the estimate of the standard deviation of the Intercept between Subjects is .</p>
-<p>6.8 The standard deviation of the Subject-specific Intercept can be interpreted as:<br><br></p>
-<p>Next fit a model with Subject-specific effects of Days in addition to the other terms.<br><br>In this model, we can consider a correlation between the by-Subject Intercept and Days effects. This means the priors on \(\alpha_j\) and \(\beta_j\) can be considered as a multivariate normal \((\alpha_j, \beta_j) \sim N(0, \Sigma)\). It is common to decompose this into a prior on \(\alpha_j\) and \(\beta_j\) and a prior on the correlation matrix \(R\). <br><br>Use the priors \(\alpha_j \sim normal(0, \tau_{\alpha})\), \(\beta_j \sim normal(0, \tau_{\beta})\), \(\tau_{\alpha} \sim normal^+(0, 100)\), \(\tau_{\beta} \sim normal^+(0, 20)\) and \(R \sim LKJ(2)\).<br></p>
-<p>6.9 Which of these formulae
-    correctly defines the linear predictor in this case?<br><br><br></p>6.10 Which is the correct brms formula for this model?<br><br>
-<p><br><br>6.11 Based on the posterior, the estimate of the standard deviation of Subject-specific effect of Days is .</p>6.13 Based on the posterior, the estimate of correlation between the Subject-specific Intercept and effect of Days is .<br><br>6.14 After fitting both models, which of the statements describe the results best (here interpret "plausible" as what is contained within the 95% posterior interval):<br><br>
-<p><br><br></p>
+}</code></pre>
+<p><strong>5.1</strong> Which of the following generative models does the code
+  correspond to? <span class="math inline">\(i\)</span> is the observation
+  number, <span class="math inline">\(j\)</span> is the group indicator.</p>
+<p><strong>5.2</strong> What does the vertical dashed line in the plot
+  represent?</p>
+<p><strong>5.3</strong> Which function call would plausibly create Figure 2
+  below (although the random numbers you generate will almost certainly be
+  different those plotted below, try to distill what attributes are captured
+  with the different simulation choices and compare to the below)?</p>
+<div class="figure"><img style="width: 50.0%;" src="https://raw.githubusercontent.com/avehtari/BDA_course_Aalto/master/figures/Quizzes/simulator_outout.png" alt="">
+  <p class="caption">Figure 2</p>
+</div>
+<p><strong>5.4</strong> Which of these statements correctly describes the
+  behaviour when the number of groups is increased?</p>
+<p><strong>5.5</strong> Which of these statements correctly describes the
+  behaviour when the ratio of the between group and within group variance is
+  changed?</p>
+<h1 id="sleep-deprivation">6. Sleep deprivation</h1>
+<p>In many studies, data will have been collected for the same people repeatedly
+  (e.g.&nbsp;at different time points). A hierarchical model is well suited for such
+  data as we can specify a grouping structure corresponding to the
+  person/subject id. The sleepstudy dataset contains observations of reaction
+  times for different people after differing number of days of sleep
+  deprivation.</p>
+<p>Your task is to fit a hierarchical normal linear model in brms. The
+  observation model will be <span class="math inline">\(\mathrm{Reaction}_{ij}
+    \sim \mathrm{normal}\left(\mu_{ij},\sigma\right)\)</span> where <span class="math inline">\(i\)</span> refers to an observation id and <span class="math inline">\(j\)</span> to the subject id. But depending on the
+  model, the <span class="math inline">\(\mu_{ij}\)</span> term will be
+  differently parameterised.</p>
+<p>First fit a model with a population-level intercept, population-level effect
+  of Days and varying intercept per Subject. Note: in order to have the
+  Intercept parameter be more clearly interpretable, use <code>center =
+    FALSE</code> when creating the brms formula (see the Parameterization of the
+  population-level intercept secion in the <a href="https://rdrr.io/cran/brms/man/brmsformula.html">brms manual</a>.
+  Centering refers here to data transformations made within the Stan model, that
+  among other things makes sampling more efficient, but change the
+  interpretation of the intercept. <a href="https://avehtari.github.io/BDA_R_demos/demos_rstan/brms_demo.html">Section
+    5 of this demo</a> provides some more insight into this. Use the following
+  priors (check the code notebook for how to specify):</p>
+<p><span class="math inline">\(\alpha_0 \sim
+    \mathrm{normal}\left(250,100\right); \beta_0 \sim
+    \mathrm{normal}\left(0,20\right);\alpha_j \sim
+    \mathrm{normal}\left(0,\tau\right); \tau \sim
+    \mathrm{normal}_+\left(0,100\right);\sigma \sim
+    \mathrm{normal}_+\left(0,100\right)\)</span></p>
+<p><strong>6.1</strong> Which of these formulae correctly defines the linear
+  predictor term in a model with population-level intercept, population-level
+  effect of Days and varying intercepts per Subject?</p>
+<p><strong>6.2</strong> Which is the correct brms formula for this model?</p>
+<p><strong>6.3</strong> Based on the posterior, the estimate of the
+  population-level intercept is: </p>
+<p><strong>6.4</strong> The population-level intercept can be interpreted as:
+</p>
+<p><strong>6.5</strong> Based on the posterior, the estimate of the
+  population-level effect of Days on Reaction <span class="math inline">\(i\)</span>: </p>
+<p><strong>6.6</strong> The population-level effect of Days can be interpreted
+  as:</p>
+<p><strong>6.7</strong> Based on the posterior, the estimate of the standard
+  deviation of the Intercept between Subjects <span class="math inline">\(i\)</span>: </p>
+<p><strong>6.8</strong> The standard deviation of the Subject-specific Intercept
+  can be interpreted as:</p>
+<p>Next fit a model with Subject-specific effects of Days in addition to the
+  other terms.</p>
+<p>In this model, we can consider a correlation between the by-Subject Intercept
+  and Days effects. This means the priors on <span class="math inline">\(\alpha_j\)</span> and <span class="math inline">\(\beta_j\)</span> can be considered as a multivariate
+  normal <span class="math inline">\(\left(\alpha_j,\beta_j\right)\sim
+    \mathrm{N}\left(0,\Sigma\right)\)</span>. It is common to decompose this
+  into a prior on <span class="math inline">\(\alpha_j\)</span> and <span class="math inline">\(\beta_j\)</span> and a prior on the correlation matrix
+  <span class="math inline">\(R\)</span>.</p>
+<p>Use the priors <span class="math inline">\(\alpha_j \sim
+    \mathrm{normal}\left(0,\tau_\alpha\right), \beta_j\sim
+    \mathrm{normal}\left(0,\tau_\beta\right), \tau_\alpha\sim
+    \mathrm{normal}_+\left(0,100\right), \tau_\beta\sim
+    \mathrm{normal}_+\left(0,20\right)\)</span> and <span class="math inline">\(R\sim \mathrm{LKJ}\left(2\right)\)</span>.</p>
+<p><strong>6.9</strong> Which of these formulae correctly defines the linear
+  predictor in this case?</p>
+<p><strong>6.10</strong> Which is the correct brms formula for this model?</p>
+<p><strong>6.11</strong> Based on the posterior, the estimate of the standard
+  deviation of Subject-specific effect of Days is: </p>
+<p><strong>6.12</strong> Based on the posterior, the estimate of correlation
+  between the Subject-specific Intercept and effect of Days is:
+  </p>
+<p><strong>6.13</strong> After fitting both models, which of the statements
+  describe the results best (here interpret “plausible” as what is contained
+  within the 95% posterior interval):</p>
+<p>Based on this, we would hope to see also graphically differences between the
+  varying intercept only and the varying intercept plus varying slope models.
+  Use the <code>conditional_effect()</code> function in brms to plot the
+  posterior distribution of the linear predictor term at the covariate’s mean
+  values (<a href="https://paulbuerkner.com/brms/reference/conditional_effects.brmsfit.html">this
+    is the default of the function</a>).</p>
+<p>First, let’s check you used the function correctly.</p>
+<p><strong>6.14</strong> Which figure plots the conditional effects of the
+  varying slope model?</p>
+<div class="figure"><img style="width: 50.0%;" src="https://raw.githubusercontent.com/avehtari/BDA_course_Aalto/master/figures/Quizzes/cond_effects_1.png" alt="">
+  <p class="caption">Figure 3</p>
+</div>
+<div class="figure"><img style="width: 50.0%;" src="https://raw.githubusercontent.com/avehtari/BDA_course_Aalto/master/figures/Quizzes/cond_effects_2.png" alt="">
+  <p class="caption">Figure 4</p>
+</div>
+<p>We will add more model features and conduct predictive evaluation in the next
+  assignment!</p>
+<h1 id="school-calendar-dataset">7. School calendar dataset</h1>
+<p>As you’ve learned from the above, hierarchical models are also useful for
+  meta-analyses.</p>
+<p>The dataset <code>dat.konstantopolous2011</code> from the
+  <code>metadat</code> package contains results from different studies conducted
+  on the effect of changing the school calendar from a standard one with a long
+  summer break to a modified one with more regular but shorter breaks.</p>
+<p>Each result of a study is a standardized estimated mean effect on student
+  achievement, where positive values indicate improvement <span class="math inline">\((y_i)\)</span> and the variance of the estimate <span class="math inline">\((v_i)\)</span> for a school.</p>
+<p>The meta-analysis model can be written as follows: <span class="math inline">\(y_{ijk} \sim
+    \mathrm{normal}\left(\mu_{ijk},\sigma_{ijk}\right)\)</span>. <span class="math inline">\(i\)</span> refers to an observation, <span class="math inline">\(j\)</span> refers to a school, <span class="math inline">\(k\)</span> refers to a district. <span class="math inline">\(\mu_{ijk}\)</span> thus refers to one observation
+  <span class="math inline">\(i\)</span> at school <span class="math inline">\(j\)</span> in district <span class="math inline">\(k\)</span>. <span class="math inline">\(\mu_0\)</span>
+  is the population-level effect, <span class="math inline">\(\mu_j\)</span> is
+  the school-specific effect, and <span class="math inline">\(\mu_k\)</span> is
+  the district-specific effect.</p>
+<p>In this case, the <span class="math inline">\(\sigma_{ijk}\)</span> values
+  are known (the standard errors reported from each study) and the <span class="math inline">\(\mu_{ijk}\)</span> term will differ depending on the
+  model.</p>
+<p>In this exercise you will fit four different models to the same data set:
+  Pooled, separate, partially pooled within school-specific effects, and
+  partially pooled within schools and district effects.</p>
+<p>For all models, use brms with the default priors and use the following
+  settings: iter = 2000, warmup = 1000, chains = 4, seed = 2024</p>
+<p>The dataset has separate columns for school and district, but for the models,
+  we will want a unique identifier for each school. Before fitting any models,
+  add a new column to the dataset called “district_school” which is the
+  combination of the district and the school. This is then unique for each
+  school, and will be used in the model formulae.</p>
+<p><strong>Pooled model</strong>:</p>
+<p>Use brms to fit a pooled model and answer the following questions. Check the
+  code notebook for help starting.</p>
+<p>The pooled model formula is: <span class="math inline">\(\mu_{ijk}=\mu_0\)</span>.</p>
+<p><strong>7.1</strong> The pooled model is written as:</p>
+<p><strong>7.2</strong> How many parameters are estimated in the pooled model?
+</p>
+<p><strong>7.6</strong> Based on the posterior of the Intercept, what would you
+  conclude about the effect of the intervention:</p>
+<p><strong>7.7</strong> Suppose there is a new school in an existing district
+  (School = 9, District = 86). What is the mean prediction for the effect in
+  this school? Use the function <code>posterior_epred</code> and the newdata
+  argument.</p>
+<p>Use brms to fit a separate model and answer the following questions. Check
+  the code notebook for help starting.</p>
+<p>The separate model formula is: <span class="math inline">\(\mu_{ijk}=\mu_{jk}\)</span>.</p>
+<p><strong>7.9</strong> The separate model is written as:</p>
+<p><strong>7.10</strong> How many parameters are estimated in the separate
+  model?</p>
+<p>Mean: , lower 95% interval bound:
+  , upper 95% interval bound: </p>
+<p><strong>7.12</strong> What is the estimated effect for School 7 in District
+  86?</p>
+<p>Mean: , lower 95% interval bound:
+  , upper 95% interval bound: 
+</p>
+<p><strong>7.13</strong> Based on the posterior for the separate model, what
+  could reasonably be concluded about the effect of the intervention:</p>
+<p><strong>7.14</strong> Suppose there is a new school in an existing district
+  (District = 86, School = 9). Why can we not easily predict the effect for this
+  school based on the separate model posterior?</p>
+<p><strong>Partially pooled model for schools</strong></p>
+<p>The partially pooled model formula is: <span class="math inline">\(\mu_{ijk}
+    = \mu_0 + \mu_{jk}\)</span></p>
+<p><strong>7.15</strong> And the partially pooled hierarchical model:</p>
+<p><strong>7.16</strong> How many parameters are estimated in the partially
+  pooled for schools model?</p>
+<p><strong>7.18</strong> What is the estimated effect for School 3 in District
+  71?</p>
+<p>Mean:  , lower 95% interval bound:
+  , upper 95% interval bound: </p>
+<p><strong>7.19</strong> What is the estimated effect of School 7 in District
+  86?</p>
+<p>Mean:  , lower 95% interval bound:
+  , upper 95% interval bound: 
+</p>
+<p><strong>7.20</strong> Suppose there is a new school in an existing district
+  (District = 86, School = 9). What would the mean prediction for the effect in
+  this school? Use the function<code>posterior_epred</code> and the newdata
+  argument with allow_new_levels = TRUE:</p>
+<p>In this data set, as there is a two-level structure, where schools are nested
+  in districts, we can add another level to the hierarchy. The additional
+  hierarchy formula is: <span class="math inline">\(\mu_{ijk}=\mu_0+\mu_j+\mu_{jk}\)</span></p>
+<p><strong>7.22</strong> What is the correct brms formula?</p>
+<p><strong>7.23</strong> How many parameters are estimated in the partially
+  pooled for schools in districts model?</p>
+<p><strong>7.27</strong> After fitting all the models, choose which of the
+  following statements relating to the results are true:</p>
 <p></p>
-<h3 class="anchored">7. School calendar dataset</h3>
-<p>As you've learned from the above, hierarchical models are also useful for meta-analyses. <br></p>The dataset dat.konstantopolous2011 from the metadat package contains results from different studies conducted on the effect of changing the school calendar from a standard one with a long summer break to a modified one with more regular but shorter breaks.<br><br>Each result of a study is a standardized estimated mean effect on student achievement, where positive values indicate improvement (yi) and the variance of the estimate (vi) for a school.<br><br>
-<p>The meta-analysis model can be written as follows: \(y_{ijk} \sim normal(\mu_{ijk}, \sigma_{ijk})\). \(i\) refers to an observation, \(j\) refers to a school, \(k\)
-    refers to a district. \(\mu_{ijk}\) thus refers to one observation \(i\) at school \(j\) in district \(k\). \(\mu_0\) is the
-    population-level effect, \(\mu_j\) is the school-specific effect,
-    and \(\mu_k\) is the district-specific effect.<br></p>
-<p>In this case, the \(\sigma_{ijk}\) values are known (the standard errors reported from each study) and the \(\mu_{ijk}\) term will differ depending on the model.</p>
-<p>In this exercise you will fit four different models to the same data set: Pooled, separate, partially pooled within school-specific effects, and partially pooled within schools and district effects.</p>
-<p>For all models, use brms with the default priors and use the following settings:<br>iter = 2000, warmup = 1000, chains = 4, seed = 2024<br></p>
-<p>The dataset has separate columns for school and district, but for the models, we will want a unique identifier for each school. Before fitting any models, add a new column to the dataset called "district_school" which is the combination of the district and the school. This is then unique for each school, and will be used in the model formulae.<br></p>
-<p><br><strong>Pooled model:</strong></p>
-<p>Use brms to fit a pooled model and answer the following questions. Check the code notebook for help starting.<br></p>
-<p>The pooled model formula is: \(\mu_{ijk} = \mu_0\).<br></p>7.1 The pooled model is written as:<br>
-<p></p>
-<p>7.2 How many parameters are estimated in the pooled model?<br><br></p>
-<p>7.3 What is the Rhat value for the Intercept term?<br></p>
-<p>7.4 Based on the Rhat value, have the chains converged?<br><br></p>
-<p>7.5 What is the posterior mean (labelled Estimate) and lower and upper 95% posterior interval bounds (labelled CI) for the Intercept?<br>Mean: , lower 95% interval bound: , upper 95% interval bound: <br></p>
-<p>7.6 Based on the posterior of the Intercept, what would you conclude about the effect of the intervention:<br><br><br>7.7 Suppose there is a new school in an existing district (School = 9, District = 86). What is the mean prediction for the effect in this school? Use the function`posterior_epred` and the newdata argument.<br></p>
-<p>7.8 Suppose there is a new school in a new district (School = 1,
-    District = 30). What is the mean prediction for the effect in this
-    school? Use the function`posterior_epred` and the newdata argument.<br><br></p>
-<p><strong>Separate model:</strong></p>
-<p>Use brms to fit a separate model and answer the following questions. Check the code notebook for help starting.<br></p>
-<p></p>
-<p></p>
-<p>The separate model formula is: \(\mu_{ijk}= \mu_{jk}\).<br></p>7.9 The separate model is written as:<br><br>
-<p><br>7.10 How many parameters are estimated in the separate model?<br><br></p>
-<p>7.11 What is the estimated effect for School 3 in District 71?<br>Mean: , lower 95% interval bound: , upper 95% interval bound: </p>
-<p>7.12 What is the estimated effect of School 7 in District 86?<br>Mean: , lower 95% interval bound: , upper 95% interval bound: <br><br>7.13 Based on the posterior for the separate model, what could reasonably be concluded about the effect of the intervention:<br><br><br>7.14 Suppose there is a new
-    school in an existing district (District = 86, School = 9). Why can we not easily predict the effect for this school based on the separate model posterior?<br></p>
-<p><strong>Partially pooled model for schools.</strong><br></p>
-<p></p>
-<p>The partially pooled model formula is: \(\mu_{ijk} = \mu_0 + \mu_j\)<br></p>7.15 And the partially pooled hierarchical model:<br>
-<p></p>
-<p></p>
-<p>7.16 How many parameters are estimated in the partially pooled for schools model?<br></p>
-<p>7.17 Based on the posterior for the partially pooled model, what could reasonably be concluded about the effect of the intervention:<br></p>
-<p>7.18 What is the estimated effect for School 3 in District 71?<br>Mean: , lower 95% interval bound: , upper 95% interval bound: </p>
-<p>7.19 What is the estimated effect of School 7 in District 86?<br>Mean: , lower 95% interval bound: , upper 95% interval bound: <br></p>
-<p></p>
-<p>7.20 Suppose there is a new
-    school in an existing district (District = 86, School = 9). What would
-    the mean prediction for the effect in this school? Use the
-    function`posterior_epred` and the newdata argument with allow_new_levels = TRUE.<br></p>
-<p>7.21 Suppose there is a new school in a new district (District = 30, School = 1). What would the mean prediction for the effect in this
-    school? Use the function`posterior_epred` and the newdata argument with allow_new_levels = TRUE.<br><br><br></p>
-<p></p>
-<p></p>
-<p><strong>Partially pooled model for schools in districts:</strong><br></p>
-<p></p>
-<p>In this data set, as there is a two-level structure, where schools are
-    nested in districts, we can add another level to the hierarchy. The additional hierarchy formula is: \(\mu_{ijk} = \mu_0 + \mu_j + \mu_k\)<br></p><br>
-<p>7.22 What is the correct brms formula?<br><br><br>7.23 How many parameters are estimated in the partially pooled for schools in districts model?<br><br></p>
-<p></p>
-<p>7.24 Suppose there is a new
-    school in an existing district (District = 86, School = 9). What is
-    the mean prediction for the effect in this school? Use the
-    function`posterior_epred` and the newdata argument with allow_new_levels = TRUE.<br></p>
-<p>7.25 Suppose there is a new school in a new district (District = 30, School = 1). What is the mean prediction for the effect in this
-    school? Use the function`posterior_epred` and the `newdata` argument with `allow_new_levels = TRUE`.<br><br><br>7.26 Which of the following statements are true relating to exchangeability assumptions in the models:<br><br></p>
-<p></p>7.27 After fitting all the models, choose which of the following statements relating to the results are true:<br><br>
 
 
 </section>
