@@ -786,15 +786,28 @@ family = bernoulli()
   \only<1>{\phantom{\rinline/pp_check(fit, ndraws=20)/\\
     \includegraphics[height=3.5cm]{helicopter_hier_stable_ppc_dens_overlay_2024.pdf}}}
   \only<2>{\rinline/pp_check(fit, ndraws=20)/\\
-    \includegraphics[height=3.5cm]{helicopter_hier_stable_ppc_dens_overlay_2024.pdf}}
+    \includegraphics[height=3.5cm]{helicopter_hier_stable_ppc_dens_overlay_2024.pdf}
+    \begin{minipage}[t][][t]{0.33\linewidth}
+      \vspace{-3cm}
+      {\color{red} Continuous kernel density estimate
+        for binary target doesn't make sense!}
+    \end{minipage}
+  }
   \only<3>{\rinline/pp_check(fit, type="bars")/\\
-    \includegraphics[height=3.5cm]{helicopter_hier_stable_ppc_bars_2024.pdf}}
+    \includegraphics[height=3.5cm]{helicopter_hier_stable_ppc_bars_2024.pdf}
+    \begin{minipage}[t][][t]{0.33\linewidth}
+      \vspace{-3cm} {\color{red} Bar plot showing marginal
+        probabilities for binary data is almost always useless!}
+    \end{minipage}
+  }
   \only<4>{\rinline/pp_check(fit, type="bars_grouped")/\\
     \includegraphics[height=3.5cm]{helicopter_hier_stable_ppc_bars_grouped_2024.pdf}}
   \only<5>{with \texttt{caret::calibration()}\\
     \includegraphics[height=3.5cm]{helicopter_hier_stable_calibration_2024.pdf}}
   \only<6>{with \texttt{reliabilitydiag::reliabilitydiag()}\\
-    \includegraphics[height=3.5cm]{helicopter_hier_stable_reliabilitydiag_2024.pdf}}
+    \includegraphics[height=3.5cm]{helicopter_hier_stable_reliabilitydiag_2024.pdf}\\
+    \vspace{-1.5\baselineskip}\\
+  Use this for binary data!}
   
 \end{frame}
 
@@ -925,6 +938,9 @@ family = bernoulli()
   \item Gabry, Simpson, Vehtari, Betancourt, and Gelman
     (2019). Visualization in Bayesian
     workflow. \url{https://doi.org/10.1111/rssa.12378}.
+  \item Säilynoja, Johnson, Martin, and Vehtari (2025).
+    Recommendations for visual predictive checks in Bayesian workflow.
+    \url{https://teemusailynoja.github.io/visual-predictive-checks/}
   \item Graphical posterior predictive checks using the bayesplot package
     \url{http://mc-stan.org/bayesplot/articles/graphical-ppcs.html}
   \item brms demos \url{https://avehtari.github.io/BDA_R_demos/demos_rstan/brms_demo.html}
@@ -940,18 +956,23 @@ family = bernoulli()
     \begin{itemize}
     \item<2-> test different models and priors\\
       \texttt{priorsense} and \texttt{adjustr} packages use importance
-      sampling for faster prior sensitivity analysis
-      \item<3-> alternatively combine different models to one model
+      sampling for faster prior sensitivity analysis\\
+      \begin{itemize}
+      \item<3-> Kallioinen, Paananen, Bürkner, and Vehtari (2024).
+        Detecting and diagnosing prior and likelihood sensitivity with power-scaling.
+        \url{https://doi.org/10.1007/s11222-023-10366-5}
+      \end{itemize}
+      \item<4-> alternatively combine different models to one model
         \begin{itemize}
         \item e.g. hierarchical model instead of separate and pooled
         \item e.g. $t$ distribution contains Gaussian as a special case
       \end{itemize}
-      \item<3-> robust models are good for testing sensitivity to ``outliers''
+      \item<4-> robust models are good for testing sensitivity to ``outliers''
         \begin{itemize}
         \item e.g. $t$ instead of Gaussian
         \end{itemize}
     \end{itemize}
-    \item<4-> Compare sensitivity of essential inference quantities
+    \item<5-> Compare sensitivity of essential inference quantities
       \begin{itemize}
       \item extreme quantiles are more sensitive than means and medians
       \item extrapolation is more sensitive than interpolation
