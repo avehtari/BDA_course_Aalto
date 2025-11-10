@@ -290,40 +290,127 @@ Aalto University}
 % \end{center}
 % \end{frame}
 
+\begin{frame}{Outline}
+
+  \begin{itemize}
+  \item Prior/likelihood sensitivity checks
+  \item Variable selection with projpred
+  \item Bayesian software for Python users
+  \end{itemize}
+
+\end{frame}
+
+
+
+
+
+
+\begin{frame}{Prior/likelihood sensitivity checks}
+
+  \begin{itemize}
+  \item  Insert slides here
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Variable selection}
+
+  \begin{itemize}
+  \item The process of identifying the most relevant variables in a model from a larger set of predictors. 
+  \item We assume variables contribute unevenly to the outcome.
+  \begin{itemize}
+      \item We may want to identify the most "important" ones.
+      \item Sometimes we also want to rank them.
+  \end{itemize}
+  \end{itemize}
+  
+\end{frame}
+
+
+\begin{frame}{Motivation for variable selection}
+
+  \begin{itemize}
+  \item<+->  We can always include all available variables in a model
+  \item<+->  Theory says this is a good idea, in particular if we use predictively consistent priors
+  \item<+->  However, sometimes we need to reduce the number of variables
+    \begin{itemize}
+      \item measurement cost in covariates
+      \item running cost of predictive model
+      \item easier explanation / learn from the model
+    \end{itemize}
+  \end{itemize}
+  
+\end{frame}
+
+
+
+\begin{frame}{The problem with variable selection}
+
+  \begin{itemize}
+  \item The number of potential models is $2^p$, where $p$ is the number of variables
+  \item Evaluating all models can be computationally infeasible even for moderate $p$
+  \item The proccess is prone to overfitting 
+  \end{itemize}
+  
+\end{frame}
+
+
+\begin{frame}{How to overcome the problem?}
+
+  \begin{itemize}
+  \item We recommend to use a technique called projection predictive inference
+  \item It can be easily done with \texttt{brms} + \texttt{projpred}
+  \end{itemize}
+  
+\end{frame}
+
+
+
+
 \begin{frame}{Variable selection with projpred}
 
   \begin{itemize}
-  \item<+-> In your project it is sufficient to compare 2--3 models
-  \item<+-> ...but if you are interested in variable selection, then the
-    number of potential models is $2^p$, where $p$ is the number of
-    variables
-  \item<+-> ...in such case I recommended to use \texttt{brms} + \texttt{projpred}
-  \item<+-> \texttt{projpred} avoids the overfit in model selection
+  \item The main advantage is that it reduces overfitting
+  \item Other advantages are:
+    \begin{itemize}
+    \item Automatic model building and fitting process.
+    \item Reduced number of models we need to fit.
+    \item Reduced time it takes to fit each model.
+    \end{itemize}
   \end{itemize}
   
 \end{frame}
 
 
-\begin{frame}{Use of reference models in model selection}
+\begin{frame}{Main concepts}
 
   \begin{itemize}
-  \item Background
-  \item First example
-  \item Bayesian and decision theoretical justification
-  \item More examples
-  % \item Going forward
+  \item<1-> Reference model:
+    \begin{itemize}
+      \item<2-> A model that includes all available variables and describes the data well.
+    \end{itemize}
+  \item<1-> Search strategy: 
+    \begin{itemize}
+      \item<3->  A method for searching through the model space.
+    \end{itemize}
+  \item<1-> Projection:
+      \begin{itemize}
+      \item<4->  A way to estimate the posterior distribution of a model given a reference model.
+    \end{itemize}
+  
+
   \end{itemize}
   
 \end{frame}
 
-\begin{frame}{Not a novel idea}
+
+\begin{frame}{Useing a reference model is not a novel idea}
 
   \begin{itemize}
   \item<+-> Lindley (1968): \textit{The choice of variables in multiple regression}
     \begin{itemize}
       % \vspace{-1\baselineskip}
-    \item Bayesian and decision theoretical justification, but
-      simplified model and computation
+    \item Bayesian and decision theoretical justification, but simplified model and computation
     \end{itemize}
   \item<+-> Goutis \& Robert (1998): \textit{Model choice in generalised
       linear models: a Bayesian approach via Kullback-Leibler
@@ -339,12 +426,6 @@ Aalto University}
      distilling,
      $\ldots$
     \end{itemize}
-  \item<+-> Motivation in these
-    \begin{itemize}
-    \item measurement cost in covariates
-    \item running cost of predictive model
-    \item easier explanation / learn from the model
-\end{itemize}
   \end{itemize}
   
 \end{frame}
@@ -456,28 +537,30 @@ Aalto University}
 \begin{frame}{Bayesian justification}
   
   \begin{itemize}
-  \item  Theory says to integrate over all the uncertainties
+  \item Theory says to integrate over all the uncertainties
     \begin{itemize}
     \item build a rich model
     \item make model checking etc.
     \item this model can be the reference model
     \end{itemize}
-  \item<2-> Consider model selection as decision problem
-  \item<3-> Replace full posterior {\color{set11} $p(\theta \mid D)$} with
-    some constrained {\color{set12} $q(\theta)$} so that the {\color{set13} \emph{predictive
-      distribution}} changes as little as possible
-  \item<4-> Example constraints
-    \begin{itemize}
-    \item {\color{set12} $q(\theta)$} can have only point mass at some $\theta_0$ \\
-      $\Rightarrow$ ``Optimal point estimates''
-    \item<5-> Some covariates must have exactly zero regression coefficient \\
-      $\Rightarrow$ ``Which covariates can be discarded''
-    \item<6-> Much simpler model \\
-      $\Rightarrow$ ``Easier explanation''
-    \end{itemize}
 \end{itemize}
 
 \end{frame}
+
+\begin{frame}{Projection}
+  \begin{itemize}
+  \item<1-> Replace full posterior {\color{set11} $p(\theta \mid D)$} with
+    some constrained {\color{set12} $q(\theta)$} so that the {\color{set13} \emph{predictive
+      distribution}} changes as little as possible
+  \item<2-> Example constraints
+    \begin{itemize}
+      \item {\color{set12} $q(\theta)$} can have only point mass at some $\theta_0$ $\Rightarrow$ ``Optimal point estimates''
+      \item<3-> Some covariates must have exactly zero regression coefficient $\Rightarrow$ ``Which covariates can be discarded''
+      \item<4-> Much simpler model $\Rightarrow$ ``Easier explanation''
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
 
 \begin{frame}{Logistic regression with two covariates}
 
@@ -530,22 +613,22 @@ Aalto University}
 
 \frame{
 
-  {\Large\color{navyblue} Projective selection}
+  {\Large\color{navyblue} Searching for submodels}
 
 \begin{itemize}
-	\item How to select a feature combination? \pause
-	\item For a given model size, choose feature combination with minimal projective loss \pause
+	\item We may not be able to evaluate the $2^p$ combinations \pause
 	\item Search heuristics, e.g. 
 	\begin{itemize}
         \item Monte Carlo search
         \item Forward search
         \item $L_1$-penalization (as in Lasso)
 	\end{itemize} \pause 
-      \item Use cross-validation to select the appropriate model size
+	\item For a given model size, choose feature combination with minimal projective loss \pause
+  \item Use cross-validation to select the appropriate model size
         \begin{itemize}
-        \item need to cross-validate over the search paths
+        \item In some cases like, $p>>n$, we need to cross-validate over the search paths
         \end{itemize}
-      \end{itemize} 
+\end{itemize} 
 }
 
 
@@ -837,7 +920,7 @@ $n=50$, $p=500$, $p_\text{rel} = 150$, $\rho=0.5$
 
 % \end{frame}
 
-\begin{frame}{Multilevel regerssion and GAMMs}
+\begin{frame}{Multilevel regression and GAMMs}
   
 
   \begin{itemize}
@@ -918,6 +1001,28 @@ varsel <- cv_varsel(fit, method='L1', cv_method='kfold', K=5,
 \end{itemize}
 
 \end{frame}
+
+\begin{frame}{Bayesian Python packages}
+
+  \begin{itemize}
+  \item PPLs
+    \begin{itemize}
+    \item Stan (via \href{https://mc-stan.org/cmdstanpy/}{CmdStanPy})
+    \item \href{https://www.pymc.io/}{PyMC}
+    \item NumPyro, ..., etc
+    \end{itemize}
+  \item Workflow packages
+    \begin{itemize}
+      \item \href{https://python.arviz.org/en/stable/}{ArviZ}, MCMC diagnostics, model checking, model comparison, plotting, prior-sensitivity...
+      \item \href{https://bambinos.github.io/bambi}{Bambi}, BAyesian Model-Building Interface
+      \item \href{https://kulprit.readthedocs.io}{Kulprit}, projective inference (still under development)
+    \end{itemize}
+  \end{itemize}
+
+\url{https://link-to-demo}
+
+\end{frame}
+
 
 % \begin{frame}{References}
 % \vspace{-0.5\baselineskip}
