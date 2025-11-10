@@ -424,18 +424,13 @@ Attaching package: 'brms'</code></pre>
 <div class="cell-output cell-output-stderr">
 <pre><code>- CmdStan version: 2.36.0</code></pre>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-A newer version of CmdStan is available. See ?install_cmdstan() to install it.
-To disable this check set option or environment variable cmdstanr_no_ver_check=TRUE.</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>cmdstan_installed <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
-<span id="cb14-2"><a href="#cb14-2"></a>  res <span class="ot">&lt;-</span> <span class="fu">try</span>(out <span class="ot">&lt;-</span> cmdstanr<span class="sc">::</span><span class="fu">cmdstan_path</span>(), <span class="at">silent =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb14-3"><a href="#cb14-3"></a>  <span class="sc">!</span><span class="fu">inherits</span>(res, <span class="st">"try-error"</span>)</span>
-<span id="cb14-4"><a href="#cb14-4"></a>}</span>
-<span id="cb14-5"><a href="#cb14-5"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">cmdstan_installed</span>()){</span>
-<span id="cb14-6"><a href="#cb14-6"></a>    <span class="fu">install_cmdstan</span>()</span>
-<span id="cb14-7"><a href="#cb14-7"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>cmdstan_installed <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
+<span id="cb13-2"><a href="#cb13-2"></a>  res <span class="ot">&lt;-</span> <span class="fu">try</span>(out <span class="ot">&lt;-</span> cmdstanr<span class="sc">::</span><span class="fu">cmdstan_path</span>(), <span class="at">silent =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb13-3"><a href="#cb13-3"></a>  <span class="sc">!</span><span class="fu">inherits</span>(res, <span class="st">"try-error"</span>)</span>
+<span id="cb13-4"><a href="#cb13-4"></a>}</span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">cmdstan_installed</span>()){</span>
+<span id="cb13-6"><a href="#cb13-6"></a>    <span class="fu">install_cmdstan</span>()</span>
+<span id="cb13-7"><a href="#cb13-7"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="sleep-deprivation" class="level1" data-number="2">
@@ -444,37 +439,37 @@ To disable this check set option or environment variable cmdstanr_no_ver_check=T
 <p>Below is some code for fitting a brms model. This model is a simple pooled model. You will need to fit a hierarchical model as explained in the assignment, but this code should help getting started.</p>
 <p>Load the dataset</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">data</span>(sleepstudy, <span class="at">package =</span> <span class="st">"lme4"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">data</span>(sleepstudy, <span class="at">package =</span> <span class="st">"lme4"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-error">
 <pre><code>Error in find.package(package, lib.loc, verbose = verbose): there is no package called 'lme4'</code></pre>
 </div>
 </div>
 <p>Specify the formula and observation family:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>sleepstudy_pooled_formula <span class="ot">&lt;-</span> <span class="fu">bf</span>(</span>
-<span id="cb17-2"><a href="#cb17-2"></a>  Reaction <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> Days,</span>
-<span id="cb17-3"><a href="#cb17-3"></a>  <span class="at">family =</span> <span class="st">"gaussian"</span>,</span>
-<span id="cb17-4"><a href="#cb17-4"></a>  <span class="at">center =</span> <span class="cn">FALSE</span></span>
-<span id="cb17-5"><a href="#cb17-5"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>sleepstudy_pooled_formula <span class="ot">&lt;-</span> <span class="fu">bf</span>(</span>
+<span id="cb16-2"><a href="#cb16-2"></a>  Reaction <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> Days,</span>
+<span id="cb16-3"><a href="#cb16-3"></a>  <span class="at">family =</span> <span class="st">"gaussian"</span>,</span>
+<span id="cb16-4"><a href="#cb16-4"></a>  <span class="at">center =</span> <span class="cn">FALSE</span></span>
+<span id="cb16-5"><a href="#cb16-5"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We can then specify the priors:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>(sleepstudy_pooled_priors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb18-2"><a href="#cb18-2"></a>  <span class="fu">prior</span>(</span>
-<span id="cb18-3"><a href="#cb18-3"></a>    <span class="fu">normal</span>(<span class="dv">250</span>, <span class="dv">100</span>),</span>
-<span id="cb18-4"><a href="#cb18-4"></a>    <span class="at">class =</span> <span class="st">"b"</span>,</span>
-<span id="cb18-5"><a href="#cb18-5"></a>    <span class="at">coef =</span> <span class="st">"Intercept"</span></span>
-<span id="cb18-6"><a href="#cb18-6"></a>  ),</span>
-<span id="cb18-7"><a href="#cb18-7"></a>  <span class="fu">prior</span>(</span>
-<span id="cb18-8"><a href="#cb18-8"></a>    <span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">20</span>),</span>
-<span id="cb18-9"><a href="#cb18-9"></a>    <span class="at">class =</span> <span class="st">"b"</span>,</span>
-<span id="cb18-10"><a href="#cb18-10"></a>    <span class="at">coef =</span> <span class="st">"Days"</span></span>
-<span id="cb18-11"><a href="#cb18-11"></a>  ),</span>
-<span id="cb18-12"><a href="#cb18-12"></a>  <span class="fu">prior</span>(</span>
-<span id="cb18-13"><a href="#cb18-13"></a>    <span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">100</span>),</span>
-<span id="cb18-14"><a href="#cb18-14"></a>    <span class="at">class =</span> <span class="st">"sigma"</span></span>
-<span id="cb18-15"><a href="#cb18-15"></a>  )</span>
-<span id="cb18-16"><a href="#cb18-16"></a>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>(sleepstudy_pooled_priors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb17-2"><a href="#cb17-2"></a>  <span class="fu">prior</span>(</span>
+<span id="cb17-3"><a href="#cb17-3"></a>    <span class="fu">normal</span>(<span class="dv">250</span>, <span class="dv">100</span>),</span>
+<span id="cb17-4"><a href="#cb17-4"></a>    <span class="at">class =</span> <span class="st">"b"</span>,</span>
+<span id="cb17-5"><a href="#cb17-5"></a>    <span class="at">coef =</span> <span class="st">"Intercept"</span></span>
+<span id="cb17-6"><a href="#cb17-6"></a>  ),</span>
+<span id="cb17-7"><a href="#cb17-7"></a>  <span class="fu">prior</span>(</span>
+<span id="cb17-8"><a href="#cb17-8"></a>    <span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">20</span>),</span>
+<span id="cb17-9"><a href="#cb17-9"></a>    <span class="at">class =</span> <span class="st">"b"</span>,</span>
+<span id="cb17-10"><a href="#cb17-10"></a>    <span class="at">coef =</span> <span class="st">"Days"</span></span>
+<span id="cb17-11"><a href="#cb17-11"></a>  ),</span>
+<span id="cb17-12"><a href="#cb17-12"></a>  <span class="fu">prior</span>(</span>
+<span id="cb17-13"><a href="#cb17-13"></a>    <span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">100</span>),</span>
+<span id="cb17-14"><a href="#cb17-14"></a>    <span class="at">class =</span> <span class="st">"sigma"</span></span>
+<span id="cb17-15"><a href="#cb17-15"></a>  )</span>
+<span id="cb17-16"><a href="#cb17-16"></a>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            prior class      coef group resp dpar nlpar   lb   ub tag source
  normal(250, 100)     b Intercept                       &lt;NA&gt; &lt;NA&gt;       user
@@ -484,25 +479,25 @@ To disable this check set option or environment variable cmdstanr_no_ver_check=T
 </div>
 <p>And then fit the model:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>sleepstudy_pooled_fit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
-<span id="cb20-2"><a href="#cb20-2"></a>  <span class="at">formula =</span> sleepstudy_pooled_formula,</span>
-<span id="cb20-3"><a href="#cb20-3"></a>  <span class="at">prior =</span> sleepstudy_pooled_priors,</span>
-<span id="cb20-4"><a href="#cb20-4"></a>  <span class="at">data =</span> sleepstudy</span>
-<span id="cb20-5"><a href="#cb20-5"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>sleepstudy_pooled_fit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
+<span id="cb19-2"><a href="#cb19-2"></a>  <span class="at">formula =</span> sleepstudy_pooled_formula,</span>
+<span id="cb19-3"><a href="#cb19-3"></a>  <span class="at">prior =</span> sleepstudy_pooled_priors,</span>
+<span id="cb19-4"><a href="#cb19-4"></a>  <span class="at">data =</span> sleepstudy</span>
+<span id="cb19-5"><a href="#cb19-5"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-error">
 <pre><code>Error: object 'sleepstudy' not found</code></pre>
 </div>
 </div>
 <p>We can add the leave-one-out CV criterion to the fit object, and then view the output</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>sleepstudy_pooled_fit <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(</span>
-<span id="cb22-2"><a href="#cb22-2"></a>  sleepstudy_pooled_fit,</span>
-<span id="cb22-3"><a href="#cb22-3"></a>  <span class="at">criterion =</span> <span class="st">"loo"</span></span>
-<span id="cb22-4"><a href="#cb22-4"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>sleepstudy_pooled_fit <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(</span>
+<span id="cb21-2"><a href="#cb21-2"></a>  sleepstudy_pooled_fit,</span>
+<span id="cb21-3"><a href="#cb21-3"></a>  <span class="at">criterion =</span> <span class="st">"loo"</span></span>
+<span id="cb21-4"><a href="#cb21-4"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-error">
 <pre><code>Error: object 'sleepstudy_pooled_fit' not found</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="fu">loo</span>(sleepstudy_pooled_fit)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">loo</span>(sleepstudy_pooled_fit)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-error">
 <pre><code>Error: object 'sleepstudy_pooled_fit' not found</code></pre>
 </div>
@@ -512,61 +507,61 @@ To disable this check set option or environment variable cmdstanr_no_ver_check=T
 <h1 data-number="3"><span class="header-section-number">3</span> Sleep deprivation extension</h1>
 <p>Here is an example of a pooled model with spline</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>sleepstudy_pooled_spline_formula <span class="ot">&lt;-</span> <span class="fu">bf</span>(</span>
-<span id="cb26-2"><a href="#cb26-2"></a>  Reaction <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> Days <span class="sc">+</span> <span class="fu">s</span>(Days),</span>
-<span id="cb26-3"><a href="#cb26-3"></a>  <span class="at">family =</span> <span class="st">"gaussian"</span>,</span>
-<span id="cb26-4"><a href="#cb26-4"></a>  <span class="at">center =</span> <span class="cn">FALSE</span></span>
-<span id="cb26-5"><a href="#cb26-5"></a>)</span>
-<span id="cb26-6"><a href="#cb26-6"></a></span>
-<span id="cb26-7"><a href="#cb26-7"></a></span>
-<span id="cb26-8"><a href="#cb26-8"></a>sleepstudy_pooled_spline_priors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb26-9"><a href="#cb26-9"></a>  <span class="fu">prior</span>(</span>
-<span id="cb26-10"><a href="#cb26-10"></a>    <span class="fu">normal</span>(<span class="dv">250</span>, <span class="dv">100</span>),</span>
-<span id="cb26-11"><a href="#cb26-11"></a>    <span class="at">class =</span> <span class="st">"b"</span>,</span>
-<span id="cb26-12"><a href="#cb26-12"></a>    <span class="at">coef =</span> <span class="st">"Intercept"</span></span>
-<span id="cb26-13"><a href="#cb26-13"></a>  ),</span>
-<span id="cb26-14"><a href="#cb26-14"></a>  <span class="fu">prior</span>(</span>
-<span id="cb26-15"><a href="#cb26-15"></a>    <span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">20</span>),</span>
-<span id="cb26-16"><a href="#cb26-16"></a>    <span class="at">class =</span> <span class="st">"b"</span>,</span>
-<span id="cb26-17"><a href="#cb26-17"></a>    <span class="at">coef =</span> <span class="st">"Days"</span></span>
-<span id="cb26-18"><a href="#cb26-18"></a>  ),</span>
-<span id="cb26-19"><a href="#cb26-19"></a>  <span class="fu">prior</span>(</span>
-<span id="cb26-20"><a href="#cb26-20"></a>    <span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">100</span>),</span>
-<span id="cb26-21"><a href="#cb26-21"></a>    <span class="at">class =</span> <span class="st">"sigma"</span></span>
-<span id="cb26-22"><a href="#cb26-22"></a>  ),</span>
-<span id="cb26-23"><a href="#cb26-23"></a>  <span class="fu">prior</span>(</span>
-<span id="cb26-24"><a href="#cb26-24"></a>    <span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">20</span>),</span>
-<span id="cb26-25"><a href="#cb26-25"></a>    <span class="at">class =</span> <span class="st">"b"</span>,</span>
-<span id="cb26-26"><a href="#cb26-26"></a>    <span class="at">coef =</span> <span class="st">"sDays_1"</span></span>
-<span id="cb26-27"><a href="#cb26-27"></a>  )</span>
-<span id="cb26-28"><a href="#cb26-28"></a>)</span>
-<span id="cb26-29"><a href="#cb26-29"></a></span>
-<span id="cb26-30"><a href="#cb26-30"></a>sleepstudy_pooled_spline_fit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
-<span id="cb26-31"><a href="#cb26-31"></a>  <span class="at">formula =</span> sleepstudy_pooled_spline_formula,</span>
-<span id="cb26-32"><a href="#cb26-32"></a>  <span class="at">prior =</span> sleepstudy_pooled_spline_priors,</span>
-<span id="cb26-33"><a href="#cb26-33"></a>  <span class="at">data =</span> sleepstudy,</span>
-<span id="cb26-34"><a href="#cb26-34"></a>  <span class="at">family =</span> <span class="st">"gaussian"</span></span>
-<span id="cb26-35"><a href="#cb26-35"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>sleepstudy_pooled_spline_formula <span class="ot">&lt;-</span> <span class="fu">bf</span>(</span>
+<span id="cb25-2"><a href="#cb25-2"></a>  Reaction <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> Days <span class="sc">+</span> <span class="fu">s</span>(Days),</span>
+<span id="cb25-3"><a href="#cb25-3"></a>  <span class="at">family =</span> <span class="st">"gaussian"</span>,</span>
+<span id="cb25-4"><a href="#cb25-4"></a>  <span class="at">center =</span> <span class="cn">FALSE</span></span>
+<span id="cb25-5"><a href="#cb25-5"></a>)</span>
+<span id="cb25-6"><a href="#cb25-6"></a></span>
+<span id="cb25-7"><a href="#cb25-7"></a></span>
+<span id="cb25-8"><a href="#cb25-8"></a>sleepstudy_pooled_spline_priors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb25-9"><a href="#cb25-9"></a>  <span class="fu">prior</span>(</span>
+<span id="cb25-10"><a href="#cb25-10"></a>    <span class="fu">normal</span>(<span class="dv">250</span>, <span class="dv">100</span>),</span>
+<span id="cb25-11"><a href="#cb25-11"></a>    <span class="at">class =</span> <span class="st">"b"</span>,</span>
+<span id="cb25-12"><a href="#cb25-12"></a>    <span class="at">coef =</span> <span class="st">"Intercept"</span></span>
+<span id="cb25-13"><a href="#cb25-13"></a>  ),</span>
+<span id="cb25-14"><a href="#cb25-14"></a>  <span class="fu">prior</span>(</span>
+<span id="cb25-15"><a href="#cb25-15"></a>    <span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">20</span>),</span>
+<span id="cb25-16"><a href="#cb25-16"></a>    <span class="at">class =</span> <span class="st">"b"</span>,</span>
+<span id="cb25-17"><a href="#cb25-17"></a>    <span class="at">coef =</span> <span class="st">"Days"</span></span>
+<span id="cb25-18"><a href="#cb25-18"></a>  ),</span>
+<span id="cb25-19"><a href="#cb25-19"></a>  <span class="fu">prior</span>(</span>
+<span id="cb25-20"><a href="#cb25-20"></a>    <span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">100</span>),</span>
+<span id="cb25-21"><a href="#cb25-21"></a>    <span class="at">class =</span> <span class="st">"sigma"</span></span>
+<span id="cb25-22"><a href="#cb25-22"></a>  ),</span>
+<span id="cb25-23"><a href="#cb25-23"></a>  <span class="fu">prior</span>(</span>
+<span id="cb25-24"><a href="#cb25-24"></a>    <span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">20</span>),</span>
+<span id="cb25-25"><a href="#cb25-25"></a>    <span class="at">class =</span> <span class="st">"b"</span>,</span>
+<span id="cb25-26"><a href="#cb25-26"></a>    <span class="at">coef =</span> <span class="st">"sDays_1"</span></span>
+<span id="cb25-27"><a href="#cb25-27"></a>  )</span>
+<span id="cb25-28"><a href="#cb25-28"></a>)</span>
+<span id="cb25-29"><a href="#cb25-29"></a></span>
+<span id="cb25-30"><a href="#cb25-30"></a>sleepstudy_pooled_spline_fit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
+<span id="cb25-31"><a href="#cb25-31"></a>  <span class="at">formula =</span> sleepstudy_pooled_spline_formula,</span>
+<span id="cb25-32"><a href="#cb25-32"></a>  <span class="at">prior =</span> sleepstudy_pooled_spline_priors,</span>
+<span id="cb25-33"><a href="#cb25-33"></a>  <span class="at">data =</span> sleepstudy,</span>
+<span id="cb25-34"><a href="#cb25-34"></a>  <span class="at">family =</span> <span class="st">"gaussian"</span></span>
+<span id="cb25-35"><a href="#cb25-35"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-error">
 <pre><code>Error: object 'sleepstudy' not found</code></pre>
 </div>
 </div>
 <p>Adding the loo criterion:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>sleepstudy_pooled_spline_fit <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(</span>
-<span id="cb28-2"><a href="#cb28-2"></a>  sleepstudy_pooled_spline_fit,</span>
-<span id="cb28-3"><a href="#cb28-3"></a>  <span class="at">criterion =</span> <span class="st">"loo"</span></span>
-<span id="cb28-4"><a href="#cb28-4"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>sleepstudy_pooled_spline_fit <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(</span>
+<span id="cb27-2"><a href="#cb27-2"></a>  sleepstudy_pooled_spline_fit,</span>
+<span id="cb27-3"><a href="#cb27-3"></a>  <span class="at">criterion =</span> <span class="st">"loo"</span></span>
+<span id="cb27-4"><a href="#cb27-4"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-error">
 <pre><code>Error: object 'sleepstudy_pooled_spline_fit' not found</code></pre>
 </div>
 </div>
 <p>Compare to the other model</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="fu">loo_compare</span>(</span>
-<span id="cb30-2"><a href="#cb30-2"></a>  <span class="fu">loo</span>(sleepstudy_pooled_fit),</span>
-<span id="cb30-3"><a href="#cb30-3"></a>  <span class="fu">loo</span>(sleepstudy_pooled_spline_fit)</span>
-<span id="cb30-4"><a href="#cb30-4"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="fu">loo_compare</span>(</span>
+<span id="cb29-2"><a href="#cb29-2"></a>  <span class="fu">loo</span>(sleepstudy_pooled_fit),</span>
+<span id="cb29-3"><a href="#cb29-3"></a>  <span class="fu">loo</span>(sleepstudy_pooled_spline_fit)</span>
+<span id="cb29-4"><a href="#cb29-4"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-error">
 <pre><code>Error: object 'sleepstudy_pooled_fit' not found</code></pre>
 </div>
@@ -574,25 +569,25 @@ To disable this check set option or environment variable cmdstanr_no_ver_check=T
 <p>If there are high Pareto-k values</p>
 <p>First try moment matching:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>sleepstudy_pooled_spline_fit <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(</span>
-<span id="cb32-2"><a href="#cb32-2"></a>  sleepstudy_pooled_spline_fit,</span>
-<span id="cb32-3"><a href="#cb32-3"></a>  <span class="at">criterion =</span> <span class="st">"loo"</span>,</span>
-<span id="cb32-4"><a href="#cb32-4"></a>  <span class="at">moment_match =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb32-5"><a href="#cb32-5"></a>  <span class="at">overwrite =</span> <span class="cn">TRUE</span></span>
-<span id="cb32-6"><a href="#cb32-6"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>sleepstudy_pooled_spline_fit <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(</span>
+<span id="cb31-2"><a href="#cb31-2"></a>  sleepstudy_pooled_spline_fit,</span>
+<span id="cb31-3"><a href="#cb31-3"></a>  <span class="at">criterion =</span> <span class="st">"loo"</span>,</span>
+<span id="cb31-4"><a href="#cb31-4"></a>  <span class="at">moment_match =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb31-5"><a href="#cb31-5"></a>  <span class="at">overwrite =</span> <span class="cn">TRUE</span></span>
+<span id="cb31-6"><a href="#cb31-6"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-error">
 <pre><code>Error: object 'sleepstudy_pooled_spline_fit' not found</code></pre>
 </div>
 </div>
 <p>Then if there are a few remaining (and refitting is not going to take forever), try moment matching and reloo</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>sleepstudy_pooled_spline_fit <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(</span>
-<span id="cb34-2"><a href="#cb34-2"></a>  sleepstudy_pooled_spline_fit,</span>
-<span id="cb34-3"><a href="#cb34-3"></a>  <span class="at">criterion =</span> <span class="st">"loo"</span>,</span>
-<span id="cb34-4"><a href="#cb34-4"></a>  <span class="at">moment_match =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb34-5"><a href="#cb34-5"></a>  <span class="at">reloo =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb34-6"><a href="#cb34-6"></a>  <span class="at">overwrite =</span> <span class="cn">TRUE</span></span>
-<span id="cb34-7"><a href="#cb34-7"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>sleepstudy_pooled_spline_fit <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(</span>
+<span id="cb33-2"><a href="#cb33-2"></a>  sleepstudy_pooled_spline_fit,</span>
+<span id="cb33-3"><a href="#cb33-3"></a>  <span class="at">criterion =</span> <span class="st">"loo"</span>,</span>
+<span id="cb33-4"><a href="#cb33-4"></a>  <span class="at">moment_match =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb33-5"><a href="#cb33-5"></a>  <span class="at">reloo =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb33-6"><a href="#cb33-6"></a>  <span class="at">overwrite =</span> <span class="cn">TRUE</span></span>
+<span id="cb33-7"><a href="#cb33-7"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-error">
 <pre><code>Error: object 'sleepstudy_pooled_spline_fit' not found</code></pre>
 </div>
@@ -1067,217 +1062,217 @@ To disable this check set option or environment variable cmdstanr_no_ver_check=T
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb36-1"><a href="#cb36-1"></a><span class="co">---</span></span>
-<span id="cb36-2"><a href="#cb36-2"></a><span class="an">title:</span><span class="co"> "Notebook for Assignment 8"</span></span>
-<span id="cb36-3"><a href="#cb36-3"></a><span class="an">author:</span><span class="co"> "Aki Vehtari et al."</span></span>
-<span id="cb36-4"><a href="#cb36-4"></a><span class="an">format:</span></span>
-<span id="cb36-5"><a href="#cb36-5"></a><span class="co">  html:</span></span>
-<span id="cb36-6"><a href="#cb36-6"></a><span class="co">    toc: true</span></span>
-<span id="cb36-7"><a href="#cb36-7"></a><span class="co">    code-tools: true</span></span>
-<span id="cb36-8"><a href="#cb36-8"></a><span class="co">    code-line-numbers: true</span></span>
-<span id="cb36-9"><a href="#cb36-9"></a><span class="co">    number-sections: true</span></span>
-<span id="cb36-10"><a href="#cb36-10"></a><span class="co">    mainfont: Georgia, serif</span></span>
-<span id="cb36-11"><a href="#cb36-11"></a><span class="an">editor:</span><span class="co"> source</span></span>
-<span id="cb36-12"><a href="#cb36-12"></a><span class="co">---</span></span>
-<span id="cb36-13"><a href="#cb36-13"></a></span>
-<span id="cb36-14"><a href="#cb36-14"></a><span class="fu"># General information</span></span>
-<span id="cb36-15"><a href="#cb36-15"></a></span>
-<span id="cb36-16"><a href="#cb36-16"></a></span>
-<span id="cb36-17"><a href="#cb36-17"></a>This assignment relates to Lectures 8-9 and Chapter 7 of BDA3</span>
-<span id="cb36-18"><a href="#cb36-18"></a></span>
-<span id="cb36-19"><a href="#cb36-19"></a>We recommend using <span class="co">[</span><span class="ot">JupyterHub</span><span class="co">](https://jupyter.cs.aalto.fi)</span> (which has all the needed packages pre-installed).</span>
-<span id="cb36-20"><a href="#cb36-20"></a></span>
-<span id="cb36-21"><a href="#cb36-21"></a>::: hint</span>
-<span id="cb36-22"><a href="#cb36-22"></a>**Reading instructions:**</span>
-<span id="cb36-23"><a href="#cb36-23"></a></span>
-<span id="cb36-24"><a href="#cb36-24"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**The reading instructions for BDA3 Chapter 6**</span><span class="co">](../BDA3_notes.html#ch6)</span> (posterior predictive checking).</span>
-<span id="cb36-25"><a href="#cb36-25"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**The reading instructions for BDA3 Chapter 7**</span><span class="co">](../BDA3_notes.html#ch7)</span> (predictive performance).</span>
-<span id="cb36-26"><a href="#cb36-26"></a><span class="ss">- </span>The <span class="co">[</span><span class="ot">‘loo‘ package vignette on the basics of LOO</span><span class="co">](https://mc-stan.org/loo/articles/loo2-with-rstan.html)</span></span>
-<span id="cb36-27"><a href="#cb36-27"></a>shows an example of how to modify Stan code and use the package with Stan models.</span>
-<span id="cb36-28"><a href="#cb36-28"></a><span class="ss">- </span>Also read</span>
-<span id="cb36-29"><a href="#cb36-29"></a>about PSIS-LOO in the <span class="co">[</span><span class="ot">PSIS-LOO paper</span><span class="co">](https://link.springer.com/article/10.1007/s11222-016-9696-4)</span>.</span>
-<span id="cb36-30"><a href="#cb36-30"></a><span class="ss">- </span><span class="co">[</span><span class="ot">CV-FAQ</span><span class="co">](https://avehtari.github.io/modelselection/CV-FAQ.html)</span> includes a lot of informative answers to frequent questions and misconceptions.</span>
-<span id="cb36-31"><a href="#cb36-31"></a>:::</span>
-<span id="cb36-32"><a href="#cb36-32"></a></span>
-<span id="cb36-33"><a href="#cb36-33"></a>{{&lt; include includes/_general_cloze_instructions.md &gt;}}</span>
-<span id="cb36-34"><a href="#cb36-34"></a></span>
-<span id="cb36-37"><a href="#cb36-37"></a><span class="in">```{r}</span></span>
-<span id="cb36-38"><a href="#cb36-38"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(brms)) {</span>
-<span id="cb36-39"><a href="#cb36-39"></a>    <span class="fu">install.packages</span>(<span class="st">"brms"</span>)</span>
-<span id="cb36-40"><a href="#cb36-40"></a>    <span class="fu">library</span>(brms)</span>
-<span id="cb36-41"><a href="#cb36-41"></a>}</span>
-<span id="cb36-42"><a href="#cb36-42"></a></span>
-<span id="cb36-43"><a href="#cb36-43"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(cmdstanr)){</span>
-<span id="cb36-44"><a href="#cb36-44"></a>    <span class="fu">install.packages</span>(<span class="st">"cmdstanr"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://mc-stan.org/r-packages/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span>
-<span id="cb36-45"><a href="#cb36-45"></a>    <span class="fu">library</span>(cmdstanr)</span>
-<span id="cb36-46"><a href="#cb36-46"></a>}</span>
-<span id="cb36-47"><a href="#cb36-47"></a>cmdstan_installed <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
-<span id="cb36-48"><a href="#cb36-48"></a>  res <span class="ot">&lt;-</span> <span class="fu">try</span>(out <span class="ot">&lt;-</span> cmdstanr<span class="sc">::</span><span class="fu">cmdstan_path</span>(), <span class="at">silent =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb36-49"><a href="#cb36-49"></a>  <span class="sc">!</span><span class="fu">inherits</span>(res, <span class="st">"try-error"</span>)</span>
-<span id="cb36-50"><a href="#cb36-50"></a>}</span>
-<span id="cb36-51"><a href="#cb36-51"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">cmdstan_installed</span>()){</span>
-<span id="cb36-52"><a href="#cb36-52"></a>    <span class="fu">install_cmdstan</span>()</span>
-<span id="cb36-53"><a href="#cb36-53"></a>}</span>
-<span id="cb36-54"><a href="#cb36-54"></a><span class="in">```</span></span>
-<span id="cb36-55"><a href="#cb36-55"></a></span>
-<span id="cb36-56"><a href="#cb36-56"></a><span class="fu"># Sleep deprivation</span></span>
-<span id="cb36-57"><a href="#cb36-57"></a></span>
-<span id="cb36-58"><a href="#cb36-58"></a>The dataset <span class="in">`sleepstudy`</span> is available by using the command</span>
-<span id="cb36-59"><a href="#cb36-59"></a><span class="in">`data(sleepstudy, package = "lme4")`</span></span>
-<span id="cb36-60"><a href="#cb36-60"></a></span>
-<span id="cb36-61"><a href="#cb36-61"></a>Below is some code for fitting a brms model. This model is a simple</span>
-<span id="cb36-62"><a href="#cb36-62"></a>pooled model. You will need to fit a hierarchical model as explained</span>
-<span id="cb36-63"><a href="#cb36-63"></a>in the assignment, but this code should help getting started.</span>
-<span id="cb36-64"><a href="#cb36-64"></a></span>
-<span id="cb36-65"><a href="#cb36-65"></a>Load the dataset</span>
-<span id="cb36-68"><a href="#cb36-68"></a><span class="in">```{r}</span></span>
-<span id="cb36-69"><a href="#cb36-69"></a><span class="fu">data</span>(sleepstudy, <span class="at">package =</span> <span class="st">"lme4"</span>)</span>
-<span id="cb36-70"><a href="#cb36-70"></a><span class="in">```</span></span>
-<span id="cb36-71"><a href="#cb36-71"></a></span>
-<span id="cb36-72"><a href="#cb36-72"></a>Specify the formula and observation family:</span>
-<span id="cb36-73"><a href="#cb36-73"></a></span>
-<span id="cb36-76"><a href="#cb36-76"></a><span class="in">```{r}</span></span>
-<span id="cb36-77"><a href="#cb36-77"></a>sleepstudy_pooled_formula <span class="ot">&lt;-</span> <span class="fu">bf</span>(</span>
-<span id="cb36-78"><a href="#cb36-78"></a>  Reaction <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> Days,</span>
-<span id="cb36-79"><a href="#cb36-79"></a>  <span class="at">family =</span> <span class="st">"gaussian"</span>,</span>
-<span id="cb36-80"><a href="#cb36-80"></a>  <span class="at">center =</span> <span class="cn">FALSE</span></span>
-<span id="cb36-81"><a href="#cb36-81"></a>)</span>
-<span id="cb36-82"><a href="#cb36-82"></a><span class="in">```</span></span>
-<span id="cb36-83"><a href="#cb36-83"></a></span>
-<span id="cb36-84"><a href="#cb36-84"></a>We can then specify the priors:</span>
-<span id="cb36-85"><a href="#cb36-85"></a></span>
-<span id="cb36-88"><a href="#cb36-88"></a><span class="in">```{r}</span></span>
-<span id="cb36-89"><a href="#cb36-89"></a>(sleepstudy_pooled_priors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb36-90"><a href="#cb36-90"></a>  <span class="fu">prior</span>(</span>
-<span id="cb36-91"><a href="#cb36-91"></a>    <span class="fu">normal</span>(<span class="dv">250</span>, <span class="dv">100</span>),</span>
-<span id="cb36-92"><a href="#cb36-92"></a>    <span class="at">class =</span> <span class="st">"b"</span>,</span>
-<span id="cb36-93"><a href="#cb36-93"></a>    <span class="at">coef =</span> <span class="st">"Intercept"</span></span>
-<span id="cb36-94"><a href="#cb36-94"></a>  ),</span>
-<span id="cb36-95"><a href="#cb36-95"></a>  <span class="fu">prior</span>(</span>
-<span id="cb36-96"><a href="#cb36-96"></a>    <span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">20</span>),</span>
-<span id="cb36-97"><a href="#cb36-97"></a>    <span class="at">class =</span> <span class="st">"b"</span>,</span>
-<span id="cb36-98"><a href="#cb36-98"></a>    <span class="at">coef =</span> <span class="st">"Days"</span></span>
-<span id="cb36-99"><a href="#cb36-99"></a>  ),</span>
-<span id="cb36-100"><a href="#cb36-100"></a>  <span class="fu">prior</span>(</span>
-<span id="cb36-101"><a href="#cb36-101"></a>    <span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">100</span>),</span>
-<span id="cb36-102"><a href="#cb36-102"></a>    <span class="at">class =</span> <span class="st">"sigma"</span></span>
-<span id="cb36-103"><a href="#cb36-103"></a>  )</span>
-<span id="cb36-104"><a href="#cb36-104"></a>))</span>
-<span id="cb36-105"><a href="#cb36-105"></a><span class="in">```</span></span>
-<span id="cb36-106"><a href="#cb36-106"></a></span>
-<span id="cb36-107"><a href="#cb36-107"></a>And then fit the model:</span>
-<span id="cb36-108"><a href="#cb36-108"></a></span>
-<span id="cb36-111"><a href="#cb36-111"></a><span class="in">```{r}</span></span>
-<span id="cb36-112"><a href="#cb36-112"></a>sleepstudy_pooled_fit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
-<span id="cb36-113"><a href="#cb36-113"></a>  <span class="at">formula =</span> sleepstudy_pooled_formula,</span>
-<span id="cb36-114"><a href="#cb36-114"></a>  <span class="at">prior =</span> sleepstudy_pooled_priors,</span>
-<span id="cb36-115"><a href="#cb36-115"></a>  <span class="at">data =</span> sleepstudy</span>
-<span id="cb36-116"><a href="#cb36-116"></a>)</span>
-<span id="cb36-117"><a href="#cb36-117"></a><span class="in">```</span></span>
-<span id="cb36-118"><a href="#cb36-118"></a></span>
-<span id="cb36-119"><a href="#cb36-119"></a>We can add the leave-one-out CV criterion to the fit object, and then view the output</span>
-<span id="cb36-120"><a href="#cb36-120"></a></span>
-<span id="cb36-123"><a href="#cb36-123"></a><span class="in">```{r}</span></span>
-<span id="cb36-124"><a href="#cb36-124"></a>sleepstudy_pooled_fit <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(</span>
-<span id="cb36-125"><a href="#cb36-125"></a>  sleepstudy_pooled_fit,</span>
-<span id="cb36-126"><a href="#cb36-126"></a>  <span class="at">criterion =</span> <span class="st">"loo"</span></span>
-<span id="cb36-127"><a href="#cb36-127"></a>)</span>
-<span id="cb36-128"><a href="#cb36-128"></a></span>
-<span id="cb36-129"><a href="#cb36-129"></a><span class="fu">loo</span>(sleepstudy_pooled_fit)</span>
-<span id="cb36-130"><a href="#cb36-130"></a><span class="in">```</span></span>
-<span id="cb36-131"><a href="#cb36-131"></a></span>
-<span id="cb36-132"><a href="#cb36-132"></a></span>
-<span id="cb36-133"><a href="#cb36-133"></a><span class="fu"># Sleep deprivation extension</span></span>
-<span id="cb36-134"><a href="#cb36-134"></a></span>
-<span id="cb36-135"><a href="#cb36-135"></a></span>
-<span id="cb36-136"><a href="#cb36-136"></a>Here is an example of a pooled model with spline</span>
-<span id="cb36-139"><a href="#cb36-139"></a><span class="in">```{r}</span></span>
-<span id="cb36-140"><a href="#cb36-140"></a>sleepstudy_pooled_spline_formula <span class="ot">&lt;-</span> <span class="fu">bf</span>(</span>
-<span id="cb36-141"><a href="#cb36-141"></a>  Reaction <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> Days <span class="sc">+</span> <span class="fu">s</span>(Days),</span>
-<span id="cb36-142"><a href="#cb36-142"></a>  <span class="at">family =</span> <span class="st">"gaussian"</span>,</span>
-<span id="cb36-143"><a href="#cb36-143"></a>  <span class="at">center =</span> <span class="cn">FALSE</span></span>
-<span id="cb36-144"><a href="#cb36-144"></a>)</span>
-<span id="cb36-145"><a href="#cb36-145"></a></span>
-<span id="cb36-146"><a href="#cb36-146"></a></span>
-<span id="cb36-147"><a href="#cb36-147"></a>sleepstudy_pooled_spline_priors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb36-148"><a href="#cb36-148"></a>  <span class="fu">prior</span>(</span>
-<span id="cb36-149"><a href="#cb36-149"></a>    <span class="fu">normal</span>(<span class="dv">250</span>, <span class="dv">100</span>),</span>
-<span id="cb36-150"><a href="#cb36-150"></a>    <span class="at">class =</span> <span class="st">"b"</span>,</span>
-<span id="cb36-151"><a href="#cb36-151"></a>    <span class="at">coef =</span> <span class="st">"Intercept"</span></span>
-<span id="cb36-152"><a href="#cb36-152"></a>  ),</span>
-<span id="cb36-153"><a href="#cb36-153"></a>  <span class="fu">prior</span>(</span>
-<span id="cb36-154"><a href="#cb36-154"></a>    <span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">20</span>),</span>
-<span id="cb36-155"><a href="#cb36-155"></a>    <span class="at">class =</span> <span class="st">"b"</span>,</span>
-<span id="cb36-156"><a href="#cb36-156"></a>    <span class="at">coef =</span> <span class="st">"Days"</span></span>
-<span id="cb36-157"><a href="#cb36-157"></a>  ),</span>
-<span id="cb36-158"><a href="#cb36-158"></a>  <span class="fu">prior</span>(</span>
-<span id="cb36-159"><a href="#cb36-159"></a>    <span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">100</span>),</span>
-<span id="cb36-160"><a href="#cb36-160"></a>    <span class="at">class =</span> <span class="st">"sigma"</span></span>
-<span id="cb36-161"><a href="#cb36-161"></a>  ),</span>
-<span id="cb36-162"><a href="#cb36-162"></a>  <span class="fu">prior</span>(</span>
-<span id="cb36-163"><a href="#cb36-163"></a>    <span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">20</span>),</span>
-<span id="cb36-164"><a href="#cb36-164"></a>    <span class="at">class =</span> <span class="st">"b"</span>,</span>
-<span id="cb36-165"><a href="#cb36-165"></a>    <span class="at">coef =</span> <span class="st">"sDays_1"</span></span>
-<span id="cb36-166"><a href="#cb36-166"></a>  )</span>
-<span id="cb36-167"><a href="#cb36-167"></a>)</span>
-<span id="cb36-168"><a href="#cb36-168"></a></span>
-<span id="cb36-169"><a href="#cb36-169"></a>sleepstudy_pooled_spline_fit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
-<span id="cb36-170"><a href="#cb36-170"></a>  <span class="at">formula =</span> sleepstudy_pooled_spline_formula,</span>
-<span id="cb36-171"><a href="#cb36-171"></a>  <span class="at">prior =</span> sleepstudy_pooled_spline_priors,</span>
-<span id="cb36-172"><a href="#cb36-172"></a>  <span class="at">data =</span> sleepstudy,</span>
-<span id="cb36-173"><a href="#cb36-173"></a>  <span class="at">family =</span> <span class="st">"gaussian"</span></span>
-<span id="cb36-174"><a href="#cb36-174"></a>)</span>
-<span id="cb36-175"><a href="#cb36-175"></a></span>
-<span id="cb36-176"><a href="#cb36-176"></a><span class="in">```</span></span>
-<span id="cb36-177"><a href="#cb36-177"></a></span>
-<span id="cb36-178"><a href="#cb36-178"></a>Adding the loo criterion:</span>
-<span id="cb36-179"><a href="#cb36-179"></a></span>
-<span id="cb36-182"><a href="#cb36-182"></a><span class="in">```{r}</span></span>
-<span id="cb36-183"><a href="#cb36-183"></a>sleepstudy_pooled_spline_fit <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(</span>
-<span id="cb36-184"><a href="#cb36-184"></a>  sleepstudy_pooled_spline_fit,</span>
-<span id="cb36-185"><a href="#cb36-185"></a>  <span class="at">criterion =</span> <span class="st">"loo"</span></span>
-<span id="cb36-186"><a href="#cb36-186"></a>)</span>
-<span id="cb36-187"><a href="#cb36-187"></a></span>
-<span id="cb36-188"><a href="#cb36-188"></a></span>
-<span id="cb36-189"><a href="#cb36-189"></a><span class="in">```</span></span>
-<span id="cb36-190"><a href="#cb36-190"></a></span>
-<span id="cb36-191"><a href="#cb36-191"></a></span>
-<span id="cb36-192"><a href="#cb36-192"></a>Compare to the other model</span>
-<span id="cb36-193"><a href="#cb36-193"></a></span>
-<span id="cb36-196"><a href="#cb36-196"></a><span class="in">```{r}</span></span>
-<span id="cb36-197"><a href="#cb36-197"></a><span class="fu">loo_compare</span>(</span>
-<span id="cb36-198"><a href="#cb36-198"></a>  <span class="fu">loo</span>(sleepstudy_pooled_fit),</span>
-<span id="cb36-199"><a href="#cb36-199"></a>  <span class="fu">loo</span>(sleepstudy_pooled_spline_fit)</span>
-<span id="cb36-200"><a href="#cb36-200"></a>)</span>
-<span id="cb36-201"><a href="#cb36-201"></a></span>
-<span id="cb36-202"><a href="#cb36-202"></a><span class="in">```</span></span>
-<span id="cb36-203"><a href="#cb36-203"></a></span>
-<span id="cb36-204"><a href="#cb36-204"></a></span>
-<span id="cb36-205"><a href="#cb36-205"></a>If there are high Pareto-k values</span>
-<span id="cb36-206"><a href="#cb36-206"></a></span>
-<span id="cb36-207"><a href="#cb36-207"></a>First try moment matching:</span>
-<span id="cb36-210"><a href="#cb36-210"></a><span class="in">```{r}</span></span>
-<span id="cb36-211"><a href="#cb36-211"></a>sleepstudy_pooled_spline_fit <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(</span>
-<span id="cb36-212"><a href="#cb36-212"></a>  sleepstudy_pooled_spline_fit,</span>
-<span id="cb36-213"><a href="#cb36-213"></a>  <span class="at">criterion =</span> <span class="st">"loo"</span>,</span>
-<span id="cb36-214"><a href="#cb36-214"></a>  <span class="at">moment_match =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb36-215"><a href="#cb36-215"></a>  <span class="at">overwrite =</span> <span class="cn">TRUE</span></span>
-<span id="cb36-216"><a href="#cb36-216"></a>)</span>
-<span id="cb36-217"><a href="#cb36-217"></a></span>
-<span id="cb36-218"><a href="#cb36-218"></a><span class="in">```</span></span>
-<span id="cb36-219"><a href="#cb36-219"></a></span>
-<span id="cb36-220"><a href="#cb36-220"></a>Then if there are a few remaining (and refitting is not going to take forever), try moment matching and reloo</span>
-<span id="cb36-221"><a href="#cb36-221"></a></span>
-<span id="cb36-224"><a href="#cb36-224"></a><span class="in">```{r}</span></span>
-<span id="cb36-225"><a href="#cb36-225"></a>sleepstudy_pooled_spline_fit <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(</span>
-<span id="cb36-226"><a href="#cb36-226"></a>  sleepstudy_pooled_spline_fit,</span>
-<span id="cb36-227"><a href="#cb36-227"></a>  <span class="at">criterion =</span> <span class="st">"loo"</span>,</span>
-<span id="cb36-228"><a href="#cb36-228"></a>  <span class="at">moment_match =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb36-229"><a href="#cb36-229"></a>  <span class="at">reloo =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb36-230"><a href="#cb36-230"></a>  <span class="at">overwrite =</span> <span class="cn">TRUE</span></span>
-<span id="cb36-231"><a href="#cb36-231"></a>)</span>
-<span id="cb36-232"><a href="#cb36-232"></a></span>
-<span id="cb36-233"><a href="#cb36-233"></a><span class="in">```</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb35-1"><a href="#cb35-1"></a><span class="co">---</span></span>
+<span id="cb35-2"><a href="#cb35-2"></a><span class="an">title:</span><span class="co"> "Notebook for Assignment 8"</span></span>
+<span id="cb35-3"><a href="#cb35-3"></a><span class="an">author:</span><span class="co"> "Aki Vehtari et al."</span></span>
+<span id="cb35-4"><a href="#cb35-4"></a><span class="an">format:</span></span>
+<span id="cb35-5"><a href="#cb35-5"></a><span class="co">  html:</span></span>
+<span id="cb35-6"><a href="#cb35-6"></a><span class="co">    toc: true</span></span>
+<span id="cb35-7"><a href="#cb35-7"></a><span class="co">    code-tools: true</span></span>
+<span id="cb35-8"><a href="#cb35-8"></a><span class="co">    code-line-numbers: true</span></span>
+<span id="cb35-9"><a href="#cb35-9"></a><span class="co">    number-sections: true</span></span>
+<span id="cb35-10"><a href="#cb35-10"></a><span class="co">    mainfont: Georgia, serif</span></span>
+<span id="cb35-11"><a href="#cb35-11"></a><span class="an">editor:</span><span class="co"> source</span></span>
+<span id="cb35-12"><a href="#cb35-12"></a><span class="co">---</span></span>
+<span id="cb35-13"><a href="#cb35-13"></a></span>
+<span id="cb35-14"><a href="#cb35-14"></a><span class="fu"># General information</span></span>
+<span id="cb35-15"><a href="#cb35-15"></a></span>
+<span id="cb35-16"><a href="#cb35-16"></a></span>
+<span id="cb35-17"><a href="#cb35-17"></a>This assignment relates to Lectures 8-9 and Chapter 7 of BDA3</span>
+<span id="cb35-18"><a href="#cb35-18"></a></span>
+<span id="cb35-19"><a href="#cb35-19"></a>We recommend using <span class="co">[</span><span class="ot">JupyterHub</span><span class="co">](https://jupyter.cs.aalto.fi)</span> (which has all the needed packages pre-installed).</span>
+<span id="cb35-20"><a href="#cb35-20"></a></span>
+<span id="cb35-21"><a href="#cb35-21"></a>::: hint</span>
+<span id="cb35-22"><a href="#cb35-22"></a>**Reading instructions:**</span>
+<span id="cb35-23"><a href="#cb35-23"></a></span>
+<span id="cb35-24"><a href="#cb35-24"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**The reading instructions for BDA3 Chapter 6**</span><span class="co">](../BDA3_notes.html#ch6)</span> (posterior predictive checking).</span>
+<span id="cb35-25"><a href="#cb35-25"></a><span class="ss">- </span><span class="co">[</span><span class="ot">**The reading instructions for BDA3 Chapter 7**</span><span class="co">](../BDA3_notes.html#ch7)</span> (predictive performance).</span>
+<span id="cb35-26"><a href="#cb35-26"></a><span class="ss">- </span>The <span class="co">[</span><span class="ot">‘loo‘ package vignette on the basics of LOO</span><span class="co">](https://mc-stan.org/loo/articles/loo2-with-rstan.html)</span></span>
+<span id="cb35-27"><a href="#cb35-27"></a>shows an example of how to modify Stan code and use the package with Stan models.</span>
+<span id="cb35-28"><a href="#cb35-28"></a><span class="ss">- </span>Also read</span>
+<span id="cb35-29"><a href="#cb35-29"></a>about PSIS-LOO in the <span class="co">[</span><span class="ot">PSIS-LOO paper</span><span class="co">](https://link.springer.com/article/10.1007/s11222-016-9696-4)</span>.</span>
+<span id="cb35-30"><a href="#cb35-30"></a><span class="ss">- </span><span class="co">[</span><span class="ot">CV-FAQ</span><span class="co">](https://avehtari.github.io/modelselection/CV-FAQ.html)</span> includes a lot of informative answers to frequent questions and misconceptions.</span>
+<span id="cb35-31"><a href="#cb35-31"></a>:::</span>
+<span id="cb35-32"><a href="#cb35-32"></a></span>
+<span id="cb35-33"><a href="#cb35-33"></a>{{&lt; include includes/_general_cloze_instructions.md &gt;}}</span>
+<span id="cb35-34"><a href="#cb35-34"></a></span>
+<span id="cb35-37"><a href="#cb35-37"></a><span class="in">```{r}</span></span>
+<span id="cb35-38"><a href="#cb35-38"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(brms)) {</span>
+<span id="cb35-39"><a href="#cb35-39"></a>    <span class="fu">install.packages</span>(<span class="st">"brms"</span>)</span>
+<span id="cb35-40"><a href="#cb35-40"></a>    <span class="fu">library</span>(brms)</span>
+<span id="cb35-41"><a href="#cb35-41"></a>}</span>
+<span id="cb35-42"><a href="#cb35-42"></a></span>
+<span id="cb35-43"><a href="#cb35-43"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(cmdstanr)){</span>
+<span id="cb35-44"><a href="#cb35-44"></a>    <span class="fu">install.packages</span>(<span class="st">"cmdstanr"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://mc-stan.org/r-packages/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span>
+<span id="cb35-45"><a href="#cb35-45"></a>    <span class="fu">library</span>(cmdstanr)</span>
+<span id="cb35-46"><a href="#cb35-46"></a>}</span>
+<span id="cb35-47"><a href="#cb35-47"></a>cmdstan_installed <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
+<span id="cb35-48"><a href="#cb35-48"></a>  res <span class="ot">&lt;-</span> <span class="fu">try</span>(out <span class="ot">&lt;-</span> cmdstanr<span class="sc">::</span><span class="fu">cmdstan_path</span>(), <span class="at">silent =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb35-49"><a href="#cb35-49"></a>  <span class="sc">!</span><span class="fu">inherits</span>(res, <span class="st">"try-error"</span>)</span>
+<span id="cb35-50"><a href="#cb35-50"></a>}</span>
+<span id="cb35-51"><a href="#cb35-51"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">cmdstan_installed</span>()){</span>
+<span id="cb35-52"><a href="#cb35-52"></a>    <span class="fu">install_cmdstan</span>()</span>
+<span id="cb35-53"><a href="#cb35-53"></a>}</span>
+<span id="cb35-54"><a href="#cb35-54"></a><span class="in">```</span></span>
+<span id="cb35-55"><a href="#cb35-55"></a></span>
+<span id="cb35-56"><a href="#cb35-56"></a><span class="fu"># Sleep deprivation</span></span>
+<span id="cb35-57"><a href="#cb35-57"></a></span>
+<span id="cb35-58"><a href="#cb35-58"></a>The dataset <span class="in">`sleepstudy`</span> is available by using the command</span>
+<span id="cb35-59"><a href="#cb35-59"></a><span class="in">`data(sleepstudy, package = "lme4")`</span></span>
+<span id="cb35-60"><a href="#cb35-60"></a></span>
+<span id="cb35-61"><a href="#cb35-61"></a>Below is some code for fitting a brms model. This model is a simple</span>
+<span id="cb35-62"><a href="#cb35-62"></a>pooled model. You will need to fit a hierarchical model as explained</span>
+<span id="cb35-63"><a href="#cb35-63"></a>in the assignment, but this code should help getting started.</span>
+<span id="cb35-64"><a href="#cb35-64"></a></span>
+<span id="cb35-65"><a href="#cb35-65"></a>Load the dataset</span>
+<span id="cb35-68"><a href="#cb35-68"></a><span class="in">```{r}</span></span>
+<span id="cb35-69"><a href="#cb35-69"></a><span class="fu">data</span>(sleepstudy, <span class="at">package =</span> <span class="st">"lme4"</span>)</span>
+<span id="cb35-70"><a href="#cb35-70"></a><span class="in">```</span></span>
+<span id="cb35-71"><a href="#cb35-71"></a></span>
+<span id="cb35-72"><a href="#cb35-72"></a>Specify the formula and observation family:</span>
+<span id="cb35-73"><a href="#cb35-73"></a></span>
+<span id="cb35-76"><a href="#cb35-76"></a><span class="in">```{r}</span></span>
+<span id="cb35-77"><a href="#cb35-77"></a>sleepstudy_pooled_formula <span class="ot">&lt;-</span> <span class="fu">bf</span>(</span>
+<span id="cb35-78"><a href="#cb35-78"></a>  Reaction <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> Days,</span>
+<span id="cb35-79"><a href="#cb35-79"></a>  <span class="at">family =</span> <span class="st">"gaussian"</span>,</span>
+<span id="cb35-80"><a href="#cb35-80"></a>  <span class="at">center =</span> <span class="cn">FALSE</span></span>
+<span id="cb35-81"><a href="#cb35-81"></a>)</span>
+<span id="cb35-82"><a href="#cb35-82"></a><span class="in">```</span></span>
+<span id="cb35-83"><a href="#cb35-83"></a></span>
+<span id="cb35-84"><a href="#cb35-84"></a>We can then specify the priors:</span>
+<span id="cb35-85"><a href="#cb35-85"></a></span>
+<span id="cb35-88"><a href="#cb35-88"></a><span class="in">```{r}</span></span>
+<span id="cb35-89"><a href="#cb35-89"></a>(sleepstudy_pooled_priors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb35-90"><a href="#cb35-90"></a>  <span class="fu">prior</span>(</span>
+<span id="cb35-91"><a href="#cb35-91"></a>    <span class="fu">normal</span>(<span class="dv">250</span>, <span class="dv">100</span>),</span>
+<span id="cb35-92"><a href="#cb35-92"></a>    <span class="at">class =</span> <span class="st">"b"</span>,</span>
+<span id="cb35-93"><a href="#cb35-93"></a>    <span class="at">coef =</span> <span class="st">"Intercept"</span></span>
+<span id="cb35-94"><a href="#cb35-94"></a>  ),</span>
+<span id="cb35-95"><a href="#cb35-95"></a>  <span class="fu">prior</span>(</span>
+<span id="cb35-96"><a href="#cb35-96"></a>    <span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">20</span>),</span>
+<span id="cb35-97"><a href="#cb35-97"></a>    <span class="at">class =</span> <span class="st">"b"</span>,</span>
+<span id="cb35-98"><a href="#cb35-98"></a>    <span class="at">coef =</span> <span class="st">"Days"</span></span>
+<span id="cb35-99"><a href="#cb35-99"></a>  ),</span>
+<span id="cb35-100"><a href="#cb35-100"></a>  <span class="fu">prior</span>(</span>
+<span id="cb35-101"><a href="#cb35-101"></a>    <span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">100</span>),</span>
+<span id="cb35-102"><a href="#cb35-102"></a>    <span class="at">class =</span> <span class="st">"sigma"</span></span>
+<span id="cb35-103"><a href="#cb35-103"></a>  )</span>
+<span id="cb35-104"><a href="#cb35-104"></a>))</span>
+<span id="cb35-105"><a href="#cb35-105"></a><span class="in">```</span></span>
+<span id="cb35-106"><a href="#cb35-106"></a></span>
+<span id="cb35-107"><a href="#cb35-107"></a>And then fit the model:</span>
+<span id="cb35-108"><a href="#cb35-108"></a></span>
+<span id="cb35-111"><a href="#cb35-111"></a><span class="in">```{r}</span></span>
+<span id="cb35-112"><a href="#cb35-112"></a>sleepstudy_pooled_fit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
+<span id="cb35-113"><a href="#cb35-113"></a>  <span class="at">formula =</span> sleepstudy_pooled_formula,</span>
+<span id="cb35-114"><a href="#cb35-114"></a>  <span class="at">prior =</span> sleepstudy_pooled_priors,</span>
+<span id="cb35-115"><a href="#cb35-115"></a>  <span class="at">data =</span> sleepstudy</span>
+<span id="cb35-116"><a href="#cb35-116"></a>)</span>
+<span id="cb35-117"><a href="#cb35-117"></a><span class="in">```</span></span>
+<span id="cb35-118"><a href="#cb35-118"></a></span>
+<span id="cb35-119"><a href="#cb35-119"></a>We can add the leave-one-out CV criterion to the fit object, and then view the output</span>
+<span id="cb35-120"><a href="#cb35-120"></a></span>
+<span id="cb35-123"><a href="#cb35-123"></a><span class="in">```{r}</span></span>
+<span id="cb35-124"><a href="#cb35-124"></a>sleepstudy_pooled_fit <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(</span>
+<span id="cb35-125"><a href="#cb35-125"></a>  sleepstudy_pooled_fit,</span>
+<span id="cb35-126"><a href="#cb35-126"></a>  <span class="at">criterion =</span> <span class="st">"loo"</span></span>
+<span id="cb35-127"><a href="#cb35-127"></a>)</span>
+<span id="cb35-128"><a href="#cb35-128"></a></span>
+<span id="cb35-129"><a href="#cb35-129"></a><span class="fu">loo</span>(sleepstudy_pooled_fit)</span>
+<span id="cb35-130"><a href="#cb35-130"></a><span class="in">```</span></span>
+<span id="cb35-131"><a href="#cb35-131"></a></span>
+<span id="cb35-132"><a href="#cb35-132"></a></span>
+<span id="cb35-133"><a href="#cb35-133"></a><span class="fu"># Sleep deprivation extension</span></span>
+<span id="cb35-134"><a href="#cb35-134"></a></span>
+<span id="cb35-135"><a href="#cb35-135"></a></span>
+<span id="cb35-136"><a href="#cb35-136"></a>Here is an example of a pooled model with spline</span>
+<span id="cb35-139"><a href="#cb35-139"></a><span class="in">```{r}</span></span>
+<span id="cb35-140"><a href="#cb35-140"></a>sleepstudy_pooled_spline_formula <span class="ot">&lt;-</span> <span class="fu">bf</span>(</span>
+<span id="cb35-141"><a href="#cb35-141"></a>  Reaction <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> Days <span class="sc">+</span> <span class="fu">s</span>(Days),</span>
+<span id="cb35-142"><a href="#cb35-142"></a>  <span class="at">family =</span> <span class="st">"gaussian"</span>,</span>
+<span id="cb35-143"><a href="#cb35-143"></a>  <span class="at">center =</span> <span class="cn">FALSE</span></span>
+<span id="cb35-144"><a href="#cb35-144"></a>)</span>
+<span id="cb35-145"><a href="#cb35-145"></a></span>
+<span id="cb35-146"><a href="#cb35-146"></a></span>
+<span id="cb35-147"><a href="#cb35-147"></a>sleepstudy_pooled_spline_priors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb35-148"><a href="#cb35-148"></a>  <span class="fu">prior</span>(</span>
+<span id="cb35-149"><a href="#cb35-149"></a>    <span class="fu">normal</span>(<span class="dv">250</span>, <span class="dv">100</span>),</span>
+<span id="cb35-150"><a href="#cb35-150"></a>    <span class="at">class =</span> <span class="st">"b"</span>,</span>
+<span id="cb35-151"><a href="#cb35-151"></a>    <span class="at">coef =</span> <span class="st">"Intercept"</span></span>
+<span id="cb35-152"><a href="#cb35-152"></a>  ),</span>
+<span id="cb35-153"><a href="#cb35-153"></a>  <span class="fu">prior</span>(</span>
+<span id="cb35-154"><a href="#cb35-154"></a>    <span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">20</span>),</span>
+<span id="cb35-155"><a href="#cb35-155"></a>    <span class="at">class =</span> <span class="st">"b"</span>,</span>
+<span id="cb35-156"><a href="#cb35-156"></a>    <span class="at">coef =</span> <span class="st">"Days"</span></span>
+<span id="cb35-157"><a href="#cb35-157"></a>  ),</span>
+<span id="cb35-158"><a href="#cb35-158"></a>  <span class="fu">prior</span>(</span>
+<span id="cb35-159"><a href="#cb35-159"></a>    <span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">100</span>),</span>
+<span id="cb35-160"><a href="#cb35-160"></a>    <span class="at">class =</span> <span class="st">"sigma"</span></span>
+<span id="cb35-161"><a href="#cb35-161"></a>  ),</span>
+<span id="cb35-162"><a href="#cb35-162"></a>  <span class="fu">prior</span>(</span>
+<span id="cb35-163"><a href="#cb35-163"></a>    <span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">20</span>),</span>
+<span id="cb35-164"><a href="#cb35-164"></a>    <span class="at">class =</span> <span class="st">"b"</span>,</span>
+<span id="cb35-165"><a href="#cb35-165"></a>    <span class="at">coef =</span> <span class="st">"sDays_1"</span></span>
+<span id="cb35-166"><a href="#cb35-166"></a>  )</span>
+<span id="cb35-167"><a href="#cb35-167"></a>)</span>
+<span id="cb35-168"><a href="#cb35-168"></a></span>
+<span id="cb35-169"><a href="#cb35-169"></a>sleepstudy_pooled_spline_fit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
+<span id="cb35-170"><a href="#cb35-170"></a>  <span class="at">formula =</span> sleepstudy_pooled_spline_formula,</span>
+<span id="cb35-171"><a href="#cb35-171"></a>  <span class="at">prior =</span> sleepstudy_pooled_spline_priors,</span>
+<span id="cb35-172"><a href="#cb35-172"></a>  <span class="at">data =</span> sleepstudy,</span>
+<span id="cb35-173"><a href="#cb35-173"></a>  <span class="at">family =</span> <span class="st">"gaussian"</span></span>
+<span id="cb35-174"><a href="#cb35-174"></a>)</span>
+<span id="cb35-175"><a href="#cb35-175"></a></span>
+<span id="cb35-176"><a href="#cb35-176"></a><span class="in">```</span></span>
+<span id="cb35-177"><a href="#cb35-177"></a></span>
+<span id="cb35-178"><a href="#cb35-178"></a>Adding the loo criterion:</span>
+<span id="cb35-179"><a href="#cb35-179"></a></span>
+<span id="cb35-182"><a href="#cb35-182"></a><span class="in">```{r}</span></span>
+<span id="cb35-183"><a href="#cb35-183"></a>sleepstudy_pooled_spline_fit <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(</span>
+<span id="cb35-184"><a href="#cb35-184"></a>  sleepstudy_pooled_spline_fit,</span>
+<span id="cb35-185"><a href="#cb35-185"></a>  <span class="at">criterion =</span> <span class="st">"loo"</span></span>
+<span id="cb35-186"><a href="#cb35-186"></a>)</span>
+<span id="cb35-187"><a href="#cb35-187"></a></span>
+<span id="cb35-188"><a href="#cb35-188"></a></span>
+<span id="cb35-189"><a href="#cb35-189"></a><span class="in">```</span></span>
+<span id="cb35-190"><a href="#cb35-190"></a></span>
+<span id="cb35-191"><a href="#cb35-191"></a></span>
+<span id="cb35-192"><a href="#cb35-192"></a>Compare to the other model</span>
+<span id="cb35-193"><a href="#cb35-193"></a></span>
+<span id="cb35-196"><a href="#cb35-196"></a><span class="in">```{r}</span></span>
+<span id="cb35-197"><a href="#cb35-197"></a><span class="fu">loo_compare</span>(</span>
+<span id="cb35-198"><a href="#cb35-198"></a>  <span class="fu">loo</span>(sleepstudy_pooled_fit),</span>
+<span id="cb35-199"><a href="#cb35-199"></a>  <span class="fu">loo</span>(sleepstudy_pooled_spline_fit)</span>
+<span id="cb35-200"><a href="#cb35-200"></a>)</span>
+<span id="cb35-201"><a href="#cb35-201"></a></span>
+<span id="cb35-202"><a href="#cb35-202"></a><span class="in">```</span></span>
+<span id="cb35-203"><a href="#cb35-203"></a></span>
+<span id="cb35-204"><a href="#cb35-204"></a></span>
+<span id="cb35-205"><a href="#cb35-205"></a>If there are high Pareto-k values</span>
+<span id="cb35-206"><a href="#cb35-206"></a></span>
+<span id="cb35-207"><a href="#cb35-207"></a>First try moment matching:</span>
+<span id="cb35-210"><a href="#cb35-210"></a><span class="in">```{r}</span></span>
+<span id="cb35-211"><a href="#cb35-211"></a>sleepstudy_pooled_spline_fit <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(</span>
+<span id="cb35-212"><a href="#cb35-212"></a>  sleepstudy_pooled_spline_fit,</span>
+<span id="cb35-213"><a href="#cb35-213"></a>  <span class="at">criterion =</span> <span class="st">"loo"</span>,</span>
+<span id="cb35-214"><a href="#cb35-214"></a>  <span class="at">moment_match =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb35-215"><a href="#cb35-215"></a>  <span class="at">overwrite =</span> <span class="cn">TRUE</span></span>
+<span id="cb35-216"><a href="#cb35-216"></a>)</span>
+<span id="cb35-217"><a href="#cb35-217"></a></span>
+<span id="cb35-218"><a href="#cb35-218"></a><span class="in">```</span></span>
+<span id="cb35-219"><a href="#cb35-219"></a></span>
+<span id="cb35-220"><a href="#cb35-220"></a>Then if there are a few remaining (and refitting is not going to take forever), try moment matching and reloo</span>
+<span id="cb35-221"><a href="#cb35-221"></a></span>
+<span id="cb35-224"><a href="#cb35-224"></a><span class="in">```{r}</span></span>
+<span id="cb35-225"><a href="#cb35-225"></a>sleepstudy_pooled_spline_fit <span class="ot">&lt;-</span> <span class="fu">add_criterion</span>(</span>
+<span id="cb35-226"><a href="#cb35-226"></a>  sleepstudy_pooled_spline_fit,</span>
+<span id="cb35-227"><a href="#cb35-227"></a>  <span class="at">criterion =</span> <span class="st">"loo"</span>,</span>
+<span id="cb35-228"><a href="#cb35-228"></a>  <span class="at">moment_match =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb35-229"><a href="#cb35-229"></a>  <span class="at">reloo =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb35-230"><a href="#cb35-230"></a>  <span class="at">overwrite =</span> <span class="cn">TRUE</span></span>
+<span id="cb35-231"><a href="#cb35-231"></a>)</span>
+<span id="cb35-232"><a href="#cb35-232"></a></span>
+<span id="cb35-233"><a href="#cb35-233"></a><span class="in">```</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

@@ -447,76 +447,71 @@ Attaching package: 'brms'</code></pre>
 <div class="cell-output cell-output-stderr">
 <pre><code>- CmdStan version: 2.36.0</code></pre>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-A newer version of CmdStan is available. See ?install_cmdstan() to install it.
-To disable this check set option or environment variable cmdstanr_no_ver_check=TRUE.</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>cmdstan_installed <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
-<span id="cb21-2"><a href="#cb21-2"></a>  res <span class="ot">&lt;-</span> <span class="fu">try</span>(out <span class="ot">&lt;-</span> cmdstanr<span class="sc">::</span><span class="fu">cmdstan_path</span>(), <span class="at">silent =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb21-3"><a href="#cb21-3"></a>  <span class="sc">!</span><span class="fu">inherits</span>(res, <span class="st">"try-error"</span>)</span>
-<span id="cb21-4"><a href="#cb21-4"></a>}</span>
-<span id="cb21-5"><a href="#cb21-5"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">cmdstan_installed</span>()){</span>
-<span id="cb21-6"><a href="#cb21-6"></a>    <span class="fu">install_cmdstan</span>()</span>
-<span id="cb21-7"><a href="#cb21-7"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>cmdstan_installed <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
+<span id="cb20-2"><a href="#cb20-2"></a>  res <span class="ot">&lt;-</span> <span class="fu">try</span>(out <span class="ot">&lt;-</span> cmdstanr<span class="sc">::</span><span class="fu">cmdstan_path</span>(), <span class="at">silent =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb20-3"><a href="#cb20-3"></a>  <span class="sc">!</span><span class="fu">inherits</span>(res, <span class="st">"try-error"</span>)</span>
+<span id="cb20-4"><a href="#cb20-4"></a>}</span>
+<span id="cb20-5"><a href="#cb20-5"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">cmdstan_installed</span>()){</span>
+<span id="cb20-6"><a href="#cb20-6"></a>    <span class="fu">install_cmdstan</span>()</span>
+<span id="cb20-7"><a href="#cb20-7"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="simulation-warm-up" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Simulation warm-up</h1>
 <p>Here is the function to simulate and plot observations from a hierarchical data-generating process.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>hierarchical_sim <span class="ot">&lt;-</span> <span class="cf">function</span>(group_pop_mean,</span>
-<span id="cb22-2"><a href="#cb22-2"></a>                             between_group_sd,</span>
-<span id="cb22-3"><a href="#cb22-3"></a>                             within_group_sd,</span>
-<span id="cb22-4"><a href="#cb22-4"></a>                             n_groups,</span>
-<span id="cb22-5"><a href="#cb22-5"></a>                             n_obs_per_group</span>
-<span id="cb22-6"><a href="#cb22-6"></a>                             ) {</span>
-<span id="cb22-7"><a href="#cb22-7"></a>  <span class="co"># Generate group means</span></span>
-<span id="cb22-8"><a href="#cb22-8"></a>  group_means <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(</span>
-<span id="cb22-9"><a href="#cb22-9"></a>    <span class="at">n =</span> n_groups,</span>
-<span id="cb22-10"><a href="#cb22-10"></a>    <span class="at">mean =</span> group_pop_mean,</span>
-<span id="cb22-11"><a href="#cb22-11"></a>    <span class="at">sd =</span> between_group_sd</span>
-<span id="cb22-12"><a href="#cb22-12"></a>  )</span>
-<span id="cb22-13"><a href="#cb22-13"></a></span>
-<span id="cb22-14"><a href="#cb22-14"></a>  <span class="co"># Generate observations</span></span>
-<span id="cb22-15"><a href="#cb22-15"></a></span>
-<span id="cb22-16"><a href="#cb22-16"></a>  <span class="do">## Create an empty vector for observations</span></span>
-<span id="cb22-17"><a href="#cb22-17"></a>  y <span class="ot">&lt;-</span> <span class="fu">numeric</span>()</span>
-<span id="cb22-18"><a href="#cb22-18"></a>  <span class="do">## Create a vector for the group identifier</span></span>
-<span id="cb22-19"><a href="#cb22-19"></a>  group <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>n_groups, <span class="at">each =</span> n_obs_per_group)</span>
-<span id="cb22-20"><a href="#cb22-20"></a>  </span>
-<span id="cb22-21"><a href="#cb22-21"></a>  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_groups) {</span>
-<span id="cb22-22"><a href="#cb22-22"></a>    <span class="do">### Generate one group observations</span></span>
-<span id="cb22-23"><a href="#cb22-23"></a>    group_y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(</span>
-<span id="cb22-24"><a href="#cb22-24"></a>      <span class="at">n =</span> n_obs_per_group,</span>
-<span id="cb22-25"><a href="#cb22-25"></a>      <span class="at">mean =</span> group_means[j],</span>
-<span id="cb22-26"><a href="#cb22-26"></a>      <span class="at">sd =</span> within_group_sd</span>
-<span id="cb22-27"><a href="#cb22-27"></a>    )</span>
-<span id="cb22-28"><a href="#cb22-28"></a>    <span class="do">### Append the group observations to the vector</span></span>
-<span id="cb22-29"><a href="#cb22-29"></a>    y <span class="ot">&lt;-</span> <span class="fu">c</span>(y, group_y)</span>
-<span id="cb22-30"><a href="#cb22-30"></a>  }</span>
-<span id="cb22-31"><a href="#cb22-31"></a></span>
-<span id="cb22-32"><a href="#cb22-32"></a>  <span class="co"># Combine into a data frame</span></span>
-<span id="cb22-33"><a href="#cb22-33"></a>  data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb22-34"><a href="#cb22-34"></a>    <span class="at">group =</span> <span class="fu">factor</span>(group),</span>
-<span id="cb22-35"><a href="#cb22-35"></a>    <span class="at">y =</span> y</span>
-<span id="cb22-36"><a href="#cb22-36"></a>  )</span>
-<span id="cb22-37"><a href="#cb22-37"></a></span>
-<span id="cb22-38"><a href="#cb22-38"></a>  <span class="co"># Plot the data</span></span>
-<span id="cb22-39"><a href="#cb22-39"></a>  <span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> y, <span class="at">y =</span> group)) <span class="sc">+</span></span>
-<span id="cb22-40"><a href="#cb22-40"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb22-41"><a href="#cb22-41"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> group_pop_mean, <span class="at">linetype =</span> <span class="st">"dashed"</span>)</span>
-<span id="cb22-42"><a href="#cb22-42"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>hierarchical_sim <span class="ot">&lt;-</span> <span class="cf">function</span>(group_pop_mean,</span>
+<span id="cb21-2"><a href="#cb21-2"></a>                             between_group_sd,</span>
+<span id="cb21-3"><a href="#cb21-3"></a>                             within_group_sd,</span>
+<span id="cb21-4"><a href="#cb21-4"></a>                             n_groups,</span>
+<span id="cb21-5"><a href="#cb21-5"></a>                             n_obs_per_group</span>
+<span id="cb21-6"><a href="#cb21-6"></a>                             ) {</span>
+<span id="cb21-7"><a href="#cb21-7"></a>  <span class="co"># Generate group means</span></span>
+<span id="cb21-8"><a href="#cb21-8"></a>  group_means <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(</span>
+<span id="cb21-9"><a href="#cb21-9"></a>    <span class="at">n =</span> n_groups,</span>
+<span id="cb21-10"><a href="#cb21-10"></a>    <span class="at">mean =</span> group_pop_mean,</span>
+<span id="cb21-11"><a href="#cb21-11"></a>    <span class="at">sd =</span> between_group_sd</span>
+<span id="cb21-12"><a href="#cb21-12"></a>  )</span>
+<span id="cb21-13"><a href="#cb21-13"></a></span>
+<span id="cb21-14"><a href="#cb21-14"></a>  <span class="co"># Generate observations</span></span>
+<span id="cb21-15"><a href="#cb21-15"></a></span>
+<span id="cb21-16"><a href="#cb21-16"></a>  <span class="do">## Create an empty vector for observations</span></span>
+<span id="cb21-17"><a href="#cb21-17"></a>  y <span class="ot">&lt;-</span> <span class="fu">numeric</span>()</span>
+<span id="cb21-18"><a href="#cb21-18"></a>  <span class="do">## Create a vector for the group identifier</span></span>
+<span id="cb21-19"><a href="#cb21-19"></a>  group <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>n_groups, <span class="at">each =</span> n_obs_per_group)</span>
+<span id="cb21-20"><a href="#cb21-20"></a>  </span>
+<span id="cb21-21"><a href="#cb21-21"></a>  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_groups) {</span>
+<span id="cb21-22"><a href="#cb21-22"></a>    <span class="do">### Generate one group observations</span></span>
+<span id="cb21-23"><a href="#cb21-23"></a>    group_y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(</span>
+<span id="cb21-24"><a href="#cb21-24"></a>      <span class="at">n =</span> n_obs_per_group,</span>
+<span id="cb21-25"><a href="#cb21-25"></a>      <span class="at">mean =</span> group_means[j],</span>
+<span id="cb21-26"><a href="#cb21-26"></a>      <span class="at">sd =</span> within_group_sd</span>
+<span id="cb21-27"><a href="#cb21-27"></a>    )</span>
+<span id="cb21-28"><a href="#cb21-28"></a>    <span class="do">### Append the group observations to the vector</span></span>
+<span id="cb21-29"><a href="#cb21-29"></a>    y <span class="ot">&lt;-</span> <span class="fu">c</span>(y, group_y)</span>
+<span id="cb21-30"><a href="#cb21-30"></a>  }</span>
+<span id="cb21-31"><a href="#cb21-31"></a></span>
+<span id="cb21-32"><a href="#cb21-32"></a>  <span class="co"># Combine into a data frame</span></span>
+<span id="cb21-33"><a href="#cb21-33"></a>  data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb21-34"><a href="#cb21-34"></a>    <span class="at">group =</span> <span class="fu">factor</span>(group),</span>
+<span id="cb21-35"><a href="#cb21-35"></a>    <span class="at">y =</span> y</span>
+<span id="cb21-36"><a href="#cb21-36"></a>  )</span>
+<span id="cb21-37"><a href="#cb21-37"></a></span>
+<span id="cb21-38"><a href="#cb21-38"></a>  <span class="co"># Plot the data</span></span>
+<span id="cb21-39"><a href="#cb21-39"></a>  <span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> y, <span class="at">y =</span> group)) <span class="sc">+</span></span>
+<span id="cb21-40"><a href="#cb21-40"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb21-41"><a href="#cb21-41"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> group_pop_mean, <span class="at">linetype =</span> <span class="st">"dashed"</span>)</span>
+<span id="cb21-42"><a href="#cb21-42"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Example using the function:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">hierarchical_sim</span>(</span>
-<span id="cb23-2"><a href="#cb23-2"></a>  <span class="at">group_pop_mean =</span> <span class="dv">50</span>,</span>
-<span id="cb23-3"><a href="#cb23-3"></a>  <span class="at">between_group_sd =</span> <span class="dv">5</span>,</span>
-<span id="cb23-4"><a href="#cb23-4"></a>  <span class="at">within_group_sd =</span> <span class="dv">1</span>,</span>
-<span id="cb23-5"><a href="#cb23-5"></a>  <span class="at">n_groups =</span> <span class="dv">10</span>,</span>
-<span id="cb23-6"><a href="#cb23-6"></a>  <span class="at">n_obs_per_group =</span> <span class="dv">5</span></span>
-<span id="cb23-7"><a href="#cb23-7"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">hierarchical_sim</span>(</span>
+<span id="cb22-2"><a href="#cb22-2"></a>  <span class="at">group_pop_mean =</span> <span class="dv">50</span>,</span>
+<span id="cb22-3"><a href="#cb22-3"></a>  <span class="at">between_group_sd =</span> <span class="dv">5</span>,</span>
+<span id="cb22-4"><a href="#cb22-4"></a>  <span class="at">within_group_sd =</span> <span class="dv">1</span>,</span>
+<span id="cb22-5"><a href="#cb22-5"></a>  <span class="at">n_groups =</span> <span class="dv">10</span>,</span>
+<span id="cb22-6"><a href="#cb22-6"></a>  <span class="at">n_obs_per_group =</span> <span class="dv">5</span></span>
+<span id="cb22-7"><a href="#cb22-7"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -532,60 +527,60 @@ To disable this check set option or environment variable cmdstanr_no_ver_check=T
 <p>Below is some code for fitting a brms model. This model is a simple pooled model. You will need to fit a hierarchical model as explained in the assignment, but this code should help getting started.</p>
 <p>Load the dataset</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="fu">data</span>(sleepstudy, <span class="at">package =</span> <span class="st">"lme4"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">data</span>(sleepstudy, <span class="at">package =</span> <span class="st">"lme4"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-error">
 <pre><code>Error in find.package(package, lib.loc, verbose = verbose): there is no package called 'lme4'</code></pre>
 </div>
 </div>
 <p>Specify the formula and observation family:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>sleepstudy_pooled_formula <span class="ot">&lt;-</span> <span class="fu">bf</span>(</span>
-<span id="cb26-2"><a href="#cb26-2"></a>  Reaction <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> Days,</span>
-<span id="cb26-3"><a href="#cb26-3"></a>  <span class="at">family =</span> <span class="st">"gaussian"</span>,</span>
-<span id="cb26-4"><a href="#cb26-4"></a>  <span class="at">center =</span> <span class="cn">FALSE</span></span>
-<span id="cb26-5"><a href="#cb26-5"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>sleepstudy_pooled_formula <span class="ot">&lt;-</span> <span class="fu">bf</span>(</span>
+<span id="cb25-2"><a href="#cb25-2"></a>  Reaction <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> Days,</span>
+<span id="cb25-3"><a href="#cb25-3"></a>  <span class="at">family =</span> <span class="st">"gaussian"</span>,</span>
+<span id="cb25-4"><a href="#cb25-4"></a>  <span class="at">center =</span> <span class="cn">FALSE</span></span>
+<span id="cb25-5"><a href="#cb25-5"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We can see the parameters and default priors with</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="fu">get_prior</span>(pooled_formula, <span class="at">data =</span> sleepstudy)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="fu">get_prior</span>(pooled_formula, <span class="at">data =</span> sleepstudy)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We can then specify the priors:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>(sleepstudy_pooled_priors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb28-2"><a href="#cb28-2"></a>  <span class="fu">prior</span>(</span>
-<span id="cb28-3"><a href="#cb28-3"></a>    <span class="fu">normal</span>(<span class="dv">400</span>, <span class="dv">100</span>),</span>
-<span id="cb28-4"><a href="#cb28-4"></a>    <span class="at">class =</span> <span class="st">"b"</span>,</span>
-<span id="cb28-5"><a href="#cb28-5"></a>    <span class="at">coef =</span> <span class="st">"Intercept"</span></span>
-<span id="cb28-6"><a href="#cb28-6"></a>  ),</span>
-<span id="cb28-7"><a href="#cb28-7"></a>  <span class="fu">prior</span>(</span>
-<span id="cb28-8"><a href="#cb28-8"></a>    <span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">50</span>),</span>
-<span id="cb28-9"><a href="#cb28-9"></a>    <span class="at">class =</span> <span class="st">"b"</span>,</span>
-<span id="cb28-10"><a href="#cb28-10"></a>    <span class="at">coef =</span> <span class="st">"Days"</span></span>
-<span id="cb28-11"><a href="#cb28-11"></a>  ),</span>
-<span id="cb28-12"><a href="#cb28-12"></a>  <span class="fu">prior</span>(</span>
-<span id="cb28-13"><a href="#cb28-13"></a>    <span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">50</span>),</span>
-<span id="cb28-14"><a href="#cb28-14"></a>    <span class="at">class =</span> <span class="st">"sigma"</span></span>
-<span id="cb28-15"><a href="#cb28-15"></a>  )</span>
-<span id="cb28-16"><a href="#cb28-16"></a>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>(sleepstudy_pooled_priors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb27-2"><a href="#cb27-2"></a>  <span class="fu">prior</span>(</span>
+<span id="cb27-3"><a href="#cb27-3"></a>    <span class="fu">normal</span>(<span class="dv">400</span>, <span class="dv">100</span>),</span>
+<span id="cb27-4"><a href="#cb27-4"></a>    <span class="at">class =</span> <span class="st">"b"</span>,</span>
+<span id="cb27-5"><a href="#cb27-5"></a>    <span class="at">coef =</span> <span class="st">"Intercept"</span></span>
+<span id="cb27-6"><a href="#cb27-6"></a>  ),</span>
+<span id="cb27-7"><a href="#cb27-7"></a>  <span class="fu">prior</span>(</span>
+<span id="cb27-8"><a href="#cb27-8"></a>    <span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">50</span>),</span>
+<span id="cb27-9"><a href="#cb27-9"></a>    <span class="at">class =</span> <span class="st">"b"</span>,</span>
+<span id="cb27-10"><a href="#cb27-10"></a>    <span class="at">coef =</span> <span class="st">"Days"</span></span>
+<span id="cb27-11"><a href="#cb27-11"></a>  ),</span>
+<span id="cb27-12"><a href="#cb27-12"></a>  <span class="fu">prior</span>(</span>
+<span id="cb27-13"><a href="#cb27-13"></a>    <span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">50</span>),</span>
+<span id="cb27-14"><a href="#cb27-14"></a>    <span class="at">class =</span> <span class="st">"sigma"</span></span>
+<span id="cb27-15"><a href="#cb27-15"></a>  )</span>
+<span id="cb27-16"><a href="#cb27-16"></a>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>And then fit the model:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>sleepstudy_pooled_fit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
-<span id="cb29-2"><a href="#cb29-2"></a>  <span class="at">formula =</span> pooled_formula,</span>
-<span id="cb29-3"><a href="#cb29-3"></a>  <span class="at">prior =</span> sleepstudy_pooled_priors,</span>
-<span id="cb29-4"><a href="#cb29-4"></a>  <span class="at">data =</span> sleepstudy</span>
-<span id="cb29-5"><a href="#cb29-5"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>sleepstudy_pooled_fit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
+<span id="cb28-2"><a href="#cb28-2"></a>  <span class="at">formula =</span> pooled_formula,</span>
+<span id="cb28-3"><a href="#cb28-3"></a>  <span class="at">prior =</span> sleepstudy_pooled_priors,</span>
+<span id="cb28-4"><a href="#cb28-4"></a>  <span class="at">data =</span> sleepstudy</span>
+<span id="cb28-5"><a href="#cb28-5"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We can inspect the model fit:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="fu">summary</span>(pooled_fit)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="fu">summary</span>(pooled_fit)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>To plot <code>conditional_effects</code>, you can do that as follows:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>conditions <span class="ot">&lt;-</span> <span class="fu">make_conditions</span>(sleepstudy, <span class="st">"Subject"</span>, <span class="at">incl_vars =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb31-2"><a href="#cb31-2"></a>me <span class="ot">&lt;-</span> <span class="fu">conditional_effects</span>(sleepstudy_pooled_fit, <span class="at">conditions =</span> conditions, </span>
-<span id="cb31-3"><a href="#cb31-3"></a>                          <span class="at">re_formula =</span> <span class="cn">NULL</span>)</span>
-<span id="cb31-4"><a href="#cb31-4"></a><span class="fu">plot</span>(me, <span class="at">ncol =</span> <span class="dv">6</span>, <span class="at">points =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>conditions <span class="ot">&lt;-</span> <span class="fu">make_conditions</span>(sleepstudy, <span class="st">"Subject"</span>, <span class="at">incl_vars =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb30-2"><a href="#cb30-2"></a>me <span class="ot">&lt;-</span> <span class="fu">conditional_effects</span>(sleepstudy_pooled_fit, <span class="at">conditions =</span> conditions, </span>
+<span id="cb30-3"><a href="#cb30-3"></a>                          <span class="at">re_formula =</span> <span class="cn">NULL</span>)</span>
+<span id="cb30-4"><a href="#cb30-4"></a><span class="fu">plot</span>(me, <span class="at">ncol =</span> <span class="dv">6</span>, <span class="at">points =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="school-calendar" class="level1" data-number="4">
@@ -593,64 +588,64 @@ To disable this check set option or environment variable cmdstanr_no_ver_check=T
 <p>Meta-analysis models can be fit in brms. When the standard error is known, the <code>se()</code> function can be used to specify it.</p>
 <p>The dataset <code>dat.konstantopoulos2011</code> has the observations for the school calendar intervention meta-analysis.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="fu">data</span>(dat.konstantopoulos2011, <span class="at">package =</span> <span class="st">"metadat"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="fu">data</span>(dat.konstantopoulos2011, <span class="at">package =</span> <span class="st">"metadat"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>As mentioned in the assignment instructions, a unique identifier for school needs to be created by combining the district and school:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>schoolcalendar_data <span class="ot">&lt;-</span> dat.konstantopoulos2011 <span class="sc">|&gt;</span></span>
-<span id="cb33-2"><a href="#cb33-2"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
-<span id="cb33-3"><a href="#cb33-3"></a>    <span class="at">school =</span> <span class="fu">factor</span>(school),</span>
-<span id="cb33-4"><a href="#cb33-4"></a>    <span class="at">district =</span> <span class="fu">factor</span>(district),</span>
-<span id="cb33-5"><a href="#cb33-5"></a>    <span class="at">district_school =</span> <span class="fu">interaction</span>(district, school, <span class="at">drop =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">"_"</span>)</span>
-<span id="cb33-6"><a href="#cb33-6"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>schoolcalendar_data <span class="ot">&lt;-</span> dat.konstantopoulos2011 <span class="sc">|&gt;</span></span>
+<span id="cb32-2"><a href="#cb32-2"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb32-3"><a href="#cb32-3"></a>    <span class="at">school =</span> <span class="fu">factor</span>(school),</span>
+<span id="cb32-4"><a href="#cb32-4"></a>    <span class="at">district =</span> <span class="fu">factor</span>(district),</span>
+<span id="cb32-5"><a href="#cb32-5"></a>    <span class="at">district_school =</span> <span class="fu">interaction</span>(district, school, <span class="at">drop =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">"_"</span>)</span>
+<span id="cb32-6"><a href="#cb32-6"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Then the models can be fit</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>schoolcalendar_pooled_formula <span class="ot">&lt;-</span> <span class="fu">bf</span>(</span>
-<span id="cb34-2"><a href="#cb34-2"></a>  <span class="at">formula =</span> yi <span class="sc">|</span> <span class="fu">se</span>(<span class="fu">sqrt</span>(vi)) <span class="sc">~</span> <span class="dv">1</span>,</span>
-<span id="cb34-3"><a href="#cb34-3"></a>  <span class="at">family =</span> <span class="st">"gaussian"</span></span>
-<span id="cb34-4"><a href="#cb34-4"></a>)  </span>
-<span id="cb34-5"><a href="#cb34-5"></a></span>
-<span id="cb34-6"><a href="#cb34-6"></a>schoolcalendar_pooled_fit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
-<span id="cb34-7"><a href="#cb34-7"></a>  <span class="at">formula =</span> schoolcalendar_pooled_formula,</span>
-<span id="cb34-8"><a href="#cb34-8"></a>  <span class="at">data =</span> schoolcalendar_data</span>
-<span id="cb34-9"><a href="#cb34-9"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>schoolcalendar_pooled_formula <span class="ot">&lt;-</span> <span class="fu">bf</span>(</span>
+<span id="cb33-2"><a href="#cb33-2"></a>  <span class="at">formula =</span> yi <span class="sc">|</span> <span class="fu">se</span>(<span class="fu">sqrt</span>(vi)) <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb33-3"><a href="#cb33-3"></a>  <span class="at">family =</span> <span class="st">"gaussian"</span></span>
+<span id="cb33-4"><a href="#cb33-4"></a>)  </span>
+<span id="cb33-5"><a href="#cb33-5"></a></span>
+<span id="cb33-6"><a href="#cb33-6"></a>schoolcalendar_pooled_fit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
+<span id="cb33-7"><a href="#cb33-7"></a>  <span class="at">formula =</span> schoolcalendar_pooled_formula,</span>
+<span id="cb33-8"><a href="#cb33-8"></a>  <span class="at">data =</span> schoolcalendar_data</span>
+<span id="cb33-9"><a href="#cb33-9"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Predictions for a new school can be made using the <code>posterior_epred</code> function:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>new_school <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb35-2"><a href="#cb35-2"></a>  <span class="at">school =</span> <span class="fu">factor</span>(<span class="dv">1</span>),</span>
-<span id="cb35-3"><a href="#cb35-3"></a>  <span class="at">district =</span> <span class="fu">factor</span>(<span class="dv">1</span>),</span>
-<span id="cb35-4"><a href="#cb35-4"></a>  <span class="at">district_school =</span> <span class="fu">factor</span>(<span class="st">"1_1"</span>),</span>
-<span id="cb35-5"><a href="#cb35-5"></a>  <span class="at">vi =</span> <span class="dv">0</span> <span class="co"># the expectation of the prediction is not affected by the sampling variance, so this can be any number</span></span>
-<span id="cb35-6"><a href="#cb35-6"></a>)</span>
-<span id="cb35-7"><a href="#cb35-7"></a>  </span>
-<span id="cb35-8"><a href="#cb35-8"></a></span>
-<span id="cb35-9"><a href="#cb35-9"></a>schoolcalendar_post_epred <span class="ot">&lt;-</span> <span class="fu">posterior_epred</span>(</span>
-<span id="cb35-10"><a href="#cb35-10"></a>    schoolcalendar_pooled_fit,</span>
-<span id="cb35-11"><a href="#cb35-11"></a>    <span class="at">newdata =</span> new_school,</span>
-<span id="cb35-12"><a href="#cb35-12"></a>    <span class="at">allow_new_levels =</span> <span class="cn">TRUE</span></span>
-<span id="cb35-13"><a href="#cb35-13"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>new_school <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb34-2"><a href="#cb34-2"></a>  <span class="at">school =</span> <span class="fu">factor</span>(<span class="dv">1</span>),</span>
+<span id="cb34-3"><a href="#cb34-3"></a>  <span class="at">district =</span> <span class="fu">factor</span>(<span class="dv">1</span>),</span>
+<span id="cb34-4"><a href="#cb34-4"></a>  <span class="at">district_school =</span> <span class="fu">factor</span>(<span class="st">"1_1"</span>),</span>
+<span id="cb34-5"><a href="#cb34-5"></a>  <span class="at">vi =</span> <span class="dv">0</span> <span class="co"># the expectation of the prediction is not affected by the sampling variance, so this can be any number</span></span>
+<span id="cb34-6"><a href="#cb34-6"></a>)</span>
+<span id="cb34-7"><a href="#cb34-7"></a>  </span>
+<span id="cb34-8"><a href="#cb34-8"></a></span>
+<span id="cb34-9"><a href="#cb34-9"></a>schoolcalendar_post_epred <span class="ot">&lt;-</span> <span class="fu">posterior_epred</span>(</span>
+<span id="cb34-10"><a href="#cb34-10"></a>    schoolcalendar_pooled_fit,</span>
+<span id="cb34-11"><a href="#cb34-11"></a>    <span class="at">newdata =</span> new_school,</span>
+<span id="cb34-12"><a href="#cb34-12"></a>    <span class="at">allow_new_levels =</span> <span class="cn">TRUE</span></span>
+<span id="cb34-13"><a href="#cb34-13"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>It can be helpful to plot the posterior estimates. Here is a function that will do this:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>plot_school_posteriors <span class="ot">&lt;-</span> <span class="cf">function</span>(fit, dataset) {</span>
-<span id="cb36-2"><a href="#cb36-2"></a>  tidybayes<span class="sc">::</span><span class="fu">add_predicted_draws</span>(dataset, fit) <span class="sc">|&gt;</span></span>
-<span id="cb36-3"><a href="#cb36-3"></a>    <span class="fu">ggplot</span>(</span>
-<span id="cb36-4"><a href="#cb36-4"></a>      <span class="fu">aes</span>(</span>
-<span id="cb36-5"><a href="#cb36-5"></a>        <span class="at">x =</span> .prediction,</span>
-<span id="cb36-6"><a href="#cb36-6"></a>        <span class="at">y =</span> <span class="fu">interaction</span>(district, school, <span class="at">sep =</span> <span class="st">", "</span>, <span class="at">lex.order =</span> <span class="cn">TRUE</span>))) <span class="sc">+</span></span>
-<span id="cb36-7"><a href="#cb36-7"></a>    tidybayes<span class="sc">::</span><span class="fu">stat_halfeye</span>() <span class="sc">+</span></span>
-<span id="cb36-8"><a href="#cb36-8"></a>    <span class="fu">ylab</span>(<span class="st">"District, school"</span>) <span class="sc">+</span></span>
-<span id="cb36-9"><a href="#cb36-9"></a>    <span class="fu">xlab</span>(<span class="st">"Posterior effect"</span>)</span>
-<span id="cb36-10"><a href="#cb36-10"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>plot_school_posteriors <span class="ot">&lt;-</span> <span class="cf">function</span>(fit, dataset) {</span>
+<span id="cb35-2"><a href="#cb35-2"></a>  tidybayes<span class="sc">::</span><span class="fu">add_predicted_draws</span>(dataset, fit) <span class="sc">|&gt;</span></span>
+<span id="cb35-3"><a href="#cb35-3"></a>    <span class="fu">ggplot</span>(</span>
+<span id="cb35-4"><a href="#cb35-4"></a>      <span class="fu">aes</span>(</span>
+<span id="cb35-5"><a href="#cb35-5"></a>        <span class="at">x =</span> .prediction,</span>
+<span id="cb35-6"><a href="#cb35-6"></a>        <span class="at">y =</span> <span class="fu">interaction</span>(district, school, <span class="at">sep =</span> <span class="st">", "</span>, <span class="at">lex.order =</span> <span class="cn">TRUE</span>))) <span class="sc">+</span></span>
+<span id="cb35-7"><a href="#cb35-7"></a>    tidybayes<span class="sc">::</span><span class="fu">stat_halfeye</span>() <span class="sc">+</span></span>
+<span id="cb35-8"><a href="#cb35-8"></a>    <span class="fu">ylab</span>(<span class="st">"District, school"</span>) <span class="sc">+</span></span>
+<span id="cb35-9"><a href="#cb35-9"></a>    <span class="fu">xlab</span>(<span class="st">"Posterior effect"</span>)</span>
+<span id="cb35-10"><a href="#cb35-10"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>And can be used as follows:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a><span class="fu">plot_school_posteriors</span>(</span>
-<span id="cb37-2"><a href="#cb37-2"></a>  <span class="at">fit =</span> schoolcalendar_pooled_fit,</span>
-<span id="cb37-3"><a href="#cb37-3"></a>  <span class="at">dataset =</span> schoolcalendar_data</span>
-<span id="cb37-4"><a href="#cb37-4"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a><span class="fu">plot_school_posteriors</span>(</span>
+<span id="cb36-2"><a href="#cb36-2"></a>  <span class="at">fit =</span> schoolcalendar_pooled_fit,</span>
+<span id="cb36-3"><a href="#cb36-3"></a>  <span class="at">dataset =</span> schoolcalendar_data</span>
+<span id="cb36-4"><a href="#cb36-4"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
 
@@ -1122,291 +1117,291 @@ To disable this check set option or environment variable cmdstanr_no_ver_check=T
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb38-1"><a href="#cb38-1"></a><span class="co">---</span></span>
-<span id="cb38-2"><a href="#cb38-2"></a><span class="an">title:</span><span class="co"> "Notebook for Assignment 7"</span></span>
-<span id="cb38-3"><a href="#cb38-3"></a><span class="an">author:</span><span class="co"> "Aki Vehtari et al."</span></span>
-<span id="cb38-4"><a href="#cb38-4"></a><span class="an">format:</span></span>
-<span id="cb38-5"><a href="#cb38-5"></a><span class="co">  html:</span></span>
-<span id="cb38-6"><a href="#cb38-6"></a><span class="co">    toc: true</span></span>
-<span id="cb38-7"><a href="#cb38-7"></a><span class="co">    code-tools: true</span></span>
-<span id="cb38-8"><a href="#cb38-8"></a><span class="co">    code-line-numbers: true</span></span>
-<span id="cb38-9"><a href="#cb38-9"></a><span class="co">    number-sections: true</span></span>
-<span id="cb38-10"><a href="#cb38-10"></a><span class="co">    mainfont: Georgia, serif</span></span>
-<span id="cb38-11"><a href="#cb38-11"></a><span class="an">editor:</span><span class="co"> source</span></span>
-<span id="cb38-12"><a href="#cb38-12"></a><span class="co">---</span></span>
-<span id="cb38-13"><a href="#cb38-13"></a></span>
-<span id="cb38-14"><a href="#cb38-14"></a><span class="fu"># General information</span></span>
-<span id="cb38-15"><a href="#cb38-15"></a></span>
-<span id="cb38-16"><a href="#cb38-16"></a>This assignment relates to Lecture 7 and Chapter 5.</span>
-<span id="cb38-17"><a href="#cb38-17"></a></span>
-<span id="cb38-18"><a href="#cb38-18"></a>We recommend using <span class="co">[</span><span class="ot">JupyterHub</span><span class="co">](https://jupyter.cs.aalto.fi)</span> (which has all the needed packages pre-installed).</span>
-<span id="cb38-19"><a href="#cb38-19"></a></span>
-<span id="cb38-20"><a href="#cb38-20"></a>::: hint</span>
-<span id="cb38-21"><a href="#cb38-21"></a>**Reading instructions:**</span>
-<span id="cb38-22"><a href="#cb38-22"></a></span>
-<span id="cb38-23"><a href="#cb38-23"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">**The reading instructions for BDA3 Chapter 5**</span><span class="co">](../BDA3_notes.html#ch5)</span>.</span>
-<span id="cb38-24"><a href="#cb38-24"></a>:::</span>
-<span id="cb38-25"><a href="#cb38-25"></a></span>
-<span id="cb38-26"><a href="#cb38-26"></a>{{&lt; include includes/_general_cloze_instructions.md &gt;}}</span>
-<span id="cb38-27"><a href="#cb38-27"></a></span>
-<span id="cb38-30"><a href="#cb38-30"></a><span class="in">```{r}</span></span>
-<span id="cb38-31"><a href="#cb38-31"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(tidybayes)) {</span>
-<span id="cb38-32"><a href="#cb38-32"></a>    <span class="fu">install.packages</span>(<span class="st">"tidybayes"</span>)</span>
-<span id="cb38-33"><a href="#cb38-33"></a>    <span class="fu">library</span>(tidybayes)</span>
-<span id="cb38-34"><a href="#cb38-34"></a>}</span>
-<span id="cb38-35"><a href="#cb38-35"></a></span>
-<span id="cb38-36"><a href="#cb38-36"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(brms)) {</span>
-<span id="cb38-37"><a href="#cb38-37"></a>    <span class="fu">install.packages</span>(<span class="st">"brms"</span>)</span>
-<span id="cb38-38"><a href="#cb38-38"></a>    <span class="fu">library</span>(brms)</span>
-<span id="cb38-39"><a href="#cb38-39"></a>}</span>
-<span id="cb38-40"><a href="#cb38-40"></a></span>
-<span id="cb38-41"><a href="#cb38-41"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(ggplot2)) {</span>
-<span id="cb38-42"><a href="#cb38-42"></a>  <span class="fu">install.packages</span>(<span class="st">"ggplot2"</span>)</span>
-<span id="cb38-43"><a href="#cb38-43"></a>  <span class="fu">library</span>(ggplot2)</span>
-<span id="cb38-44"><a href="#cb38-44"></a>}</span>
-<span id="cb38-45"><a href="#cb38-45"></a></span>
-<span id="cb38-46"><a href="#cb38-46"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(metadat)) {</span>
-<span id="cb38-47"><a href="#cb38-47"></a>  <span class="fu">install.packages</span>(<span class="st">"metadat"</span>)</span>
-<span id="cb38-48"><a href="#cb38-48"></a>  <span class="fu">library</span>(metadat)</span>
-<span id="cb38-49"><a href="#cb38-49"></a>}</span>
-<span id="cb38-50"><a href="#cb38-50"></a></span>
-<span id="cb38-51"><a href="#cb38-51"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(cmdstanr)){</span>
-<span id="cb38-52"><a href="#cb38-52"></a>    <span class="fu">install.packages</span>(<span class="st">"cmdstanr"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://mc-stan.org/r-packages/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span>
-<span id="cb38-53"><a href="#cb38-53"></a>    <span class="fu">library</span>(cmdstanr)</span>
-<span id="cb38-54"><a href="#cb38-54"></a>}</span>
-<span id="cb38-55"><a href="#cb38-55"></a>cmdstan_installed <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
-<span id="cb38-56"><a href="#cb38-56"></a>  res <span class="ot">&lt;-</span> <span class="fu">try</span>(out <span class="ot">&lt;-</span> cmdstanr<span class="sc">::</span><span class="fu">cmdstan_path</span>(), <span class="at">silent =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb38-57"><a href="#cb38-57"></a>  <span class="sc">!</span><span class="fu">inherits</span>(res, <span class="st">"try-error"</span>)</span>
-<span id="cb38-58"><a href="#cb38-58"></a>}</span>
-<span id="cb38-59"><a href="#cb38-59"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">cmdstan_installed</span>()){</span>
-<span id="cb38-60"><a href="#cb38-60"></a>    <span class="fu">install_cmdstan</span>()</span>
-<span id="cb38-61"><a href="#cb38-61"></a>}</span>
-<span id="cb38-62"><a href="#cb38-62"></a><span class="in">```</span></span>
-<span id="cb38-63"><a href="#cb38-63"></a></span>
-<span id="cb38-64"><a href="#cb38-64"></a><span class="fu"># Simulation warm-up</span></span>
-<span id="cb38-65"><a href="#cb38-65"></a></span>
-<span id="cb38-66"><a href="#cb38-66"></a>Here is the function to simulate and plot observations from a</span>
-<span id="cb38-67"><a href="#cb38-67"></a>hierarchical data-generating process.</span>
-<span id="cb38-68"><a href="#cb38-68"></a></span>
-<span id="cb38-71"><a href="#cb38-71"></a><span class="in">```{r}</span></span>
-<span id="cb38-72"><a href="#cb38-72"></a>hierarchical_sim <span class="ot">&lt;-</span> <span class="cf">function</span>(group_pop_mean,</span>
-<span id="cb38-73"><a href="#cb38-73"></a>                             between_group_sd,</span>
-<span id="cb38-74"><a href="#cb38-74"></a>                             within_group_sd,</span>
-<span id="cb38-75"><a href="#cb38-75"></a>                             n_groups,</span>
-<span id="cb38-76"><a href="#cb38-76"></a>                             n_obs_per_group</span>
-<span id="cb38-77"><a href="#cb38-77"></a>                             ) {</span>
-<span id="cb38-78"><a href="#cb38-78"></a>  <span class="co"># Generate group means</span></span>
-<span id="cb38-79"><a href="#cb38-79"></a>  group_means <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(</span>
-<span id="cb38-80"><a href="#cb38-80"></a>    <span class="at">n =</span> n_groups,</span>
-<span id="cb38-81"><a href="#cb38-81"></a>    <span class="at">mean =</span> group_pop_mean,</span>
-<span id="cb38-82"><a href="#cb38-82"></a>    <span class="at">sd =</span> between_group_sd</span>
-<span id="cb38-83"><a href="#cb38-83"></a>  )</span>
-<span id="cb38-84"><a href="#cb38-84"></a></span>
-<span id="cb38-85"><a href="#cb38-85"></a>  <span class="co"># Generate observations</span></span>
-<span id="cb38-86"><a href="#cb38-86"></a></span>
-<span id="cb38-87"><a href="#cb38-87"></a>  <span class="do">## Create an empty vector for observations</span></span>
-<span id="cb38-88"><a href="#cb38-88"></a>  y <span class="ot">&lt;-</span> <span class="fu">numeric</span>()</span>
-<span id="cb38-89"><a href="#cb38-89"></a>  <span class="do">## Create a vector for the group identifier</span></span>
-<span id="cb38-90"><a href="#cb38-90"></a>  group <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>n_groups, <span class="at">each =</span> n_obs_per_group)</span>
-<span id="cb38-91"><a href="#cb38-91"></a>  </span>
-<span id="cb38-92"><a href="#cb38-92"></a>  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_groups) {</span>
-<span id="cb38-93"><a href="#cb38-93"></a>    <span class="do">### Generate one group observations</span></span>
-<span id="cb38-94"><a href="#cb38-94"></a>    group_y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(</span>
-<span id="cb38-95"><a href="#cb38-95"></a>      <span class="at">n =</span> n_obs_per_group,</span>
-<span id="cb38-96"><a href="#cb38-96"></a>      <span class="at">mean =</span> group_means[j],</span>
-<span id="cb38-97"><a href="#cb38-97"></a>      <span class="at">sd =</span> within_group_sd</span>
-<span id="cb38-98"><a href="#cb38-98"></a>    )</span>
-<span id="cb38-99"><a href="#cb38-99"></a>    <span class="do">### Append the group observations to the vector</span></span>
-<span id="cb38-100"><a href="#cb38-100"></a>    y <span class="ot">&lt;-</span> <span class="fu">c</span>(y, group_y)</span>
-<span id="cb38-101"><a href="#cb38-101"></a>  }</span>
-<span id="cb38-102"><a href="#cb38-102"></a></span>
-<span id="cb38-103"><a href="#cb38-103"></a>  <span class="co"># Combine into a data frame</span></span>
-<span id="cb38-104"><a href="#cb38-104"></a>  data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb38-105"><a href="#cb38-105"></a>    <span class="at">group =</span> <span class="fu">factor</span>(group),</span>
-<span id="cb38-106"><a href="#cb38-106"></a>    <span class="at">y =</span> y</span>
-<span id="cb38-107"><a href="#cb38-107"></a>  )</span>
-<span id="cb38-108"><a href="#cb38-108"></a></span>
-<span id="cb38-109"><a href="#cb38-109"></a>  <span class="co"># Plot the data</span></span>
-<span id="cb38-110"><a href="#cb38-110"></a>  <span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> y, <span class="at">y =</span> group)) <span class="sc">+</span></span>
-<span id="cb38-111"><a href="#cb38-111"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb38-112"><a href="#cb38-112"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> group_pop_mean, <span class="at">linetype =</span> <span class="st">"dashed"</span>)</span>
-<span id="cb38-113"><a href="#cb38-113"></a>}</span>
-<span id="cb38-114"><a href="#cb38-114"></a><span class="in">```</span></span>
-<span id="cb38-115"><a href="#cb38-115"></a></span>
-<span id="cb38-116"><a href="#cb38-116"></a>Example using the function:</span>
-<span id="cb38-119"><a href="#cb38-119"></a><span class="in">```{r}</span></span>
-<span id="cb38-120"><a href="#cb38-120"></a><span class="fu">hierarchical_sim</span>(</span>
-<span id="cb38-121"><a href="#cb38-121"></a>  <span class="at">group_pop_mean =</span> <span class="dv">50</span>,</span>
-<span id="cb38-122"><a href="#cb38-122"></a>  <span class="at">between_group_sd =</span> <span class="dv">5</span>,</span>
-<span id="cb38-123"><a href="#cb38-123"></a>  <span class="at">within_group_sd =</span> <span class="dv">1</span>,</span>
-<span id="cb38-124"><a href="#cb38-124"></a>  <span class="at">n_groups =</span> <span class="dv">10</span>,</span>
-<span id="cb38-125"><a href="#cb38-125"></a>  <span class="at">n_obs_per_group =</span> <span class="dv">5</span></span>
-<span id="cb38-126"><a href="#cb38-126"></a>  )</span>
-<span id="cb38-127"><a href="#cb38-127"></a><span class="in">```</span></span>
-<span id="cb38-128"><a href="#cb38-128"></a></span>
-<span id="cb38-129"><a href="#cb38-129"></a><span class="fu"># Sleep deprivation</span></span>
-<span id="cb38-130"><a href="#cb38-130"></a></span>
-<span id="cb38-131"><a href="#cb38-131"></a>The dataset <span class="in">`sleepstudy`</span> is available by using the command</span>
-<span id="cb38-132"><a href="#cb38-132"></a><span class="in">`data(sleepstudy, package = "lme4")`</span></span>
-<span id="cb38-133"><a href="#cb38-133"></a></span>
-<span id="cb38-134"><a href="#cb38-134"></a>Below is some code for fitting a brms model. This model is a simple</span>
-<span id="cb38-135"><a href="#cb38-135"></a>pooled model. You will need to fit a hierarchical model as explained</span>
-<span id="cb38-136"><a href="#cb38-136"></a>in the assignment, but this code should help getting started.</span>
-<span id="cb38-137"><a href="#cb38-137"></a></span>
-<span id="cb38-138"><a href="#cb38-138"></a>Load the dataset</span>
-<span id="cb38-141"><a href="#cb38-141"></a><span class="in">```{r}</span></span>
-<span id="cb38-142"><a href="#cb38-142"></a><span class="fu">data</span>(sleepstudy, <span class="at">package =</span> <span class="st">"lme4"</span>)</span>
-<span id="cb38-143"><a href="#cb38-143"></a><span class="in">```</span></span>
-<span id="cb38-144"><a href="#cb38-144"></a></span>
-<span id="cb38-145"><a href="#cb38-145"></a>Specify the formula and observation family:</span>
-<span id="cb38-146"><a href="#cb38-146"></a></span>
-<span id="cb38-149"><a href="#cb38-149"></a><span class="in">```{r}</span></span>
-<span id="cb38-150"><a href="#cb38-150"></a><span class="co">#| eval: false</span></span>
-<span id="cb38-151"><a href="#cb38-151"></a>sleepstudy_pooled_formula <span class="ot">&lt;-</span> <span class="fu">bf</span>(</span>
-<span id="cb38-152"><a href="#cb38-152"></a>  Reaction <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> Days,</span>
-<span id="cb38-153"><a href="#cb38-153"></a>  <span class="at">family =</span> <span class="st">"gaussian"</span>,</span>
-<span id="cb38-154"><a href="#cb38-154"></a>  <span class="at">center =</span> <span class="cn">FALSE</span></span>
-<span id="cb38-155"><a href="#cb38-155"></a>)</span>
-<span id="cb38-156"><a href="#cb38-156"></a><span class="in">```</span></span>
-<span id="cb38-157"><a href="#cb38-157"></a></span>
-<span id="cb38-158"><a href="#cb38-158"></a>We can see the parameters and default priors with</span>
-<span id="cb38-161"><a href="#cb38-161"></a><span class="in">```{r}</span></span>
-<span id="cb38-162"><a href="#cb38-162"></a><span class="co">#| eval: false</span></span>
-<span id="cb38-163"><a href="#cb38-163"></a><span class="fu">get_prior</span>(pooled_formula, <span class="at">data =</span> sleepstudy)</span>
-<span id="cb38-164"><a href="#cb38-164"></a><span class="in">```</span></span>
-<span id="cb38-165"><a href="#cb38-165"></a></span>
-<span id="cb38-166"><a href="#cb38-166"></a>We can then specify the priors:</span>
-<span id="cb38-167"><a href="#cb38-167"></a></span>
-<span id="cb38-170"><a href="#cb38-170"></a><span class="in">```{r}</span></span>
-<span id="cb38-171"><a href="#cb38-171"></a><span class="co">#| eval: false</span></span>
-<span id="cb38-172"><a href="#cb38-172"></a>(sleepstudy_pooled_priors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb38-173"><a href="#cb38-173"></a>  <span class="fu">prior</span>(</span>
-<span id="cb38-174"><a href="#cb38-174"></a>    <span class="fu">normal</span>(<span class="dv">400</span>, <span class="dv">100</span>),</span>
-<span id="cb38-175"><a href="#cb38-175"></a>    <span class="at">class =</span> <span class="st">"b"</span>,</span>
-<span id="cb38-176"><a href="#cb38-176"></a>    <span class="at">coef =</span> <span class="st">"Intercept"</span></span>
-<span id="cb38-177"><a href="#cb38-177"></a>  ),</span>
-<span id="cb38-178"><a href="#cb38-178"></a>  <span class="fu">prior</span>(</span>
-<span id="cb38-179"><a href="#cb38-179"></a>    <span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">50</span>),</span>
-<span id="cb38-180"><a href="#cb38-180"></a>    <span class="at">class =</span> <span class="st">"b"</span>,</span>
-<span id="cb38-181"><a href="#cb38-181"></a>    <span class="at">coef =</span> <span class="st">"Days"</span></span>
-<span id="cb38-182"><a href="#cb38-182"></a>  ),</span>
-<span id="cb38-183"><a href="#cb38-183"></a>  <span class="fu">prior</span>(</span>
-<span id="cb38-184"><a href="#cb38-184"></a>    <span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">50</span>),</span>
-<span id="cb38-185"><a href="#cb38-185"></a>    <span class="at">class =</span> <span class="st">"sigma"</span></span>
-<span id="cb38-186"><a href="#cb38-186"></a>  )</span>
-<span id="cb38-187"><a href="#cb38-187"></a>))</span>
-<span id="cb38-188"><a href="#cb38-188"></a><span class="in">```</span></span>
-<span id="cb38-189"><a href="#cb38-189"></a></span>
-<span id="cb38-190"><a href="#cb38-190"></a>And then fit the model:</span>
-<span id="cb38-191"><a href="#cb38-191"></a></span>
-<span id="cb38-194"><a href="#cb38-194"></a><span class="in">```{r}</span></span>
-<span id="cb38-195"><a href="#cb38-195"></a><span class="co">#| eval: false</span></span>
-<span id="cb38-196"><a href="#cb38-196"></a>sleepstudy_pooled_fit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
-<span id="cb38-197"><a href="#cb38-197"></a>  <span class="at">formula =</span> pooled_formula,</span>
-<span id="cb38-198"><a href="#cb38-198"></a>  <span class="at">prior =</span> sleepstudy_pooled_priors,</span>
-<span id="cb38-199"><a href="#cb38-199"></a>  <span class="at">data =</span> sleepstudy</span>
-<span id="cb38-200"><a href="#cb38-200"></a>)</span>
-<span id="cb38-201"><a href="#cb38-201"></a><span class="in">```</span></span>
-<span id="cb38-202"><a href="#cb38-202"></a></span>
-<span id="cb38-203"><a href="#cb38-203"></a>We can inspect the model fit:</span>
-<span id="cb38-204"><a href="#cb38-204"></a></span>
-<span id="cb38-207"><a href="#cb38-207"></a><span class="in">```{r}</span></span>
-<span id="cb38-208"><a href="#cb38-208"></a><span class="co">#| eval: false</span></span>
-<span id="cb38-209"><a href="#cb38-209"></a><span class="fu">summary</span>(pooled_fit)</span>
-<span id="cb38-210"><a href="#cb38-210"></a><span class="in">```</span></span>
-<span id="cb38-211"><a href="#cb38-211"></a></span>
-<span id="cb38-212"><a href="#cb38-212"></a>To plot <span class="in">`conditional_effects`</span>, you can do that as follows: </span>
-<span id="cb38-215"><a href="#cb38-215"></a><span class="in">```{r}</span></span>
-<span id="cb38-216"><a href="#cb38-216"></a><span class="co">#| eval: false</span></span>
-<span id="cb38-217"><a href="#cb38-217"></a>conditions <span class="ot">&lt;-</span> <span class="fu">make_conditions</span>(sleepstudy, <span class="st">"Subject"</span>, <span class="at">incl_vars =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb38-218"><a href="#cb38-218"></a>me <span class="ot">&lt;-</span> <span class="fu">conditional_effects</span>(sleepstudy_pooled_fit, <span class="at">conditions =</span> conditions, </span>
-<span id="cb38-219"><a href="#cb38-219"></a>                          <span class="at">re_formula =</span> <span class="cn">NULL</span>)</span>
-<span id="cb38-220"><a href="#cb38-220"></a><span class="fu">plot</span>(me, <span class="at">ncol =</span> <span class="dv">6</span>, <span class="at">points =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb38-221"><a href="#cb38-221"></a><span class="in">```</span></span>
-<span id="cb38-222"><a href="#cb38-222"></a></span>
-<span id="cb38-223"><a href="#cb38-223"></a><span class="fu"># School calendar</span></span>
-<span id="cb38-224"><a href="#cb38-224"></a></span>
-<span id="cb38-225"><a href="#cb38-225"></a>Meta-analysis models can be fit in brms. When the standard error is</span>
-<span id="cb38-226"><a href="#cb38-226"></a>known, the <span class="in">`se()`</span> function can be used to specify it.</span>
-<span id="cb38-227"><a href="#cb38-227"></a></span>
-<span id="cb38-228"><a href="#cb38-228"></a>The dataset <span class="in">`dat.konstantopoulos2011`</span> has the observations for the school calendar intervention meta-analysis.</span>
-<span id="cb38-229"><a href="#cb38-229"></a></span>
-<span id="cb38-232"><a href="#cb38-232"></a><span class="in">```{r}</span></span>
-<span id="cb38-233"><a href="#cb38-233"></a><span class="fu">data</span>(dat.konstantopoulos2011, <span class="at">package =</span> <span class="st">"metadat"</span>)</span>
-<span id="cb38-234"><a href="#cb38-234"></a><span class="in">```</span></span>
-<span id="cb38-235"><a href="#cb38-235"></a></span>
-<span id="cb38-236"><a href="#cb38-236"></a>As mentioned in the assignment instructions, a unique identifier for</span>
-<span id="cb38-237"><a href="#cb38-237"></a>school needs to be created by combining the district and school:</span>
-<span id="cb38-238"><a href="#cb38-238"></a></span>
-<span id="cb38-241"><a href="#cb38-241"></a><span class="in">```{r}</span></span>
-<span id="cb38-242"><a href="#cb38-242"></a><span class="co">#| eval: false</span></span>
-<span id="cb38-243"><a href="#cb38-243"></a>schoolcalendar_data <span class="ot">&lt;-</span> dat.konstantopoulos2011 <span class="sc">|&gt;</span></span>
-<span id="cb38-244"><a href="#cb38-244"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
-<span id="cb38-245"><a href="#cb38-245"></a>    <span class="at">school =</span> <span class="fu">factor</span>(school),</span>
-<span id="cb38-246"><a href="#cb38-246"></a>    <span class="at">district =</span> <span class="fu">factor</span>(district),</span>
-<span id="cb38-247"><a href="#cb38-247"></a>    <span class="at">district_school =</span> <span class="fu">interaction</span>(district, school, <span class="at">drop =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">"_"</span>)</span>
-<span id="cb38-248"><a href="#cb38-248"></a>  )</span>
-<span id="cb38-249"><a href="#cb38-249"></a><span class="in">```</span></span>
-<span id="cb38-250"><a href="#cb38-250"></a></span>
-<span id="cb38-251"><a href="#cb38-251"></a>Then the models can be fit</span>
-<span id="cb38-254"><a href="#cb38-254"></a><span class="in">```{r}</span></span>
-<span id="cb38-255"><a href="#cb38-255"></a><span class="co">#| eval: false</span></span>
-<span id="cb38-256"><a href="#cb38-256"></a>schoolcalendar_pooled_formula <span class="ot">&lt;-</span> <span class="fu">bf</span>(</span>
-<span id="cb38-257"><a href="#cb38-257"></a>  <span class="at">formula =</span> yi <span class="sc">|</span> <span class="fu">se</span>(<span class="fu">sqrt</span>(vi)) <span class="sc">~</span> <span class="dv">1</span>,</span>
-<span id="cb38-258"><a href="#cb38-258"></a>  <span class="at">family =</span> <span class="st">"gaussian"</span></span>
-<span id="cb38-259"><a href="#cb38-259"></a>)  </span>
-<span id="cb38-260"><a href="#cb38-260"></a></span>
-<span id="cb38-261"><a href="#cb38-261"></a>schoolcalendar_pooled_fit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
-<span id="cb38-262"><a href="#cb38-262"></a>  <span class="at">formula =</span> schoolcalendar_pooled_formula,</span>
-<span id="cb38-263"><a href="#cb38-263"></a>  <span class="at">data =</span> schoolcalendar_data</span>
-<span id="cb38-264"><a href="#cb38-264"></a>)</span>
-<span id="cb38-265"><a href="#cb38-265"></a><span class="in">```</span></span>
-<span id="cb38-266"><a href="#cb38-266"></a></span>
-<span id="cb38-267"><a href="#cb38-267"></a>Predictions for a new school can be made using the <span class="in">`posterior_epred`</span> function:</span>
-<span id="cb38-270"><a href="#cb38-270"></a><span class="in">```{r}</span></span>
-<span id="cb38-271"><a href="#cb38-271"></a><span class="co">#| eval: false</span></span>
-<span id="cb38-272"><a href="#cb38-272"></a>new_school <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb38-273"><a href="#cb38-273"></a>  <span class="at">school =</span> <span class="fu">factor</span>(<span class="dv">1</span>),</span>
-<span id="cb38-274"><a href="#cb38-274"></a>  <span class="at">district =</span> <span class="fu">factor</span>(<span class="dv">1</span>),</span>
-<span id="cb38-275"><a href="#cb38-275"></a>  <span class="at">district_school =</span> <span class="fu">factor</span>(<span class="st">"1_1"</span>),</span>
-<span id="cb38-276"><a href="#cb38-276"></a>  <span class="at">vi =</span> <span class="dv">0</span> <span class="co"># the expectation of the prediction is not affected by the sampling variance, so this can be any number</span></span>
-<span id="cb38-277"><a href="#cb38-277"></a>)</span>
-<span id="cb38-278"><a href="#cb38-278"></a>  </span>
-<span id="cb38-279"><a href="#cb38-279"></a></span>
-<span id="cb38-280"><a href="#cb38-280"></a>schoolcalendar_post_epred <span class="ot">&lt;-</span> <span class="fu">posterior_epred</span>(</span>
-<span id="cb38-281"><a href="#cb38-281"></a>    schoolcalendar_pooled_fit,</span>
-<span id="cb38-282"><a href="#cb38-282"></a>    <span class="at">newdata =</span> new_school,</span>
-<span id="cb38-283"><a href="#cb38-283"></a>    <span class="at">allow_new_levels =</span> <span class="cn">TRUE</span></span>
-<span id="cb38-284"><a href="#cb38-284"></a>  )</span>
-<span id="cb38-285"><a href="#cb38-285"></a></span>
-<span id="cb38-286"><a href="#cb38-286"></a><span class="in">```</span></span>
-<span id="cb38-287"><a href="#cb38-287"></a></span>
-<span id="cb38-288"><a href="#cb38-288"></a>It can be helpful to plot the posterior estimates. Here is a function that will do this:</span>
-<span id="cb38-289"><a href="#cb38-289"></a></span>
-<span id="cb38-292"><a href="#cb38-292"></a><span class="in">```{r}</span></span>
-<span id="cb38-293"><a href="#cb38-293"></a><span class="co">#| eval: false</span></span>
-<span id="cb38-294"><a href="#cb38-294"></a>plot_school_posteriors <span class="ot">&lt;-</span> <span class="cf">function</span>(fit, dataset) {</span>
-<span id="cb38-295"><a href="#cb38-295"></a>  tidybayes<span class="sc">::</span><span class="fu">add_predicted_draws</span>(dataset, fit) <span class="sc">|&gt;</span></span>
-<span id="cb38-296"><a href="#cb38-296"></a>    <span class="fu">ggplot</span>(</span>
-<span id="cb38-297"><a href="#cb38-297"></a>      <span class="fu">aes</span>(</span>
-<span id="cb38-298"><a href="#cb38-298"></a>        <span class="at">x =</span> .prediction,</span>
-<span id="cb38-299"><a href="#cb38-299"></a>        <span class="at">y =</span> <span class="fu">interaction</span>(district, school, <span class="at">sep =</span> <span class="st">", "</span>, <span class="at">lex.order =</span> <span class="cn">TRUE</span>))) <span class="sc">+</span></span>
-<span id="cb38-300"><a href="#cb38-300"></a>    tidybayes<span class="sc">::</span><span class="fu">stat_halfeye</span>() <span class="sc">+</span></span>
-<span id="cb38-301"><a href="#cb38-301"></a>    <span class="fu">ylab</span>(<span class="st">"District, school"</span>) <span class="sc">+</span></span>
-<span id="cb38-302"><a href="#cb38-302"></a>    <span class="fu">xlab</span>(<span class="st">"Posterior effect"</span>)</span>
-<span id="cb38-303"><a href="#cb38-303"></a>}</span>
-<span id="cb38-304"><a href="#cb38-304"></a></span>
-<span id="cb38-305"><a href="#cb38-305"></a><span class="in">```</span></span>
-<span id="cb38-306"><a href="#cb38-306"></a></span>
-<span id="cb38-307"><a href="#cb38-307"></a>And can be used as follows:</span>
-<span id="cb38-308"><a href="#cb38-308"></a></span>
-<span id="cb38-311"><a href="#cb38-311"></a><span class="in">```{r}</span></span>
-<span id="cb38-312"><a href="#cb38-312"></a><span class="co">#| eval: false</span></span>
-<span id="cb38-313"><a href="#cb38-313"></a><span class="fu">plot_school_posteriors</span>(</span>
-<span id="cb38-314"><a href="#cb38-314"></a>  <span class="at">fit =</span> schoolcalendar_pooled_fit,</span>
-<span id="cb38-315"><a href="#cb38-315"></a>  <span class="at">dataset =</span> schoolcalendar_data</span>
-<span id="cb38-316"><a href="#cb38-316"></a>)</span>
-<span id="cb38-317"><a href="#cb38-317"></a><span class="in">```</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb37-1"><a href="#cb37-1"></a><span class="co">---</span></span>
+<span id="cb37-2"><a href="#cb37-2"></a><span class="an">title:</span><span class="co"> "Notebook for Assignment 7"</span></span>
+<span id="cb37-3"><a href="#cb37-3"></a><span class="an">author:</span><span class="co"> "Aki Vehtari et al."</span></span>
+<span id="cb37-4"><a href="#cb37-4"></a><span class="an">format:</span></span>
+<span id="cb37-5"><a href="#cb37-5"></a><span class="co">  html:</span></span>
+<span id="cb37-6"><a href="#cb37-6"></a><span class="co">    toc: true</span></span>
+<span id="cb37-7"><a href="#cb37-7"></a><span class="co">    code-tools: true</span></span>
+<span id="cb37-8"><a href="#cb37-8"></a><span class="co">    code-line-numbers: true</span></span>
+<span id="cb37-9"><a href="#cb37-9"></a><span class="co">    number-sections: true</span></span>
+<span id="cb37-10"><a href="#cb37-10"></a><span class="co">    mainfont: Georgia, serif</span></span>
+<span id="cb37-11"><a href="#cb37-11"></a><span class="an">editor:</span><span class="co"> source</span></span>
+<span id="cb37-12"><a href="#cb37-12"></a><span class="co">---</span></span>
+<span id="cb37-13"><a href="#cb37-13"></a></span>
+<span id="cb37-14"><a href="#cb37-14"></a><span class="fu"># General information</span></span>
+<span id="cb37-15"><a href="#cb37-15"></a></span>
+<span id="cb37-16"><a href="#cb37-16"></a>This assignment relates to Lecture 7 and Chapter 5.</span>
+<span id="cb37-17"><a href="#cb37-17"></a></span>
+<span id="cb37-18"><a href="#cb37-18"></a>We recommend using <span class="co">[</span><span class="ot">JupyterHub</span><span class="co">](https://jupyter.cs.aalto.fi)</span> (which has all the needed packages pre-installed).</span>
+<span id="cb37-19"><a href="#cb37-19"></a></span>
+<span id="cb37-20"><a href="#cb37-20"></a>::: hint</span>
+<span id="cb37-21"><a href="#cb37-21"></a>**Reading instructions:**</span>
+<span id="cb37-22"><a href="#cb37-22"></a></span>
+<span id="cb37-23"><a href="#cb37-23"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">**The reading instructions for BDA3 Chapter 5**</span><span class="co">](../BDA3_notes.html#ch5)</span>.</span>
+<span id="cb37-24"><a href="#cb37-24"></a>:::</span>
+<span id="cb37-25"><a href="#cb37-25"></a></span>
+<span id="cb37-26"><a href="#cb37-26"></a>{{&lt; include includes/_general_cloze_instructions.md &gt;}}</span>
+<span id="cb37-27"><a href="#cb37-27"></a></span>
+<span id="cb37-30"><a href="#cb37-30"></a><span class="in">```{r}</span></span>
+<span id="cb37-31"><a href="#cb37-31"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(tidybayes)) {</span>
+<span id="cb37-32"><a href="#cb37-32"></a>    <span class="fu">install.packages</span>(<span class="st">"tidybayes"</span>)</span>
+<span id="cb37-33"><a href="#cb37-33"></a>    <span class="fu">library</span>(tidybayes)</span>
+<span id="cb37-34"><a href="#cb37-34"></a>}</span>
+<span id="cb37-35"><a href="#cb37-35"></a></span>
+<span id="cb37-36"><a href="#cb37-36"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(brms)) {</span>
+<span id="cb37-37"><a href="#cb37-37"></a>    <span class="fu">install.packages</span>(<span class="st">"brms"</span>)</span>
+<span id="cb37-38"><a href="#cb37-38"></a>    <span class="fu">library</span>(brms)</span>
+<span id="cb37-39"><a href="#cb37-39"></a>}</span>
+<span id="cb37-40"><a href="#cb37-40"></a></span>
+<span id="cb37-41"><a href="#cb37-41"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(ggplot2)) {</span>
+<span id="cb37-42"><a href="#cb37-42"></a>  <span class="fu">install.packages</span>(<span class="st">"ggplot2"</span>)</span>
+<span id="cb37-43"><a href="#cb37-43"></a>  <span class="fu">library</span>(ggplot2)</span>
+<span id="cb37-44"><a href="#cb37-44"></a>}</span>
+<span id="cb37-45"><a href="#cb37-45"></a></span>
+<span id="cb37-46"><a href="#cb37-46"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(metadat)) {</span>
+<span id="cb37-47"><a href="#cb37-47"></a>  <span class="fu">install.packages</span>(<span class="st">"metadat"</span>)</span>
+<span id="cb37-48"><a href="#cb37-48"></a>  <span class="fu">library</span>(metadat)</span>
+<span id="cb37-49"><a href="#cb37-49"></a>}</span>
+<span id="cb37-50"><a href="#cb37-50"></a></span>
+<span id="cb37-51"><a href="#cb37-51"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(cmdstanr)){</span>
+<span id="cb37-52"><a href="#cb37-52"></a>    <span class="fu">install.packages</span>(<span class="st">"cmdstanr"</span>, <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://mc-stan.org/r-packages/"</span>, <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span>
+<span id="cb37-53"><a href="#cb37-53"></a>    <span class="fu">library</span>(cmdstanr)</span>
+<span id="cb37-54"><a href="#cb37-54"></a>}</span>
+<span id="cb37-55"><a href="#cb37-55"></a>cmdstan_installed <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
+<span id="cb37-56"><a href="#cb37-56"></a>  res <span class="ot">&lt;-</span> <span class="fu">try</span>(out <span class="ot">&lt;-</span> cmdstanr<span class="sc">::</span><span class="fu">cmdstan_path</span>(), <span class="at">silent =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb37-57"><a href="#cb37-57"></a>  <span class="sc">!</span><span class="fu">inherits</span>(res, <span class="st">"try-error"</span>)</span>
+<span id="cb37-58"><a href="#cb37-58"></a>}</span>
+<span id="cb37-59"><a href="#cb37-59"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">cmdstan_installed</span>()){</span>
+<span id="cb37-60"><a href="#cb37-60"></a>    <span class="fu">install_cmdstan</span>()</span>
+<span id="cb37-61"><a href="#cb37-61"></a>}</span>
+<span id="cb37-62"><a href="#cb37-62"></a><span class="in">```</span></span>
+<span id="cb37-63"><a href="#cb37-63"></a></span>
+<span id="cb37-64"><a href="#cb37-64"></a><span class="fu"># Simulation warm-up</span></span>
+<span id="cb37-65"><a href="#cb37-65"></a></span>
+<span id="cb37-66"><a href="#cb37-66"></a>Here is the function to simulate and plot observations from a</span>
+<span id="cb37-67"><a href="#cb37-67"></a>hierarchical data-generating process.</span>
+<span id="cb37-68"><a href="#cb37-68"></a></span>
+<span id="cb37-71"><a href="#cb37-71"></a><span class="in">```{r}</span></span>
+<span id="cb37-72"><a href="#cb37-72"></a>hierarchical_sim <span class="ot">&lt;-</span> <span class="cf">function</span>(group_pop_mean,</span>
+<span id="cb37-73"><a href="#cb37-73"></a>                             between_group_sd,</span>
+<span id="cb37-74"><a href="#cb37-74"></a>                             within_group_sd,</span>
+<span id="cb37-75"><a href="#cb37-75"></a>                             n_groups,</span>
+<span id="cb37-76"><a href="#cb37-76"></a>                             n_obs_per_group</span>
+<span id="cb37-77"><a href="#cb37-77"></a>                             ) {</span>
+<span id="cb37-78"><a href="#cb37-78"></a>  <span class="co"># Generate group means</span></span>
+<span id="cb37-79"><a href="#cb37-79"></a>  group_means <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(</span>
+<span id="cb37-80"><a href="#cb37-80"></a>    <span class="at">n =</span> n_groups,</span>
+<span id="cb37-81"><a href="#cb37-81"></a>    <span class="at">mean =</span> group_pop_mean,</span>
+<span id="cb37-82"><a href="#cb37-82"></a>    <span class="at">sd =</span> between_group_sd</span>
+<span id="cb37-83"><a href="#cb37-83"></a>  )</span>
+<span id="cb37-84"><a href="#cb37-84"></a></span>
+<span id="cb37-85"><a href="#cb37-85"></a>  <span class="co"># Generate observations</span></span>
+<span id="cb37-86"><a href="#cb37-86"></a></span>
+<span id="cb37-87"><a href="#cb37-87"></a>  <span class="do">## Create an empty vector for observations</span></span>
+<span id="cb37-88"><a href="#cb37-88"></a>  y <span class="ot">&lt;-</span> <span class="fu">numeric</span>()</span>
+<span id="cb37-89"><a href="#cb37-89"></a>  <span class="do">## Create a vector for the group identifier</span></span>
+<span id="cb37-90"><a href="#cb37-90"></a>  group <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>n_groups, <span class="at">each =</span> n_obs_per_group)</span>
+<span id="cb37-91"><a href="#cb37-91"></a>  </span>
+<span id="cb37-92"><a href="#cb37-92"></a>  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_groups) {</span>
+<span id="cb37-93"><a href="#cb37-93"></a>    <span class="do">### Generate one group observations</span></span>
+<span id="cb37-94"><a href="#cb37-94"></a>    group_y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(</span>
+<span id="cb37-95"><a href="#cb37-95"></a>      <span class="at">n =</span> n_obs_per_group,</span>
+<span id="cb37-96"><a href="#cb37-96"></a>      <span class="at">mean =</span> group_means[j],</span>
+<span id="cb37-97"><a href="#cb37-97"></a>      <span class="at">sd =</span> within_group_sd</span>
+<span id="cb37-98"><a href="#cb37-98"></a>    )</span>
+<span id="cb37-99"><a href="#cb37-99"></a>    <span class="do">### Append the group observations to the vector</span></span>
+<span id="cb37-100"><a href="#cb37-100"></a>    y <span class="ot">&lt;-</span> <span class="fu">c</span>(y, group_y)</span>
+<span id="cb37-101"><a href="#cb37-101"></a>  }</span>
+<span id="cb37-102"><a href="#cb37-102"></a></span>
+<span id="cb37-103"><a href="#cb37-103"></a>  <span class="co"># Combine into a data frame</span></span>
+<span id="cb37-104"><a href="#cb37-104"></a>  data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb37-105"><a href="#cb37-105"></a>    <span class="at">group =</span> <span class="fu">factor</span>(group),</span>
+<span id="cb37-106"><a href="#cb37-106"></a>    <span class="at">y =</span> y</span>
+<span id="cb37-107"><a href="#cb37-107"></a>  )</span>
+<span id="cb37-108"><a href="#cb37-108"></a></span>
+<span id="cb37-109"><a href="#cb37-109"></a>  <span class="co"># Plot the data</span></span>
+<span id="cb37-110"><a href="#cb37-110"></a>  <span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> y, <span class="at">y =</span> group)) <span class="sc">+</span></span>
+<span id="cb37-111"><a href="#cb37-111"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb37-112"><a href="#cb37-112"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> group_pop_mean, <span class="at">linetype =</span> <span class="st">"dashed"</span>)</span>
+<span id="cb37-113"><a href="#cb37-113"></a>}</span>
+<span id="cb37-114"><a href="#cb37-114"></a><span class="in">```</span></span>
+<span id="cb37-115"><a href="#cb37-115"></a></span>
+<span id="cb37-116"><a href="#cb37-116"></a>Example using the function:</span>
+<span id="cb37-119"><a href="#cb37-119"></a><span class="in">```{r}</span></span>
+<span id="cb37-120"><a href="#cb37-120"></a><span class="fu">hierarchical_sim</span>(</span>
+<span id="cb37-121"><a href="#cb37-121"></a>  <span class="at">group_pop_mean =</span> <span class="dv">50</span>,</span>
+<span id="cb37-122"><a href="#cb37-122"></a>  <span class="at">between_group_sd =</span> <span class="dv">5</span>,</span>
+<span id="cb37-123"><a href="#cb37-123"></a>  <span class="at">within_group_sd =</span> <span class="dv">1</span>,</span>
+<span id="cb37-124"><a href="#cb37-124"></a>  <span class="at">n_groups =</span> <span class="dv">10</span>,</span>
+<span id="cb37-125"><a href="#cb37-125"></a>  <span class="at">n_obs_per_group =</span> <span class="dv">5</span></span>
+<span id="cb37-126"><a href="#cb37-126"></a>  )</span>
+<span id="cb37-127"><a href="#cb37-127"></a><span class="in">```</span></span>
+<span id="cb37-128"><a href="#cb37-128"></a></span>
+<span id="cb37-129"><a href="#cb37-129"></a><span class="fu"># Sleep deprivation</span></span>
+<span id="cb37-130"><a href="#cb37-130"></a></span>
+<span id="cb37-131"><a href="#cb37-131"></a>The dataset <span class="in">`sleepstudy`</span> is available by using the command</span>
+<span id="cb37-132"><a href="#cb37-132"></a><span class="in">`data(sleepstudy, package = "lme4")`</span></span>
+<span id="cb37-133"><a href="#cb37-133"></a></span>
+<span id="cb37-134"><a href="#cb37-134"></a>Below is some code for fitting a brms model. This model is a simple</span>
+<span id="cb37-135"><a href="#cb37-135"></a>pooled model. You will need to fit a hierarchical model as explained</span>
+<span id="cb37-136"><a href="#cb37-136"></a>in the assignment, but this code should help getting started.</span>
+<span id="cb37-137"><a href="#cb37-137"></a></span>
+<span id="cb37-138"><a href="#cb37-138"></a>Load the dataset</span>
+<span id="cb37-141"><a href="#cb37-141"></a><span class="in">```{r}</span></span>
+<span id="cb37-142"><a href="#cb37-142"></a><span class="fu">data</span>(sleepstudy, <span class="at">package =</span> <span class="st">"lme4"</span>)</span>
+<span id="cb37-143"><a href="#cb37-143"></a><span class="in">```</span></span>
+<span id="cb37-144"><a href="#cb37-144"></a></span>
+<span id="cb37-145"><a href="#cb37-145"></a>Specify the formula and observation family:</span>
+<span id="cb37-146"><a href="#cb37-146"></a></span>
+<span id="cb37-149"><a href="#cb37-149"></a><span class="in">```{r}</span></span>
+<span id="cb37-150"><a href="#cb37-150"></a><span class="co">#| eval: false</span></span>
+<span id="cb37-151"><a href="#cb37-151"></a>sleepstudy_pooled_formula <span class="ot">&lt;-</span> <span class="fu">bf</span>(</span>
+<span id="cb37-152"><a href="#cb37-152"></a>  Reaction <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> Days,</span>
+<span id="cb37-153"><a href="#cb37-153"></a>  <span class="at">family =</span> <span class="st">"gaussian"</span>,</span>
+<span id="cb37-154"><a href="#cb37-154"></a>  <span class="at">center =</span> <span class="cn">FALSE</span></span>
+<span id="cb37-155"><a href="#cb37-155"></a>)</span>
+<span id="cb37-156"><a href="#cb37-156"></a><span class="in">```</span></span>
+<span id="cb37-157"><a href="#cb37-157"></a></span>
+<span id="cb37-158"><a href="#cb37-158"></a>We can see the parameters and default priors with</span>
+<span id="cb37-161"><a href="#cb37-161"></a><span class="in">```{r}</span></span>
+<span id="cb37-162"><a href="#cb37-162"></a><span class="co">#| eval: false</span></span>
+<span id="cb37-163"><a href="#cb37-163"></a><span class="fu">get_prior</span>(pooled_formula, <span class="at">data =</span> sleepstudy)</span>
+<span id="cb37-164"><a href="#cb37-164"></a><span class="in">```</span></span>
+<span id="cb37-165"><a href="#cb37-165"></a></span>
+<span id="cb37-166"><a href="#cb37-166"></a>We can then specify the priors:</span>
+<span id="cb37-167"><a href="#cb37-167"></a></span>
+<span id="cb37-170"><a href="#cb37-170"></a><span class="in">```{r}</span></span>
+<span id="cb37-171"><a href="#cb37-171"></a><span class="co">#| eval: false</span></span>
+<span id="cb37-172"><a href="#cb37-172"></a>(sleepstudy_pooled_priors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb37-173"><a href="#cb37-173"></a>  <span class="fu">prior</span>(</span>
+<span id="cb37-174"><a href="#cb37-174"></a>    <span class="fu">normal</span>(<span class="dv">400</span>, <span class="dv">100</span>),</span>
+<span id="cb37-175"><a href="#cb37-175"></a>    <span class="at">class =</span> <span class="st">"b"</span>,</span>
+<span id="cb37-176"><a href="#cb37-176"></a>    <span class="at">coef =</span> <span class="st">"Intercept"</span></span>
+<span id="cb37-177"><a href="#cb37-177"></a>  ),</span>
+<span id="cb37-178"><a href="#cb37-178"></a>  <span class="fu">prior</span>(</span>
+<span id="cb37-179"><a href="#cb37-179"></a>    <span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">50</span>),</span>
+<span id="cb37-180"><a href="#cb37-180"></a>    <span class="at">class =</span> <span class="st">"b"</span>,</span>
+<span id="cb37-181"><a href="#cb37-181"></a>    <span class="at">coef =</span> <span class="st">"Days"</span></span>
+<span id="cb37-182"><a href="#cb37-182"></a>  ),</span>
+<span id="cb37-183"><a href="#cb37-183"></a>  <span class="fu">prior</span>(</span>
+<span id="cb37-184"><a href="#cb37-184"></a>    <span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">50</span>),</span>
+<span id="cb37-185"><a href="#cb37-185"></a>    <span class="at">class =</span> <span class="st">"sigma"</span></span>
+<span id="cb37-186"><a href="#cb37-186"></a>  )</span>
+<span id="cb37-187"><a href="#cb37-187"></a>))</span>
+<span id="cb37-188"><a href="#cb37-188"></a><span class="in">```</span></span>
+<span id="cb37-189"><a href="#cb37-189"></a></span>
+<span id="cb37-190"><a href="#cb37-190"></a>And then fit the model:</span>
+<span id="cb37-191"><a href="#cb37-191"></a></span>
+<span id="cb37-194"><a href="#cb37-194"></a><span class="in">```{r}</span></span>
+<span id="cb37-195"><a href="#cb37-195"></a><span class="co">#| eval: false</span></span>
+<span id="cb37-196"><a href="#cb37-196"></a>sleepstudy_pooled_fit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
+<span id="cb37-197"><a href="#cb37-197"></a>  <span class="at">formula =</span> pooled_formula,</span>
+<span id="cb37-198"><a href="#cb37-198"></a>  <span class="at">prior =</span> sleepstudy_pooled_priors,</span>
+<span id="cb37-199"><a href="#cb37-199"></a>  <span class="at">data =</span> sleepstudy</span>
+<span id="cb37-200"><a href="#cb37-200"></a>)</span>
+<span id="cb37-201"><a href="#cb37-201"></a><span class="in">```</span></span>
+<span id="cb37-202"><a href="#cb37-202"></a></span>
+<span id="cb37-203"><a href="#cb37-203"></a>We can inspect the model fit:</span>
+<span id="cb37-204"><a href="#cb37-204"></a></span>
+<span id="cb37-207"><a href="#cb37-207"></a><span class="in">```{r}</span></span>
+<span id="cb37-208"><a href="#cb37-208"></a><span class="co">#| eval: false</span></span>
+<span id="cb37-209"><a href="#cb37-209"></a><span class="fu">summary</span>(pooled_fit)</span>
+<span id="cb37-210"><a href="#cb37-210"></a><span class="in">```</span></span>
+<span id="cb37-211"><a href="#cb37-211"></a></span>
+<span id="cb37-212"><a href="#cb37-212"></a>To plot <span class="in">`conditional_effects`</span>, you can do that as follows: </span>
+<span id="cb37-215"><a href="#cb37-215"></a><span class="in">```{r}</span></span>
+<span id="cb37-216"><a href="#cb37-216"></a><span class="co">#| eval: false</span></span>
+<span id="cb37-217"><a href="#cb37-217"></a>conditions <span class="ot">&lt;-</span> <span class="fu">make_conditions</span>(sleepstudy, <span class="st">"Subject"</span>, <span class="at">incl_vars =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb37-218"><a href="#cb37-218"></a>me <span class="ot">&lt;-</span> <span class="fu">conditional_effects</span>(sleepstudy_pooled_fit, <span class="at">conditions =</span> conditions, </span>
+<span id="cb37-219"><a href="#cb37-219"></a>                          <span class="at">re_formula =</span> <span class="cn">NULL</span>)</span>
+<span id="cb37-220"><a href="#cb37-220"></a><span class="fu">plot</span>(me, <span class="at">ncol =</span> <span class="dv">6</span>, <span class="at">points =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb37-221"><a href="#cb37-221"></a><span class="in">```</span></span>
+<span id="cb37-222"><a href="#cb37-222"></a></span>
+<span id="cb37-223"><a href="#cb37-223"></a><span class="fu"># School calendar</span></span>
+<span id="cb37-224"><a href="#cb37-224"></a></span>
+<span id="cb37-225"><a href="#cb37-225"></a>Meta-analysis models can be fit in brms. When the standard error is</span>
+<span id="cb37-226"><a href="#cb37-226"></a>known, the <span class="in">`se()`</span> function can be used to specify it.</span>
+<span id="cb37-227"><a href="#cb37-227"></a></span>
+<span id="cb37-228"><a href="#cb37-228"></a>The dataset <span class="in">`dat.konstantopoulos2011`</span> has the observations for the school calendar intervention meta-analysis.</span>
+<span id="cb37-229"><a href="#cb37-229"></a></span>
+<span id="cb37-232"><a href="#cb37-232"></a><span class="in">```{r}</span></span>
+<span id="cb37-233"><a href="#cb37-233"></a><span class="fu">data</span>(dat.konstantopoulos2011, <span class="at">package =</span> <span class="st">"metadat"</span>)</span>
+<span id="cb37-234"><a href="#cb37-234"></a><span class="in">```</span></span>
+<span id="cb37-235"><a href="#cb37-235"></a></span>
+<span id="cb37-236"><a href="#cb37-236"></a>As mentioned in the assignment instructions, a unique identifier for</span>
+<span id="cb37-237"><a href="#cb37-237"></a>school needs to be created by combining the district and school:</span>
+<span id="cb37-238"><a href="#cb37-238"></a></span>
+<span id="cb37-241"><a href="#cb37-241"></a><span class="in">```{r}</span></span>
+<span id="cb37-242"><a href="#cb37-242"></a><span class="co">#| eval: false</span></span>
+<span id="cb37-243"><a href="#cb37-243"></a>schoolcalendar_data <span class="ot">&lt;-</span> dat.konstantopoulos2011 <span class="sc">|&gt;</span></span>
+<span id="cb37-244"><a href="#cb37-244"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb37-245"><a href="#cb37-245"></a>    <span class="at">school =</span> <span class="fu">factor</span>(school),</span>
+<span id="cb37-246"><a href="#cb37-246"></a>    <span class="at">district =</span> <span class="fu">factor</span>(district),</span>
+<span id="cb37-247"><a href="#cb37-247"></a>    <span class="at">district_school =</span> <span class="fu">interaction</span>(district, school, <span class="at">drop =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">"_"</span>)</span>
+<span id="cb37-248"><a href="#cb37-248"></a>  )</span>
+<span id="cb37-249"><a href="#cb37-249"></a><span class="in">```</span></span>
+<span id="cb37-250"><a href="#cb37-250"></a></span>
+<span id="cb37-251"><a href="#cb37-251"></a>Then the models can be fit</span>
+<span id="cb37-254"><a href="#cb37-254"></a><span class="in">```{r}</span></span>
+<span id="cb37-255"><a href="#cb37-255"></a><span class="co">#| eval: false</span></span>
+<span id="cb37-256"><a href="#cb37-256"></a>schoolcalendar_pooled_formula <span class="ot">&lt;-</span> <span class="fu">bf</span>(</span>
+<span id="cb37-257"><a href="#cb37-257"></a>  <span class="at">formula =</span> yi <span class="sc">|</span> <span class="fu">se</span>(<span class="fu">sqrt</span>(vi)) <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb37-258"><a href="#cb37-258"></a>  <span class="at">family =</span> <span class="st">"gaussian"</span></span>
+<span id="cb37-259"><a href="#cb37-259"></a>)  </span>
+<span id="cb37-260"><a href="#cb37-260"></a></span>
+<span id="cb37-261"><a href="#cb37-261"></a>schoolcalendar_pooled_fit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
+<span id="cb37-262"><a href="#cb37-262"></a>  <span class="at">formula =</span> schoolcalendar_pooled_formula,</span>
+<span id="cb37-263"><a href="#cb37-263"></a>  <span class="at">data =</span> schoolcalendar_data</span>
+<span id="cb37-264"><a href="#cb37-264"></a>)</span>
+<span id="cb37-265"><a href="#cb37-265"></a><span class="in">```</span></span>
+<span id="cb37-266"><a href="#cb37-266"></a></span>
+<span id="cb37-267"><a href="#cb37-267"></a>Predictions for a new school can be made using the <span class="in">`posterior_epred`</span> function:</span>
+<span id="cb37-270"><a href="#cb37-270"></a><span class="in">```{r}</span></span>
+<span id="cb37-271"><a href="#cb37-271"></a><span class="co">#| eval: false</span></span>
+<span id="cb37-272"><a href="#cb37-272"></a>new_school <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb37-273"><a href="#cb37-273"></a>  <span class="at">school =</span> <span class="fu">factor</span>(<span class="dv">1</span>),</span>
+<span id="cb37-274"><a href="#cb37-274"></a>  <span class="at">district =</span> <span class="fu">factor</span>(<span class="dv">1</span>),</span>
+<span id="cb37-275"><a href="#cb37-275"></a>  <span class="at">district_school =</span> <span class="fu">factor</span>(<span class="st">"1_1"</span>),</span>
+<span id="cb37-276"><a href="#cb37-276"></a>  <span class="at">vi =</span> <span class="dv">0</span> <span class="co"># the expectation of the prediction is not affected by the sampling variance, so this can be any number</span></span>
+<span id="cb37-277"><a href="#cb37-277"></a>)</span>
+<span id="cb37-278"><a href="#cb37-278"></a>  </span>
+<span id="cb37-279"><a href="#cb37-279"></a></span>
+<span id="cb37-280"><a href="#cb37-280"></a>schoolcalendar_post_epred <span class="ot">&lt;-</span> <span class="fu">posterior_epred</span>(</span>
+<span id="cb37-281"><a href="#cb37-281"></a>    schoolcalendar_pooled_fit,</span>
+<span id="cb37-282"><a href="#cb37-282"></a>    <span class="at">newdata =</span> new_school,</span>
+<span id="cb37-283"><a href="#cb37-283"></a>    <span class="at">allow_new_levels =</span> <span class="cn">TRUE</span></span>
+<span id="cb37-284"><a href="#cb37-284"></a>  )</span>
+<span id="cb37-285"><a href="#cb37-285"></a></span>
+<span id="cb37-286"><a href="#cb37-286"></a><span class="in">```</span></span>
+<span id="cb37-287"><a href="#cb37-287"></a></span>
+<span id="cb37-288"><a href="#cb37-288"></a>It can be helpful to plot the posterior estimates. Here is a function that will do this:</span>
+<span id="cb37-289"><a href="#cb37-289"></a></span>
+<span id="cb37-292"><a href="#cb37-292"></a><span class="in">```{r}</span></span>
+<span id="cb37-293"><a href="#cb37-293"></a><span class="co">#| eval: false</span></span>
+<span id="cb37-294"><a href="#cb37-294"></a>plot_school_posteriors <span class="ot">&lt;-</span> <span class="cf">function</span>(fit, dataset) {</span>
+<span id="cb37-295"><a href="#cb37-295"></a>  tidybayes<span class="sc">::</span><span class="fu">add_predicted_draws</span>(dataset, fit) <span class="sc">|&gt;</span></span>
+<span id="cb37-296"><a href="#cb37-296"></a>    <span class="fu">ggplot</span>(</span>
+<span id="cb37-297"><a href="#cb37-297"></a>      <span class="fu">aes</span>(</span>
+<span id="cb37-298"><a href="#cb37-298"></a>        <span class="at">x =</span> .prediction,</span>
+<span id="cb37-299"><a href="#cb37-299"></a>        <span class="at">y =</span> <span class="fu">interaction</span>(district, school, <span class="at">sep =</span> <span class="st">", "</span>, <span class="at">lex.order =</span> <span class="cn">TRUE</span>))) <span class="sc">+</span></span>
+<span id="cb37-300"><a href="#cb37-300"></a>    tidybayes<span class="sc">::</span><span class="fu">stat_halfeye</span>() <span class="sc">+</span></span>
+<span id="cb37-301"><a href="#cb37-301"></a>    <span class="fu">ylab</span>(<span class="st">"District, school"</span>) <span class="sc">+</span></span>
+<span id="cb37-302"><a href="#cb37-302"></a>    <span class="fu">xlab</span>(<span class="st">"Posterior effect"</span>)</span>
+<span id="cb37-303"><a href="#cb37-303"></a>}</span>
+<span id="cb37-304"><a href="#cb37-304"></a></span>
+<span id="cb37-305"><a href="#cb37-305"></a><span class="in">```</span></span>
+<span id="cb37-306"><a href="#cb37-306"></a></span>
+<span id="cb37-307"><a href="#cb37-307"></a>And can be used as follows:</span>
+<span id="cb37-308"><a href="#cb37-308"></a></span>
+<span id="cb37-311"><a href="#cb37-311"></a><span class="in">```{r}</span></span>
+<span id="cb37-312"><a href="#cb37-312"></a><span class="co">#| eval: false</span></span>
+<span id="cb37-313"><a href="#cb37-313"></a><span class="fu">plot_school_posteriors</span>(</span>
+<span id="cb37-314"><a href="#cb37-314"></a>  <span class="at">fit =</span> schoolcalendar_pooled_fit,</span>
+<span id="cb37-315"><a href="#cb37-315"></a>  <span class="at">dataset =</span> schoolcalendar_data</span>
+<span id="cb37-316"><a href="#cb37-316"></a>)</span>
+<span id="cb37-317"><a href="#cb37-317"></a><span class="in">```</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

@@ -344,95 +344,196 @@ ul.task-list li input[type="checkbox"] {
 <section id="assignment-questions" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="assignment-questions"><span class="header-section-number">1.1</span> Assignment questions</h2>
 <p>For convenience the assignment questions are copied below. Answer the questions in MyCourses.</p>
-Lecture 9-10/Chapter 9 of BDA Quiz (96% of grade)<br><br>
-<h3 class="anchored">1. \( R^2 \) Prior</h3>
 <p></p>
-<p>The coefficient of determination, \( R^2 \), measures the proportion of variance explained by the model compared to the total variance of the model. This metric can be easily extended to a Bayesian definition. Let \( \tilde{y} \) denote future data. Suppose a model uses covariates X to model the target y with parameters \( \theta \). Define \( \mu_n = E[\tilde{y}_n |X_n,\theta] \) as the expected predictor for future observations for all n and \( \epsilon_n =&nbsp; \tilde{y}_n - \mu_n \) as the modeled residual.&nbsp;</p>
-<p>1.1: While for certain priors the implied probability distribution for Bayes \( R^2 \) may be derived analytically, we can generally find the push-forward distribution with Monte-Carlo Integration. Which of the below correctly characterises the s-th draw from the Bayes \(R^2\) distribution?<br></p>
-<p></p>
-<p>1.2 What is the intuition behind the Bayesian \(R^2\)? </p>
-<p>1.3: Assume a normal observation model with variance \(\sigma^2\) and the predictor terms includes covariates X and coefficients \( \beta \). Which of the below is the correct expression for a draw from the Bayes-\(R^2\) distribution?<br></p>
-<p>1.4: With some further assumptions, we can formulate Bayes-\( R^2 \) similarly for other observation families. For logistic regression, define \( \mu_n^{(s)} = logit^{-1}(X_n^T\beta^{(s)}) = \pi_n^{(s)} \) and \(&nbsp;E[var( \epsilon_n^{(s)}) | \theta^{(s)}] =&nbsp;\pi_n^{(s)}(1-\pi_n^{(s)})&nbsp; &nbsp;\). Which of the below is the correct expression for a draw from the Bayes-\(R^2\) distribution?<br></p>
-<p></p>
-<p>For other GLMs, it is not so straighforward to define the Bayes-\( R^2 \), so in this course, we recommend showing the Bayes-\( R^2 \) only for normal and logistic regression models.&nbsp;</p>
-<p>The prior-predictive distribution of \(R^2\) is also useful to look at in order to understand the impact of the prior choices on the expected amount of variance fit. For the below, assume \( y_i \sim normal(\beta^TX_i,\sigma) \). Assume the covariates, \(X \in \mathbb{R}^{N \times p} \), have been scaled to have 0 mean and variance 1, and p = 26.</p>
-<p>1.5: Assume standard normal priors for \(\beta\) and an exponential prior with rate 1/3 for \(\sigma\). Draw from the priors 4000 times, and generate prior predictive values for Bayes-\(R^2\). Which of the figures below refers to the correct implied \(R^2\) distribution?<br></p>
-<p></p>
-<p>1.6: With these priors you can derive the variance of the predictor term. What is the standard deviation of the predictor term?<br></p>
-<p>You may also put a prior directly on the Bayesian-\( R^2 \). This is simplest for the normal linear regression model and implies a joint prior for \( (\beta,\sigma) \), where we specify beliefs about the \( R^2 \) and learn the rest of the hyper-parameters in the prior for \( \beta \) via partial pooling. In the&nbsp; prior hierarchy below, the beta distribution is parameterised in terms of a location \( \mu_{R^2}\) and scale \( \sigma_{R^2} \), where the relationship to the usual parameterisation of the \(beta (\alpha,\beta)\) distribution is \( \alpha =&nbsp;\mu_{R^2}\sigma_{R^2}, \beta = (1-\mu_{R^2})\sigma_{R^2}&nbsp; \):</p>
-<p><br></p>
-<p>\( \beta_j&nbsp; \sim normal(0, \sqrt(\tau^2\psi_j\sigma^2)) \)<br>\( \tau^2 = R^2/(1-R^2) \)<br>\( R^2 \sim beta(\mu_{R^2},\sigma_{R^2}) \)&nbsp;<br>\( \psi \sim Dir(\xi) \)<br>\( \sigma \sim \pi() \) (some distribution)<br></p>
-<p><br></p>
-<p>Here, we use the relationship between the variance of the predictor term \( X\beta \) and \(R^2\) to relate inference on the \( R^2 \) space to the population variance of \( \beta \), \(\tau^2\). If you are curious about this relationship, <a href="https://arxiv.org/abs/1609.00046">Zhang et al. (2022)</a> provide derivations.&nbsp; \( \tau^2 \) is the population variance for the coefficients \( \beta \), which is allocated to individual coefficients via a weight vector \( \psi \). Positivity of weights \( \psi&nbsp; \) and sum to 1 constraint are enforced by assuming a Dirichlet distribution as prior. You may interpret \( \psi \) as determining the importance of a variable in explaining the variance of the target data, \(y\) (larger \( \psi_j \) compared to \( \psi_{-j} \) means that the j-th coefficient has larger variance and thus the j-th covariate contributes relatively more to the fraction of variance explained, \( R^2 \) ). The concentrations of the Dirichlet distribution, \( \xi \) can be used to encode prior information about the relative importance of covariates in terms of the fraction of variance explained. In absence of such prior knowledge, which is likely your starting point of your analysis, you may set these concentrations to 1. This implies that you think the covariates have equal importance. If you want to enforce sparsity on the coefficient vector, try setting to&nbsp;\( \xi = 0.3 \) (this pushes weights to the edges of the p-dimensional simplex)</p>
-<p></p>
-<p></p>
-<p>1.8: Assume that \( \sigma \sim exp(1/3) \), \( \mu_{R^2} = 1/3, \sigma_{R^2} = 3 \) and \( \xi_j = 1 \) for all j in 1 to p. Which of the below distributions should the prior predictive Bayes-\(R^2\) be closest to? Assume the beta distributions below are parameterised in terms of location and scale.<br></p>
-<p>1.9: Generate the prior predictive Bayes-\(R^2\) using the \(R^2 \) prior in 1.8 and and exponential prior with rate 1/3 for \(\sigma\). Draw from the priors 4000 times, and generate prior predictive values for Bayes-\(R^2\). Which of the figures below refers to the correct implied \(R^2\) distribution?<br></p>
-<p>We generally recommend setting the prior for the \( R^2 \) with&nbsp;\( \mu_{R^2} = 1/3, \sigma_{R^2} = 3 \). This is weakly informative toward lower \( R^2 \) which may help regularising the coefficients' posterior variance, particularly in higher dimensions. You may experiment in your projects with those hyper-parameters in order to gauge sensitivity.&nbsp;</p>
-<p><a href="https://paulbuerkner.com/brms/reference/R2D2.html">BRMS has the R2 prior implemented</a>, and here some cautionary notes:&nbsp;<br></p>
+<h1 id="lecture-9-10chapter-9-of-bda-quiz-96-of-grade">Lecture 9-10/Chapter 9 of
+  BDA Quiz (96% of grade)</h1>
+<h1 id="r2-prior">1. <span class="math inline">\(R^2\)</span> PRIOR</h1>
+<p>The coefficient of determination, <span class="math inline">\(R^2\)</span>,
+  measures the proportion of variance explained by the model compared to the
+  total variance of the model. This metric can be easily extended to a Bayesian
+  definition. Let <span class="math inline">\(\tilde{y}\)</span> denote future
+  data. Suppose a model uses covariates X to model the target y with parameters
+  <span class="math inline">\(\theta\)</span>. Define <span class="math inline">\(\mu_n = E[\tilde{y}_n \mid X_n,\theta]\)</span> as the
+  expected predictor for future observations for all n and <span class="math inline">\(\epsilon_n = \tilde{y}_n - \mu_n\)</span> as the
+  modeled residual.</p>
+<p><strong>1.1</strong> While for certain priors the implied probability
+  distribution for Bayes <span class="math inline">\(R^2\)</span> may be derived
+  analytically, we can generally find the push-forward distribution with
+  Monte-Carlo Integration. Which of the below correctly characterises the s-th
+  draw from the Bayes <span class="math inline">\(R^2\)</span> distribution?</p>
+<p><strong>1.2</strong> What is the intuition behind the Bayesian <span class="math inline">\(R^2\)</span>?</p>
+<p><strong>1.3</strong> Assume a normal observation model with variance <span class="math inline">\(\sigma^2\)</span> and the predictor terms includes
+  covariates X and coefficients <span class="math inline">\(\beta\)</span>.
+  Which of the below is the correct expression for a draw from the Bayes-<span class="math inline">\(R^2\)</span> distribution?</p>
+<p><strong>1.4</strong> With some further assumptions, we can formulate
+  Bayes-<span class="math inline">\(R^2\)</span> similarly for other observation
+  families. For logistic regression, define <span class="math inline">\(\mu_n^{(s)} = logit^{-1}(X_n^T\beta^{(s)}) =
+    \pi_n^{(s)}\)</span> and <span class="math inline">\(E[var(
+    \epsilon_n^{(s)}) | \theta^{(s)}] = \pi_n^{(s)}(1-\pi_n^{(s)})\)</span>.
+  Which of the below is the correct expression for a draw from the Bayes-<span class="math inline">\(R^2\)</span> distribution?</p>
+<p>For other GLMs, it is not so straightforward to define the Bayes-<span class="math inline">\(R^2\)</span>, so in this course, we recommend showing
+  the Bayes-<span class="math inline">\(R^2\)</span> only for normal and
+  logistic regression models. The prior-predictive distribution of <span class="math inline">\(R^2\)</span> is also useful to look at in order to
+  understand the impact of the prior choices on the expected amount of variance
+  fit. For the below, assume <span class="math inline">\(y_i \sim
+    normal(\beta^TX_i,\sigma)\)</span>. Assume the covariates, <span class="math inline">\(X \in \mathbb{R}^{N \times p}\)</span>, have been
+  scaled to have 0 mean and variance 1, and p = 26.</p>
+<p><strong>1.5</strong> Assume standard normal priors for <span class="math inline">\(\beta\)</span> and an exponential prior with rate 1/3
+  for <span class="math inline">\(\sigma\)</span>. Assume further that each
+  covariate is drawn iid from a standard normal distribution. Draw from the
+  priors 4000 times, and generate prior predictive values for Bayes-<span class="math inline">\(R^2\)</span>. Which of the figures below refers to the
+  correct Bayes-<span class="math inline">\(R^2\)</span> distribution?</p>
+<div class="float"><img style="width: 35.0%;" src="https://raw.githubusercontent.com/avehtari/BDA_course_Aalto/master/figures/Quizzes/pp_br2_1.png" alt="Figure 1">
+  <div class="figcaption">Figure 1</div>
+</div>
+<div class="float"><img style="width: 35.0%;" src="https://raw.githubusercontent.com/avehtari/BDA_course_Aalto/master/figures/Quizzes/pp_br2_2.png" alt="Figure 2">
+  <div class="figcaption">Figure 2</div>
+</div>
+<p><span class="math inline">\(\beta_j \sim normal(0,
+    \sqrt(\tau^2\psi_j\sigma^2))\)</span></p>
+<p><span class="math inline">\(\tau^2 = R^2/(1-R^2)\)</span></p>
+<p><span class="math inline">\(R^2 \sim beta(\mu_{R^2},\sigma_{R^2})\)</span>
+</p>
+<p><span class="math inline">\(\psi \sim Dir(\xi)\)</span></p>
+<p><span class="math inline">\(\sigma \sim \pi()\)</span> (some distribution)
+</p>
+<p>Here, we use the relationship between the variance of the predictor term
+  <span class="math inline">\(X\beta\)</span> and <span class="math inline">\(R^2\)</span> to relate inference on the <span class="math inline">\(R^2\)</span> space to the population variance of <span class="math inline">\(\beta\)</span>, <span class="math inline">\(\tau^2\)</span>. If you are curious about this
+  relationship, <a href="https://arxiv.org/abs/1609.00046">Zhang et
+    al.&nbsp;(2022)</a> provide derivations. <span class="math inline">\(\tau^2\)</span> is the population variance for the
+  coefficients <span class="math inline">\(\beta\)</span>, which is allocated to
+  individual coefficients via a weight vector <span class="math inline">\(\psi\)</span>. Positivity of weights <span class="math inline">\(\psi\)</span> and sum to 1 constraint are enforced by
+  assuming a Dirichlet distribution as prior. You may interpret <span class="math inline">\(\psi\)</span> as determining the importance of a
+  variable in explaining the variance of the target data, <span class="math inline">\(y\)</span> (larger <span class="math inline">\(\psi_j\)</span> compared to <span class="math inline">\(\psi_{-j}\)</span> means that the j-th coefficient has
+  larger variance and thus the j-th covariate contributes relatively more to the
+  fraction of variance explained, <span class="math inline">\(R^2\)</span>). The
+  concentrations of the Dirichlet distribution, <span class="math inline">\(\xi\)</span> can be used to encode prior information
+  about the relative importance of covariates in terms of the fraction of
+  variance explained. In absence of such prior knowledge, which is likely your
+  starting point of your analysis, you may set these concentrations to 1. This
+  implies that you think the covariates have equal importance. If you want to
+  enforce sparsity on the coefficient vector, try setting to <span class="math inline">\(\xi = 0.3\)</span> (this pushes weights to the edges
+  of the p-dimensional simplex).</p>
+<p><strong>1.7</strong> Assume that <span class="math inline">\(\sigma \sim
+    exp(1/3)\)</span>, <span class="math inline">\(\mu_{R^2} = 1/3, \sigma_{R^2}
+    = 3\)</span> and <span class="math inline">\(\xi_j = 1\)</span> for all j in
+  1 to p.&nbsp;Which of the below distributions should the prior predictive
+  Bayes-<span class="math inline">\(R^2\)</span> be closest to? Assume the beta
+  distributions below are parameterised in terms of location and scale.</p>
+<p><strong>1.8</strong> Generate the prior predictive Bayes-<span class="math inline">\(R^2\)</span> using the <span class="math inline">\(R^2\)</span> prior in 1.8 and and exponential prior
+  with rate 1/3 for <span class="math inline">\(\sigma\)</span>. Draw from the
+  priors 4000 times, and generate prior predictive values for Bayes-<span class="math inline">\(R^2\)</span>. Which of the figures below refers to the
+  correct Bayes-<span class="math inline">\(R^2\)</span> distribution?</p>
+<div class="float"><img style="width: 35.0%;" src="https://raw.githubusercontent.com/avehtari/BDA_course_Aalto/master/figures/Quizzes/pp_br2_1.png" alt="Figure 3">
+  <div class="figcaption">Figure 3</div>
+</div>
+<div class="float"><img style="width: 35.0%;" src="https://raw.githubusercontent.com/avehtari/BDA_course_Aalto/master/figures/Quizzes/pp_br2_2.png" alt="Figure 4">
+  <div class="figcaption">Figure 4</div>
+</div>
 <ul>
-    <li>The implementation of the prior BRMS assumes you have scaled the covariates to have variance 1, so please pass scaled covariates to the brm function (the target variable should stay as is for easier model comparison).<br></li>
-    <li>The connection between R2 prior and model R2 is only exact for the normal model<br></li>
-    <li>We still recommend using the R2 prior in BRMS for all observation families, particularly when you have many covariates and you would otherwise use normal independent priors&nbsp;</li>
+  <li>The implementation of the prior brms assumes you have scaled the
+    covariates to have variance 1, so please pass scaled covariates to the brm
+    function (the target variable should stay as is for easier model
+    comparison).</li>
+  <li>The connection between <span class="math inline">\(R^2\)</span> prior and
+    model <span class="math inline">\(R^2\)</span> is only exact for the normal
+    model (hence, be careful to interpret it as the Bayes-<span class="math inline">\(R^2\)</span> for other observation families)</li>
+  <li>We still recommend using the <span class="math inline">\(R^2\)</span>
+    prior in brms for <strong>all</strong> observation families, particularly
+    when you have many covariates and you would otherwise use normal independent
+    priors.</li>
 </ul>
-<p></p>
-<p>For those who want to dig deeper, how would the prior for \( \beta \) need to be adjusted so that the \( R^2 \) of the model is invariant to changes in the scale of X?&nbsp;</p>
-<h3 class="anchored">2.Portuguese Student Data</h3>
-<p></p>
-<h3 class="anchored"></h3>
-<p>Now we apply these priors to a data set in which the goal is to predict Portoguese students' final period math grade based on a moderately large set of covariates (p = 26), including social background and past schooling information.</p>
-<p>Use the data preparation steps in the code template, and estimate a model with normal(0,1) priors on the regression coefficients, and otherwise use default priors.</p>
-<p>2.1: Plot the marginal posteriors of the coefficients with this prior, what do you observe?<br><br><br>2.2: Compute and plot the prior and posterior Bayes-\(R^2\) distributions. Which of the figures below refers to the correct the implied \(R^2\) distribution with normal(0,1) priors on the regression coefficients?<br></p>
-<p>2.3: Compute the mean of the posterior R2 distribution  and the mean of the loo R2 .<br><br>2.4: What does the difference between the mean of the posterior R2 and LOO cross-validated R2 distribution indicate?<br></p>
-<p></p>
-<p></p>
-<p>2.5: Now use the \( R^2 \) prior with \( \mu_{R^2} = 1/3, \sigma_{R^2} = 3 \) and concentration values of 1, otherwise use default priors from BRMS.&nbsp;Plot the marginal posteriors of the coefficients with this prior, what do you observe compared to the marginal posteriors of the normal(0,1) prior?<br><br><br></p>
-<p>2.6: Compute and plot the prior and posterior Bayes-\(R^2\) distributions. Which of the figures below refers to the correct the implied \(R^2\) distribution using the \( R^2 \) prior ?<br></p>
-<p></p>
-<p>2.7: Compute the mean of the posterior predictive R2 distribution  and the mean of the loo R2 .<br><br></p>
-<p>2.8: What does the difference between the mean of the posterior R2 and LOO cross-validated R2 distribution indicate?</p>
-<p></p>
-<p><span style=""><span style="font-size: 26.2499px;"><b>3. Bayesian Decision theory</b></span></span></p>
-<p></p>3.1 Which of the following are steps of decision analysis according to BDA3? <br><br>
-<h3 class="anchored">4. Decision theory case study</h3>
-<p></p>
-<h3 class="anchored"></h3>
-<p><span>Assume we created a model that estimates life expectancy of a person based on various covariates such as gender, history of diseases and so on. We conducted inference in a Bayesian way by obtaining samples of the parameters of our model.&nbsp;</span></p>
-<p><span>A 80-year-old man with an apparently malignant tumor in the lung must decide between the three options of radiotherapy, surgery, or no treatment. He visits us and asks to use our model to help him with his decision. A priori doctors told the man that there is a 80% chance that the tumor is malignant. By using our marvellous model, we sampled posterior predictive draws (ppd) for all cases which are interesting for us. To keep things simpler, we have obtained only 5 posterior draws from the distribution of the predicted remaining lifetime.</span></p>
+<p>For those who want to dig deeper, how would the prior for <span class="math inline">\(\beta\)</span> need to be adjusted so that the <span class="math inline">\(R^2\)</span> of the model is invariant to changes in
+  the scale of X?</p>
+<h1 id="portuguese-student-data">2. PORTUGUESE STUDENT DATA</h1>
+<p>Now we apply these priors to a data set in which the goal is to predict
+  Portuguese students’ final period math grade based on a moderately large set
+  of covariates (p = 26), including social background and past schooling
+  information. Use the data preparation steps in the code template, and estimate
+  a model with normal(0,1) priors on the regression coefficients, and otherwise
+  use default priors.</p>
+<p><strong>2.1</strong>: Plot the marginal posteriors of the coefficients with
+  this prior, what do you observe?</p>
+<p><strong>2.2</strong>: Compute and plot the prior and posterior Bayes-<span class="math inline">\(R^2\)</span> distributions. Which of the figures below
+  refers to the correct the Bayes-<span class="math inline">\(R^2\)</span>
+  distribution with normal(0,1) priors on the regression coefficients?</p>
+<div class="float"><img style="width: 35.0%;" src="https://raw.githubusercontent.com/avehtari/BDA_course_Aalto/refs/heads/master/figures/Quizzes/R2_1.png" alt="Figure 5">
+  <div class="figcaption">Figure 5</div>
+</div>
+<div class="float"><img style="width: 35.0%;" src="https://raw.githubusercontent.com/avehtari/BDA_course_Aalto/refs/heads/master/figures/Quizzes/R2_2.png" alt="Figure 6">
+  <div class="figcaption">Figure 6</div>
+</div>
+<p><strong>2.4</strong> What does the difference between the mean of the
+  posterior R2 and LOO cross-validated R2 distribution indicate?</p>
+<p><strong>2.5</strong> Now use the <span class="math inline">\(R^2\)</span>
+  prior with <span class="math inline">\(\mu_{R^2} = 1/3, \sigma_{R^2} =
+    3\)</span> and concentration values of 1, otherwise use default priors from
+  brms. Plot the marginal posteriors of the coefficients with this prior, what
+  do you observe compared to the marginal posteriors of the normal(0, 1) prior?
+</p>
+<p><strong>2.6</strong> Compute and plot the prior and posterior Bayes-<span class="math inline">\(R^2\)</span> distributions. Which of the figures below
+  refers to the correct the Bayes-<span class="math inline">\(R^2\)</span>
+  distribution using the <span class="math inline">\(R^2\)</span> prior?</p>
+<div class="float"><img style="width: 35.0%;" src="https://raw.githubusercontent.com/avehtari/BDA_course_Aalto/refs/heads/master/figures/Quizzes/R2_1.png" alt="Figure 7">
+  <div class="figcaption">Figure 7</div>
+</div>
+<div class="float"><img style="width: 35.0%;" src="https://raw.githubusercontent.com/avehtari/BDA_course_Aalto/refs/heads/master/figures/Quizzes/R2_2.png" alt="Figure 8">
+  <div class="figcaption">Figure 8</div>
+</div>
+<p><strong>2.8</strong> What does the difference between the mean of the
+  posterior <span class="math inline">\(R^2\)</span> and LOO cross-validated
+  <span class="math inline">\(R^2\)</span> distribution indicate?</p>
+<h1 id="bayesian-decision-theory">3. BAYESIAN DECISION THEORY</h1>
+<p><strong>3.1</strong> Which of the following are steps of decision analysis
+  according to BDA3?</p>
+<h1 id="decision-theory-case-study">4. Decision theory case study</h1>
+<p>Assume we created a model that estimates life expectancy of a person based on
+  various covariates such as gender, history of diseases and so on. We conducted
+  inference in a Bayesian way by obtaining samples of the parameters of our
+  model. A 80-year-old man with an apparently malignant tumor in the lung must
+  decide between the three options of radiotherapy, surgery, or no treatment. He
+  visits us and asks to use our model to help him with his decision. A priori
+  doctors told the man that there is a 80% chance that the tumor is malignant.
+  By using our model, we sampled posterior predictive draws (ppd) for all cases
+  which are interesting for us. To keep things simpler, we have obtained only 5
+  posterior draws from the distribution of the predicted remaining lifetime.</p>
 <ul>
-    <li><span>if the man has lung cancer and&nbsp;</span><span>radiotherapy is performed,&nbsp;ppd of his life expectancy are: [4.4, 5.3, 5.1, 3.2, 4.9]</span></li>
-    <li><span>if the man has lung cancer and surgery is done</span><span>, which is dangerous for this age and doctors give 30% chance of mortality, ppd of his life expectancy in a case of successful surgery are: [5.9, 6.3, 6.2, 5.7, 7]</span></li>
-    <li><span>if the man has lung cancer and no treatment is given</span><span>,&nbsp;ppd of his life expectancy are: [1.1, 0.7, 0.9, 1.7, 0.4]</span></li>
-    <li><span>if the man does not have lung cancer (no malignant tumor), &nbsp;ppd of his life expectancy are:&nbsp;[6.8, 5.5, 8.8, 7.4, 9]. Assume also that if man is healthy,&nbsp;radiotherapy or successful surgery do not affect his life expectancy, however he still has 30% of dying during the surgery&nbsp;</span></li>
+  <li>if the man has lung cancer and radiotherapy is performed, ppd of his life
+    expectancy are: [4.4, 5.3, 5.1, 3.2, 4.9]</li>
+  <li>if the man has lung cancer and surgery is done, which is dangerous for
+    this age and doctors give 30% chance of mortality, ppd of his life
+    expectancy in a case of successful surgery are: [5.9, 6.3, 6.2, 5.7, 7]</li>
+  <li>if the man has lung cancer and no treatment is given, ppd of his life
+    expectancy are: [1.1, 0.7, 0.9, 1.7, 0.4]</li>
+  <li>if the man does not have lung cancer (no malignant tumor), ppd of his life
+    expectancy are: [6.8, 5.5, 8.8, 7.4, 9]. Assume also that if man is healthy,
+    radiotherapy or successful surgery do not affect his life expectancy,
+    however he still has 30% of dying during the surgery.</li>
 </ul>
-<p></p>
-<div title="Page 255">
-    <div>
-        <div>
-            <p>We shall determine the decision that maximizes patient’s life expectancy. Compute expected l<span>ife expectancy for the above cases using posterior predictive draws and given probabilities:</span></p>
-            <p><span>4.1: man does not have lung cancer (no malignant tumor) and no treatment is given or radiotherapy is performed: </span></p>
-            <p><span>4.2: man does not have lung cancer (no malignant tumor) and surgery is done: <br></span></p>
-            <p><span><span>4.3: man has lung cancer and performs&nbsp;</span><span>radiotherapy:&nbsp;</span><br></span></p>
-            <p>4.4: man has lung cancer and surgery is done: <br></p>
-            <p>4.5: man has lung cancer and no treatment is given:&nbsp;</p>
-            <p>Then, using these quantities, compute expected&nbsp;l<span>ife expectancy under each treatment (you should use information that there is 20% chance that the man does not have lung cancer (no malignant tumor)):</span></p>
-            <p><span>4.6: with radiotherapy:&nbsp;</span></p>
-            <p>4.7: with surgery: <br></p>
-            <p>4.8: with no treatment:&nbsp;</p>
-            <p>4.9: What should the man choose to maximize his&nbsp;expected l<span>ife expectancy?</span></p>
-            <p><span></span></p>
-            <div title="Page 86">
-                <p>
-        </p></div>
-    </div>
-</div><br>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
+<p>We shall determine the decision that maximizes patient’s life expectancy.
+  Compute expected life expectancy for the above cases using posterior
+  predictive draws and given probabilities:</p>
+<p><strong>4.1</strong> man does not have lung cancer (no malignant tumor) and
+  no treatment is given or radiotherapy is performed: </p>
+<p><strong>4.2</strong> man does not have lung cancer (no malignant tumor) and
+  surgery is done: </p>
+<p><strong>4.3</strong> man has lung cancer and performs radiotherapy:
+  </p>
+<p><strong>4.4</strong> man has lung cancer and surgery is done:
+  </p>
+<p><strong>4.5</strong> man has lung cancer and no treatment is given:
+  </p>
+<p>Then, using these quantities, compute expected life expectancy under each
+  treatment (you should use information that there is 20% chance that the man
+  does not have lung cancer (no malignant tumor)):</p>
+<p><strong>4.6</strong> with radiotherapy: </p>
+<p><strong>4.7</strong> with surgery: </p>
+<p><strong>4.8</strong> with no treatment: </p>
+<p><strong>4.9</strong> What should the man choose to maximize his expected life
+  expectancy?</p>
 
 
-</div></section>
+</section>
 </section>
 
 </main> <!-- /main -->
