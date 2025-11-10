@@ -1,0 +1,350 @@
+\documentclass[t]{beamer}
+%\documentclass[finnish,english,handout]{beamer}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{newtxtext} % times
+%\usepackage[scaled=.95]{cabin} % sans serif
+\usepackage{amsmath}
+\usepackage[varqu,varl]{inconsolata} % typewriter
+\usepackage[varg]{newtxmath}
+\usefonttheme[onlymath]{serif} % beamer font theme
+\usepackage{microtype}
+\usepackage{afterpage}
+\usepackage{url}
+\urlstyle{same}
+% \usepackage{amsbsy}
+% \usepackage{eucal}
+\usepackage{rotating}
+\usepackage{listings}
+\usepackage{lstbayes}
+\usepackage[all,poly,ps,color]{xy}
+\usepackage{eurosym}
+
+\usepackage{natbib}
+\bibliographystyle{apalike}
+
+% minted
+\usepackage{minted}
+\setminted{highlightcolor=yellow!25}
+\newmintinline{r}{}
+% The following is adjusted from
+% https://tex.stackexchange.com/questions/548592/changing-all-colors-to-black-white-using-minted-sty
+\makeatletter
+\newcommand{\minted@style@bw}{%
+  \renewcommand\fcolorbox[3][]{##3}%
+  \renewcommand\textcolor[3][]{##3}%
+  \color{gray}
+}
+% define new minted option "gray"
+\minted@def@opt@switch{gray}
+\fvset{formatcom*={%
+  \ifthenelse{\equal{\minted@get@opt{gray}{true}}{true}}
+  {\minted@style@bw}{}%
+}}
+\makeatother
+% The following is ajusted from
+% https://tex.stackexchange.com/questions/74459/remove-space-before-colorbox
+\newcommand{\reducedstrut}{\vrule width 0pt height .9\ht\strutbox depth .9\dp\strutbox\relax}
+\newcommand{\highlight}[1]{%
+  \begingroup
+  \setlength{\fboxsep}{0pt}%  
+  \colorbox{yellow!30}{\reducedstrut\detokenize{#1}\/}%
+  \endgroup
+}
+
+\mode<presentation>
+{
+  \setbeamercovered{invisible}
+  \setbeamertemplate{itemize items}[circle]
+  \setbeamercolor{frametitle}{bg=white,fg=navyblue}
+  \setbeamertemplate{navigation symbols}{}
+  \setbeamertemplate{headline}[default]{}
+  \setbeamertemplate{footline}[split]
+  % \setbeamertemplate{headline}[text line]{\insertsection}
+  \setbeamertemplate{footline}[frame number]
+}
+
+\pdfinfo{            
+  /Title      (BDA, Lecture 10) 
+  /Author     (Aki Vehtari) % 
+  /Keywords   (Bayesian data analysis)
+}
+
+\definecolor{forestgreen}{rgb}{0.1333,0.5451,0.1333}
+\definecolor{navyblue}{rgb}{0,0,0.5}
+\definecolor{list1}{rgb}{0,0.2549,0.6784}
+\renewcommand{\emph}[1]{\textcolor{navyblue}{#1}}
+\definecolor{set11}{HTML}{E41A1C}
+\definecolor{set12}{HTML}{377EB8}
+\definecolor{set13}{HTML}{4DAF4A}
+
+\graphicspath{{./figs/}}
+
+
+\parindent=0pt
+\parskip=8pt
+\tolerance=9000
+\abovedisplayshortskip=0pt
+
+%\renewcommand{\itemsep}{0pt}
+% Lists
+\newenvironment{list1}{
+   \begin{list}{$\color{list1}\bullet$}{\itemsep=6pt}}{
+  \end{list}}
+\newenvironment{list1s}{
+  \begin{list}{$\includegraphics[width=5pt]{logo.eps}$}{\itemsep=6pt}}{
+  \end{list}}
+\newenvironment{list2}{
+  \begin{list}{-}{\baselineskip=12pt\itemsep=2pt}}{
+  \end{list}}
+\newenvironment{list3}{
+  \begin{list}{$\cdot$}{\baselineskip=15pt}}{
+  \end{list}}
+
+\def\o{{\mathbf o}}
+\def\t{{\mathbf \theta}}
+\def\w{{\mathbf w}}
+\def\x{{\mathbf x}}
+\def\y{{\mathbf y}}
+\def\z{{\mathbf z}}
+
+\def\peff{p_{\mathrm{eff}}}
+\def\eff{\mathrm{eff}}
+
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\var}{var}
+\DeclareMathOperator{\Sd}{Sd}
+\DeclareMathOperator{\sd}{sd}
+\DeclareMathOperator{\Gammad}{Gamma}
+\DeclareMathOperator{\Invgamma}{Inv-gamma}
+\DeclareMathOperator{\Bin}{Bin}
+\DeclareMathOperator{\Negbin}{Neg-bin}
+\DeclareMathOperator{\Poisson}{Poisson}
+\DeclareMathOperator{\Beta}{Beta}
+\DeclareMathOperator{\logit}{logit}
+\DeclareMathOperator{\N}{N}
+\DeclareMathOperator{\U}{U}
+\DeclareMathOperator{\normal}{normal}
+\DeclareMathOperator{\R2D2}{R2D2}
+\DeclareMathOperator{\BF}{BF}
+\DeclareMathOperator{\Invchi2}{Inv-\chi^2}
+\DeclareMathOperator{\NInvchi2}{N-Inv-\chi^2}
+\DeclareMathOperator{\InvWishart}{Inv-Wishart}
+\DeclareMathOperator{\tr}{tr}
+% \DeclareMathOperator{\Pr}{Pr}
+\def\euro{{\footnotesize \EUR\, }}
+\DeclareMathOperator{\rep}{\mathrm{rep}}
+
+% \def\dashxy(#1){%
+%   /xydash{[#1] 0 setdash}def}
+% \def\grayxy(#1){%
+%   /xycolor{#1 setgray}def}
+% \newgraphescape{D}[1]{!{\ar @*{[!\dashxy(2 2)]} "#1"}}
+% \newgraphescape{P}[1]{!{\ar "#1"}}
+% \newgraphescape{F}[1]{!{*+=<2em>[F=]{#1}="#1"}}
+% \newgraphescape{O}[1]{!{*+=<2em>[F]{#1}="#1"}}
+% \newgraphescape{V}[1]{!{*+=<2em>[o][F]{#1}="#1"}}
+% \newgraphescape{B}[3]{!{{ "#1"*+#3\frm{} }.{ "#2"*+#3\frm{} } *+[F:!\grayxy(0.75)]\frm{}}}
+
+
+\title[]{Bayesian data analysis}
+\subtitle{}
+
+\author{Aki Vehtari}
+
+\institute[Aalto]{}
+ 
+\date[]{}
+
+%\beamerdefaultoverlayspecification{<+->}
+
+\begin{document}
+
+\begin{frame}{R2D2 prior}
+
+  \begin{list1}
+  \item Useful for models with many predictors
+  \end{list1}
+\end{frame}
+
+\begin{frame}{$R^2$, proportion of variance explained}
+
+  \vspace{-\baselineskip}
+    \begin{equation*}
+      \frac{\text{explained variance}}{\text{total variance}}
+    \end{equation*}
+
+    \uncover<2->{
+  \includegraphics[width=5.3cm]{fake_yhat.pdf}
+  \includegraphics[width=5.3cm]{fake_res.pdf}
+}
+  
+  \vspace{-\baselineskip}
+  \begin{align*}
+    \uncover<3->{R^2 }& \uncover<3->{= \frac{{\Var}_{\mu}}{{\Var}_{\mu}+{\Var}_{\mathrm res}}, \text{ where } \mu = \hat{y}, \text{and res}=y-\hat{y}}  \\
+  & \uncover<4->{  \approx \frac{2.4}{2.4+0.85} \approx 0.74}
+  \end{align*}
+  
+  
+\end{frame}
+
+\begin{frame}{LOO-$R^2$}
+
+  Replace posterior mean prediction with LOO-CV predictions
+
+    \uncover<2->{
+  \includegraphics[width=5.3cm]{fake_yloo.pdf}
+  \includegraphics[width=5.3cm]{fake_loores.pdf}
+}
+  
+  \vspace{-\baselineskip}
+  \begin{align*}
+    \uncover<3->{R^2 }& \uncover<3->{\approx \frac{2.4}{2.4+0.85} \approx 0.74}\\
+    \uncover<3->{\mathrm{LOO-}R^2 }& \uncover<3->{\approx \frac{2.4}{2.4+1.0} \approx 0.7}
+  \end{align*}
+
+  \hfill
+  
+  {\color{gray}\small Code and examples \url{avehtari.github.io/bayes_R2/bayes_R2.html}}
+\end{frame}
+
+\begin{frame}{Bayesian-$R^2$}
+
+  \vspace{-\baselineskip}
+  Model based, with posterior
+
+    \uncover<2->{
+      \includegraphics[width=5.3cm]{fake_mus.pdf}
+\uncover<3->{
+      \includegraphics[width=5.3cm]{fake_bayes_R2.pdf}
+  }
+    }
+    
+  
+    \uncover<2->{
+  \vspace{-3\baselineskip}
+  \begin{align*}
+ {\Var}_{\mu}^s & = V_{n=1}^N \hat{y}_n^s\\
+    {\Var}_{\mathrm res}^s & = \Var(y \mid x, \alpha^s, \beta^s, \sigma^s) = (\sigma^2)^s 
+  \end{align*}
+}
+
+\vspace{-2\baselineskip}
+  \begin{itemize}
+  \item<4-> Posterior presents the uncertainty
+  \item<5-> Posterior mean of Bayesian-$R^2$ is optimistic compared to LOO-$R^2$
+  \item<6-> Can also be used to examine $R^2$ prior distribution
+  \end{itemize}
+
+  {\color{gray}\footnotesize \href{https://doi.org/10.1080/00031305.2018.1549100}{Gelman, Goodrich, Gabry, and Vehtari (2019). R-squared for Bayesian regression models. \textit{The American Statistician}, 73(3):307-309.}}
+
+\end{frame}
+
+\begin{frame}{Implied prior on $R^2$}
+
+  \begin{itemize}
+  \item Draw from the model parameter priors
+  \item Compute prior predictions
+  \item Compute Bayesian-$R^2$ using the prior draws
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}[fragile]{Implied prior on $R^2$}
+
+  Regression and Other Stories, Section 12.7 Models for regression
+  coefficients: 26 covariates normalized to have mean 0 and sd 1
+  
+  \only<1>{
+    Independent normal priors for coefficients
+    \begin{align*}
+      \beta & \sim \normal(0, 2.5) \\
+      \sigma & \sim t_3(0, 3)
+    \end{align*}
+    
+    \vspace{-4\baselineskip}
+    \includegraphics[width=10cm]{student_bayes_R2_n1p.pdf}
+  }
+  \only<2>{
+    Scaled normal priors for coefficients
+    \begin{align*}
+      \beta & \sim \normal(0, 2.5/\sqrt{26}) \\
+      \sigma & \sim t_3(0, 3)
+    \end{align*}
+
+    \vspace{-4\baselineskip}
+    \includegraphics[width=10cm]{student_bayes_R2_n2p.pdf}
+  }
+  \only<3>{
+    R2D2 prior
+    \begin{align*}
+      \beta & \sim \R2D2(1/3, 3, 1/2, \sigma) \\
+      \sigma & \sim t_3(0, 3)
+    \end{align*}
+
+    \vspace{-4\baselineskip}
+    \includegraphics[width=10cm]{student_bayes_R2_mp.pdf}
+  }
+  
+\end{frame}
+
+\begin{frame}[fragile]{R2D2 prior}
+
+  \begin{itemize}
+  \item Define the prior on $R^2$
+  \item Joint prior on coefficients which depends also on $\sigma$
+  \item D2 refers to Dirichlet decomposition
+  \item<2-> With mean 1/3 and precision 3, R2D2 prior states smaller
+    $R^2$ are more likely a priori, but locally the slope is not steep
+  \item<3-> Often good prior when there are many covariates
+  \item<4-> Predictively consistent prior: adding more covariates
+    doesn't change the prior on $R^2$
+  \end{itemize}
+
+  \hfill
+
+  {\footnotesize\color{gray}\href{https://doi.org/10.1080/01621459.2020.1825449}{Zhang, Naughton, Bondell, and Reich
+      (2022). Bayesian regression using a prior on the model fit: The {R2-D2} shrinkage prior. \textit{Journal of the American Statistical
+        Association}, 117:862--874.}\\
+    \href{https://doi.org/10.1214/23-EJS2136}{Aguilar and Bürkner (2023). Intuitive joint priors for {Bayesian} linear multilevel models: {The} {R2D2M2} prior. \textit{Electronic Journal of Statistics}, 17:1711--1767.}}
+  
+\end{frame}
+
+\begin{frame}[fragile]{Priors and posteriors}
+
+
+\only<1>{\includegraphics[width=11cm]{fig-implied-R2-prior-posterior-loo-html-1.pdf}}
+\only<2>{\includegraphics[width=11cm]{fig-implied-R2-prior-posterior-loo-html-2.pdf}}
+\only<3>{\includegraphics[width=11cm]{fig-implied-R2-prior-posterior-loo-html-3.pdf}}
+\only<4>{\includegraphics[width=11cm]{fig-implied-R2-prior-posterior-loo-html-4.pdf}}
+  
+\end{frame}
+
+\begin{frame}[fragile]{brms}
+
+\begin{minted}{r}
+fit <- brm(y ~ .,
+           prior = prior(R2D2(mean_R2 = 1/3,
+                              prec_R2 = 3,
+                              cons_D2 = 1/2),
+                         class=b)))
+\end{minted}  
+
+  \vspace{2\baselineskip}
+
+  \uncover<2->{
+  See the assignment notebook for additional $R^2$ related code.
+}
+
+
+\end{frame}
+
+\end{document}
+
+%%% Local Variables: 
+%%% TeX-PDF-mode: t
+%%% TeX-master: t
+%%% TeX-command-extra-options: "-shell-escape"
+%%% End: 

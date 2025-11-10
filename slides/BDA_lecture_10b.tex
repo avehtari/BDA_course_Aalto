@@ -257,48 +257,48 @@
 
 \end{frame}
 
-\begin{frame}{Normal approximation}
+% \begin{frame}{Normal approximation}
 
-  \begin{itemize}
-  % \item Taylor series expansion of the log posterior around the posterior mode
-  %   $\hat{\theta}$
-  %   \begin{equation*}
-  %     \log p(\theta|y) = \log p(\hat{\theta}|y) +
-  %     \frac{1}{2}(\theta-\hat{\theta})^T\left[\frac{d^2}{d\theta^2}\log p(\theta'|y) \right]_{\theta'=\hat{\theta}} (\theta-\hat{\theta})+\ldots
-  %   \end{equation*}
-  % \item Multivariate normal $\propto\left|\Sigma\right|^{-1/2} \exp\left(-\frac{1}{2}(\theta-\hat{\theta}^T)\Sigma^{-1}(\theta-\hat{\theta})\right)$
+%   \begin{itemize}
+%   % \item Taylor series expansion of the log posterior around the posterior mode
+%   %   $\hat{\theta}$
+%   %   \begin{equation*}
+%   %     \log p(\theta|y) = \log p(\hat{\theta}|y) +
+%   %     \frac{1}{2}(\theta-\hat{\theta})^T\left[\frac{d^2}{d\theta^2}\log p(\theta'|y) \right]_{\theta'=\hat{\theta}} (\theta-\hat{\theta})+\ldots
+%   %   \end{equation*}
+%   % \item Multivariate normal $\propto\left|\Sigma\right|^{-1/2} \exp\left(-\frac{1}{2}(\theta-\hat{\theta}^T)\Sigma^{-1}(\theta-\hat{\theta})\right)$
 
-  \item Normal approximation 
-    \begin{equation*}
-      p(\theta|y) \approx \N(\hat{\theta},[I(\hat{\theta})]^{-1})
-    \end{equation*}
-    where $I(\theta)$ is called {\em observed information}
-    \begin{equation*}
-      I(\theta) = - \frac{d^2}{d\theta^2}\log p(\theta|y)
-    \end{equation*}
-    \uncover<2->{Hessian $H(\theta)=-I(\theta)$}
-  \end{itemize}
+%   \item Normal approximation 
+%     \begin{equation*}
+%       p(\theta|y) \approx \N(\hat{\theta},[I(\hat{\theta})]^{-1})
+%     \end{equation*}
+%     where $I(\theta)$ is called {\em observed information}
+%     \begin{equation*}
+%       I(\theta) = - \frac{d^2}{d\theta^2}\log p(\theta|y)
+%     \end{equation*}
+%     \uncover<2->{Hessian $H(\theta)=-I(\theta)$}
+%   \end{itemize}
 
-\end{frame}
+% \end{frame}
 
-\begin{frame}{Normal approximation}
+% \begin{frame}{Normal approximation}
 
-  \begin{itemize}
-  \item $I(\theta)$ is called {\em observed information}
-    \begin{equation*}
-      I(\theta) = - \frac{d^2}{d\theta^2}\log p(\theta|y)
-    \end{equation*}
-    \begin{itemize}
-    \item $I(\hat{\theta})$ is the second derivatives at the mode and
-      thus describes the curvature at the mode
-    \item if the mode is inside the parameter space, $I(\hat{\theta})$
-      is positive
-    \item if $\theta$ is a vector, then $I(\theta)$ is a matrix
-%    \item Käytetään myös nimitystä {\em Hessian} $H(\theta)$
-  \end{itemize}
-\end{itemize}
+%   \begin{itemize}
+%   \item $I(\theta)$ is called {\em observed information}
+%     \begin{equation*}
+%       I(\theta) = - \frac{d^2}{d\theta^2}\log p(\theta|y)
+%     \end{equation*}
+%     \begin{itemize}
+%     \item $I(\hat{\theta})$ is the second derivatives at the mode and
+%       thus describes the curvature at the mode
+%     \item if the mode is inside the parameter space, $I(\hat{\theta})$
+%       is positive
+%     \item if $\theta$ is a vector, then $I(\theta)$ is a matrix
+% %    \item Käytetään myös nimitystä {\em Hessian} $H(\theta)$
+%   \end{itemize}
+% \end{itemize}
 
-\end{frame}
+% \end{frame}
 
 \begin{frame}{Normal approximation}
 
@@ -444,8 +444,44 @@
   \item Normal approximation can be computed numerically
     \begin{itemize}
     \item iterative optimization to find a mode (may use gradients)
-    \item autodiff or finite-difference for gradients and Hessian
-    \item<2> e.g. in R, demo4\_1.R:
+    \item autodiff or finite-difference for gradients and Hessian (second derivatives)
+    \item covariance matrix is inverse of negative Hessian matrix
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Normal approximation -- numerically}
+
+  \begin{itemize}
+  \item Normal approximation can be computed numerically
+    \begin{itemize}
+    \item iterative optimization to find a mode (may use gradients)
+    \item autodiff or finite-difference for gradients and Hessian (second derivatives)
+    \item covariance matrix is inverse of negative Hessian matrix
+    \item e.g. in R, demo4\_1.R:
+    \end{itemize}
+  \end{itemize}
+\begin{minted}[fontsize=\footnotesize]{r}
+bioassayfun <- function(w, df) {
+  z <- w[1] + w[2]*df$x
+  -sum(df$y*(z) - df$n*log1p(exp(z)))
+}
+\end{minted}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Normal approximation -- numerically}
+
+  \begin{itemize}
+  \item Normal approximation can be computed numerically
+    \begin{itemize}
+    \item iterative optimization to find a mode (may use gradients)
+    \item autodiff or finite-difference for gradients and Hessian (second derivatives)
+    \item covariance matrix is inverse of negative Hessian matrix
+    \item e.g. in R, demo4\_1.R:
+    \end{itemize}
+  \end{itemize}
 \begin{minted}[fontsize=\footnotesize]{r}
 bioassayfun <- function(w, df) {
   z <- w[1] + w[2]*df$x
@@ -457,8 +493,6 @@ optimres <- optim(w0, bioassayfun, gr=NULL, df1, hessian=T)
 thetahat <- optimres$par
 Sigma <- solve(optimres$hessian)
 \end{minted}
-    \end{itemize}
-  \end{itemize}
 \end{frame}
 
 \begin{frame}{Normal approximation -- numerically}
@@ -541,7 +575,7 @@ Sigma <- solve(optimres$hessian)
   \item<1-> Pareto-$k$ diagnostic of importance sampling weights can be
     used for diagnostic
     \begin{itemize}
-    \item in Bioassay example $k=0.57$, which is ok
+    \item in Bioassay example $k=0.57$, which is OK
     \end{itemize}
   \item<2-> CmdStan(R) has Laplace algorithm
     \begin{itemize}
@@ -720,12 +754,13 @@ Sigma <- solve(optimres$hessian)
 \vspace{-.5\baselineskip}
 
 \only<1>{\includegraphics[width=1.05\textwidth]{pathfinder_logit_example.pdf}\\
-  \vspace{-.5\baselineskip}}
-\only<2>{\includegraphics[width=1.05\textwidth]{pathfinder_funnel_example.pdf}\\
-  \vspace{-.5\baselineskip}}
+\vspace{-\baselineskip}}
+\only<2>{\includegraphics[width=1.05\textwidth]{pathfinder_funnel_example.pdf}}
+
+\vspace{-.5\baselineskip}
 \footnotesize{Zhang, Carpenter, Gelman, and Vehtari
   (2022). Pathfinder: Parallel quasi-Newton variational
-  inference. \textit{Journal of Machine Learning Research},
+  inference. \textit{JMLR},
   23(306):1--49.}
 
 \end{frame}
@@ -800,7 +835,7 @@ Sigma <- solve(optimres$hessian)
 
 \begin{frame}[fragile]{brms supports Laplace / Pathfinder / ADVI}
 
-  These might be useful for initializng MCMC or big data. The ADVI
+  These might be useful for initializing MCMC or big data. The ADVI
   implementation is not very good.
   
 \begin{minted}[fontsize=\footnotesize,escapeinside=\%\%]{r}
