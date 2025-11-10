@@ -489,7 +489,7 @@ bioassayfun <- function(w, df) {
 }
 
 theta0 <- c(0,0)
-optimres <- optim(w0, bioassayfun, gr=NULL, df1, hessian=T)
+optimres <- optim(theta0, bioassayfun, gr=NULL, df1, hessian=T)
 thetahat <- optimres$par
 Sigma <- solve(optimres$hessian)
 \end{minted}
@@ -596,7 +596,7 @@ Sigma <- solve(optimres$hessian)
     \begin{itemize}
     \item e.g. $\theta \in [0,1]$ presenting probability
     \item<+-> Stan code can include constraints\\
-      \rinline/real<lower=0,upper=0> theta;/
+      \rinline/real<lower=0,upper=1> theta;/
     \item<+-> for this, Stan does the inference in unconstrained space
       using logit transformation
     \item<+-> density of the transformed parameter needs to include
