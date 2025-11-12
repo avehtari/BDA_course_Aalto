@@ -1,462 +1,1038 @@
 \documentclass[t]{beamer}
 %\documentclass[finnish,english,handout]{beamer}
 
-% Uncomment if want to show notes
-% \setbeameroption{show notes}
-
-\mode<presentation>
-{
-%  \usetheme{Copenhagen}
-  % oder ...
-  
-  %\setbeamercovered{transparent}
-  % oder auch nicht
-}
-\setbeamertemplate{itemize items}[circle]
-\setbeamercolor{frametitle}{bg=white,fg=navyblue}
-
-
-
 \usepackage[T1]{fontenc}
-\usepackage[latin1]{inputenc}
-\usepackage{times}
-\usepackage{epic,epsfig}
-\usepackage{subfigure,float}
-\usepackage{amsmath,amsfonts,amssymb}
-\usepackage{inputenc}
+\usepackage[utf8]{inputenc}
+\usepackage{newtxtext} % times
+%\usepackage[scaled=.95]{cabin} % sans serif
+\usepackage{amsmath}
+\usepackage[varqu,varl]{inconsolata} % typewriter
+\usepackage[varg]{newtxmath}
+\usefonttheme[onlymath]{serif} % beamer font theme
+\usepackage{microtype}
 \usepackage{afterpage}
 \usepackage{url}
 \urlstyle{same}
-\usepackage{amsbsy}
-\usepackage{eucal}
+% \usepackage{amsbsy}
+% \usepackage{eucal}
 \usepackage{rotating}
-\usepackage{listings}
-\usepackage{lstbayes}
 \usepackage[all,poly,ps,color]{xy}
 \usepackage{eurosym}
-\usepackage{microtype}
+
+% minted
+\usepackage{minted}
+\setminted{highlightcolor=yellow!25}
+\newmintinline{r}{}
+% The following is adjusted from
+% https://tex.stackexchange.com/questions/548592/changing-all-colors-to-black-white-using-minted-sty
+\makeatletter
+\newcommand{\minted@style@bw}{%
+  \renewcommand\fcolorbox[3][]{##3}%
+  \renewcommand\textcolor[3][]{##3}%
+  \color{gray}
+}
+% define new minted option "gray"
+\minted@def@opt@switch{gray}
+\fvset{formatcom*={%
+  \ifthenelse{\equal{\minted@get@opt{gray}{true}}{true}}
+  {\minted@style@bw}{}%
+}}
+\makeatother
+% The following is ajusted from
+% https://tex.stackexchange.com/questions/74459/remove-space-before-colorbox
+\newcommand{\reducedstrut}{\vrule width 0pt height .9\ht\strutbox depth .9\dp\strutbox\relax}
+\newcommand{\highlight}[1]{%
+  \begingroup
+  \setlength{\fboxsep}{0pt}%  
+  \colorbox{yellow!30}{\reducedstrut\detokenize{#1}\/}%
+  \endgroup
+}
 
 \usepackage{natbib}
 \bibliographystyle{apalike}
 
-\hypersetup{%
-  bookmarksopen=true,
-  bookmarksnumbered=true,
-  pdftitle={Stan},
-  pdfsubject={Bayesian data analysis},
-  pdfauthor={Aki Vehtari},
-  pdfkeywords={},
-  pdfstartview={FitH -32768},
-  colorlinks=true,
-  linkcolor=navyblue,
-  citecolor=navyblue,
-  filecolor=navyblue,
-  urlcolor=navyblue
+\mode<presentation>
+{
+  \setbeamercovered{invisible}
+  \setbeamertemplate{itemize items}[circle]
+  \setbeamercolor{frametitle}{bg=white,fg=navyblue}
+  \setbeamertemplate{navigation symbols}{}
+  \setbeamertemplate{headline}[default]{}
+  \setbeamertemplate{footline}[split]
+  % \setbeamertemplate{headline}[text line]{\insertsection}
+  \setbeamertemplate{footline}[frame number]
 }
-
-% \definecolor{hutblue}{rgb}{0,0.2549,0.6784}
-% \definecolor{midnightblue}{rgb}{0.0977,0.0977,0.4375}
-% \definecolor{hutsilver}{rgb}{0.4863,0.4784,0.4784}
-% \definecolor{lightgray}{rgb}{0.95,0.95,0.95}
-% \definecolor{section}{rgb}{0,0.2549,0.6784}
-% \definecolor{list1}{rgb}{0,0.2549,0.6784}
-\definecolor{forestgreen}{rgb}{0.1333,0.5451,0.1333}
-\definecolor{navyblue}{rgb}{0,0,0.5}
-\renewcommand{\emph}[1]{\textcolor{navyblue}{#1}}
-
-\graphicspath{{./figs/}}
 
 \pdfinfo{            
-  /Title      (Bayesian data analysis 4)
+  /Title      (BDA, Lecture 11) 
   /Author     (Aki Vehtari) % 
-  /Keywords   (Bayesian probability theory, Bayesian inference, Bayesian data analysis)
+  /Keywords   (Bayesian data analysis)
+}
+% \documentclass[english,t]{beamer}
+% %\documentclass[handout,english,t]{beamer}
+
+% \mode<presentation>
+% {
+%   \usetheme{Copenhagen}
+%   % oder ...
+  
+% %  \setbeamercovered{transparent}
+%   % oder auch nicht
+% }
+
+% %\usepackage[pdftex]{graphicx}
+\graphicspath{{/home/ave/doc/images/}{}{../teranaloppu/}{../metodi/}{../slides/Hartikainen/}{../gphealth/}{../2008_09_RSS2008/}{../gphealth/}{../jyvaskyla2009/}{../nbbc2009/}{../gphealth/hippics/}{../euroheis2010/}{../pubgensens2011/}{../reykjavik2013/}{../liverpool2013/}{../../gpstuff/doc/}{./images/}{../aalto_stochastic/}{figs/}{fig/}{../venice2018/figs/}{../venice2018/fig/}}
+
+%%%%%%%%%%%%%%%%%%% for tikz figures %%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{ifthen}
+\usepackage{tikz,pgfplots}
+\usetikzlibrary{matrix}
+\usetikzlibrary{calc}
+\newlength{\figurewidth}
+\newlength{\figureheight}
+
+
+\def\figpdfdir{./figs/} % directory for pdf-figures
+\def\figtikzdir{./tikz/} % directory for tikz-figures 
+
+% this is replacement for the \input command used in the figure-environment which
+% takes into account whether pdf is forced
+\newcommand{\minput}[2][]{
+\ifthenelse{\equal{#1}{pdf}}
+	{ \includegraphics{\figpdfdir #2} }
+	{ \tikzset{external/remake next} \tikzsetnextfilename{#2} \input{\figtikzdir #2} }
 }
 
+% for externalization
+\usetikzlibrary{external}
+\tikzexternalize[prefix=\figpdfdir] 
+\tikzset{external/system call={lualatex
+	\tikzexternalcheckshellescape -halt-on-error -interaction=batchmode
+	-jobname "\image" "\texsource"}}
+    
+%%%%%%%%%%%%%%%%%%% for hiding figures %%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{color}
+\newcommand{\hide}[5][white]{
+	% usage: \hhide[color]{vspace,hspace,height,width}
+	% note: all measures are relative units measured in \textwidth
+	%\begin{minipage}{0.99\textwidth}
+	\vspace{#2\textwidth}
+	\hspace{#3\textwidth}
+	\textcolor{#1}{  \rule{#5\textwidth}{#4\textwidth}  }
+	% \end{minipage}
+      }
+      
+\DeclareMathOperator{\Kfu}{\mathbf{K}_{f,u}}
+\DeclareMathOperator{\Kuf}{\mathbf{K}_{u,f}}
+\DeclareMathOperator{\Kff}{\mathbf{K}_{f,f}}
+\DeclareMathOperator{\iKff}{\mathbf{K}_{f,f}^{-1}}
+\DeclareMathOperator{\Kfa}{\mathbf{K}_{f,\tilde{f}}}
+\DeclareMathOperator{\Kaf}{\mathbf{K}_{\tilde{f},f}}
+\DeclareMathOperator{\Kaa}{\mathbf{K}_{\tilde{f},\tilde{f}}}
+\DeclareMathOperator{\Kuu}{\mathbf{K}_{u,u}}
+\DeclareMathOperator{\iKuu}{\mathbf{K}_{u,u}^{-1}}
+\DeclareMathOperator{\Kau}{\mathbf{K}_{\tilde{f},u}}
+\DeclareMathOperator{\Kua}{\mathbf{K}_{u,\tilde{f}}}
+\DeclareMathOperator{\Qff}{\mathbf{Q}_{f,f}}
+\DeclareMathOperator{\Qaa}{\mathbf{Q}_{\tilde{f},\tilde{f}}}
+\DeclareMathOperator{\Qfa}{\mathbf{Q}_{f,\tilde{f}}}
+\DeclareMathOperator{\Qaf}{\mathbf{Q}_{\tilde{f},f}}
+\DeclareMathOperator{\x}{\mathbf{x}}
+\DeclareMathOperator{\f}{\mathbf{f}}
+\DeclareMathOperator{\y}{\mathbf{y}}
+\DeclareMathOperator{\h}{\mathbf{h}}
+\DeclareMathOperator{\uu}{\mathbf{u}}
+\DeclareMathOperator{\LL}{\mathbf{\Lambda}}
+\DeclareMathOperator{\bb}{\mathbf{b}}
+\DeclareMathOperator{\E}{\mathrm{E}}
+\def\WAIC{\mathrm{WAIC}}
 
-\parindent=0pt
-\parskip=8pt
-\tolerance=9000
-\abovedisplayshortskip=0pt
+\newcommand{\kin}{k^{\rm in}}
+\newcommand{\kout}{k^{\rm out}}
+\newcommand{\gi}{{R_0}}
+\newcommand{\eff}{{E_{\rm max}}}
+\newcommand{\HN}{{\rm N^+}}
+\newcommand{\lN}{{\rm LN}}
+\newcommand{\Rss}{R^{\rm ss}}
+\newcommand{\invlogit}{\mbox{logit}^{-1}}
 
-\setbeamertemplate{navigation symbols}{}
-\setbeamertemplate{headline}[default]{}
-\setbeamertemplate{headline}[text line]{\insertsection}
-\setbeamertemplate{footline}[frame number]
+% \DeclareMathOperator{\Poisson}{Poisson}
+\DeclareMathOperator{\Chi}{Chi}
+\DeclareMathOperator{\GP}{\mathcal{GP}}
+%\DeclareMathOperator{\N}{N}
+\DeclareMathOperator{\KL}{KL}
 
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\newcommand{\mb}{\mathbf}
+\newcommand{\pkg}[1]{{\fontseries{b}\selectfont #1}}
+\newcommand{\proglang}{}
+\newcommand{\email}[1]{\href{mailto:#1}{\normalfont\texttt{#1}}}
+\newcommand{\doi}[1]{\href{http://dx.doi.org/#1}{\normalfont\texttt{doi:#1}}}
+\newcommand{\code}[1]{{\normalfont\texttt{#1}}}
 
-\def\o{{\mathbf o}}
-\def\t{{\mathbf \theta}}
-\def\w{{\mathbf w}}
-\def\x{{\mathbf x}}
-\def\y{{\mathbf y}}
-\def\z{{\mathbf z}}
-
-\DeclareMathOperator{\E}{E}
+% \DeclareMathOperator{\E}{E}
+% \DeclareMathOperator{\VAR}{Var}
+% \DeclareMathOperator{\COV}{Cov}
+% \DeclareMathOperator{\Prob}{P}
+% \DeclareMathOperator{\E}{E}
 \DeclareMathOperator{\Var}{Var}
 \DeclareMathOperator{\var}{var}
+\DeclareMathOperator{\cov}{cov}
+\DeclareMathOperator{\logistic}{logistic}
+\DeclareMathOperator{\softmax}{softmax}
+\DeclareMathOperator{\Multinomial}{Multinomial}
 \DeclareMathOperator{\Sd}{Sd}
 \DeclareMathOperator{\sd}{sd}
-\DeclareMathOperator{\Gammad}{Gamma}
-\DeclareMathOperator{\Invgamma}{Inv-gamma}
 \DeclareMathOperator{\Bin}{Bin}
-\DeclareMathOperator{\Negbin}{Neg-bin}
 \DeclareMathOperator{\Poisson}{Poisson}
 \DeclareMathOperator{\Beta}{Beta}
 \DeclareMathOperator{\logit}{logit}
 \DeclareMathOperator{\N}{N}
 \DeclareMathOperator{\U}{U}
 \DeclareMathOperator{\BF}{BF}
-\DeclareMathOperator{\Invchi2}{Inv-\chi^2}
-\DeclareMathOperator{\NInvchi2}{N-Inv-\chi^2}
-\DeclareMathOperator{\InvWishart}{Inv-Wishart}
-\DeclareMathOperator{\tr}{tr}
-% \DeclareMathOperator{\Pr}{Pr}
+%\DeclareMathOperator{\Pr}{Pr}
 \def\euro{{\footnotesize \EUR\, }}
 \DeclareMathOperator{\rep}{\mathrm{rep}}
 
+\definecolor{set11}{HTML}{E41A1C}
+\definecolor{set12}{HTML}{377EB8}
+\definecolor{set13}{HTML}{4DAF4A}
+\definecolor{forestgreen}{rgb}{0.1333,0.5451,0.1333}
+\definecolor{hutblue}{rgb}{0,0.2549,0.6784}
+\definecolor{midnightblue}{rgb}{0.0977,0.0977,0.4375}
+\definecolor{navyblue}{rgb}{0,0,0.5}
+\definecolor{hutsilver}{rgb}{0.4863,0.4784,0.4784}
+\definecolor{lightgray}{rgb}{0.95,0.95,0.95}
+\definecolor{section}{rgb}{0,0.2549,0.6784}
+\definecolor{list1}{rgb}{0,0.2549,0.6784}
+%\renewcommand{\emph}[1]{\textcolor{navyblue}{#1}}
+%\renewcommand{\emph}[1]{\textcolor{navyblue}{#1}}
+
+%\graphicspath{./pics}
+
+\parindent=0pt
+\parskip=8pt
+\tolerance=9000
+\abovedisplayshortskip=0pt
+
+%\renewcommand{\itemsep}{0pt}
+% Lists
+\newenvironment{list1}{
+   \begin{list}{$\color{list1}\bullet$}{\itemsep=6pt}}{
+  \end{list}}
+\newenvironment{list1s}{
+  \begin{list}{$\includegraphics[width=5pt]{logo.eps}$}{\itemsep=6pt}}{
+  \end{list}}
+\newenvironment{list2}{
+  \begin{list}{-}{\baselineskip=12pt\itemsep=2pt}}{
+  \end{list}}
+\newenvironment{list3}{
+  \begin{list}{$\cdot$}{\baselineskip=15pt}}{
+  \end{list}}
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{headline}[default]
+%\setbeamertemplate{headline}[text line]{\insertshorttitle\insertshortsubtitle}
+%\setbeamertemplate{footline}[frame number]
+%\setbeamertemplate{footline}[default]
+\setbeamertemplate{footline}[split]
+%\setbeamertemplate{footline}[text line]{\insertshorttitle\insertshortsubtitle}
 
 
-\title[]{Bayesian data analysis}
-\subtitle{}
-
-\author{Aki Vehtari}
-
-\institute[Aalto]{}
+\title[]{\LARGE{Use of reference models in model selection}}
 
 
-\begin{document} 
+\author[Aki.Vehtari@aalto.fi -- @avehtari]{Aki Vehtari \\ 
+  \small{\texttt{Aki.Vehtari@aalto.fi}}}  %\inst{1}
 
-\begin{frame}{Common statistical tests as Bayesian models}
+\institute[Department of Computer Science\\
+Aalto University] % (optional, aber oft nötig)
+{Department of Computer Science\\
+Aalto University}
+% \institute[Department of Computer Science\\
+% Aalto University] % (optional, aber oft nötig)
+% {\includegraphics[height=3cm,clip]{Aalto_EN_Science_13_CMYK-COATED_3.pdf}\\
+%\vspace{-8mm}
+%(former Helsinki University of Technology)
+%\\
+%~
+%\\
+%Department of Biomedical Engineering and Computational Science (BECS)
+%}
+ 
+\date[]{}
+
+%\beamerdefaultoverlayspecification{<+->}
+
+\begin{document}
+
+%  \begin{frame}[plain]
+%    \titlepage
+%  \end{frame}
+
+% \begin{frame}[c]
+  
+
+
+%   \begin{center}
+%     {\Large\color{navyblue}\bf Use of Reference Models in Model Selection}\\ \vspace{1\baselineskip}
+    
+% {\color{set12}    \Large{Aki Vehtari\\\vspace{0.25\baselineskip}
+%       \large Aalto University\\
+%     Finnish Center for Artificial Intelligence}}\\ \vspace{0.5\baselineskip}
+%     \large{based on several papers (refs in the end) with\\ \vspace{0.2\baselineskip}
+%       Juho Piironen, Markus Paasiniemi, Federico Pavone (University of
+%       Bocconi)}, Paul-Christian Bürkner, Homayun Afrabandpey, Tomi
+%     Peltola, Samuel Kaski, Alejandro Catalina, Donald R. Williams (UC
+%     Davis), Philippe Rast (UC Davis), Ojanen
+
+% \end{center}
+% \end{frame}
+
+\begin{frame}{Outline}
 
   \begin{itemize}
-  \item Most common statistical tests are linear models\\
-    \vspace{0.5\baselineskip}
-    \hspace{-0.8cm}\begin{minipage}[t]{1.0\linewidth}
-      {\small
-        \begin{tabular}{lll}
-          $t$-test & mean of data & {\tt stan\_glm(y \~\ 1)}\\
-          paired $t$-test & mean of diffs &{\tt stan\_glm((y1 - y2) \~\  1)}\\
-          Pearson correl. & linear model &{\tt stan\_glm(y \~\  1 + x)}\\
-          two-sample $t$-test & group means &{\tt stan\_glm(y \~\  1 + gid)}\\
-          ANOVA & hier. model &{\tt stan\_glm(y \~\  1 + (1 | gid))}\\
-          $\ldots$ &
-        \end{tabular}}
-      \end{minipage}
-  \item<2->  Possible to extend, e.g., with group specific variances and and
-    different distributions such $t$- or Poisson distribution
+  \item Variable selection with projpred
+  \item Bayesian software for Python users
+  \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Variable selection}
+
+  \begin{itemize}
+  \item The process of identifying the most relevant variables in a model from a larger set of predictors. 
+  \item We assume variables contribute unevenly to the outcome.
+  \begin{itemize}
+      \item We may want to identify the most "important" ones.
+      \item Sometimes we also want to rank them.
+  \end{itemize}
+  \end{itemize}
+  
+\end{frame}
+
+
+\begin{frame}{Motivation for variable selection}
+
+  \begin{itemize}
+  \item<+->  We can always include all available variables in a model
+  \item<+->  Theory says this is a good idea, in particular if we use predictively consistent priors
+  \item<+->  However, sometimes we need to reduce the number of variables
     \begin{itemize}
-    \item and go beyond named tests
+      \item measurement cost in covariates
+      \item running cost of predictive model
+      \item easier explanation / learn from the model
     \end{itemize}
-  \item<3-> See longer list and illustrations (with {\tt lm}) at
-  \url{https://lindeloev.github.io/tests-as-linear/}\\
-  and\\
-  with rstanarm in \href{https://avehtari.github.io/ROS-Examples/}{Regression and other stories}
+  \end{itemize}
+  
+\end{frame}
+
+
+
+\begin{frame}{The problem with variable selection}
+
+  \begin{itemize}
+  \item The number of potential models is $2^p$, where $p$ is the number of variables
+  \item Evaluating all models can be computationally infeasible even for moderate $p$
+  \item The proccess is prone to overfitting 
+  \end{itemize}
+  
+\end{frame}
+
+
+\begin{frame}{How to overcome the problem?}
+
+  \begin{itemize}
+  \item We recommend to use a technique called projection predictive inference
+  \item It can be easily done with \texttt{brms} + \texttt{projpred}
+  \end{itemize}
+  
+\end{frame}
+
+
+
+
+\begin{frame}{Variable selection with projpred}
+
+  \begin{itemize}
+  \item The main advantage is that it reduces overfitting
+  \item Other advantages are:
+    \begin{itemize}
+    \item Automatic model building and fitting process.
+    \item Reduced number of models we need to fit.
+    \item Reduced time it takes to fit each model.
+    \end{itemize}
+  \end{itemize}
+  
+\end{frame}
+
+
+\begin{frame}{Main concepts}
+
+  \begin{itemize}
+  \item<1-> Reference model:
+    \begin{itemize}
+      \item<2-> A model that includes all available variables and describes the data well.
+    \end{itemize}
+  \item<1-> Search strategy: 
+    \begin{itemize}
+      \item<3->  A method for searching through the model space.
+    \end{itemize}
+  \item<1-> Projection:
+      \begin{itemize}
+      \item<4->  A way to estimate the posterior distribution of a model given a reference model.
+    \end{itemize}
+  
+
+  \end{itemize}
+  
+\end{frame}
+
+
+\begin{frame}{Useing a reference model is not a novel idea}
+
+  \begin{itemize}
+  \item<+-> Lindley (1968): \textit{The choice of variables in multiple regression}
+    \begin{itemize}
+      % \vspace{-1\baselineskip}
+    \item Bayesian and decision theoretical justification, but simplified model and computation
+    \end{itemize}
+  \item<+-> Goutis \& Robert (1998): \textit{Model choice in generalised
+      linear models: a Bayesian approach via Kullback-Leibler
+      projections}
+    \begin{itemize}
+    \item one key part for practical computation
+    \end{itemize}
+  \item<+-> Related approaches
+    \begin{itemize}
+    \item gold standard,
+     preconditioning,
+     teacher and student,
+     distilling,
+     $\ldots$
+    \end{itemize}
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Example: Simulated regression}
+
+\vspace{-1.5\baselineskip}
+  
+\begin{minipage}[t]{0.3\linewidth}
+\begin{equation*}
+  \only<2->{\color{gray}}
+\begin{alignedat}{1}
+  f &  \sim \N(0,1),  \\
+  y \mid f &\sim \N(f, 1) 
+\end{alignedat}
+\end{equation*}
+\end{minipage}
+\uncover<2->{
+  \begin{minipage}[t]{0.4\linewidth}
+\begin{equation*}
+\begin{alignedat}{2}
+  x_j \mid f &\sim \N(\sqrt{\rho}f,\, 1-\rho), \qquad && j = 1,\dots,150 \,, \\
+  x_j \mid f &\sim \N(0, 1), && j = 151,\dots, 500 \,.
+\end{alignedat}
+\end{equation*}
+\end{minipage}
+\vspace{-0.7\baselineskip}
+}
+
+\center
+\only<1>{\includegraphics[width=8cm]{fy.pdf}}\only<2>{~}\only<3>{\includegraphics[width=8cm]{fx1.pdf}}\only<4>{\includegraphics[width=8cm]{fx151.pdf}}\only<5>{\includegraphics[width=8cm]{fx2.pdf}}\only<6>{\includegraphics[width=8cm]{fx152.pdf}}\only<7>{\includegraphics[width=8cm]{fx3.pdf}}\only<8>{\includegraphics[width=8cm]{fx153.pdf}}\only<9>{\includegraphics[width=8cm]{fx4.pdf}}\only<10>{\includegraphics[width=8cm]{fx154.pdf}}
+
+% \begin{itemize}
+% \item<2-> $y$ are noisy observations about latent $f$ \pause
+% \item<3-> First $p_\text{rel}=150$ features are correlated with $\rho$ and predictive about $y$ \pause
+% \item<4-> Remaining $350$ features are irrelevant random noise
+% \end{itemize}
+% \uncover<5>{Generate one data set $\{ x^{(i)}, y^{(i)}\}^n_{i=1}$ with $n=30$ and $\rho=0.5$ and assess the feature relevances}
+
+\end{frame}
+
+\begin{frame}{Example: Individual correlations}
+
+\vspace{-1.5\baselineskip}
+  
+\begin{minipage}[t]{0.3\linewidth}
+\begin{equation*}
+\begin{alignedat}{1}
+  f &  \sim \N(0,1),  \\
+  y \mid f &\sim \N(f, 1) 
+\end{alignedat}
+\end{equation*}
+\end{minipage}
+  \begin{minipage}[t]{0.4\linewidth}
+\begin{equation*}
+\begin{alignedat}{2}
+  x_j \mid f &\sim \N(\sqrt{\rho}f,\, 1-\rho), \qquad && j = 1,\dots,150 \,, \\
+  x_j \mid f &\sim \N(0, 1), && j = 151,\dots, 500 \,.
+\end{alignedat}
+\end{equation*}
+\end{minipage}
+\vspace{-0.2\baselineskip}
+
+\center
+\only<1-2>{Correlation for $x_j,y$\\}
+\only<3>{Correlation for $x_j,f$\\}
+\only<4>{Correlation for $x_j,f_*$ ($f_*$ = PCA + linear regression)\\}
+\vspace{-0.5\baselineskip}
+\only<1>{\includegraphics[width=8cm]{Ry_ordered.pdf}}\only<2>{\includegraphics[width=8cm]{Ry.pdf}}\only<3>{\includegraphics[width=8cm]{Rf.pdf}}\only<4>{\includegraphics[width=8cm]{Rfs.pdf}}
+
+% \begin{itemize}
+% \item<2-> $y$ are noisy observations about latent $f$ \pause
+% \item<3-> First $p_\text{rel}=150$ features are correlated with $\rho$ and predictive about $y$ \pause
+% \item<4-> Remaining $350$ features are irrelevant random noise
+% \end{itemize}
+% \uncover<5>{Generate one data set $\{ x^{(i)}, y^{(i)}\}^n_{i=1}$ with $n=30$ and $\rho=0.5$ and assess the feature relevances}
+
+\end{frame}
+
+% \begin{frame}{}
+
+%   {\Large\color{navyblue} Individual variable relevances}
+
+%   $n=30$, $p=500$, $p_\text{rel}=150$, $\rho=0.5$.
+
+%   \includegraphics[width=5.5cm]{toy_corr1.pdf}\\
+%   \vspace{-0.2cm}
+%   \hspace{0.5cm} {\color{set12} irrelevant $x_j$}, {\color{set11} relevant $x_j$}\\
+%   \vspace{0.2cm}
+%   \hspace{0.5cm} Sample correlation with $y$\\
+  
+% \end{frame}
+
+\begin{frame}{\only<1>{Knowing the latent values would help}\only<2>{Estimating the latent values with a reference}\uncover<2->{ model helps}}
+
+  \hspace{-0.4cm}
+  \includegraphics[width=5.5cm]{toy_corr2.pdf}
+  \uncover<2->{\includegraphics[width=5.5cm]{toy_corr3.pdf}}\\
+  \vspace{-0.2cm}
+  \hspace{0.5cm} {\color{set12} irrelevant $x_j$}, {\color{set11} relevant $x_j$}\\
+  \vspace{0.2cm}
+  A) Sample correlation with $y$ vs. sample correlation with $f$\\
+  \uncover<2->{B) Sample correlation with $y$ vs. sample correlation with $f_*$\\
+  % $f_* = $ linear regression fit with 3 supervised principal components}
+  $f_* = $ linear regression fit with 3 principal components}
+  
+\end{frame}
+
+\begin{frame}{Bayesian justification}
+  
+  \begin{itemize}
+  \item Theory says to integrate over all the uncertainties
+    \begin{itemize}
+    \item build a rich model
+    \item make model checking etc.
+    \item this model can be the reference model
+    \end{itemize}
 \end{itemize}
 
 \end{frame}
 
-\begin{frame}{Frequentist hypothesis testing}
-  
+\begin{frame}{Projection}
   \begin{itemize}
-  \item Frequentist approach can be used to to make estimates and
-    confidence intervals, but for some reason null hypothesis testing
-    has had a very big role
+  \item<1-> Replace full posterior {\color{set11} $p(\theta \mid D)$} with
+    some constrained {\color{set12} $q(\theta)$} so that the {\color{set13} \emph{predictive
+      distribution}} changes as little as possible
+  \item<2-> Example constraints
     \begin{itemize}
-    \item<2-> reporting just the null hypothesis testing result throws
-      away lot of useful information
-    \item<3-> some Bayesians are also into null hypothesis testing
+      \item {\color{set12} $q(\theta)$} can have only point mass at some $\theta_0$ $\Rightarrow$ ``Optimal point estimates''
+      \item<3-> Some covariates must have exactly zero regression coefficient $\Rightarrow$ ``Which covariates can be discarded''
+      \item<4-> Much simpler model $\Rightarrow$ ``Easier explanation''
     \end{itemize}
-  \item<4-> Frequentist null hypothesis testing
-    \begin{itemize}
-    \item asks what if data is generated from the smaller model
-    \item doesn't tell whether the more complex model is good enough
-    \end{itemize}
-  \item<5-> Some frequentists are now advocating looking at intervals and
-    equivalence testing
   \end{itemize}
-  
 \end{frame}
 
-\begin{frame}{Bayesian hypothesis testing}
 
-  \begin{itemize}
-  \item Instead of hypothesis testing, report full posterior \only<1>{and}
-    \begin{itemize}
-      \only<1>{
-      \item<1> compare to expert information
-      \item<1> combine with utility/cost function
-      }
-      \only<2>{
-      \item for continuous posterior there is zero probability that
-        e.g. treatment effect is exactly zero
-      }
-      \only<3>{
-      \item for continuous posterior we could compute the probability
-        that we know the sign of the effect
-      }
-      \only<4>{
-      \item for continuous posterior some people compare whether
-        posterior interval includes null case
-      }
-    \end{itemize}
-  \end{itemize}
+\begin{frame}{Logistic regression with two covariates}
+
+  \vspace{\baselineskip}
   
-  \only<1>{\includegraphics[width=10cm]{odds1_fullp.pdf}}
-  \only<2>{\includegraphics[width=10cm]{odds1_eq.pdf}}
-  \only<3>{\includegraphics[width=10cm]{odds1_less.pdf}}
-  \only<4>{\includegraphics[width=10cm]{odds1_ci.pdf}}
-  
-\end{frame}
-
-\begin{frame}{Bayesian hypothesis testing}
-
-  \begin{itemize}
-  \item Equivalence testing (region of practical equivalence)
-    \begin{itemize}
-      \only<1>{
-    \item what is the probability that the effect is closer than
-      $\epsilon$ to null, where $\epsilon$ is based on what is
-      practically useful effect size
-      }
-      \only<2>{
-      \item some people combine posterior interval and region of
-        practical equivalence}
-    \end{itemize}
-  \end{itemize}
-
-    \only<1>{\includegraphics[width=10cm]{odds1_rope.pdf}}
-    \only<2>{\includegraphics[width=10cm]{odds1_cirope.pdf}}
-
-\end{frame}
-
-\begin{frame}{Bayesian hypothesis testing}
-
-  \begin{itemize}
-  \item Instead of hypothesis testing, report full posterior
-    \begin{itemize}
-      \only<1>{
-      \item for continuous posterior there is zero probability that
-        e.g. treatment effect is exactly zero
-      }
-      \only<2>{
-      \item for continuous posterior we could compute the probability
-        that we know the sign of the effect
-      }
-      \only<3>{
-      \item for continuous posterior some people compare whether
-        posterior interval includes null case
-      }
-      \only<4->{
-      \item region of practical equivalence (ROPE)\\
-        \phantom{posterior interval includes null case}
-      }
-    \end{itemize}
-  \end{itemize}
-  
-  \only<1>{\begin{minipage}{14.1cm}
-      \hspace{-1.2cm}\includegraphics[width=6.8cm]{odds1_eq.pdf}\includegraphics[width=6.8cm]{odds2_eq.pdf}
-    \end{minipage}}
-  \only<2>{\begin{minipage}{14.1cm}
-      \hspace{-1.2cm}\includegraphics[width=6.8cm]{odds1_less.pdf}\includegraphics[width=6.8cm]{odds2_less.pdf}
-    \end{minipage}}
-  \only<3>{\begin{minipage}{14.1cm}
-      \hspace{-1.2cm}\includegraphics[width=6.8cm]{odds1_ci.pdf}\includegraphics[width=6.8cm]{odds2_ci.pdf}
-    \end{minipage}}
-  \only<4>{\begin{minipage}{14.1cm}
-      \hspace{-1.2cm}\includegraphics[width=6.8cm]{odds1_rope.pdf}\includegraphics[width=6.8cm]{odds2_rope.pdf}
-    \end{minipage}}
-  \only<5>{\begin{minipage}{14.1cm}
-      \hspace{-1.2cm}\includegraphics[width=6.8cm]{odds1_cirope.pdf}\includegraphics[width=6.8cm]{odds2_cirope.pdf}
-    \end{minipage}}
-  
-\end{frame}
-
-\begin{frame}{Bayesian hypothesis testing}
-
-  \begin{itemize}
-  \item Instead of hypothesis testing, report full posterior
-    \begin{itemize}
-      \only<1>{
-      \item for continuous posterior there is zero probability that
-        e.g. treatment effect is exactly zero
-      }
-      \only<2>{
-      \item for continuous posterior we could compute the probability
-        that we know the sign of the effect
-      }
-      \only<3>{
-      \item for continuous posterior some people compare whether
-        posterior interval includes null case
-      }
-      \only<4->{
-      \item region of practical equivalence (ROPE)\\~
-      }
-    \end{itemize}
-  \end{itemize}
-  
-  \only<2>{\begin{minipage}{14.1cm}
-      \hspace{-1.2cm}\includegraphics[width=6.8cm]{odds2_less.pdf}\includegraphics[width=6.8cm]{odds3_less.pdf}
-    \end{minipage}}
-  \only<3>{\begin{minipage}{14.1cm}
-      \hspace{-1.2cm}\includegraphics[width=6.8cm]{odds2_ci.pdf}\includegraphics[width=6.8cm]{odds3_ci.pdf}
-    \end{minipage}}
-  \only<4>{\begin{minipage}{14.1cm}
-      \hspace{-1.2cm}\includegraphics[width=6.8cm]{odds2_rope.pdf}\includegraphics[width=6.8cm]{odds3_rope.pdf}
-    \end{minipage}}
-  \only<5>{\begin{minipage}{14.1cm}
-      \hspace{-1.2cm}\includegraphics[width=6.8cm]{odds2_cirope.pdf}\includegraphics[width=6.8cm]{odds3_cirope.pdf}
-    \end{minipage}}
-  
-\end{frame}
-
-\begin{frame}{Bayesian hypothesis testing}
-
-  \begin{itemize}
-  \item Bayes factor
-    \begin{itemize}
-    \item null model has, e.g., the treatment effect fixed to 0
-    \item assumes that there is non-zero probability that the
-      treatment effect can be exactly zero (point mass)
-    \item requires posterior inference for the null model, too
-    \end{itemize}
-  \end{itemize}
-    \vspace{-1\baselineskip}
-  
-    \only<1>{\includegraphics[width=9cm]{odds1_bf.pdf}}
-    \only<2>{\includegraphics[width=9cm]{odds2_bf.pdf}}
-    \only<3>{\includegraphics[width=9cm]{odds3_bf.pdf}}
-    \vspace{-1.2\baselineskip}
-    
-    {\footnotesize\color{gray}\hspace{1cm}  with {\tt bridgesampling} package, see also BDA3 13.10}
-\end{frame}
-
-\begin{frame}{Bayesian hypothesis testing}
-
-  \begin{itemize}
-  \item Bayes factor
-    \begin{itemize}
-    \item sensitive to the prior choice even when the posterior is not
-    \end{itemize}
-  \end{itemize}
-  normal(0,3.5) \hspace{4.5cm} normal(0,100)
-  \begin{minipage}{14.1cm}
-      \hspace{-1.2cm}{\includegraphics[width=6.8cm]{odds1_bf.pdf}}{\includegraphics[width=6.8cm]{odds1_bf100.pdf}}
+  \begin{overlayarea}{\textwidth}{0.7\textwidth}
+    \begin{minipage}{0.99\textwidth}
+      \begin{center}
+        \only<1>{ \minput{proj_posterior} }%
+        \only<2>{ \minput{proj_b1b2_single} }%
+        \only<3>{ \minput{proj_b2_single} }%
+        \only<4>{ \minput{proj_b1_single} }%
+        \only<5>{ \minput{proj_b2_dbd} }%
+        \only<6>{ \minput{proj_b1_dbd} }%
+      \end{center}
     \end{minipage}
-      \vspace{-1.2\baselineskip}
-    {\footnotesize\color{gray}\hspace{1cm}  with {\tt bridgesampling} package, see also BDA3 13.10}
+    \begin{minipage}{0.99\textwidth}
+      \only<1>{Full posterior for $\beta_1$ and $\beta_2$ and contours of predicted class probability}
+      \only<2>{Projected point estimates for $\beta_1$ and $\beta_2$}
+      \only<3>{Projected point estimates, constraint $\beta_1 = 0$}
+      \only<4>{Projected point estimates, constraint $\beta_2 = 0$}
+      \only<5>{Draw-by-draw projection, constraint $\beta_1 = 0$}
+      \only<6>{Draw-by-draw projection, constraint $\beta_2 = 0$}
+    \end{minipage}
+  \end{overlayarea}
 \end{frame}
 
-\begin{frame}{Bayesian hypothesis testing}
+
+\begin{frame}{Predictive projection}
+
 
   \begin{itemize}
-  \item Predictive performance
+  \item Replace full posterior {\color{set11} $p(\theta \mid D)$} with
+    some constrained {\color{set12} $q(\theta)$} so that the {\color{set13} \emph{predictive
+      distribution}} changes as little as possible
+  \item<2-> As the full posterior {\color{set11} $p(\theta \mid D)$} is projected to {\color{set12} $q(\theta)$}
     \begin{itemize}
-    \item is there difference in predictive performance with, e.g.,
-      treatment effect fixed to zero or unknown treatment effect
-    \item requires posterior inference for the null model or
-      projection from the full to null
-    \item looking at the posterior is better if parameters are
-      independent
+    \item the prior is also projected and there is no need to define
+      priors for submodels separately
+    \item<3-> even if we constrain some coefficients to be $0$, the
+      predictive inference is conditoned on the information related
+      features contributed to the reference model
+    \item<4-> solves the problem of how to do the inference after the
+      model selection
     \end{itemize}
   \end{itemize}
 
-  \uncover<2->{
-  In the beta blockers example
+  
+\end{frame}
+
+\frame{
+
+  {\Large\color{navyblue} Searching for submodels}
+
+\begin{itemize}
+	\item We may not be able to evaluate the $2^p$ combinations \pause
+	\item Search heuristics, e.g. 
+	\begin{itemize}
+        \item Monte Carlo search
+        \item Forward search
+        \item $L_1$-penalization (as in Lasso)
+	\end{itemize} \pause 
+	\item For a given model size, choose feature combination with minimal projective loss \pause
+  \item Use cross-validation to select the appropriate model size
+        \begin{itemize}
+        \item In some cases like, $p>>n$, we need to cross-validate over the search paths
+        \end{itemize}
+\end{itemize} 
+}
+
+
+\frame{
+
+  {\Large\color{navyblue} Projective selection vs. Lasso}
+
+Same simulated regression data as before, \\
+$n=50$, $p=500$, $p_\text{rel} = 150$, $\rho=0.5$
+
+\vspace{0.5em}
+
+  \makebox[12.1cm][t]{
+    \hspace{-0.5cm}
+  \begin{minipage}{0.99\textwidth}
+      \only<1>{\includegraphics[width=5.5cm]{vslasso1rmse.pdf}}
+      \only<2>{\includegraphics[width=5.5cm]{vslasso2rmse.pdf}}
+      \only<3->{\includegraphics[width=5.5cm]{vslasso3rmse.pdf}}
+      \uncover<4>{\includegraphics[width=5.5cm]{vslasso3mlpd.pdf}}
+  \end{minipage}
+  }
+  
+}
+
+% \frame{
+
+%   {\Large\color{navyblue} Real data benchmarks}\\
+%   $n = 54...102$, $p=1536...22283$, Bayes SPC as the reference
+% \begin{overlayarea}{\textwidth}{0.7\textwidth}
+% \vspace{-0.5em}
+% 	\begin{minipage}{0.99\textwidth}
+% 	\begin{center}
+%           \minput[pdf]{realdata}
+% 	\end{center}
+% 	% hidings
+% 	\only<1>{ \hide[white]{-0.5}{-0.02}{0.42}{1.05} }%
+% 	\only<2>{ \hide[white]{-0.3}{-0.02}{0.22}{1.05} }%
+% 	\only<3>{ \hide[white]{-0.07}{-0.02}{0.01}{1.05} }%
+	
+% 	\end{minipage}
+% 	%\begin{minipage}{0.99\textwidth}
+% 	%\end{minipage}
+	
+% \end{overlayarea}
+% }
+
+% \frame{
+
+%   {\Large\color{navyblue} Computation time}
+
+%   \begin{table}%
+%     \small
+% \vspace{-0.2cm}
+% \centering
+% \abovetopsep=2pt
+% \begin{tabular}{ lccrrrr }
+% \toprule
+% Data set & $n$ & $p$ & \multicolumn{4}{c}{Computation time} \\
+% \cmidrule(r){4-7}
+%  & & & Bayes SPC & Projection & Lasso1 & Lasso2 \\ 
+% \midrule
+% Ovarian & 54 & 1536 & 30.4 & 3.6 & 1.3 & 0.2  \\
+% Colon & 62 & 2000 & 31.0 & 4.0 & 1.6 & 0.3  \\
+% Prostate & 102 & 5966 & 49.4 & 7.6 & 5.0 & 0.8\\
+% Leukemia & 72 & 7129 & 47.0 & 6.3 & 5.6 & 0.7  \\
+% Glioma & 85 & 22283 & 95.8 & 14.2 & 15.6 & 2.6 \\
+% \bottomrule
+% \end{tabular}
+% \caption{{\it Computation times:} Average computation time (in seconds) over five repeated runs. In all cases the time contains the cross-validation of the tuning parameters and/or the model size. The first result for Lasso is computed using our software ({\tt projpred}) whereas the second result (and that of ridge) is computed using the R-package {\tt glmnet} which is more highly optimized. }
+% \label{tab:computation_times}
+% \end{table}
+% }
+
+% \begin{frame}
+  
+%   {\Large\color{navyblue} More results}\\
+
+%   {\footnotesize
+%   \begin{itemize}
+%   \item More results projpred vs. Lasso and elastic net:\\
+%     Piironen, Paasiniemi, Vehtari (2018). Projective Inference in
+%     High-dimensional Problems: Prediction and Feature Selection.
+%     \href{https://arxiv.org/abs/arXiv:1810.02406}{arXiv:1810.02406}
+%   \item<2-> More results projpred vs. marginal posterior probabilities:\\
+%     Piironen and Vehtari (2017). Comparison of Bayesian predictive
+%     methods for model selection. Statistics and Computing,
+%     27(3):711-735.
+%     \href{https://dx.doi.org/10.1007/s11222-016-9649-y}{doi:10.1007/s11222-016-9649-y}.
+%   \item<3-> projpred for Gaussian graphical models:\\
+%     Williams, Piironen, Vehtari, Rast (2018). Bayesian estimation of Gaussian graphical models with projection predictive selection. \href{https://arxiv.org/abs/1801.05725}{arXiv:1801.05725}
+%   \item<4-> More results for Bayes SPC:\\
+%     Piironen and Vehtari (2018). Iterative supervised principal components. 21st AISTATS, PMLR 84:106-114. \href{http://proceedings.mlr.press/v84/piironen18a.html}{Online}.
+%   \item<5-> Several case studies for small to moderate dimensional ($p=4 \ldots 100$) small data:\\
+%     Vehtari (2018). Model assesment, selection and inference after
+%     selection. \url{https://avehtari.github.io/modelselection/}
+%   \end{itemize}
+%   }
+% \end{frame}
+
+\begin{frame}{Bodyfat: small $p$ example of projection predictive}
+  
+  Predict bodyfat percentage. The reference value is obtained by
+  immersing person in water. $n=251$.
+
+  \pause
+  \vspace{-0.7\baselineskip}
+  \includegraphics[width=7.7cm]{bodyfat_corr.pdf}
+
+\end{frame}
+
+\begin{frame}{Bodyfat}
+
+  Marginal posteriors of coefficients
+  
+  \includegraphics[width=11cm]{bodyfat_mcmc_areas.pdf}
+
+\end{frame}
+
+\begin{frame}{Bodyfat}
+
+  Bivariate marginal of weight and height
+  
+  \includegraphics[width=7.5cm]{bodyfat_mcmc_scatter.pdf}
+
+\end{frame}
+
+\begin{frame}{Bodyfat}
+
+  The predictive performance of the full and submodels
+  
+  \includegraphics[width=11cm]{bodyfat_varsel_plot.pdf}
+
+\end{frame}
+
+\begin{frame}{Bodyfat}
+
+  Marginals of the reference and projected posterior
+
+  % TODO: side by side comaprison to original marginals
+  \vspace{\baselineskip}
+  
+  \begin{minipage}[t]{1\linewidth}
+    \hspace{-1cm}
+    \includegraphics[width=6.5cm]{bodyfat_mcmc_areas.pdf}
+  \includegraphics[width=6.5cm]{bodyfat_proj_mcmc_areas.pdf}
+\end{minipage}
+\end{frame}
+
+\begin{frame}{Predictive performance vs. selected variables}
+
   \begin{itemize}
-  \item Leave-one-person-out works, but is less efficient than looking
-    at the posterior (see
-    \url{https://avehtari.github.io/modelselection/betablockers.html})
+  \item<+-> The initial aim: find the minimal set of variables
+    providing similar predictive performance as the reference model
+  \item<+-> Some keep asking can it find the true variables
+    \begin{itemize}
+    \item<3-> What do you mean by true variables?
+    \end{itemize}
   \end{itemize}
+
+  \uncover<3>{
+      \vspace{-0.5\baselineskip}
+    \begin{minipage}[t]{1\linewidth}
+      \hspace{-1cm}
+  \vspace{-.88\baselineskip}
+  \includegraphics[width=6cm]{bodyfat_corr.pdf}\includegraphics[width=6.5cm]{bodyfat_proj_mcmc_areas.pdf}
+    \end{minipage}
 }
 
 \end{frame}
 
+% \begin{frame}{Example: Individual correlations}
 
-\begin{frame}{Simulation experiment}
+% \vspace{-1.5\baselineskip}
+  
+% \begin{minipage}[t]{0.3\linewidth}
+% \begin{equation*}
+% \begin{alignedat}{1}
+%   f &  \sim \N(0,1),  \\
+%   y \mid f &\sim \N(f, 1) 
+% \end{alignedat}
+% \end{equation*}
+% \end{minipage}
+%   \begin{minipage}[t]{0.4\linewidth}
+% \begin{equation*}
+% \begin{alignedat}{2}
+%   x_j \mid f &\sim \N(\sqrt{\rho}f,\, 1-\rho), \qquad && j = 1,\dots,150 \,, \\
+%   x_j \mid f &\sim \N(0, 1), && j = 151,\dots, 500 \,.
+% \end{alignedat}
+% \end{equation*}
+% \end{minipage}
+% \vspace{-0.2\baselineskip}
 
-  \vspace{-0.75\baselineskip}
-  
-  \begin{minipage}{3.2cm}
-    \vspace{-4\baselineskip}
-    \hfill p(odds < 1)
-  \end{minipage}\includegraphics[width=6cm]{simuridges_beta.pdf}
-\uncover<2->{  
-  \begin{minipage}{3.2cm}
-    \vspace{-4\baselineskip}
-    \hfill Marginal likelihood comparison
-  \end{minipage}\includegraphics[width=6cm]{simuridges_bf.pdf}
-  }
-\uncover<3->{  
-  \vspace{-1\baselineskip}
-  
-  \begin{minipage}{3.2cm}
-    \vspace{-4\baselineskip}
-    \hfill LOO comparison
-  \end{minipage}\includegraphics[width=6cm]{simuridges_loo.pdf}
-  \vspace{-1\baselineskip}
-  }
-  
-\end{frame}
+% \center
+% {Correlation for $x_j,f_*$ ($f_*$ = PCA + linear regression)\\}
+% \vspace{-0.5\baselineskip}
+% \only<1>{\includegraphics[width=8cm]{Rfs.pdf}}\only<2>{\includegraphics[width=8cm]{Rfs1.pdf}}\only<3>{\includegraphics[width=8cm]{Rfs2.pdf}}
 
-\begin{frame}{Hypothesis testing and posterior dependencies}
+% \end{frame}
+
+\begin{frame}{Variability under data perturbation}
+
+   Comparing projection predictive variable selection (projpred)
+    and stepwise maximum likelihood over bootstrapped datasets
 
   \vspace{-0.5\baselineskip}
-  Looking at the marginal posterior $p(\beta < 0)$ can be misleading when there
-  are many parameters
+  \begin{minipage}[t]{1\linewidth}
+      \hspace{-1cm}
+      \includegraphics[width=12.5cm]{inc_prob.pdf}
+    \end{minipage}
+    \pause
+  \begin{minipage}[t]{1\linewidth}
+      \hspace{-0.9cm}
+      \includegraphics[width=12.5cm]{bodyfat_table.png}
+    \end{minipage}
+
+  \end{frame}
+
+  \begin{frame}{Variability under data perturbation}
+
+   Comparing projection predictive variable selection (projpred)
+    and stepwise maximum likelihood over bootstrapped datasets
+
   
-  Marginal posteriors of coefficients
-  
-  \includegraphics[width=10cm]{bodyfat_mcmc_areas.pdf}
-
-\end{frame}
-
-\begin{frame}{Hypothesis testing and posterior dependencies}
-
-  \vspace{-0.75\baselineskip}
-  Looking at the marginal posterior(s) can be misleading when there
-  are many parameters
-
-  Bivariate marginal of weight and height
-  
-  \vspace{-0.25\baselineskip}
-  \includegraphics[width=6.8cm]{bodyfat_mcmc_scatter.pdf}
-
-\end{frame}
-
-
-\begin{frame}{Hypothesis testing and posterior dependencies}
-
-  In bodyfat example, starting from full model
-
-  \begin{itemize}
-  \item BF in favor of removing weight (p=0.92)
-  \item LOO in favor of removing weight (p=0.99)
-  \end{itemize}
-
-  In bodyfat example, starting from model y $\sim$ abdomen
-  \begin{itemize}
-  \item BF in favor of adding weight (p=1.0)
-  \item LOO in favor of adding weight (p=1.0)
-  \end{itemize}
-
-\end{frame}
-
-\begin{frame}{Variable selection}
-
   \vspace{-0.5\baselineskip}
-  More elaborate approaches are needed for variable selection
-
-  Projection predictive variable selection selects the minimal set of
-  variables with similar predictive performance as the full model
+  \begin{minipage}[t]{1\linewidth}
+      \hspace{-1cm}
+      \includegraphics[width=12.5cm]{inc_prob.pdf}
+    \end{minipage}
   
-  \includegraphics[width=10cm]{bodyfat_varsel_plot.pdf}
+    \begin{itemize}
+      \vspace{-1\baselineskip}
+    \item<1-> Reduced variability, but in case of noisy finite data,
+      there will be some variability under data perturbation
+    \item<2-> projpred uses
+      \begin{itemize}
+      \item Bayesian inference for the reference
+      \item \only<2>{The reference model}\only<3->{{\color{set13}The reference model}}
+      \item Projection for submodel inference
+      \end{itemize}
+    \end{itemize}
+
+  \end{frame}
+
+% \begin{frame}{Predictive performance vs. selected variables}
+
+%   \begin{itemize}
+%   \item projpred has very good predictive performance and small false
+%     discovery rate {\color{gray}(with simulated data with known truth)}
+%   \item Other variable selection methods (e.g. steplm) can be improved
+%     just by replacing the data with the predictions from the reference
+%     model
+%   \end{itemize}
+
+%   \pause
+% \vspace{1\baselineskip}
+  
+%   \begin{minipage}[t]{1\linewidth}
+%       \hspace{-.9cm}
+% \includegraphics[width=12.5cm]{rmse_vs_fdr_parallel.pdf}
+% \end{minipage}  
+
+% \end{frame}
+
+% \begin{frame}{Complete variable selection}
+
+%   \begin{itemize}
+%   \item projpred can be used iteratively to search for all variables
+%     with some predictive relevance
+%   \item More challenging problem, where specialized algorithms seem to
+%     perform better
+%     \begin{itemize}
+%     \item reference model helps to improve other methods, too
+%     \end{itemize}
+%   \end{itemize}
+  
+% \end{frame}
+
+% \begin{frame}{Networks as a bunch of linear models}
+  
+%   \begin{center}
+%     \includegraphics[width=8.5cm]{ceu.pdf}
+%   \end{center}
+%     {\footnotesize CEU genetic network. BGL: Bayesian glasso; GL: glasso;
+%       TIGER: tuning insensitive graph estimation and regression; BMA:
+%       Bayesian model averaging; MAP: Maximum a posteriori; Projection:
+%       projection predictive selection.}
+
+%       % \item Williams, Piironen, Vehtari, Rast (2018). Bayesian estimation of Gaussian graphical models with projection predictive selection. \href{https://arxiv.org/abs/1801.05725}{arXiv:1801.05725}\\
+
+% \end{frame}
+
+\begin{frame}{Multilevel regression and GAMMs}
+  
+
+  \begin{itemize}
+  \item \texttt{projpred} supports also hierarchical models in \texttt{brms}\\
+  {\small  Catalina, Bürkner, and Vehtari (2022). Projection predictive inference for generalized linear and additive multilevel models. \textit{Proceedings of the 24th International Conference on Artificial Intelligence and Statistics (AISTATS), PMLR} 151:4446–4461. \url{https://proceedings.mlr.press/v151/catalina22a.html}}
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Scaling}
+
+  \begin{itemize}
+  \item So far the biggest number of variables we've tested is 22K
+    \begin{itemize}
+    \item 96s for creating a reference model
+    \item 14s for projection predictive variable selection
+    \end{itemize}
+  \end{itemize}
+  
+\end{frame}
+
+% \begin{frame}{In machine learning (example)}
+
+%   \vspace{-0.3\baselineskip}
+%   \begin{itemize}
+%   \item BART integrates over the uncertainty producing many trees
+%   \item CART makes just one tree which is easier to analyse
+%   \item Projecting BART to CART gets benefits of both
+%   \end{itemize}
+
+%   \pause
+%   \center
+%   \vspace{-0.8\baselineskip}
+%   \includegraphics[width=7.5cm]{CART_BART.png}
+
+% \end{frame}
+
+% \begin{frame}{Take-home messages}
+
+% \begin{itemize}
+% \item Good reference model filters out noise, making it easier to
+%   search for simpler models
+%   \begin{itemize}
+%   \item Applicable for many algorithms and models
+%   \end{itemize}
+% \item Reference model + projection improve model selection
+%   \begin{itemize}
+%   \item Bayesian decision theoretical justification
+%   \item Excellent tradeoff between accuracy and model complexity
+%   \item Excellent FDR in minimal set selection
+%   \item Can be useful also for identifying all the relevant features
+%   \end{itemize}
+% \end{itemize}
+
+% \end{frame}
+
+\begin{frame}[fragile]{Intro paper and brms and rstanarm + projpred examples}
+
+\begin{itemize}
+\item {\small McLatchie, Rögnvaldsson, Weber, and Aki Vehtari (2024). Advances in projection predictive inference. \emph{Statistical Science}. \url{https://arxiv.org/abs/2306.15581}}
+\item \url{https://mc-stan.org/projpred/articles/projpred.html}
+\item \url{https://users.aalto.fi/~ave/casestudies.html}
+\item Fast and often sufficient if $n\gg p$\\
+\begin{minted}[fontsize=\footnotesize]{r}
+varsel <- cv_varsel(fit, method='forward', cv_method='loo',
+                    validate_search=FALSE)
+\end{minted}
+\item Slower but needed if not $n\gg p$\\
+\begin{minted}[fontsize=\footnotesize]{r}
+varsel <- cv_varsel(fit, method='forward', cv_method='kfold', K=10,
+                    validate_search=TRUE)
+\end{minted}
+\item If $p$ is very big use subsampling loo\\
+\begin{minted}[fontsize=\footnotesize]{r}
+# nloo should be a positive integer smaller than the number of observations
+varsel <- cv_varsel(fit, cv_method='loo',
+                    validate_search=TRUE, nloo=50)
+\end{minted}
+\end{itemize}
 
 \end{frame}
 
+\begin{frame}{Bayesian Python packages}
+
+  \begin{itemize}
+  \item Probabilistic programming languages
+    \begin{itemize}
+    \item Stan (via \href{https://mc-stan.org/cmdstanpy/}{CmdStanPy})
+    \item \href{https://www.pymc.io/}{PyMC}
+    \item NumPyro
+    \item ...
+    \end{itemize}
+  \item Workflow packages
+    \begin{itemize}
+      \item \href{https://python.arviz.org/en/stable/}{ArviZ}, MCMC diagnostics, model checking, model comparison, plotting, prior-sensitivity...
+      \item \href{https://bambinos.github.io/bambi}{Bambi}, BAyesian Model-Building Interface
+      \item \href{https://kulprit.readthedocs.io}{Kulprit}, projective inference (still under development)
+    \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+
+% \begin{frame}{References}
+% \vspace{-0.5\baselineskip}
+  
+%   \scriptsize
+  
+% \begin{itemize}
+% \item[-] Piironen, Paasiniemi, and Vehtari (2020). Projective inference in high-dimensional problems: prediction and feature selection. \textit{Electronic Journal of Statistics}, 14(1):2155-2197. \url{https://doi.org/10.1214/20-EJS1711}
+% \item[-] Pavone, Piironen, Bürkner, and Vehtari (2020). Using reference models in variable selection. arXiv preprint arXiv:2004.13118. \url{https://arxiv.org/abs/2004.13118}
+% \item[-] Piironen and Vehtari (2016). Projection predictive input variable selection for Gaussian process models. \textit{2016 IEEE 26th International Workshop on Machine Learning for Signal Processing (MLSP)}, doi:10.1109/MLSP.2016.7738829. \url{https://dx.doi.org/10.1109/MLSP.2016.7738829}
+% \item[-] Piironen and Vehtari (2017). Comparison of Bayesian predictive methods for model selection. \textit{Statistics and Computing}, 27(3):711-735. doi:10.1007/s11222-016-9649-y. \url{https://link.springer.com/article/10.1007/s11222-016-9649-y}
+% \item[-] Afrabandpey, Peltola, Piironen, Vehtari, and Kaski (2019). Making Bayesian predictive models interpretable: A decision theoretic approach. \textit{arXiv preprint arXiv:1910.09358} \url{https://arxiv.org/abs/1910.09358}
+% \item[-] Williams, Piironen, Vehtari, and Rast (2018). Bayesian estimation of Gaussian graphical models with projection predictive selection. \textit{arXiv preprint arXiv:1801.05725}. \url{https://arxiv.org/abs/1801.05725}
+% \item[-] Piironen, Paasiniemi, Catalina and Vehtari (2020). projpred:
+%   Projection Predictive Feature
+%   Selection. \url{https://mc-stan.org/projpred}
+% \end{itemize}
+% \end{frame}
 
 \end{document}
 
 %%% Local Variables: 
-%%% TeX-PDF-mode: t
+%%% mode: latex
 %%% TeX-master: t
-%%% End: 
+%%% TeX-command-extra-options: "-shell-escape"
+%%% End:
