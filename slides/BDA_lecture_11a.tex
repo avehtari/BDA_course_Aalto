@@ -1,0 +1,386 @@
+\documentclass[t]{beamer}
+%\documentclass[finnish,english,handout]{beamer}
+
+\usepackage{tikz}
+\usepackage{bm}
+\usepackage[T1]{fontenc}
+\usepackage{booktabs}
+\usepackage[utf8]{inputenc}
+\usepackage{newtxtext} % times
+%\usepackage[scaled=.95]{cabin} % sans serif
+\usepackage{amsmath}
+\usepackage[varqu,varl]{inconsolata} % typewriter
+\usepackage[varg]{newtxmath}
+\usefonttheme[onlymath]{serif} % beamer font theme
+\usepackage{microtype}
+\usepackage{afterpage}
+\usepackage{url}
+\urlstyle{same}
+% \usepackage{amsbsy}
+% \usepackage{eucal}
+\usepackage{rotating}
+\usepackage{listings}
+\usepackage{lstbayes}
+\usepackage[all,poly,ps,color]{xy}
+\usepackage{eurosym}
+
+\usepackage{natbib}
+\bibliographystyle{apalike}
+
+\mode<presentation>
+{
+  \setbeamercovered{invisible}
+  \setbeamertemplate{itemize items}[circle]
+  \setbeamercolor{frametitle}{bg=white,fg=navyblue}
+  \setbeamertemplate{navigation symbols}{}
+  \setbeamertemplate{headline}[default]{}
+  \setbeamertemplate{footline}[split]
+  % \setbeamertemplate{headline}[text line]{\insertsection}
+  \setbeamertemplate{footline}[frame number]
+}
+
+\pdfinfo{            
+  /Title      (BDA, Lecture 11a) 
+  /Author     (Aki Vehtari) % 
+  /Keywords   (Bayesian data analysis)
+}
+
+\definecolor{forestgreen}{rgb}{0.1333,0.5451,0.1333}
+\definecolor{navyblue}{rgb}{0,0,0.5}
+\definecolor{list1}{rgb}{0,0.2549,0.6784}
+\renewcommand{\emph}[1]{\textcolor{navyblue}{#1}}
+\definecolor{set11}{HTML}{E41A1C}
+\definecolor{set12}{HTML}{377EB8}
+\definecolor{set13}{HTML}{4DAF4A}
+\definecolor{prior}{RGB}{102,194,165}
+\definecolor{likelihood}{RGB}{252,141,98}
+
+\graphicspath{{./figs/}}
+
+
+\parindent=0pt
+\parskip=8pt
+\tolerance=9000
+\abovedisplayshortskip=0pt
+
+%\renewcommand{\itemsep}{0pt}
+% Lists
+\newenvironment{list1}{
+   \begin{list}{$\color{list1}\bullet$}{\itemsep=6pt}}{
+  \end{list}}
+\newenvironment{list1s}{
+  \begin{list}{$\includegraphics[width=5pt]{logo.eps}$}{\itemsep=6pt}}{
+  \end{list}}
+\newenvironment{list2}{
+  \begin{list}{-}{\baselineskip=12pt\itemsep=2pt}}{
+  \end{list}}
+\newenvironment{list3}{
+  \begin{list}{$\cdot$}{\baselineskip=15pt}}{
+  \end{list}}
+
+\def\o{{\mathbf o}}
+\def\t{{\mathbf \theta}}
+\def\w{{\mathbf w}}
+\def\x{{\mathbf x}}
+\def\y{{\mathbf y}}
+\def\z{{\mathbf z}}
+
+\def\peff{p_{\mathrm{eff}}}
+\def\eff{\mathrm{eff}}
+
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\var}{var}
+\DeclareMathOperator{\Sd}{Sd}
+\DeclareMathOperator{\sd}{sd}
+\DeclareMathOperator{\Gammad}{Gamma}
+\DeclareMathOperator{\Invgamma}{Inv-gamma}
+\DeclareMathOperator{\Bin}{Bin}
+\DeclareMathOperator{\Negbin}{Neg-bin}
+\DeclareMathOperator{\normal}{normal}
+\DeclareMathOperator{\gammadist}{gamma}
+\DeclareMathOperator{\expdist}{exponential}
+\DeclareMathOperator{\Poisson}{Poisson}
+\DeclareMathOperator{\betadist}{Beta}
+\DeclareMathOperator{\logit}{logit}
+\DeclareMathOperator{\N}{N}
+\DeclareMathOperator{\U}{U}
+\DeclareMathOperator{\BF}{BF}
+\DeclareMathOperator{\Invchi2}{Inv-\chi^2}
+\DeclareMathOperator{\NInvchi2}{N-Inv-\chi^2}
+\DeclareMathOperator{\InvWishart}{Inv-Wishart}
+\DeclareMathOperator{\tr}{tr}
+% \DeclareMathOperator{\Pr}{Pr}
+\def\euro{{\footnotesize \EUR\, }}
+\DeclareMathOperator{\rep}{\mathrm{rep}}
+
+% \def\dashxy(#1){%
+%   /xydash{[#1] 0 setdash}def}
+% \def\grayxy(#1){%
+%   /xycolor{#1 setgray}def}
+% \newgraphescape{D}[1]{!{\ar @*{[!\dashxy(2 2)]} "#1"}}
+% \newgraphescape{P}[1]{!{\ar "#1"}}
+% \newgraphescape{F}[1]{!{*+=<2em>[F=]{#1}="#1"}}
+% \newgraphescape{O}[1]{!{*+=<2em>[F]{#1}="#1"}}
+% \newgraphescape{V}[1]{!{*+=<2em>[o][F]{#1}="#1"}}
+% \newgraphescape{B}[3]{!{{ "#1"*+#3\frm{} }.{ "#2"*+#3\frm{} } *+[F:!\grayxy(0.75)]\frm{}}}
+
+
+\title[]{Bayesian data analysis}
+\subtitle{}
+
+\author{Noa Kallioinen}
+
+\institute[Aalto]{}
+ 
+\date[]{}
+
+%\beamerdefaultoverlayspecification{<+->}
+
+\begin{document}
+
+%\maketitle
+
+\begin{frame}{Prior and likelihood sensitivity checks with priorsense}
+
+\begin{itemize}[<+->]
+\item sensible prior specification is important, as otherwise priors can strongly and unintentionally influence results
+\item we recommend checking prior and likelihood sensitivity using priorsense (Kallioinen et al., 2023)
+\end{itemize}
+
+\begin{minipage}{0.2\textwidth}
+\onslide<2->{\begin{figure}
+\includegraphics[width=\textwidth]{logo.png}
+\end{figure}}
+\end{minipage}
+\hspace{0.05\textwidth}
+\begin{minipage}{0.65\textwidth}
+\begin{itemize}[<+->]
+    \item efficient prior and likelihood sensitivity checks
+    \item provides numerical and graphical diagnostics
+    \item compatible with \texttt{brms} and applicable to any model (excluding flat priors)
+    \item no need to refit
+\end{itemize}
+
+\end{minipage}
+
+\end{frame}
+
+\begin{frame}{How it works}
+\begin{minipage}{0.2\textwidth}
+\begin{figure}
+    \includegraphics[width=\linewidth]{logo.png}
+\end{figure}
+\end{minipage}
+\hspace{0.05\textwidth}
+\begin{minipage}{0.65\textwidth}
+\begin{itemize}[<+->]
+\item modifies the posterior by power-scaling the \textcolor{prior}{\textbf{prior}} or \textcolor{likelihood}{\textbf{likelihood}} slightly
+        \item original posterior: \(p(\theta\mid y) \propto p(\theta)p(y\mid \theta)\)
+    \item modified posterior: \(\bm{{\color{prior}{p(\theta)^{\alpha}}}} p(y\mid \theta)\) or \(p(\theta) 
+    \bm{{\color{likelihood}{p(y\mid \theta)^{\alpha}}}}\)
+    \item uses Pareto-smoothed importance sampling to estimate modified posterior from original posterior draws \(\theta^{(s)}\)
+ 
+\end{itemize}
+\end{minipage}
+\end{frame}
+
+\begin{frame}{Power-scaling}
+\begin{figure}
+    \centering
+\input{tikz/example_dists}
+    \caption{Example power-scaled distributions}
+    \label{fig:placeholder}
+\end{figure}
+    
+\end{frame}
+
+\begin{frame}{Interpretation}
+\begin{figure}
+    \centering
+    \input{tikz/conflict-example}
+    \caption{Prior-likelihood conflict}
+    \label{fig:placeholder}
+\end{figure}
+    
+\end{frame}
+
+\begin{frame}{Computation}
+\begin{itemize}
+\onslide<1->{\item[] For prior power-scaling:
+\item[] \(w_{pri}^{(s)} = \dfrac{\bm{{\color{prior}{p(\theta^{(s)})^{\alpha}}}}p(\theta^{(s)} \mid y)}{p(\theta^{(s)})p(\theta^{(s)} \mid y)} = \dfrac{\bm{{\color{prior}{p(\theta^{(s)})^{\alpha}}}}}{p(\theta^{(s)})} = p(\theta^{(s)})^{(\alpha - 1)}\)
+\item[]
+\item[]
+}
+\onslide<2>{\item[] For likelihood power-scaling:
+\item[] \(w_{lik}^{(s)} = \dfrac{p(\theta^{(s)})\bm{{\color{likelihood}{p(\theta^{(s)} \mid y)^{\alpha}}}}}{p(\theta^{(s)})p(\theta^{(s)} \mid y)} = \dfrac{\bm{{\color{likelihood}{p(\theta^{(s)} \mid y)^{\alpha}}}}}{p(y \mid \theta^{(s)})} = p(y \mid \theta^{(s)})^{(\alpha - 1)}\)}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Example}
+
+\begin{itemize}
+    \item Dataset: \texttt{npk}
+    \item Goal: Model effect of Nitrogen, Phosphate and Potassium on pea crop yield
+    \item Data: 24 observations of crop yield (3 observations of each combination)
+
+\end{itemize}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{npk.png}
+    \caption{Mean yield per combination}
+    \label{fig:placeholder}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Example}
+
+Model:
+\begin{align*}
+  \onslide<1->{y_i &\sim \N(\mu_i, \sigma^2)} \\[0.5em]
+  \onslide<2->{\mu_i =& \beta_{\text{Intercept}}} \\
+  \onslide<3->{      \quad +& \beta_{\text{N}} N_i && \text{(main effects)} \\
+                           \quad +& \beta_{\text{P}} P_i \\
+                           \quad +& \beta_{\text{K}} K_i 
+                           } \\
+  \onslide<4->{      \quad +& \beta_{\text{N} \times \text{K}} N_i K_i
+                           && \text{(2-way interactions)}} \\
+  \onslide<4->{      \quad +& \beta_{\text{N} \times \text{P}} N_i P_i} \\
+  \onslide<4->{      \quad +& \beta_{\text{K} \times \text{P}} K_i P_i} \\
+  % \onslide<5->{      &\quad + \beta_{\text{N} \times \text{P} \times \text{K}}
+  %                           N_i P_i K_i
+  %                          && \text{(3-way interaction)}} \\
+\end{align*}
+
+\end{frame}
+
+\begin{frame}{Example: Initial model}
+
+\onslide<1->{
+Main effects only
+
+\texttt{brms} formula:
+\texttt{yield} \sim \texttt{N + P + K }
+}
+
+\onslide<2->{
+\texttt{prior(normal(0, 2.5), coef = "b\_N1", \textcolor{blue}{tag = "main"})}
+\texttt{prior(normal(0, 2.5), coef = "b\_K1", \textcolor{blue}{tag = "main"})}
+\texttt{prior(normal(0, 2.5), coef = "b\_P1", \textcolor{blue}{tag = "main"})}
+
+\textcolor{blue}{tagging} a group of priors allows for selective power-scaling
+}
+\end{frame}
+
+\begin{frame}{Example: Initial model checks}
+
+
+\only<1-2>{
+\texttt{powerscale\_plot\_dens(fit, \textcolor{blue}{prior\_selection = "main"})}
+}
+
+\only<2>{
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{npk_model1.png}
+\end{figure}
+
+}
+
+\only<3-4>{
+\texttt{powerscale\_sensitivity(fit, \textcolor{blue}{prior\_selection = "main"}})
+}
+
+\only<4>{
+\begin{table}[]
+    \centering
+    \begin{tabular}{llll}
+      variable & prior sens. & likelihood sens. & diagnosis \\ 
+      \midrule
+      b\_N1 & 0.15 & 0.18 & potential prior-data conflict \\
+     b\_P1 & 0.06 & 0.07 & potential prior-data conflict \\
+     b\_K1 & 0.11 & 0.14 & potential prior-data conflict
+    \end{tabular}
+    \caption{Sensitivity diagnostics}
+    \label{tab:placeholder}
+\end{table}    
+}
+
+    
+\end{frame}
+
+\begin{frame}{Example: Adjusted prior}
+
+\texttt{prior(normal(0, \textcolor{blue}{25}), coef = "b\_N1", tag = "main")}
+\texttt{prior(normal(0, \textcolor{blue}{25}), coef = "b\_K1", tag = "main")}
+\texttt{prior(normal(0, \textcolor{blue}{25}), coef = "b\_P1", tag = "main")}
+    
+\end{frame}
+
+\begin{frame}{Example: Adjusted prior checks}
+
+\only<1>{
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{npk_model1adj.png}
+\end{figure}
+}
+
+\only<2>{
+\begin{table}[]
+    \centering
+    \begin{tabular}{llll}
+      variable & prior sens. & likelihood sens. & diagnosis \\ 
+      \midrule
+      b\_N1 & 0.00 & 0.10 & - \\
+     b\_P1 & 0.00 & 0.09 & - \\
+     b\_K1 & 0.00 & 0.10 & -
+    \end{tabular}
+    \end{table}
+
+}
+\end{frame}
+
+\begin{frame}{Example: Second model}
+
+\onslide<1->{
+Main effects and two-way interactions
+
+\texttt{brms} formula:
+
+\texttt{yield} \sim \texttt{(N + P + K)\^{}2}
+}
+
+\onslide<2->{
+\texttt{prior(normal(0, 25), coef = "b$\_$N1:P1", \textcolor{blue}{tag = "twoway"})}
+\texttt{prior(normal(0, 25), coef = "b$\_$N1:K1", \textcolor{blue}{tag = "twoway"})}
+\texttt{prior(normal(0, 25), coef = "b$\_$P1:K1", \textcolor{blue}{tag = "twoway"})}
+}
+\end{frame}
+
+\begin{frame}{Example: Second model checks}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{npk_model2.png}
+\end{figure}
+    
+\end{frame}
+
+\begin{frame}{Summary}
+
+\begin{itemize}[<+->]
+    \item priors can be challenging to specify without domain knowledge
+    \item prior and likelihood sensitivity checking is recommended
+    \item \texttt{priorsense} can make sensitivity checking faster 
+    \item with many parameters, use tags to select priors and look at predictions or model fit measures
+    \item if checks indicate strong prior sensitivity, prior-data conflict, or weak likelihood, further thought should be put into the prior
+    \item see more at \url{n-kall.github.io/priorsense}
+\end{itemize}
+
+\end{frame}
+
+\end{document}
