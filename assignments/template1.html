@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.37">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -13,10 +13,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -77,10 +80,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-6cebedc212c1adef46408f9178fa9388.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-b301820b0b8cea9c6fd8e5daddb76281.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -344,10 +347,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The exercises here refer to the lecture 1/BDA chapter 1 content, not the course infrastructure quiz. This assignment is meant to test whether or not you have sufficient knowledge to participate in the course. The first question checks that you remember basic terms of probability calculus. The second exercise checks you recognise the most important notation used throughout the course and used in BDA3. The third-fifth exercise you will solve some basic Bayes theorem questions to check your understanding on the basics of probability theory. The 6th exercise checks on whether you recall the three steps of Bayesian Data Ananlysis as mentioned in chapter 1 of BDA3. The last exercise walks you through an example of how we can use models to generate distributions for outcomes of interest, applied to a setting of a simplified Roulette table.</p>
 <p>This quarto document is not intended to be submitted, but to render the questions as they appear on Mycourses to be available also outside of it. The following will set-up <code>markmyassignment</code> to check your functions at the end of the notebook:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(markmyassignment)</span>
-<span id="cb1-2"><a href="#cb1-2"></a>assignment_path <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">"https://github.com/avehtari/BDA_course_Aalto/"</span>,</span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="st">"blob/master/tests/assignment1.yml"</span>, <span class="at">sep=</span><span class="st">""</span>)</span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="fu">set_assignment</span>(assignment_path)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a><span class="fu">library</span>(markmyassignment)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a>assignment_path <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">"https://github.com/avehtari/BDA_course_Aalto/"</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-label="3"></a><span class="st">"blob/master/tests/assignment1.yml"</span>, <span class="at">sep=</span><span class="st">""</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-label="4"></a><span class="fu">set_assignment</span>(assignment_path)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Assignment set:
 assignment1: Bayesian Data Analysis: Assignment 1
@@ -377,70 +380,70 @@ Figure&nbsp;1: Parts of Bayesian workflow
 <h1 data-number="3"><span class="header-section-number">3</span> Bayes’ theorem 2</h1>
 <p>The following will help you implementing a function to calculate the required probabilities for this exercise. Keep the below name and format for the function to work with <code>markmyassignment</code>:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>boxes_test <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>), <span class="at">ncol =</span> <span class="dv">2</span>,</span>
-<span id="cb3-2"><a href="#cb3-2"></a>    <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>), <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"white"</span>)))</span>
-<span id="cb3-3"><a href="#cb3-3"></a></span>
-<span id="cb3-4"><a href="#cb3-4"></a>p_red <span class="ot">&lt;-</span> <span class="cf">function</span>(boxes) {</span>
-<span id="cb3-5"><a href="#cb3-5"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb3-6"><a href="#cb3-6"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
-<span id="cb3-7"><a href="#cb3-7"></a>    <span class="fl">0.3928571</span></span>
-<span id="cb3-8"><a href="#cb3-8"></a>}</span>
-<span id="cb3-9"><a href="#cb3-9"></a></span>
-<span id="cb3-10"><a href="#cb3-10"></a>p_box <span class="ot">&lt;-</span> <span class="cf">function</span>(boxes) {</span>
-<span id="cb3-11"><a href="#cb3-11"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb3-12"><a href="#cb3-12"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
-<span id="cb3-13"><a href="#cb3-13"></a>    <span class="fu">c</span>(<span class="fl">0.29090909</span>,<span class="fl">0.07272727</span>,<span class="fl">0.63636364</span>)</span>
-<span id="cb3-14"><a href="#cb3-14"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-label="1"></a>boxes_test <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>), <span class="at">ncol =</span> <span class="dv">2</span>,</span>
+<span id="cb3-2"><a href="#cb3-2" aria-label="2"></a>    <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>), <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"white"</span>)))</span>
+<span id="cb3-3"><a href="#cb3-3" aria-label="3"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-label="4"></a>p_red <span class="ot">&lt;-</span> <span class="cf">function</span>(boxes) {</span>
+<span id="cb3-5"><a href="#cb3-5" aria-label="5"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-label="6"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-label="7"></a>    <span class="fl">0.3928571</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-label="8"></a>}</span>
+<span id="cb3-9"><a href="#cb3-9" aria-label="9"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-label="10"></a>p_box <span class="ot">&lt;-</span> <span class="cf">function</span>(boxes) {</span>
+<span id="cb3-11"><a href="#cb3-11" aria-label="11"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-label="12"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-label="13"></a>    <span class="fu">c</span>(<span class="fl">0.29090909</span>,<span class="fl">0.07272727</span>,<span class="fl">0.63636364</span>)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-label="14"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="a-binomial-model-for-the-roulette-table" class="level1" data-number="4">
 <h1 data-number="4"><span class="header-section-number">4</span> A Binomial Model for the Roulette Table</h1>
 <p>Incomplete code can be found below.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># proportion of red/black</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a>theta <span class="ot">&lt;-</span> <span class="co"># declare probability parameter for the binomial model</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a></span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="co"># Sequence of trials</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a></span>
-<span id="cb4-6"><a href="#cb4-6"></a>trials <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="co">#start value of sequence,#end value of sequence,#value for spacing)</span></span>
-<span id="cb4-7"><a href="#cb4-7"></a></span>
-<span id="cb4-8"><a href="#cb4-8"></a><span class="co"># Number of simulation draws from the model</span></span>
-<span id="cb4-9"><a href="#cb4-9"></a>nsims <span class="ot">&lt;-</span> <span class="co"># number of of simulations from the binomial model</span></span>
-<span id="cb4-10"><a href="#cb4-10"></a></span>
-<span id="cb4-11"><a href="#cb4-11"></a><span class="co"># Helper function for getting the proportions</span></span>
-<span id="cb4-12"><a href="#cb4-12"></a>binom_gen <span class="ot">&lt;-</span> <span class="cf">function</span>(trials,theta,nsims){</span>
-<span id="cb4-13"><a href="#cb4-13"></a>    df <span class="ot">&lt;-</span>  <span class="fu">as.data.frame</span>(<span class="fu">rbinom</span>(nsims,trials,theta)<span class="sc">/</span>trials) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">nsims =</span> nsims,<span class="at">trials =</span> trials)</span>
-<span id="cb4-14"><a href="#cb4-14"></a>    <span class="fu">colnames</span>(df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Proportions"</span>,<span class="st">"Nsims"</span>,<span class="st">"Trials"</span>)</span>
-<span id="cb4-15"><a href="#cb4-15"></a>  <span class="fu">return</span>(df)</span>
-<span id="cb4-16"><a href="#cb4-16"></a>}</span>
-<span id="cb4-17"><a href="#cb4-17"></a></span>
-<span id="cb4-18"><a href="#cb4-18"></a><span class="co"># Create a data frame containing the draws for each number of trials</span></span>
-<span id="cb4-19"><a href="#cb4-19"></a>proportion_60 <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(trials, binom_gen, theta, nsims)) <span class="co"># lapply applies elements in trials column to binom_gen function, which is then rowbound via do.call</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-label="1"></a><span class="co"># proportion of red/black</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-label="2"></a>theta <span class="ot">&lt;-</span> <span class="co"># declare probability parameter for the binomial model</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-label="3"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-label="4"></a><span class="co"># Sequence of trials</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-label="5"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-label="6"></a>trials <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="co">#start value of sequence,#end value of sequence,#value for spacing)</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-label="7"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-label="8"></a><span class="co"># Number of simulation draws from the model</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-label="9"></a>nsims <span class="ot">&lt;-</span> <span class="co"># number of of simulations from the binomial model</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-label="10"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-label="11"></a><span class="co"># Helper function for getting the proportions</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-label="12"></a>binom_gen <span class="ot">&lt;-</span> <span class="cf">function</span>(trials,theta,nsims){</span>
+<span id="cb4-13"><a href="#cb4-13" aria-label="13"></a>    df <span class="ot">&lt;-</span>  <span class="fu">as.data.frame</span>(<span class="fu">rbinom</span>(nsims,trials,theta)<span class="sc">/</span>trials) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">nsims =</span> nsims,<span class="at">trials =</span> trials)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-label="14"></a>    <span class="fu">colnames</span>(df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Proportions"</span>,<span class="st">"Nsims"</span>,<span class="st">"Trials"</span>)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-label="15"></a>  <span class="fu">return</span>(df)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-label="16"></a>}</span>
+<span id="cb4-17"><a href="#cb4-17" aria-label="17"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-label="18"></a><span class="co"># Create a data frame containing the draws for each number of trials</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-label="19"></a>proportion_60 <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(trials, binom_gen, theta, nsims)) <span class="co"># lapply applies elements in trials column to binom_gen function, which is then rowbound via do.call</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now plot a histogram of the computed proportions for 10, 50 and 1000 trials, using the code below</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Plot the Distributions</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a>subset_df60 <span class="ot">&lt;-</span> proportion_60[proportion_60<span class="sc">$</span>Trials <span class="sc">%in%</span> <span class="fu">c</span>(<span class="co">#trial values), ] # Subset your dataframe</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a></span>
-<span id="cb5-4"><a href="#cb5-4"></a>subset_df60 <span class="sc">|&gt;</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(Proportions)) <span class="sc">+</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a>  <span class="fu">geom_histogram</span>(<span class="at">position =</span> <span class="st">"identity"</span> ,<span class="at">bins =</span> <span class="dv">40</span>) <span class="sc">+</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a>  <span class="fu">facet_grid</span>(<span class="at">cols =</span> <span class="fu">vars</span>(Trials))  <span class="sc">+</span></span>
-<span id="cb5-7"><a href="#cb5-7"></a>  <span class="fu">ggtitle</span>(<span class="st">"Proportions for specific trials"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-label="1"></a><span class="co"># Plot the Distributions</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-label="2"></a>subset_df60 <span class="ot">&lt;-</span> proportion_60[proportion_60<span class="sc">$</span>Trials <span class="sc">%in%</span> <span class="fu">c</span>(<span class="co">#trial values), ] # Subset your dataframe</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-label="3"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-label="4"></a>subset_df60 <span class="sc">|&gt;</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(Proportions)) <span class="sc">+</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-label="5"></a>  <span class="fu">geom_histogram</span>(<span class="at">position =</span> <span class="st">"identity"</span> ,<span class="at">bins =</span> <span class="dv">40</span>) <span class="sc">+</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-label="6"></a>  <span class="fu">facet_grid</span>(<span class="at">cols =</span> <span class="fu">vars</span>(Trials))  <span class="sc">+</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-label="7"></a>  <span class="fu">ggtitle</span>(<span class="st">"Proportions for specific trials"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Suppose you are now certain that theta = 0.6, plot the probability density given 1000 trials using the code below.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>size <span class="ot">=</span>  <span class="co"># number of trials</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a>prob <span class="ot">=</span>  <span class="co"># probability of success</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a></span>
-<span id="cb6-4"><a href="#cb6-4"></a>binom_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb6-5"><a href="#cb6-5"></a>  <span class="at">Success =</span> <span class="dv">0</span><span class="sc">:</span>size,</span>
-<span id="cb6-6"><a href="#cb6-6"></a>  <span class="at">Probability =</span> <span class="fu">dbinom</span>(<span class="dv">0</span><span class="sc">:</span>size, <span class="at">size =</span> size, <span class="at">prob =</span> prob)</span>
-<span id="cb6-7"><a href="#cb6-7"></a>)</span>
-<span id="cb6-8"><a href="#cb6-8"></a></span>
-<span id="cb6-9"><a href="#cb6-9"></a><span class="fu">ggplot</span>(binom_data, <span class="fu">aes</span>(<span class="at">x =</span> Success, <span class="at">y =</span> Probability)) <span class="sc">+</span></span>
-<span id="cb6-10"><a href="#cb6-10"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb6-11"><a href="#cb6-11"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb6-12"><a href="#cb6-12"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"PMF of Binomial Distribution"</span>, <span class="at">x =</span> <span class="st">"Number of Successes"</span>, <span class="at">y =</span> <span class="st">"PDF"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-label="1"></a>size <span class="ot">=</span>  <span class="co"># number of trials</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-label="2"></a>prob <span class="ot">=</span>  <span class="co"># probability of success</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-label="3"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-label="4"></a>binom_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb6-5"><a href="#cb6-5" aria-label="5"></a>  <span class="at">Success =</span> <span class="dv">0</span><span class="sc">:</span>size,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-label="6"></a>  <span class="at">Probability =</span> <span class="fu">dbinom</span>(<span class="dv">0</span><span class="sc">:</span>size, <span class="at">size =</span> size, <span class="at">prob =</span> prob)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-label="7"></a>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-label="8"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-label="9"></a><span class="fu">ggplot</span>(binom_data, <span class="fu">aes</span>(<span class="at">x =</span> Success, <span class="at">y =</span> Probability)) <span class="sc">+</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-label="10"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-label="11"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-label="12"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"PMF of Binomial Distribution"</span>, <span class="at">x =</span> <span class="st">"Number of Successes"</span>, <span class="at">y =</span> <span class="st">"PDF"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
@@ -456,7 +459,7 @@ Figure&nbsp;1: Parts of Bayesian workflow
 <div class="callout-body-container callout-body">
 <p>The following will check the functions for which <code>markmyassignment</code> has been set up:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">mark_my_assignment</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-label="1"></a><span class="fu">mark_my_assignment</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>✔ | F W  S  OK | Context
 
@@ -641,16 +644,16 @@ Backtrace:
     }
     function toggleCodeHandler(show) {
       return function(e) {
-        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
-        for (let i=0; i<detailsSrc.length; i++) {
-          const details = detailsSrc[i].parentElement;
+        const cellDetails = window.document.querySelectorAll(".cell details.code-fold");
+        for (let i=0; i<cellDetails.length; i++) {
+          const details = cellDetails[i];
           if (show) {
             details.open = true;
           } else {
             details.removeAttribute("open");
           }
         }
-        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const cellCodeDivs = window.document.querySelectorAll(".cell div.sourceCode.cell-code");
         const fromCls = show ? "hidden" : "unhidden";
         const toCls = show ? "unhidden" : "hidden";
         for (let i=0; i<cellCodeDivs.length; i++) {
@@ -1012,132 +1015,132 @@ Backtrace:
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1"></a><span class="co">---</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a><span class="an">title:</span><span class="co"> "Notebook for Assignment 1"</span></span>
-<span id="cb9-3"><a href="#cb9-3"></a><span class="an">author:</span><span class="co"> "Aki Vehtari et al."</span></span>
-<span id="cb9-4"><a href="#cb9-4"></a><span class="an">format:</span></span>
-<span id="cb9-5"><a href="#cb9-5"></a><span class="co">  html:</span></span>
-<span id="cb9-6"><a href="#cb9-6"></a><span class="co">    toc: true</span></span>
-<span id="cb9-7"><a href="#cb9-7"></a><span class="co">    code-tools: true</span></span>
-<span id="cb9-8"><a href="#cb9-8"></a><span class="co">    code-line-numbers: true</span></span>
-<span id="cb9-9"><a href="#cb9-9"></a><span class="co">    number-sections: true</span></span>
-<span id="cb9-10"><a href="#cb9-10"></a><span class="co">    mainfont: Georgia, serif</span></span>
-<span id="cb9-11"><a href="#cb9-11"></a><span class="an">editor:</span><span class="co"> source</span></span>
-<span id="cb9-12"><a href="#cb9-12"></a><span class="co">---</span></span>
-<span id="cb9-13"><a href="#cb9-13"></a></span>
-<span id="cb9-14"><a href="#cb9-14"></a><span class="fu"># General information</span></span>
-<span id="cb9-15"><a href="#cb9-15"></a></span>
-<span id="cb9-16"><a href="#cb9-16"></a>The exercises here refer to the lecture 1/BDA chapter 1 content, not the course infrastructure quiz. This assignment is meant to test whether or not you have sufficient knowledge to participate in the course. The first question checks that you remember basic terms of probability calculus. The second exercise checks you recognise the most important notation used throughout the course and used in BDA3. The third-fifth exercise you will solve some basic Bayes theorem questions to check your understanding on the basics of probability theory. The 6th exercise checks on whether you recall the three steps of Bayesian Data Ananlysis as mentioned in chapter 1 of BDA3. The last exercise walks you through an example of how we can use models to generate distributions for outcomes of interest, applied to a setting of a simplified Roulette table.</span>
-<span id="cb9-17"><a href="#cb9-17"></a></span>
-<span id="cb9-18"><a href="#cb9-18"></a>This quarto document is not intended to be submitted, but to render the questions as they appear on Mycourses to be available also outside of it. The following will set-up <span class="in">`markmyassignment`</span> to check your functions at the end of the notebook:</span>
-<span id="cb9-19"><a href="#cb9-19"></a></span>
-<span id="cb9-22"><a href="#cb9-22"></a><span class="in">```{r}</span></span>
-<span id="cb9-23"><a href="#cb9-23"></a><span class="fu">library</span>(markmyassignment)</span>
-<span id="cb9-24"><a href="#cb9-24"></a>assignment_path <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">"https://github.com/avehtari/BDA_course_Aalto/"</span>,</span>
-<span id="cb9-25"><a href="#cb9-25"></a><span class="st">"blob/master/tests/assignment1.yml"</span>, <span class="at">sep=</span><span class="st">""</span>)</span>
-<span id="cb9-26"><a href="#cb9-26"></a><span class="fu">set_assignment</span>(assignment_path)</span>
-<span id="cb9-27"><a href="#cb9-27"></a><span class="in">```</span></span>
-<span id="cb9-28"><a href="#cb9-28"></a></span>
-<span id="cb9-29"><a href="#cb9-29"></a></span>
-<span id="cb9-30"><a href="#cb9-30"></a><span class="fu"># Bayes' theorem 1</span></span>
-<span id="cb9-31"><a href="#cb9-31"></a></span>
-<span id="cb9-32"><a href="#cb9-32"></a></span>
-<span id="cb9-33"><a href="#cb9-33"></a>If you use pen and paper, it may help to draw pictures as follows (see also <span class="co">[</span><span class="ot">assignment_instructions#fig-workflow</span><span class="co">](assignment_instructions#fig-workflow)</span>):</span>
-<span id="cb9-34"><a href="#cb9-34"></a></span>
-<span id="cb9-35"><a href="#cb9-35"></a><span class="al">![Parts of Bayesian workflow](additional_files/bayes_workflow.jpg)</span>{#fig-workflow width="350"}</span>
-<span id="cb9-36"><a href="#cb9-36"></a></span>
-<span id="cb9-37"><a href="#cb9-37"></a>See @fig-workflow for illustration of parts of Bayesian workflow.</span>
-<span id="cb9-38"><a href="#cb9-38"></a></span>
-<span id="cb9-39"><a href="#cb9-39"></a></span>
-<span id="cb9-40"><a href="#cb9-40"></a><span class="fu"># Bayes' theorem 2</span></span>
-<span id="cb9-41"><a href="#cb9-41"></a></span>
-<span id="cb9-42"><a href="#cb9-42"></a></span>
-<span id="cb9-43"><a href="#cb9-43"></a>The following will help you implementing a function to calculate the required probabilities for this exercise. Keep the below name and format for the function to work with <span class="in">`markmyassignment`</span>:</span>
-<span id="cb9-44"><a href="#cb9-44"></a></span>
-<span id="cb9-47"><a href="#cb9-47"></a><span class="in">```{r}</span></span>
-<span id="cb9-48"><a href="#cb9-48"></a>boxes_test <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>), <span class="at">ncol =</span> <span class="dv">2</span>,</span>
-<span id="cb9-49"><a href="#cb9-49"></a>    <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>), <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"white"</span>)))</span>
-<span id="cb9-50"><a href="#cb9-50"></a></span>
-<span id="cb9-51"><a href="#cb9-51"></a>p_red <span class="ot">&lt;-</span> <span class="cf">function</span>(boxes) {</span>
-<span id="cb9-52"><a href="#cb9-52"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb9-53"><a href="#cb9-53"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
-<span id="cb9-54"><a href="#cb9-54"></a>    <span class="fl">0.3928571</span></span>
-<span id="cb9-55"><a href="#cb9-55"></a>}</span>
-<span id="cb9-56"><a href="#cb9-56"></a></span>
-<span id="cb9-57"><a href="#cb9-57"></a>p_box <span class="ot">&lt;-</span> <span class="cf">function</span>(boxes) {</span>
-<span id="cb9-58"><a href="#cb9-58"></a>    <span class="co"># Do computation here, and return as below.</span></span>
-<span id="cb9-59"><a href="#cb9-59"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
-<span id="cb9-60"><a href="#cb9-60"></a>    <span class="fu">c</span>(<span class="fl">0.29090909</span>,<span class="fl">0.07272727</span>,<span class="fl">0.63636364</span>)</span>
-<span id="cb9-61"><a href="#cb9-61"></a>}</span>
-<span id="cb9-62"><a href="#cb9-62"></a><span class="in">```</span></span>
-<span id="cb9-63"><a href="#cb9-63"></a></span>
-<span id="cb9-64"><a href="#cb9-64"></a></span>
-<span id="cb9-65"><a href="#cb9-65"></a></span>
-<span id="cb9-66"><a href="#cb9-66"></a><span class="fu"># A Binomial Model for the Roulette Table</span></span>
-<span id="cb9-67"><a href="#cb9-67"></a></span>
-<span id="cb9-68"><a href="#cb9-68"></a>Incomplete code can be found below.</span>
-<span id="cb9-69"><a href="#cb9-69"></a></span>
-<span id="cb9-70"><a href="#cb9-70"></a><span class="in">```{r,eval=FALSE}</span></span>
-<span id="cb9-71"><a href="#cb9-71"></a><span class="co"># proportion of red/black</span></span>
-<span id="cb9-72"><a href="#cb9-72"></a>theta <span class="ot">&lt;-</span> <span class="co"># declare probability parameter for the binomial model</span></span>
-<span id="cb9-73"><a href="#cb9-73"></a></span>
-<span id="cb9-74"><a href="#cb9-74"></a><span class="co"># Sequence of trials</span></span>
-<span id="cb9-75"><a href="#cb9-75"></a></span>
-<span id="cb9-76"><a href="#cb9-76"></a>trials <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="co">#start value of sequence,#end value of sequence,#value for spacing)</span></span>
-<span id="cb9-77"><a href="#cb9-77"></a></span>
-<span id="cb9-78"><a href="#cb9-78"></a><span class="co"># Number of simulation draws from the model</span></span>
-<span id="cb9-79"><a href="#cb9-79"></a>nsims <span class="ot">&lt;-</span> <span class="co"># number of of simulations from the binomial model</span></span>
-<span id="cb9-80"><a href="#cb9-80"></a></span>
-<span id="cb9-81"><a href="#cb9-81"></a><span class="co"># Helper function for getting the proportions</span></span>
-<span id="cb9-82"><a href="#cb9-82"></a>binom_gen <span class="ot">&lt;-</span> <span class="cf">function</span>(trials,theta,nsims){</span>
-<span id="cb9-83"><a href="#cb9-83"></a>    df <span class="ot">&lt;-</span>  <span class="fu">as.data.frame</span>(<span class="fu">rbinom</span>(nsims,trials,theta)<span class="sc">/</span>trials) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">nsims =</span> nsims,<span class="at">trials =</span> trials)</span>
-<span id="cb9-84"><a href="#cb9-84"></a>    <span class="fu">colnames</span>(df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Proportions"</span>,<span class="st">"Nsims"</span>,<span class="st">"Trials"</span>)</span>
-<span id="cb9-85"><a href="#cb9-85"></a>  <span class="fu">return</span>(df)</span>
-<span id="cb9-86"><a href="#cb9-86"></a>}</span>
-<span id="cb9-87"><a href="#cb9-87"></a></span>
-<span id="cb9-88"><a href="#cb9-88"></a><span class="co"># Create a data frame containing the draws for each number of trials</span></span>
-<span id="cb9-89"><a href="#cb9-89"></a>proportion_60 <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(trials, binom_gen, theta, nsims)) <span class="co"># lapply applies elements in trials column to binom_gen function, which is then rowbound via do.call</span></span>
-<span id="cb9-90"><a href="#cb9-90"></a><span class="st">```</span></span>
-<span id="cb9-91"><a href="#cb9-91"></a></span>
-<span id="cb9-92"><a href="#cb9-92"></a><span class="at">Now plot a histogram of the computed proportions for 10, 50 and 1000 trials, using the code below</span></span>
-<span id="cb9-93"><a href="#cb9-93"></a></span>
-<span id="cb9-94"><a href="#cb9-94"></a><span class="st">```</span>{r,eval<span class="ot">=</span><span class="cn">FALSE</span>}</span>
-<span id="cb9-95"><a href="#cb9-95"></a><span class="co"># Plot the Distributions</span></span>
-<span id="cb9-96"><a href="#cb9-96"></a>subset_df60 <span class="ot">&lt;-</span> proportion_60[proportion_60<span class="sc">$</span>Trials <span class="sc">%in%</span> <span class="fu">c</span>(<span class="co">#trial values), ] # Subset your dataframe</span></span>
-<span id="cb9-97"><a href="#cb9-97"></a></span>
-<span id="cb9-98"><a href="#cb9-98"></a>subset_df60 <span class="sc">|&gt;</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(Proportions)) <span class="sc">+</span></span>
-<span id="cb9-99"><a href="#cb9-99"></a>  <span class="fu">geom_histogram</span>(<span class="at">position =</span> <span class="st">"identity"</span> ,<span class="at">bins =</span> <span class="dv">40</span>) <span class="sc">+</span></span>
-<span id="cb9-100"><a href="#cb9-100"></a>  <span class="fu">facet_grid</span>(<span class="at">cols =</span> <span class="fu">vars</span>(Trials))  <span class="sc">+</span></span>
-<span id="cb9-101"><a href="#cb9-101"></a>  <span class="fu">ggtitle</span>(<span class="st">"Proportions for specific trials"</span>)</span>
-<span id="cb9-102"><a href="#cb9-102"></a><span class="st">```</span></span>
-<span id="cb9-103"><a href="#cb9-103"></a></span>
-<span id="cb9-104"><a href="#cb9-104"></a><span class="at">Suppose you are now certain that theta = 0.6, plot the probability density given 1000 trials using the code below.</span></span>
-<span id="cb9-105"><a href="#cb9-105"></a></span>
-<span id="cb9-106"><a href="#cb9-106"></a><span class="st">```</span>{r, eval<span class="ot">=</span><span class="cn">FALSE</span>}</span>
-<span id="cb9-107"><a href="#cb9-107"></a><span class="at">size =</span>  <span class="co"># number of trials</span></span>
-<span id="cb9-108"><a href="#cb9-108"></a><span class="at">prob =</span>  <span class="co"># probability of success</span></span>
-<span id="cb9-109"><a href="#cb9-109"></a></span>
-<span id="cb9-110"><a href="#cb9-110"></a>binom_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb9-111"><a href="#cb9-111"></a>  <span class="at">Success =</span> <span class="dv">0</span><span class="sc">:</span>size,</span>
-<span id="cb9-112"><a href="#cb9-112"></a>  <span class="at">Probability =</span> <span class="fu">dbinom</span>(<span class="dv">0</span><span class="sc">:</span>size, <span class="at">size =</span> size, <span class="at">prob =</span> prob)</span>
-<span id="cb9-113"><a href="#cb9-113"></a>)</span>
-<span id="cb9-114"><a href="#cb9-114"></a></span>
-<span id="cb9-115"><a href="#cb9-115"></a><span class="fu">ggplot</span>(binom_data, <span class="fu">aes</span>(<span class="at">x =</span> Success, <span class="at">y =</span> Probability)) <span class="sc">+</span></span>
-<span id="cb9-116"><a href="#cb9-116"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb9-117"><a href="#cb9-117"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb9-118"><a href="#cb9-118"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"PMF of Binomial Distribution"</span>, <span class="at">x =</span> <span class="st">"Number of Successes"</span>, <span class="at">y =</span> <span class="st">"PDF"</span>)</span>
-<span id="cb9-119"><a href="#cb9-119"></a></span>
-<span id="cb9-120"><a href="#cb9-120"></a><span class="st">```</span></span>
-<span id="cb9-121"><a href="#cb9-121"></a></span>
-<span id="cb9-122"><a href="#cb9-122"></a><span class="at">::: {.callout-warning collapse="false"}</span></span>
-<span id="cb9-123"><a href="#cb9-123"></a><span class="at">## markmyassignment</span></span>
-<span id="cb9-124"><a href="#cb9-124"></a></span>
-<span id="cb9-125"><a href="#cb9-125"></a><span class="at">The following will check the functions for which </span><span class="st">`</span>markmyassignment<span class="st">`</span><span class="at"> has been set up:</span></span>
-<span id="cb9-126"><a href="#cb9-126"></a></span>
-<span id="cb9-129"><a href="#cb9-129"></a><span class="in">```{r}</span></span>
-<span id="cb9-130"><a href="#cb9-130"></a><span class="fu">mark_my_assignment</span>()</span>
-<span id="cb9-131"><a href="#cb9-131"></a><span class="st">```</span></span>
-<span id="cb9-132"><a href="#cb9-132"></a><span class="at">:::</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1" aria-label="1"></a><span class="co">---</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-label="2"></a><span class="an">title:</span><span class="co"> "Notebook for Assignment 1"</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-label="3"></a><span class="an">author:</span><span class="co"> "Aki Vehtari et al."</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-label="4"></a><span class="an">format:</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-label="5"></a><span class="co">  html:</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-label="6"></a><span class="co">    toc: true</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-label="7"></a><span class="co">    code-tools: true</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-label="8"></a><span class="co">    code-line-numbers: true</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-label="9"></a><span class="co">    number-sections: true</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-label="10"></a><span class="co">    mainfont: Georgia, serif</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-label="11"></a><span class="an">editor:</span><span class="co"> source</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-label="12"></a><span class="co">---</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-label="13"></a></span>
+<span id="cb9-14"><a href="#cb9-14" aria-label="14"></a><span class="fu"># General information</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-label="15"></a></span>
+<span id="cb9-16"><a href="#cb9-16" aria-label="16"></a>The exercises here refer to the lecture 1/BDA chapter 1 content, not the course infrastructure quiz. This assignment is meant to test whether or not you have sufficient knowledge to participate in the course. The first question checks that you remember basic terms of probability calculus. The second exercise checks you recognise the most important notation used throughout the course and used in BDA3. The third-fifth exercise you will solve some basic Bayes theorem questions to check your understanding on the basics of probability theory. The 6th exercise checks on whether you recall the three steps of Bayesian Data Ananlysis as mentioned in chapter 1 of BDA3. The last exercise walks you through an example of how we can use models to generate distributions for outcomes of interest, applied to a setting of a simplified Roulette table.</span>
+<span id="cb9-17"><a href="#cb9-17" aria-label="17"></a></span>
+<span id="cb9-18"><a href="#cb9-18" aria-label="18"></a>This quarto document is not intended to be submitted, but to render the questions as they appear on Mycourses to be available also outside of it. The following will set-up <span class="in">`markmyassignment`</span> to check your functions at the end of the notebook:</span>
+<span id="cb9-19"><a href="#cb9-19" aria-label="19"></a></span>
+<span id="cb9-22"><a href="#cb9-22" aria-label="20"></a><span class="in">```{r}</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-label="21"></a><span class="fu">library</span>(markmyassignment)</span>
+<span id="cb9-24"><a href="#cb9-24" aria-label="22"></a>assignment_path <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">"https://github.com/avehtari/BDA_course_Aalto/"</span>,</span>
+<span id="cb9-25"><a href="#cb9-25" aria-label="23"></a><span class="st">"blob/master/tests/assignment1.yml"</span>, <span class="at">sep=</span><span class="st">""</span>)</span>
+<span id="cb9-26"><a href="#cb9-26" aria-label="24"></a><span class="fu">set_assignment</span>(assignment_path)</span>
+<span id="cb9-27"><a href="#cb9-27" aria-label="25"></a><span class="in">```</span></span>
+<span id="cb9-28"><a href="#cb9-28" aria-label="26"></a></span>
+<span id="cb9-29"><a href="#cb9-29" aria-label="27"></a></span>
+<span id="cb9-30"><a href="#cb9-30" aria-label="28"></a><span class="fu"># Bayes' theorem 1</span></span>
+<span id="cb9-31"><a href="#cb9-31" aria-label="29"></a></span>
+<span id="cb9-32"><a href="#cb9-32" aria-label="30"></a></span>
+<span id="cb9-33"><a href="#cb9-33" aria-label="31"></a>If you use pen and paper, it may help to draw pictures as follows (see also <span class="co">[</span><span class="ot">assignment_instructions#fig-workflow</span><span class="co">](assignment_instructions#fig-workflow)</span>):</span>
+<span id="cb9-34"><a href="#cb9-34" aria-label="32"></a></span>
+<span id="cb9-35"><a href="#cb9-35" aria-label="33"></a><span class="al">![Parts of Bayesian workflow](additional_files/bayes_workflow.jpg)</span>{#fig-workflow width="350"}</span>
+<span id="cb9-36"><a href="#cb9-36" aria-label="34"></a></span>
+<span id="cb9-37"><a href="#cb9-37" aria-label="35"></a>See @fig-workflow for illustration of parts of Bayesian workflow.</span>
+<span id="cb9-38"><a href="#cb9-38" aria-label="36"></a></span>
+<span id="cb9-39"><a href="#cb9-39" aria-label="37"></a></span>
+<span id="cb9-40"><a href="#cb9-40" aria-label="38"></a><span class="fu"># Bayes' theorem 2</span></span>
+<span id="cb9-41"><a href="#cb9-41" aria-label="39"></a></span>
+<span id="cb9-42"><a href="#cb9-42" aria-label="40"></a></span>
+<span id="cb9-43"><a href="#cb9-43" aria-label="41"></a>The following will help you implementing a function to calculate the required probabilities for this exercise. Keep the below name and format for the function to work with <span class="in">`markmyassignment`</span>:</span>
+<span id="cb9-44"><a href="#cb9-44" aria-label="42"></a></span>
+<span id="cb9-47"><a href="#cb9-47" aria-label="43"></a><span class="in">```{r}</span></span>
+<span id="cb9-48"><a href="#cb9-48" aria-label="44"></a>boxes_test <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">1</span>), <span class="at">ncol =</span> <span class="dv">2</span>,</span>
+<span id="cb9-49"><a href="#cb9-49" aria-label="45"></a>    <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>), <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"white"</span>)))</span>
+<span id="cb9-50"><a href="#cb9-50" aria-label="46"></a></span>
+<span id="cb9-51"><a href="#cb9-51" aria-label="47"></a>p_red <span class="ot">&lt;-</span> <span class="cf">function</span>(boxes) {</span>
+<span id="cb9-52"><a href="#cb9-52" aria-label="48"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb9-53"><a href="#cb9-53" aria-label="49"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb9-54"><a href="#cb9-54" aria-label="50"></a>    <span class="fl">0.3928571</span></span>
+<span id="cb9-55"><a href="#cb9-55" aria-label="51"></a>}</span>
+<span id="cb9-56"><a href="#cb9-56" aria-label="52"></a></span>
+<span id="cb9-57"><a href="#cb9-57" aria-label="53"></a>p_box <span class="ot">&lt;-</span> <span class="cf">function</span>(boxes) {</span>
+<span id="cb9-58"><a href="#cb9-58" aria-label="54"></a>    <span class="co"># Do computation here, and return as below.</span></span>
+<span id="cb9-59"><a href="#cb9-59" aria-label="55"></a>    <span class="co"># This is the correct return value for the test data provided above.</span></span>
+<span id="cb9-60"><a href="#cb9-60" aria-label="56"></a>    <span class="fu">c</span>(<span class="fl">0.29090909</span>,<span class="fl">0.07272727</span>,<span class="fl">0.63636364</span>)</span>
+<span id="cb9-61"><a href="#cb9-61" aria-label="57"></a>}</span>
+<span id="cb9-62"><a href="#cb9-62" aria-label="58"></a><span class="in">```</span></span>
+<span id="cb9-63"><a href="#cb9-63" aria-label="59"></a></span>
+<span id="cb9-64"><a href="#cb9-64" aria-label="60"></a></span>
+<span id="cb9-65"><a href="#cb9-65" aria-label="61"></a></span>
+<span id="cb9-66"><a href="#cb9-66" aria-label="62"></a><span class="fu"># A Binomial Model for the Roulette Table</span></span>
+<span id="cb9-67"><a href="#cb9-67" aria-label="63"></a></span>
+<span id="cb9-68"><a href="#cb9-68" aria-label="64"></a>Incomplete code can be found below.</span>
+<span id="cb9-69"><a href="#cb9-69" aria-label="65"></a></span>
+<span id="cb9-70"><a href="#cb9-70" aria-label="66"></a><span class="in">```{r,eval=FALSE}</span></span>
+<span id="cb9-71"><a href="#cb9-71" aria-label="67"></a><span class="co"># proportion of red/black</span></span>
+<span id="cb9-72"><a href="#cb9-72" aria-label="68"></a>theta <span class="ot">&lt;-</span> <span class="co"># declare probability parameter for the binomial model</span></span>
+<span id="cb9-73"><a href="#cb9-73" aria-label="69"></a></span>
+<span id="cb9-74"><a href="#cb9-74" aria-label="70"></a><span class="co"># Sequence of trials</span></span>
+<span id="cb9-75"><a href="#cb9-75" aria-label="71"></a></span>
+<span id="cb9-76"><a href="#cb9-76" aria-label="72"></a>trials <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="co">#start value of sequence,#end value of sequence,#value for spacing)</span></span>
+<span id="cb9-77"><a href="#cb9-77" aria-label="73"></a></span>
+<span id="cb9-78"><a href="#cb9-78" aria-label="74"></a><span class="co"># Number of simulation draws from the model</span></span>
+<span id="cb9-79"><a href="#cb9-79" aria-label="75"></a>nsims <span class="ot">&lt;-</span> <span class="co"># number of of simulations from the binomial model</span></span>
+<span id="cb9-80"><a href="#cb9-80" aria-label="76"></a></span>
+<span id="cb9-81"><a href="#cb9-81" aria-label="77"></a><span class="co"># Helper function for getting the proportions</span></span>
+<span id="cb9-82"><a href="#cb9-82" aria-label="78"></a>binom_gen <span class="ot">&lt;-</span> <span class="cf">function</span>(trials,theta,nsims){</span>
+<span id="cb9-83"><a href="#cb9-83" aria-label="79"></a>    df <span class="ot">&lt;-</span>  <span class="fu">as.data.frame</span>(<span class="fu">rbinom</span>(nsims,trials,theta)<span class="sc">/</span>trials) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">nsims =</span> nsims,<span class="at">trials =</span> trials)</span>
+<span id="cb9-84"><a href="#cb9-84" aria-label="80"></a>    <span class="fu">colnames</span>(df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Proportions"</span>,<span class="st">"Nsims"</span>,<span class="st">"Trials"</span>)</span>
+<span id="cb9-85"><a href="#cb9-85" aria-label="81"></a>  <span class="fu">return</span>(df)</span>
+<span id="cb9-86"><a href="#cb9-86" aria-label="82"></a>}</span>
+<span id="cb9-87"><a href="#cb9-87" aria-label="83"></a></span>
+<span id="cb9-88"><a href="#cb9-88" aria-label="84"></a><span class="co"># Create a data frame containing the draws for each number of trials</span></span>
+<span id="cb9-89"><a href="#cb9-89" aria-label="85"></a>proportion_60 <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(trials, binom_gen, theta, nsims)) <span class="co"># lapply applies elements in trials column to binom_gen function, which is then rowbound via do.call</span></span>
+<span id="cb9-90"><a href="#cb9-90" aria-label="86"></a><span class="st">```</span></span>
+<span id="cb9-91"><a href="#cb9-91" aria-label="87"></a></span>
+<span id="cb9-92"><a href="#cb9-92" aria-label="88"></a><span class="at">Now plot a histogram of the computed proportions for 10, 50 and 1000 trials, using the code below</span></span>
+<span id="cb9-93"><a href="#cb9-93" aria-label="89"></a></span>
+<span id="cb9-94"><a href="#cb9-94" aria-label="90"></a><span class="st">```</span>{r,eval<span class="ot">=</span><span class="cn">FALSE</span>}</span>
+<span id="cb9-95"><a href="#cb9-95" aria-label="91"></a><span class="co"># Plot the Distributions</span></span>
+<span id="cb9-96"><a href="#cb9-96" aria-label="92"></a>subset_df60 <span class="ot">&lt;-</span> proportion_60[proportion_60<span class="sc">$</span>Trials <span class="sc">%in%</span> <span class="fu">c</span>(<span class="co">#trial values), ] # Subset your dataframe</span></span>
+<span id="cb9-97"><a href="#cb9-97" aria-label="93"></a></span>
+<span id="cb9-98"><a href="#cb9-98" aria-label="94"></a>subset_df60 <span class="sc">|&gt;</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(Proportions)) <span class="sc">+</span></span>
+<span id="cb9-99"><a href="#cb9-99" aria-label="95"></a>  <span class="fu">geom_histogram</span>(<span class="at">position =</span> <span class="st">"identity"</span> ,<span class="at">bins =</span> <span class="dv">40</span>) <span class="sc">+</span></span>
+<span id="cb9-100"><a href="#cb9-100" aria-label="96"></a>  <span class="fu">facet_grid</span>(<span class="at">cols =</span> <span class="fu">vars</span>(Trials))  <span class="sc">+</span></span>
+<span id="cb9-101"><a href="#cb9-101" aria-label="97"></a>  <span class="fu">ggtitle</span>(<span class="st">"Proportions for specific trials"</span>)</span>
+<span id="cb9-102"><a href="#cb9-102" aria-label="98"></a><span class="st">```</span></span>
+<span id="cb9-103"><a href="#cb9-103" aria-label="99"></a></span>
+<span id="cb9-104"><a href="#cb9-104" aria-label="100"></a><span class="at">Suppose you are now certain that theta = 0.6, plot the probability density given 1000 trials using the code below.</span></span>
+<span id="cb9-105"><a href="#cb9-105" aria-label="101"></a></span>
+<span id="cb9-106"><a href="#cb9-106" aria-label="102"></a><span class="st">```</span>{r, eval<span class="ot">=</span><span class="cn">FALSE</span>}</span>
+<span id="cb9-107"><a href="#cb9-107" aria-label="103"></a><span class="at">size =</span>  <span class="co"># number of trials</span></span>
+<span id="cb9-108"><a href="#cb9-108" aria-label="104"></a><span class="at">prob =</span>  <span class="co"># probability of success</span></span>
+<span id="cb9-109"><a href="#cb9-109" aria-label="105"></a></span>
+<span id="cb9-110"><a href="#cb9-110" aria-label="106"></a>binom_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb9-111"><a href="#cb9-111" aria-label="107"></a>  <span class="at">Success =</span> <span class="dv">0</span><span class="sc">:</span>size,</span>
+<span id="cb9-112"><a href="#cb9-112" aria-label="108"></a>  <span class="at">Probability =</span> <span class="fu">dbinom</span>(<span class="dv">0</span><span class="sc">:</span>size, <span class="at">size =</span> size, <span class="at">prob =</span> prob)</span>
+<span id="cb9-113"><a href="#cb9-113" aria-label="109"></a>)</span>
+<span id="cb9-114"><a href="#cb9-114" aria-label="110"></a></span>
+<span id="cb9-115"><a href="#cb9-115" aria-label="111"></a><span class="fu">ggplot</span>(binom_data, <span class="fu">aes</span>(<span class="at">x =</span> Success, <span class="at">y =</span> Probability)) <span class="sc">+</span></span>
+<span id="cb9-116"><a href="#cb9-116" aria-label="112"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb9-117"><a href="#cb9-117" aria-label="113"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb9-118"><a href="#cb9-118" aria-label="114"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"PMF of Binomial Distribution"</span>, <span class="at">x =</span> <span class="st">"Number of Successes"</span>, <span class="at">y =</span> <span class="st">"PDF"</span>)</span>
+<span id="cb9-119"><a href="#cb9-119" aria-label="115"></a></span>
+<span id="cb9-120"><a href="#cb9-120" aria-label="116"></a><span class="st">```</span></span>
+<span id="cb9-121"><a href="#cb9-121" aria-label="117"></a></span>
+<span id="cb9-122"><a href="#cb9-122" aria-label="118"></a><span class="at">::: {.callout-warning collapse="false"}</span></span>
+<span id="cb9-123"><a href="#cb9-123" aria-label="119"></a><span class="at">## markmyassignment</span></span>
+<span id="cb9-124"><a href="#cb9-124" aria-label="120"></a></span>
+<span id="cb9-125"><a href="#cb9-125" aria-label="121"></a><span class="at">The following will check the functions for which </span><span class="st">`</span>markmyassignment<span class="st">`</span><span class="at"> has been set up:</span></span>
+<span id="cb9-126"><a href="#cb9-126" aria-label="122"></a></span>
+<span id="cb9-129"><a href="#cb9-129" aria-label="123"></a><span class="in">```{r}</span></span>
+<span id="cb9-130"><a href="#cb9-130" aria-label="124"></a><span class="fu">mark_my_assignment</span>()</span>
+<span id="cb9-131"><a href="#cb9-131" aria-label="125"></a><span class="st">```</span></span>
+<span id="cb9-132"><a href="#cb9-132" aria-label="126"></a><span class="at">:::</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
