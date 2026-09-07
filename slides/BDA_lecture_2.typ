@@ -37,16 +37,12 @@
 -  2.3 Posterior summaries
 -  2.4 Informative prior distributions (skip exponential families and sufficient statistics)
 -  2.5 Gaussian model with known variance
-
-== Outline of Chapter 2 (cont)
-
 -  2.6 Other single parameter models
   -  the normal distribution with known mean but
       unknown variance is the most important
   -  glance through Poisson and exponential
 -  2.7 glance through this example, which illustrates benefits of prior information, no need to read all the details (it's quite long example)
 -  2.8--2.9 Noninformative and weakly informative priors
-
 
 == Binomial: known $theta$
 
@@ -253,10 +249,10 @@ Example: $n = 10, y = 10$
 == Predictive distribution
 
 - #bluetext[Prior predictive] distribution for new $tilde(y)$ (discrete)
-$ p(tilde(y) = 1| M) & = integral_(0)^(1) p(tilde(y) = 1| theta, M) #bluetext[p(theta | M)] d theta $
+$ p(tilde(y) = 1| M) & = integral_(0)^(1) p(tilde(y) = 1| theta, M) #bluetext[p($theta$ | M)] d theta $
 
 - #redtext[Posterior predictive] distribution for new $tilde(y)$ (discrete)
-$ p(tilde(y) = 1| y, M) & = integral_(0)^(1) p(tilde(y) = 1| theta, y, M) #redtext[p(theta | y, M)] d theta $
+$ p(tilde(y) = 1| y, M) & = integral_(0)^(1) p(tilde(y) = 1| theta, y, M) #redtext[p($theta$ | y, M)] d theta $
 
 
 == Left handedness
