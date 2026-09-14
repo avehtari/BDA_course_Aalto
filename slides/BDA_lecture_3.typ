@@ -4,7 +4,7 @@
 #show: m.setup.with(
   title: [BDA Course 2026],
   subtitle: [Lecture 3],
-  authors: [Aki Vehtari, Osvaldo Martin],
+  //authors: [Aki Vehtari, Osvaldo Martin],
   paper: "4-3",
 )
 #set page(fill: rgb("#ffffff"))
@@ -39,6 +39,7 @@
 - Marginalization by analytic integration
 - Posterior predictive distribution by analytic integration
 - Generalized Linear Models (GLMs)
+- Gaussian process (extra-material not covered in detail)
 
 
 == Normal / Gaussian
@@ -46,7 +47,7 @@
 - Gaussian: favored by Germans (but it was studied earlier by De Moivre and Laplace, and Gauss avoided using it)
 - Normal: some prominent statistician started to use this term systematically in the end of 19th century (but it's a bit of exaggeration)
 #v(2cm)
-#align(center)[#image("figs/kuva2b_0.pdf", width: 15cm)]
+#align(center)[#image("figs/normal.pdf", width: 15cm)]
 
 // Not to be confused with the paranormal distribution
 
@@ -161,8 +162,9 @@ $
 - The normalized exponentiated minus scaled square of the differences
   $
     p(y | mu, sigma)
-    = 1 / (sqrt(2 pi) sigma)
-        exp(-1 / (2 sigma^2) (y - mu)^2)
+    = #bluetext[$1 / (sqrt(2 pi) sigma)
+        exp(-1 / (2 sigma^2) (y - mu)^2)$
+    ]
   $
 #align(center)[
   #image("figs/normal_steps_0.pdf")
@@ -213,20 +215,20 @@ Why $pi$ is here and how it is connected to CLT? -> https://www.youtube.com/watc
   - #bluetext[Data model] for #redtext[$y$]: $p(#redtext[$y$] | mu, sigma)$, a distribution over #redtext[$y$] for
     fixed $mu, sigma$
     #v(1cm)
-  - #bluetext[Likelihood] the same
-    expression $p(y | mu, sigma)$, now viewed as a function of #redtext[$mu, sigma$] and fixed for $y$: 
-    $
-        p(y | mu, sigma) = product_(i=1)^n p(y_i | mu, sigma),
-    $
-    with $n$ helicopter flight times $y = (y_1, ..., y_n)$ and assuming
-      conditional independence.
+  - #bluetext[Likelihood] the same, now viewed as a function of #redtext[$mu, sigma$] and fixed for $y$:
+    #v(1cm)
+  - With $n$ helicopter flight times $y = (y_1, ..., y_n)$ and assuming
+    conditional independence.
+      $
+        p(y | #redtext[$mu, sigma$]) = product_(i=1)^n p(y_i | #redtext[$mu, sigma$]),
+      $
 ]
 
 == Posterior for $mu$ and $sigma$ given $y$
 
 
 #m.steps.reveal[
-- Normal likelihood has two unknown parameters ($mu, sigma$), so we need to specify a prior for them.
+- The normal has two unknown parameters ($mu, sigma$), so we need to specify a prior for them.
  #v(0.5cm)
 - #bluetext[Prior] for $mu$ and $sigma$: 
   - joint $p(mu, sigma)$
@@ -422,10 +424,10 @@ $
 == Factorization
 
 #m.steps.reveal[
-- Repeating for many draws of $(sigma^2)$ -> a #bluetext[family of normals] (one per draw)
+- Repeated sampling from $mu$ (conditional on each draw of $sigma^2$) -> a #bluetext[family of normals] (one per draw)
 - Averaging over all these conditional normals approximates the marginal posterior for $mu$ #yellowtext[(a mixture of normals)]:
 - This mixture is in fact a *Student-$t$ distribution* (See appendix A.2)
-  #align(center)[#image("figs/mixture_normals_studentt.pdf")]
+  #align(center)[#image("figs/mixture_normals_studentt.pdf", width: 21cm)]
 ] 
 
 
@@ -433,18 +435,18 @@ $
 
 #m.steps.reveal[
 - We often want to predict a *new* observation $tilde(y)$
-- This requires averaging the #redtext[data model] over our #bluetext[uncertainty in $mu, sigma$].
+- This requires averaging the #redtext[data model] over our #bluetext[uncertainty in $mu, sigma$]
   $
     p(tilde(y) | y) = integral #redtext[$p(tilde(y) | mu, sigma)$]  #bluetext[$p(mu, sigma | y)$] thick d mu d sigma
   $
   #v(1cm)
 - Step 1: draw parameters from the posterior
   $
-    mu^(s), sigma^(s) tilde p(mu, sigma | y)
+    mu^(s), sigma^(s) tilde #bluetext[$p(mu, sigma | y)$]
   $
 - Step 2: draw a new observation from the data model
   $
-    #redtext[$tilde(y)^(s)$] tilde #bluetext[$p(tilde(y) | mu^(s), sigma^(s))$]
+    #purpletext[$tilde(y)^(s)$] tilde #redtext[$p(tilde(y) | mu^(s), sigma^(s))$]
   $
 - Step 3: repeat steps 1 and 2 many times to approximate the predictive distribution
 ]
@@ -532,17 +534,15 @@ $
 
 - We generalized regression models to allow for non-normal observation models.
   $
-    y_i &tilde p(g^(-1)(eta_i), theta) \
+    y_i &tilde f(g^(-1)(eta_i), phi) \
     eta_i &= alpha + beta x_i
   $
+- $eta$: linear predictor term $eta$
+- $g^(-1)$: inverse link function
+- $f$: observation model
+- $phi$: other parameters of the observation model (e.g., variance for normal)
 
-- We need a link function $g$ to relate the linear predictor $eta_i$ to the mean (or other relevant parameter) of the observation model.
-  - identity for normal
-  - logit for Bernoulli
-  - log for Poisson
-  - ...
-- $theta$ represents other parameters of the observation model (e.g., variance for normal)
-- More in BDA3 Chapter 16 and #link("https://avehtari.github.io/ROS-Examples")[Regression and Other Stories] book
+More in BDA3 Chapter 16 and #link("https://avehtari.github.io/ROS-Examples")[Regression and Other Stories] book
 
 
 == Bioassay
@@ -594,23 +594,24 @@ Bayesian methods help to
 ]
 
 Binomial model
-
 $
   y_i | theta_i tilde "Bin"(theta_i , n_i )
 $
 
-== Bioassay
 
-#align(center)[
-  #image("figs/bioassay_fitbinom.pdf", width: 20cm)
-]
+== Bioassay (GLM for binomial data)
 
-Binomial model
+- Generalized linear model
 $
-  y_i | theta_i tilde "Bin"(theta_i, n_i),
-  quad "logit"(theta_i) = log(theta_i / (1 - theta_i)) = alpha + beta x_i
+  y_i &tilde f(g^(-1)(eta_i), phi) \
+  eta_i &= alpha + beta x_i \
 $
 
+- GLM for binomial data
+  - $f$ is the Binomial model
+  - $g^(-1)$ is the logistic function
+  - $g$ is the logit function
+  - $phi$ is not needed for the Binomial model
 
 == Bioassay
 
@@ -643,12 +644,16 @@ $
 
 == Bioassay
 
+- One curve, the posterior mean of the dose-response relationship
+
 #align(center)[
   #image("figs/bioassay_fitbinom.pdf")
 ]
 
 
 == Bioassay
+
+- Many curves, representing samples from the posterior distribution of the dose-response relationship
 
 #align(center)[
   #image("figs/bioassay_post.pdf")
@@ -669,6 +674,8 @@ $
 
 == Bioassay
 
+- Posterior distribution of the LD50
+
 #align(center)[
   #image("figs/bioassay_postld50.pdf")
 ]
@@ -682,6 +689,8 @@ $
 
 == Bioassay
 
+- Histogram of the posterior distribution of the LD50
+
 #align(center)[
   #image("figs/bioassay_histld50.pdf")
 ]
@@ -694,25 +703,26 @@ $
 
 
 == Bioassay posterior
-Binomial model
 
-$y_i | theta_i tilde "Bin"(theta_i, n_i)$
+- Binomial model
+  $
+    y_i | theta_i tilde "Bin"(theta_i, n_i)
+  $
 
-Link function
+- Link function
 
-$"logit"(theta_i) = alpha + beta x_i$
+  $
+    "logit"(theta_i) = alpha + beta x_i
+  $
 
-Likelihood
+- Likelihood
+  $
+    p(y_i | alpha, beta, n_i, x_i) &prop theta_i^(y_i) [1 - theta_i]^(n_i - y_i) \
 
-$
-  p(y_i | alpha, beta, n_i, x_i) prop theta_i^(y_i) [1 - theta_i]^(n_i - y_i)
-$
-
-$
-  p(y_i | alpha, beta, n_i, x_i) prop
-  ["logit"^(-1)(alpha + beta x_i)]^(y_i)
-  [1 - "logit"^(-1)(alpha + beta x_i)]^(n_i - y_i)
-$
+    p(y_i | alpha, beta, n_i, x_i) &prop
+    ["logit"^(-1)(alpha + beta x_i)]^(y_i)
+    [1 - "logit"^(-1)(alpha + beta x_i)]^(n_i - y_i)
+  $
 
 Posterior (with uniform prior on $alpha, beta$)
 
@@ -721,93 +731,124 @@ $
 $
 
 
-== Bioassay - grid
+== Bioassay - grid approximation
 
-#align(center)[
-  #image("figs/bioassay_grid1.pdf")
-]
+#m.steps.reveal[
+- The posterior $p(alpha, beta | y, n, x)$ has no closed-form
+- But we can evaluate the posterior at any given point in the parameter space.
+- Choose a grid of values for $alpha$ and $beta$: $alpha_1, ..., alpha_M$ and $beta_1, ..., beta_N$
+- Evaluate the unnormalized posterior at every grid point $(alpha_j, beta_k)$
+  $
+    q_(j,k) = p(alpha_j, beta_k | y, n, x) prop p(alpha_j, beta_k) product_(i=1)^n p(y_i | alpha_j, beta_k, n_i, x_i)
+  $
+  ]
 
+== Bioassay - grid approximation
 
-== Bioassay - grid
-
-#align(center)[
-  #image("figs/bioassay_grid2.pdf")
-]
-
-Density evaluated in grid, but plotted using interpolation
-
-
-== Bioassay - grid
-
-#align(center)[
-  #image("figs/bioassay_grid3.pdf")
-]
-
-Density evaluated in grid, and plotted without interpolation
-
-
-== Bioassay - grid
-
-#align(center)[
-  #image("figs/bioassay_grid3_1.pdf")
-]
-
-Density evaluated in a coarser grid
-
-
-== Bioassay - grid
-
-#align(center)[
-  #image("figs/bioassay_grid3_2.pdf")
-]
-
-- Approximate the density as piecewise constant function
-- Evaluate density in a grid over some finite region
 - Density times cell area gives probability mass in each cell
+#v(1cm)
+#align(center)[
+  #image("figs/bioassay_grid3_2.pdf", width: 20cm)
+]
+
+== Bioassay - grid approximation
+
+
+Normalization
+
+- Since we only know the posterior up to a constant, we normalize over the grid:
+$
+  p(alpha_j, beta_k | y, n, x) approx q_(j,k) / (sum_(j,k) q_(j,k))
+$
+- This turns the grid of unnormalized values into a proper discrete probability distribution that sums to 1.
+
+
 
 
 == Bioassay - grid
 
+Density evaluated in a coarse grid
+#v(1cm)
 #align(center)[
-  #image("figs/bioassay_grid3_3.pdf")
-]
-
-- Densities at 1, 2, and 3: 0.0027 0.0010 0.0001
-- Probabilities of cells 1, 2, and 3: 0.0431 0.0166 0.0010
-- Probabilities of cells sum to 1
-
-
-== Bioassay - grid
-
-#align(center)[
-  #image("figs/bioassay_grid4.png")
+  #image("figs/bioassay_grid3_1.pdf", width: 20cm)
 ]
 
 
 == Bioassay - grid
 
+- Density evaluated in a finer grid
+  - The finer the grid, the more accurate the approximation becomes
+  - But cost can grow fast, in particular as the number of parameters increases
+
 #align(center)[
-  #image("figs/bioassay_grid5.png")
+  #image("figs/bioassay_grid3.pdf", width: 20cm)
+]
+
+== Bioassay - grid
+
+- For an smoother visualization, we may want to interpolate
+#align(center)[
+  #image("figs/bioassay_grid2.pdf", width: 20cm)
+]
+
+== Bioassay - grid
+
+- And maybe also compute contour lines
+#v(1cm)
+#align(center)[
+  #image("figs/bioassay_grid1.pdf", width: 20cm)
 ]
 
 
 == Bioassay - grid
 
+- We can sample based on the grid cell probabilities
+#v(1cm)
 #align(center)[
-  #image("figs/bioassay_grid6.png")
+  #image("figs/bioassay_grid4.png", width: 20cm)
 ]
 
-- Sample according to grid cell probabilities
+== Bioassay - grid
+
+- More samples 
+#v(1cm)
+#align(center)[
+  #image("figs/bioassay_grid5.png", width: 20cm)
+]
+
+
+== Bioassay - grid
+
 - Several draws can be from the same grid cell
+#v(1cm)
+#align(center)[
+  #image("figs/bioassay_grid6.png", width: 20cm)
+]
+
 
 
 == Bioassay - grid
-
-#align(center)[
-  #image("figs/bioassay_grid7.png")
-]
 
 - Jitter can be added to improve visualization
+#v(1cm)
+#align(center)[
+  #image("figs/bioassay_grid7.png", width: 20cm)
+]
+
+
+
+== Grid sampling
+
+- Draws can be used to estimate expectations, for example
+  $
+    E[x_("LD50")] = E[-alpha/beta]
+    approx 1/S sum_(s=1)^S -alpha^(s)/beta^(s)
+  $
+- Instead of sampling, grid could be used to evaluate functions directly, for example
+  $
+    E[-alpha/beta] approx sum_(t=1)^T -alpha^(t)/beta^(t) w_"cell"^(t)
+  $
+  where $w_"cell"^(t)$ is the normalized probability of a grid cell $t$, and $alpha^(t)$ and $beta^(t)$ are center locations of grid cells
 
 
 
@@ -840,10 +881,10 @@ Bayesian methods help
   #grid(
     columns: 2,
     [
-      #image("figs/drownings_fittargetspace_C0.pdf", width: 10cm)
+      #image("figs/drownings_fittargetspace_C0.pdf", width: 13cm)
     ],
     [
-      #image("figs/drownings_fitlogspace_C1.pdf", width: 10cm)
+      #image("figs/drownings_fitlogspace_C1.pdf", width: 13cm)
     ],
   )
   ]
@@ -887,9 +928,12 @@ Bayesian methods help
 
 #m.steps.reveal[
 - Formally, it's an infinite-dimensional multivariate normal - any finite set of function values, $f(x_1), ..., f(x_n)$, is jointly normal.
-- In practice we only ever evaluate a function at *finitely* many points, so we only ever need this finite-Multivariate normal
+- In practice we only ever evaluate a function at *finitely* many points -> Multivariate normal
 - Some nice theoretical properties and many models can be seen as  as special cases of Gaussian processes.
-- Used for regression/classification when you want a flexible, non-parametric function with built-in uncertainty.
+- More about GPs
+  - See #link("https://gaussianprocess.org/gpml/")[Gaussian Processes for Machine Learning]
+  - GPs in BDA3 Chapter 21
+  - Other courses in Aalto.
 ]
 
 
@@ -920,8 +964,8 @@ $
 
 == Example GLM: Gaussian Process Models
 
-- Clear overdispersion
-  - later we use posterior predictive checking and cross-validation to confirm this
+- NegativeBinomial model is better because data is overdispersed
+  - later in the course we will learn about tools to assess model fit and compare models
 - Trend interpretations shouldn't be based on one observation
 
 #align(center)[
