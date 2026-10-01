@@ -353,18 +353,16 @@ ul.task-list li input[type="checkbox"] {
 <p></p>
 <h1 id="lecture-6chapter-12-of-bda-quiz-96-of-grade">Lecture 6/Chapter 12 of BDA
   Quiz (96% of grade)</h1>
-<p>This week’s assignment focuses on building the foundations for using frontier
-  MCMC methods and the probabilistic programming language Stan. We will directly
-  code in Stan, but later assignments will use the <a href="https://paulbuerkner.com/brms/">brms</a> R package for building Stan
-  models.</p>
+<p>This week’s assignment focuses on building the foundations for using modern
+  MCMC methods and the probabilistic programming language Stan.</p>
 <h1 id="a-brief-overview-of-hamiltonian-monte-carlo-hmc">1. A brief overview of
   Hamiltonian Monte Carlo (HMC)</h1>
 <p><strong>1.1</strong> What is the intuition behind HMC as described in the
   course lectures?</p>
-<p>In order to generate good proposals, HMC uses the Hamiltonian function and
-  it’s partial derivatives to generate a path along the surface of the log
+<p> To generate good proposals, HMC uses the Hamiltonian function and
+  its partial derivatives to generate a path along the surface of the log
   posterior. As in the lecture, define <span class="math inline">\(\phi\)</span>
-  as the momentum variable which is of the same dimension as the parameter
+  as the momentum variable, which is of the same dimension as the parameter
   vector <span class="math inline">\(\theta\)</span>. The Hamiltonian function
   has two terms <span class="math inline">\(U(\theta)\)</span> and <span class="math inline">\(K(\phi)\)</span>.</p>
 <p><strong>1.2</strong> What is the intuition behind the term <span class="math inline">\(U(\theta)\)</span></p>
@@ -384,14 +382,14 @@ ul.task-list li input[type="checkbox"] {
   shows dynamic simulation in the joint position-momentum space using leapfrog
   method. Based on these figures, which of the following statements is false?
 </p>
-<p><img style="width: 100.0%;" src="https://raw.githubusercontent.com/avehtari/BDA_course_Aalto/master/slides/figs/hmc_leapfrog.png">
+<p><img class="img-fluid" style="width: 100.0%;" src="https://raw.githubusercontent.com/avehtari/BDA_course_Aalto/master/slides/figs/hmc_leapfrog.png">
 </p>
 <p>HMC has two general steps at each iteration of the MCMC chain. Denote the
   current state of the MCMC chain as <span class="math inline">\(t\)</span>,
   then</p>
 <ol style="list-style-type: decimal;">
   <li>we draw a new momentum variable <span class="math inline">\(\phi\)</span>
-    (often assumed to distributed marginally Gaussian)</li>
+    (often assumed to be marginally Gaussian)</li>
   <li>perform a Metropolis update with <span class="math inline">\(r=\exp\left(-H(\theta^*,\phi^*)+H(\theta^{(t-1)},\phi^{(t-1)})\right)\)</span>,
     where Hamiltonian dynamics are used to produce the proposal. The two
     parameters of the algorithm, number of steps <span class="math inline">\(L\)</span> and step size <span class="math inline">\(\epsilon\)</span>, need to be tuned.</li>
@@ -406,7 +404,7 @@ ul.task-list li input[type="checkbox"] {
 <p>To avoid this behaviour that static HMC with fixed integration time (number
   of steps times the step size) may have, the No-U-Turn (NUTS) algorithm by <a href="https://www.jmlr.org/papers/volume15/hoffman14a/hoffman14a.pdf">Hoffman
     and Gelman (2014)</a> performs automatic tuning: neither the step size nor
-  number of steps need be specified by the user. NUTS uses a tree-building
+  number of steps needs to be specified by the user. NUTS uses a tree-building
   algorithm (see the <a href="https://avehtari.github.io/BDA_course_Aalto/slides/BDA_lecture_6.pdf">slides</a>)
   to adaptively determine the number of steps, <span class="math inline">\(L\)</span>, while the step size is adapted during the
   warm-up phase according to a target average acceptance ratio. To gain some
@@ -430,8 +428,8 @@ ul.task-list li input[type="checkbox"] {
   (algorithm=DualAveragingNUTS, target=banana), and adjust the Autoplay delay to
   around 70, but otherwise keep the default options, particularly, keep the
   target acceptance ratio (here <span class="math inline">\(\delta\)</span>) at
-  0.65. On the top left-hand corner m/M_adapt tells you how many draws have been
-  taken compared to number of warm-up draws. Wait until m/M_adapt is at least
+  0.65. In the top left-hand corner m/M_adapt tells you how many draws have been
+  taken compared to the number of warm-up draws. Wait until m/M_adapt is at least
   50/200.</p>
 <p><strong>1.10</strong> What do you observe with the first couple of
   iterations?</p>
@@ -441,7 +439,7 @@ ul.task-list li input[type="checkbox"] {
 <p><strong>1.13</strong> Now set the target acceptance ratio to the smallest
   possible value. What do you observe?</p>
 <p>The current Stan HMC-NUTS implementation has some further enhancements, but
-  we will not go to details of those. The main algorithm paramaters are
+  we will not go into the details of those. The main algorithm parameters are
   <code>adapt_delta</code> and <code>max_treedepth</code> options.</p>
 <p><code>adapt_delta</code> specifies the target expected discretization error
   (in the same scale as the average proposal acceptance ratio), during the
@@ -555,9 +553,9 @@ generated quantities {
 <p><span class="math inline">\(p(\sigma)= \text{normal}_+ (\sigma \mid
     0,10)\)</span>,</p>
 <p>where <span class="math inline">\(\text{normal}_+ ()\)</span> stands for the
-  half normal, defined for the positive reals.</p>
+  half-normal, defined for the positive reals.</p>
 <p><strong>2.8</strong> What are correct ways to write your model in the model
-  block? In the below, assume that there is a line-break after each semi-colon,
+  block? In the below, assume that there is a line break after each semicolon,
   and that the variables have been appropriately declared in the parameter
   blocks.</p>
 <p>When writing complicated models, it may happen that some distribution
@@ -576,8 +574,8 @@ generated quantities {
   Stan file in the RStudio editor. Note that some of the errors in the presented
   Stan code may not be syntax errors. Use the code in the <a href="https://avehtari.github.io/BDA_course_Aalto/assignments/template6.html">template</a>
   to first compile your model using CmdStanR (which is a handy interface for
-  CmdStan which transpiles Stan model code to C++ which is compiled to
-  executable program which can do the actual sampling), run the inference with
+  CmdStan, which transpiles Stan model code to C++, which is compiled to
+  executable program that can do the actual sampling), run the inference with
   the supplied data, and finally create the plot to answer the following
   questions.</p>
 <p>Define the term of the model <span class="math inline">\(\mu = \alpha + \beta
@@ -594,8 +592,8 @@ generated quantities {
   prediction for the given data set?</p>
 <h1 id="diagnosing-problems-in-hmc-nuts-sampling">3. Diagnosing Problems in
   HMC-NUTS sampling</h1>
-<p>Another benefit of the HMC-NUTS algorithm over simpler non-gradient based
-  MCMC algorithms, is that we have access to many diagnostic tools related to
+<p>Another benefit of the HMC-NUTS algorithm over simpler non-gradient-based
+  MCMC algorithms is that we have access to many diagnostic tools related to
   the posterior geometry that we would otherwise not have. This feedback is
   helpful for modeling and also for debugging code, and therefore an essential
   part of the <a href="https://arxiv.org/abs/2011.01808">Bayesian workflow</a>.
@@ -663,7 +661,7 @@ model {
 <p>Use the code hints in the <a href="https://avehtari.github.io/BDA_course_Aalto/assignments/template6.html">template</a>
   to complete your Stan model. For questions about declarations and
   functionality of Stan, your first point of reference should always be the <a href="https://mc-stan.org/docs/reference-manual/">Stan Manual</a> (it’s been
-  recently revised, be sure to open at least version 2.35). Use 4 chains, with
+  recently revised; be sure to open at least version 2.35). Use 4 chains, with
   1000 warmup and 2000 total draws each, use default options for
   <code>adapt_delta</code> and <code>max_treedepth</code>, and use <code>seed =
     4911</code>. Compile your model, define the data inputs needed, sample from
