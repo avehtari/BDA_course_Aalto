@@ -167,7 +167,8 @@ Hoffman and Gelman (2014): #link("https://jmlr.org/papers/v15/hoffman14a.html")
 - We need to be careful in how we detect the U-turn to ensure the correctness of the sampler
 
 1. Start from the current state
-2. Choose at random whether to extend the trajectory forward or backward in time3. Run $2^j$ new leapfrog steps in that direction ($j = 0, 1, 2, ...$)
+2. Choose at random whether to extend the trajectory forward or backward in time.
+3. Run $2^j$ new leapfrog steps in that direction ($j = 0, 1, 2, ...$)
   - Internally, a binary tree of states is used to efficiently check for U-turns and preserve reversibility
 4. Check for a U-turn. If found, stop. Otherwise, go to step 2.
 5. Use one of the visited states as the proposed state
