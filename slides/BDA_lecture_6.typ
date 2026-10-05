@@ -86,7 +86,7 @@ Demo #link("https://chi-feng.github.io/mcmc-demo/app.html?algorithm=HamiltonianM
 $ (dif theta) / (dif t) = (partial H) / (partial phi) = M^(-1) phi, quad quad (dif phi) / (dif t) = - (partial H) / (partial theta) = - nabla U(theta) $
 
 - Interpretation:
-  - Position, $theta$, changes in proportion to the momentum, with velocity, with velocity $M^(-1) phi$ ($M$: mass matrix)
+  - Position, $theta$, changes in proportion to the momentum, with velocity $M^(-1) phi$ ($M$: mass matrix)
   - Momentum, $phi$, changes in the direction of steepest descent of $U$, i.e. the force is $-nabla U(theta)$
 - Key properties, also important for MCMC:
   - Energy, $H(theta, phi)$, is conserved
@@ -167,8 +167,7 @@ Hoffman and Gelman (2014): #link("https://jmlr.org/papers/v15/hoffman14a.html")
 - We need to be careful in how we detect the U-turn to ensure the correctness of the sampler
 
 1. Start from the current state
-2. Choose a direction at random (forward or backward)
-3. Run $2^j$ new leapfrog steps in that direction ($j = 0, 1, 2, ...$)
+2. Choose at random whether to extend the trajectory forward or backward in time3. Run $2^j$ new leapfrog steps in that direction ($j = 0, 1, 2, ...$)
   - Internally, a binary tree of states is used to efficiently check for U-turns and preserve reversibility
 4. Check for a U-turn. If found, stop. Otherwise, go to step 2.
 5. Use one of the visited states as the proposed state
