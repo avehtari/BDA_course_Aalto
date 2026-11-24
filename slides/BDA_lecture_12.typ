@@ -60,10 +60,10 @@
 
 == Bayesian workflow resources
 
-- Gelman et al. (2020), [ArXiv Paper](https://arxiv.org/abs/2011.01808)
-- Book free to [download](https://users.aalto.fi/~ave/Bayesian-Workflow.pdf)
-  - Examples in R https://avehtari.github.io/Bayesian-Workflow/
-  - Examples in Python https://arviz-devs.github.io/bayesian-workflow/
+- Gelman et al. (2020), #link("https://arxiv.org/abs/2011.01808")[ArXiv Paper]
+- Book free to #link("https://users.aalto.fi/~ave/Bayesian-Workflow.pdf")[download]
+  - Examples in R #link("https://avehtari.github.io/Bayesian-Workflow/")[here]
+  - Examples in Python #link("https://arviz-devs.github.io/bayesian-workflow/")[here]
 
 
 == Project presentation overview
@@ -123,7 +123,7 @@
 
 - Describe the MCMC settings
   - if you changed any defaults, say which and why
-- Report $\hat R$, ESS, and divergences
+- Report $hat(R)$, ESS, and divergences
   - highlight only problematic values
   - a short summary is better than showing all diagnostics, especially if they are fine
 - Explain what you did to fix convergence issues
@@ -139,11 +139,12 @@
   - rootograms are usually good for count data
   - calibration plots (PAV-adjusted) for binary, ordinal, and categorical outcomes
 #v(1fr)
-[Recommendations for visual predictive checks in Bayesian workflow](https://journals.aau.dk/index.php/jovi/article/view/11478)
+#link("https://journals.aau.dk/index.php/jovi/article/view/11478")[Recommendations for visual predictive checks in Bayesian workflow]
 
 ==  Sensitivity analysis
 
-- You can use priorsense/ArviZ for this purpose. Manual checking is ok as well, in particular if you have reasons to test specific priors.
+- You can use priorsense/ArviZ for this purpose.
+- Manual checking is ok as well, in particular if you have reasons to test specific priors.
 
 
 == Sensitivity analysis
@@ -156,7 +157,7 @@
 
 - Compare the predictive performance of the models with an appropriate method, e.g. PSIS-LOO-CV
   - report and interpret the results, including the uncertainty in the estimates
-  - report high Pareto-$\hat k$ diagnostics
+  - report high Pareto-$hat(k)$ diagnostics
 - You can use other metrics than ELPD
 - Explain which model you prefer and why
   - predictive performance, interpretability, simplicity, and alignment with the modeling objectives
@@ -232,8 +233,8 @@
 
 == Project report
 
-- You can use different tools to write your project report
-- *Quarto* (and also Jupyter) can combine text, code, and figures
+- You can use different tools, including LaTeX, to write your project report
+- One option is *Quarto*, which can combine text, code, and figures
   - one document that renders from the data to the final report
   - works with both R and Python
 - Set random seeds and keep track of package versions
